@@ -9,11 +9,10 @@ AddEventHandler("Venato:displaytext", function(text, time)
 end)
 
 RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(icon, type, sender, title, text)
-  SetNotificationTextEntry("STRING");
-  AddTextComponentString(text);
-  SetNotificationMessage(icon, icon, true, type, sender, title, text);
-  DrawNotification(false, true);
+AddEventHandler("Venato:notify", function(message)
+  SetNotificationTextEntry("STRING")
+  AddTextComponentString(message)
+  DrawNotification(false, false)
 end)
 
 function Venato.notify(message)
@@ -87,4 +86,9 @@ function GetPlayers()
         end
     end
     return players
+end
+
+function Venato.Round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
 end

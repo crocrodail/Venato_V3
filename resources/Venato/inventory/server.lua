@@ -17,7 +17,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 				inventaire[v.item_id] = Inv
 				poid = poid + tonumber(v.poid)*v.quantity
 			end
-			DataPlayers[source].Poid = poid
+			DataPlayers[source].Poid = poid + Venato.Round(DataPlayers[source].Money*0.000075,1)
 			DataPlayers[source].Inventaire = inventaire
 		end
 	end)
@@ -117,10 +117,80 @@ end)
 
 RegisterServerEvent('Inventory:DelItemsOnTheGround')
 AddEventHandler('Inventory:DelItemsOnTheGround', function(index)
-	ItemsOnTheGround[ItemsOnTheGroundIndex] = nil
+	ItemsOnTheGround[index] = nil
 	ActualiseTableOfItemOnTheGround()
 end)
 
 function ActualiseTableOfItemOnTheGround()
 	TriggerClientEvent("Inventory:SendItemsOnTheGround", -1, ItemsOnTheGround)
+end
+
+RegisterServerEvent('Inventory:CallInfoMoney')
+AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
+	if DataPlayers[ClosePlayer].Poid + Venato.Round(qty * 0.000075) >= DataPlayers[ClosePlayer].PoidMax then
+		TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
+		TriggerEvent("Inventory:RemoveMoney", qty, source)
+		--TriggerClientEvent("Venato:Anim", source, ...)-- ###########################   non atribué-- ###########################   non atribué-- ###########################-- ###########################   non atribué-- ###########################   non atribué-- ###########################
+		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
+		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu "..qty.." €")
+	else
+		TriggerClientEvent("Venato:notify", source, "La personne est trop lourde pour reçevoir "..qty.." €")
+		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous etes trop lourd pour reçevoir "..qty.." €")
+	end
+end)
+
+RegisterNetEvent("Inventory:AddMoney")
+AddEventHandler("Inventory:AddMoney", function(qty, NewSource)
+	local source = source
+	local qty = qty
+	if NewSource ~= nil then
+		source = NewSource
+	end
+	local new = DataPlayers[source].Money + qty
+	DataPlayers[source].Money = new
+	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+end)
+
+RegisterNetEvent("Inventory:RemoveMoney")
+AddEventHandler("Inventory:RemoveMoney", function(qty, NewSource)
+	local source = source
+	local qty = qty
+	if NewSource ~= nil then
+		source = NewSource
+	end
+	local new = DataPlayers[source].Money - qty
+	DataPlayers[source].Money = new
+	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+end)
+
+RegisterNetEvent("Inventory:SetMoney")
+AddEventHandler("Inventory:SetMoney", function(qty, NewSource)
+	local source = source
+	local qty = qty
+	if NewSource ~= nil then
+		source = NewSource
+	end
+	local new = qty
+	DataPlayers[source].Money = new
+	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+end)
+
+MoneyOnTheGround = {}
+MoneyOnTheGroundIndex = 0
+RegisterServerEvent('Inventory:DropMoney')
+AddEventHandler('Inventory:DropMoney', function(qty, tableau, pos, poid)
+	local x, y, z = table.unpack(pos)
+	MoneyOnTheGroundIndex = MoneyOnTheGroundIndex + 1
+	MoneyOnTheGround[MoneyOnTheGroundIndex] = {qty = qty, poid = tableau[3], PlayerMoney = tableau[1], x = x, y = y, z = z}
+	ActualiseTableOfMoneyOnTheGround()
+end)
+
+RegisterServerEvent('Inventory:DelMoneyOnTheGround')
+AddEventHandler('Inventory:DelMoneyOnTheGround', function(index)
+	MoneyOnTheGround[index] = nil
+	ActualiseTableOfMoneyOnTheGround()
+end)
+
+function ActualiseTableOfMoneyOnTheGround()
+	TriggerClientEvent("Inventory:SendMoneyOnTheGround", -1, MoneyOnTheGround)
 end

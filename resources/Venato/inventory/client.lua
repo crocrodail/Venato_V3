@@ -1,4 +1,5 @@
 local ItemsOnTheGround = {}
+local MoneyOnTheGround = {}
 -- ######## COFIG ##############
 	local PoidMax = 20 -- Kg
 --##############################
@@ -22,6 +23,7 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) and GetLastInputMethod(2) then
 			Menu.hidden = true
 		end
+
 		if ItemsOnTheGround ~= nil then
 			local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 			for k,v in pairs(ItemsOnTheGround) do
@@ -30,7 +32,7 @@ Citizen.CreateThread(function()
 					Venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." "..v.libelle)
 					Venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." "..v.libelle)
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-						if v.qty*v.uPoid + v.poid <= PoidMax then
+						if (v.qty*v.uPoid + v.poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddItem", v.qty , v.id)
 							TriggerServerEvent("Inventory:DelItemsOnTheGround", k)
 							Venato.notify("Vous avez ramassez "..v.qty.." "..v.libelle.." .")
@@ -40,6 +42,28 @@ Citizen.CreateThread(function()
 					end
 				elseif dis < 10 then
 					Venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." "..v.libelle)
+				end
+			end
+		end
+
+		if MoneyOnTheGround ~= nil then
+			local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			for k,v in pairs(MoneyOnTheGround) do
+				local dis = Vdist(x, y, z, v.x, v.y, v.z)
+				if dis < 1 then
+					Venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." €")
+					Venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." €")
+					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+						if (Venato.Round(v.qty*0.000075,1) + v.poid) <= PoidMax then
+							TriggerServerEvent("Inventory:AddMoney", v.qty)
+							TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
+							Venato.notify("Vous avez ramassez "..v.qty.." € .")
+						else
+							Venato.notify("Vous etes trop lourd pour ramasser "..v.qty.." € .")
+						end
+					end
+				elseif dis < 10 then
+					Venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." €")
 				end
 			end
 		end
@@ -53,13 +77,13 @@ end
 function OpenInventory()
 	MenuTitle = "00 / 20 Kg"
 	MenuDescription = "Inventaire"
-	Menu.addButton("~r~debug", "debuge", 1)
 	TriggerServerEvent("Inventory:ShowMe")
 end
 
 RegisterNetEvent('Inventory:ShowMe:cb')
 AddEventHandler('Inventory:ShowMe:cb', function(DataUser)
 	ClearMenu()
+	Menu.addButton("~r~Syncdata", "debuge", {})
 	local color = "~s~"
 	if DataUser.Poid > 18 then
 		color = "~r~"
@@ -68,14 +92,64 @@ AddEventHandler('Inventory:ShowMe:cb', function(DataUser)
 	end
 	MenuTitle = color..""..DataUser.Poid.." ~s~/ 20 Kg"
 	MenuDescription = "Inventaire"
-	Menu.addButton("~g~Argent : "..DataUser.Money.." €", "OptionMoney", {})
+	local MoneyPoid = Venato.Round(DataUser.Money*0.000075,1)
+	Menu.addButton("~g~Argent : "..DataUser.Money.." € ~o~( "..MoneyPoid.." Kg )", "OptionMoney", {DataUser.Money, MoneyPoid, DataUser.Poid})
 	for k,v in pairs(DataUser.Inventaire) do
 		if v.quantity > 0 then
-			Menu.addButton("~b~"..v.libelle.." ~s~: ~r~"..v.quantity.." ~o~( "..v.poid.." Kg )", "OptionItem", {v.quantity, v.id, v.libelle, v.uPoid, poid})
+			Menu.addButton("~b~"..v.libelle.." ~s~: ~r~"..v.quantity.." ~o~( "..v.poid.." Kg )", "OptionItem", {v.quantity, v.id, v.libelle, v.uPoid, DataUser.Poid})
 		end
 	end
 end)
 
+--############# Money ##################
+
+function OptionMoney(table)
+	ClearMenu()
+	Menu.addButton("Donner", "GiveMoney", table)
+	Menu.addButton("Jeter", "DropMoney", table)
+end
+
+function GiveMoney(table)
+	local ClosePlayer, distance = Venato.ClosePlayer()
+	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+		local nb = Venato.OpenKeyboard('', '0', 10,"Nombre à donner")
+		if tonumber(nb) ~= nil and tonumber(nb) ~= 0 and tonumber(nb) > 0 and table[1] - tonumber(nb) >= 0 then
+			TriggerServerEvent("Inventory:CallInfoMoney", ClosePlayer, tonumber(nb), table)
+		else
+			Venato.notify("Une erreur dans le nombre choisi.")
+		end
+	else
+		Venato.notify("Il n'y a personne à proximité.")
+	end
+end
+
+function DropMoney(table)
+	local nb = Venato.OpenKeyboard('', '0', 10,"Nombre à jeter")
+	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
+		if table[1] - tonumber(nb) >= 0 then
+			local x = GetEntityCoords(GetPlayerPed(-1), true)
+			TriggerServerEvent("Inventory:DropMoney", tonumber(nb), table, x)
+			TriggerServerEvent("Inventory:RemoveMoney", tonumber(nb))
+			--Venato.CreateObject(GetHashKey("prop_big_bag_01"), x, y, z, true, true, true)-- ###########################   non atribué-- ###########################   non atribué-- ###########################
+			OpenInventory()
+		else
+			Venato.notify("Vous ne pouvez pas jeter plus que ce que vous avez.")
+		end
+	else
+		Venato.notify("Erreur dans le nombre désiré.")
+	end
+end
+
+RegisterNetEvent('Inventory:SendMoneyOnTheGround')
+AddEventHandler('Inventory:SendMoneyOnTheGround', function(ParMoneyOnTheGround)
+	print('ok')
+	MoneyOnTheGround = ParMoneyOnTheGround
+end)
+
+--############# Money ##################
+
+
+--############# ITEM ##################
 function OptionItem(table)
 	ClearMenu()
 	MenuDescription = table[3]
@@ -98,7 +172,7 @@ function GiveItem(table)
 	if ClosePlayer ~= 0 or ClosePlayer ~= nil and distance < 4 then
 		local nb = Venato.OpenKeyboard('', '0', 2,"Nombre à donner")
 		if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
-			TriggerServerEvent("Inventory:CallInfo", ClosePlayer, nb, table)
+			TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), table)
 		end
 	else
 		Venato.notify("Il n'y a personne à proximité.")
@@ -112,7 +186,7 @@ AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, 
 			TriggerServerEvent("Inventory:SetItem", table[1] - nb , id)
 			TriggerServerEvent("Inventory:SetItem", qty + nb , id, ClosePlayer)
 		else
-			Venato.notify("La personne est trop lourd pour ces items.")
+			Venato.notify("La personne est trop lourde pour ces items.")
 		end
 	else
 		Venato.notify("Vous ne pouvez pas donner plus que ce que vous avez.")
@@ -141,3 +215,5 @@ RegisterNetEvent('Inventory:SendItemsOnTheGround')
 AddEventHandler('Inventory:SendItemsOnTheGround', function(ParItemsOnTheGround)
 	ItemsOnTheGround = ParItemsOnTheGround
 end)
+
+--############# ITEM ##################

@@ -1,3 +1,5 @@
+Venato = {}
+
 function getSteamID(source)
  	local identifiers = GetPlayerIdentifiers(source)
  	local player = getIdentifiant(identifiers)
@@ -36,8 +38,9 @@ function accessGranded(SteamId, source)
         Sool = DataUser[1].sool,
         PhoneNumber = DataUser[1].phone_number,
         Pseudo = DataUser[1].pseudo,
-        Poid = nil,
+        Poid = Venato.Round(DataUser[1].money*0.000075,1),
         Inventaire = {nil},
+        PoidMax = 20,
       }
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
@@ -68,3 +71,8 @@ AddEventHandler("Venato:notify", function(icon, type, sender, title, text)
   SetNotificationMessage(icon, icon, true, type, sender, title, text);
   DrawNotification(false, true);
 end)
+
+function Venato.Round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
