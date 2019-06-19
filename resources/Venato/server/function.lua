@@ -28,6 +28,8 @@ function accessGranded(SteamId, source)
         Job = DataUser[1].job,
         Bank = DataUser[1].bank,
         Money = DataUser[1].money,
+        Account = DataUser[1].account,
+        Code = DataUser[1].code,
         Position = DataUser[1].lastPosition,
         Sexe = DataUser[1].sexe,
         Taille = DataUser[1].taille,
@@ -40,7 +42,9 @@ function accessGranded(SteamId, source)
         Pseudo = DataUser[1].pseudo,
         Poid = Venato.Round(DataUser[1].money*0.000075,1),
         Inventaire = {nil},
+        Weapon = {nil},
         PoidMax = 20,
+        Index = 0,
       }
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
