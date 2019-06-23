@@ -3,20 +3,20 @@
 -- #Version 2.0
 --====================================================================================
 
-math.randomseed(os.time()) 
+math.randomseed(os.time())
 
 --- Pour les numero du style XXX-XXXX
-function getPhoneRandomNumber()
-    local numBase0 = math.random(100,999)
-    local numBase1 = math.random(0,9999)
-    local num = string.format("%03d-%04d", numBase0, numBase1 )
-	return num
-end
+--function getPhoneRandomNumber()
+--    local numBase0 = math.random(100,999)
+--    local numBase1 = math.random(0,9999)
+--    local num = string.format("%03d-%04d", numBase0, numBase1 )
+--	return num
+--end
 
---- Exemple pour les numero du style 06XXXXXXXX
--- function getPhoneRandomNumber()
---     return '0' .. math.random(600000000,699999999)
--- end
+-- Exemple pour les numero du style 06XXXXXXXX
+function getPhoneRandomNumber()
+     return '0' .. math.random(600000000,699999999)
+end
 
 
 --[[
@@ -26,8 +26,8 @@ end
 --]]
 --[[
 local ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) 
-    ESX = obj 
+TriggerEvent('esx:getSharedObject', function(obj)
+    ESX = obj
     ESX.RegisterServerCallback('gcphone:getItemAmount', function(source, cb, item)
         print('gcphone:getItemAmount call item : ' .. item)
         local xPlayer = ESX.GetPlayerFromId(source)
@@ -66,7 +66,7 @@ function getNumberPhone(identifier)
     end
     return nil
 end
-function getIdentifierByPhoneNumber(phone_number) 
+function getIdentifierByPhoneNumber(phone_number)
     local result = MySQL.Sync.fetchAll("SELECT users.identifier FROM users WHERE users.phone_number = @phone_number", {
         ['@phone_number'] = phone_number
     })
@@ -98,7 +98,7 @@ function getOrGeneratePhoneNumber (sourcePlayer, identifier, cb)
             myPhoneNumber = getPhoneRandomNumber()
             local id = getIdentifierByPhoneNumber(myPhoneNumber)
         until id == nil
-        MySQL.Async.insert("UPDATE users SET phone_number = @myPhoneNumber WHERE identifier = @identifier", { 
+        MySQL.Async.insert("UPDATE users SET phone_number = @myPhoneNumber WHERE identifier = @identifier", {
             ['@myPhoneNumber'] = myPhoneNumber,
             ['@identifier'] = identifier
         }, function ()
@@ -129,7 +129,7 @@ function addContact(source, identifier, number, display)
 end
 function updateContact(source, identifier, id, number, display)
     local sourcePlayer = tonumber(source)
-    MySQL.Async.insert("UPDATE phone_users_contacts SET number = @number, display = @display WHERE id = @id", { 
+    MySQL.Async.insert("UPDATE phone_users_contacts SET number = @number, display = @display WHERE id = @id", {
         ['@number'] = number,
         ['@display'] = display,
         ['@id'] = id,
@@ -153,7 +153,7 @@ end
 function notifyContactChange(source, identifier)
     local sourcePlayer = tonumber(source)
     local identifier = identifier
-    if sourcePlayer ~= nil then 
+    if sourcePlayer ~= nil then
         TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))
     end
 end
@@ -215,14 +215,14 @@ function addMessage(source, identifier, phone_number, message)
     local sourcePlayer = tonumber(source)
     local otherIdentifier = getIdentifierByPhoneNumber(phone_number)
     local myPhone = getNumberPhone(identifier)
-    if otherIdentifier ~= nil then 
+    if otherIdentifier ~= nil then
         local tomess = _internalAddMessage(myPhone, phone_number, message, 0)
         getSourceFromIdentifier(otherIdentifier, function (osou)
-            if tonumber(osou) ~= nil then 
+            if tonumber(osou) ~= nil then
                 -- TriggerClientEvent("gcPhone:allMessage", osou, getMessages(otherIdentifier))
                 TriggerClientEvent("gcPhone:receiveMessage", tonumber(osou), tomess)
             end
-        end) 
+        end)
     end
     local memess = _internalAddMessage(phone_number, myPhone, message, 1)
     TriggerClientEvent("gcPhone:receiveMessage", sourcePlayer, memess)
@@ -230,7 +230,7 @@ end
 
 function setReadMessageNumber(identifier, num)
     local mePhoneNumber = getNumberPhone(identifier)
-    MySQL.Sync.execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", { 
+    MySQL.Sync.execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", {
         ['@receiver'] = mePhoneNumber,
         ['@transmitter'] = num
     })
@@ -315,7 +315,7 @@ function getHistoriqueCall (num)
     return result
 end
 
-function sendHistoriqueCall (src, num) 
+function sendHistoriqueCall (src, num)
     local histo = getHistoriqueCall(num)
     TriggerClientEvent('gcPhone:historiqueCall', src, histo)
 end
@@ -349,7 +349,7 @@ function saveAppels (appelInfo)
     end
 end
 
-function notifyNewAppelsHisto (src, num) 
+function notifyNewAppelsHisto (src, num)
     sendHistoriqueCall(src, num)
 end
 
@@ -368,9 +368,9 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
         onCallFixePhone(source, phone_number, rtcOffer, extraData)
         return
     end
-    
+
     local rtcOffer = rtcOffer
-    if phone_number == nil or phone_number == '' then 
+    if phone_number == nil or phone_number == '' then
         print('BAD CALL NUMBER IS NIL')
         return
     end
@@ -406,7 +406,7 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
         rtcOffer = rtcOffer,
         extraData = extraData
     }
-    
+
 
     if is_valid == true then
         getSourceFromIdentifier(destPlayer, function (srcTo)
@@ -438,7 +438,7 @@ AddEventHandler('gcPhone:candidates', function (callId, candidates)
     if AppelsEnCours[callId] ~= nil then
         local source = source
         local to = AppelsEnCours[callId].transmitter_src
-        if source == to then 
+        if source == to then
             to = AppelsEnCours[callId].receiver_src
         end
         -- print('TO', to)
@@ -484,7 +484,7 @@ AddEventHandler('gcPhone:rejectCall', function (infoCall)
             TriggerClientEvent('gcPhone:rejectCall', AppelsEnCours[id].receiver_src)
         end
 
-        if AppelsEnCours[id].is_accepts == false then 
+        if AppelsEnCours[id].is_accepts == false then
             saveAppels(AppelsEnCours[id])
         end
         TriggerEvent('gcPhone:removeCall', AppelsEnCours)
@@ -594,12 +594,12 @@ end)
 --====================================================================================
 function getBourse()
     --  Format
-    --  Array 
+    --  Array
     --    Object
     --      -- libelle type String    | Nom
     --      -- price type number      | Prix actuelle
-    --      -- difference type number | Evolution 
-    -- 
+    --      -- difference type number | Evolution
+    --
     -- local result = MySQL.Sync.fetchAll("SELECT * FROM `recolt` LEFT JOIN `items` ON items.`id` = recolt.`treated_id` WHERE fluctuation = 1 ORDER BY price DESC",{})
     local result = {
         {
@@ -673,7 +673,7 @@ function onCallFixePhone (source, phone_number, rtcOffer, extraData)
         extraData = extraData,
         coords = FixePhone[phone_number].coords
     }
-    
+
     PhoneFixeInfo[indexCall] = AppelsEnCours[indexCall]
 
     TriggerClientEvent('gcPhone:notifyFixePhoneChange', -1, PhoneFixeInfo)
@@ -684,7 +684,7 @@ end
 
 function onAcceptFixePhone(source, infoCall, rtcAnswer)
     local id = infoCall.id
-    
+
     AppelsEnCours[id].receiver_src = source
     if AppelsEnCours[id].transmitter_src ~= nil and AppelsEnCours[id].receiver_src~= nil then
         AppelsEnCours[id].is_accepts = true
@@ -707,5 +707,5 @@ function onRejectFixePhone(source, infoCall, rtcAnswer)
         saveAppels(AppelsEnCours[id])
     end
     AppelsEnCours[id] = nil
-    
+
 end

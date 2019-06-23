@@ -1,0 +1,149 @@
+
+.over{
+    position: absolute;
+    display: block;
+    position: absolute;
+    display: block;
+    top: 8px;
+    left: 7px;
+    right: 11px;
+    bottom: 8px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%,
+    rgba(241,241,241,0.3) 50%,
+    rgba(225,225,225,0.2) 51%,
+    rgba(246,246,246,0.1) 100%);
+}
+#ident-cursor {
+    position: absolute;
+    z-index: 99999999;
+    display: none;
+}
+
+#cheque{
+  position: absolute;
+  width: 618px;
+  height: 243px;
+  background-image: url('../images/cheque.png');
+  bottom: 300px;
+  right: 300px;
+  font-weight:700;
+  font-size: 0.9em
+}
+
+#date{
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    width: 95px;
+    height: 15px;
+    text-align: center;
+    text
+    line-height: 15px;
+    font-size: 12px;
+}
+
+#nomprenom{
+    position: absolute;
+    top: 96px;
+    left: 70px;
+    width: 150px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 20px;
+}
+
+#nomprenomd{
+    position: absolute;
+    top: 180px;
+    left: 190px;
+    width: 150px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+#montant{
+  position: absolute;
+    top: 110px;
+    right: 15px;
+    width: 130px;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    font-size: 15px;
+}
+
+#montant1{
+  position: absolute;
+    top: 55px;
+    left: 100px;
+    width: 250px;
+    height: 15px;
+    text-align: center;
+    line-height: 15px;
+    font-size: 20px;
+}
+
+#num{
+    display: block;
+    position: absolute;
+    top: 175px;
+    left: 80px;
+    bottom: 28px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    font-family: monospace;
+    letter-spacing: -2px;
+    text-align: center;
+}
+
+
+.champ label{
+  display: block;
+  color: black;
+  background-color: white;
+  height: 28px;
+  line-height: 28px;
+  font-size: 24px;
+  padding: 4px 14px;
+}
+.champ input[type="number"],
+.champ input[type="text"]{
+  display: block;
+  margin-left: 22px;
+  height: 38px;
+  width: 508px;
+  padding-left: 10px;
+  background-color: lightgray;
+  border: 1px solid black;
+  font-size: 22px;
+}
+
+.champ .lcheck{
+  display: inline-block;
+}
+
+
+.champ input[type="radio"]{
+  height: 16px;
+  width: 16px;
+}
+
+button{
+  background-color: lightgray;
+  color:black;
+  font-weight: 700;
+  margin: 15px 50px;
+  padding: 10px 20px;
+  border: 1px solid darkgray;
+  float: right;
+}
+
+.clearfix {
+  overflow: auto;
+  zoom: 1;
+}

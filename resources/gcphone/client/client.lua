@@ -1,7 +1,7 @@
 --====================================================================================
 -- #Author: Jonathan D @ Gannon
 --====================================================================================
- 
+
 -- Configuration
 local KeyToucheCloseEvent = {
   { code = 172, event = 'ArrowUp' },
@@ -33,13 +33,29 @@ local soundDistanceMax = 8.0
 --  Check si le joueurs poséde un téléphone
 --  Callback true or false
 --====================================================================================
-function hasPhone (cb)
-  cb(true)
+function hasPhone()
+  TriggerServerEvent("gcphone:callData")
 end
+
+RegisterNetEvent('gcphone:callData:cb')
+AddEventHandler('gcphone:callData:cb', function(data)
+  local gotPhone = false
+  for k,v in pairs(data.Inventaire) do
+    if v.id == 206 then
+      gotPhone = true
+    end
+  end
+  if gotPhone == true then
+    TooglePhone()
+  else
+    ShowNoPhoneWarning()
+  end
+end)
 --====================================================================================
 --  Que faire si le joueurs veut ouvrir sont téléphone n'est qu'il en a pas ?
 --====================================================================================
 function ShowNoPhoneWarning ()
+  TriggerEvent('Venato:notify', "~r~Vous n'avez pas de téléphone.")
 end
 
 --[[
@@ -62,7 +78,7 @@ function hasPhone (cb)
     cb(qtty > 0)
   end, 'phone')
 end
-function ShowNoPhoneWarning () 
+function ShowNoPhoneWarning ()
   if (ESX == nil) then return end
   ESX.ShowNotification("Vous n'avez pas de ~r~téléphone~s~")
 end
@@ -70,20 +86,14 @@ end
 
 
 --====================================================================================
---  
+--
 --====================================================================================
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if takePhoto ~= true then
       if IsControlJustPressed(1, KeyOpenClose) then
-        hasPhone(function (hasPhone)
-          if hasPhone == true then
-            TooglePhone()
-          else
-            ShowNoPhoneWarning()
-          end
-        end)
+        hasPhone()
       end
       if menuIsOpen == true then
         for _, value in ipairs(KeyToucheCloseEvent) do
@@ -168,16 +178,16 @@ function showFixePhoneHelper (coords)
     end
   end
 end
- 
+
 
 Citizen.CreateThread(function ()
   local mod = 0
-  while true do 
+  while true do
     local playerPed   = PlayerPedId()
     local coords      = GetEntityCoords(playerPed)
     local inRangeToActivePhone = false
     local inRangedist = 0
-    for i, _ in pairs(PhoneInCall) do 
+    for i, _ in pairs(PhoneInCall) do
         local dist = GetDistanceBetweenCoords(
           PhoneInCall[i].coords.x, PhoneInCall[i].coords.y, PhoneInCall[i].coords.z,
           coords.x, coords.y, coords.z, 1)
@@ -186,7 +196,7 @@ Citizen.CreateThread(function ()
               0,0,0, 0,0,0, 0.1,0.1,0.1, 0,255,0,255, 0,0,0,0,0,0,0)
           inRangeToActivePhone = true
           inRangedist = dist
-          if (dist <= 1.5) then 
+          if (dist <= 1.5) then
             SetTextComponentFormat("STRING")
             AddTextComponentString("~INPUT_PICKUP~ Décrocher")
             DisplayHelpTextFromStringLabel(0, 0, 1, -1)
@@ -250,7 +260,7 @@ AddEventHandler("gcPhone:forceOpenPhone", function(_myPhoneNumber)
     TooglePhone()
   end
 end)
- 
+
 --====================================================================================
 --  Events
 --====================================================================================
@@ -307,11 +317,11 @@ end)
 --====================================================================================
 --  Function client | Contacts
 --====================================================================================
-function addContact(display, num) 
+function addContact(display, num)
     TriggerServerEvent('gcPhone:addContact', display, num)
 end
 
-function deleteContact(num) 
+function deleteContact(num)
     TriggerServerEvent('gcPhone:deleteContact', num)
 end
 --====================================================================================
@@ -323,7 +333,7 @@ end
 
 function deleteMessage(msgId)
   TriggerServerEvent('gcPhone:deleteMessage', msgId)
-  for k, v in ipairs(messages) do 
+  for k, v in ipairs(messages) do
     if v.id == msgId then
       table.remove(messages, k)
       SendNUIMessage({event = 'updateMessages', messages = messages})
@@ -342,7 +352,7 @@ end
 
 function setReadMessageNumber(num)
   TriggerServerEvent('gcPhone:setReadMessageNumber', num)
-  for k, v in ipairs(messages) do 
+  for k, v in ipairs(messages) do
     if v.transmitter == num then
       v.isRead = 1
     end
@@ -383,7 +393,7 @@ AddEventHandler("gcPhone:acceptCall", function(infoCall, initiator)
     NetworkSetVoiceChannel(infoCall.id + 1)
     NetworkSetTalkerProximity(0.0)
   end
-  if menuIsOpen == false then 
+  if menuIsOpen == false then
     TooglePhone()
   end
   PhonePlayCall()
@@ -424,7 +434,7 @@ function ignoreCall(infoCall)
   TriggerServerEvent('gcPhone:ignoreCall', infoCall)
 end
 
-function requestHistoriqueCall() 
+function requestHistoriqueCall()
   TriggerServerEvent('gcPhone:getHistoriqueCall')
 end
 
@@ -435,7 +445,7 @@ end
 function appelsDeleteAllHistorique ()
   TriggerServerEvent('gcPhone:appelsDeleteAllHistorique')
 end
-  
+
 
 --====================================================================================
 --  Event NUI - Appels
@@ -562,7 +572,7 @@ end)
 
 --====================================================================================
 --  Gestion des evenements NUI
---==================================================================================== 
+--====================================================================================
 RegisterNUICallback('log', function(data, cb)
   print(data)
   cb()
@@ -576,7 +586,7 @@ end)
 RegisterNUICallback('reponseText', function(data, cb)
   local limit = data.limit or 255
   local text = data.text or ''
-  
+
   DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", text, "", "", "", limit)
   while (UpdateOnscreenKeyboard() == 0) do
       DisableAllControlActions(0);
@@ -619,7 +629,7 @@ end)
 --====================================================================================
 --  Event - Contacts
 --====================================================================================
-RegisterNUICallback('addContact', function(data, cb) 
+RegisterNUICallback('addContact', function(data, cb)
   TriggerServerEvent('gcPhone:addContact', data.display, data.phoneNumber)
 end)
 RegisterNUICallback('updateContact', function(data, cb)
@@ -640,7 +650,7 @@ end)
 RegisterNUICallback('callEvent', function(data, cb)
   local eventName = data.eventName or ''
   if string.match(eventName, 'gcphone') then
-    if data.data ~= nil then 
+    if data.data ~= nil then
       TriggerEvent(data.eventName, data.data)
     else
       TriggerEvent(data.eventName)
@@ -660,10 +670,10 @@ end)
 
 
 
-function TooglePhone() 
+function TooglePhone()
   menuIsOpen = not menuIsOpen
   SendNUIMessage({show = menuIsOpen})
-  if menuIsOpen == true then 
+  if menuIsOpen == true then
     PhonePlayIn()
   else
     PhonePlayOut()
@@ -755,7 +765,7 @@ RegisterNUICallback('takePhoto', function(data, cb)
         local resp = json.decode(data)
         DestroyMobilePhone()
         CellCamActivate(false, false)
-        cb(json.encode({ url = resp.files[1].url }))   
+        cb(json.encode({ url = resp.files[1].url }))
       end)
       takePhoto = false
 		end

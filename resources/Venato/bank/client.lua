@@ -3,14 +3,17 @@ local type = 'fleeca'
 
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
-	time = 500
-	x = 1
+	local time = 500
+	local x = 1
   while true do
     Citizen.Wait(time)
 		inMarker = false
 		inBankMarker = false
 
     for i=1, #Config.ATMS, 1 do
+      if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 20 and ( Config.ATMS[i].b ~= nil ) then
+        DrawMarker(27,Config.ATMS[x].x, Config.ATMS[x].y, Config.ATMS[x].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
+      end
       if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2  then
 				x = i
 				time = 0
@@ -43,6 +46,82 @@ end)
 
 RegisterNetEvent('Bank:GetDataMoneyForBank:cb')
 AddEventHandler('Bank:GetDataMoneyForBank:cb', function(data)
+  menuBank(data)
+end)
+
+function menuBank(data)
+  Menu.hidden = false
+  MenuTitle = "Banque"
+  MenuDescription = "Options"
+  ClearMenu()
+  if data.Account == 'aucun' then
+    Menu.addButton("Créer un compte banquaire pour ~g~1 000 €", "CreatAcount", data)
+  else
+    Menu.addButton("Mon compte", "myAcount", data)
+    Menu.addButton("Déposer un chèque", "depoCheque", data)
+    Menu.addButton("Acheter une carte ~g~1 000 €", "buyCard", data)
+    Menu.addButton("Acheter un chequier ~g~1 000 €", "buyCheque", data)
+  end
+end
+
+function depoCheque(data)
+  Menu.hidden = false
+  ClearMenu()
+  MenuTitle = "Mes chèques"
+	MenuDescription = "Choisisez le chèque à déposer"
+  Menu.addButton("~r~↩ Retour", "menuBank", data)
+  for k,v in pairs(data.Documents) do
+    if v.type == "cheque" then
+      Menu.addButton("Cheque de ~g~"..v.montant.." €", "selecChequedepot", {data,k})
+    end
+  end
+end
+
+function selecChequedepot(row)
+  TriggerServerEvent("Bank:DepotCheque", row[2])
+  Menu.hidden = true
+end
+
+
+function buyCheque(data)
+  if data.Money >= 1000 then
+    local alereadyAChequier = false
+    for k,v in pairs(data.Documents) do
+      if v.type == "chequier" then
+        alereadyAChequier = true
+      end
+    end
+    if alereadyAChequier == false then
+      TriggerServerEvent("Bank:createCheque")
+      TriggerServerEvent("Inventory:RemoveMoney", 1000)
+    else
+      Venato.notify("~r~Vous possèdez déjà un chèquier.")
+    end
+  else
+    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour acheter un chequier.")
+  end
+end
+
+function buyCard(data)
+  if data.Money >= 1000 then
+    TriggerServerEvent("Bank:createCard")
+    TriggerServerEvent("Inventory:RemoveMoney", 1000)
+  else
+    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour acheter une carte banquaire.")
+  end
+end
+
+function CreatAcount(data)
+  Menu.hidden = true
+  if data.Money >= 1000 then
+    TriggerServerEvent("Bank:createAccount")
+    TriggerServerEvent("Inventory:RemoveMoney", 1000)
+  else
+    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour ouvrir un compte.")
+  end
+end
+
+function myAcount(data)
 	SetNuiFocus(true, true)
 	open = true
 	SendNUIMessage({
@@ -54,7 +133,7 @@ AddEventHandler('Bank:GetDataMoneyForBank:cb', function(data)
 		lastname = data.Nom,
 		account = data.Account
 	})
-end)
+end
 
 
 Citizen.CreateThread(function ()
@@ -64,19 +143,10 @@ Citizen.CreateThread(function ()
 			SetNuiFocus(false, false)
 			open = false
 		end
-		if IsControlJustReleased(0, 38) and inMarker then
-		--	for k,v in pairs(DataPlayers[source].Inventaire) do
-    --    if k == 41 then
-    --      godDamn = true
-    --    end
-    --  end
+		if IsControlJustReleased(0, 38) and inMarker and GetLastInputMethod(2) then
 			TriggerServerEvent("Bank:GetDataMoneyForATM")
-			--	else
-				--	ESX.ShowNotification('You have no credit card. Go to the bank')
-				--end
-			--end)
 		end
-		if IsControlJustReleased(0, 38) and inBankMarker then
+		if IsControlJustReleased(0, 38) and inBankMarker and GetLastInputMethod(2) then
 			TriggerServerEvent("Bank:GetDataMoneyForBank")
 		end
 		if open then

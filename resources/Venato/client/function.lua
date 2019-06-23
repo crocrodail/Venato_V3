@@ -92,3 +92,21 @@ function Venato.Round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
 end
+
+function Venato.CreateObject(objet, x, y, z)
+    local model = GetHashKey(objet)
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+      Citizen.Wait(100)
+    end
+    local objet = CreateObject(model, x, y, z, true, false, false)
+    PlaceObjectOnGroundProperly(object)
+    return objet
+end
+
+function Venato.ConvertUrl(url)
+  local urlstep1 = string.gsub(url, "/", "_")
+  local urlstep2 = string.gsub(urlstep1, ":", "ù")
+  local finalUrl = string.gsub(urlstep1, "%.", "!")
+  return finalUrl
+end

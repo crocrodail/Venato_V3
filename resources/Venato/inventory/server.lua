@@ -11,6 +11,8 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 	local inventaire = {}
 	local Wp = {}
 	local Weapon = {}
+	local doc = {}
+	local Document = {}
 	local poid = Venato.Round(DataPlayers[source].Money*0.000075,1)
 	MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
 		if result[1] ~= nil then
@@ -29,9 +31,20 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 				Wp = {["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles)}
 				Weapon[v.id] = Wp
 				poid = poid + tonumber(v.poid)
+				TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
 			end
 			DataPlayers[source].Poid = poid
 			DataPlayers[source].Weapon = Weapon
+		end
+	end)
+	MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+		if result[1] ~= nil then
+			for i,v in ipairs(result) do
+				print(v.type)
+				doc = {["type"] = v.type, ["nom1"] = v.nom, ["prenom1"] = v.prenom, ["montant"] = tonumber(v.montant), ["numeroDeCompte"] = v.numero_de_compte, ["date"] = v.date, ["nom2"] = v.nom_du_factureur, ["prenom2"] = v.prenom_du_factureur}
+				Document[v.id] = doc
+			end
+			DataPlayers[source].Documents = Document
 		end
 	end)
 end)
@@ -42,17 +55,22 @@ AddEventHandler('Inventory:ShowMe', function()
 end)
 
 RegisterServerEvent('Inventory:DataItem')
-AddEventHandler('Inventory:DataItem', function(id)
+AddEventHandler('Inventory:DataItem', function(id, qty)
 	local source = source
 	local table = {}
 	MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
-		if result ~= nil then
-			table = { water = result[1].water, food = result[1].food, need = result[1].need, sool = result[1].sool, drug = result[1].drug }
-			DataPlayers[source].Food = DataPlayers[source].Food - table.food
-			DataPlayers[source].Water = DataPlayers[source].Water - table.water
-			DataPlayers[source].Need = DataPlayers[source].Need + table.need
-			DataPlayers[source].Sool = DataPlayers[source].Sool + table.sool
-			TriggerClientEvent("Stade:UpdateState", source, table)  -- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué
+		if result[1] ~= nil then
+			if tonumber(result[1].conspmable) == 1 then
+				TriggerEvent("Inventory:SetItem", qty-1, id, source)
+				table = { water = result[1].water, food = result[1].food, need = result[1].need, sool = result[1].sool, drug = result[1].drug }
+				DataPlayers[source].Food = DataPlayers[source].Food - table.food
+				DataPlayers[source].Water = DataPlayers[source].Water - table.water
+				DataPlayers[source].Need = DataPlayers[source].Need + table.need
+				DataPlayers[source].Sool = DataPlayers[source].Sool + table.sool
+				TriggerClientEvent("Stade:UpdateState", source, table)  -- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué
+			else
+				TriggerClientEvent('Venato:notify', source, "~r~Cette item n'est pas utilisable.")
+			end
 		end
 	end)
 end)
@@ -145,8 +163,7 @@ end)
 ItemsOnTheGround = {}
 ItemsOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropItem')
-AddEventHandler('Inventory:DropItem', function(libelle, qty, id, uPoid, x, poid)
-	local x, y, z = table.unpack(x)
+AddEventHandler('Inventory:DropItem', function(libelle, qty, id, uPoid, x,y,z, poid)
 	ItemsOnTheGroundIndex = ItemsOnTheGroundIndex + 1
 	ItemsOnTheGround[ItemsOnTheGroundIndex] = {id = id, libelle = libelle, qty = qty, uPoid = uPoid, poid = poid, x = x, y = y, z = z}
 	ActualiseTableOfItemOnTheGround()
@@ -167,8 +184,7 @@ AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
 	if DataPlayers[ClosePlayer].Poid + Venato.Round(qty * 0.000075) >= DataPlayers[ClosePlayer].PoidMax then
 		TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
 		TriggerEvent("Inventory:RemoveMoney", qty, source)
-		--TriggerClientEvent("Venato:Anim", source, ...)-- ###########################   non atribué-- ###########################   non atribué-- ###########################-- ###########################   non atribué-- ###########################   non atribué-- ###########################
-		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
+		TriggerClientEvent("Inventory:AnimGive", source)		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
 		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu "..qty.." €")
 	else
 		TriggerClientEvent("Venato:notify", source, "La personne est trop lourde pour reçevoir "..qty.." €")
@@ -215,8 +231,7 @@ end)
 MoneyOnTheGround = {}
 MoneyOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropMoney')
-AddEventHandler('Inventory:DropMoney', function(qty, tableau, pos, poid)
-	local x, y, z = table.unpack(pos)
+AddEventHandler('Inventory:DropMoney', function(qty, tableau, x,y,z, poid)
 	MoneyOnTheGroundIndex = MoneyOnTheGroundIndex + 1
 	MoneyOnTheGround[MoneyOnTheGroundIndex] = {qty = qty, poid = tableau[3], PlayerMoney = tableau[1], x = x, y = y, z = z}
 	ActualiseTableOfMoneyOnTheGround()
@@ -237,8 +252,7 @@ AddEventHandler('Inventory:CallInfoWeapon', function(ClosePlayer, table)
 	if DataPlayers[ClosePlayer].Poid + table[4] >= DataPlayers[ClosePlayer].PoidMax then
 		TriggerEvent("Inventory:AddWeapon", table[3], table[5], table[4], table[2], ClosePlayer)
 		TriggerEvent("Inventory:RemoveWeapon", table[3], table[1], source)
-		--TriggerClientEvent("Venato:Anim", source, ...)-- ###########################   non atribué-- ###########################   non atribué-- ###########################-- ###########################   non atribué-- ###########################   non atribué-- ###########################
-		TriggerClientEvent("Venato:notify", source, "Vous avez donner une arme.")
+		TriggerClientEvent("Inventory:AnimGive", source)
 		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu une arme.")
 	else
 		TriggerClientEvent("Venato:notify", source, "La personne est trop lourde pour reçevoir une arme.")
@@ -249,8 +263,7 @@ end)
 WeaponOnTheGround = {}
 WeaponOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropWeapon')
-AddEventHandler('Inventory:DropWeapon', function(tableau, pos)
-	local x, y, z = table.unpack(pos)
+AddEventHandler('Inventory:DropWeapon', function(tableau, x,y,z)
 	WeaponOnTheGroundIndex = WeaponOnTheGroundIndex + 1
 	print(tableau[2])
 	WeaponOnTheGround[WeaponOnTheGroundIndex] = {id = tableau[3], libelle = tableau[2], ammo = tableau[5], uPoid = tableau[4], x = x, y = y, z = z, poid = tableau[6]}
@@ -281,10 +294,24 @@ AddEventHandler('Inventory:AddWeapon', function(weapon, ammo, poid, libelle, New
 	if libelle == nil then
 		libelle = "inconue"
 	end
-	DataPlayers[source].Index = DataPlayers[source].Index + 1
-	DataPlayers[source].Weapon[DataPlayers[source].Index] = {["id"] = weapon, ["libelle"] = libelle, ["poid"] = poid, ["ammo"] = ammo}
 	TriggerClientEvent("Inventory:AddWeaponClient", source, weapon, ammo)
 	MySQL.Async.execute("INSERT INTO user_weapons (`identifier`, `weapon_model`, `balles`) VALUES (@identifier, @weapon_model, @balles)",{['@identifier'] = DataPlayers[source].SteamId, ['@weapon_model'] = weapon, ['@balles'] = ammo })
+	SetTimeout(1000, function()
+		MySQL.Async.fetchScalar("SELECT id FROM user_weapons WHERE identifier = @identifier ORDER BY id DESC", {['@identifier'] = DataPlayers[source].SteamId}, function(result)
+			DataPlayers[source].Weapon[result] = {["id"] = weapon, ["libelle"] = libelle, ["poid"] = poid, ["ammo"] = ammo}
+		end)
+	end)
+end)
+
+RegisterServerEvent('Inventory:AddWeaponAmmo')
+AddEventHandler('Inventory:AddWeaponAmmo', function(weapon, ammo, index, NewSource)
+	local source = source
+	if NewSource ~= nil then
+		source = NewSource
+	end
+	DataPlayers[source].Weapon[DataPlayers[source].Index].ammo = ammo
+	TriggerClientEvent("Inventory:AddWeaponAmmoClient", source, weapon, ammo)
+	MySQL.Async.execute("UPDATE user_weapons SET balles = @ammo WHERE id = @index",{['@ammo'] = ammo, ['@index'] = index})
 end)
 
 RegisterServerEvent('Inventory:RemoveWeapon')
@@ -299,5 +326,22 @@ AddEventHandler('Inventory:RemoveWeapon', function(weapon, id, poid, NewSource)
 	end
 	TriggerClientEvent("Inventory:RemoveWeaponClient", source, weapon)
 	DataPlayers[source].Weapon[id] = nil
-	MySQL.Async.execute("DELETE FROM user_weapons WHERE id = @id AND weapon_model = @weapon", {['@id'] = id , ['@weapon_model'] = weapon })
+	print(id.."   "..weapon)
+	MySQL.Async.execute("DELETE FROM user_weapons WHERE id = @id", {['@id'] = tonumber(id) },function(info)print(info)end)
+end)
+
+RegisterServerEvent('Inventory:ShowToOtherPermis')
+AddEventHandler('Inventory:ShowToOtherPermis', function(data, target)
+	TriggerClientEvent("Inventory:ShowToOtherPermis:cb", target, data)
+end)
+
+RegisterServerEvent('Inventory:ShowToOtherIdCard')
+AddEventHandler('Inventory:ShowToOtherIdCard', function(data, target)
+	TriggerClientEvent("Inventory:ShowToOtherIdCard:cb", target, data)
+end)
+
+
+RegisterServerEvent('Inventory:ShowToOtherVisa')
+AddEventHandler('Inventory:ShowToOtherVisa', function(data, target)
+	TriggerClientEvent("Inventory:ShowToOtherVisa:cb", target, data)
 end)

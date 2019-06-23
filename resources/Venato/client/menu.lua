@@ -56,6 +56,7 @@ ysize = 0.04
 xtext = xmin + xoffset + 0.025
 ytitle = yoffset - 0.11
 xdescriptionText = 0.12
+xindexText = 0.5
 
 function Menu.addButton(name, func,args)
 	Menu.GUI[Menu.buttonCount +1] = {}
@@ -163,9 +164,25 @@ function Menu.renderMainBox(xMin,xMax,yMin,yMax,color1,color2,color3,color4)
   SetTextEdge(0, 0, 0, 0, 0)
   SetTextEntry("STRING")
   local text = MenuDescription
-  if showPageInfo then  text = text.." "..(Menu.selection + 1).."/"..Menu.buttonCount end
-  AddTextComponentString(text)
+	AddTextComponentString(text)
   DrawText(xtext-xdescriptionText , ytitle+0.0655)
+  if showPageInfo then
+		Menu.renderIndex()
+	end
+end
+
+function Menu.renderIndex()
+	local idexPage = ""
+	SetTextFont(1)
+	SetTextScale(1,0.45)
+	SetTextColour(255, 255, 255, 255)
+	SetTextCentre(false)
+	SetTextDropShadow(0, 0, 0, 0, 0)
+	SetTextEdge(0, 0, 0, 0, 0)
+	SetTextEntry("STRING")
+	idexPage = (Menu.selection + 1).."/"..Menu.buttonCount
+	AddTextComponentString(idexPage)
+	DrawText(0.295 , 0.205)
 end
 
 function Menu.renderButtons()
