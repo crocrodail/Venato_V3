@@ -40,7 +40,6 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 	MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
 		if result[1] ~= nil then
 			for i,v in ipairs(result) do
-				print(v.type)
 				doc = {["type"] = v.type, ["nom1"] = v.nom, ["prenom1"] = v.prenom, ["montant"] = tonumber(v.montant), ["numeroDeCompte"] = v.numero_de_compte, ["date"] = v.date, ["nom2"] = v.nom_du_factureur, ["prenom2"] = v.prenom_du_factureur}
 				Document[v.id] = doc
 			end
@@ -265,7 +264,6 @@ WeaponOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropWeapon')
 AddEventHandler('Inventory:DropWeapon', function(tableau, x,y,z)
 	WeaponOnTheGroundIndex = WeaponOnTheGroundIndex + 1
-	print(tableau[2])
 	WeaponOnTheGround[WeaponOnTheGroundIndex] = {id = tableau[3], libelle = tableau[2], ammo = tableau[5], uPoid = tableau[4], x = x, y = y, z = z, poid = tableau[6]}
 	ActualiseTableOfWeaponOnTheGround()
 end)
@@ -326,8 +324,7 @@ AddEventHandler('Inventory:RemoveWeapon', function(weapon, id, poid, NewSource)
 	end
 	TriggerClientEvent("Inventory:RemoveWeaponClient", source, weapon)
 	DataPlayers[source].Weapon[id] = nil
-	print(id.."   "..weapon)
-	MySQL.Async.execute("DELETE FROM user_weapons WHERE id = @id", {['@id'] = tonumber(id) },function(info)print(info)end)
+	MySQL.Async.execute("DELETE FROM user_weapons WHERE id = @id", {['@id'] = tonumber(id) })
 end)
 
 RegisterServerEvent('Inventory:ShowToOtherPermis')

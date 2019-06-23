@@ -78,7 +78,27 @@ function depoCheque(data)
 end
 
 function selecChequedepot(row)
+  ClearMenu()
+  Menu.addButton("~r~↩ Retour", "depoCheque", row[1])
+  Menu.addButton("Encaissé", "encaise", row)
+  Menu.addButton("~r~Annuler ce cheque", "cancelChequetest", row)
+end
+
+function encaise(row)
   TriggerServerEvent("Bank:DepotCheque", row[2])
+  Menu.hidden = true
+end
+
+function cancelChequetest(row)
+  ClearMenu()
+  MenuTitle = "~r~Confirmer l'annulation"
+  MenuDescription = "Etes vous sur de vouloir annuler ce chèque ?"
+  Menu.addButton("~r~Annuler l'annulation", "selecChequedepot", row)
+  Menu.addButton("~b~Confirmer l'annulation", "cancelCheque", row)
+end
+
+function cancelCheque(row)
+  TriggerServerEvent("Bank:CancelCheque", row[2])
   Menu.hidden = true
 end
 

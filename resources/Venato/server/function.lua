@@ -15,7 +15,6 @@ end
 DataPlayers = {}
 
 function accessGranded(SteamId, source)
-  print("here")
   MySQL.Async.fetchAll("SELECT * FROM users INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` WHERE identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)--JOIN whitelist ON `users`.`identifier` = `whitelist`.`identifier`
     if DataUser[1] == nil then
       DropPlayer(source, "Une erreur s'est produite, si cette dernière persiste contactez un membre du staff.")

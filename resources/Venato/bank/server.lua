@@ -114,18 +114,34 @@ end)
 RegisterNetEvent("Bank:DepotCheque")
 AddEventHandler("Bank:DepotCheque", function(index)
 	local source = source
-  TriggerEvent("Bank:AddBankMoney", DataPlayers[source].Documents[index].montant, source)
-  MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
-  TriggerClientEvent('Venato:notify', source, "~g~Vous avez bien déposé une chèque de "..DataPlayers[source].Documents[index].montant.." € sur votre compte banquaire.")
-  DataPlayers[source].Documents[index] = nil
+  MySQL.Async.fetchAll("SELECT * FROM users WHERE account = @account",{["@account"]=DataPlayers[source].Documents[index].numeroDeCompte}, function(result)
+    if result[1] ~= nil then
+      if result[1].bank >= DataPlayers[source].Documents[index].montant then
+        if result[1].source ~= 'disconnect' then
+          TriggerEvent("Bank:RemoveBankMoney", DataPlayers[source].Documents[index].montant, result[1].source)
+        else
+          MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = result[1].identifier, ["@Money"] = result[1].bank-DataPlayers[source].Documents[index].montant})
+        end
+          TriggerEvent("Bank:AddBankMoney", DataPlayers[source].Documents[index].montant, source)
+          MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
+          TriggerClientEvent('Venato:notify', source, "~g~Vous avez bien déposé un chèque de "..DataPlayers[source].Documents[index].montant.." € sur votre compte banquaire.")
+          DataPlayers[source].Documents[index] = nil
+      else
+        TriggerClientEvent('Venato:notify', source, "~r~Il s'enblerait que ce soit un chèque en bois, le transfère à été refusé pour solde insuffisant.")
+      end
+    else
+      TriggerClientEvent('Venato:notify', source, "~r~Il s'enblerait que ce chèque soit un faux, aucun numero de compte corespond à ce dernier.")
+    end
+  end)
 end)
 
-
-
-
-
-
-
+RegisterNetEvent("Bank:DepotCheque")
+AddEventHandler("Bank:DepotCheque", function(index)
+	local source = source
+  MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
+  TriggerClientEvent('Venato:notify', source, "~g~Vous avez bien ~r~annulé un chèque de "..DataPlayers[source].Documents[index].montant.." €.")
+  DataPlayers[source].Documents[index] = nil
+end)
 
 RegisterNetEvent("Bank:AddBankMoney")
 AddEventHandler("Bank:AddBankMoney", function(qty, NewSource)
