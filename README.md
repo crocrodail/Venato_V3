@@ -47,3 +47,13 @@ TriggerEvent('Inventory:RemoveMoney', qty, optional Source)
 Set Money :
 
 TriggerEvent('Inventory:SetMoney', qty, optional Source)
+
+
+###  MENU  ###
+
+MenuTitle = ""
+MenuDescription = ""
+showPageInfo = false | true     # affiche le nombre de bouton
+ClearMenu()    # supprime tout les boutons
+Menu.hidden = false | true   # affiche le menu
+Menu.addButton(string1, string2, parametre)   #string1 = text du bouton ,  string2 = fonction a execute , parametre = parametre de la dite fonction
