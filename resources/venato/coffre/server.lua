@@ -24,8 +24,10 @@ function reloadDataCoffre()
             ["blue"] = v.CouleurBleu,
             ["showname"] = v.showname,
             ["nbItems"] = 0,
+            ["nbWeapon"] = 0,
             ["itemcapacite"] = v.Capacite,
             ["argentcapacite"] = v.ArgentMax,
+            ["maxWeapon"] = v.QtyWeapon,
             ["inventaire"] = {nil},
             ["weapon"] = {nil},
             ["whitelist"] = {nil}
@@ -47,9 +49,10 @@ function reloadDataCoffre()
               end
             end
           end)
-          Citizen.Wait(5000)
+          Citizen.Wait(500)
           MySQL.Async.fetchAll("SELECT * FROM coffres_weapons JOIN weapon_model ON coffres_weapons.Weapon = weapon_model.weapond WHERE CoffreId = @CoffreId", {["@CoffreId"] = v.id}, function(resultweapon)
             if resultweapon[1] ~= nil then
+              local qtyWp = 0
               for k3,v3 in pairs(resultweapon) do
                 CofWp = {
                   ["weaponId"] = v3.Weapon,
@@ -57,11 +60,13 @@ function reloadDataCoffre()
                   ["balles"] = v3.balles,
                   ["poid"] = v3.poid
                 }
+                qtyWp = qtyWp + 1
                 DataCoffre[v.id].weapon[v3.Id] = CofWp
               end
+              DataCoffre[v.id].nbWeapon = qtyWp
             end
           end)
-          Citizen.Wait(5000)
+          Citizen.Wait(500)
           MySQL.Async.fetchAll("SELECT * FROM coffres_whitelist JOIN users ON coffres_whitelist.UserId = users.identifier WHERE CoffreId = @coffreId", {["@coffreId"] = v.id}, function(resultwhhtelist)
             if resultwhhtelist[1] ~= nil then
               for k4,v4 in pairs(resultwhhtelist) do
@@ -74,6 +79,7 @@ function reloadDataCoffre()
               end
             end
           end)
+          Citizen.Wait(500)
         end
       end
     end)
