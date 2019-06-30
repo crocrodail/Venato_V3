@@ -29,7 +29,12 @@ local traf = 0
 local whitelistUp = true
 Players = {}
 MysqlAsyncLoad = false
-MySQL.ready(function ()	MysqlAsyncLoad = true print("^2MySQL Connector is properly Connected^7")end)
+
+MySQL.ready(function()
+	MysqlAsyncLoad = true
+  startScript()
+  print("^2MySQL Connector is properly Connected^7")
+end)
 
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)

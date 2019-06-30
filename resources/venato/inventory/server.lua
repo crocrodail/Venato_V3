@@ -13,7 +13,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 	local Weapon = {}
 	local doc = {}
 	local Document = {}
-	local poid = Venato.Round(DataPlayers[source].Money*0.000075,1)
+	local poid = Venato.MoneyToPoid(DataPlayers[source].Money)
 	MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
 		if result[1] ~= nil then
 			for i,v in ipairs(result) do
@@ -180,7 +180,7 @@ end
 
 RegisterServerEvent('Inventory:CallInfoMoney')
 AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
-	if DataPlayers[ClosePlayer].Poid + Venato.Round(qty * 0.000075) >= DataPlayers[ClosePlayer].PoidMax then
+	if DataPlayers[ClosePlayer].Poid + Venato.MoneyToPoid(qty) >= DataPlayers[ClosePlayer].PoidMax then
 		TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
 		TriggerEvent("Inventory:RemoveMoney", qty, source)
 		TriggerClientEvent("Inventory:AnimGive", source)		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
@@ -198,7 +198,7 @@ AddEventHandler("Inventory:AddMoney", function(qty, NewSource)
 	if NewSource ~= nil then
 		source = NewSource
 	end
-	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.Round(qty * 0.000075)
+	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.MoneyToPoid(qty)
 	local new = DataPlayers[source].Money + qty
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
@@ -212,7 +212,7 @@ AddEventHandler("Inventory:RemoveMoney", function(qty, NewSource)
 		source = NewSource
 	end
 	local new = DataPlayers[source].Money - qty
-	DataPlayers[source].Poid = DataPlayers[source].Poid - Venato.Round(qty * 0.000075)
+	DataPlayers[source].Poid = DataPlayers[source].Poid - Venato.MoneyToPoid(qty)
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
@@ -224,9 +224,9 @@ AddEventHandler("Inventory:SetMoney", function(qty, NewSource)
 	if NewSource ~= nil then
 		source = NewSource
 	end
-	local newPoid = DataPlayers[source].Poid - Venato.Round(DataPlayers[source].Money  * 0.000075)
+	local newPoid = DataPlayers[source].Poid - Venato.MoneyToPoid(DataPlayers[source].Money)
 	local new = qty
-	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.Round(qty * 0.000075)
+	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.MoneyToPoid(qty)
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
