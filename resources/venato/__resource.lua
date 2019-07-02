@@ -10,15 +10,18 @@ client_script {
   '/client/sirenControl.js',
   '/client/teleport.lua',
   '/inventory/client.lua',
+  '/bank/config.lua',
   '/bank/client.lua',
-  '/bank/config.lua'
+  '/carShop/config.lua',
+  '/carShop/client.lua'
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
   '/server/login.lua',
   '/server/function.lua',
   '/inventory/server.lua',
-  '/bank/server.lua'
+  '/bank/server.lua',
+  '/carShop/server.lua'
 }
 
 files {

@@ -18,14 +18,20 @@ end)
 function Venato.notify(message)
 		SetNotificationTextEntry("STRING")
 		AddTextComponentString(message)
-		DrawNotification(false, false)
+		return DrawNotification(false, false)
 end
 
-function Venato.Text3D(x,y,z, text)
+function Venato.Text3D(x,y,z, text, font, fontSize)
+	if not font then
+		font = 0
+	end
+	if not fontSize then
+		fontSize = 0.4
+	end
 	SetDrawOrigin(x, y, z, 0);
-	SetTextFont(0)
+	SetTextFont(font)
 	SetTextProportional(0)
-	SetTextScale(0.0, 0.4)
+	SetTextScale(0.0, fontSize)
 	SetTextColour(200, 200, 200, 240)
 	SetTextDropshadow(0, 0, 0, 0, 255)
 	SetTextEdge(2, 0, 0, 0, 150)
@@ -109,4 +115,14 @@ function Venato.ConvertUrl(url)
   local urlstep2 = string.gsub(urlstep1, ":", "ù")
   local finalUrl = string.gsub(urlstep1, "%.", "!")
   return finalUrl
+end
+
+function Venato.ScaleForm(scaleform)
+	local scaleform = RequestScaleformMovie(scaleform)
+
+	while not HasScaleformMovieLoaded(scaleform) do
+		Citizen.Wait(0)
+	end
+	
+	return scaleform
 end
