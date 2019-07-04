@@ -5,7 +5,7 @@ Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
 	local time = 500
   while true do
-    Citizen.Wait(time)
+    Citizen.Wait(0)
 		inMarker = false
 		inBankMarker = false
 

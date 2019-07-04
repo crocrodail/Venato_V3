@@ -1,0 +1,581 @@
+1,Dinghy,Dinghy,Boats,2,166250,0,0,0,77.16,94.12,0,34
+2,Dinghy (2-seater),Dinghy2,Boats,2,250000,0,0,0,77.16,94.12,0,34
+5,Jetmax,Jetmax,Boats,2,299000,0,0,0,83.33,100,0,26
+6,Marquis,Marquis,Boats,2,413990,0,0,0,18.52,14.71,0,100
+7,Seashark,Seashark,Boats,2,16899,0,0,0,80.25,73.53,0,4
+8,Seashark Lifeguard,Seashark2,Boats,2,17000,0,0,0,80.25,73.53,0,4
+9,Seashark GT,Seashark3,Boats,2,20000,0,0,0,85.25,73.53,0,4
+10,Speeder Wood,Speeder,Boats,2,325000,0,0,0,82.1,94.12,0,36.8
+11,Speeder,Speeder2,Boats,2,325000,0,0,0,82.1,94.12,0,36.8
+12,Squalo,Squalo,Boats,2,196621,0,0,0,67.9,67.65,0,40
+13,Submersible,Submersible,Boats,2,500000,0,0,0,46.3,47.06,0,0
+14,Kraken,Submersible2,Boats,2,1325000,0,0,0,46.3,58.82,0,0
+15,Suntrap,Suntrap,Boats,2,25160,0,0,0,67.9,67.65,0,52
+16,Toro Wood,Toro,Boats,2,1750000,0,0,0,82.1,100,0,36.8
+17,Toro,Toro2,Boats,2,1750000,0,0,0,82.1,100,0,36.8
+18,Tropic,Tropic,Boats,2,22000,0,0,0,70.99,76.47,0,32
+19,Tropic Sport,Tropic2,Boats,2,25000,0,0,0,75,80,0,25
+20,Tug,Tug,Import/Export,0,1250000,0,0,0,11,13,0,100
+21,Benson,Benson,Commercials,0,25000,0,0,0,69.75,40,8.33,53.03
+22,Biff,Biff,Commercials,0,35000,0,0,0,59,30,10,50
+23,Hauler,Hauler,Commercials,0,50000,0,0,0,61.7,40,26.67,46.97
+24,Hauler Custom,Hauler2,Commercials,0,140000,0,0,0,69.75,80,28.33,59.09
+25,Mule,Mule,Commercials,0,27000,0,0,0,53.66,27.5,8.33,45.45
+26,Mule Custom,Mule2,Commercials,0,95760,0,0,0,53.66,27.5,8.33,45.45
+27,Mule (Armored),Mule3,Commercials,0,43300,0,0,0,53.66,27.55,54.11,45.45
+28,Packer,Packer,Commercials,0,50000,0,0,0,64.39,52.5,26.67,46.97
+29,Phantom,Phantom,Commercials,0,90000,0,0,0,66,52.5,26.67,50
+30,Phantom Custom,Phantom3,Commercials,0,122500,0,0,0,69.75,75,28.33,62.12
+31,Phantom (Armored),Phantom2,Military,0,2553600,0,0,0,69.75,75,28.33,59.09
+32,Pounder,Pounder,Commercials,0,25000,0,0,0,64.39,35,8.33,50
+33,Stockade,Stockade,Commercials,0,1000000,0,0,0,64.39,30,8,50
+35,Blista 2,Blista,Compacts,1,2000,0,0,0,72.43,57,20,62
+36,Blista,Blista2,Compacts,1,1000,0,0,0,72,57,20,62
+37,Blista Custom,Blista3,Compacts,1,1500,0,0,0,72,57,20,62
+38,Brioso,Brioso,Compacts,1,155000,0,0,0,72,72,20,69
+39,Dilettante Electric,Dilettante,Compacts,1,25000,0,0,0,69,25,20,53
+40,Dilettante Electric,Dilettante2,Emergency,0,0,0,0,0,0,0,0,0
+41,Issi,Issi2,Compacts,1,18000,0,0,0,72,57,20,62
+42,Planto,Panto,Compacts,1,85000,0,0,0,70,67,20,60
+43,Prairie,Prairie,Compacts,1,25000,0,0,0,72,55,20,59
+44,Rhapsody,Rhapsody,Compacts,1,140000,0,0,0,71,57,20,62
+45,CogCabrio,CogCabrio,Coupes,1,185000,0,0,0,77,65,20,69
+46,Exemplar,Exemplar,Coupes,1,205000,0,0,0,77,65,30,78
+47,F620,F620,Coupes,1,80000,0,0,0,77,60,30,75
+48,Felon,Felon,Coupes,1,90000,0,0,0,77,60,30,77
+49,Felon GT,Felon2,Coupes,1,95000,0,0,0,77,60,30,75
+50,Jackal,Jackal,Coupes,1,60000,0,0,0,76,55,30,78
+51,Oracle,Oracle,Coupes,1,80000,0,0,0,80,67,30,68
+52,Oracle XS,Oracle2,Coupes,1,82000,0,0,0,80,65,30,68
+53,Sentinel,Sentinel,Coupes,1,95000,0,0,0,76,52,30,74
+54,Sentinel XS,Sentinel2,Coupes,1,60000,0,0,0,76,52,30,74
+55,Windsor,Windsor,Coupes,1,845000,0,0,0,80,70,23,66
+56,Windsor Drop,Windsor2,Coupes,1,900000,0,0,0,80,69,23,66
+57,Zion,Zion,Coupes,1,60000,0,0,0,77,55,30,78
+58,Zion Cabrio,Zion2,Coupes,1,65000,0,0,0,77,55,30,78
+59,Bmx,Bmx,Cycles,7,150,0,0,0,26,20,50,28
+60,Cruiser,Cruiser,Cycles,7,800,0,0,0,24,10,46,27
+61,Fixter,Fixter,Cycles,7,1000,0,0,0,33.8,16.8,6,28
+62,Scorcher,Scorcher,Cycles,7,2000,0,0,0,29,21,46,31
+63,Green Race Bike,TriBike,Cycles,7,10000,0,0,0,33.8,16.8,41.6,28
+64,Red Race Bike,TriBike2,Cycles,7,10000,0,0,0,33.8,16.8,41.6,28
+65,Blue Race Bike,TriBike3,Cycles,7,10000,0,0,0,33.8,16.8,41.6,28
+66,Ambulance,Ambulance,Emergency,0,0,0,0,0,0,0,0,0
+67,FBI,FBI,Emergency,0,0,0,0,0,0,0,0,0
+68,FBI2,FBI2,Emergency,0,0,0,0,0,0,0,0,0
+69,FireTruck,FireTruck,Emergency,0,0,0,0,0,0,0,0,0
+70,PBus,PBus,Emergency,0,0,0,0,0,0,0,0,0
+71,Police,Police,Emergency,0,0,0,0,0,0,0,0,0
+72,Police2,Police2,Emergency,0,0,0,0,0,0,0,0,0
+73,Police3,Police3,Emergency,0,0,0,0,0,0,0,0,0
+74,Police4,Police4,Emergency,0,0,0,0,0,0,0,0,0
+75,PoliceOld1,PoliceOld1,Emergency,0,0,0,0,0,0,0,0,0
+76,PoliceOld2,PoliceOld2,Emergency,0,0,0,0,0,0,0,0,0
+77,PoliceT,PoliceT,Emergency,0,0,0,0,0,0,0,0,0
+78,Policeb,Policeb,Emergency,0,0,0,0,0,0,0,0,0
+79,Polmav,Polmav,Emergency,0,0,0,0,0,0,0,0,0
+80,Pranger,Pranger,Emergency,0,0,0,0,0,0,0,0,0
+81,Predator,Predator,Emergency,0,0,0,0,0,0,0,0,0
+82,Riot,Riot,Emergency,0,0,0,0,0,0,0,0,0
+83,Sheriff,Sheriff,Emergency,0,0,0,0,0,0,0,0,0
+84,Sheriff2,Sheriff2,Emergency,0,0,0,0,0,0,0,0,0
+85,Annihilator,Annihilator,Helicopters,6,1825000,0,0,0,76,83,0,75
+86,Buzzard,Buzzard,Helicopters,6,1500000,0,0,0,76,98,0,100
+87,Buzzard Attack,Buzzard2,Helicopters,6,3000000,0,0,0,76,98,0,100
+88,Cargobob,Cargobob,Helicopters,6,1790000,0,0,0,76,91,0,74
+89,Cargobob Jetsam,Cargobob2,Helicopters,6,1995000,0,0,0,76,91,0,74
+90,Cargobob3,Cargobob3,Military,0,3000000,0,0,0,0,0,0,0
+91,Cargobob4,Cargobob4,Military,0,3000000,0,0,0,0,0,0,0
+92,Frogger,Frogger,Helicopters,6,1300000,0,0,0,76,100,0,87
+93,Frogger FBI,Frogger2,Emergency,0,1300000,0,0,0,76,100,0,87
+94,Maverick,Maverick,Helicopters,6,780000,0,0,0,76,92,0,90
+95,Savage,Savage,Helicopters,6,2593500,0,0,0,76,86,0,80
+96,Skylift,Skylift,Helicopters,6,2000000,0,0,0,76,85,0,72
+97,Supervolito,Supervolito,Helicopters,6,2113000,0,0,0,76,100,0,100
+98,Supervolito Carbon,Supervolito2,Helicopters,6,3330000,0,0,0,76,100,0,100
+99,Swift,Swift,Helicopters,6,1500000,0,0,0,76,99,0,95
+100,Swift Deluxe,Swift2,Helicopters,6,5150000,0,0,0,76,99,0,95
+101,Valkyrie,Valkyrie,Helicopters,6,3790500,0,0,0,79,94,0,84
+102,Valkyrie,Valkyrie2,Military,0,3790500,0,0,0,79,94,0,84
+103,Volatus,Volatus,Helicopters,6,2295000,0,0,0,76,98,0,97
+104,Bulldozer,Bulldozer,Industrial,5,15000,0,0,0,8,35,6,33
+105,Cutter,Cutter,Industrial,5,1500000,0,0,0,21,40,10,45
+106,Dump,Dump,Industrial,5,1000000,0,0,0,18,40,10,43
+107,Flatbed,Flatbed,Industrial,5,35000,0,0,0,69,35,8,50
+108,Guardian,Guardian,Industrial,5,375000,0,0,0,69,52,20,60
+109,Handler,Handler,Industrial,5,1000000,0,0,0,13,35,3,56
+110,Mixer,Mixer,Industrial,5,375000,0,0,0,59,27,10,48
+111,Mixer II,Mixer2,Industrial,5,380000,0,0,0,59,27,10,48
+112,Rubble,Rubble,Industrial,5,450000,0,0,0,53,35,8,48
+113,Tipper,TipTruck,Industrial,5,500000,0,0,0,53,27,8,48
+114,Tipper II,TipTruck2,Industrial,5,550000,0,0,0,53,27,8,48
+115,APC,APC,Military,0,3092250,0,0,0,52,52,6,72
+116,Barracks,Barracks,Military,0,450000,0,0,0,59,27,10,50
+117,Barracks2,Barracks2,Military,0,450000,0,0,0,59,27,10,50
+118,Barracks3,Barracks3,Military,0,450000,0,0,0,59,27,10,50
+119,Crusader,Crusader,Military,0,225000,0,0,0,69,45,10,57
+120,Halftrack,Halftrack,Military,0,2254350,0,0,0,40,40,6,69
+121,Rhino,Rhino,Military,0,1500000,0,0,0,29,27,6,75
+122,Anti-Aircraft,Trailersmall2,Military,0,1862000,0,0,0,0,0,0,0
+123,Akuma,Akuma,Motorcycles,1,9000,0,0,0,78,100,40,65
+124,Avarus,Avarus,Motorcycles,1,116000,0,0,0,72,67,33,56
+125,Bagger,Bagger,Motorcycles,1,16000,0,0,0,69,52,40,50
+126,Bati 801RR,Bati2,Motorcycles,1,16000,0,0,0,80,75,46,70
+127,Bati 801,Bati,Motorcycles,1,15000,0,0,0,80,75,46,70
+128,BF400,BF400,Motorcycles,1,95000,0,0,0,77,72,35,65
+129,Street Blazer,Blazer4,Motorcycles,1,81000,0,0,0,67,62,33,81
+130,Carbon RS,CarbonRS,Motorcycles,1,40000,0,0,0,77,75,43,65
+131,Chimera,Chimera,Motorcycles,1,210000,0,0,0,72,60,33,63
+132,Cliffhanger,Cliffhanger,Motorcycles,1,225000,0,0,0,79,79,36,68
+133,Daemon Custom,Daemon2,Motorcycles,1,145000,0,0,0,72,65,20,56
+134,Daemon,Daemon,Motorcycles,1,2000,0,0,0,72,65,20,56
+135,Defiler,Defiler,Motorcycles,1,412000,0,0,0,79,100,40,65
+136,Double,Double,Motorcycles,1,12000,0,0,0,78,77,46,66
+137,Enduro,Enduro,Motorcycles,1,48000,0,0,0,63,72,36,65
+138,Esskey,Esskey,Motorcycles,1,264000,0,0,0,77,73,40,65
+139,Faggio Sport,Faggio,Motorcycles,1,47500,0,0,0,50,49,13,51
+140,Faggio,Faggio2,Motorcycles,1,5000,0,0,0,48,25,13,48
+141,Faggio Mod,Faggio3,Motorcycles,1,55000,0,0,0,48,28,13,51
+142,Fcr 1000 Custom,Fcr2,Motorcycles,1,196000,0,0,0,75,77,41,65
+143,Fcr 1000,Fcr,Motorcycles,1,135000,0,0,0,75,76,40,63
+144,Gargoyle,Gargoyle,Motorcycles,1,120000,0,0,0,78,78,36,68
+145,Hakuchou Drag Bike,Hakuchou2,Motorcycles,1,976000,0,0,0,85,100,46,87
+146,Hakuchou,Hakuchou,Motorcycles,1,82000,0,0,0,81,78,46,69
+147,Hexer,Hexer,Motorcycles,1,15000,0,0,0,72,65,33,56
+148,Innovation,Innovation,Motorcycles,1,92500,0,0,0,72,80,33,57
+149,Lectro,Lectro,Motorcycles,1,997500,0,0,0,75,70,40,59
+150,Manchez,Manchez,Motorcycles,1,67000,0,0,0,77,73,40,65
+151,Nemesis,Nemesis,Motorcycles,1,12000,0,0,0,75,75,40,59
+152,Nightblade,Nightblade,Motorcycles,1,100000,0,0,0,76,77,40,59
+154,PCJ,PCJ,Motorcycles,1,9000,0,0,0,69,65,43,62
+155,Ratbike,Ratbike,Motorcycles,1,2000,0,0,0,69,53,40,50
+156,Ruffian,Ruffian,Motorcycles,1,10000,0,0,0,75,85,36,59
+157,Sanchez Sport,Sanchez2,Motorcycles,1,7000,0,0,0,63,70,36,65
+158,Sanchez,Sanchez,Motorcycles,1,8000,0,0,0,63,70,36,65
+159,Sanctus,Sanctus,Motorcycles,1,1995000,0,0,0,77,100,33,59
+160,Shotaro,Shotaro,Motorcycles,1,2250000,0,0,0,85,100,46,81
+161,Sovereign,Sovereign,Motorcycles,1,90000,0,0,0,72,67,36,57
+162,Thrust,Thrust,Motorcycles,1,75000,0,0,0,81,66,50,60
+163,Vader,Vader,Motorcycles,1,9000,0,0,0,75,67,36,57
+164,Vindicator,Vindicator,Motorcycles,1,630000,0,0,0,81,66,50,60
+165,Vortex,Vortex,Motorcycles,1,356000,0,0,0,79,100,40,65
+166,Wolfsbane,Wolfsbane,Motorcycles,1,95000,0,0,0,69,53,40,50
+167,Zombie Bobber,Zombiea,Motorcycles,1,99000,0,0,0,73,72,26,56
+168,Zombie Chopper,Zombieb,Motorcycles,1,122000,0,0,0,73,72,26,56
+169,Blade,Blade,Muscle,1,160000,0,0,0,77,81,26,67
+170,Buccaneer,Buccaneer,Muscle,1,29000,0,0,0,78,70,26,65
+171,Buccaneer Custom,Buccaneer2,Muscle,1,390000,0,0,0,78,70,26,65
+172,Chino,Chino,Muscle,1,225000,0,0,0,75,70,26,68
+173,Chino Custom,Chino2,Muscle,1,180000,0,0,0,69,52,20,62
+174,Dominator,Dominator,Muscle,1,35000,0,0,0,77.8,72.5,26.67,68.18
+175,Dominator Racing,Dominator2,Muscle,1,35000,0,0,0,77.8,72.5,26.67,68.18
+176,Dukes,Dukes,Muscle,1,62000,0,0,0,77,80,26.67,68.18
+177,Dukes O'Death,Dukes2,Muscle,1,665000,0,0,0,81,87,30,68
+178,Faction,Faction,Muscle,1,36000,0,0,0,75,70,26,68
+179,Faction Custom,Faction2,Muscle,1,335000,0,0,0,75,70,26,68
+180,Faction Custom Donk,Faction3,Muscle,1,695000,0,0,0,75,50,26,71
+181,Gauntlet,Gauntlet,Muscle,1,32000,0,0,0,77.8,75,30,75.76
+182,Gauntlet Racing,Gauntlet2,Muscle,1,35000,0,0,0,80,78,25,60
+183,Hotknife,Hotknife,Muscle,1,90000,0,0,0,75.12,75,14.33,56.06
+184,Lurcher,Lurcher,Muscle,1,650000,0,0,0,78.34,72.5,26.67,65.15
+185,Moonbeam,Moonbeam,Muscle,1,32500,0,0,0,67,52.5,13.33,60.61
+186,Moonbeam Custom,Moonbeam2,Muscle,1,370000,0,0,0,67,52,13,60
+187,Nightshade,Nightshade,Muscle,1,585000,0,0,0,77.8,62.5,20,68.18
+188,Phoenix,Phoenix,Muscle,1,2000,0,0,0,77.8,70,26.67,65.15
+189,Picador,Picador,Muscle,1,5400,0,0,0,72.43,55,26.67,62
+190,RatLoader,RatLoader,Muscle,1,3600,0,0,0,72.43,55,13.33,50
+191,RatLoader Custom,RatLoader2,Muscle,1,37500,0,0,0,72.43,55,13.33,50
+192,Ruiner,Ruiner,Muscle,1,10000,0,0,0,77.8,70,26.67,66.67
+193,Ruiner 2000,Ruiner2,Muscle,1,5754600,0,0,0,81,82,33,63
+194,Sabre Turbo,SabreGT,Muscle,1,15000,0,0,0,75,70,26,68
+195,Sabre Turbo Custom,SabreGT2,Muscle,1,490000,0,0,0,75.12,70.5,27.33,68.48
+197,SlamVan,SlamVan,Muscle,1,49500,0,0,0,72.43,62.5,20,50
+198,SlamVan (Arena),SlamVan2,Muscle,1,1255781,0,0,0,72.7,67.5,13.33,56.06
+199,SlamVan Custom,SlamVan3,Muscle,1,394250,0,0,0,72.43,62.5,20,71.21
+200,Stalion,Stalion,Muscle,1,71000,0,0,0,77.26,72.5,23.33,68.18
+201,Burger Shot Stallion,Stalion2,Muscle,1,277000,0,0,0,77.26,77.5,23.33,68.18
+202,Tampa,Tampa,Muscle,1,375000,0,0,0,75.12,67.5,26.67,68.18
+203,Tampa Custom,Tampa2,Muscle,1,589000,0,0,0,85,80,26.67,68
+204,Vigero,Vigero,Muscle,1,21000,0,0,0,75.12,72.5,26.67,62.12
+205,Virgo,Virgo,Muscle,1,195000,0,0,0,75.12,70,26.67,77.58
+206,Virgo Classic Custom,Virgo2,Muscle,1,240000,0,0,0,71.9,52.5,23.33,62.12
+207,Virgo Classic,Virgo3,Muscle,1,165000,0,0,0,71.9,52.75,24,63.64
+208,Voodoo,Voodoo,Muscle,1,5500,0,0,0,69.75,42.5,8.33,56.06
+209,Voodoo Custom,Voodoo2,Muscle,1,420000,0,0,0,69.75,45,23.33,56.06
+210,BfInjection,BfInjection,Off-Road,1,16000,0,0,0,72.43,57.5,20.67,56.06
+211,Bifta,Bifta,Off-Road,1,75000,0,0,0,72.97,65,23.33,62.12
+212,Blazer,Blazer,Off-Road,1,8000,0,0,0,64.39,50,33.33,78.79
+213,Blazer LifeGuard,Blazer2,Emergency,0,0,0,0,0,59.02,30,26.67,60.61
+214,Hot Rod Blazer,Blazer3,Off-Road,1,69000,0,0,0,64.39,50,33.33,78.79
+215,Blazer Aqua,Blazer5,Off-Road,1,1755600,0,0,0,67.07,68,33.33,81.82
+216,Bodhi,Bodhi2,Off-Road,1,25000,0,0,0,71.9,53.75,36.67,68.18
+217,Brawler,Brawler,Off-Road,1,715000,0,0,0,72.43,62.5,20.67,56.06
+218,DLoader,DLoader,Off-Road,1,150000,0,0,0,67.07,42.5,20,51.52
+219,Dune,Dune,Off-Road,1,20000,0,0,0,72.43,62.5,21,66.67
+221,Dune FAV,Dune3,Off-Road,1,1130500,0,0,0,72.43,72.5,21,66.67
+224,Insurgent,Insurgent,Off-Road,1,897750,0,0,0,69.75,50,20,60.61
+225,Insurgent2,Insurgent2,Off-Road,1,1795500,0,0,0,69.75,50,8.33,45.45
+227,Kalahari,Kalahari,Off-Road,1,40000,0,0,0,64.39,65,33.33,53.94
+228,Lguard,Lguard,Emergency,0,0,0,0,0,0,0,0,0
+229,Marshall,Marshall,Off-Road,1,500000,0,0,0,59.02,100,21.67,68.18
+230,Mesa,Mesa,Off-Road,1,55000,0,0,0,69.75,42.5,10,60.61
+232,Mesa Custom,Mesa3,Off-Road,1,87000,0,0,0,69.75,42.5,10,60.61
+233,The Liberator,Monster,Off-Road,1,556511,0,0,0,59.02,100,21.67,63.64
+234,Nightshark,Nightshark,Off-Road,1,1245000,0,0,0,75.12,67.5,25,63.64
+235,RancherXL,RancherXL,Off-Road,1,9000,0,0,0,69.75,45,26.67,59.09
+237,Rebel,Rebel,Off-Road,1,22000,0,0,0,69.75,50,20,62.12
+238,Rusty Rebel,Rebel2,Off-Road,1,3000,0,0,0,69.75,50,20,62.12
+239,Sandking XL,Sandking,Off-Road,1,45000,0,0,0,69.75,50,20,60.61
+240,Sandking SWB,Sandking2,Off-Road,1,38000,0,0,0,69.75,50,20,60.61
+241,Technical,Technical,Off-Road,1,1263500,0,0,0,69.75,50,20,61.52
+242,Technical Aqua,Technical2,Off-Road,1,1489600,0,0,0,69.75,62.5,23.33,64.55
+243,Technical Custom,Technical3,Off-Road,1,142500,0,0,0,69.75,50,23.33,64.55
+244,TrophyTruck,TrophyTruck,Off-Road,1,550000,0,0,0,75.12,84.75,10,75.76
+245,TrophyTruck Custom,TrophyTruck2,Off-Road,1,750000,0,0,0,75.12,84.75,10,75.76
+246,Besra,Besra,Planes,3,1150000,0,0,0,99.98,100,100,39.21
+247,Atomic Blimp,Blimp,Import/Export,0,1190350,0,0,0,48.69,31,1.82,7.45
+248,Blimp,Blimp2,Import/Export,0,1190350,0,0,0,48.69,58,100,100
+249,CargoPlane,CargoPlane,Import/Export,0,2000000,0,0,0,85.65,57,25,30
+250,Cuban800,Cuban800,Planes,3,245000,0,0,0,84.74,60,25,62.72
+251,Dodo,Dodo,Planes,3,500000,0,0,0,76.07,25,18.98,25.95
+252,Duster,Duster,Planes,3,275000,0,0,0,76.01,50,50,82
+253,Hydra,Hydra,Planes,3,3990000,0,0,0,99.5,45,51.08,45.17
+254,Jet,Jet,Planes,3,1900000,0,0,0,86.42,63,25,30
+255,P-996 Lazer,Lazer,Planes,3,6500000,0,0,0,99.99,100,25,100
+256,Luxor,Luxor,Planes,3,1625000,0,0,0,99.25,81,25,35
+257,Luxor Deluxe,Luxor2,Planes,3,10000000,0,0,0,99.25,40.5,40.2,12.88
+258,Mammatus,Mammatus,Planes,3,300000,0,0,0,76.07,50,25,90
+259,Miljet,Miljet,Planes,3,1700000,0,0,0,42.6,41.5,41.74,13.05
+260,Nimbus,Nimbus,Import/Export,0,1900000,0,0,0,99.86,41.5,42.98,13.4
+261,Shamal,Shamal,Planes,3,1150000,0,0,0,99.25,81,25,35
+262,Mallard,Stunt,Planes,3,250000,0,0,0,86.54,100,25,100
+263,Titan,Titan,Import/Export,0,2000000,0,0,0,85.65,57,25,30
+264,Velum,Velum,Planes,3,450000,0,0,0,81.76,58,25,68
+265,Velum 5-Seater,Velum2,Planes,3,1323350,0,0,0,81.76,28.5,23.3,20.9
+266,Vestra,Vestra,Planes,3,950000,0,0,0,42.9,46,48.94,29.98
+267,Beejay XL,BJXL,SUVs,1,27000,0,0,0,70,48,27,62
+268,Baller,Baller,SUVs,1,90000,0,0,0,69.75,52.5,20,57.58
+269,Baller II,Baller2,SUVs,1,90000,0,0,0,72,68,20,61
+270,Baller LE,Baller3,SUVs,1,149000,0,0,0,72,69,20,61
+271,Baller LE LWB,Baller4,SUVs,1,247000,0,0,0,72,68,19,61
+272,Baller LE (Armored),Baller5,SUVs,1,374000,0,0,0,72,68,19,60
+273,Baller LE LWB (Armored),Baller6,SUVs,1,513000,0,0,0,72,66,18,61
+274,Cavalcade,Cavalcade,SUVs,1,60000,0,0,0,68,50,20,58
+275,Cavalcade II,Cavalcade2,SUVs,1,70000,0,0,0,68,50,20,58
+276,Contender,Contender,SUVs,1,250000,0,0,0,72,65,20,64
+277,Dubsta,Dubsta,SUVs,1,100000,0,0,0,75,50,27,65
+279,Dubsta 6x6,Dubsta3,SUVs,1,249000,0,0,0,74,70,20,61
+280,FQ 2,FQ2,SUVs,1,50000,0,0,0,72,45,8,61
+281,Granger,Granger,SUVs,1,35000,0,0,0,75,48,27,65
+282,Gresley,Gresley,SUVs,1,29000,0,0,0,72,50,20,58
+283,Habanero,Habanero,SUVs,1,42000,0,0,0,74,45,8,64
+284,Huntley S,Huntley,SUVs,1,195000,0,0,0,73,66,18,64
+285,Landstalker,Landstalker,SUVs,1,58000,0,0,0,73,45,24,64
+286,Patriot,Patriot,SUVs,1,50000,0,0,0,70,50,11,52
+287,Radius,Radi,SUVs,1,32000,0,0,0,75,50,27,68
+288,Rocoto,Rocoto,SUVs,1,85000,0,0,0,75,48,8,64
+289,Seminole,Seminole,SUVs,1,30000,0,0,0,70,45,27,62
+290,Serrano,Serrano,SUVs,1,60000,0,0,0,70,50,13,64
+291,XLS,XLS,SUVs,1,253000,0,0,0,71,65,19,61
+292,XLS (Armored),XLS2,SUVs,1,522000,0,0,0,71,66,20,62
+293,Asea,Asea,Berlines,1,12000,0,0,0,77.8,50,13.33,62.12
+295,Asterope,Asterope,Berlines,1,26000,0,0,0,77.8,50,30,75.76
+296,Cognoscenti 55,Cog55,Berlines,1,254000,0,0,0,77.8,66.25,19,66.25
+297,Cognoscenti 55 (Armored),Cog552,Berlines,1,558000,0,0,0,77.8,65,18.33,66.67
+298,Cognoscenti,Cognoscenti,Berlines,1,154000,0,0,0,75.12,65,18.33,63.64
+299,Cognoscenti (Armored),Cognoscenti2,Berlines,1,396000,0,0,0,75.12,63.75,17.33,63.64
+300,Emperor,Emperor,Berlines,1,8000,0,0,0,64.39,35,20,57.58
+301,Emperor2,Emperor2,Berlines,1,1000,0,0,0,64.39,35,20,57.58
+303,Fugitive,Fugitive,Berlines,1,24000,0,0,0,77.8,50,30,75.76
+304,Glendale,Glendale,Berlines,1,200000,0,0,0,78.87,58.75,21.67,62.12
+305,Ingot,Ingot,Berlines,1,9000,0,0,0,67.07,35,20,59.09
+306,Intruder,Intruder,Berlines,1,16000,0,0,0,77.8,50,30,71.21
+307,Limo2,Limo2,Military,0,0,0,0,0,0,0,0,0
+308,Premier,Premier,Berlines,1,10000,0,0,0,77.8,50,20,63.64
+309,Primo,Primo,Berlines,1,9000,0,0,0,75.12,50,30,71.21
+310,Primo Custom,Primo2,Berlines,1,400000,0,0,0,75.12,50,30,71.21
+311,Regina,Regina,Berlines,1,8000,0,0,0,64.39,35,20,57.58
+312,Romero Hearse,Romero,Berlines,1,45000,0,0,0,67.07,37.5,16.67,59.09
+313,Stanier,Stanier,Berlines,1,10000,0,0,0,75.12,50,30,74.2
+314,Stratum,Stratum,Berlines,1,10000,0,0,0,72.43,52.5,20,66
+315,Stretch,Stretch,Berlines,1,30000,0,0,0,72.43,42.5,26.67,56.06
+316,Surge,Surge,Berlines,1,38000,0,0,0,75.12,25,20,65.15
+317,Tailgater,Tailgater,Berlines,1,55000,0,0,0,77.8,50,30,77.27
+318,Warrener,Warrener,Berlines,1,120000,0,0,0,75.12,61.25,31.67,65.45
+319,Washington,Washington,Berlines,1,15000,0,0,0,75.12,50,30,74.24
+320,Airbus,Airbus,Service,0,0,0,0,0,0,0,0,0
+321,Brickade,Brickade,Service,0,0,0,0,0,0,0,0,0
+322,Bus,Bus,Service,0,0,0,0,0,0,0,0,0
+323,Coach,Coach,Service,0,0,0,0,0,0,0,0,0
+324,Rallytruck,Rallytruck,Service,0,0,0,0,0,0,0,0,0
+325,RentalBus,RentalBus,Service,0,0,0,0,0,0,0,0,0
+326,Taxi,Taxi,Service,0,0,0,0,0,0,0,0,0
+327,Tourbus,Tourbus,Service,0,0,0,0,0,0,0,0,0
+328,Trash,Trash,Service,0,0,0,0,0,0,0,0,0
+329,Trash2,Trash2,Service,0,0,0,0,0,0,0,0,0
+330,Alpha,Alpha,Sports,1,150000,0,0,0,83.17,85,33.33,77.27
+331,Banshee,Banshee,Sports,1,105000,0,0,0,79,85,33,73
+332,Banshee (Topless),Banshee2,Sports,1,126000,0,0,0,79,85,33,73
+333,Bestia GTS,BestiaGTS,Sports,1,610000,0,0,0,83,80,33,73
+334,Buffalo,Buffalo,Sports,1,35000,0,0,0,78,68,30,74
+335,Buffalo S,Buffalo2,Sports,1,96000,0,0,0,78,73,30,74
+336,Buffalo Racing,Buffalo3,Sports,1,535000,0,0,0,79,78,33,74
+337,Carbonizzare,Carbonizzare,Sports,1,195000,0,0,0,85,88,27,72
+338,Comet,Comet2,Sports,1,100000,0,0,0,82,85,27,79
+339,Comet Retro Custom,Comet3,Sports,1,645000,0,0,0,82,85,27,90
+340,Coquette,Coquette,Sports,1,138000,0,0,0,82,83,27,77
+341,Elegy Retro Custom,Elegy,Sports,1,904000,0,0,0,79,83,33,82
+342,Elegy RH8,Elegy2,Sports,1,1220000,0,0,0,82,83,17,82
+343,Feltzer,Feltzer2,Sports,1,145000,0,0,0,82,85,27,80
+344,Feltzer Retro,Feltzer3,Sports,1,605400,0,0,0,78,79,15,65
+345,Furore GT,Furoregt,Sports,1,448000,0,0,0,82,84,27,78
+346,Fusilade,Fusilade,Sports,1,36000,0,0,0,80,80,30,74
+347,Futo,Futo,Sports,1,9000,0,0,0,72,73,17,62
+348,Infernus Classic,Infernus2,Sports Classics,1,915000,0,0,0,80,83,17,80
+349,Jester,Jester,Sports,1,240000,0,0,0,85,75,32,77
+350,Jester Racing,Jester2,Sports,1,350000,0,0,0,85,78,32,78
+351,Khamelion,Khamelion,Sports,1,100000,0,0,0,75,38,30,79
+352,Kuruma,Kuruma,Sports,1,126350,0,0,0,79,78,17,74
+353,Kuruma (Armored),Kuruma2,Sports,1,698250,0,0,0,79,78,17,74
+354,Lynx,Lynx,Sports,1,1735000,0,0,0,84,79,33,78
+355,Massacro,Massacro,Sports,1,275000,0,0,0,82,90,30,74
+356,Massacro Racing,Massacro2,Sports,1,385000,0,0,0,84,91,30,74
+357,9F,Ninef,Sports,1,120000,0,0,0,83,83,33,77
+358,9F Cabrio,Ninef2,Sports,1,130000,0,0,0,83,83,33,77
+359,Omnis,Omnis,Sports,1,701000,0,0,0,82,76,33,65
+360,Penumbra,Penumbra,Sports,1,24000,0,0,0,75,55,27,68
+361,Rapid GT,RapidGT,Sports,1,132000,0,0,0,82,90,33,74
+362,Rapid GT Sports,RapidGT2,Sports,1,140000,0,0,0,82,90,33,74
+363,Raptor,Raptor,Sports,1,648000,0,0,0,75,74,40,79
+364,Ruston,Ruston,Sports,1,430000,0,0,0,79,81,40,82
+365,Schafter,Schafter2,Berlines,1,65000,0,0,0,78,50,30,77
+366,Schafter V12,Schafter3,Berlines,1,116000,0,0,0,80,75,32,77
+367,Schafter LWB,Schafter4,Berlines,1,208000,0,0,0,76,50,28,77
+368,Schafter V12 (Armored),Schafter5,Berlines,1,325000,0,0,0,80,73,31,77
+369,Schafter LWB(Armored),Schafter6,Berlines,1,438000,0,0,0,76,46,27,77
+370,Schwartzer,Schwarzer,Sports,1,80000,0,0,0,79,73,30,70
+371,Seven70,Seven70,Sports,1,695000,0,0,0,85,84,33,78
+372,Specter,Specter,Sports,1,599000,0,0,0,83,80,33,79
+373,Specter Custom,Specter2,Sports,1,252000,0,0,0,83,83,37,86
+374,Sultan,Sultan,Sports,1,12000,0,0,0,78,65,13,71
+375,Surano,Surano,Sports,1,100000,0,0,0,83,85,33,77
+376,Drift Tampa,Tampa2,Sports,1,995000,0,0,0,80,83,17,68
+377,Tropos Rallye,Tropos,Sports,1,816000,0,0,0,82,56,23,62
+378,Verlierer,Verlierer2,Sports,1,695000,0,0,0,80,84,33,74
+379,Ardent,Ardent,Sports Classics,1,1150000,0,0,0,79,71,30,80
+380,Roosevelt,BType,Sports Classics,1,750000,0,0,0,67,68,18,64
+381,Franken Stange,BType2,Sports Classics,1,550000,0,0,0,72,89,18,59
+382,Roosevelt Valor,BType3,Sports Classics,1,982000,0,0,0,67,68,18,64
+383,Casco,Casco,Sports Classics,1,904400,0,0,0,81,80,20,70
+384,Cheetah Classic,Cheetah2,Sports Classics,1,865000,0,0,0,82,75,27,80
+385,Coquette Classic,Coquette2,Sports Classics,1,665000,0,0,0,81,85,17,70
+386,Coquette Black Fun,Coquette3,Sports Classics,1,750000,0,0,0,81,85,17,70
+387,JB700,JB700,Sports Classics,1,350000,0,0,0,80,65,20,65
+388,Mamba,Mamba,Sports Classics,1,995000,0,0,0,79,85,17,76
+389,Manana,Manana,Sports Classics,1,800000,0,0,0,70,40,8,59
+390,Monroe,Monroe,Sports Classics,1,490000,0,0,0,80,70,22,67
+391,Peyote,Peyote,Sports Classics,1,620000,0,0,0,70,40,8,56
+392,Pigalle,Pigalle,Sports Classics,1,400000,0,0,0,80,66,28,72
+393,Stinger,Stinger,Sports Classics,1,850000,0,0,0,78,65,20,65
+394,Stinger GT,StingerGT,Sports Classics,1,875000,0,0,0,78,65,20,65
+395,Torero,Torero,Sports Classics,1,998000,0,0,0,80,75,17,79
+396,Tornado,Tornado,Sports Classics,1,30000,0,0,0,70,40,8,55
+397,Tornado (Convertible),Tornado2,Sports Classics,1,30000,0,0,0,70,40,8,55
+398,Tornado (Custom),Tornado5,Sports Classics,1,375000,0,0,0,70,40,9,56
+399,Tornado Rat Rod,Tornado6,Sports Classics,1,378000,0,0,0,70,70,8,60
+402,ZType,ZType,Sports Classics,1,950000,0,0,0,75,55,13,50
+403,Adder,Adder,Super,1,1000000,0,0,0,86,80,33,76
+404,Bullet,Bullet,Super,1,155000,0,0,0,82,83,27,77
+405,Cheetah,Cheetah,Super,1,650000,0,0,0,82,80,27,80
+406,Entity XF,EntityXF,Super,1,795000,0,0,0,83,83,30,83
+407,FMJ,FMJ,Super,1,1750000,0,0,0,85,91,37,82
+408,GP1,GP1,Super,1,1260000,0,0,0,86,93,40,85
+409,Infernus,Infernus,Super,1,440000,0,0,0,80,85,17,80
+411,Nero,Nero,Super,1,1440000,0,0,0,86,85,33,80
+412,Nero Custom,Nero2,Super,1,605000,0,0,0,86,85,37,81
+413,Osiris,Osiris,Super,1,1950000,0,0,0,85,89,33,80
+414,Penetrator,Penetrator,Super,1,880000,0,0,0,86,75,27,78
+415,811,Pfister811,Super,1,1135000,0,0,0,85,89,37,81
+416,X80 Proto,Prototipo,Super,1,2700000,0,0,0,85,94,37,82
+417,Reaper,Reaper,Super,1,1595000,0,0,0,85,91,37,81
+418,ETR1,Sheava,Super,1,1995000,0,0,0,85,83,33,89
+419,Sultan RS,SultanRS,Super,1,795000,0,0,0,79,83,33,76
+420,Super Diamond,Superd,Berlines,1,250000,0,0,0,78,65,20,63
+421,T20,T20,Super,1,2200000,0,0,0,85,89,33,80
+422,Tempesta,Tempesta,Super,1,1329000,0,0,0,84,90,33,80
+424,Turismo R,Turismor,Super,1,500000,0,0,0,83,88,40,80
+425,Tyrus,Tyrus,Super,1,2550000,0,0,0,86,93,40,91
+426,Vacca,Vacca,Super,1,240000,0,0,0,82,75,33,79
+427,Vagner,Vagner,Super,1,1535000,0,0,0,86,93,37,92
+428,Voltic,Voltic,Super,1,150000,0,0,0,78,90,33,77
+430,Zentorno,Zentorno,Super,1,725000,0,0,0,85,89,33,80
+431,Itali GTB,Italigtb,Super,1,1189000,0,0,0,85,84,37,76
+432,Itali GTB Custom,Italigtb2,Super,1,495000,0,0,0,85,85,40,81
+433,XA-21,XA21,Super,1,2375000,0,0,0,85,91,37,81
+434,ArmyTanker,ArmyTanker,Trailer,0,0,0,0,0,0,0,0,0
+435,ArmyTrailer,ArmyTrailer,Trailer,0,0,0,0,0,0,0,0,0
+436,ArmyTrailer2,ArmyTrailer2,Trailer,0,0,0,0,0,0,0,0,0
+437,BaleTrailer,BaleTrailer,Trailer,0,0,0,0,0,0,0,0,0
+438,BoatTrailer,BoatTrailer,Trailer,0,0,0,0,0,0,0,0,0
+439,CableCar,CableCar,Trailer,0,0,0,0,0,0,0,0,0
+440,DockTrailer,DockTrailer,Trailer,0,0,0,0,0,0,0,0,0
+441,GrainTrailer,GrainTrailer,Trailer,0,0,0,0,0,0,0,0,0
+442,PropTrailer,PropTrailer,Trailer,0,0,0,0,0,0,0,0,0
+443,RakeTrailer,RakeTrailer,Trailer,0,0,0,0,0,0,0,0,0
+444,TR2,TR2,Trailer,0,0,0,0,0,0,0,0,0
+445,TR3,TR3,Trailer,0,0,0,0,0,0,0,0,0
+446,TR4,TR4,Trailer,0,0,0,0,0,0,0,0,0
+447,TRFlat,TRFlat,Trailer,0,0,0,0,0,0,0,0,0
+448,TVTrailer,TVTrailer,Trailer,0,0,0,0,0,0,0,0,0
+449,Tanker,Tanker,Trailer,0,0,0,0,0,0,0,0,0
+450,Tanker2,Tanker2,Trailer,0,0,0,0,0,0,0,0,0
+451,TrailerLogs,TrailerLogs,Trailer,0,0,0,0,0,0,0,0,0
+452,TrailerSmall,TrailerSmall,Trailer,0,0,0,0,0,0,0,0,0
+453,Trailers,Trailers,Trailer,0,0,0,0,0,0,0,0,0
+454,Trailers2,Trailers2,Trailer,0,0,0,0,0,0,0,0,0
+455,Trailers3,Trailers3,Trailer,0,0,0,0,0,0,0,0,0
+456,Freight,Freight,Trains,0,0,0,0,0,0,0,0,0
+457,FreightCar,FreightCar,Trains,0,0,0,0,0,0,0,0,0
+458,FreightCont1,FreightCont1,Trains,0,0,0,0,0,0,0,0,0
+459,FreightCont2,FreightCont2,Trains,0,0,0,0,0,0,0,0,0
+460,FreightGrain,FreightGrain,Trains,0,0,0,0,0,0,0,0,0
+461,FreightTrailer,FreightTrailer,Trains,0,0,0,0,0,0,0,0,0
+462,TankerCar,TankerCar,Trains,0,0,0,0,0,0,0,0,0
+463,Airtug,Airtug,Utility,5,0,0,0,0,0,0,0,0
+464,Caddy,Caddy,Utility,5,0,0,0,0,0,0,0,0
+465,Caddy2,Caddy2,Utility,5,0,0,0,0,0,0,0,0
+466,Caddy3,Caddy3,Utility,5,0,0,0,0,0,0,0,0
+467,Docktug,Docktug,Utility,5,0,0,0,0,0,0,0,0
+468,Forklift,Forklift,Utility,5,0,0,0,0,0,0,0,0
+469,Mower,Mower,Utility,5,0,0,0,0,0,0,0,0
+470,Ripley,Ripley,Utility,5,0,0,0,0,0,0,0,0
+471,Sadler,Sadler,Utility,5,0,0,0,0,0,0,0,0
+472,Scrap,Scrap,Utility,5,0,0,0,0,0,0,0,0
+473,TowTruck,TowTruck,Utility,5,0,0,0,0,0,0,0,0
+474,TowTruck2,TowTruck2,Utility,5,0,0,0,0,0,0,0,0
+475,Tractor,Tractor,Utility,5,0,0,0,0,0,0,0,0
+476,Tractor2,Tractor2,Utility,5,0,0,0,0,0,0,0,0
+477,Tractor3,Tractor3,Utility,5,0,0,0,0,0,0,0,0
+478,TrailerLarge,TrailerLarge,Utility,5,0,0,0,0,0,0,0,0
+479,TrailerS4,TrailerS4,Utility,5,0,0,0,0,0,0,0,0
+480,UtilliTruck,UtilliTruck,Utility,5,0,0,0,0,0,0,0,0
+481,UtilliTruck3,UtilliTruck3,Utility,5,0,0,0,0,0,0,0,0
+482,UtilliTruck2,UtilliTruck2,Utility,5,0,0,0,0,0,0,0,0
+483,Bison,Bison,Vans,1,30000,0,0,0,70,50,20,62
+484,Bison Occasion,Bison3,Vans,1,10000,0,0,0,70,50,20,62
+486,Bobcat XL,BobcatXL,Vans,1,23000,0,0,0,70,45,27,59
+487,Boxville,Boxville,Vans,1,59850,0,0,0,54,28,8,47
+492,Burrito,Burrito3,Vans,1,30000,0,0,0,70,40,20,60
+497,Camper,Camper,Vans,1,75000,0,0,0,54,30,8,45
+500,Journey,Journey,Vans,1,15000,0,0,0,54,33,8,42
+501,Minivan,Minivan,Vans,1,30000,0,0,0,67,38,13,58
+502,Minivan Custom,Minivan2,Vans,1,330000,0,0,0,67,38,15,58
+503,Paradise,Paradise,Vans,1,25000,0,0,0,70,43,13,60
+506,Rumpo,Rumpo,Vans,1,13000,0,0,0,70,43,13,59
+508,Rumpo Custom,Rumpo3,Vans,1,130000,0,0,0,70,45,10,61
+509,Speedo,Speedo,Vans,1,10000,0,0,0,70,45,20,55
+511,Surfer,Surfer,Vans,1,11000,0,0,0,54,25,10,47
+512,Surfer Occasion,Surfer2,Vans,1,5000,0,0,0,54,25,10,47
+514,Youga,Youga,Vans,1,16000,0,0,0,64,35,10,55
+515,Youga Classic,Youga2,Vans,1,13500,0,0,0,64,35,10,55
+516,Deluxo,Deluxo,Sports Classics,1,4721500,0,0,0,75,57,23,62
+517,Oppressor MK2,oppressor2,Import/Export,0,4721500,0,0,0,0,0,0,0
+518,Oppressor,oppressor,Motorcycles,1,3524500,0,0,0,79,100,40,64
+519,Vigilante,Vigilante,Super,1,2250000,0,0,0,72,65,20,64
+520,Pounder Custom,Pounder2,Commercials,0,0,0,0,0,0,0,0,0
+523,Pounder Custom,Pounder2,Commercials,0,320530,0,0,0,64.39,40,8.33,50
+524,Issi Classic,Issi3,Compacts,1,360000,0,0,0,67,65,10,61
+525,Akula,Akula,Helicopters,6,3704050,0,0,0,76.75,100,0,100
+526,FH-1 Hunter,hunter,Military,0,4123000,0,0,0,76,100,0,97
+527,Havok,Havok,Helicopters,6,2300900,0,0,0,76,100,0,100
+528,Avenger,Avenger,Military,0,3450000,0,0,0,76,47,45,1
+529,Scarab,Scarab,Military,0,3076290,0,0,0,53,25,23,68
+530,Kanjali,Kanjali,Military,0,35000000,0,0,0,30,25,6,77
+531,Deathbike,Deathbike,Motorcycles,1,1269000,0,0,0,78,78,36,62
+532,Clique,Clique,Muscle,1,909000,0,0,0,80,75,28,71
+533,Coquette Blackfin,Coquette3,Muscle,1,695000,0,0,0,81,85,16,69
+534,Deviant,Deviant,Muscle,1,512000,0,0,0,77.8,72.5,16.67,68.18
+535,Dominator GTX,Dominator3,Muscle,1,725000,0,0,0,78,83,16,77
+536,Dominator Arena,Dominator4,Muscle,1,1075400,0,0,0,80.48,93.75,26.67,71.21
+537,Ellie,Ellie,Muscle,1,565000,0,0,0,75,81,16,77
+538,Hermes,Hermes,Muscle,1,535000,0,0,0,73.51,71.25,25.83,71.97
+539,Hustler,Hustler,Muscle,1,625000,0,0,0,75.12,75,14.33,59.09
+540,Impaler,Impaler,Muscle,1,331835,0,0,0,81,77.5,20,71.21
+541,Impaler Apocalypse,Impaler2,Muscle,1,1209500,0,0,0,83,95,23,72
+542,Impaler Anticipation,Impaler3,Muscle,1,1500000,0,0,0,81,77.5,20,71.21
+543,Impaler Cauchemar,Impaler4,Muscle,1,200000,0,0,0,81,77.5,20,71.21
+544,Imperator,Imperator,Muscle,1,2284940,0,0,0,80,91,16,68
+545,Tulip,Tulip,Muscle,1,718000,0,0,0,79.14,80,16.67,68.18
+546,Vamos,Vamos,Muscle,1,596000,0,0,0,77.8,82.5,16.67,68.18
+547,Yosemite,Yosemite,Muscle,1,485000,0,0,0,73.51,71.25,25,71.97
+548,Street Blazer,Blazer4,Off-Road,1,81000,0,0,0,67.07,62.5,33.33,81.82
+549,Brutus,Brutus,Off-Road,1,2666650,0,0,0,75.12,67.5,20,60.61
+550,Caracara,Caracara,Off-Road,1,1775000,0,0,0,72.43,75,9,68.18
+551,Duneloader Occasion,DLoader,Off-Road,1,5000,0,0,0,67,42,20,51
+552,Freecrawler,Freecrawler,Off-Road,1,597000,0,0,0,72.43,60,10,62.12
+553,Kamacho,Kamacho,Off-Road,1,345000,0,0,0,71.9,63.75,10,60.61
+554,Riata,Riata,Off-Road,1,380000,0,0,0,72.43,62.5,10,62.12
+555,Alpha Z1,alphaz1,Planes,3,2121350,0,0,0,56.11,58.09,75,5.45
+556,B-11 Strikeforce,Strikeforce,Planes,3,3800000,0,0,0,77.46,80,61.97,2.08
+557,Howard NX-25,Howard,Planes,3,1296750,0,0,0,56.11,58.09,75,5.45
+558,LF-22 Starling,Starling,Planes,3,3657500,0,0,0,86.54,58.19,62.5,2.67
+559,Mogul,Mogul,Planes,3,3125500,0,0,0,84.14,25.24,30,1.51
+560,Nokota,Nokota,Planes,3,2653350,0,0,0,99.99,43.3,50,2.48
+561,Pyro,Pyro,Planes,3,4455500,0,0,0,99.99,62.99,57.5,5.56
+562,RM-10 Bombushka,Bombushka,Planes,3,5918500,0,0,0,85.66,11,27.5,0
+563,Rogue,Rogue,Planes,3,1596000,0,0,0,99.98,54.77,50,5.55
+564,Seabreeze,Seabreeze,Planes,3,1130500,0,0,0,99.99,100,100,2.99
+565,Tula,Tula,Planes,3,5173700,0,0,0,76.07,18.99,25,1.98
+566,V-65 Molotok,Molotok,Planes,3,4788000,0,0,0,99.98,43.3,50,2.48
+567,Volatol,Volatol,Planes,3,3724000,0,0,0,76.07,28.58,32.5,1.01
+568,Stafford,Stafford,Berlines,1,1272000,0,0,0,64.39,50,15,60.61
+569,Blista Compact,Blista2,Sports,1,42000,0,0,0,71,58,18,64
+570,Comet Safari,Comet4,Sports,1,710000,0,0,0,82,73,27,64
+571,Comet SR,Comet5,Sports,1,1145000,0,0,0,86,90,40,100
+572,Flash GT,FlashGT,Sports,1,1675000,0,0,0,82,80,33,100
+573,GB200,GB200,Sports,1,940000,0,0,0,82,79,33,100
+574,Itali GTO,ItaliGTO,Sports,1,1965000,0,0,0,86,100,37,79
+575,Neon,Neon,Sports,1,1500000,0,0,0,84,62,43,69
+576,Pariah,Pariah,Sports,1,1420000,0,0,0,83,80,33,80
+577,Raiden,Raiden,Sports,1,1375000,0,0,0,83,61,43,65
+578,Revolter,Revolter,Sports,1,1610000,0,0,0,75,88,27,68
+579,Schlagen GT,schlagen,Sports,1,1300000,0,0,0,85,93,27,100
+580,Sentinel Classic,Sentinel3,Sports Classics,1,650000,0,0,0,75,66,27,68
+581,Streiter,Streiter,Sports,1,500000,0,0,0,75,53,27,63
+582,ZR 380,ZR380,Sports,1,2138640,0,0,0,85,88,27,76
+583,Cheburek,Cheburek,Sports Classics,1,145000,0,0,0,75,66,27,68
+584,Fagaloa,Fagaloa,Sports Classics,1,335000,0,0,0,64,53,26,72
+585,GT500,GT500,Sports Classics,1,785000,0,0,0,75,73,26,67
+586,Jester Classic,Jester3,Sports Classics,1,790000,0,0,0,84,80,32,78
+587,Michelli GT,Michelli GT,Sports Classics,1,1225000,0,0,0,75,71,25,70
+588,Rapid GT Classic,RapidGT3,Sports Classics,1,885000,0,0,0,80,75,17,79
+589,Retinue,Retinue,Sports Classics,1,615000,0,0,0,72,73,17,62
+590,Savestra,Savestra,Sports Classics,1,990000,0,0,0,75,59,23,62
+591,Stromberg,Stromber,Sports Classics,1,3185350,0,0,0,80,73,33,76
+592,Swinger,Swinger,Sports Classics,1,909000,0,0,0,83,98,32,73
+593,Tornado Occasion,Tornado3,Sports Classics,1,1000,0,0,0,70,40,8,55
+594,Turismo Classic,Turismo2,Sports Classics,1,705000,0,0,0,82,85,17,80
+595,Viseris,Viseris,Sports Classics,1,875000,0,0,0,83,75,27,70
+596,Autarch,Autarch,Super,1,1955000,0,0,0,86,94,40,100
+597,Banshee 900R,Banshee2,Super,1,565000,0,0,0,80,87,33,76
+598,Cyclone,Cyclone,Super,1,1890000,0,0,0,83,80,33,79
+599,Deveste Eight,Deveste,Super,1,1795000,0,0,0,91,100,33,83
+600,Entity XXR,Entity2,Super,1,2305000,0,0,0,91,89,33,100
+601,Rocket Voltic,Voltic2,Super,1,3830400,0,0,0,78,45,33,77
+602,Scramjet,Scramjet,Super,1,4628400,0,0,0,86,100,32,82
+603,SC1,SC1,Super,1,1603000,0,0,0,85,78,37,80
+604,Taipan,Taipan,Super,1,1980000,0,0,0,91,89,33,100
+605,Tempesta,Tempesta,Super,1,1329000,0,0,0,84,90,33,80
+606,Tezeract,Tezeract,Super,1,2825000,0,0,0,90,51,43,100
+607,Tyrant,Tyrant,Super,1,2515000,0,0,0,89,85,33,100
+608,Visione,Visione,Super,1,2250000,0,0,0,86,93,37,92
+609,Mesa,Mesa,SUVs,1,30000,0,0,0,70,43,10,61
+610,Patriot Stretch,Patriot2,SUVs,1,611800,0,0,0,70,45,11,48
+611,Toros,Toros,SUVs,1,498000,0,0,0,83,80,27,70
+612,Audi RS5,rs5,Berlines,1,0,1000,1,1,85,70,30,78
+613,Megane RS 2018,rs,Coupes,1,0,1500,1,1,77,65,20,69
+614,Tesla Model S,models,Coupes,1,0,2000,1,1,77,65,20,69
+615,Lamborghini Aventador,avj,Super,1,3250000,2500,0,0,98,93,50,92
+616,Mercedes 850 Barbus,barbus850,Berlines,1,1852000,0,0,0,85,87,15,45
+617,Mercedes Amg,e63w213,Coupes,1,0,1900,1,1,77,65,20,69
+618,Porsche Cayenne,cayenne,SUVs,1,550000,0,0,0,74,45,8,64

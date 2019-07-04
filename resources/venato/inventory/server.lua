@@ -13,39 +13,43 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 	local Weapon = {}
 	local doc = {}
 	local Document = {}
-	local poid = Venato.Round(DataPlayers[source].Money*0.000075,1)
-	MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
-		if result[1] ~= nil then
-			for i,v in ipairs(result) do
-				Inv = {["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid)*v.quantity, ["uPoid"] = tonumber(v.poid) }
-				inventaire[v.item_id] = Inv
-				poid = poid + tonumber(v.poid)*v.quantity
+	local poid = 0
+	if DataPlayers and DataPlayers[source] then
+		poid = Venato.Round(DataPlayers[source].Money*0.000075,1)
+	
+		MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+			if result[1] ~= nil then
+				for i,v in ipairs(result) do
+					Inv = {["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid)*v.quantity, ["uPoid"] = tonumber(v.poid) }
+					inventaire[v.item_id] = Inv
+					poid = poid + tonumber(v.poid)*v.quantity
+				end
+				DataPlayers[source].Poid = poid
+				DataPlayers[source].Inventaire = inventaire
 			end
-			DataPlayers[source].Poid = poid
-			DataPlayers[source].Inventaire = inventaire
-		end
-	end)
-	MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
-		if result[1] ~= nil then
-			for i,v in ipairs(result) do
-				Wp = {["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles)}
-				Weapon[v.id] = Wp
-				poid = poid + tonumber(v.poid)
-				TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
+		end)
+		MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+			if result[1] ~= nil then
+				for i,v in ipairs(result) do
+					Wp = {["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles)}
+					Weapon[v.id] = Wp
+					poid = poid + tonumber(v.poid)
+					TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
+				end
+				DataPlayers[source].Poid = poid
+				DataPlayers[source].Weapon = Weapon
 			end
-			DataPlayers[source].Poid = poid
-			DataPlayers[source].Weapon = Weapon
-		end
-	end)
-	MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
-		if result[1] ~= nil then
-			for i,v in ipairs(result) do
-				doc = {["type"] = v.type, ["nom1"] = v.nom, ["prenom1"] = v.prenom, ["montant"] = tonumber(v.montant), ["numeroDeCompte"] = v.numero_de_compte, ["date"] = v.date, ["nom2"] = v.nom_du_factureur, ["prenom2"] = v.prenom_du_factureur}
-				Document[v.id] = doc
+		end)
+		MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+			if result[1] ~= nil then
+				for i,v in ipairs(result) do
+					doc = {["type"] = v.type, ["nom1"] = v.nom, ["prenom1"] = v.prenom, ["montant"] = tonumber(v.montant), ["numeroDeCompte"] = v.numero_de_compte, ["date"] = v.date, ["nom2"] = v.nom_du_factureur, ["prenom2"] = v.prenom_du_factureur}
+					Document[v.id] = doc
+				end
+				DataPlayers[source].Documents = Document
 			end
-			DataPlayers[source].Documents = Document
-		end
-	end)
+		end)
+	end
 end)
 
 RegisterServerEvent('Inventory:ShowMe')

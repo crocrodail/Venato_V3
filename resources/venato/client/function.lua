@@ -117,12 +117,90 @@ function Venato.ConvertUrl(url)
   return finalUrl
 end
 
-function Venato.ScaleForm(scaleform)
-	local scaleform = RequestScaleformMovie(scaleform)
+function Venato.ScaleForm(request)
+	scaleform = RequestScaleformMovie(request)
 
 	while not HasScaleformMovieLoaded(scaleform) do
 		Citizen.Wait(0)
 	end
 	
 	return scaleform
+end
+
+function ButtonMessage(text)
+    BeginTextCommandScaleformString("STRING")
+    AddTextComponentScaleform(text)
+    EndTextCommandScaleformString()
+end
+
+function Button(ControlButton)
+    N_0xe83a3e3557a56640(ControlButton)
+end
+
+function Venato.GetCarShopIntruction()
+    scaleform = Venato.ScaleForm("instructional_buttons")
+	PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(1)
+    Button(GetControlInstructionalButton(2, 190, true))
+    Button(GetControlInstructionalButton(2, 189, true))
+    ButtonMessage("Changer la couleur principale")
+	PopScaleformMovieFunctionVoid()
+	
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(0)
+    Button(GetControlInstructionalButton(2, 168, true))
+    Button(GetControlInstructionalButton(2, 167, true))
+    ButtonMessage("Changer la couleur secondaire")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(80)
+    EndScaleformMovieMethodReturn()
+
+    return scaleform
+end
+
+function Venato.DisplayInfoVehicle(vehicle)
+	scaleform2 = Venato.ScaleForm("mp_car_stats_01")
+	PushScaleformMovieFunction(scaleform2, "CLEAR_ALL")
+	PopScaleformMovieFunctionVoid()
+	
+	PushScaleformMovieFunction(scaleform2, "SET_VEHICLE_INFOR_AND_STATS")
+
+	prix_vp = ""
+	prix = ""
+
+    if(not vehicle.vp_only) then
+		prix = "Prix : "..formatPrice(vehicle.price).."€"      
+	end
+
+	if(vehicle.vp_enabled) then
+		prix_vp = "Prix VP : "..formatPrice(vehicle.price_vp).."VP"      
+	end
+
+	PushScaleformMovieFunctionParameterString(prix)
+	PushScaleformMovieFunctionParameterString(prix_vp)
+	PushScaleformMovieFunctionParameterString("MPCarHUD")
+	PushScaleformMovieFunctionParameterString("Annis")
+	PushScaleformMovieFunctionParameterString("Vitesse max.")
+	PushScaleformMovieFunctionParameterString("Acceleration")
+	PushScaleformMovieFunctionParameterString("Freinage")
+	PushScaleformMovieFunctionParameterString("Maniabilité")
+	
+	PushScaleformMovieFunctionParameterInt(vehicle.speed)
+	PushScaleformMovieFunctionParameterInt(vehicle.acceleration)
+	PushScaleformMovieFunctionParameterInt(vehicle.braking)
+	PushScaleformMovieFunctionParameterInt(vehicle.handling)
+	EndScaleformMovieMethodReturn()
+
+	return scaleform2
 end
