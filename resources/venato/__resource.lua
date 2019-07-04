@@ -11,14 +11,17 @@ client_script {
   '/client/teleport.lua',
   '/inventory/client.lua',
   '/bank/client.lua',
-  '/bank/config.lua'
+  '/bank/config.lua',
+  '/shops/client.lua',
+  '/shops/config.lua'
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
   '/server/login.lua',
   '/server/function.lua',
   '/inventory/server.lua',
-  '/bank/server.lua'
+  '/bank/server.lua',
+  '/shops/server.lua'
 }
 
 files {
