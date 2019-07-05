@@ -297,8 +297,7 @@ AddEventHandler('Inventory:AddWeapon', function(weapon, ammo, poid, libelle, New
 		libelle = "inconue"
 	end
 	TriggerClientEvent("Inventory:AddWeaponClient", source, weapon, ammo)
-	MySQL.Async.execute("INSERT INTO user_weapons (`identifier`, `weapon_model`, `balles`) VALUES (@identifier, @weapon_model, @balles)",{['@identifier'] = DataPlayers[source].SteamId, ['@weapon_model'] = weapon, ['@balles'] = ammo })
-	SetTimeout(1000, function()
+	MySQL.Async.execute("INSERT INTO user_weapons (`identifier`, `weapon_model`, `balles`) VALUES (@identifier, @weapon_model, @balles)",{['@identifier'] = DataPlayers[source].SteamId, ['@weapon_model'] = weapon, ['@balles'] = ammo }, function()
 		MySQL.Async.fetchScalar("SELECT id FROM user_weapons WHERE identifier = @identifier ORDER BY id DESC", {['@identifier'] = DataPlayers[source].SteamId}, function(result)
 			DataPlayers[source].Weapon[result] = {["id"] = weapon, ["libelle"] = libelle, ["poid"] = poid, ["ammo"] = ammo}
 		end)
