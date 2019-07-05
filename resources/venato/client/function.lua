@@ -110,3 +110,7 @@ function Venato.ConvertUrl(url)
   local finalUrl = string.gsub(urlstep1, "%.", "!")
   return finalUrl
 end
+
+function Venato.ChatMessage(str, source)
+	TriggerEvent("chatMessage", source or 'Message', { 0, 255, 255}, "" .. tostring(str))
+end
