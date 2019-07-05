@@ -7,18 +7,22 @@ client_script {
   '/client/menu.lua',
   '/client/blips.lua',
   '/client/function.lua',
+  '/client/global.lua',
   '/client/sirenControl.js',
   '/client/teleport.lua',
   '/inventory/client.lua',
   '/bank/client.lua',
-  '/bank/config.lua'
+  '/bank/config.lua',
+  '/coffre/client.lua'
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
   '/server/login.lua',
   '/server/function.lua',
+  '/server/global.lua',
   '/inventory/server.lua',
-  '/bank/server.lua'
+  '/bank/server.lua',
+  '/coffre/server.lua'
 }
 
 files {
