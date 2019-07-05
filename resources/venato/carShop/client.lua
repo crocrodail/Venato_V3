@@ -229,7 +229,6 @@ function buyVehicle(data)
       tyreburst = {enabled=0, red = 255,green= 255, blue = 255},
       mods = {},
   }
-  print(json.encode(customs))
   local vehicle = {
     id = data.id,
     name = data.name,

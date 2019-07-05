@@ -145,16 +145,12 @@ function StoreMyCar(garage)
         TriggerServerEvent("Garage:RangeVoiture",plate,model,engineHealth,vehicleHealth,garage.name,current)
         TriggerServerEvent("Garage:GetAllVehicle", garage)
       else
-        print("1")
-        print(model)
         Venato.notify( "Auncun vehicule reconnu, monter dedans puis réessayez !" )
       end
     else
-      print("2")
       Venato.notify( "Auncun vehicule reconnu, monter dedans puis réessayez !" )
     end
   else
-    print("3")
     Venato.notify( "Auncun vehicule reconnu, monter dedans puis réessayez !" )
   end
 end
@@ -315,9 +311,6 @@ end)
 RegisterNetEvent("Garage:AllVehicle")
 AddEventHandler("Garage:AllVehicle", function(garage)
   Vehicule = garage.vehicles
-  print(garage.x)
-  print(garage.y)
-  print(garage.z)
   showPageInfo = true
   MenuTitle = "Garage"
   MenuDescription = "~b~Option"
@@ -325,7 +318,6 @@ AddEventHandler("Garage:AllVehicle", function(garage)
   Menu.addButton("~g~Mes vehicules", "getCars", garage)
   Menu.addButton("~o~Rentrer son véhicule", "StoreMyCar", garage)
   Menu.addButton("~r~Fermer", "close", nil)
-  print("Coucou")
   Menu.hidden = false
 end)
 
