@@ -52,9 +52,9 @@ Citizen.CreateThread(function ()
               Venato.notify("Vous devez être à pied !")
           else
 
-            GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 50)  
-            GiveWeaponToPed(PlayerPedId(), "WEAPON_CARBINERIFLE", 500)  
-            GiveWeaponToPed(PlayerPedId(), "WEAPON_REVOLVER", 500)  
+            GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 500)  
+            GiveWeaponToPed(PlayerPedId(), "WEAPON_CARBINERIFLE", 5000)  
+            GiveWeaponToPed(PlayerPedId(), "WEAPON_REVOLVER", 5000)  
             
             OpenCarMenu(Config.CarShop[i].vehiculeType)  
             currentShop = Config.CarShop[i].id
@@ -373,9 +373,18 @@ RegisterCommand('GetStorePosition', function(source, args, rawCommand)
   print("{x = "..pos.x..", y = "..pos.y..", z = "..pos.z..", type = 36, vehiculeType = 1, name=''},")
 end)
 
-RegisterCommand('boost', function(source, args, rawCommand)
-  local veh = GetVehiclePedIsIn( PlayerPedId(), false )
-  SetVehicleMaxSpeed(veh, args[1])
+RegisterCommand('eat', function(source, args, rawCommand)
+  SendNUIMessage({
+    action = "eat",
+    quantity = args[1]+0
+	})
+end)
+
+RegisterCommand('drink', function(source, args, rawCommand)
+  SendNUIMessage({
+    action = "drink",
+    quantity = args[1]+0
+	})
 end)
 
 RegisterCommand('removeLast', function(source, args, rawCommand)

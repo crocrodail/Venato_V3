@@ -1,0 +1,37 @@
+html {
+  background-color: transparent;
+  overflow: hidden;
+}
+
+html body {
+  background-color: transparent;
+}
+
+html body #app {
+  background-color: transparent;
+}
+
+html body #app .besoins {
+  position: absolute;
+  bottom: 20%;
+  left: 1.8%;
+}
+
+html body #app .fullscreen {
+  width: 100%;
+  max-width: 100%;
+  padding: 100px 30px;
+}
+
+h1 {
+  font-size: 500px;
+  color: green;
+}
+
+.v-progress-circular {
+  margin: 0.2vw;
+  font-size: 0.7vw;
+  background-color: rgba(255, 255, 255, 0.329);
+  border-radius: 100px;
+}
+/*# sourceMappingURL=hud.css.map */
