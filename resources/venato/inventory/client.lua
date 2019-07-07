@@ -30,6 +30,7 @@ Citizen.CreateThread(function()
 			if Menu.hidden then
 				CloseDoc()
 			end
+			TriggerEvent("VehicleCoffre:Close")
 			Menu.hidden = true
 			showPageInfo = false
 		end

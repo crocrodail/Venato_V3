@@ -16,7 +16,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
     for k,v in pairs(DataCoffre) do
-      if  Vdist(x, y, z, v.x, v.y, v.z) < 20 then
+      if Vdist(x, y, z, v.x, v.y, v.z) < 20 then
         DrawMarker(27,v.x,v.y,v.z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
       elseif  Vdist(x, y, z, v.x, v.y, v.z) < 1 then
         DrawMarker(27,v.x,v.y,v.z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)

@@ -145,3 +145,21 @@ end
 function Venato.MoneyToPoid(money)
 	return Venato.Round(money*0.000075,1)
 end
+
+function Venato.CloseVehicle()
+  if (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false) then
+    local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
+    local clostestvehicle = GetClosestVehicle(x, y, z, 4.000, 0, 127)
+    if clostestvehicle ~= 0 then
+      return clostestvehicle
+    else
+      local pos = GetEntityCoords(GetPlayerPed(-1))
+      local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
+      local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+      local a, b, c, d, result = GetRaycastResult(rayHandle)
+      return result
+    end
+  else
+    return nil
+  end
+end

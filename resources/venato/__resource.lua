@@ -11,6 +11,7 @@ client_script {
   '/client/sirenControl.js',
   '/client/teleport.lua',
   '/inventory/client.lua',
+  '/coffre_voiture/client.lua',
   '/bank/client.lua',
   '/bank/config.lua',
   '/coffre/client.lua'
@@ -21,6 +22,8 @@ server_script {
   '/server/function.lua',
   '/server/global.lua',
   '/inventory/server.lua',
+  '/coffre_voiture/server.lua',
+  '/coffre_voiture/config.lua',
   '/bank/server.lua',
   '/coffre/server.lua'
 }
