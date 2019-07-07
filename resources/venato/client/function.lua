@@ -10,15 +10,13 @@ end)
 
 RegisterNetEvent("Venato:notify")
 AddEventHandler("Venato:notify", function(message)
-  SetNotificationTextEntry("STRING")
-  AddTextComponentString(message)
-  DrawNotification(false, false)
+  Venato.notify(message)
 end)
 
 function Venato.notify(message)
-		SetNotificationTextEntry("STRING")
-		AddTextComponentString(message)
-		DrawNotification(false, false)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentSubstringPlayerName(message)
+	DrawNotification(false, false)
 end
 
 function Venato.Text3D(x,y,z, text)

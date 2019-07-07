@@ -71,7 +71,6 @@ CreateThread(function ()
     end
     if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and inShopMarker then
       TriggerServerEvent("Shops:ShowInventory", shopName)
-      shopName = nil
       open = true
     end
     if open then
@@ -99,10 +98,50 @@ AddEventHandler('Shops:ShowInventory:cb', function(shop)
 	MenuDescription = "Stocks"
 
   for _, item in ipairs(shop.Items) do
-    Menu.addButton(item.Name.." "..item.Price.."€".." rest: "..item.Quantity, "buyItem", item)
+    local textButton = "~s~"..item.Name.." ~o~"..item.Price.."€~s~"
+    if item.Quantity == 0 then
+      textButton = textButton.." ~r~Rupture"
+    elseif item.Quantity > 0 then
+      textButton = "~s~"..textButton.." ~g~"..item.Quantity.." en stock"
+    else
+      textButton = "~s~"..textButton.."~g~ stock illimité"
+    end
+    Menu.addButton(
+      textButton, 
+      "buyItem",
+      {["item"]=item, ["shopId"]=shop.Id}
+    )
   end
 end)
 
-function buyItem(item)
-  TriggerServerEvent("Shops:TestBuy", item.Id, item.Price, 1)
+function buyItem(args)
+  TriggerServerEvent("Shops:TestBuy", args.item, args.shopId)
 end
+
+
+RegisterNetEvent('Shops:TestBuy:cb')
+AddEventHandler('Shops:TestBuy:cb', function(Name)
+  Venato.notify("~g~Vous avez bien acheté "..Name..".")
+  TriggerServerEvent("Shops:ShowInventory", shopName)
+end)
+
+
+RegisterNetEvent('Shops:NotEnoughMoney')
+AddEventHandler('Shops:NotEnoughMoney', function(Name)
+  Venato.notify("~r~Vous n'avez pas assez d'argent pour acheter "..Name..".")
+  TriggerServerEvent("Shops:ShowInventory", shopName)
+end)
+
+
+RegisterNetEvent('Shops:NotEnoughQuantity')
+AddEventHandler('Shops:NotEnoughQuantity', function(Name)
+  Venato.notify("~r~Il n'y a plus assez de "..Name.." en stock.")
+  TriggerServerEvent("Shops:ShowInventory", shopName)
+end)
+
+
+RegisterNetEvent('Shops:TooHeavy')
+AddEventHandler('Shops:TooHeavy', function(Name)
+  Venato.notify("~r~Vous etes trop lourd pour acheter "..Name..".")
+  TriggerServerEvent("Shops:ShowInventory", shopName)
+end)
