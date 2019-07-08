@@ -3,8 +3,8 @@ AddEventHandler('playerSpawned', function()
 end)
 
 
-RegisterNetEvent("Blips:Load")
-AddEventHandler("Blips:Load", function()
+RegisterNetEvent("VenatoSpawn")
+AddEventHandler("VenatoSpawn", function()
 	LoadBlips()
 end)
 

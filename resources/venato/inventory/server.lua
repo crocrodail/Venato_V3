@@ -13,16 +13,13 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 	local Weapon = {}
 	local doc = {}
 	local Document = {}
-	local poid = 0
-	if DataPlayers and DataPlayers[source] then
-		poid = Venato.Round(DataPlayers[source].Money*0.000075,1)
-	
-		MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
-			if result[1] ~= nil then
-				for i,v in ipairs(result) do
-					Inv = {["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid)*v.quantity, ["uPoid"] = tonumber(v.poid) }
-					inventaire[v.item_id] = Inv
-					poid = poid + tonumber(v.poid)*v.quantity
+	local poid = Venato.MoneyToPoid(DataPlayers[source].Money)
+	MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+		if result[1] ~= nil then
+			for i,v in ipairs(result) do
+				Inv = {["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid)*v.quantity, ["uPoid"] = tonumber(v.poid) }
+				inventaire[v.item_id] = Inv
+				poid = poid + tonumber(v.poid)*v.quantity
 				end
 				DataPlayers[source].Poid = poid
 				DataPlayers[source].Inventaire = inventaire
@@ -184,7 +181,7 @@ end
 
 RegisterServerEvent('Inventory:CallInfoMoney')
 AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
-	if DataPlayers[ClosePlayer].Poid + Venato.Round(qty * 0.000075) >= DataPlayers[ClosePlayer].PoidMax then
+	if DataPlayers[ClosePlayer].Poid + Venato.MoneyToPoid(qty) >= DataPlayers[ClosePlayer].PoidMax then
 		TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
 		TriggerEvent("Inventory:RemoveMoney", qty, source)
 		TriggerClientEvent("Inventory:AnimGive", source)		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
@@ -202,7 +199,7 @@ AddEventHandler("Inventory:AddMoney", function(qty, NewSource)
 	if NewSource ~= nil then
 		source = NewSource
 	end
-	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.Round(qty * 0.000075)
+	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.MoneyToPoid(qty)
 	local new = DataPlayers[source].Money + qty
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
@@ -216,7 +213,7 @@ AddEventHandler("Inventory:RemoveMoney", function(qty, NewSource)
 		source = NewSource
 	end
 	local new = DataPlayers[source].Money - qty
-	DataPlayers[source].Poid = DataPlayers[source].Poid - Venato.Round(qty * 0.000075)
+	DataPlayers[source].Poid = DataPlayers[source].Poid - Venato.MoneyToPoid(qty)
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
@@ -228,9 +225,9 @@ AddEventHandler("Inventory:SetMoney", function(qty, NewSource)
 	if NewSource ~= nil then
 		source = NewSource
 	end
-	local newPoid = DataPlayers[source].Poid - Venato.Round(DataPlayers[source].Money  * 0.000075)
+	local newPoid = DataPlayers[source].Poid - Venato.MoneyToPoid(DataPlayers[source].Money)
 	local new = qty
-	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.Round(qty * 0.000075)
+	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.MoneyToPoid(qty)
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
@@ -301,8 +298,7 @@ AddEventHandler('Inventory:AddWeapon', function(weapon, ammo, poid, libelle, New
 		libelle = "inconue"
 	end
 	TriggerClientEvent("Inventory:AddWeaponClient", source, weapon, ammo)
-	MySQL.Async.execute("INSERT INTO user_weapons (`identifier`, `weapon_model`, `balles`) VALUES (@identifier, @weapon_model, @balles)",{['@identifier'] = DataPlayers[source].SteamId, ['@weapon_model'] = weapon, ['@balles'] = ammo })
-	SetTimeout(1000, function()
+	MySQL.Async.execute("INSERT INTO user_weapons (`identifier`, `weapon_model`, `balles`) VALUES (@identifier, @weapon_model, @balles)",{['@identifier'] = DataPlayers[source].SteamId, ['@weapon_model'] = weapon, ['@balles'] = ammo }, function()
 		MySQL.Async.fetchScalar("SELECT id FROM user_weapons WHERE identifier = @identifier ORDER BY id DESC", {['@identifier'] = DataPlayers[source].SteamId}, function(result)
 			DataPlayers[source].Weapon[result] = {["id"] = weapon, ["libelle"] = libelle, ["poid"] = poid, ["ammo"] = ammo}
 		end)
