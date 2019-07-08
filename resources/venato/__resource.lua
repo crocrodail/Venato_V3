@@ -14,9 +14,9 @@ client_script {
   '/bank/config.lua',
   '/bank/client.lua',
   '/bank/config.lua',
-  '/coffre/client.lua'
+  '/coffre/client.lua',
   '/shops/client.lua',
-  '/shops/config.lua'
+  '/shops/config.lua',
   '/carShop/config.lua',
   '/carShop/client.lua',
   '/garage/client.lua',
@@ -30,8 +30,8 @@ server_script {
   '/inventory/server.lua',
   '/bank/server.lua',
   '/carShop/server.lua',
-  '/garage/server.lua'
-  '/coffre/server.lua'
+  '/garage/server.lua',
+  '/coffre/server.lua',
   '/shops/server.lua'
 }
 
