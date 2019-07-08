@@ -47,7 +47,7 @@ function accessGranded(SteamId, source)
         Sool = DataUser[1].sool,
         PhoneNumber = DataUser[1].phone_number,
         Pseudo = DataUser[1].pseudo,
-        Poid = Venato.Round(DataUser[1].money*0.000075,1),
+        Poid = Venato.MoneyToPoid(DataUser[1].money),
         Inventaire = {nil},
         Weapon = {nil},
         Documents = {nil},
@@ -67,7 +67,7 @@ function accessGranded(SteamId, source)
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
     TriggerEvent("Inventory:UpdateInventory", source)
-    TriggerClientEvent("Blips:Load", source)
+    TriggerClientEvent("VenatoSpawn", source)
     ControlVisa(SteamId, source)
   end)
 end
@@ -114,27 +114,6 @@ function PlayerLeaving(SteamID)
   end
 end
 
-RegisterNetEvent("Venato:displaytext")
-AddEventHandler("Venato:displaytext", function(text, time)
-  ClearPrints()
-  SetTextEntry_2("STRING")
-  AddTextComponentString(text)
-  DrawSubtitleTimed(time, 1)
-end)
-
-RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(icon, type, sender, title, text)
-  SetNotificationTextEntry("STRING");
-  AddTextComponentString(text);
-  SetNotificationMessage(icon, icon, true, type, sender, title, text);
-  DrawNotification(false, true);
-end)
-
-RegisterNetEvent("gcphone:callData")
-AddEventHandler("gcphone:callData", function()
-  TriggerClientEvent("gcphone:callData:cb", source, DataPlayers[source])
-end)
-
 function Venato.Round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
@@ -160,4 +139,8 @@ function Venato.paymentVP(source, amount)
     MySQL.Async.execute("UPDATE users SET venato_point=@money WHERE identifier=@identifier", {["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].VenatoPoint})
     return true
   end
+end
+
+function Venato.MoneyToPoid(money)
+	return Venato.Round(money*0.000075,1)
 end

@@ -1,0 +1,2 @@
+ConfigShop = {}
+ConfigShop.EnableShops = true

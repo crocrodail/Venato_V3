@@ -5,7 +5,6 @@ local dropMoney = "prop_cash_case_01"
 local dropWeapon = "prop_hockey_bag_01"
 local dropItem = "prop_cs_box_clothes"
 local PapierOpen = 0
-DataUser = {}
 -- ######## COFIG ##############
 	local PoidMax = 20 -- Kg
 --##############################
@@ -25,7 +24,7 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(1, Keys['F3']) and GetLastInputMethod(2) then
 			ClearMenu()
 			Menu.hidden = not Menu.hidden
-			OpenMenuPerso()
+			--OpenMenuPerso()
 		end
 		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) and GetLastInputMethod(2) then
 			if Menu.hidden then
@@ -67,13 +66,13 @@ Citizen.CreateThread(function()
 			for k,v in pairs(MoneyOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
-					Venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." €")
-					Venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." €")
+					Venato.Text3D(v.x, v.y, v.z, "~b~"..Venato.FormatMoney(v.qty,2).." €")
+					Venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..Venato.FormatMoney(v.qty,2).." €")
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-						if (Venato.Round(v.qty*0.000075,1) + DataUser.Poid) <= PoidMax then
+						if (Venato.MoneyToPoid(v.qty) + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddMoney", v.qty)
 							TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
-							Venato.notify("Vous avez ramassez "..v.qty.." € .")
+							Venato.notify("Vous avez ramassez "..Venato.FormatMoney(v.qty,2).." € .")
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropMoney))
 							if objet ~= 0 and objet ~= nil then
@@ -150,8 +149,8 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
 	end
 	MenuTitle = color..""..Data.Poid.." ~s~/ 20 Kg"
 	MenuDescription = "Inventaire"
-	local MoneyPoid = Venato.Round(Data.Money*0.000075,1)
-	Menu.addButton("~g~Argent : "..Data.Money.." € ~o~( "..MoneyPoid.." Kg )", "OptionMoney", {Data.Money, MoneyPoid, Data.Poid,Data})
+	local MoneyPoid = Venato.MoneyToPoid(Data.Money)
+	Menu.addButton("~g~Argent : "..Venato.FormatMoney(Data.Money,2).." € ~o~( "..MoneyPoid.." Kg )", "OptionMoney", {Data.Money, MoneyPoid, Data.Poid,Data})
 	for k,v in pairs(Data.Inventaire) do
 		if v.quantity > 0 then
 			Menu.addButton("~b~"..v.libelle.." ~s~: ~r~"..v.quantity.." ~o~( "..v.poid.." Kg )", "OptionItem", {v.quantity, v.id, v.libelle, v.uPoid, Data.Poid})
@@ -190,10 +189,10 @@ function MyDoc(data)
 	end
 	for k,v in pairs(data.Documents) do
 		if v.type == "chequier" then
-			Menu.addButton("Chèquier ~o~("..v.montant.." restant)", "showCheque", {data,k})
+			Menu.addButton("Chèquier ~o~("..Venato.FormatMoney(v.montant,2).." restant)", "showCheque", {data,k})
 		end
 		if v.type == "cheque" then
-			Menu.addButton("Cheque de ~g~"..v.montant.." €", "showCheque", {data,k})
+			Menu.addButton("Cheque de ~g~"..Venato.FormatMoney(v.montant,2).." €", "showCheque", {data,k})
 		end
 	end
 end
