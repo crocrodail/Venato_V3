@@ -3,7 +3,7 @@ local PoidMax = 20 -- Kg
 --##############################
 
 function getShops()
-    local result = MySQL.Sync.fetchAll("SELECT * FROM shops", {})
+    local result = MySQL.Sync.fetchAll("SELECT * FROM shops WHERE enabled=1", {})
     return result or {}
 end
 
@@ -16,7 +16,7 @@ function getShop(shopName)
     shop = {}
     shop.Items = {}
     local result = MySQL.Sync.fetchAll(
-        'SELECT s.Id, s.Name, it.id as ItemId, it.libelle as ItemName, c.Price as ItemPrice, c.Quantity as ItemQuantity, c.Id as ContentId '..
+        'SELECT s.Id, s.Name, s.Renamed, it.id as ItemId, it.libelle as ItemName, c.Price as ItemPrice, c.Quantity as ItemQuantity, c.Id as ContentId '..
             'FROM shops s ' ..
             'INNER JOIN shop_inventory i ON s.InventoryID = i.Id '..
             'INNER JOIN shop_content c ON i.Id = c.InventoryId '..
@@ -25,6 +25,7 @@ function getShop(shopName)
     for _, item in ipairs(result) do
         shop.Id = item.Id
         shop.Name = item.Name
+        shop.Renamed = item.Renamed
         table.insert(shop.Items, {
             ["Id"]=item.ItemId,
             ["Name"]=item.ItemName,

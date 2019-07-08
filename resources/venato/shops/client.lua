@@ -27,6 +27,15 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
         SetEntityInvincible(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
       end
+      
+      local blip = AddBlipForCoord(item.PositionX, item.PositionY, item.PositionZ)
+      SetBlipSprite(blip, item.BlipIcon)
+      SetBlipColour(blip, item.BlipColor)
+      SetBlipScale(blip, 1.0)
+      SetBlipAsShortRange(blip, true)
+      BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString(item.Renamed or item.Name)
+      EndTextCommandSetBlipName(blip)
     end
 
     while true do
@@ -37,8 +46,8 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
       for _, item in ipairs(shops) do
         local distance = GetDistanceBetweenCoords(playerPos, item.PositionX, item.PositionY, item.PositionZ, true)
         if distance < 20 then
-          local x = item.PositionX + 2.0*Sin(item.NpcHeading*3.14/180.0)
-          local y = item.PositionY + 2.0*Cos(item.NpcHeading*3.14/180.0)
+          local x = item.PositionX - 2.0*Sin(item.NpcHeading)
+          local y = item.PositionY + 2.0*Cos(item.NpcHeading)
           local z = item.PositionZ + 1.0
           DrawMarker( 29,               --type
                        x,  y,  z,       -- pos
@@ -48,11 +57,15 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
                        0,150,  0,250,   -- RGB+alpha
                      1,1,2,0)           -- other
         end
-        if distance < 2  then
+        if distance < item.ActivationDist then
           isNPC = item.Supervised ~= 1
           inShopMarker = true
           shopName = item.Name
           Venato.InteractTxt('Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop')
+        elseif open and shopName == item.Name and distance > (2*item.ActivationDist) then
+          inShopMarker = false
+          open = false
+          Menu.hidden = true
         end
       end
     end
@@ -68,6 +81,7 @@ CreateThread(function ()
     if (IsControlJustReleased(1, Keys['BACKSPACE']) or IsControlJustReleased(1, Keys['RIGHTMOUSE'])) then
       SetNuiFocus(false, false)
       open = false
+      Menu.hidden = true
     end
     if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and inShopMarker then
       TriggerServerEvent("Shops:ShowInventory", shopName)
