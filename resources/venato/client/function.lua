@@ -154,3 +154,26 @@ end
 function Venato.MoneyToPoid(money)
 	return Venato.Round(money*0.000075,1)
 end
+
+RegisterCommand('respawn', function(source, args, rawCommand)
+  local spawn = { 
+    ["x"] = tonumber(args[1] or 2679.24),
+    ["y"] = tonumber(args[2] or 3280.58),
+    ["z"] = tonumber(args[3] or 55.24), 
+    ["heading"] = tonumber(args[4] or 148.30)
+  }
+
+  print("respawn x:"..spawn.x.." y:"..spawn.y.." z:"..spawn.z.." heading:"..spawn.heading)
+
+  SetEntityCoordsNoOffset(GetPlayerPed(-1),
+  spawn.x, spawn.y, spawn.z,
+   false, false, false, true)
+   NetworkResurrectLocalPlayer(spawn.x, spawn.y, spawn.z, spawn.heading, true, true, false)
+end, false)
+
+RegisterCommand('position', function(source, args, rawCommand)
+  local ply = GetPlayerPed(-1)
+  local plyCoords = GetEntityCoords(ply, 0)
+  local plyHeading = GetEntityHeading(ply, 0)
+  print("Coords: " ..plyCoords.x.. " - " ..plyCoords.y.. " - " ..plyCoords.z.. " - " ..plyHeading) 
+end, false)
