@@ -1,12 +1,8 @@
 Venato = {}
 
-RegisterNetEvent("Venato:displaytext")
-AddEventHandler("Venato:displaytext", function(text, time)
-  ClearPrints()
-  SetTextEntry_2("STRING")
-  AddTextComponentString(text)
-  DrawSubtitleTimed(time, 1)
-end)
+function none()
+	local a = ""
+end
 
 RegisterNetEvent("Venato:notify")
 AddEventHandler("Venato:notify", function(message)
@@ -86,11 +82,6 @@ function GetPlayers()
     return players
 end
 
-function Venato.Round(num, numDecimalPlaces)
-  local mult = 10^(numDecimalPlaces or 0)
-  return math.floor(num * mult + 0.5) / mult
-end
-
 function Venato.CreateObject(objet, x, y, z)
     local model = GetHashKey(objet)
     RequestModel(model)
@@ -111,4 +102,55 @@ end
 
 function Venato.ChatMessage(str, source)
 	TriggerEvent("chatMessage", source or 'Message', { 0, 255, 255}, "" .. tostring(str))
+end
+
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
+
+function Venato.Round(val, decimal)
+  if (decimal) then
+    return math.floor( (val * 10^decimal) + 0.5) / (10^decimal)
+  else
+    return math.floor(val+0.5)
+  end
+end
+
+function Venato.FormatMoney(amount, decimal, prefix, neg_prefix)
+  if amount < 99 then
+    return amount
+  else
+  local str_amount,  formatted, famount, remain
+  decimal = decimal or 2  -- default 2 decimal places
+  neg_prefix = neg_prefix or "-" -- default negative sign
+  famount = math.abs(Venato.Round(amount,decimal))
+  famount = math.floor(famount)
+  remain = Venato.Round(math.abs(amount) - famount, decimal)
+  formatted = comma_value(famount)
+  if (decimal > 0) then
+    remain = string.sub(tostring(remain),3)
+    formatted = formatted .. "." .. remain ..
+                string.rep("0", decimal - string.len(remain))
+  end
+  formatted = (prefix or "") .. formatted
+  if (amount<0) then
+    if (neg_prefix=="()") then
+      formatted = "("..formatted ..")"
+    else
+      formatted = neg_prefix .. formatted
+    end
+  end
+  return formatted
+end
+end
+
+function Venato.MoneyToPoid(money)
+	return Venato.Round(money*0.000075,1)
 end
