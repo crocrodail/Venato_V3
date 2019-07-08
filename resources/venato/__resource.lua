@@ -13,10 +13,11 @@ client_script {
   '/inventory/client.lua',
   '/bank/client.lua',
   '/bank/config.lua',
-  '/coffre/client.lua'
+  '/coffre/client.lua',
   '/shops/client.lua',
   '/shops/config.lua'
 }
+
 server_script {
   '@mysql-async/lib/MySQL.lua',
   '/server/login.lua',
@@ -24,7 +25,7 @@ server_script {
   '/server/global.lua',
   '/inventory/server.lua',
   '/bank/server.lua',
-  '/coffre/server.lua'
+  '/coffre/server.lua',
   '/shops/server.lua'
 }
 
