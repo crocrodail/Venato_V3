@@ -2,11 +2,12 @@ new Vue({
     el : '#app',
     data: {
         interval: {},
+        playerIsInVehicule: false,
         food: 50,
-        water: 9,
-        fuel: 5,
-        carDamage: 57,
-        alcool: 25,
+        water: 50,
+        fuel: 50,
+        carDamage: 50,
+        alcool: 0,
         window: {
           width: 0,
           height: 0
@@ -32,7 +33,6 @@ new Vue({
         this.window.height = window.innerHeight;
       },
       handleMessage(event) {
-        console.log("event : "+ JSON.stringify(event.data));
         if(event.data.action === "eat"){
           this.food += event.data.quantity;          
         }
@@ -41,6 +41,21 @@ new Vue({
         }
         else if(event.data.action === "alcool"){
           this.alcool += event.data.quantity;          
+        }
+        else if(event.data.action === "enterCar"){
+          this.playerIsInVehicule = true;
+        }
+        else if(event.data.action === "leaveCar"){
+          this.playerIsInVehicule = false;
+        }
+        else if(event.data.action === "vehiculeStatus"){
+          this.fuel = event.data.fuel;
+          this.carDamage = Math.round(event.data.carHealth / 10);
+        }
+        else if(event.data.action === "playerStatus"){
+          this.water = event.data.water;
+          this.food = event.data.food;
+          this.alcool = event.data.alcool;
         }
       }
     },
