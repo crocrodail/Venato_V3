@@ -52,10 +52,10 @@ AddEventHandler('gcphone:callData:cb', function(data)
   end
 end)
 --====================================================================================
---  Que faire si le joueurs veut ouvrir sont téléphone n'est qu'il en a pas ?
+--  Que faire si le joueur veut ouvrir son téléphone mais qu'il n'en a pas ?
 --====================================================================================
 function ShowNoPhoneWarning ()
-  TriggerEvent('Venato:notify', "~r~Vous n'avez pas de téléphone.")
+  TriggerEvent('Venato:notify', "<span class='red--text'>Vous n'avez pas de téléphone.</span>")
 end
 
 --[[

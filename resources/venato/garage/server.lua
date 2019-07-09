@@ -1,5 +1,3 @@
-
-
 RegisterNetEvent("Garage:CallAllCar")
 AddEventHandler("Garage:CallAllCar", function(garage)
   local source = source  
@@ -24,7 +22,7 @@ end
 
 RegisterNetEvent("Garage:SortiVehicule")
 AddEventHandler("Garage:SortiVehicule", function(plate,model)
-  MySQL.Async.execute("UPDATE user_vehicle SET state=1, garage = NULL WHERE model=@model AND plate=@plate", {['@model'] =  model, ['@plate'] = plate})
+  MySQL.Async.execute("UPDATE user_vehicle SET state=1, namegarage = NULL WHERE model=@model AND plate=@plate", {['@model'] =  model, ['@plate'] = plate})
 end)
 
 RegisterNetEvent("Garage:RangeVoiture")

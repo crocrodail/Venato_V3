@@ -127,7 +127,7 @@ AddEventHandler("Coffre:DropItem", function(qty, row)
   local indexCoffre = row[1]
   local indexItem = row[2]
   local qtyInCoffre = DataCoffre[indexCoffre].inventaire[indexItem].quantity or 0
-  TriggerClientEvent("Venato:notify", ClosePlayer, "~g~Vous avez déposé "..qty.." "..DataPlayers[source].Inventaire[indexItem].libelle.." dans le coffre.")
+  TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez déposé "..qty.." "..DataPlayers[source].Inventaire[indexItem].libelle.." dans le coffre.","success")
   TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[indexItem].quantity - qty, indexItem)
   TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre + qty)
 end)
@@ -139,7 +139,7 @@ AddEventHandler("Coffre:TakeItems", function(qty, row)
   local indexItem = row[2]
   local qtyInCoffre = DataCoffre[indexCoffre].inventaire[indexItem].quantity or 0
   local qtyOnPlayer = DataPlayers[source].Inventaire[indexItem].quantity or 0
-  TriggerClientEvent("Venato:notify", ClosePlayer, "~g~Vous avez récuperé "..qty.." "..DataCoffre[indexCoffre].inventaire[indexItem].libelle.." dans le coffre.")
+  TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez récuperé "..qty.." "..DataCoffre[indexCoffre].inventaire[indexItem].libelle.." dans le coffre.", "success")
   TriggerEvent("Inventory:SetItem",qtyOnPlayer + qty, indexItem)
   TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre - qty)
 end)
@@ -173,7 +173,7 @@ AddEventHandler("Coffre:DropMoney", function(qty, index)
   local source = source
   TriggerEvent("Inventory:RemoveMoney", qty, source)
   TriggerEvent("Coffre:SetMoney", DataCoffre[index].argent + qty , index)
-  TriggerClientEvent("Venato:notify", source, "~g~Vous avez déposé "..qty.." € dans le coffre.")
+  TriggerClientEvent("Venato:notify", source, "Vous avez déposé "..qty.." € dans le coffre.","success")
 end)
 
 RegisterServerEvent("Coffre:TakeMoney")
@@ -181,7 +181,7 @@ AddEventHandler("Coffre:TakeMoney", function(qty, index)
   local source = source
   TriggerEvent("Inventory:AddMoney", qty, source)
   TriggerEvent("Coffre:SetMoney", DataCoffre[index].argent - qty , index)
-  TriggerClientEvent("Venato:notify", source, "~g~Vous avez récuperé "..qty.." € du coffre.")
+  TriggerClientEvent("Venato:notify", source, "Vous avez récuperé "..qty.." € du coffre.", "success")
 end)
 
 RegisterServerEvent("Coffre:SetMoney")

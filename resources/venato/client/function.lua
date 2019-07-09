@@ -5,30 +5,32 @@ function none()
 end
 
 RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(message, type, timeout)
-  Venato.notify(message, type, timeout)
+AddEventHandler("Venato:notify", function(notif)
+  Venato.notify(notif)
 end)
 
-function Venato.notify(message, type, timeout)
+function Venato.notify(notif)
   
-  if not message then
+  if not notif.message then
     return
   end
 
-  if not type then
-    type = 'alert'
+  if not notif.type then
+    notif.type = 'alert'
   end
 
-  if not timeout then
-    timeout = 3500
+  if not notif.timeout then
+    notif.timeout = 3500
   end  
 
 	SendNUIMessage(
     {
         action = "notify",
-        message = message,
-        type = type,
-        timeout = timeout
+        message = notif.message,
+        type = notif.type,
+        timeout = notif.timeout,
+        logo = notif.logo,
+        title = notif.title
     }
   )
 end

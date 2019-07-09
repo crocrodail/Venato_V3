@@ -8,6 +8,11 @@ local menuIsOpen = false
 local currentVehicle
 local showInformationVehicle = false
 local currentShop = 0
+local defaultNotification = {
+  type = "alert",
+  title ="Venato CarShop",
+  logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
+}
 
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)  
@@ -49,7 +54,9 @@ Citizen.CreateThread(function ()
         end
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
           if IsPedInAnyVehicle( playerPed, false ) then
-              Venato.notify("Vous devez être à pied !")
+              defaultNotification.message = "Vous devez être à pied !"
+              defaultNotification.type = 'error'
+              Venato.notify(defaultNotification)
           else
 
             GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 500)  
@@ -62,17 +69,26 @@ Citizen.CreateThread(function ()
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end     
         end
+        if IsControlJustPressed(1, 170) or IsControlJustPressed(1, 177) or IsControlJustPressed(1, 311) or IsControlJustPressed(1, 166) then
+          hideMenu() 
+          RemoveCurrentCar()
+        end
       else
-        if menuIsOpen and Config.CarShop[i].id == currentShop then
-          
-          menuIsOpen = false
-          Menu.hidden = true
+        if menuIsOpen and Config.CarShop[i].id == currentShop then          
+          hideMenu() 
+          RemoveCurrentCar()
         end
       end			
     end
 	end
 end)
 
+function RemoveCurrentCar()
+  if IsPedInAnyVehicle( playerPed, false ) then
+    car = GetVehiclePedIsIn( playerPed, false )      
+    deleteCar( car )
+  end
+end
 
 function OpenCarMenu(vehiculeType)
   if not menuIsOpen then    
@@ -168,9 +184,9 @@ function previewVehicle(data)
    -- check if the vehicle actually exists
    showInformationVehicle = false 
    if not IsModelInCdimage(data.model) or not IsModelAVehicle(data.model) then
-        TriggerEvent('chat:addMessage', {
-            args = { 'It might have been a good thing that you tried to spawn a ' .. data.name .. '. Who even wants their spawning to actually ^*succeed?' }
-        })
+        defaultNotification.message = "Ce modèle n'est pas disponible."
+        defaultNotification.type = "error"
+        Venato.notify(defaultNotification)
         return
     end
 
@@ -290,12 +306,15 @@ AddEventHandler('CarShop:PaiementOk:response', function(data)
   SetVehicleUndriveable(car, false)
   showInformationVehicle = false
   hideMenu()
-  Venato.notify("~g~Félicitation\n~w~Faites attention sur la route")
+  defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Faites attention sur la route.";
+  Venato.notify(defaultNotification)  
 end)
 
 RegisterNetEvent('CarShop:PaiementKo:response')
 AddEventHandler('CarShop:PaiementKo:response', function(data)
-  Venato.notify("~r~Echec de paiement")
+  defaultNotification.message = "Erreur de paiement. Verifiez votre solde.";
+  defaultNotification.type = "error"
+  Venato.notify(defaultNotification)
 end)
 
 RegisterNetEvent('CarShop:ShowCategory:response')

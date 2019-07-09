@@ -74,7 +74,7 @@ html body #app .fullscreen {
 
 .noty_layout .noty_type__error,
 .noty_layout .noty_type__danger {
-  background-color: rgba(199, 10, 10, 0.75);
+  background-color: rgba(183, 28, 28, 0.459);
   color: white;
 }
 /*# sourceMappingURL=hud.css.map */

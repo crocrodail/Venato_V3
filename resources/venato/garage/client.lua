@@ -20,6 +20,12 @@ local garage = {
 }
 
 
+local defaultNotification = {
+  type = "alert",
+  logo = "https://i.ibb.co/dpsQ3B9/icons8-parking-96px.png"
+}
+
+
 function setMapMarker()
     for k,v in ipairs(garage)do
       if v.hidden == false then
@@ -50,6 +56,7 @@ setMapMarker()
         if distance < 50 then
           DrawMarker(27,item.xpoint, item.ypoint, item.zpoint,0,0,0,0,0,0,1.9,1.9,1.9,0,150,255,200,0,0,0,0)
           if distance <= 2 then
+            defaultNotification.title = item.name
             Venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
               openGarage(item.name, item.xspawn, item.yspawn, item.zspawn, item.hspawn)              
@@ -144,15 +151,13 @@ function StoreMyCar(garage)
       if mind and  model ~= nil then
         TriggerServerEvent("Garage:RangeVoiture", plate,model,engineHealth,vehicleHealth,garage.name,current)
         TriggerServerEvent("Garage:GetAllVehicle", garage)
-      else
-        Venato.notify( "Auncun vehicule reconnu, monter dedans puis réessayez !" )
+        return
       end
-    else
-      Venato.notify( "Auncun vehicule reconnu, monter dedans puis réessayez !" )
     end
-  else
-    Venato.notify( "Auncun vehicule reconnu, monter dedans puis réessayez !" )
   end
+  defaultNotification.message = "Auncun vehicule reconnu, monter dedans puis réessayez !"
+  defaultNotification.type = "error"
+  Venato.notify(defaultNotification)
 end
 
 
@@ -188,11 +193,6 @@ function SortirVoiture(vhl)
     SetPedIntoVehicle(GetPlayerPed(-1), veh, -1)
     SetVehicleModKit(veh, 0 )
     SetVehicleColours(veh,customs.color.primary,customs.color.secondary)
-    -- SetVehicleModColor_1(veh, customs.color.primary.type, 0,0)
-    -- SetVehicleCustomPrimaryColour(veh, customs.color.primary.red,  customs.color.primary.green,  customs.color.primary.blue)
-    -- SetVehicleModColor_2(veh, customs.color.secondary.type, 0,0)
-    -- SetVehicleCustomSecondaryColour(veh, customs.color.secondary.red,  customs.color.secondary.green,  customs.color.secondary.blue)
-    -- SetVehicleExtraColours(veh, customs.color.pearlescent, customs.wheels.color)
     ToggleVehicleMod(veh, 18, false)
     for i = 0, 49 do
       if i ~= 11 and i ~= 12 and i ~= 13 and i ~= 15 and i ~= 18 then
@@ -298,7 +298,9 @@ function SortirVoiture(vhl)
       end
     end
   else
-    Venato.notify("Véhicule ~r~dans la zone ~r~")
+    defaultNotification.message = "Véhicule dans la zone"
+    defaultNotification.type = "error"
+    Venato.notify(defaultNotification)
   end
 end
 
@@ -325,21 +327,23 @@ RegisterNetEvent("Garage:deleteVoiture")
 AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
   if GetEntityModel(vehicle) ~= nil then
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(vehicle))
-    Venato.notify("Vehicle Rangé.")
+    
     SetEntityAsMissionEntity( vehicle, true, true )
     DeleteVehicle(vehicle)
     DeleteEntity(vehicle)
-    --TriggerServerEvent("ivt:deleteVeh",plate)
-  --  TriggerServerEvent('sd:deleteVeh', plate)
   else
     local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(current))
-    Venato.notify( "Vehicle Rangé." )
+    
     SetEntityAsMissionEntity( current, true, true )
     DeleteVehicle(current)
     DeleteEntity(current)
-    --TriggerServerEvent('sd:deleteVeh', plate)
   end
+  
+  defaultNotification.message = "Véhicule rangé"
+  defaultNotification.type = "alert"
+  Venato.notify(defaultNotification)
+
 end)
 
 function GetBlacklistedList()
@@ -355,8 +359,10 @@ function GetBalancedCatList()
 end
 
 RegisterNetEvent("maskshop:notifs")
-AddEventHandler("maskshop:notifs", function(msg)
-    Venato.notify(msg)
+AddEventHandler("maskshop:notifs", function(msg)    
+  defaultNotification.message = msg
+  defaultNotification.type = "alert"
+  Venato.notify(defaultNotification)
 end)
 
 TriggerServerEvent('VnT:ActuLibrarie')

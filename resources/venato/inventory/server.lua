@@ -191,8 +191,8 @@ AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
 		TriggerClientEvent("Inventory:AnimGive", source)		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
 		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu "..qty.." €")
 	else
-		TriggerClientEvent("Venato:notify", source, "La personne est trop lourde pour reçevoir "..qty.." €")
-		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous etes trop lourd pour reçevoir "..qty.." €")
+		TriggerClientEvent("Venato:notify", source, "La personne n'a pas la place pour recevoir "..qty.." €")
+		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous n'avez pas la place pour recevoir "..qty.." €")
 	end
 end)
 
