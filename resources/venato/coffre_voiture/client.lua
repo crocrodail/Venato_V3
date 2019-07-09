@@ -99,8 +99,8 @@ end
 function ConfDropItemCv(index)
   local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à déposer")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) <= DataUser.Inventaire[index].quantity and VehicleData[plate].nbItems+qty <= VehicleData[plate].itemcapacite then
-    TriggerServerEvent("VehicleCoffre:DropItem", qty , plate) --############################# (testmove)
+  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
+    TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
   else
     Venato.notify("~r~Une erreur est survenue.")
   end
@@ -114,8 +114,9 @@ end
 
 function GetItemCv(index)
   local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à prendre")
+  local plate = GetVehicleNumberPlateText(CloseVehicle)
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
-    TriggerServerEvent("VehicleCoffre:TakeItems",index, qty) --############################### (testmove)
+    TriggerServerEvent("VehicleCoffre:TakeItems",index, qty, plate)
   else
     Venato.notify("~r~Une erreur est survenue.")
   end
@@ -128,7 +129,7 @@ function OptionWeaponCv(index)
 end
 
 function GetWpCv(index)
-  TriggerServerEvent("VehicleCoffre:TakeWpCv", index) --############################## (testmove)
+  TriggerServerEvent("VehicleCoffre:TakeWpCv", index, GetVehicleNumberPlateText(CloseVehicle))
 end
 
 function DropWeaponCv()
@@ -149,9 +150,10 @@ function DropConfirmWeaponCv(index)
     Menu.addButton("~g~Déposer l'arme dans le coffre", "CoffreVehicleDropWp", index)
   else
     Venato.notify("~r~Il n'y a pas de place pour cette arme.")
+    DropWeaponCv()
   end
 end
 
 function CoffreVehicleDropWp(index)
-  TriggerServerEvent("DropWpCv", index,  GetVehicleNumberPlateText(CloseVehicle)) --#################### (testmove)
+  TriggerServerEvent("VehicleCoffre:DropWpCv", index,  GetVehicleNumberPlateText(CloseVehicle))
 end
