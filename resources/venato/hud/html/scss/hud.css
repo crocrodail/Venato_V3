@@ -23,15 +23,58 @@ html body #app .fullscreen {
   padding: 100px 30px;
 }
 
-h1 {
-  font-size: 500px;
-  color: green;
-}
-
 .v-progress-circular {
   margin: 0.2vw;
   font-size: 0.7vw;
   background-color: rgba(255, 255, 255, 0.329);
   border-radius: 100px;
+}
+
+#notifVenato .noty_body {
+  font-size: 0.9vw;
+  font-family: "Poppins";
+  padding: 15px 30px;
+}
+
+#notifVenato .noty_logo {
+  text-align: center;
+  width: 15%;
+  margin: auto;
+  padding-top: 1%;
+  float: left;
+}
+
+#notifVenato .noty_logo img {
+  width: auto;
+  height: auto;
+  max-height: 90%;
+  max-width: 90%;
+}
+
+#notifVenato .noty_title {
+  font-family: "Poppins";
+  font-size: 0.9vw;
+  font-weight: bolder;
+  margin-top: 10px;
+}
+
+#noty_layout__topRight,
+#noty_layout__topCenter,
+#noty_layout__topLeft {
+  margin-top: 100px;
+}
+
+.noty_layout {
+  width: 30% !important;
+}
+
+.noty_layout .noty_type__alert {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.noty_layout .noty_type__error,
+.noty_layout .noty_type__danger {
+  background-color: rgba(199, 10, 10, 0.75);
+  color: white;
 }
 /*# sourceMappingURL=hud.css.map */

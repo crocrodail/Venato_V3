@@ -2,6 +2,8 @@ local pedIsInVehicule = false
 local food = 100
 local water = 100
 local alcool = 0
+local old_water = 0
+local old_food = 0
 
 Citizen.CreateThread(function() 
         Citizen.Wait(1500)
@@ -65,16 +67,22 @@ Citizen.CreateThread(function()
             })
 
             if food <= 0 or water <= 0 then
+                --SetEntityHealth(GetPlayerPed(-1), 0)
                 TriggerServerEvent("Life: Dead")                
             end
 
-            if food % 1 == 0 or water % 1 == 0 then
-                local needs = {
-                    food = food,
-                    water = water,
-                    alcool = alcool
-                }
-                TriggerServerEvent("Life: Update", needs)
+            local needs = {
+                food = food,
+                water = water,
+                alcool = alcool
+            }
+            TriggerServerEvent("Life:Update", needs)
+
+            if old_food - food  >= 0.5 or old_water - water >= 0.5 then
+                print("Player's status updated") 
+                old_food = food
+                old_water = water              
+                TriggerServerEvent("Life:UpdateDB", needs)
             end
         end
     end
@@ -93,4 +101,23 @@ AddEventHandler("Life:InitStatus", function(needs)
     food = needs.food
     water = needs.water
     alcool = needs.alcool
+    old_food = food
+    old_water = water
+end)
+
+RegisterNetEvent("Life:UpdateState")
+AddEventHandler("Life:UpdateState", function(needs)
+    SendNUIMessage(
+        {
+            action = "playerStatus",
+            food = needs.food,
+            water = needs.water,
+            alcool = needs.alcool
+        }
+    )
+    food = needs.food
+    water = needs.water
+    alcool = needs.alcool
+    old_food = food
+    old_water = water
 end)

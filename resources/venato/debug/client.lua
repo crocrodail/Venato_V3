@@ -48,10 +48,21 @@ RegisterCommand(
 RegisterCommand(
     "eat",
     function(source, args, rawCommand)
+        TriggerServerEvent("Life:Eat", args[1]+0)
+    end
+)
+
+RegisterCommand(
+    "notify",
+    function(source, args, rawCommand)
         SendNUIMessage(
             {
-                action = "eat",
-                quantity = args[1] + 0
+                action = "notify",
+                title = "Big News",
+                type="info",
+                message = "LeGrosBubu est le meilleur",
+                logo = "https://firebasestorage.googleapis.com/v0/b/legrosbubu-streamplanner.appspot.com/o/upload%2Flegrosbubu%2FLogo.png?alt=media&token=c05e011e-c4f2-46f2-a672-ec76625e46df",
+                timeout = 3500
             }
         )
     end
@@ -60,12 +71,7 @@ RegisterCommand(
 RegisterCommand(
     "drink",
     function(source, args, rawCommand)
-        SendNUIMessage(
-            {
-                action = "drink",
-                quantity = args[1] + 0
-            }
-        )
+        TriggerServerEvent("Life:Drink", args[1]+0)
     end
 )
 

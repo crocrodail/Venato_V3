@@ -5,14 +5,32 @@ function none()
 end
 
 RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(message)
-  Venato.notify(message)
+AddEventHandler("Venato:notify", function(message, type, timeout)
+  Venato.notify(message, type, timeout)
 end)
 
-function Venato.notify(message)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentSubstringPlayerName(message)
-	DrawNotification(false, false)
+function Venato.notify(message, type, timeout)
+  
+  if not message then
+    return
+  end
+
+  if not type then
+    type = 'alert'
+  end
+
+  if not timeout then
+    timeout = 3500
+  end  
+
+	SendNUIMessage(
+    {
+        action = "notify",
+        message = message,
+        type = type,
+        timeout = timeout
+    }
+  )
 end
 
 function Venato.Text3D(x,y,z, text, font, fontSize)
