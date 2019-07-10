@@ -107,11 +107,32 @@ AddEventHandler('Shops:ShowInventory:cb', function(shop)
     drawClientPage(shop)
   elseif page == "admin" then
     drawAdminPage(shop)
+  elseif page == "order" then
+    drawOrderPage(shop)
   end
 end)
 
+function showProducts(shop, isOrder)
+  isOrder = isOrder or false
+  for _, item in ipairs(shop.Items) do
+    local textButton = "~s~"..item.Name.." ~o~"..item.Price.."€~s~"
+    if item.Quantity == 0 then
+      textButton = textButton.." ~r~Rupture"
+    elseif item.Quantity > 0 then
+      textButton = "~s~"..textButton.." ~g~"..item.Quantity.." en stock"
+    else
+      textButton = "~s~"..textButton.."~g~ stock illimité"
+    end
+    Menu.addButton(
+      textButton, 
+      isOrder and 'orderItem' or 'buyItem',
+      {["item"]=item, ["shopId"]=shop.Id}
+    )
+  end
+end
+
 function drawClientPage(shop)
-	open = true
+  open = true
 
   ClearMenu()
   Menu.hidden = false
@@ -134,42 +155,72 @@ function drawClientPage(shop)
       "goToAdministrationPage"
     )
   end
-  for _, item in ipairs(shop.Items) do
-    local textButton = "~s~"..item.Name.." ~o~"..item.Price.."€~s~"
-    if item.Quantity == 0 then
-      textButton = textButton.." ~r~Rupture"
-    elseif item.Quantity > 0 then
-      textButton = "~s~"..textButton.." ~g~"..item.Quantity.." en stock"
-    else
-      textButton = "~s~"..textButton.."~g~ stock illimité"
-    end
-    Menu.addButton(
-      textButton, 
-      "buyItem",
-      {["item"]=item, ["shopId"]=shop.Id}
-    )
-  end
+
+  showProducts(shop)
+
 end
 
 function drawAdminPage(shop)
-	open = true
+  if not shop.IsSupervisor then
+    goToClientPage()
+  end
 
+	open = true
   ClearMenu()
   Menu.hidden = false
 
-  local color = "~s~"
-  local shopName_ = shop.Renamed or shop.Name or "Shop"
-	MenuTitle = color..""..shopName_
-	MenuDescription = "Administration"
+  local color = "~y~"
+	MenuTitle = color.."Administration"
+	MenuDescription = "caisse: "..shop.Money.."€"
 
   Menu.addButton(
     "↩ Stocks", 
     "goToClientPage"
   )
+  Menu.addButton(
+    "Passer commande →", 
+    "goToOrderPage"
+  )
+  Menu.addButton(
+    "Récuperer caisse →", 
+    "getMoney",
+    {['Id']=shop.Id, ['Money']=shop.Money}
+  )
+end
+
+function drawOrderPage(shop)
+  if not shop.IsSupervisor then
+    goToClientPage()
+  end
+
+	open = true
+  ClearMenu()
+  Menu.hidden = false
+
+  local color = "~y~"
+  local shopName_ = shop.Renamed or shop.Name or "Shop"
+	MenuTitle = color.."Commande"
+	MenuDescription = "Selectionne sur un produit pour le modifier"
+
+  Menu.addButton(
+    "↩ Administration", 
+    "goToAdministrationPage"
+  )
+  Menu.addButton(
+    "TODO: Ajouter un produit", 
+    "addItemToStock"
+  )
+
+  showProducts(shop, true)
+
 end
 
 function buyItem(args)
   TriggerServerEvent("Shops:TestBuy", args.item, args.shopId)
+end
+
+function orderItem(args)
+  Venato.notify("~o~Pas encore implémenté ...")
 end
 
 function goToClientPage()
@@ -182,6 +233,30 @@ function goToAdministrationPage()
   TriggerServerEvent("Shops:ShowInventory", shopId)
 end
 
+function goToOrderPage()
+  page="order"
+  TriggerServerEvent("Shops:ShowInventory", shopId)
+end
+
+function getMoney(shop)
+  TriggerServerEvent("Shops:getMoney", shop.Money, shopId)
+end
+
+function addItemToStock()
+  Venato.notify("~o~Pas encore implémenté ...")
+end
+
+function removeItemFromStock()
+  Venato.notify("~o~Pas encore implémenté ...")
+end
+
+
+RegisterNetEvent('Shops:getMoney:cb')
+AddEventHandler('Shops:getMoney:cb', function(Price)
+  Venato.notify("~g~Vous avez bien récupéré "..Price.."€.")
+  TriggerServerEvent("Shops:ShowInventory", shopId)
+end)
+
 
 RegisterNetEvent('Shops:TestBuy:cb')
 AddEventHandler('Shops:TestBuy:cb', function(Name)
@@ -193,6 +268,13 @@ end)
 RegisterNetEvent('Shops:NotEnoughMoney')
 AddEventHandler('Shops:NotEnoughMoney', function(Name)
   Venato.notify("~r~Vous n'avez pas assez d'argent pour acheter "..Name..".")
+  TriggerServerEvent("Shops:ShowInventory", shopId)
+end)
+
+
+RegisterNetEvent('Shops:NotEnoughShopMoney')
+AddEventHandler('Shops:NotEnoughShopMoney', function(Price)
+  Venato.notify("~r~Le magasin n'a pas assez d'argent pour récupérer "..Price.."€.")
   TriggerServerEvent("Shops:ShowInventory", shopId)
 end)
 
