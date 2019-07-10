@@ -12,20 +12,46 @@ AddEventHandler('Shops:LoadShops', function()
     TriggerClientEvent("Shops:LoadShops:cb", source, getShops())
 end)
 
-function getShop(shopName)
+function getManagers(shopId, source)
+    local managers = {}
+    local isSupervisor = false
+
+    local steamId = getSteamID(source)
+    local resultManagers = MySQL.Sync.fetchAll(
+        'SELECT u.id as Id, u.identifier as Identifier, u.nom as Name '..
+            'FROM shops s ' ..
+            'INNER JOIN shop_manager m ON s.Id = m.ShopId '..
+            'INNER JOIN users u ON u.Id = m.ManagerId '..
+            'WHERE s.Id=@Id', {["@Id"] = shopId})
+    for _, item in ipairs(resultManagers) do
+        table.insert(managers, {
+            ["Id"]=item.Id,
+            ["Name"]=item.Name,
+            ["Identifier"]=item.Identifier
+        })
+        isSupervisor = isSupervisor or steamId == item.Identifier
+    end
+
+    return managers, isSupervisor
+end
+
+function getShop(shopId, source)
     shop = {}
+    shop.IsSupervisor = false
     shop.Items = {}
+    shop.Managers = {}
     local result = MySQL.Sync.fetchAll(
-        'SELECT s.Id, s.Name, s.Renamed, it.id as ItemId, it.libelle as ItemName, c.Price as ItemPrice, c.Quantity as ItemQuantity, c.Id as ContentId '..
+        'SELECT s.Id, s.Name, s.Renamed, s.Supervised, it.id as ItemId, it.libelle as ItemName, c.Price as ItemPrice, c.Quantity as ItemQuantity, c.Id as ContentId '..
             'FROM shops s ' ..
             'INNER JOIN shop_inventory i ON s.InventoryID = i.Id '..
             'INNER JOIN shop_content c ON i.Id = c.InventoryId '..
             'INNER JOIN items it on c.ItemId = it.id '..
-            'WHERE s.Name=@Name', {["@Name"] = shopName})
+            'WHERE s.Id=@Id', {["@Id"] = shopId})
     for _, item in ipairs(result) do
         shop.Id = item.Id
         shop.Name = item.Name
         shop.Renamed = item.Renamed
+        shop.Supervised = item.Supervised
         table.insert(shop.Items, {
             ["Id"]=item.ItemId,
             ["Name"]=item.ItemName,
@@ -34,12 +60,17 @@ function getShop(shopName)
             ["ContentId"]=item.ContentId,
         }) 
     end
+
+    if shop.Supervised == 1 then
+        shop.Managers, shop.IsSupervisor = getManagers(shopId, source)
+    end
+
     return shop
 end
 
 RegisterServerEvent('Shops:ShowInventory')
 AddEventHandler('Shops:ShowInventory', function(shopName)
-    TriggerClientEvent("Shops:ShowInventory:cb", source, getShop(shopName))
+    TriggerClientEvent("Shops:ShowInventory:cb", source, getShop(shopName, source))
 end)
 
 

@@ -1,7 +1,8 @@
 local open = false
-local shopName = nil
+local shopId = nil
 local isNPC = true
 local inShopMarker = false
+local page = "client"
 
 function LoadShops()
   if ConfigShop.EnableShops then
@@ -19,7 +20,7 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
     end
 
     for _, item in ipairs(shops) do
-      if item.Supervised ~= "1" then
+      if item.Supervised ~= 1 then
         local npc = CreatePed(4, 0xA1435105, item.PositionX, item.PositionY, item.PositionZ, item.NpcHeading, false, true)
         
         SetEntityHeading(npc, item.NpcHeading)
@@ -60,9 +61,9 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
         if distance < item.ActivationDist then
           isNPC = item.Supervised ~= 1
           inShopMarker = true
-          shopName = item.Name
+          shopId = item.Id
           Venato.InteractTxt('Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop')
-        elseif open and shopName == item.Name and distance > (2*item.ActivationDist) then
+        elseif open and shopId == item.Id and distance > (2*item.ActivationDist) then
           inShopMarker = false
           open = false
           Menu.hidden = true
@@ -79,12 +80,13 @@ CreateThread(function ()
   while true do
     Wait(0)
     if (IsControlJustReleased(1, Keys['BACKSPACE']) or IsControlJustReleased(1, Keys['RIGHTMOUSE'])) then
+      print('Hide menu')
       SetNuiFocus(false, false)
       open = false
       Menu.hidden = true
     end
     if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and inShopMarker then
-      TriggerServerEvent("Shops:ShowInventory", shopName)
+      TriggerServerEvent("Shops:ShowInventory", shopId)
       open = true
     end
     if open then
@@ -101,6 +103,14 @@ end)
 
 RegisterNetEvent('Shops:ShowInventory:cb')
 AddEventHandler('Shops:ShowInventory:cb', function(shop)
+  if page == "client" then
+    drawClientPage(shop)
+  elseif page == "admin" then
+    drawAdminPage(shop)
+  end
+end)
+
+function drawClientPage(shop)
 	open = true
 
   ClearMenu()
@@ -111,6 +121,19 @@ AddEventHandler('Shops:ShowInventory:cb', function(shop)
 	MenuTitle = color..""..shopName_
 	MenuDescription = "Stocks"
 
+  if shop.Supervised then
+    MenuDescription = MenuDescription .. " supervised by: "
+    for _, manager in ipairs(shop.Managers) do
+      MenuDescription = MenuDescription .. " ".. manager.Name
+    end
+  end
+  
+  if shop.IsSupervisor then
+    Menu.addButton(
+      "Administration →", 
+      "goToAdministrationPage"
+    )
+  end
   for _, item in ipairs(shop.Items) do
     local textButton = "~s~"..item.Name.." ~o~"..item.Price.."€~s~"
     if item.Quantity == 0 then
@@ -126,36 +149,63 @@ AddEventHandler('Shops:ShowInventory:cb', function(shop)
       {["item"]=item, ["shopId"]=shop.Id}
     )
   end
-end)
+end
+
+function drawAdminPage(shop)
+	open = true
+
+  ClearMenu()
+  Menu.hidden = false
+
+  local color = "~s~"
+  local shopName_ = shop.Renamed or shop.Name or "Shop"
+	MenuTitle = color..""..shopName_
+	MenuDescription = "Administration"
+
+  Menu.addButton(
+    "↩ Stocks", 
+    "goToClientPage"
+  )
+end
 
 function buyItem(args)
   TriggerServerEvent("Shops:TestBuy", args.item, args.shopId)
+end
+
+function goToClientPage()
+  page="client"
+  TriggerServerEvent("Shops:ShowInventory", shopId)
+end
+
+function goToAdministrationPage()
+  page="admin"
+  TriggerServerEvent("Shops:ShowInventory", shopId)
 end
 
 
 RegisterNetEvent('Shops:TestBuy:cb')
 AddEventHandler('Shops:TestBuy:cb', function(Name)
   Venato.notify("~g~Vous avez bien acheté "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  TriggerServerEvent("Shops:ShowInventory", shopId)
 end)
 
 
 RegisterNetEvent('Shops:NotEnoughMoney')
 AddEventHandler('Shops:NotEnoughMoney', function(Name)
   Venato.notify("~r~Vous n'avez pas assez d'argent pour acheter "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  TriggerServerEvent("Shops:ShowInventory", shopId)
 end)
 
 
 RegisterNetEvent('Shops:NotEnoughQuantity')
 AddEventHandler('Shops:NotEnoughQuantity', function(Name)
   Venato.notify("~r~Il n'y a plus assez de "..Name.." en stock.")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  TriggerServerEvent("Shops:ShowInventory", shopId)
 end)
 
 
 RegisterNetEvent('Shops:TooHeavy')
 AddEventHandler('Shops:TooHeavy', function(Name)
   Venato.notify("~r~Vous etes trop lourd pour acheter "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  TriggerServerEvent("Shops:ShowInventory", shopId)
 end)
