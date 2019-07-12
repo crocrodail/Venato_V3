@@ -35,7 +35,7 @@ AddEventHandler("CarShop:BuyVP", function(vehicle)
   if Venato.paymentVP(source, car.price_vp) then
     vehicle["price"] = car.price_vp * 100
     AddVehicleToUser(source, vehicle)
-    TriggerClientEvent("CarShop:PaiementOk:response", source)
+    TriggerClientEvent("CarShop:PaiementOk:response", source, vehicle)
   else
     TriggerClientEvent("CarShop:PaiementKo:response", source)
   end
@@ -49,7 +49,7 @@ AddEventHandler("CarShop:Buy", function(vehicle)
   if Venato.paymentCB(source, car.price) then
     vehicle["price"] = car.price
     AddVehicleToUser(source,vehicle)
-    TriggerClientEvent("CarShop:PaiementOk:response", source)
+    TriggerClientEvent("CarShop:PaiementOk:response", source, vehicle)
   else
     TriggerClientEvent("CarShop:PaiementKo:response", source)
   end

@@ -100,6 +100,11 @@ RegisterCommand("togglespeedo", function(source, args, rawCommand)
 	toggleSpeedo()
 end, false)
 
+RegisterNetEvent("Speedmeter:Toggle")
+AddEventHandler("Speedmeter:Toggle", function(event)
+    toggleSpeedo()
+end)
+
 
 Citizen.CreateThread(function()
 	PlayerPed = PlayerPedId()

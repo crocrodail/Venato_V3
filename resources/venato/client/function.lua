@@ -23,16 +23,14 @@ function Venato.notify(notif)
     notif.timeout = 3500
   end  
 
-	SendNUIMessage(
-    {
-        action = "notify",
-        message = notif.message,
-        type = notif.type,
-        timeout = notif.timeout,
-        logo = notif.logo,
-        title = notif.title
-    }
-  )
+  TriggerEvent("Hud:Update",{
+    action = "notify",
+    message = notif.message,
+    type = notif.type,
+    timeout = notif.timeout,
+    logo = notif.logo,
+    title = notif.title
+  })
 end
 
 function Venato.Text3D(x,y,z, text, font, fontSize)

@@ -321,8 +321,10 @@ AddEventHandler('CarShop:PaiementOk:response', function(data)
   SetVehicleUndriveable(car, false)
   showInformationVehicle = false
   hideMenu()
+  defaultNotification.type = "success"
   defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Faites attention sur la route.";
-  Venato.notify(defaultNotification)  
+  Venato.notify(defaultNotification)
+  TriggerEvent('lock:addVeh', data.plate, data.name)  
 end)
 
 RegisterNetEvent('CarShop:PaiementKo:response')

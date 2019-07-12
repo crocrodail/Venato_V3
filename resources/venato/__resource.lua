@@ -1,6 +1,6 @@
 resource_manifest_version "05cfa83c-a124-4cfa-a768-c24a5811d8f9"
 
- ui_page "/hud/html/index.html"
+ ui_page "/html/index.html"
 
 client_script {
 	'/client/menu.lua',
@@ -22,6 +22,7 @@ client_script {
 	'/garage/table.lua',
 	"/life/client.lua",
 	"/debug/client.lua",
+	"/lockVehicule/client.lua"
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
@@ -34,7 +35,8 @@ server_script {
   '/garage/server.lua',
   '/coffre/server.lua',
   '/shops/server.lua',
-	"/life/server.lua"
+  "/life/server.lua",
+  "/lockVehicule/server.lua"
 }
 
 files {
@@ -94,9 +96,6 @@ files {
 	"/html/index.html",
 	"/html/bank.html",
 	"/html/identity.html",
-	"/hud/html/index.html",
-	"/hud/html/scss/hud.css",
-	"/hud/html/hud.js",
 	"/html/cheque.html"
 }
 

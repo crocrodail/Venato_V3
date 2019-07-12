@@ -18,6 +18,7 @@ new Vue({
       clearInterval(this.interval)
     },
     created() {
+      console.log("Ceci est un test");
       window.addEventListener('resize', this.handleResize)
       window.addEventListener('message', this.handleMessage)
       this.handleResize();
