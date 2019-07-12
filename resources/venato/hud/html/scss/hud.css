@@ -17,6 +17,12 @@ html body #app .besoins {
   left: 1.8%;
 }
 
+html body #app .speedomeeter {
+  position: absolute;
+  bottom: 8%;
+  left: 16%;
+}
+
 html body #app .fullscreen {
   width: 100%;
   max-width: 100%;

@@ -41,7 +41,8 @@ Citizen.CreateThread(function()
                     {
                         action = "vehiculeStatus",
                         fuel = GetVehicleFuelLevel(car),
-                        carHealth = GetEntityHealth(car)
+                        carHealth = GetEntityHealth(car),
+                        speed = GetVehicleDashboardSpeed(car) * 1.60934
                     }
                 )
             end   
@@ -67,14 +68,23 @@ Citizen.CreateThread(function()
             })
 
             if food <= 0 or water <= 0 then
-                --SetEntityHealth(GetPlayerPed(-1), 0)
+                SetEntityHealth(GetPlayerPed(-1), 0)
+                if food <=0 then
+                    food = 25
+                end
+                if water <=0 then
+                    water = 25
+                end
+                old_food = food
+                old_water = water              
+                TriggerServerEvent("Life:UpdateDB", needs)
                 TriggerServerEvent("Life: Dead")                
             end
 
             local needs = {
-                food = food,
-                water = water,
-                alcool = alcool
+                food = Venato.Round(food,2),
+                water = Venato.Round(water,2),
+                alcool = Venato.Round(alcool,2)
             }
             TriggerServerEvent("Life:Update", needs)
 
@@ -87,6 +97,23 @@ Citizen.CreateThread(function()
         end
     end
 )
+
+Citizen.CreateThread(function()
+    Citizen.Wait(0)
+    while true do
+        Citizen.Wait(10)
+        local playerPed = PlayerPedId()  
+        if IsPedInAnyVehicle(playerPed, false) then
+            local car = GetVehiclePedIsIn(playerPed, false)
+            SendNUIMessage(
+            {
+                action = "speed",
+                speed = GetEntitySpeed(car) * 3.6
+            })            
+        end
+    end
+    
+end)
 
 RegisterNetEvent("Life:InitStatus")
 AddEventHandler("Life:InitStatus", function(needs)

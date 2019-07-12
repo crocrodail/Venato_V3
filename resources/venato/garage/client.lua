@@ -21,6 +21,7 @@ local garage = {
 
 
 local defaultNotification = {
+  name = "Garage",
   type = "alert",
   logo = "https://i.ibb.co/dpsQ3B9/icons8-parking-96px.png"
 }
@@ -155,7 +156,7 @@ function StoreMyCar(garage)
       end
     end
   end
-  defaultNotification.message = "Auncun vehicule reconnu, monter dedans puis réessayez !"
+  defaultNotification.message = "Vous ne pouvez stocker que vos véhicules !"
   defaultNotification.type = "error"
   Venato.notify(defaultNotification)
 end

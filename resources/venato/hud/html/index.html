@@ -12,7 +12,7 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
-    />
+    />    
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
@@ -98,6 +98,16 @@
                 </v-progress-circular>
               </transition>
             </div>
+          </div>
+          <div class="speedomeeter">
+            <input type="hidden" id="speed" :value="speed"/>
+            <transition
+                name="custom-classes-transition"
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut"
+              >
+            <div id="chart_div" v-if="playerIsInVehicule"></div>
+            </transition>            
           </div>
         </v-content>
       </v-app>

@@ -19,10 +19,12 @@ Citizen.CreateThread(function ()
   while true do
     playerPed = PlayerPedId()
     Citizen.Wait(0)    
+
     if menuIsOpen then
       scaleform = Venato.GetCarShopIntruction()      
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
+
     if showInformationVehicle and currentVehicle then      
       scaleform2 = Venato.DisplayInfoVehicle(currentVehicle)
       local x = 0.85
@@ -30,10 +32,10 @@ Citizen.CreateThread(function ()
 			local width = 1.20
 			local height = 1.20
       DrawScaleformMovie(scaleform2, x, y, width, height)
-    else
-
     end
-    for i=1, #Config.CarShop, 1 do      
+
+    for i=1, #Config.CarShop, 1 do  
+      setCarShopMapMarker(Config.CarShop[i])   
       distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
@@ -88,6 +90,19 @@ function RemoveCurrentCar()
     car = GetVehiclePedIsIn( playerPed, false )      
     deleteCar( car )
   end
+end
+
+function setCarShopMapMarker(carshop)
+    if not carshop.hidden then
+      local blip = AddBlipForCoord(carshop.x, carshop.y, carshop.z)
+      SetBlipSprite(blip, carshop.blip)
+      SetBlipColour(blip, 11)
+      SetBlipScale(blip, 0.8)
+      SetBlipAsShortRange(blip, true)
+      BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString("CarShop")
+      EndTextCommandSetBlipName(blip)
+    end
 end
 
 function OpenCarMenu(vehiculeType)

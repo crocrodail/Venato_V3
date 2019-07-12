@@ -1,8 +1,3 @@
-Vue.component('notifications', {
-  props: ['text'],
-  template: '<h1>{{ text }}</h1>'
-})
-
 new Vue({
     el : '#app',
     data: {
@@ -16,7 +11,8 @@ new Vue({
         window: {
           width: 0,
           height: 0
-        }
+        },
+        speed: 50
     },
     beforeDestroy () {
       clearInterval(this.interval)
@@ -58,6 +54,10 @@ new Vue({
         else if(event.data.action === "vehiculeStatus"){
           this.fuel = event.data.fuel;
           this.carDamage = Math.round(event.data.carHealth / 10);
+          this.speed = Math.round(event.data.speed);
+        }
+        else if(event.data.action === "speed"){
+          this.speed = Math.round(event.data.speed);
         }
         else if(event.data.action === "playerStatus"){
           this.water = event.data.water;
