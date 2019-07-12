@@ -14,6 +14,7 @@ client_script {
   '/bank/client.lua',
   '/bank/config.lua',
   '/coffre/client.lua',
+  '/shops/pages.lua',
   '/shops/client.lua',
   '/shops/config.lua'
 }
