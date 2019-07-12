@@ -33,6 +33,7 @@ function accessGranded(SteamId, source)
         NameJob = DataUser[1].job_name,
         Bank = DataUser[1].bank,
         Money = DataUser[1].money,
+        VenatoPoint = DataUser[1].venato_point,
         Account = DataUser[1].account,
         Code = DataUser[1].code,
         Position = DataUser[1].lastPosition,
@@ -74,6 +75,9 @@ end
 function ControlVisa(SteamId, source)
   local source = source
   MySQL.Async.fetchAll("SELECT * FROM whitelist WHERE identifier = @identifier",{["@identifier"]=SteamId},function(result)
+    if not result[1] then
+      return
+    end
     local num = result[1].listed
     local start = result[1].visadebut
     if  tonumber(num) == 2 then
@@ -113,6 +117,28 @@ end
 function Venato.Round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
+end
+
+function Venato.paymentCB(source, amount)
+  print(DataPlayers[source].Bank)
+  if DataPlayers[source].Bank <= amount then
+    return false
+  else
+    DataPlayers[source].Bank = DataPlayers[source].Bank - amount
+    MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier", {["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].Bank})
+    return true
+  end
+end
+
+function Venato.paymentVP(source, amount)
+  print(DataPlayers[source].VenatoPoint)
+  if DataPlayers[source].VenatoPoint <= amount then
+    return false
+  else
+    DataPlayers[source].VenatoPoint = DataPlayers[source].VenatoPoint - amount
+    MySQL.Async.execute("UPDATE users SET venato_point=@money WHERE identifier=@identifier", {["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].VenatoPoint})
+    return true
+  end
 end
 
 function Venato.MoneyToPoid(money)

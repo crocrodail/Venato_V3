@@ -4,17 +4,28 @@ function none()
 	local a = ""
 end
 
+RegisterNetEvent("Venato:notify")
+AddEventHandler("Venato:notify", function(message)
+  Venato.notify(message)
+end)
+
 function Venato.notify(message)
-		SetNotificationTextEntry("STRING")
-		AddTextComponentString(message)
-		DrawNotification(false, false)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentSubstringPlayerName(message)
+	DrawNotification(false, false)
 end
 
-function Venato.Text3D(x,y,z, text)
+function Venato.Text3D(x,y,z, text, font, fontSize)
+	if not font then
+		font = 0
+	end
+	if not fontSize then
+		fontSize = 0.4
+	end
 	SetDrawOrigin(x, y, z, 0);
-	SetTextFont(0)
+	SetTextFont(font)
 	SetTextProportional(0)
-	SetTextScale(0.0, 0.4)
+	SetTextScale(0.0, fontSize)
 	SetTextColour(200, 200, 200, 240)
 	SetTextDropshadow(0, 0, 0, 0, 255)
 	SetTextEdge(2, 0, 0, 0, 150)
@@ -95,6 +106,10 @@ function Venato.ConvertUrl(url)
   return finalUrl
 end
 
+function Venato.ChatMessage(str, source)
+	TriggerEvent("chatMessage", source or 'Message', { 0, 255, 255}, "" .. tostring(str))
+end
+
 function comma_value(amount)
   local formatted = amount
   while true do
@@ -162,4 +177,92 @@ function Venato.CloseVehicle()
   else
     return nil
   end
+end
+
+function Venato.ScaleForm(request)
+	scaleform = RequestScaleformMovie(request)
+
+	while not HasScaleformMovieLoaded(scaleform) do
+		Citizen.Wait(0)
+	end
+
+	return scaleform
+end
+
+function ButtonMessage(text)
+    BeginTextCommandScaleformString("STRING")
+    AddTextComponentScaleform(text)
+    EndTextCommandScaleformString()
+end
+
+function Button(ControlButton)
+    N_0xe83a3e3557a56640(ControlButton)
+end
+
+function Venato.GetCarShopIntruction()
+    scaleform = Venato.ScaleForm("instructional_buttons")
+	PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(1)
+    Button(GetControlInstructionalButton(2, 190, true))
+    Button(GetControlInstructionalButton(2, 189, true))
+    ButtonMessage("Changer la couleur principale")
+	PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(0)
+    Button(GetControlInstructionalButton(2, 168, true))
+    Button(GetControlInstructionalButton(2, 167, true))
+    ButtonMessage("Changer la couleur secondaire")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(80)
+    EndScaleformMovieMethodReturn()
+
+    return scaleform
+end
+
+function Venato.DisplayInfoVehicle(vehicle)
+	scaleform2 = Venato.ScaleForm("mp_car_stats_01")
+	PushScaleformMovieFunction(scaleform2, "CLEAR_ALL")
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform2, "SET_VEHICLE_INFOR_AND_STATS")
+
+	prix_vp = ""
+	prix = ""
+
+    if(not vehicle.vp_only) then
+		prix = "Prix : "..formatPrice(vehicle.price).."€"
+	end
+
+	if(vehicle.vp_enabled) then
+		prix_vp = "Prix VP : "..formatPrice(vehicle.price_vp).."VP"
+	end
+
+	PushScaleformMovieFunctionParameterString(prix)
+	PushScaleformMovieFunctionParameterString(prix_vp)
+	PushScaleformMovieFunctionParameterString("MPCarHUD")
+	PushScaleformMovieFunctionParameterString("Annis")
+	PushScaleformMovieFunctionParameterString("Vitesse max.")
+	PushScaleformMovieFunctionParameterString("Acceleration")
+	PushScaleformMovieFunctionParameterString("Freinage")
+	PushScaleformMovieFunctionParameterString("Maniabilité")
+
+	PushScaleformMovieFunctionParameterInt(vehicle.speed)
+	PushScaleformMovieFunctionParameterInt(vehicle.acceleration)
+	PushScaleformMovieFunctionParameterInt(vehicle.braking)
+	PushScaleformMovieFunctionParameterInt(vehicle.handling)
+	EndScaleformMovieMethodReturn()
+
+	return scaleform2
 end

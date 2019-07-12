@@ -58,10 +58,11 @@ ytitle = yoffset - 0.11
 xdescriptionText = 0.12
 xindexText = 0.5
 
-function Menu.addButton(name, func,args)
+function Menu.addButton(name, func, args, hover)
 	Menu.GUI[Menu.buttonCount +1] = {}
 	Menu.GUI[Menu.buttonCount +1]["name"] = name
 	Menu.GUI[Menu.buttonCount+1]["func"] = func
+	Menu.GUI[Menu.buttonCount+1]["hover"] = hover
 	Menu.GUI[Menu.buttonCount+1]["args"] = args
 	Menu.GUI[Menu.buttonCount+1]["active"] = false
 	Menu.GUI[Menu.buttonCount+1]["xmin"] = xmin
@@ -96,6 +97,9 @@ function Menu.updateSelection()
 			Menu.to = itemsPerPage
 			Menu.selection = Menu.from
 		end
+		if Menu.GUI[Menu.selection +1]["hover"] then
+			MenuCallFunction(Menu.GUI[Menu.selection +1]["hover"], Menu.GUI[Menu.selection +1]["args"])
+		end
 	elseif IsControlJustPressed(1, Keys["TOP"])  or stayPressedUp then
     PlaySoundFrontend(-1, Audio.UpDown, Audio.Library, true)
 		if (Menu.selection > Menu.from or Menu.selection > 0 ) then
@@ -115,12 +119,15 @@ function Menu.updateSelection()
         Menu.selection = Menu.buttonCount - 1
       end
 		end
+		if Menu.GUI[Menu.selection +1]["hover"] then
+			MenuCallFunction(Menu.GUI[Menu.selection +1]["hover"], Menu.GUI[Menu.selection +1]["args"])
+		end
 	elseif IsControlJustPressed(1, Keys["NENTER"])  then
     PlaySoundFrontend(-1, Audio.Select, Audio.Library, true)
 		if Menu.buttonCount > 0 then
 			MenuCallFunction(Menu.GUI[Menu.selection +1]["func"], Menu.GUI[Menu.selection +1]["args"])
 		end
-	end
+	end		
 	local iterator = 0
 	for id, settings in ipairs(Menu.GUI) do
 		Menu.GUI[id]["active"] = false

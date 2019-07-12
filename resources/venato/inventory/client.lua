@@ -24,7 +24,7 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(1, Keys['F3']) and GetLastInputMethod(2) then
 			ClearMenu()
 			Menu.hidden = not Menu.hidden
-			OpenMenuPerso()
+			--OpenMenuPerso()
 		end
 		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) and GetLastInputMethod(2) then
 			if Menu.hidden then

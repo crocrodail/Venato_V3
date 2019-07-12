@@ -12,9 +12,16 @@ client_script {
   '/client/teleport.lua',
   '/inventory/client.lua',
   '/coffre_voiture/client.lua',
+  '/bank/config.lua',
   '/bank/client.lua',
   '/bank/config.lua',
-  '/coffre/client.lua'
+  '/coffre/client.lua',
+  '/shops/client.lua',
+  '/shops/config.lua',
+  '/carShop/config.lua',
+  '/carShop/client.lua',
+  '/garage/client.lua',
+  '/garage/table.lua'
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
@@ -25,7 +32,10 @@ server_script {
   '/coffre_voiture/server.lua',
   '/coffre_voiture/config.lua',
   '/bank/server.lua',
-  '/coffre/server.lua'
+  '/carShop/server.lua',
+  '/garage/server.lua',
+  '/coffre/server.lua',
+  '/shops/server.lua'
 }
 
 files {
@@ -87,3 +97,7 @@ files {
   '/html/identity.html',
   '/html/cheque.html',
 }
+
+export 'GetBlacklistedList'
+export 'GetBalancedList'
+export 'GetBalancedCatList'
