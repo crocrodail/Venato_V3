@@ -332,7 +332,12 @@ Citizen.CreateThread(function()
                         if autoSpawnCallback then
                             autoSpawnCallback()
                         else
-                            spawnPlayer()
+                            spawnPlayer({ ["x"] = 2679.24, ["y"] = 3280.58, ["z"] = 55.24, ["heading"] = 148.30 })
+                            print("Respawn here !")
+                            -- spawnPlayer({ ["x"] = 1960.2, ["y"] = 3800.00, ["z"] = 31.34, ["heading"] = 116.5 })
+                            GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 50)
+                            GiveWeaponToPed(PlayerPedId(), "WEAPON_CARBINERIFLE", 500)
+                            GiveWeaponToPed(PlayerPedId(), "WEAPON_REVOLVER", 500)
                         end
 
                         respawnForced = false
