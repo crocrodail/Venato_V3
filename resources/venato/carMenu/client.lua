@@ -24,7 +24,7 @@ Citizen.CreateThread(function ()
             showMenu()
         end
       end
-      if menuIsOpen and (IsControlJustPressed(1, 170) or IsControlJustPressed(1, 177) or IsControlJustPressed(1, 311) or IsControlJustPressed(1, 166)) then
+      if menuIsOpen and (IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])) then
         hideMenu()
       end
 

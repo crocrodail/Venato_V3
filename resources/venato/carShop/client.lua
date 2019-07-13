@@ -77,7 +77,7 @@ Citizen.CreateThread(function ()
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end     
         end
-        if IsControlJustPressed(1, 170) or IsControlJustPressed(1, 177) or IsControlJustPressed(1, 311) or IsControlJustPressed(1, 166) then
+        if IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])  or IsControlJustPressed(1, Keys["F2"]) then
           HideMenu() 
           RemoveCurrentCar()
         end
