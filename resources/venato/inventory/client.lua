@@ -8,17 +8,19 @@ local PapierOpen = 0
 -- ######## COFIG ##############
 	local PoidMax = 20 -- Kg
 --##############################
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		Menu.renderGUI()
 		if IsControlJustPressed(1, Keys['K']) and GetLastInputMethod(2) then
 			ClearMenu()
-			Menu.hidden = not Menu.hidden
-			showPageInfo = not showPageInfo
-			if not Menu.hidden then
+			if Menu.hidden == true then
+				Menu.hidden = false
+				showPageInfo = false
 				OpenInventory()
+			else
+				Menu.hidden = true
+				showPageInfo = true
 			end
 		end
 		if IsControlJustPressed(1, Keys['F3']) and GetLastInputMethod(2) then
@@ -140,6 +142,7 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
 			WeaponPoid = WeaponPoid + v.poid
 		end
 	end
+	Menu.addButton("~o~Mes Clefs", "Myclef", Data)
 	Menu.addButton("~r~🔫 Mes Armes ~o~("..WeaponPoid.." Kg )", "MyWeapon", Data)
 	Menu.addButton("~y~Mes Documents", "MyDoc", Data)
 	local color = "~s~"
@@ -158,6 +161,41 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
 		end
 	end
 end)
+
+function Myclef(Data)
+	TriggerEvent("getInv:clef")
+end
+
+RegisterNetEvent("getInv:back")
+AddEventHandler("getInv:back", function(TableOfKey)
+	ClearMenu()
+	MenuTitle = "Mes clefs"
+		for i, v in pairs(TableOfKey) do
+			if v.name ~= nil then
+					Menu.addButton("~b~"..v.name.."~s~ : ~r~"..v.plate, "giveclef", {v.name,v.plate})
+				else
+					Menu.addButton("~r~Vous n'avez aucune clef", "none", nil)
+				end
+		end
+end)
+
+function giveclef(clef)
+    ClearMenu()
+  MenuTitle = "Details:"
+	MenuDescription = "~b~"..clef[1].." plaque : "..clef[2]
+  Menu.addButton("Donner un double de la clef", "givecleff", {clef[1], clef[2]})
+end
+
+function givecleff(item)
+	local ClosePlayer, distance = Venato.ClosePlayer()
+	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("inv:giveclef",GetPlayerServerId(ClosePlayer), item[1],item[2])
+		TriggerEvent("Inventory:AnimGive")
+		Venato.notify("~g~Vous avez donné les clef du vehicule "..item[1])
+	else
+		Venato.notify("~r~Aucun joueurs à proximité")
+	end
+end
 
 function MyWeapon(Data)
 	ClearMenu()

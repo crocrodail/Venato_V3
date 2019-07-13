@@ -21,10 +21,11 @@ client_script {
   '/carShop/client.lua',
   '/garage/client.lua',
   '/garage/table.lua',
-    '/carMenu/client.lua',
-    "/lockVehicule/client.lua",	
-    "/debug/client.lua",
-    "/life/client.lua",
+  '/carMenu/client.lua',
+  '/lockVehicule/client.lua',
+  '/debug/client.lua',
+  '/life/client.lua',
+  '/admin/client.lua'
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
@@ -39,8 +40,9 @@ server_script {
   '/garage/server.lua',
   '/coffre/server.lua',
   '/shops/server.lua',
-  "/life/server.lua",
-  "/lockVehicule/server.lua"
+  '/life/server.lua',
+  '/lockVehicule/server.lua',
+  '/admin/server.lua'
 }
 
 files {

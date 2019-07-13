@@ -60,7 +60,7 @@ setMapMarker()
             defaultNotification.title = item.name
             Venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
-              openGarage(item.name, item.xspawn, item.yspawn, item.zspawn, item.hspawn)              
+              openGarage(item.name, item.xspawn, item.yspawn, item.zspawn, item.hspawn)
             end
             if resend then
               openGarage(item.name, item.xspawn, item.yspawn, item.zspawn, item.hspawn)
@@ -69,18 +69,6 @@ setMapMarker()
           end
         end
       end
-      if IsControlJustPressed(1, 170) then
-  			Menu.hidden = true
-  		end
-  		if IsControlJustPressed(1, 177) then
-  			Menu.hidden = true
-  		end
-  		if IsControlJustPressed(1, 311) then
-  			Menu.hidden = true
-  		end
-  		if IsControlJustPressed(1, 166) then
-  			Menu.hidden = true
-  		end
   end
 end)
 
@@ -101,7 +89,7 @@ function none()
   print("nothing")
 end
 
-function getCars(garage)  
+function getCars(garage)
   TriggerServerEvent("Garage:CallAllCar", garage)
 end
 
@@ -113,7 +101,7 @@ function MyCar(table)
   MenuDescription = "~b~Mes Véhicules"
   ClearMenu()
   if Vehicule ~= nil then
-  for a, v in pairs(Vehicule) do    
+  for a, v in pairs(Vehicule) do
     if v.type == 1 then
       if v.state == 2 then
         ads = true
@@ -308,7 +296,7 @@ end
 RegisterNetEvent("Garage:AllVehicleBack")
 AddEventHandler("Garage:AllVehicleBack", function(garage)
   Vehicule = garage.vehicles
-  MyCar(garage)    
+  MyCar(garage)
 end)
 
 RegisterNetEvent("Garage:AllVehicle")
