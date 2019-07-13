@@ -193,11 +193,13 @@ end
   end
   
   function addItemToStock()
-    Venato.notify("~o~Pas encore implémenté ...")
+    ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
+    Venato.notify(ConfigShop.shopsNotification)
   end
   
   function removeItemFromStock()
-    Venato.notify("~o~Pas encore implémenté ...")
+    ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
+    Venato.notify(ConfigShop.shopsNotification)
   end
   
   function orderItem(item)
@@ -208,18 +210,21 @@ end
       "Combien voulez-vous de '"..item.Name.."' à "..item.Price.."€/unité"
     )
     if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
-			TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
-		else
-			Venato.notify("~r~Une erreur dans le nombre choisi.")
-		end
+      TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
+    else
+      ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre choisi.")
+      Venato.notify(ConfigShop.shopsNotification)
+    end
   end
   
   function setPrice()
-    Venato.notify("~o~Pas encore implémenté ...")
+    ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
+    Venato.notify(ConfigShop.shopsNotification)
   end
   
   function removeItem(item)
-    Venato.notify("~o~Pas encore implémenté ...")
+    ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
+    Venato.notify(ConfigShop.shopsNotification)
   end
 
   function createOrder()
