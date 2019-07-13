@@ -5,21 +5,45 @@ function none()
 end
 
 RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(message)
-  Venato.notify(message)
+AddEventHandler("Venato:notify", function(notif)
+  Venato.notify(notif)
 end)
 
-function Venato.notify(message)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentSubstringPlayerName(message)
-	DrawNotification(false, false)
+function Venato.notify(notif)
+  
+  if not notif.message then
+    return
+  end
+
+  if not notif.type then
+    notif.type = 'alert'
+  end
+
+  if not notif.timeout then
+    notif.timeout = 3500
+  end  
+
+  TriggerEvent("Hud:Update",{
+    action = "notify",
+    message = notif.message,
+    type = notif.type,
+    timeout = notif.timeout,
+    logo = notif.logo,
+    title = notif.title
+  })
 end
 
-function Venato.Text3D(x,y,z, text)
+function Venato.Text3D(x,y,z, text, font, fontSize)
+	if not font then
+		font = 0
+	end
+	if not fontSize then
+		fontSize = 0.4
+	end
 	SetDrawOrigin(x, y, z, 0);
-	SetTextFont(0)
+	SetTextFont(font)
 	SetTextProportional(0)
-	SetTextScale(0.0, 0.4)
+	SetTextScale(0.0, fontSize)
 	SetTextColour(200, 200, 200, 240)
 	SetTextDropshadow(0, 0, 0, 0, 255)
 	SetTextEdge(2, 0, 0, 0, 150)
@@ -155,38 +179,139 @@ function Venato.MoneyToPoid(money)
 	return Venato.Round(money*0.000075,1)
 end
 
-RegisterCommand('respawn', function(source, args, rawCommand)
-  local spawn = { 
-    ["x"] = tonumber(args[1] or 2679.24),
-    ["y"] = tonumber(args[2] or 3280.58),
-    ["z"] = tonumber(args[3] or 55.24), 
-    ["heading"] = tonumber(args[4] or 148.30)
-  }
-
-  print("respawn x:"..spawn.x.." y:"..spawn.y.." z:"..spawn.z.." heading:"..spawn.heading)
-
-  SetEntityCoordsNoOffset(GetPlayerPed(-1),
-  spawn.x, spawn.y, spawn.z,
-   false, false, false, true)
-   NetworkResurrectLocalPlayer(spawn.x, spawn.y, spawn.z, spawn.heading, true, true, false)
-end, false)
-
-RegisterCommand('position', function(source, args, rawCommand)
-  local ply = GetPlayerPed(-1)
-  local plyCoords = GetEntityCoords(ply, 0)
-  local plyHeading = GetEntityHeading(ply, 0)
-  print("Coords: " ..plyCoords.x.. " - " ..plyCoords.y.. " - " ..plyCoords.z.. " - " ..plyHeading) 
-end, false)
-
-function Venato.dump(o)
-  if type(o) == 'table' then
-     local s = '{ '
-     for k,v in pairs(o) do
-        if type(k) ~= 'number' then k = '"'..k..'"' end
-        s = s .. '['..k..'] = ' .. Venato.dump(v) .. ','
-     end
-     return s .. '} '
+function Venato.CloseVehicle()
+  if (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false) then
+    local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
+    local clostestvehicle = GetClosestVehicle(x, y, z, 4.000, 0, 127)
+    if clostestvehicle ~= 0 then
+      return clostestvehicle
+    else
+      local pos = GetEntityCoords(GetPlayerPed(-1))
+      local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
+      local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+      local a, b, c, d, result = GetRaycastResult(rayHandle)
+      return result
+    end
   else
-     return tostring(o)
+    return nil
   end
+end
+
+function Venato.ScaleForm(request)
+	scaleform = RequestScaleformMovie(request)
+
+	while not HasScaleformMovieLoaded(scaleform) do
+		Citizen.Wait(0)
+	end
+
+	return scaleform
+end
+
+function ButtonMessage(text)
+    BeginTextCommandScaleformString("STRING")
+    AddTextComponentScaleform(text)
+    EndTextCommandScaleformString()
+end
+
+function Button(ControlButton)
+    N_0xe83a3e3557a56640(ControlButton)
+end
+
+function Venato.GetCarShopIntruction()
+    scaleform = Venato.ScaleForm("instructional_buttons")
+	PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(1)
+    Button(GetControlInstructionalButton(2, 190, true))
+    Button(GetControlInstructionalButton(2, 189, true))
+    ButtonMessage("Changer la couleur principale")
+	PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(0)
+    Button(GetControlInstructionalButton(2, 168, true))
+    Button(GetControlInstructionalButton(2, 167, true))
+    ButtonMessage("Changer la couleur secondaire")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(80)
+    EndScaleformMovieMethodReturn()
+
+    return scaleform
+end
+
+
+function Venato.GetCarMenuIntruction()
+  scaleform = Venato.ScaleForm("instructional_buttons")
+  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(1)
+  Button(GetControlInstructionalButton(2, Keys["L"], true))
+  ButtonMessage("Ouvrir l'inventaire du coffre")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(0)
+  Button(GetControlInstructionalButton(2, Keys["H"], true))
+  ButtonMessage("Régler les phares")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(80)
+  EndScaleformMovieMethodReturn()
+
+  DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
+end
+
+function Venato.DisplayInfoVehicle(vehicle)
+	scaleform2 = Venato.ScaleForm("mp_car_stats_01")
+	PushScaleformMovieFunction(scaleform2, "CLEAR_ALL")
+	PopScaleformMovieFunctionVoid()
+
+	PushScaleformMovieFunction(scaleform2, "SET_VEHICLE_INFOR_AND_STATS")
+
+	prix_vp = ""
+	prix = ""
+
+    if(not vehicle.vp_only) then
+		prix = "Prix : "..formatPrice(vehicle.price).."€"
+	end
+
+	if(vehicle.vp_enabled) then
+		prix_vp = "Prix VP : "..formatPrice(vehicle.price_vp).."VP"
+	end
+
+	PushScaleformMovieFunctionParameterString(prix)
+	PushScaleformMovieFunctionParameterString(prix_vp)
+	PushScaleformMovieFunctionParameterString("MPCarHUD")
+	PushScaleformMovieFunctionParameterString("Annis")
+	PushScaleformMovieFunctionParameterString("Vitesse max.")
+	PushScaleformMovieFunctionParameterString("Acceleration")
+	PushScaleformMovieFunctionParameterString("Freinage")
+	PushScaleformMovieFunctionParameterString("Maniabilité")
+
+	PushScaleformMovieFunctionParameterInt(vehicle.speed)
+	PushScaleformMovieFunctionParameterInt(vehicle.acceleration)
+	PushScaleformMovieFunctionParameterInt(vehicle.braking)
+	PushScaleformMovieFunctionParameterInt(vehicle.handling)
+	EndScaleformMovieMethodReturn()
+
+	return scaleform2
 end

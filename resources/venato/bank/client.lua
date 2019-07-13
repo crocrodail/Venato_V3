@@ -4,18 +4,16 @@ local type = 'fleeca'
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
 	local time = 500
-	local x = 1
   while true do
-    Citizen.Wait(time)
+    Citizen.Wait(0)
 		inMarker = false
 		inBankMarker = false
 
     for i=1, #Config.ATMS, 1 do
       if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 20 and ( Config.ATMS[i].b ~= nil ) then
-        DrawMarker(27,Config.ATMS[x].x, Config.ATMS[x].y, Config.ATMS[x].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
+        DrawMarker(27,Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
       end
       if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2  then
-				x = i
 				time = 0
 				if ( Config.ATMS[i].b == nil ) then
 					inMarker = true
@@ -25,7 +23,7 @@ Citizen.CreateThread(function ()
 					type = Config.ATMS[i].t
 					Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
 				end
-			elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[x].x, Config.ATMS[x].y, Config.ATMS[x].z, true) > 4 then
+			elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) > 4 then
 				time = 500
 			end
     end
@@ -142,7 +140,6 @@ function CreatAcount(data)
 end
 
 function myAcount(data)
-	SetNuiFocus(true, true)
 	open = true
 	SendNUIMessage({
 		action = "openBank",

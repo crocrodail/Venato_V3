@@ -16,7 +16,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
     for k,v in pairs(DataCoffre) do
-      if  Vdist(x, y, z, v.x, v.y, v.z) < 20 then
+      if Vdist(x, y, z, v.x, v.y, v.z) < 20 then
         DrawMarker(27,v.x,v.y,v.z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
       elseif  Vdist(x, y, z, v.x, v.y, v.z) < 1 then
         DrawMarker(27,v.x,v.y,v.z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
@@ -58,7 +58,7 @@ end
 
 function CoffreDropItem(row)
   local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à déposer")
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) <= DataUser.Inventaire[row[2]].quantity and DataCoffre[row[1]].nbItems+qty <= DataCoffre[row[1]].itemcapacite then
+  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("Coffre:DropItem", qty , row)
   else
     Venato.notify("~r~Une erreur est survenue.")
@@ -85,7 +85,7 @@ function CoffreDropWeapon(index)
 end
 
 function CoffreConfirmDropWeapon(row)
-  if DataCoffre[index].nbWeapon + 1 <= DataCoffre[index].maxWeapon then
+  if DataCoffre[row[1]].nbWeapon + 1 <= DataCoffre[row[1]].maxWeapon then
     ClearMenu()
     MenuTitle = "Voulez vous vraiment déposer l'arme ?"
     Menu.addButton("~r~Non", "CoffreDropWeapon", row[1])
@@ -187,7 +187,7 @@ end
 
 function CoffreTakeMoney(index)
   local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) <= DataCoffre[row[1]].money and Venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
+  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) <= DataCoffre[index].money and Venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeMoney", qty , index)
   else
     Venato.notify("~r~Une erreur est survenue.")
@@ -196,7 +196,7 @@ end
 
 function CoffreDropMoney(index)
   local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) + DataCoffre[row[1]].money <= DataCoffre[row[1]].argentcapacite then
+  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) + DataCoffre[index].money <= DataCoffre[index].argentcapacite then
     TriggerServerEvent("Coffre:DropMoney", qty , index)
   else
     Venato.notify("~r~Une erreur est survenue.")

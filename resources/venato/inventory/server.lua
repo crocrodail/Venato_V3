@@ -66,9 +66,14 @@ AddEventHandler('Inventory:DataItem', function(id, qty)
 				DataPlayers[source].Water = DataPlayers[source].Water - table.water
 				DataPlayers[source].Need = DataPlayers[source].Need + table.need
 				DataPlayers[source].Sool = DataPlayers[source].Sool + table.sool
-				TriggerClientEvent("Stade:UpdateState", source, table)  -- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué
+				local needs = {
+					water = DataPlayers[source].Water,
+					food = DataPlayers[source].Food,
+					alcool = DataPlayers[source].Sool
+				}
+				TriggerClientEvent("Life:UpdateState", source, needs)  -- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué
 			else
-				TriggerClientEvent('Venato:notify', source, "~r~Cette item n'est pas utilisable.")
+				TriggerClientEvent('Venato:notify', source, "Cette item n'est pas utilisable.", 'danger')
 			end
 		end
 	end)
@@ -186,8 +191,8 @@ AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
 		TriggerClientEvent("Inventory:AnimGive", source)		TriggerClientEvent("Venato:notify", source, "Vous avez donner "..qty.." €")
 		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu "..qty.." €")
 	else
-		TriggerClientEvent("Venato:notify", source, "La personne est trop lourde pour reçevoir "..qty.." €")
-		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous etes trop lourd pour reçevoir "..qty.." €")
+		TriggerClientEvent("Venato:notify", source, "La personne n'a pas la place pour recevoir "..qty.." €")
+		TriggerClientEvent("Venato:notify", ClosePlayer, "Vous n'avez pas la place pour recevoir "..qty.." €")
 	end
 end)
 

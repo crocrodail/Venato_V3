@@ -1,0 +1,80 @@
+html {
+  background-color: transparent;
+  overflow: hidden;
+  body {
+    background-color: transparent;
+    #app {
+      background-color: transparent;
+      .besoins {
+        position: absolute;
+        bottom: 20%;
+        left: 1.8%;
+      }
+
+      .speedomeeter{
+        position: absolute;
+        bottom: 8%;
+        left: 16%;
+      }
+
+      .fullscreen {
+        width: 100%;
+        max-width: 100%;
+        padding: 100px 30px;
+      }
+    }
+  }
+}
+
+.v-progress-circular {
+  margin: 0.2vw;
+  font-size: 0.7vw;
+  background-color: rgba(255, 255, 255, 0.329);
+  border-radius: 100px;
+}
+
+#notifVenato {
+  .noty_body {
+    font-size: 0.9vw;
+    font-family: "Poppins";
+    padding: 15px 30px;
+  }
+
+  .noty_logo {
+    text-align: center;
+    width: 15%;
+    margin: auto;
+    padding-top: 1%;
+    float: left;
+    img {
+      width: auto;
+      height: auto;
+      max-height: 90%;
+      max-width: 90%;
+    }
+  }
+  .noty_title {
+    font-family: "Poppins";
+    font-size: 0.9vw;
+    font-weight: bolder;
+    margin-top: 10px;
+  }
+}
+
+#noty_layout__topRight,
+#noty_layout__topCenter,
+#noty_layout__topLeft {
+  margin-top: 100px;
+}
+
+.noty_layout {
+  width: 30% !important;
+  .noty_type__alert {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  .noty_type__error,
+  .noty_type__danger {
+    background-color: rgba(183, 28, 28, 0.459);
+    color: white;
+  }
+}

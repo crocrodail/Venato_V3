@@ -28,7 +28,7 @@ AddEventHandler('Bank:insert', function(amount)
 	else
     TriggerEvent("Bank:AddBankMoney", amount, source)
     TriggerEvent("Inventory:RemoveMoney", amount, source)
-		TriggerClientEvent('Venato:notify', source, 'Vous avez déposé ~g~' .. amount .. ' €~s~')
+		TriggerClientEvent('Venato:notify', source, 'Vous avez déposé <span class="green--text">' .. amount .. ' €</span>')
 	end
 end)
 
@@ -44,7 +44,7 @@ AddEventHandler('Bank:take', function(amount)
 	else
     TriggerEvent("Bank:RemoveBankMoney", amount, source)
     TriggerEvent("Inventory:AddMoney", amount, source)
-		TriggerClientEvent('Venato:notify', source, 'Vous avez retiré ~g~' .. amount .. ' €~s~ ')
+		TriggerClientEvent('Venato:notify', source, 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> ')
 	end
 end)
 
@@ -67,8 +67,8 @@ AddEventHandler('Bank:transfer', function(amount, receiver)
         else
           MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = recPlayerBank + amount})
         end
-        TriggerClientEvent('Venato:notify', source, 'Vous avez envoyé ~g~' .. amount .. ' €~s~ à ' .. result[1].prenom .. ' ' .. result[1].nom)
-        TriggerClientEvent('Venato:notify', recPlayer, 'Vous avez reçu ~g~' .. amount .. ' €~s~ de la part de ' .. DataPlayers[source].Prenom .. ' ' .. DataPlayers[source].Nom)
+        TriggerClientEvent('Venato:notify', source, 'Vous avez envoyé <span class="green--text">' .. amount .. ' €</span> à ' .. result[1].prenom .. ' ' .. result[1].nom)
+        TriggerClientEvent('Venato:notify', recPlayer, 'Vous avez reçu <span class="green--text">' .. amount .. ' €</span> de la part de ' .. DataPlayers[source].Prenom .. ' ' .. DataPlayers[source].Nom)
       end
     end
   end)
@@ -82,7 +82,7 @@ AddEventHandler('Bank:createAccount', function()
   local account = lettre..''..math.random(00,99) .. ' VnT-'.. math.random(000,999)
   DataPlayers[source].Account = account
   MySQL.Async.execute("UPDATE users SET account=@account WHERE identifier=@identifier", {["@account"]=account, ["@identifier"]=DataPlayers[source].SteamId})
-  TriggerClientEvent('Venato:notify', source, "~g~Le compte ~b~"..account.."~g~ de "..DataPlayers[source].Nom.." "..DataPlayers[source].Prenom.." a bien été ouvert.")
+  TriggerClientEvent('Venato:notify', source, 'Le compte <span class="blue--text">'..account..'</span> de '..DataPlayers[source].Nom..' '..DataPlayers[source].Prenom.." a bien été ouvert.")
 end)
 
 
@@ -94,7 +94,7 @@ AddEventHandler('Bank:createCard', function()
   DataPlayers[source].Code = code
   MySQL.Async.execute("UPDATE users SET code=@code WHERE identifier=@identifier", {["@code"]=code, ["@identifier"]=DataPlayers[source].SteamId})
   TriggerEvent("Inventory:AddItem", 1, 41, source)
-  TriggerClientEvent('Venato:notify', source, "~g~Vous avez reçu votre carte, le code cofidentiel à retenir est : ~r~"..code.."~g~.")
+  TriggerClientEvent('Venato:notify', source, 'Vous avez reçu votre carte, le code confidentiel à retenir est : <span class="red--text">'..code..'</span>.')
 end)
 
 RegisterServerEvent('Bank:createCheque')
@@ -102,7 +102,7 @@ AddEventHandler('Bank:createCheque', function()
   local source = source
   DataPlayers[source].Code = code
   MySQL.Async.execute("INSERT INTO user_document (`identifier`, `type`, `montant`) VALUES (@identifier, @type, @montant )", {["@identifier"]=DataPlayers[source].SteamId, ["@type"]="chequier", ["@montant"]=5})
-  TriggerClientEvent('Venato:notify', source, "~g~Vous avez bien reçu un carnet de 5 cheque.")
+  TriggerClientEvent('Venato:notify', source, "Vous avez bien reçu un carnet de 5 cheques.", "success")
   SetTimeout(1000, function()
 		MySQL.Async.fetchScalar("SELECT id FROM user_document WHERE identifier = @identifier ORDER BY id DESC", {['@identifier'] = DataPlayers[source].SteamId}, function(result)
 			DataPlayers[source].Documents[result] = {["type"] = "chequier", ["montant"] = 5}
@@ -124,13 +124,13 @@ AddEventHandler("Bank:DepotCheque", function(index)
         end
           TriggerEvent("Bank:AddBankMoney", DataPlayers[source].Documents[index].montant, source)
           MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
-          TriggerClientEvent('Venato:notify', source, "~g~Vous avez bien déposé un chèque de "..DataPlayers[source].Documents[index].montant.." € sur votre compte banquaire.")
+          TriggerClientEvent('Venato:notify', source, "Vous avez bien déposé un chèque de "..DataPlayers[source].Documents[index].montant.." € sur votre compte banquaire.", "success")
           DataPlayers[source].Documents[index] = nil
       else
-        TriggerClientEvent('Venato:notify', source, "~r~Il s'enblerait que ce soit un chèque en bois, le transfère à été refusé pour solde insuffisant.")
+        TriggerClientEvent('Venato:notify', source, "Il s'emblerait que ce soit un chèque en bois, le transfère a été refusé pour solde insuffisant.", "danger")
       end
     else
-      TriggerClientEvent('Venato:notify', source, "~r~Il s'enblerait que ce chèque soit un faux, aucun numero de compte corespond à ce dernier.")
+      TriggerClientEvent('Venato:notify', source, "Il s'emblerait que ce chèque soit un faux, aucun numero de compte ne correspond à ce dernier.", "danger")
     end
   end)
 end)
@@ -139,7 +139,7 @@ RegisterNetEvent("Bank:DepotCheque")
 AddEventHandler("Bank:DepotCheque", function(index)
 	local source = source
   MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
-  TriggerClientEvent('Venato:notify', source, "~g~Vous avez bien ~r~annulé un chèque de "..DataPlayers[source].Documents[index].montant.." €.")
+  TriggerClientEvent('Venato:notify', source, 'Vous avez bien <span class="red--text">annulé</span> un chèque de '..DataPlayers[source].Documents[index].montant.." €.","success")
   DataPlayers[source].Documents[index] = nil
 end)
 
