@@ -10,7 +10,7 @@ local skinData = {
 	-- these names are hardcoded
 
 	-- where the speedo gets centered, values below are OFFSETS from this.
-	centerCoords = {0.85,0.88},
+	centerCoords = {0.84,0.84},
 
 	coeff = 0.75,
 

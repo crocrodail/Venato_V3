@@ -44,7 +44,8 @@ server_script {
   '/shops/server.lua',
   '/life/server.lua',
   '/lockVehicule/server.lua',
-  '/admin/server.lua'
+  '/admin/server.lua',
+  '/carMenu/server.lua'
 }
 
 files {

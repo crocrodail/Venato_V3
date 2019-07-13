@@ -102,7 +102,7 @@ end, false)
 
 RegisterNetEvent("Speedmeter:Toggle")
 AddEventHandler("Speedmeter:Toggle", function(event)
-    toggleSpeedo()
+    toggleSpeedo(event)
 end)
 
 
