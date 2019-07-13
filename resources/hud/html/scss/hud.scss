@@ -17,6 +17,15 @@ html {
         left: 16%;
       }
 
+      .mini-speedomeeter{
+        position: absolute;
+        bottom: 3.5%;
+        left: 11.8%;
+        background-color: rgba(0, 0, 0, 0.70);
+        color: white;
+        padding: 5px
+      }
+
       .fullscreen {
         width: 100%;
         max-width: 100%;
@@ -77,4 +86,8 @@ html {
     background-color: rgba(183, 28, 28, 0.459);
     color: white;
   }
+}
+
+.hide{
+  display: none;
 }

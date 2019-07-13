@@ -62,8 +62,10 @@ function accessGranded(SteamId, source)
         Point = DataUser[1].point,
         Citoyen = 0,
         Url = DataUser[1].url,
+        Speedometer = DataUser[1].speedometer
       }
       TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
+      TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
     TriggerEvent("Inventory:UpdateInventory", source)

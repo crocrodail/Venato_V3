@@ -99,6 +99,13 @@ Citizen.CreateThread(
                 end
                 old_food = food
                 old_water = water
+                
+                local needs = {
+                    food = Venato.Round(food, 2),
+                    water = Venato.Round(water, 2),
+                    alcool = Venato.Round(alcool, 2)
+                }
+
                 TriggerServerEvent("Life:UpdateDB", needs)
                 TriggerServerEvent("Life: Dead")
             end
