@@ -62,12 +62,14 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
         end
         if distance < item.ActivationDist then
           ConfigShop.inShopMarker = true
-          ConfigShop.currentId = item.Id
+          ConfigShop.currentShopId = item.Id
           Venato.InteractTxt('Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop')
-        elseif ConfigShop.menuOpen and ConfigShop.currentId == item.Id and distance > (2*item.ActivationDist) then
+        elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > (2*item.ActivationDist) then
           ConfigShop.inShopMarker = false
           ConfigShop.menuOpen = false
           Menu.hidden = true
+          showPageInfo = false
+          ConfigShop.page="client"
         end
       end
     end
@@ -81,13 +83,14 @@ CreateThread(function ()
   while true do
     Wait(0)
     if (IsControlJustReleased(1, Keys['BACKSPACE']) or IsControlJustReleased(1, Keys['RIGHTMOUSE'])) then
-      print('Hide menu')
       SetNuiFocus(false, false)
       ConfigShop.menuOpen = false
       Menu.hidden = true
+      showPageInfo = false
+      ConfigShop.page="client"
     end
     if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and ConfigShop.inShopMarker then
-      TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+      TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
       ConfigShop.menuOpen = true
     end
     if ConfigShop.menuOpen then
@@ -105,49 +108,49 @@ end)
 -- Callback from Server --
 -- ==================== --
 
-RegisterNetEvent('Shops:ShowInventory:cb')
-AddEventHandler('Shops:ShowInventory:cb', function(shop)
-  if ConfigShop.page == "client" then
-    ShopPages.client(shop)
-  elseif ConfigShop.page == "admin" then
-    ShopPages.admin(shop)
-  elseif ConfigShop.page == "order" then
-    ShopPages.order(shop)
-  end
+RegisterNetEvent('Shops:UpdateMenu:cb')
+AddEventHandler('Shops:UpdateMenu:cb', function(content)
+  ShopPages.drawPage(content)
 end)
 
 RegisterNetEvent('Shops:getMoney:cb')
 AddEventHandler('Shops:getMoney:cb', function(Price)
   Venato.notify("~g~Vous avez bien récupéré "..Price.."€.")
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
 
 RegisterNetEvent('Shops:TestBuy:cb')
 AddEventHandler('Shops:TestBuy:cb', function(Name)
   Venato.notify("~g~Vous avez bien acheté "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
 
 RegisterNetEvent('Shops:NotEnoughMoney')
 AddEventHandler('Shops:NotEnoughMoney', function(Name)
   Venato.notify("~r~Vous n'avez pas assez d'argent pour acheter "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
 
 RegisterNetEvent('Shops:NotEnoughShopMoney')
 AddEventHandler('Shops:NotEnoughShopMoney', function(Price)
   Venato.notify("~r~Le magasin n'a pas assez d'argent pour récupérer "..Price.."€.")
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
 
 RegisterNetEvent('Shops:NotEnoughQuantity')
 AddEventHandler('Shops:NotEnoughQuantity', function(Name)
   Venato.notify("~r~Il n'y a plus assez de "..Name.." en stock.")
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
 
 RegisterNetEvent('Shops:TooHeavy')
 AddEventHandler('Shops:TooHeavy', function(Name)
   Venato.notify("~r~Vous etes trop lourd pour acheter "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentId)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+end)
+
+RegisterNetEvent('Shops:OrderItem:cb')
+AddEventHandler('Shops:OrderItem:cb', function(Quantity, Name)
+  Venato.notify("~g~Vous avez bien commandé pour "..Quantity..": "..Name..".")
+  TriggerServerEvent("Shops:showOrder", ConfigShop.currentOrderId)
 end)

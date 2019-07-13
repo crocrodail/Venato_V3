@@ -118,3 +118,16 @@ end
 function Venato.MoneyToPoid(money)
 	return Venato.Round(money*0.000075,1)
 end
+
+function Venato.dump(o)
+  if type(o) == 'table' then
+     local s = '{ '
+     for k,v in pairs(o) do
+        if type(k) ~= 'number' then k = '"'..k..'"' end
+        s = s .. '['..k..'] = ' .. Venato.dump(v) .. ','
+     end
+     return s .. '} '
+  else
+     return tostring(o)
+  end
+end

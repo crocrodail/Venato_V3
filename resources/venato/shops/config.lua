@@ -10,5 +10,6 @@ ConfigShop = {}
 ConfigShop.EnableShops = true
 ConfigShop.page = 'client'
 ConfigShop.menuOpen = false
-ConfigShop.currentId = nil
+ConfigShop.currentShopId = nil
+ConfigShop.currentOrderId = nil
 ConfigShop.inShopMarker = false

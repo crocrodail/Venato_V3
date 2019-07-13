@@ -177,3 +177,16 @@ RegisterCommand('position', function(source, args, rawCommand)
   local plyHeading = GetEntityHeading(ply, 0)
   print("Coords: " ..plyCoords.x.. " - " ..plyCoords.y.. " - " ..plyCoords.z.. " - " ..plyHeading) 
 end, false)
+
+function Venato.dump(o)
+  if type(o) == 'table' then
+     local s = '{ '
+     for k,v in pairs(o) do
+        if type(k) ~= 'number' then k = '"'..k..'"' end
+        s = s .. '['..k..'] = ' .. Venato.dump(v) .. ','
+     end
+     return s .. '} '
+  else
+     return tostring(o)
+  end
+end
