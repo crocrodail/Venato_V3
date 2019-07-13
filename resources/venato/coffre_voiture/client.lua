@@ -6,24 +6,24 @@ local DataUser = {}
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    if IsControlJustPressed(1, Keys['K']) and GetLastInputMethod(2) then
+    if IsControlJustPressed(1, Keys['L']) and GetLastInputMethod(2) then
       CloseVehicle = Venato.CloseVehicle()
-      if CloseVehicle ~= nil then
+      if CloseVehicle ~= 0 then
         if not open then
           if (GetVehicleDoorLockStatus(CloseVehicle) < 2) then
-            if Menu.hidden then
+            if not Menu.Hidden then
               OpenVehicleCoffre()
             else
               CloseVehicleCoffre()
             end
           else
-            Venato.Notify("~r~Vous devez ouvrir le véhicule pour ouvrir le coffre.")
+            Venato.notify("~r~Vous devez ouvrir le véhicule pour ouvrir le coffre.")
           end
         else
           CloseVehicleCoffre()
         end
       else
-        Venato.Notify("~r~Aucun véhicule à proximité.")
+        Venato.notify("~r~Aucun véhicule à proximité.")
       end
     end
   end
@@ -31,6 +31,7 @@ end)
 
 function OpenVehicleCoffre()
   open = true
+  Menu.hidden = false
   showPageInfo = true
   SetVehicleDoorOpen(CloseVehicle, 5, false, false)
   local plate = GetVehicleNumberPlateText(CloseVehicle)
@@ -38,7 +39,7 @@ function OpenVehicleCoffre()
   if plate or class ~= nil then
     TriggerServerEvent("VehicleCoffre:CallData", plate, class)
   else
-    Venato.Notify('~r~ERROR ?')
+    Venato.notify('~r~ERROR ?')
   end
 end
 
@@ -46,6 +47,7 @@ function CloseVehicleCoffre()
   open = false
   showPageInfo = false
   SetVehicleDoorShut(CloseVehicle, 5, false)
+  Menu.hidden = true
 end
 
 RegisterNetEvent("VehicleCoffre:Close")
@@ -67,14 +69,20 @@ end)
 
 function OpenMenuCv()
   ClearMenu()
-  MenuTitle = "Coffre"
-  MenuDescription = "option"
+  local color = ""
+  if VehicleData.nbItems > VehicleData.itemcapacite - 2 then
+    color = "~r~"
+  elseif VehicleData.nbItems > VehicleData.itemcapacite - 5 then
+    color = "~o~"
+  end
+  MenuTitle = color..""..VehicleData.nbItems.."~s~ / "..VehicleData.itemcapacite
+  MenuDescription = "Coffre"
   Menu.addButton("~r~Fermer le coffre", "CloseVehicleCoffre", nil)
   Menu.addButton("~o~Armes", "WeaponCoffreVehicle", nil)
+  Menu.addButton("~r~-----------------------  ~g~items~r~  -----------------------", "none", nil)
   Menu.addButton("~y~Déposer des items dans le coffre", "DropItemCv", nil)
-  Menu.addButton("~r~--------------~g~items~r~-----------------", "none", nil)
-  for k,v in pairs(VehicleData) do
-    Menu.addButton(v.libelle.." : ~r~"..v.quantity, "OptionItemsCv", k)
+  for k,v in pairs(VehicleData.inventaire) do
+    Menu.addButton("~b~"..v.libelle.." : ~r~"..v.quantity, "OptionItemsCv", k)
   end
 end
 
@@ -91,8 +99,11 @@ end
 function DropItemCv()
   ClearMenu()
   MenuTitle = "mon inventaire"
+  Menu.addButton("~r~↩ Retour", "OpenMenuCv", nil)
   for k,v in pairs(DataUser.Inventaire) do
-    Menu.addButton(v.libelle.." : ~r~"..v.quantity, "ConfDropItemCv", k)
+    if v.quantity ~= 0 then
+      Menu.addButton(v.libelle.." : ~r~"..v.quantity, "ConfDropItemCv", k)
+    end
   end
 end
 
@@ -135,17 +146,17 @@ end
 function DropWeaponCv()
   ClearMenu()
   MenuTitle = "Mes armes"
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
-  for k,v in pairs(DataUser.weapon) do
-    Menu.addButton(v.libelle.." avec ~r~"..v.balles.." balles", "DropConfirmWeaponCv", k)
+  Menu.addButton("~r~↩ Retour", "OpenMenuCv", index)
+  for k,v in pairs(DataUser.Weapon) do
+    Menu.addButton(v.libelle.." avec ~r~"..v.ammo.." balles", "DropConfirmWeaponCv", k)
   end
 end
 
 function DropConfirmWeaponCv(index)
-  local plate = GetVehicleNumberPlateText(CloseVehicle)
-  if VehicleData[plate].nbWeapon + 1 <= VehicleData[plate].maxWeapon then
+  if VehicleData.nbWeapon + 1 <= VehicleData.maxWeapon then
     ClearMenu()
-    MenuTitle = "Voulez vous vraiment déposer l'arme ?"
+    MenuTitle = "Confirmation"
+    MenuDescription = "Voulez vous vraiment déposer l'arme ?"
     Menu.addButton("~r~Non", "DropWeaponCv", nil)
     Menu.addButton("~g~Déposer l'arme dans le coffre", "CoffreVehicleDropWp", index)
   else

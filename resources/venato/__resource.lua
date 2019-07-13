@@ -21,7 +21,8 @@ client_script {
   '/carShop/config.lua',
   '/carShop/client.lua',
   '/garage/client.lua',
-  '/garage/table.lua'
+  '/garage/table.lua',
+  '/admin/client.lua'
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
@@ -35,7 +36,8 @@ server_script {
   '/carShop/server.lua',
   '/garage/server.lua',
   '/coffre/server.lua',
-  '/shops/server.lua'
+  '/shops/server.lua',
+  '/admin/server.lua'
 }
 
 files {

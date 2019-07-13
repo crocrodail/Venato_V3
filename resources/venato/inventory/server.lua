@@ -46,7 +46,6 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 				DataPlayers[source].Documents = Document
 			end
 		end)
-	end
 end)
 
 RegisterServerEvent('Inventory:ShowMe')
