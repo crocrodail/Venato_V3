@@ -3,27 +3,28 @@ resource_manifest_version "05cfa83c-a124-4cfa-a768-c24a5811d8f9"
  ui_page "/html/index.html"
 
 client_script {
-	'/client/menu.lua',
-	'/client/blips.lua',
-	'/client/function.lua',
-	'/client/global.lua',
-	'/client/sirenControl.js',
-	'/client/teleport.lua',
-	'/inventory/client.lua',
-	'/bank/config.lua',
-	'/bank/client.lua',
-	'/bank/config.lua',
-	'/coffre/client.lua',
-	'/shops/client.lua',
-	'/shops/config.lua',
-	'/carShop/config.lua',
-	'/carShop/client.lua',
-	'/garage/client.lua',
-	'/garage/table.lua',
-	"/life/client.lua",
-	"/debug/client.lua",
-	"/lockVehicule/client.lua",	
-	'/carMenu/client.lua',
+  '/client/menu.lua',
+  '/client/blips.lua',
+  '/client/function.lua',
+  '/client/global.lua',
+  '/client/sirenControl.js',
+  '/client/teleport.lua',
+  '/inventory/client.lua',
+  '/coffre_voiture/client.lua',
+  '/bank/config.lua',
+  '/bank/client.lua',
+  '/bank/config.lua',
+  '/coffre/client.lua',
+  '/shops/client.lua',
+  '/shops/config.lua',
+  '/carShop/config.lua',
+  '/carShop/client.lua',
+  '/garage/client.lua',
+  '/garage/table.lua',
+    '/carMenu/client.lua',
+    "/lockVehicule/client.lua",	
+    "/debug/client.lua",
+    "/life/client.lua",
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',
@@ -31,6 +32,8 @@ server_script {
   '/server/function.lua',
   '/server/global.lua',
   '/inventory/server.lua',
+  '/coffre_voiture/server.lua',
+  '/coffre_voiture/config.lua',
   '/bank/server.lua',
   '/carShop/server.lua',
   '/garage/server.lua',
@@ -100,6 +103,6 @@ files {
 	"/html/cheque.html"
 }
 
-export "GetBlacklistedList"
-export "GetBalancedList"
-export "GetBalancedCatList"
+export 'GetBlacklistedList'
+export 'GetBalancedList'
+export 'GetBalancedCatList'

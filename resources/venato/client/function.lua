@@ -179,13 +179,31 @@ function Venato.MoneyToPoid(money)
 	return Venato.Round(money*0.000075,1)
 end
 
+function Venato.CloseVehicle()
+  if (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false) then
+    local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
+    local clostestvehicle = GetClosestVehicle(x, y, z, 4.000, 0, 127)
+    if clostestvehicle ~= 0 then
+      return clostestvehicle
+    else
+      local pos = GetEntityCoords(GetPlayerPed(-1))
+      local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
+      local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+      local a, b, c, d, result = GetRaycastResult(rayHandle)
+      return result
+    end
+  else
+    return nil
+  end
+end
+
 function Venato.ScaleForm(request)
 	scaleform = RequestScaleformMovie(request)
 
 	while not HasScaleformMovieLoaded(scaleform) do
 		Citizen.Wait(0)
 	end
-	
+
 	return scaleform
 end
 
@@ -210,7 +228,7 @@ function Venato.GetCarShopIntruction()
     Button(GetControlInstructionalButton(2, 189, true))
     ButtonMessage("Changer la couleur principale")
 	PopScaleformMovieFunctionVoid()
-	
+
     PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
     PushScaleformMovieFunctionParameterInt(0)
     Button(GetControlInstructionalButton(2, 168, true))
@@ -266,18 +284,18 @@ function Venato.DisplayInfoVehicle(vehicle)
 	scaleform2 = Venato.ScaleForm("mp_car_stats_01")
 	PushScaleformMovieFunction(scaleform2, "CLEAR_ALL")
 	PopScaleformMovieFunctionVoid()
-	
+
 	PushScaleformMovieFunction(scaleform2, "SET_VEHICLE_INFOR_AND_STATS")
 
 	prix_vp = ""
 	prix = ""
 
     if(not vehicle.vp_only) then
-		prix = "Prix : "..formatPrice(vehicle.price).."€"      
+		prix = "Prix : "..formatPrice(vehicle.price).."€"
 	end
 
 	if(vehicle.vp_enabled) then
-		prix_vp = "Prix VP : "..formatPrice(vehicle.price_vp).."VP"      
+		prix_vp = "Prix VP : "..formatPrice(vehicle.price_vp).."VP"
 	end
 
 	PushScaleformMovieFunctionParameterString(prix)
@@ -288,7 +306,7 @@ function Venato.DisplayInfoVehicle(vehicle)
 	PushScaleformMovieFunctionParameterString("Acceleration")
 	PushScaleformMovieFunctionParameterString("Freinage")
 	PushScaleformMovieFunctionParameterString("Maniabilité")
-	
+
 	PushScaleformMovieFunctionParameterInt(vehicle.speed)
 	PushScaleformMovieFunctionParameterInt(vehicle.acceleration)
 	PushScaleformMovieFunctionParameterInt(vehicle.braking)
