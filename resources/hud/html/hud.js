@@ -18,7 +18,6 @@ new Vue({
       clearInterval(this.interval)
     },
     created() {
-      console.log("Ceci est un test");
       window.addEventListener('resize', this.handleResize)
       window.addEventListener('message', this.handleMessage)
       this.handleResize();
@@ -32,7 +31,7 @@ new Vue({
           },
           timeout: 3000
       });
-      Noty.setMaxVisible(10); 
+      Noty.setMaxVisible(5); 
     },
     destroyed() {
       window.removeEventListener('resize', this.handleResize)

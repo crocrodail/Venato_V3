@@ -22,7 +22,8 @@ client_script {
 	'/garage/table.lua',
 	"/life/client.lua",
 	"/debug/client.lua",
-	"/lockVehicule/client.lua"
+	"/lockVehicule/client.lua",	
+	'/carMenu/client.lua',
 }
 server_script {
   '@mysql-async/lib/MySQL.lua',

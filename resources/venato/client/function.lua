@@ -231,6 +231,37 @@ function Venato.GetCarShopIntruction()
     return scaleform
 end
 
+
+function Venato.GetCarMenuIntruction()
+  scaleform = Venato.ScaleForm("instructional_buttons")
+  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(1)
+  Button(GetControlInstructionalButton(2, Keys["L"], true))
+  ButtonMessage("Ouvrir l'inventaire du coffre")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(0)
+  Button(GetControlInstructionalButton(2, Keys["H"], true))
+  ButtonMessage("Régler les phares")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(80)
+  EndScaleformMovieMethodReturn()
+
+  DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
+end
+
 function Venato.DisplayInfoVehicle(vehicle)
 	scaleform2 = Venato.ScaleForm("mp_car_stats_01")
 	PushScaleformMovieFunction(scaleform2, "CLEAR_ALL")

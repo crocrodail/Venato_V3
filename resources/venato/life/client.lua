@@ -4,6 +4,7 @@ local water = 100
 local alcool = 0
 local old_water = 0
 local old_food = 0
+local reserveTrigger = false
 
 Citizen.CreateThread(
     function()
@@ -38,6 +39,22 @@ Citizen.CreateThread(
 
                 if GetIsVehicleEngineRunning(car) then
                     SetVehicleFuelLevel(car, GetVehicleFuelLevel(car) - (GetVehicleCurrentRpm(car) / 10))
+                end
+                
+                if(GetVehicleFuelLevel(car) > 20) then
+                    reserveTrigger = false
+                end
+                                
+                if(GetVehicleFuelLevel(car) < 20 and not reserveTrigger) then
+                    local defaultNotification = {
+                        title ="Info. Véhicule",
+                        type = "danger",
+                        logo = "https://i.ibb.co/CBxPS3F/icons8-gas-station-96px-1.png",
+                        message = "Vous êtes dans la résèrve",
+                        timeout = "5000"
+                    }
+                    Venato.notify(defaultNotification)
+                    reserveTrigger = true;
                 end
 
                 TriggerEvent(

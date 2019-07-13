@@ -14,11 +14,17 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
 }
 
+function HideMenu()  
+  menuIsOpen = false
+  showInformationVehicle = false
+  Menu.hidden = true
+end
+
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)  
   while true do
     playerPed = PlayerPedId()
-    Citizen.Wait(0)    
+    Citizen.Wait(0) 
 
     if menuIsOpen then
       scaleform = Venato.GetCarShopIntruction()      
@@ -72,12 +78,12 @@ Citizen.CreateThread(function ()
           end     
         end
         if IsControlJustPressed(1, 170) or IsControlJustPressed(1, 177) or IsControlJustPressed(1, 311) or IsControlJustPressed(1, 166) then
-          hideMenu() 
+          HideMenu() 
           RemoveCurrentCar()
         end
       else
         if menuIsOpen and Config.CarShop[i].id == currentShop then          
-          hideMenu() 
+          HideMenu() 
           RemoveCurrentCar()
         end
       end			
@@ -106,21 +112,13 @@ function setCarShopMapMarker(carshop)
 end
 
 function OpenCarMenu(vehiculeType)
-  if not menuIsOpen then    
-    testIcon = 0      
+  if not menuIsOpen then   
     TriggerServerEvent("CarShop:ShowCategory", vehiculeType)
   else  
     menuIsOpen = false
     Menu.hidden = true
   end
   showInformationVehicle = false  
-end
-
-function hideMenu()  
-  RemoveNotification(lastNotif)  
-  menuIsOpen = false
-  showInformationVehicle = false
-  Menu.hidden = true
 end
 
 function showCategory(category)
@@ -320,8 +318,8 @@ AddEventHandler('CarShop:PaiementOk:response', function(data)
   local car = GetVehiclePedIsIn( playerPed, false )
   SetVehicleUndriveable(car, false)
   showInformationVehicle = false
-  hideMenu()
-  defaultNotification.type = "success"
+  HideMenu()
+  defaultNotification.type = "alert"
   defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Faites attention sur la route.";
   Venato.notify(defaultNotification)
   TriggerEvent('lock:addVeh', data.plate, data.name)  
@@ -339,12 +337,12 @@ AddEventHandler('CarShop:ShowCategory:response', function(data)
   ClearMenu()
   MenuTitle = "Concessionnaire"
   MenuDescription = "Catégories"
-  Menu.addButton("~r~↩ Retour", "hideMenu", data)
+  Menu.addButton("~r~↩ Retour", "HideMenu", data)
   
   for k,v in pairsByKeys(data) do
     Menu.addButton(v.type, "showCategory", v.type)
   end
-  Menu.addButton("~r~↩ Retour", "hideMenu", data)
+  Menu.addButton("~r~↩ Retour", "HideMenu", data)
   menuIsOpen = true
   showInformationVehicle = false
   Menu.hidden = false
