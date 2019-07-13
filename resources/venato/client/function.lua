@@ -256,6 +256,12 @@ function Venato.GetCarMenuIntruction()
   PopScaleformMovieFunctionVoid()
 
   PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(2)
+  Button(GetControlInstructionalButton(2, Keys["Y"], true))
+  ButtonMessage("Vérrouiler/Déverrouiller le véhicule (avec les clès)")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
   PushScaleformMovieFunctionParameterInt(1)
   Button(GetControlInstructionalButton(2, Keys["L"], true))
   ButtonMessage("Ouvrir l'inventaire du coffre")

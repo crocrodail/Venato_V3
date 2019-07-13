@@ -6,15 +6,12 @@ AddEventHandler("Life:Init", function()
       water = DataPlayers[source].Water,
       alcool = DataPlayers[source].Sool
   }
-  print(DataPlayers[source].Food)
-  print(DataPlayers[source].Water)
 
   TriggerClientEvent("Life:InitStatus", source, needs)  
 end)
 
 RegisterNetEvent("Life:Dead")
 AddEventHandler("Life:Dead", function()  
-    print("You're dead")
 end)
 
 RegisterNetEvent("Life:Update")

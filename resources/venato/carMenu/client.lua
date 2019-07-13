@@ -96,7 +96,7 @@ end
 
 function openDoor(data)
     local status = GetVehicleDoorAngleRatio(data.car, data.index)
-    print(status)
+    
     if status == 0 then
         SetVehicleDoorOpen(data.car, data.index, 0, 0) 
     else
@@ -117,12 +117,9 @@ function openRegulMenu(car)
 end
 
 function activRegu(data)    
-      setRegu = true
-      print(GetVehiclePedIsIn( PlayerPedId(), false ))
-     
-      print(data.vitesse)
+      setRegu = true     
       local maxSpeed = GetVehicleHandlingFloat(GetVehiclePedIsIn( PlayerPedId(), false ),"CHandlingData","fInitialDriveMaxFlatVel")
-      print(maxSpeed)
+      
       local speed = 0
       if(data.vitesse == -1)then
         speed = maxSpeed
@@ -137,7 +134,6 @@ function activRegu(data)
       if(cruise >= speed) then
         cruiseNotification.message = "Régulateur : <span class='red--text'>Impossible, ralentissez</span>"
       else
-        print(cruise)
         if(cruise == 0) then
             SetVehicleForwardSpeed(data.car,0.01)
         end
