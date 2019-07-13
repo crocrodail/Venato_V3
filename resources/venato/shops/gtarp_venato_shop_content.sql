@@ -1,0 +1,12 @@
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (1, 1, 6, 15, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (2, 1, 30, 15, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (3, 1, 101, 15, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (4, 1, 102, 15, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (5, 1, 103, 15, 0);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (6, 1, 104, 15, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (7, 1, 105, 15, 9);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (8, 1, 107, 50, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (9, 1, 206, 500, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (10, 1, 210, 1000, 99);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (11, 1, 211, 300, -1);
+INSERT INTO gtarp_venato.shop_content (Id, InventoryId, ItemId, Price, Quantity) VALUES (12, 1, 656, 30, -1);
