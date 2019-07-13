@@ -80,7 +80,8 @@ Citizen.CreateThread(
                 alcool = alcool - 0.2
             end
 
-            SendNUIMessage(
+            TriggerEvent(
+                    "Hud:Update",
                 {
                     action = "playerStatus",
                     food = food,
