@@ -11,6 +11,11 @@ local ztppers = "0.0"
 local AdminBlips = false
 local AdminBlipsString = "Blips : ~b~Off"
 local AdminShowCoordString = "Afficher les coordonées : ~b~Off"
+local indexToShow = nil
+local indexToSpectate = nil
+local LastCoords = {}
+local state = false
+local cam = nil
 
 function ResetDefaultNotification()
   defaultNotification = {type = "alert", title ="Staff Venato",logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png"}
@@ -146,19 +151,19 @@ function AdminFixVehicle()
   local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
   if tonumber(vehicle) == 0 then
     vehicle = Venato.CloseVehicle()
-    SetVehicleFuelLevel(vehicle, 1000.0)
+    SetVehicleFixed(vehicle)
+    SetVehicleFuelLevel(vehicle, 100.0)
     SetVehicleBodyHealth(vehicle, 1000.0)
     SetVehicleEngineHealth(vehicle, 1000.0)
-    SetVehicleFixed(vehicle)
     SetVehicleDirtLevel(vehicle, 0.0)
     SetVehicleLights(vehicle, 0)
     SetVehicleBurnout(vehicle, false)
     Citizen.InvokeNative(0x1FD09E7390A74D54, vehicle, 0)
   else
-    SetVehicleFuelLevel(vehicle, 1000.0)
+    SetVehicleFixed(vehicle)
+    SetVehicleFuelLevel(vehicle, 100.0)
     SetVehicleBodyHealth(vehicle, 1000.0)
     SetVehicleEngineHealth(vehicle, 1000.0)
-    SetVehicleFixed(vehicle)
     SetVehicleDirtLevel(vehicle, 0.0)
     SetVehicleLights(vehicle, 0)
     SetVehicleBurnout(vehicle, false)
@@ -232,6 +237,126 @@ function AdminListPlayer()
 	end
 	Menu.addButton("~r~↩ Retour", "openVenatoadmin", nil)
 end
+
+function AdminPlayerOption(index)
+  indexToShow = index
+  MenuTitle = "Venato Admin Menu Player"
+  ClearMenu()
+  Menu.addButton("Retour", "AdminListPlayer", nil)
+  Menu.addButton("Spectate (Voyeur :3)", "AdminSpectate", nil)
+  Menu.addButton("Kick (Pour le lol)", "AdminActionOnPlayer", "kick")
+  Menu.addButton("Ban (Parceque c'est cool)", "AdminActionOnPlayer", "ban")
+  Menu.addButton("Freeze", "AdminFreeze", nil)
+  Menu.addButton("Toi --> elle", "Admintptoelle", nil)
+  Menu.addButton("Toi <-- elle", "Admintptome", nil)
+  Menu.addButton("Give dans la poche", "AdminGivePoche", nil)
+  Menu.addButton("Give en bank", "AdminGiveBank", nil)
+  Menu.addButton("Set dans la poche", "AdminSetPoche", nil)
+  Menu.addButton("Set en bank", "AdminSetBank", nil)
+end
+
+function AdminActionOnPlayer(action)
+  local result = Venato.OpenKeyboard('', "", 100,"Raison:")
+  if result ~= "" and result ~= nil then
+    TriggerServerEvent("Admin:ActionOnPlayer", action, indexToShow, result)
+  else
+    Venato.notifyError("Il y a un problème sur la Raison renseigné (le joueur n'a pas subit la sanction du coup)")
+  end
+end
+
+function AdminSetBank()
+  local result = Venato.OpenKeyboard('', "", 10,"Nombre")
+	if result ~= "" and result ~= nil then
+    TriggerServerEvent('Bank:SetBankMoney', result)
+  else
+    Venato.notifyError("Il y a un problème sur la somme renseigné")
+  end
+end
+
+function AdminSetPoche()
+  local result = Venato.OpenKeyboard('', "", 10,"Nombre")
+	if result ~= "" and result ~= nil then
+    TriggerServerEvent('Inventory:SetMoney', result)
+  else
+    Venato.notifyError("Il y a un problème sur la somme renseigné")
+  end
+end
+
+function AdminGiveBank()
+  local result = Venato.OpenKeyboard('', "", 10,"Nombre")
+	if result ~= "" and result ~= nil then
+    TriggerServerEvent('Bank:AddBankMoney', result)
+  else
+    Venato.notifyError("Il y a un problème sur la somme renseigné")
+  end
+end
+
+function AdminGivePoche()
+  local result = Venato.OpenKeyboard('', "", 10,"Nombre")
+	if result ~= "" and result ~= nil then
+    TriggerServerEvent('Inventory:AddMoney', result)
+  else
+    Venato.notifyError("Il y a un problème sur la somme renseigné")
+  end
+end
+
+function Admintptome()
+  local targetPed      = Venato.GetPlayerPedFromSource(indexToShow)
+  local ped            = Venato.GetPlayerPed()
+  local Coord          = GetEntityCoords(ped)
+  SetEntityCoords(Targetped,  Coord.x, Coord.y, Coord.z)
+end
+
+function Admintptoelle()
+  local targetPed      = Venato.GetPlayerPedFromSource(indexToShow)
+  local ped            = Venato.GetPlayerPed()
+  local TargetCoord    = GetEntityCoords(Targetped)
+  SetEntityCoords(ped,  TargetCoord.x, TargetCoord.y, TargetCoord.z)
+end
+
+function AdminFreeze()
+  local ped = Venato.GetPlayerPedFromSource(indexToShow)
+  if state == true then
+		if not IsEntityVisible(ped) then
+			SetEntityVisible(ped, true)
+		end
+		if not IsPedInAnyVehicle(ped) then
+			SetEntityCollision(ped, true)
+		end
+		FreezeEntityPosition(ped, false)
+		state = false
+	else
+		SetEntityCollision(ped, false)
+		FreezeEntityPosition(ped, true)
+		state = true
+		if not IsPedFatallyInjured(ped) then
+			ClearPedTasksImmediately(ped)
+		end
+	end
+end
+
+
+function AdminSpectate()
+  if InSpectatorMode == false then
+    if not DoesCamExist(cam) then
+      cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+    end
+    SetCamActive(cam,  true)
+    RenderScriptCams(true,  false,  0,  true,  true)
+    LastCoords = GetEntityCoords(GetPlayerPed(-1))
+    indexToSpectate = indexToShow
+    InSpectatorMode = true
+  else
+    InSpectatorMode = false
+    SetCamActive(cam,  false)
+    RenderScriptCams(false,  false,  0,  true,  true)
+    SetEntityCollision(playerPed,  true,  true)
+    SetEntityVisible(playerPed,  true)
+    SetEntityCoords(playerPed,  LastCoords.x, LastCoords.y, LastCoords.z)
+  end
+end
+
+
 
 function AdminCloseMenu()
 	Menu.hidden = true
@@ -323,6 +448,10 @@ end)
 
 Citizen.CreateThread(function()
   local zHeigt = 0.0; height = 1000.0
+  local radius = -3.5;
+  local cam = nil
+  local polarAngleDeg   = 0;
+  local azimuthAngleDeg = 90;
 	while true do
 		Citizen.Wait(0)
     if wp then
@@ -365,16 +494,59 @@ Citizen.CreateThread(function()
 			if Menu.GUI[Menu.selection +1]["args"] ~= nil then
 				ShowInfoClient(Menu.GUI[Menu.selection +1]["args"])
 			end
+      if MenuTitle == "Venato Admin Menu Player" then
+        ShowInfoClient(indexToShow)
+      end
 		end
     if AdminShowCoordString == "Afficher les coordonées : ~b~On" then
       ShowInfoCoord()
     end
+    if InSpectatorMode then
+      local playerPed      = Venato.GetPlayerPed()
+      local targetPed      = Venato.GetPlayerPedFromSource(indexToShow)
+      local coords         = GetEntityCoords(targetPed)
+      if IsControlPressed(2, 241) then
+        radius = radius + 0.5;
+      end
+      if IsControlPressed(2, 242) then
+        radius = radius - 0.5;
+      end
+      if radius > -1 then
+        radius = -1
+      end
+      local xMagnitude = GetDisabledControlNormal(0,  1);
+      local yMagnitude = GetDisabledControlNormal(0,  2);
+      polarAngleDeg = polarAngleDeg + xMagnitude * 10;
+      if polarAngleDeg >= 360 then
+        polarAngleDeg = 0
+      end
+      azimuthAngleDeg = azimuthAngleDeg + yMagnitude * 10;
+      if azimuthAngleDeg >= 360 then
+        azimuthAngleDeg = 0;
+      end
+      local nextCamLocation = polar3DToWorld3D(coords, radius, polarAngleDeg, azimuthAngleDeg)
+      SetCamCoord(cam,  nextCamLocation.x,  nextCamLocation.y,  nextCamLocation.z)
+      PointCamAtEntity(cam,  targetPed)
+      SetEntityCollision(playerPed,  false,  false)
+      SetEntityVisible(playerPed,  false)
+      SetEntityCoords(playerPed,  coords.x, coords.y, coords.z + 10)
+    end
 	end
 end)
 
+function polar3DToWorld3D(entityPosition, radius, polarAngleDeg, azimuthAngleDeg)
+    local polarAngleRad   = polarAngleDeg   * math.pi / 180.0
+    local azimuthAngleRad = azimuthAngleDeg * math.pi / 180.0
+    local pos = {
+      x = entityPosition.x + radius * (math.sin(azimuthAngleRad) * math.cos(polarAngleRad)),
+      y = entityPosition.y - radius * (math.sin(azimuthAngleRad) * math.sin(polarAngleRad)),
+      z = entityPosition.z - radius * math.cos(azimuthAngleRad)
+    }
+    return pos
+end
+
 function ShowInfoCoord(index)
   local playerPos = GetEntityCoords(PlayerPedId())
-  --Venato.Round(val, decimal)
 	DrawRect(0.5, 0.95, 0.2, 0.05, 0, 0, 0, 215)
 	printTxt("x = ~b~"..Venato.Round(playerPos.x,3).."~s~ ,   y = ~b~"..Venato.Round(playerPos.y,3).."~s~ ,   z = ~b~"..Venato.Round(playerPos.z,3),0.5, 0.933, true)
 end

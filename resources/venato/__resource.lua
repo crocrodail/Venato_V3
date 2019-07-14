@@ -26,7 +26,9 @@ client_script {
   '/lockVehicule/client.lua',
   '/debug/client.lua',
   '/life/client.lua',
-  '/admin/client.lua'
+  '/admin/client.lua',
+  '/clothingShop/client.lua',
+  '/clothingShop/config.lua',
 }
 
 server_script {

@@ -1,7 +1,3 @@
--- ######## CONFIG ##############
-local PoidMax = 20 -- Kg
---##############################
-
 function getShops()
     local result = MySQL.Sync.fetchAll("SELECT * FROM shops WHERE Enabled=1", {})
     return result or {}
@@ -68,7 +64,7 @@ function getShop(shopId, source)
             ["Price"]=item.Price,
             ["Quantity"]=item.Quantity,
             ["ContentId"]=item.ContentId,
-        }) 
+        })
     end
 
     local result = MySQL.Sync.fetchAll(
@@ -122,7 +118,7 @@ AddEventHandler('Shops:TestBuy', function(ContentId, shopId, quantity, NewSource
         TriggerClientEvent("Shops:NotEnoughMoney", source, content.libelle)
     elseif content.Quantity >= 0 and content.Quantity < quantity then
         TriggerClientEvent("Shops:NotEnoughQuantity", source, content.libelle)
-    elseif PoidMax < (DataPlayers[source].Poid + totalPoid) then
+    elseif DataPlayers[source].PoidMax < (DataPlayers[source].Poid + totalPoid) then
         TriggerClientEvent("Shops:TooHeavy", source, content.libelle)
     else
         TriggerEvent("Inventory:AddItem", quantity, content.ItemId, source)

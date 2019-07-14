@@ -8,6 +8,7 @@ local menuIsOpen = false
 local currentVehicle
 local showInformationVehicle = false
 local currentShop = 0
+local LastCar = nil
 local defaultNotification = {
   type = "alert",
   title ="Venato CarShop",
@@ -95,8 +96,7 @@ end)
 
 function RemoveCurrentCar()
   if IsPedInAnyVehicle( playerPed, false ) then
-    car = GetVehiclePedIsIn( playerPed, false )
-    Venato.DeleteCar( car )
+    Venato.DeleteCar( LastCar )
   end
 end
 
@@ -104,11 +104,14 @@ function setCarShopMapMarker(carshop)
     if not carshop.hidden then
       local blip = AddBlipForCoord(carshop.x, carshop.y, carshop.z)
       SetBlipSprite(blip, carshop.blip)
-      SetBlipColour(blip, 11)
+      SetBlipColour(blip, 41)
       SetBlipScale(blip, 0.8)
       SetBlipAsShortRange(blip, true)
       BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString("CarShop")
+      if carshop.name == "" then
+        carshop.name = "CarShop"
+      end
+      AddTextComponentString(carshop.name)
       EndTextCommandSetBlipName(blip)
     end
 end
@@ -201,6 +204,7 @@ function previewVehicle(data)
   end
   local pos = GetEntityCoords(playerPed)
   Venato.CreateVehicle(data.model, {x = pos.x, y = pos.y, z = pos.z}, GetEntityHeading(playerPed), function(vehicle)
+    LastCar = vehicle
     SetVehicleColours(vehicle,color,colorSec)
     if IsPedInAnyVehicle( playerPed, false ) then
       car = GetVehiclePedIsIn( playerPed, false )
@@ -301,6 +305,7 @@ AddEventHandler('CarShop:PaiementOk:response', function(data)
   defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Faites attention sur la route.";
   Venato.notify(defaultNotification)
   TriggerEvent('lock:addVeh', data.plate, data.name)
+  LastCar = nil
 end)
 
 RegisterNetEvent('CarShop:PaiementKo:response')

@@ -107,6 +107,15 @@ function Venato.ClosePlayer()
 	return GetPlayerServerId(closestPlayer), closestDistance
 end
 
+function Venato.GetPlayerPedFromSource(source)
+	local targetPlayerId = GetPlayerFromServerId(source)
+  return GetPlayerPed(targetPlayerId)
+end
+
+function Venato.GetPlayerPed()
+	return GetPlayerPed(-1)
+end
+
 function GetPlayers()
     local players = {}
     for i = 0, 255 do

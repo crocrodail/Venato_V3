@@ -230,8 +230,8 @@ function spawnPlayer(spawnIdx, cb)
                 Citizen.Wait(0)
             end
 
-            local spawn = { model = 'a_f_y_genhot_01', x = -49.158519744873, y = -1112.1115722656, z = 26.435813903809 }
-            
+            local spawn = { model = 'mp_m_freemode_01', x = -49.158519744873, y = -1112.1115722656, z = 26.435813903809 }
+
             -- validate the index
             if not spawn then
                 Citizen.Trace("tried to spawn at an invalid spawn index\n")
@@ -260,6 +260,8 @@ function spawnPlayer(spawnIdx, cb)
 
                 -- release the player model
                 SetModelAsNoLongerNeeded(spawn.model)
+                SetPedDefaultComponentVariation(GetPlayerPed(-1))
+                SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
             end
 
             -- preload collisions for the spawnpoint

@@ -32,7 +32,7 @@ function setMapMarker()
       if v.hidden == false then
         local blip = AddBlipForCoord(v.xpoint, v.ypoint, v.zpoint)
         SetBlipSprite(blip, 50)
-        SetBlipColour(blip, 3)
+        SetBlipColour(blip, 5)
         SetBlipScale(blip, 0.8)
         SetBlipAsShortRange(blip, true)
         BeginTextCommandSetBlipName("STRING")
