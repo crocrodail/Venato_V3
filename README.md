@@ -57,3 +57,14 @@ showPageInfo = false | true     # affiche le nombre de bouton
 ClearMenu()    # supprime tout les boutons
 Menu.hidden = false | true   # affiche le menu
 Menu.addButton(string1, string2, parametre)   #string1 = text du bouton ,  string2 = fonction a execute , parametre = parametre de la dite fonction
+
+### notif ###
+
+local defaultNotification = {
+ title= "YOURtitle",
+ type = "alert", --  danger, error, alert, info, success, warning
+ logo = "https://yourURL.png",
+ message = "YourText",
+ timeout = time
+}
+Venato.notify(defaultNotification)

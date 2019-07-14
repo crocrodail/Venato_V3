@@ -37,14 +37,15 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
       for index,v in ipairs(StingPlateExeption) do
         customExeption = true
         for i=1,#StingPlateExeption[index] - 2 do
-          if string.sub(plate, i,i) ~= StingPlateExeption[i+2] then
+          if string.sub(plate, i,i) ~= StingPlateExeption[index][i+2] then
             customExeption = false
             break
           end
+          i = i + 1
         end
         if customExeption == true then
-          limitItem = index[1]
-          limiteWp = index[2]
+          limitItem = StingPlateExeption[index][1]
+          limiteWp = StingPlateExeption[index][2]
           break
         end
       end
@@ -87,7 +88,7 @@ AddEventHandler('VehicleCoffre:DropItem', function(qty, plate, index)
     end
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Erreur dans la quantité.")
+    TriggerClientEvent("Venato:notifyError", source, "~r~Erreur dans la quantité.")
   end
 end)
 
@@ -100,7 +101,7 @@ AddEventHandler('VehicleCoffre:TakeItems', function(index, qty, plate)
     TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity - qty, index, plate )
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Erreur dans la quantité.")
+    TriggerClientEvent("Venato:notifyError", source, "~r~Erreur dans la quantité.")
   end
 end)
 
@@ -140,7 +141,7 @@ AddEventHandler('VehicleCoffre:TakeWpCv', function(index, plate)
     DataVehicle[plate].nbWeapon = DataVehicle[plate].nbWeapon - 1
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Cette arme est trop lourd pour toi.")
+    TriggerClientEvent("Venato:notifyError", source, "~r~Cette arme est trop lourd pour toi.")
   end
 end)
 
@@ -157,6 +158,6 @@ AddEventHandler('VehicleCoffre:DropWpCv', function(index, plate)
     end)
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Cette arme est trop lourd pour toi.")
+    TriggerClientEvent("Venato:notifyError", source, "~r~Cette arme est trop lourd pour toi.")
   end
 end)
