@@ -43,7 +43,6 @@ end)
 
 RegisterServerEvent("CarShop:Buy")
 AddEventHandler("CarShop:Buy", function(vehicle)
-  print(vehicle.plate)
   local source = source  
   local car = getVehicleById(vehicle.id)
   if Venato.paymentCB(source, car.price) then

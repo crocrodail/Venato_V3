@@ -55,14 +55,14 @@ RegisterCommand(
 RegisterCommand(
     "notify",
     function(source, args, rawCommand)
-        SendNUIMessage(
+        TriggerEvent('Hud:Update',
             {
                 action = "notify",
                 title = "Big News",
                 type="info",
-                message = "LeGrosBubu est le meilleur",
+                message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ultrices dictum ex id mattis. Pellentesque rutrum nisl a ligula commodo, a molestie mauris aliquet. Fusce consectetur nec orci et euismod. Nam et nibh vel odio finibus suscipit. Duis dictum sapien nec ligula rutrum ullamcorper. Duis fermentum felis neque, ac scelerisque dui lacinia nec. Cras hendrerit diam eget rutrum ultrices. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Praesent bibendum velit nec velit efficitur aliquam. Curabitur fringilla, sem sed tempor dapibus, dolor elit venenatis lorem, id sagittis turpis orci sit amet massa. Integer sed laoreet sapien. Maecenas vestibulum blandit tellus eget sodales. Phasellus in ullamcorper nisi. Donec nec consectetur neque. Nam dignissim lorem vel erat accumsan semper. Phasellus maximus et libero id tincidunt.              Suspendisse iaculis nunc et commodo auctor. Sed et commodo lectus. Sed mollis feugiat malesuada. Praesent odio ipsum, laoreet eu est quis, rhoncus rhoncus dolor. Pellentesque posuere enim mauris, vulputate sollicitudin risus mattis id. Aliquam sed rhoncus lectus. Proin justo felis, aliquam ac consectetur at, condimentum ut libero. Integer libero ligula, vulputate et elit a, bibendum suscipit magna. Nunc a tortor sagittis, laoreet ante ac, bibendum nulla. Duis ut purus pellentesque, mollis augue vitae, sodales ex. Duis a dapibus felis, in placerat velit.              Suspendisse aliquet, justo sed porta tempor, risus elit condimentum turpis, et congue lorem urna at enim. Fusce malesuada nec enim et rutrum. Suspendisse consectetur finibus diam, rutrum volutpat eros. Nulla facilisi. Mauris sodales nulla sit amet odio luctus, quis molestie nisl ultrices. Pellentesque rutrum sagittis fringilla. Nunc nec cursus nisl.",
                 logo = "https://firebasestorage.googleapis.com/v0/b/legrosbubu-streamplanner.appspot.com/o/upload%2Flegrosbubu%2FLogo.png?alt=media&token=c05e011e-c4f2-46f2-a672-ec76625e46df",
-                timeout = 3500
+                timeout = 10500
             }
         )
     end

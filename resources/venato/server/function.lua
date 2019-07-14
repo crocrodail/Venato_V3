@@ -62,8 +62,10 @@ function accessGranded(SteamId, source)
         Point = DataUser[1].point,
         Citoyen = 0,
         Url = DataUser[1].url,
+        Speedometer = DataUser[1].speedometer
       }
       TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
+      TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
     TriggerEvent("Inventory:UpdateInventory", source)
@@ -143,4 +145,17 @@ end
 
 function Venato.MoneyToPoid(money)
 	return Venato.Round(money*0.000075,1)
+end
+
+function Venato.dump(o)
+  if type(o) == 'table' then
+     local s = '{ '
+     for k,v in pairs(o) do
+        if type(k) ~= 'number' then k = '"'..k..'"' end
+        s = s .. '['..k..'] = ' .. Venato.dump(v) .. ','
+     end
+     return s .. '} '
+  else
+     return tostring(o)
+  end
 end

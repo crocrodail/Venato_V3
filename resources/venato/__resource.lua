@@ -15,6 +15,7 @@ client_script {
   '/bank/client.lua',
   '/bank/config.lua',
   '/coffre/client.lua',
+  '/shops/pages.lua',
   '/shops/client.lua',
   '/shops/config.lua',
   '/carShop/config.lua',
@@ -27,6 +28,7 @@ client_script {
   '/life/client.lua',
   '/admin/client.lua'
 }
+
 server_script {
   '@mysql-async/lib/MySQL.lua',
   '/server/login.lua',
@@ -42,7 +44,8 @@ server_script {
   '/shops/server.lua',
   '/life/server.lua',
   '/lockVehicule/server.lua',
-  '/admin/server.lua'
+  '/admin/server.lua',
+  '/carMenu/server.lua'
 }
 
 files {

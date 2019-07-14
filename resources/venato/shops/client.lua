@@ -1,7 +1,10 @@
-local open = false
-local shopName = nil
-local isNPC = true
-local inShopMarker = false
+--[[
+  Client entry point for manage shops
+
+  @author Astymeus
+  @date 2019-07-11
+  @version 1.0
+--]]
 
 function LoadShops()
   if ConfigShop.EnableShops then
@@ -19,7 +22,7 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
     end
 
     for _, item in ipairs(shops) do
-      if item.Supervised ~= "1" then
+      if item.Supervised ~= 1 then
         local npc = CreatePed(4, 0xA1435105, item.PositionX, item.PositionY, item.PositionZ, item.NpcHeading, false, true)
         
         SetEntityHeading(npc, item.NpcHeading)
@@ -27,18 +30,27 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
         SetEntityInvincible(npc, true)
         SetBlockingOfNonTemporaryEvents(npc, true)
       end
+      
+      local blip = AddBlipForCoord(item.PositionX, item.PositionY, item.PositionZ)
+      SetBlipSprite(blip, item.BlipIcon)
+      SetBlipColour(blip, item.BlipColor)
+      SetBlipScale(blip, 1.0)
+      SetBlipAsShortRange(blip, true)
+      BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString(item.Renamed or item.Name)
+      EndTextCommandSetBlipName(blip)
     end
 
     while true do
       Wait(0)
-      inShopMarker = false
+      ConfigShop.inShopMarker = false
 
       local playerPos = GetEntityCoords(GetPlayerPed(-1))
       for _, item in ipairs(shops) do
         local distance = GetDistanceBetweenCoords(playerPos, item.PositionX, item.PositionY, item.PositionZ, true)
         if distance < 20 then
-          local x = item.PositionX + 2.0*Sin(item.NpcHeading*3.14/180.0)
-          local y = item.PositionY + 2.0*Cos(item.NpcHeading*3.14/180.0)
+          local x = item.PositionX - 2.0*Sin(item.NpcHeading)
+          local y = item.PositionY + 2.0*Cos(item.NpcHeading)
           local z = item.PositionZ + 1.0
           DrawMarker( 29,               --type
                        x,  y,  z,       -- pos
@@ -48,11 +60,16 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
                        0,150,  0,250,   -- RGB+alpha
                      1,1,2,0)           -- other
         end
-        if distance < 2  then
-          isNPC = item.Supervised ~= 1
-          inShopMarker = true
-          shopName = item.Name
+        if distance < item.ActivationDist then
+          ConfigShop.inShopMarker = true
+          ConfigShop.currentShopId = item.Id
           Venato.InteractTxt('Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop')
+        elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > (2*item.ActivationDist) then
+          ConfigShop.inShopMarker = false
+          ConfigShop.menuOpen = false
+          Menu.hidden = true
+          showPageInfo = false
+          ConfigShop.page="client"
         end
       end
     end
@@ -67,13 +84,16 @@ CreateThread(function ()
     Wait(0)
     if (IsControlJustReleased(1, Keys['BACKSPACE']) or IsControlJustReleased(1, Keys['RIGHTMOUSE'])) then
       SetNuiFocus(false, false)
-      open = false
+      ConfigShop.menuOpen = false
+      Menu.hidden = true
+      showPageInfo = false
+      ConfigShop.page="client"
     end
-    if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and inShopMarker then
-      TriggerServerEvent("Shops:ShowInventory", shopName)
-      open = true
+    if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and ConfigShop.inShopMarker then
+      TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+      ConfigShop.menuOpen = true
     end
-    if open then
+    if ConfigShop.menuOpen then
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack
@@ -84,64 +104,60 @@ CreateThread(function ()
 	end
 end)
 
+-- ==================== --
+-- Callback from Server --
+-- ==================== --
 
-RegisterNetEvent('Shops:ShowInventory:cb')
-AddEventHandler('Shops:ShowInventory:cb', function(shop)
-	open = true
-
-  ClearMenu()
-  Menu.hidden = false
-
-  local color = "~s~"
-  local shopName_ = shop.Renamed or shop.Name or "Shop"
-	MenuTitle = color..""..shopName_
-	MenuDescription = "Stocks"
-
-  for _, item in ipairs(shop.Items) do
-    local textButton = "~s~"..item.Name.." ~o~"..item.Price.."€~s~"
-    if item.Quantity == 0 then
-      textButton = textButton.." ~r~Rupture"
-    elseif item.Quantity > 0 then
-      textButton = "~s~"..textButton.." ~g~"..item.Quantity.." en stock"
-    else
-      textButton = "~s~"..textButton.."~g~ stock illimité"
-    end
-    Menu.addButton(
-      textButton, 
-      "buyItem",
-      {["item"]=item, ["shopId"]=shop.Id}
-    )
-  end
+RegisterNetEvent('Shops:UpdateMenu:cb')
+AddEventHandler('Shops:UpdateMenu:cb', function(content)
+  ShopPages.drawPage(content)
 end)
 
-function buyItem(args)
-  TriggerServerEvent("Shops:TestBuy", args.item, args.shopId)
-end
-
+RegisterNetEvent('Shops:getMoney:cb')
+AddEventHandler('Shops:getMoney:cb', function(Price)
+  ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor("Vous avez bien récupéré "..Price.."€.")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+end)
 
 RegisterNetEvent('Shops:TestBuy:cb')
 AddEventHandler('Shops:TestBuy:cb', function(Name)
-  Venato.notify("~g~Vous avez bien acheté "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor("Vous avez bien acheté "..Name..".")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
-
 
 RegisterNetEvent('Shops:NotEnoughMoney')
 AddEventHandler('Shops:NotEnoughMoney', function(Name)
-  Venato.notify("~r~Vous n'avez pas assez d'argent pour acheter "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Vous n'avez pas assez d'argent pour acheter "..Name..".")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
 
+RegisterNetEvent('Shops:NotEnoughShopMoney')
+AddEventHandler('Shops:NotEnoughShopMoney', function(Price)
+  ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Le magasin n'a pas assez d'argent pour récupérer "..Price.."€.")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+end)
 
 RegisterNetEvent('Shops:NotEnoughQuantity')
 AddEventHandler('Shops:NotEnoughQuantity', function(Name)
-  Venato.notify("~r~Il n'y a plus assez de "..Name.." en stock.")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Il n'y a plus assez de "..Name.." en stock.")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
 end)
-
 
 RegisterNetEvent('Shops:TooHeavy')
 AddEventHandler('Shops:TooHeavy', function(Name)
-  Venato.notify("~r~Vous etes trop lourd pour acheter "..Name..".")
-  TriggerServerEvent("Shops:ShowInventory", shopName)
+  ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Vous etes trop lourd pour acheter "..Name..".")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+end)
+
+RegisterNetEvent('Shops:OrderItem:cb')
+AddEventHandler('Shops:OrderItem:cb', function(Quantity, Name)
+  ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor("Vous avez bien commandé pour "..Quantity..": "..Name..".")
+  Venato.notify(ConfigShop.shopsNotification)
+  TriggerServerEvent("Shops:showOrder", ConfigShop.currentOrderId)
 end)

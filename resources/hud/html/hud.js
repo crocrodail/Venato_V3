@@ -12,7 +12,9 @@ new Vue({
           width: 0,
           height: 0
         },
-        speed: 50
+        speed: 50,
+        showMiniSpeedmeter: false,
+        showSpeedmeter: false
     },
     beforeDestroy () {
       clearInterval(this.interval)
@@ -38,6 +40,8 @@ new Vue({
       window.removeEventListener('message', this.handleMessage)
     },
     mounted () {
+      google.load('visualization', '1', {packages: ['gauge']}); 
+      google.setOnLoadCallback(this.drawChart);
     },
     methods: {
       handleResize() {
@@ -64,6 +68,12 @@ new Vue({
           this.food = event.data.food;
           this.alcool = event.data.alcool;
         }
+        else if(event.data.action === "toggleMiniSpeedmeter"){
+          this.showMiniSpeedmeter = event.data.value;
+        }
+        else if(event.data.action === "toggleSpeedmeter"){
+          this.showSpeedmeter = event.data.value;
+        }
         else if(event.data.action === "notify"){
           var n = new Noty({
             title : event.data.title,
@@ -84,6 +94,31 @@ new Vue({
           } 
           n.show();
         }
+      },
+      drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Vitesse', 80]
+        ]);
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+        
+        var options = {
+          animation: {
+            duration: 0, easing: "linear"
+          },
+          forcelFrame: true,
+          width: 400, height: 120,
+          min: 0, max: 240,
+          redFrom: 180, redTo: 240,
+          minorTicks: 5, majorTicks: 10
+        };
+
+        setInterval(function() {
+          data.setValue(0, 1, document.getElementById('speed').value);
+          chart.draw(data, options)
+        }, 50);
       }
     },
     computed: {
