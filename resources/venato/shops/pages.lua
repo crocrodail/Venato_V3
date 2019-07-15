@@ -25,6 +25,8 @@ function ShopPages.drawPage(content)
     ShopPages.order(content)
   elseif ConfigShop.page == "orderItem" then
     ShopPages.orderItem(content)
+  elseif ConfigShop.page == "addItem" then
+    ShopPages.addItem(content)
   else
     ShopPages.client(content)
   end
@@ -76,13 +78,13 @@ function ShopPages.order(order)
     MenuDescription = "Selectionne un produit pour le modifier"
 
     Menu.addButton("~y~↩ Administration", "goToAdministrationPage")
-    Menu.addButton("~o~TODO:~b~ Ajouter un produit", "addItemToStock")
+    Menu.addButton("~b~ Ajouter un produit", "goToAddItemToStock")
     Menu.addButton("~b~ Supprimer commande", "deleteOrder")
-    if(order.Finalized ~= 1) then
+    if(order.Finalized ~= 1 and table.getn(order.Items) > 0) then
       Menu.addButton("~b~ Finaliser commande", "finalizeOrder")
     end
 
-    showProducts(order.Items, true)
+    showProducts(order.Items)
 end
 
 
@@ -102,24 +104,45 @@ function ShopPages.orderItem(item)
 	Menu.addButton("Retirer", "removeItem", item)
 end
 
+function ShopPages.addItem(items)
+  MenuTitle = "Ajouter un produit"
+  MenuDescription = "Selectionne le produit à ajouter"
+
+	Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)
+  showProducts(items)
+end
+
 -- ===== --
 -- Tools --
 -- ===== --
 
-function showProducts(items, isOrder)
-  isOrder = isOrder or false
+function showProducts(items)
   for _, item in ipairs(items) do
-    local textButton = itemToString(item, isOrder)
+    local textButton = itemToString(item, ConfigShop.page == "admin")
     
-    local action = isOrder and 'goToOrderItemPage' or 'buyItem'
-    local id = isOrder and item.Id or item.ContentId
+    local action = 'buyItem'
+    local id = item.Id
+    if ConfigShop.page == "admin" then
+      action = 'goToOrderItemPage'
+      id = item.ContentId
+    elseif ConfigShop.page == "addItem" then
+      action = 'addItemToStock'
+    end
+
     Menu.addButton(textButton, action, {["itemId"]=id, ["shopId"]=ConfigShop.currentShopId})
   end
 end
 
 function itemToString(item, isOrder)
-  local s = "~s~"..item.Name.." ~o~"..item.Price.."€~s~"
-  if item.Quantity == 0 then
+  local s = "~s~"..item.Name
+  
+  if item.Price ~= nil then
+    s = s.." ~o~"..item.Price.."€~s~"
+  end
+
+  if item.Quantity == nil then
+    -- nothing todo
+  elseif item.Quantity == 0 then
     s = s.." ~r~Rupture"
   elseif item.Quantity > 0 then
     s = "~s~"..s.." ~g~"..item.Quantity.." en stock"
@@ -194,9 +217,9 @@ end
     TriggerServerEvent("Shops:getMoney", shop.Money, ConfigShop.currentShopId)
   end
   
-  function addItemToStock()
-    ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
-    Venato.notify(ConfigShop.shopsNotification)
+  function goToAddItemToStock()
+    ConfigShop.page="addItem"
+    TriggerServerEvent("Shops:showAddItem", ConfigShop.currentShopId)
   end
   
   function removeItemFromStock()
@@ -225,6 +248,11 @@ end
   end
   
   function removeItem(item)
+    ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
+    Venato.notify(ConfigShop.shopsNotification)
+  end
+  
+  function addItemToStock(itemId)
     ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
     Venato.notify(ConfigShop.shopsNotification)
   end

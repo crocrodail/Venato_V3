@@ -11,6 +11,7 @@ local getManagersRequest = 'SELECT u.id, u.identifier, u.nom FROM shops s INNER 
 local getContentItemRequest = 'SELECT c.Quantity, c.Price, c.ItemId, it.poid, it.libelle FROM shop_content c INNER JOIN items it on c.ItemId = it.id WHERE c.Id=@Id'
 local getOrderItemsRequest = 'SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered FROM shop_orders o INNER JOIN shops s ON o.ShopID = s.Id INNER JOIN shop_inventory i ON s.InventoryID = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId WHERE o.Id=@OrderId'
 local getOrderItemRequest = 'SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered, oc.Price as OrderPrice FROM shops s INNER JOIN shop_inventory i ON s.InventoryID = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id LEFT JOIN shop_orders o ON s.Id = o.ShopId LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId WHERE it.id=@ItemId and s.Id=@ShopId'
+local getAllItemsRequest = 'SELECT it.id, it.libelle, it.price FROM items it'
 
 local removeItemRequest = 'UPDATE shop_content SET Quantity = Quantity - @Quantity WHERE Id=@Id'
 local addMoneyRequest = 'UPDATE shops SET Money = Money + @Price WHERE Id=@Id'
@@ -93,6 +94,97 @@ function getShop(shopId, source)
     return shop
 end
 
+function getOrder(orderId)
+    local order = {}
+    order.Items = {}
+
+    local result = MySQL.Sync.fetchAll(getShopOrderRequest, {["@OrderId"] = orderId})
+    for _, item in ipairs(result) do
+        order['Id'] = item.Id
+        order['Ref'] = item.Ref
+        order['Signed'] = item.Signed
+        order['Started'] = item.Started
+        order['Finalized'] = item.Finalized
+    end
+
+    local result = MySQL.Sync.fetchAll(getOrderItemsRequest, {["@OrderId"] = orderId})
+    for _, item in ipairs(result) do
+        table.insert(order.Items, {
+            ['Id'] = item.id,
+            ['Name'] = item.libelle,
+            ['Quantity'] = item.Quantity,
+            ['Price'] = item.Price,
+            ['Ordered'] = item.Ordered
+        })
+    end
+
+    return order
+end
+
+function getItem(args)
+    local item = {}
+    local result = MySQL.Sync.fetchAll(getOrderItemRequest, {["@ItemId"] = args.itemId, ["@ShopId"] = args.shopId})
+    for _, item_ in ipairs(result) do
+        item['Id'] = item_.id
+        item['ShopId'] = item_.ShopId
+        item['Name'] = item_.libelle
+        item['Quantity'] = item_.Quantity
+        item['Price'] = item_.Price
+        item['Ordered'] = item_.Ordered
+        item['OrderPrice'] = item_.OrderPrice or 0
+    end
+
+    return item
+end
+
+function getAllItems()
+    local items = {}
+    local result = MySQL.Sync.fetchAll(getAllItemsRequest)
+    for _, item in ipairs(result) do
+        table.insert(items, {
+            ['Id'] = item.id,
+            ['Name'] = item.libelle,
+            ['Price'] = item.price
+        })
+    end
+
+    return items
+end
+
+function getUsedItems(ContentId)
+    local items = {}
+    local result = MySQL.Sync.fetchAll(getShopItemsRequest, {["@Id"] = shopId})
+    for _, item in ipairs(result) do
+        table.insert(items, {
+            ['Id'] = item.ItemId,
+            ['Name'] = item.libelle
+        })
+    end
+
+    return items
+end
+
+function getNotUsedItems(shopId)
+    local items = {}
+    local allItems = getAllItems()
+    local usedItems = getUsedItems(shopId)
+
+    for _, item in ipairs(allItems) do
+        local notUsed = true
+        for _, usedItem in ipairs(usedItems) do
+            if item.Id == usedItem.Id then
+                notUsed = false
+                break
+            end
+        end
+        if notUsed then
+            table.insert(items, item)
+        end
+    end
+
+    return items
+end
+
 RegisterServerEvent('Shops:ShowInventory')
 AddEventHandler('Shops:ShowInventory', function(shopId)
     TriggerClientEvent("Shops:UpdateMenu:cb", source, getShop(shopId, source))
@@ -164,53 +256,10 @@ AddEventHandler('Shops:getMoney', function(price, shopId, NewSource)
     end
 end)
 
-function getOrder(orderId)
-    local order = {}
-    order.Items = {}
-
-    local result = MySQL.Sync.fetchAll(getShopOrderRequest, {["@OrderId"] = orderId})
-    for _, item in ipairs(result) do
-        order['Id'] = item.Id
-        order['Ref'] = item.Ref
-        order['Signed'] = item.Signed
-        order['Started'] = item.Started
-        order['Finalized'] = item.Finalized
-    end
-
-    local result = MySQL.Sync.fetchAll(getOrderItemsRequest, {["@OrderId"] = orderId})
-    for _, item in ipairs(result) do
-        table.insert(order.Items, {
-            ['Id'] = item.id,
-            ['Name'] = item.libelle,
-            ['Quantity'] = item.Quantity,
-            ['Price'] = item.Price,
-            ['Ordered'] = item.Ordered
-        })
-    end
-
-    return order
-end
-
 RegisterServerEvent('Shops:showOrder')
 AddEventHandler('Shops:showOrder', function(shopId)
     TriggerClientEvent("Shops:UpdateMenu:cb", source, getOrder(shopId))
 end)
-
-function getItem(args)
-    local item = {}
-    local result = MySQL.Sync.fetchAll(getOrderItemRequest, {["@ItemId"] = args.itemId, ["@ShopId"] = args.shopId})
-    for _, item_ in ipairs(result) do
-        item['Id'] = item_.id
-        item['ShopId'] = item_.ShopId
-        item['Name'] = item_.libelle
-        item['Quantity'] = item_.Quantity
-        item['Price'] = item_.Price
-        item['Ordered'] = item_.Ordered
-        item['OrderPrice'] = item_.OrderPrice or 0
-    end
-
-    return item
-end
 
 RegisterServerEvent('Shops:ShowItem')
 AddEventHandler('Shops:ShowItem', function(args)
@@ -250,11 +299,17 @@ AddEventHandler('Shops:DeleteOrder', function(orderId, shopId)
     TriggerClientEvent("Shops:UpdateMenu:cb", source, getShop(shopId, source))
 end)
 
+RegisterServerEvent('Shops:showAddItem')
+AddEventHandler('Shops:showAddItem', function(shopId)
+    local source = source
+    TriggerClientEvent("Shops:UpdateMenu:cb", source, getNotUsedItems(shopId))
+end)
+
 local random = math.random
 function uuid()
-    local template ='xxxxxxxx-xxxx'
-    return string.gsub(template, '[xy]', function (c)
-        local v = (c == 'x') and random(0, 0xf) or random(8, 0xb)
+    local template ='xxx-xxx-xxx'
+    return string.gsub(template, 'x', function (c)
+        local v = random(0, 0xf)
         return string.format('%x', v)
     end)
 end
