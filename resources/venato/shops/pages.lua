@@ -78,7 +78,9 @@ function ShopPages.order(order)
     Menu.addButton("~y~↩ Administration", "goToAdministrationPage")
     Menu.addButton("~o~TODO:~b~ Ajouter un produit", "addItemToStock")
     Menu.addButton("~b~ Supprimer commande", "deleteOrder")
-    Menu.addButton("~b~ Finaliser commande", "finalizeOrder")
+    if(order.Finalized ~= 1) then
+      Menu.addButton("~b~ Finaliser commande", "finalizeOrder")
+    end
 
     showProducts(order.Items, true)
 end
