@@ -18,6 +18,7 @@ function HideMenu()
   menuIsOpen = false
   showInformationVehicle = false
   Menu.hidden = true
+  TriggerEvent("Menu:Close")
 end
 
 Citizen.CreateThread(function ()
@@ -66,7 +67,6 @@ Citizen.CreateThread(function ()
               defaultNotification.type = 'error'
               Venato.notify(defaultNotification)
           else
-
             GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 500)  
             GiveWeaponToPed(PlayerPedId(), "WEAPON_CARBINERIFLE", 5000)  
             GiveWeaponToPed(PlayerPedId(), "WEAPON_REVOLVER", 5000)  
@@ -77,7 +77,7 @@ Citizen.CreateThread(function ()
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end     
         end
-        if IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])  or IsControlJustPressed(1, Keys["F2"]) then
+        if IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])  or IsControlJustPressed(1, Keys["F2"]) then          
           HideMenu() 
           RemoveCurrentCar()
         end
@@ -113,8 +113,11 @@ end
 
 function OpenCarMenu(vehiculeType)
   if not menuIsOpen then   
-    TriggerServerEvent("CarShop:ShowCategory", vehiculeType)
-  else  
+    --TriggerServerEvent("CarShop:ShowCategory", vehiculeType)
+    TriggerEvent("Menu:Open")
+    menuIsOpen = true
+  else      
+    TriggerEvent("Menu:Close")
     menuIsOpen = false
     Menu.hidden = true
   end
@@ -330,6 +333,16 @@ AddEventHandler('CarShop:PaiementKo:response', function(data)
   defaultNotification.message = "Erreur de paiement. Verifiez votre solde.";
   defaultNotification.type = "error"
   Venato.notify(defaultNotification)
+end)
+
+RegisterNetEvent('CarShop:hover')
+AddEventHandler('CarShop:hover', function(data)
+  print('Hover: '..data.id)
+end)
+
+RegisterNetEvent('CarShop:confirm')
+AddEventHandler('CarShop:confirm', function(data)
+  print('Confirm: '..data.id)
 end)
 
 RegisterNetEvent('CarShop:ShowCategory:response')

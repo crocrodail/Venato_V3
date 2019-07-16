@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Oswald|Poppins|Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
+    />
+    <link rel="stylesheet" href="./scss/menu.css" />
+  </head>
+  <body>
+    <div id="app">
+      <v-app>
+        <v-style>
+          .selected{ background-color: {{ color }}; color: white; }
+        </v-style>
+        <v-layout>
+          <v-flex class="menu_container" sm3 pl-5>
+            <v-card class="elevation-10" :dark="isDark" v-if="open">
+              <v-img :src="background" height="90px">
+                <div
+                  class="menu_title"
+                  :dark="isDark"
+                  :style="'background-color:'+color"
+                >
+                  <p class="text-xs-center">
+                    {{ title }}
+                  </p>
+                </div>
+              </v-img>
+              <v-list rounded dense two-line :dark="isDark" id="menuList">
+                <v-subheader :dark="isDark">
+                  {{ subtitle }} ({{ selectedItem }})
+                </v-subheader>
+                <template v-for="(item, index) in items">
+                  <v-list-tile
+                    :key="index"
+                    :dark="isDark"
+                    @click="selectedItem = index"
+                    :class="[{selected: index === selectedItem}]"
+                  >
+                    <v-list-tile-content>
+                      <v-list-tile-title
+                        v-html="item.title"
+                      ></v-list-tile-title>
+                      <v-list-tile-sub-title
+                        v-html="item.subtitle"
+                      ></v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <v-btn icon ripple>
+                        <v-icon :color="(isDark ? 'white':'black')"
+                          >fa fa-chevron-right</v-icon
+                        >
+                      </v-btn>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                </template>
+              </v-list>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-app>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+    <script src="https://kit.fontawesome.com/15284e8427.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.14/lodash.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./menu.js" type="text/javascript"></script>
+  </body>
+</html>

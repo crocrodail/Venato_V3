@@ -116,7 +116,7 @@ function buyCheque(data)
       Venato.notify("~r~Vous possèdez déjà un chèquier.")
     end
   else
-    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour acheter un chequier.")
+    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour acheter un chequier.")
   end
 end
 
@@ -125,7 +125,7 @@ function buyCard(data)
     TriggerServerEvent("Bank:createCard")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour acheter une carte banquaire.")
+    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte banquaire.")
   end
 end
 
@@ -135,12 +135,13 @@ function CreatAcount(data)
     TriggerServerEvent("Bank:createAccount")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour ouvrir un compte.")
+    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour ouvrir un compte.")
   end
 end
 
 function myAcount(data)
-	open = true
+  open = true
+  SetNuiFocus(true, true)
 	SendNUIMessage({
 		action = "openBank",
 		bank = data.Bank,
@@ -166,7 +167,7 @@ Citizen.CreateThread(function ()
 		if IsControlJustReleased(0, 38) and inBankMarker and GetLastInputMethod(2) then
 			TriggerServerEvent("Bank:GetDataMoneyForBank")
 		end
-		if open then
+    if open then      
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack
