@@ -71,72 +71,83 @@
               </v-list>
             </v-card>
           </v-flex>
-          <v-flex class="vehicle_information" sm2 v-if="showVehicleInformation">
-            <v-card
-              elevation-5
-              class="mx-auto"
-
-              color="#ECEFF1BF"
-              width="390"
+          <v-flex class="vehicle_information" sm2>
+            <vehicle-information
+              inline-template
+              :vehicle="vehicle"
+              :color="color"
+              v-if="showVehicleInformation"
             >
-              <v-card-title>
-                <span class="headline font-weight-bold text-truncate">{{
-                  vehicle.name
-                }}</span>
-              </v-card-title>
+              <v-card elevation-5 class="mx-auto" color="#ECEFF1BF" width="390">
+                <v-card-title>
+                  <span class="headline font-weight-bold text-truncate">
+                    {{ vehicle.name }}</span
+                  >
+                </v-card-title>
 
-              <v-card-text>
-                <p class="title font-weight-black">Spécifications</p>
-                <p>Vitesse</p>
-                <v-progress-linear
-                  query
-                  :color="color"
-                  height="10"
-                  :value="vehicle.speed"
-                ></v-progress-linear>
-                <p>Accélération</p>
-                <v-progress-linear
-                  query
-                  :color="color"
-                  height="10"
-                  :value="vehicle.acceleration"
-                ></v-progress-linear>
-                <p>Freinage</p>
-                <v-progress-linear
-                  query
-                  :color="color"
-                  height="10"
-                  :value="vehicle.braking"
-                ></v-progress-linear>
-                <p>Maniabilité</p>
-                <v-progress-linear
-                  query
-                  :color="color"
-                  height="10"
-                  :value="vehicle.handling"
-                ></v-progress-linear>
-                <v-divider></v-divider>
-                <v-layout row wrap pt-2>
+                <v-card-text>
+                  <p class="title font-weight-black">Spécifications</p>
+                  <p>Vitesse</p>
+                  <v-progress-linear
+                    query
+                    :color="color"
+                    height="10"
+                    :value="vehicle.speed"
+                  ></v-progress-linear>
+                  <p>Accélération</p>
+                  <v-progress-linear
+                    query
+                    :color="color"
+                    height="10"
+                    :value="vehicle.acceleration"
+                  ></v-progress-linear>
+                  <p>Freinage</p>
+                  <v-progress-linear
+                    query
+                    :color="color"
+                    height="10"
+                    :value="vehicle.braking"
+                  ></v-progress-linear>
+                  <p>Maniabilité</p>
+                  <v-progress-linear
+                    query
+                    :color="color"
+                    height="10"
+                    :value="vehicle.handling"
+                  ></v-progress-linear>
+                  <v-divider></v-divider>
+                  <v-layout row wrap pt-2>
                     <v-flex xs6>
-                      <v-card v-if="!vehicle.vp_only" color="blue-grey lighten-3">
-                        <v-card-text class="black--text title font-weight-bold text-xs-center px-0">
-                            {{vehicle.price | toCurrency}} €
+                      <v-card
+                        v-if="!vehicle.vp_only"
+                        color="blue-grey lighten-3"
+                      >
+                        <v-card-text
+                          class="black--text title font-weight-bold text-xs-center px-0"
+                        >
+                          {{ vehicle.price | toCurrency }} €
                         </v-card-text>
                       </v-card>
                     </v-flex>
                     <v-flex xs6>
-                      <v-card v-if="vehicle.vp_enabled" color="blue-grey lighten-3">
-                        <v-card-text class="black--text title font-weight-bold text-xs-center px-0">
-                            {{vehicle.price_vp | toCurrency}} VP
+                      <v-card
+                        v-if="vehicle.vp_enabled"
+                        color="blue-grey lighten-3"
+                      >
+                        <v-card-text
+                          class="black--text title font-weight-bold text-xs-center px-0"
+                        >
+                          {{ vehicle.price_vp | toCurrency }} VP
                         </v-card-text>
                       </v-card>
                     </v-flex>
-                </v-layout>
-              </v-card-text>
-            </v-card>
+                  </v-layout>
+                </v-card-text>
+              </v-card>
+            </vehicle-information>
           </v-flex>
           <v-flew class="shop_admin" sm12 v-if="showShopAdmin">
-              <v-data-table
+            <v-data-table
               :headers="headers"
               :items="desserts"
               class="elevation-1"
@@ -163,6 +174,11 @@
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous"
     ></script>
+
+    <script src="./vehicleInformation.js" type="text/javascript"></script>
     <script src="./menu.js" type="text/javascript"></script>
+    <script lang="javascript">
+      //$("#vehicule_information").load("./templates/vehicleInformation.html");
+    </script>
   </body>
 </html>
