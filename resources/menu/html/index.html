@@ -40,9 +40,9 @@
                   </p>
                 </div>
               </v-img>
-              <v-list rounded dense two-line :dark="isDark" id="menuList">
+              <v-list two-line :dark="isDark" id="menuList">
                 <v-subheader :dark="isDark">
-                  {{ subtitle }} ({{ selectedItem }})
+                  {{ subtitle }}
                 </v-subheader>
                 <template v-for="(item, index) in items">
                   <v-list-tile
@@ -61,9 +61,9 @@
                     </v-list-tile-content>
                     <v-list-tile-action>
                       <v-btn icon ripple>
-                        <v-icon :color="(isDark ? 'white':'black')"
-                          >fa fa-chevron-right</v-icon
-                        >
+                        <v-icon :color="(isDark ? 'white':'black')">{{
+                          item.icon || "fa fa-chevron-right fa-xs"
+                        }}</v-icon>
                       </v-btn>
                     </v-list-tile-action>
                   </v-list-tile>
@@ -71,6 +71,86 @@
               </v-list>
             </v-card>
           </v-flex>
+          <v-flex class="vehicle_information" sm2 v-if="showVehicleInformation">
+            <v-card
+              elevation-5
+              class="mx-auto"
+
+              color="#ECEFF1BF"
+              width="390"
+            >
+              <v-card-title>
+                <span class="headline font-weight-bold text-truncate">{{
+                  vehicle.name
+                }}</span>
+              </v-card-title>
+
+              <v-card-text>
+                <p class="title font-weight-black">Spécifications</p>
+                <p>Vitesse</p>
+                <v-progress-linear
+                  query
+                  :color="color"
+                  height="10"
+                  :value="vehicle.speed"
+                ></v-progress-linear>
+                <p>Accélération</p>
+                <v-progress-linear
+                  query
+                  :color="color"
+                  height="10"
+                  :value="vehicle.acceleration"
+                ></v-progress-linear>
+                <p>Freinage</p>
+                <v-progress-linear
+                  query
+                  :color="color"
+                  height="10"
+                  :value="vehicle.braking"
+                ></v-progress-linear>
+                <p>Maniabilité</p>
+                <v-progress-linear
+                  query
+                  :color="color"
+                  height="10"
+                  :value="vehicle.handling"
+                ></v-progress-linear>
+                <v-divider></v-divider>
+                <v-layout row wrap pt-2>
+                    <v-flex xs6>
+                      <v-card v-if="!vehicle.vp_only" color="blue-grey lighten-3">
+                        <v-card-text class="black--text title font-weight-bold text-xs-center px-0">
+                            {{vehicle.price | toCurrency}} €
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+                    <v-flex xs6>
+                      <v-card v-if="vehicle.vp_enabled" color="blue-grey lighten-3">
+                        <v-card-text class="black--text title font-weight-bold text-xs-center px-0">
+                            {{vehicle.price_vp | toCurrency}} VP
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+                </v-layout>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          <v-flew class="shop_admin" sm12 v-if="showShopAdmin">
+              <v-data-table
+              :headers="headers"
+              :items="desserts"
+              class="elevation-1"
+            >
+              <template v-slot:items="props">
+                <td>{{ props.item.name }}</td>
+                <td class="text-xs-right">{{ props.item.calories }}</td>
+                <td class="text-xs-right">{{ props.item.fat }}</td>
+                <td class="text-xs-right">{{ props.item.carbs }}</td>
+                <td class="text-xs-right">{{ props.item.protein }}</td>
+                <td class="text-xs-right">{{ props.item.iron }}</td>
+              </template>
+            </v-data-table>
+          </v-flew>
         </v-layout>
       </v-app>
     </div>

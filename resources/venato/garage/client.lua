@@ -138,8 +138,7 @@ function StoreMyCar(garage)
         end
       end
       if mind and  model ~= nil then
-        TriggerServerEvent("Garage:RangeVoiture", plate,model,engineHealth,vehicleHealth,garage.name,current)
-        TriggerServerEvent("Garage:GetAllVehicle", garage)
+        TriggerServerEvent("Garage:RangeVoiture", plate,model,engineHealth,vehicleHealth,garage.name,current)        
         return
       end
     end
@@ -314,6 +313,10 @@ end)
 
 RegisterNetEvent("Garage:deleteVoiture")
 AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
+  if IsPedInAnyVehicle( GetPlayerPed(-1), false ) then
+    TaskLeaveVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 262144)  
+    Citizen.Wait(2500)  
+  end
   if GetEntityModel(vehicle) ~= nil then
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(vehicle))
     
@@ -328,11 +331,10 @@ AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
     DeleteVehicle(current)
     DeleteEntity(current)
   end
-  
+  Menu.hidden = true
   defaultNotification.message = "Véhicule rangé"
   defaultNotification.type = "alert"
   Venato.notify(defaultNotification)
-
 end)
 
 function GetBlacklistedList()

@@ -12,7 +12,7 @@ html {
           background-color: #2e2e2ede;
         }
         .menu_title {
-          font-size: 40px;
+          font-size: 0.8em;
           height: 100%;
           width: 100%;
           p {
@@ -27,11 +27,20 @@ html {
           padding: 20px !important;
           background: transparent;
           .v-subheader {
+            font-size: 0.3em;
             color: black;
             font-style: italic;
             &.theme--dark {
               color: white;
             }
+          }
+          .v-list__tile{
+            font-size: 0.5em;
+            font-family: "Poppins";
+          }
+          .v-list__tile__sub-title{
+            font-size: 0.4em;
+            font-family: "Poppins";
           }
         }
       }
@@ -39,14 +48,30 @@ html {
   }
 }
 
-.menu_container{
-    padding-top: 10vh;
-    max-height: 70vh;
-    .v-card{
-        height: 98%;
-        .v-list{
-            height: 80%;
-            overflow-y: hidden;
-        }
+.menu_container {
+  padding-top: 10vh;
+  max-height: 70vh;
+  font-size: 45px;
+  .v-card {
+    max-height: 60vh;
+    .v-list {
+      max-height: 50vh;
+      overflow-y: hidden;
     }
+  }
+}
+
+.v-list--dense {
+  .v-list__tile {
+    .v-icon {
+      font-size: 0.75em !important;
+    }
+  }
+}
+
+
+.vehicle_information{
+  position: absolute;
+  right: 10%;
+  top: 30%;
 }

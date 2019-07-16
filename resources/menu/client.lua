@@ -75,24 +75,66 @@ AddEventHandler('Menu:Init', function(title, subtitle, color, background)
 	})
 end)
 
+RegisterNetEvent('Menu:Title')
+AddEventHandler('Menu:Title', function(title, subtitle)	
+	SendNUIMessage({
+        action = "title",
+        title = title,
+        subtitle = subtitle
+	})
+end)
+
 RegisterNetEvent('Menu:AddButton')
 AddEventHandler('Menu:AddButton', function(name, func, args, hover)	
 	SendNUIMessage({
         action = "addButton",
         name = name,
         func = func,
-        args = args,
+        args = args,        
         hover = hover
+	})
+end)
+
+RegisterNetEvent('Menu:ShowVehicleInformation')
+AddEventHandler('Menu:ShowVehicleInformation', function(vehicle)	
+    SendNUIMessage({
+        action = "showVehicleInfo",
+        vehicle = vehicle
+	})
+end)
+
+RegisterNetEvent('Menu:HideVehicleInformation')
+AddEventHandler('Menu:HideVehicleInformation', function()	
+	SendNUIMessage({
+        action = "hideVehicleInfo"
+	})
+end)
+
+RegisterNetEvent('Menu:ShowShopAdmin')
+AddEventHandler('Menu:ShowShopAdmin', function()	
+    SendNUIMessage({
+        action = "showShopAdmin",
+	})
+end)
+
+RegisterNetEvent('Menu:HideShopAdmin')
+AddEventHandler('Menu:HideShopAdmin', function()	
+	SendNUIMessage({
+        action = "hideShopAdmin"
 	})
 end)
 
 RegisterNUICallback('callback', function(data, cb)
     cb('ok')
-    TriggerEvent(data.data.hover, data.data.data)
+    print(data.data.hover)
+    if data.data.hover then
+        TriggerEvent(data.data.hover, data.data.data)
+    end
 end)
 
 RegisterNUICallback('confirm', function(data, cb)
     cb('ok')
+    print(data.data.confirm)
     TriggerEvent(data.data.confirm, data.data.data)
 end)
 
