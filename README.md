@@ -51,9 +51,9 @@ TriggerEvent('Inventory:SetMoney', qty, optional Source)
 
 ###  MENU  ###
 
-MenuTitle = ""
-MenuDescription = ""
+Menu.setTitle("")
+Menu.setSubtitle( "")
 showPageInfo = false | true     # affiche le nombre de bouton
-ClearMenu()    # supprime tout les boutons
-Menu.hidden = false | true   # affiche le menu
+Menu.clearMenu()    # supprime tout les boutons
+Menu.open() | true   # affiche le menu
 Menu.addButton(string1, string2, parametre)   #string1 = text du bouton ,  string2 = fonction a execute , parametre = parametre de la dite fonction

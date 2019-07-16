@@ -20,7 +20,7 @@ new Vue({
       width: 0,
       height: 0
     },
-    background: 'https://www.numerama.com/content/uploads/2017/06/epicerie-magasin-fruit-legume-bio.jpg',
+    background: '',
     color: 'rgba(40,162,160,0.65)',
     isDark: true,
     open: false,
@@ -84,9 +84,9 @@ new Vue({
         this.background = event.data.background;
       } else if (event.data.action == "title") {
         this.title = event.data.title;
+      } else if (event.data.action == "subtitle") {
         this.subtitle = event.data.subtitle;
       } else if (event.data.action == "showVehicleInfo") {
-        console.log(JSON.stringify(event.data.vehicle));
         this.showVehicleInformation = false;
         this.vehicle = event.data.vehicle;
         this.showVehicleInformation = true

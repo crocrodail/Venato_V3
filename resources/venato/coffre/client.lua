@@ -23,8 +23,7 @@ Citizen.CreateThread(function()
         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour ouvrir le coffre.')
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
           OpenCoffre(k)
-          showPageInfo = not showPageInfo
-          Menu.hidden = not Menu.hidden
+          Menu.toggle()
         end
       end
     end
@@ -32,9 +31,9 @@ Citizen.CreateThread(function()
 end)
 
 function OpenCoffre(index)
-  ClearMenu()
-  MenuTitle = DataCoffre[index].nom
-  MenuDescription = "~b~Option"
+  Menu.clearMenu()
+  Menu.setTitle( DataCoffre[index].nom)
+  Menu.setSubtitle( "~b~Option")
   Menu.addButton("~p~Parametres", "CoffreParametre", index)
   Menu.addButton("~g~"..Venato.FormatMoney(DataCoffre[index].money,2).." / "..Venato.FormatMoney(DataCoffre[index].argentcapacite,2) "CoffreMenuMoney", index)
   Menu.addButton("~r~Armes", "CoffreWeapon", index)
@@ -48,8 +47,8 @@ function OpenCoffre(index)
 end
 
 function CoffreAddItem(index)
-  ClearMenu()
-  MenuTitle = "Mes items"
+  Menu.clearMenu()
+  Menu.setTitle( "Mes items")
   Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
   for k,v in pairs(DataUser.Inventaire) do
     Menu.addButton(v.libelle.." : ~r~"..v.quantity, "CoffreDropItem", {index, k})
@@ -66,8 +65,8 @@ function CoffreDropItem(row)
 end
 
 function CoffreWeapon(index)
-  ClearMenu()
-  MenuTitle = "Armes : "..DataCoffre[index].nbWeapon.." / "..DataCoffre[index].maxWeapon
+  Menu.clearMenu()
+  Menu.setTitle( "Armes : "..DataCoffre[index].nbWeapon.." / "..DataCoffre[index].maxWeapon)
   Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
   Menu.addButton("~y~Déposer une armes", "CoffreDropWeapon", index)
   for k,v in pairs(DataCoffre[index].weapon) do
@@ -76,8 +75,8 @@ function CoffreWeapon(index)
 end
 
 function CoffreDropWeapon(index)
-  ClearMenu()
-  MenuTitle = "Mes armes"
+  Menu.clearMenu()
+  Menu.setTitle( "Mes armes")
   Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
   for k,v in pairs(DataUser.weapon) do
     Menu.addButton(v.libelle.." avec ~r~"..v.balles.." balles", "CoffreConfirmDropWeapon", {index, k})
@@ -86,8 +85,8 @@ end
 
 function CoffreConfirmDropWeapon(row)
   if DataCoffre[row[1]].nbWeapon + 1 <= DataCoffre[row[1]].maxWeapon then
-    ClearMenu()
-    MenuTitle = "Voulez vous vraiment déposer l'arme ?"
+    Menu.clearMenu()
+    Menu.setTitle( "Voulez vous vraiment déposer l'arme ?")
     Menu.addButton("~r~Non", "CoffreDropWeapon", row[1])
     Menu.addButton("~g~Déposer l'arme dans le coffre", "CoffreDropWp", row)
   else
@@ -96,13 +95,13 @@ function CoffreConfirmDropWeapon(row)
 end
 
 function CoffreDropWp(row)
-  Menu.hidden = true
+  Menu.close()
   TriggerServerEvent("Coffre:DropWeapon", row)
 end
 
 
 function CoffreWeaponOption(row)
-  ClearMenu()
+  Menu.clearMenu()
   Menu.addButton("~r~↩ Retour", "OpenCoffre", row[1])
   Menu.addButton("Recuperer l'arme", "CoffreTakeWeapon", row)
 end
@@ -117,16 +116,16 @@ function CoffreTakeWeapon(row)
 end
 
 function CoffreParametre(index)
-  ClearMenu()
-  MenuTitle = "~b~ Parametres"
+  Menu.clearMenu()
+  Menu.setTitle( "~b~ Parametres")
   Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
   Menu.addButton("Liste des perssones avec l'acces", "CoffreListWhitelist", index)
   Menu.addButton("Donner l'acces à une perssones", "CoffreAddWhitelist", index)
 end
 
 function CoffreAddWhitelist(index)
-  ClearMenu()
-  MenuTitle = "Personne à proximité"
+  Menu.clearMenu()
+  Menu.setTitle( "Personne à proximité")
   player, dist = Venato.ClosePlayer()
   if player ~= 0 and player ~= nil and dist < 10 then
     TriggerServerEvent("Coffre:CallDataClosePlayer", index, player)
@@ -146,12 +145,12 @@ end)
 
 function CoffreWhitelistPlayer(row)
   TriggerServerEvent("Coffre:CoffreWhitelistPlayer", row)
-  Menu.hidden = true
+  Menu.close()
 end
 
 function CoffreListWhitelist(index)
-  ClearMenu()
-  MenuTitle = "~b~Whitelist"
+  Menu.clearMenu()
+  Menu.setTitle( "~b~Whitelist")
   Menu.addButton("~r~↩ Retour", "CoffreParametre", index)
   for k,v in pairs(DataCoffre[index].whitelist) do
     Menu.addButton(v.prenom.." "..v.nom, "unwhitelist", {index, v.identifier, v.nom, v.prenom})
@@ -159,8 +158,8 @@ function CoffreListWhitelist(index)
 end
 
 function unwhitelist(row)
-  ClearMenu()
-  MenuTitle = "Voulez déwhitlister "..row[4].." "..row[3]
+  Menu.clearMenu()
+  Menu.setTitle( "Voulez déwhitlister "..row[4].." "..row[3])
   Menu.addButton("~r~Non", "CoffreListWhitelist", row[1])
   Menu.addButton("Déwhitelist "..row[4].." "..row[3], "confirmUnWhitelist", row)
 end
@@ -170,7 +169,7 @@ function confirmUnWhitelist(row)
 end
 
 function MenuMoney(index)
-  ClearMenu()
+  Menu.clearMenu()
   Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
   Menu.addButton("Prendre de l'argents", "CoffreTakeMoney", index)
   Menu.addButton("Déposer de l'argents", "CoffreDropMoney", index)

@@ -3,9 +3,9 @@ local ListPlayer = false
 local open = false
 
 function openVenatoadmin()
-	ClearMenu()
-	MenuTitle = "Venato Admin Menu"
-  MenuDescription = "~b~La vitamine c mais ne dira rien "
+	Menu.clearMenu()
+	Menu.setTitle("Venato Admin Menu")
+  Menu.setSubtitle( "~b~La vitamine c mais ne dira rien ")
 	Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
 	Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
 	Menu.addButton("Envoyer un message aux joueurs", "sendmsg", nil)
@@ -33,7 +33,7 @@ end
 
 RegisterNetEvent("Admin:CallDataUsers:cb")
 AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers)
-	ClearMenu()
+	Menu.clearMenu()
 	AdminDataPlayers = dataPlayers
 	ListPlayer = true
 	Menu.addButton("~r~↩ Retour", "openVenatoadmin", nil)
@@ -47,7 +47,7 @@ end)
 
 
 function AdminCloseMenu()
-	Menu.hidden = true
+	Menu.close()
 end
 
 Citizen.CreateThread(function()
@@ -60,9 +60,9 @@ Citizen.CreateThread(function()
 			open = true
 			if Menu.hidden == true then
 				openVenatoadmin()
-				Menu.hidden = false
+				Menu.open()
 			else
-				Menu.hidden = true
+				Menu.close()
 			end
 		end
 		if ListPlayer then

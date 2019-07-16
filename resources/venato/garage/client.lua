@@ -72,6 +72,7 @@ setMapMarker()
   end
 end)
 
+
 function backToOpenGarage()
   resend = true
 end
@@ -82,7 +83,7 @@ function openGarage(name, x, y, z, h)
 end
 
 function close()
-  Menu.hidden = true
+  Menu.close()
 end
 
 function none()
@@ -96,10 +97,9 @@ end
 
 function MyCar(table)
   local ads = false
-  showPageInfo = true
-  MenuTitle = "Garage"
-  MenuDescription = "~b~Mes Véhicules"
-  ClearMenu()
+  Menu.setTitle( "Garage")
+  Menu.setSubtitle( "~b~Mes Véhicules")
+  Menu.clearMenu()
   if Vehicule ~= nil then
   for a, v in pairs(Vehicule) do
     if v.type == 1 then
@@ -150,7 +150,7 @@ end
 
 
 function SortirVoiture(vhl)
-  Menu.hidden = true
+  Menu.close()
   local customs = json.decode(tostring(vhl.customs))
   local health = json.decode(tostring(vhl.Health))
   Wait(300)
@@ -301,14 +301,13 @@ end)
 RegisterNetEvent("Garage:AllVehicle")
 AddEventHandler("Garage:AllVehicle", function(garage)
   Vehicule = garage.vehicles
-  showPageInfo = true
-  MenuTitle = "Garage"
-  MenuDescription = "~b~Option"
-  ClearMenu()
+  Menu.setTitle( "Garage")
+  Menu.setSubtitle( "~b~Option")
+  Menu.clearMenu()
   Menu.addButton("~g~Mes vehicules", "getCars", garage)
   Menu.addButton("~o~Rentrer son véhicule", "StoreMyCar", garage)
   Menu.addButton("~r~Fermer", "close", nil)
-  Menu.hidden = false
+  Menu.open()
 end)
 
 RegisterNetEvent("Garage:deleteVoiture")
@@ -331,7 +330,7 @@ AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
     DeleteVehicle(current)
     DeleteEntity(current)
   end
-  Menu.hidden = true
+  Menu.close()
   defaultNotification.message = "Véhicule rangé"
   defaultNotification.type = "alert"
   Venato.notify(defaultNotification)

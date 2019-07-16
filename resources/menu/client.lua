@@ -76,10 +76,17 @@ AddEventHandler('Menu:Init', function(title, subtitle, color, background)
 end)
 
 RegisterNetEvent('Menu:Title')
-AddEventHandler('Menu:Title', function(title, subtitle)	
+AddEventHandler('Menu:Title', function(title)	
 	SendNUIMessage({
         action = "title",
-        title = title,
+        title = title
+	})
+end)
+
+RegisterNetEvent('Menu:SubTitle')
+AddEventHandler('Menu:SubTitle', function(subtitle)	
+	SendNUIMessage({
+        action = "subtitle",
         subtitle = subtitle
 	})
 end)
@@ -126,19 +133,18 @@ end)
 
 RegisterNUICallback('callback', function(data, cb)
     cb('ok')
-    print(data.data.hover)
     if data.data.hover then
-        TriggerEvent(data.data.hover, data.data.data)
+        TriggerEvent("Menu:Execute",{ fn = data.data.hover, args =data.data.data })
     end
 end)
 
 RegisterNUICallback('confirm', function(data, cb)
     cb('ok')
-    print(data.data.confirm)
-    TriggerEvent(data.data.confirm, data.data.data)
+    TriggerEvent("Menu:Execute",{ fn = data.data.confirm, args =data.data.data })
 end)
 
 RegisterNUICallback('close', function(data, cb)
     cb('ok')
+    _G[data.data.hover](data.data.data)
     TriggerEvent("Menu:Close")
 end)

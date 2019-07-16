@@ -9,6 +9,11 @@ AddEventHandler("Venato:notify", function(notif)
   Venato.notify(notif)
 end)
 
+RegisterNetEvent("Menu:Execute")
+AddEventHandler("Menu:Execute", function(params)
+  _G[params.fn](params.args)
+end)
+
 function Venato.notify(notif)
   
   if not notif.message then

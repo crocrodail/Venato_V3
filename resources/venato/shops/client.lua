@@ -67,8 +67,7 @@ AddEventHandler('Shops:LoadShops:cb', function(shops)
         elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > (2*item.ActivationDist) then
           ConfigShop.inShopMarker = false
           ConfigShop.menuOpen = false
-          Menu.hidden = true
-          showPageInfo = false
+          Menu.close()
           ConfigShop.page="client"
         end
       end
@@ -85,8 +84,7 @@ CreateThread(function ()
     if (IsControlJustReleased(1, Keys['BACKSPACE']) or IsControlJustReleased(1, Keys['RIGHTMOUSE'])) then
       SetNuiFocus(false, false)
       ConfigShop.menuOpen = false
-      Menu.hidden = true
-      showPageInfo = false
+      Menu.close()
       ConfigShop.page="client"
     end
     if IsControlJustReleased(1, Keys['INPUT_CONTEXT']) and ConfigShop.inShopMarker then

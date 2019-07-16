@@ -337,11 +337,17 @@ AddEventHandler('CarShop:PaiementKo:response', function(data)
   TriggerEvent("Menu:Open")
 end)
 
+function testCarShop(data)
+  print("Crocro est trop balèze")
+end
+
+
 RegisterNetEvent('CarShop:ShowCategory:response')
 AddEventHandler('CarShop:ShowCategory:response', function(data)
   TriggerEvent('Menu:Clear')
   TriggerEvent('Menu:Init', "Concessionnaire", "Catégories", '#1A237E99', "https://images.caradisiac.com/logos/0/3/1/6/240316/S0-parc-automobile-il-n-y-a-jamais-eu-autant-de-vehicules-sur-nos-routes-161246.jpg")
   TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "CarShop:HideMenu", data)
+  TriggerEvent('Menu:AddButton', "Test", "testCarShop", data)
   
   for k,v in pairsByKeys(data) do
     TriggerEvent('Menu:AddButton',v.type, "CarShop:ShowCategory", v.type)

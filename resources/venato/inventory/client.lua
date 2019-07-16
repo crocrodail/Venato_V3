@@ -13,19 +13,17 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		Menu.renderGUI()
 		if IsControlJustPressed(1, Keys['K']) and GetLastInputMethod(2) then
-			ClearMenu()
+			Menu.clearMenu()
 			if Menu.hidden == true then
-				Menu.hidden = false
-				showPageInfo = false
+				Menu.open()
 				OpenInventory()
 			else
-				Menu.hidden = true
-				showPageInfo = true
+				Menu.close()
 			end
 		end
 		if IsControlJustPressed(1, Keys['F3']) and GetLastInputMethod(2) then
-			ClearMenu()
-			Menu.hidden = not Menu.hidden
+			Menu.clearMenu()
+			Menu.toggle()
 			--OpenMenuPerso()
 		end
 		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) and GetLastInputMethod(2) then
@@ -33,8 +31,7 @@ Citizen.CreateThread(function()
 				CloseDoc()
 			end
 			TriggerEvent("VehicleCoffre:Close")
-			Menu.hidden = true
-			showPageInfo = false
+			Menu.close()
 		end
 
 		if ItemsOnTheGround ~= nil then
@@ -126,14 +123,14 @@ end
 
 
 function OpenInventory()
-	MenuTitle = "00 / 20 Kg"
-	MenuDescription = "Inventaire"
+	Menu.setTitle( "00 / 20 Kg")
+	Menu.setSubtitle( "Inventaire")
 	TriggerServerEvent("Inventory:ShowMe")
 end
 
 RegisterNetEvent('Inventory:ShowMe:cb')
 AddEventHandler('Inventory:ShowMe:cb', function(Data)
-	ClearMenu()
+	Menu.clearMenu()
 	DataUser = Data
 	local WeaponPoid = 0
 	Menu.addButton("~r~Syncdata", "debuge", {})
@@ -151,8 +148,8 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
 	elseif Data.Poid > 14 then
 		color = "~o~"
 	end
-	MenuTitle = color..""..Data.Poid.." ~s~/ 20 Kg"
-	MenuDescription = "Inventaire"
+	Menu.setTitle( color..""..Data.Poid.." ~s~/ 20 Kg")
+	Menu.setSubtitle( "Inventaire")
 	local MoneyPoid = Venato.MoneyToPoid(Data.Money)
 	Menu.addButton("~g~Argent : "..Venato.FormatMoney(Data.Money,2).." € ~o~( "..MoneyPoid.." Kg )", "OptionMoney", {Data.Money, MoneyPoid, Data.Poid,Data})
 	for k,v in pairs(Data.Inventaire) do
@@ -168,8 +165,8 @@ end
 
 RegisterNetEvent("getInv:back")
 AddEventHandler("getInv:back", function(TableOfKey)
-	ClearMenu()
-	MenuTitle = "Mes clefs"
+	Menu.clearMenu()
+	Menu.setTitle( "Mes clefs")
 		for i, v in pairs(TableOfKey) do
 			if v.name ~= nil then
 					Menu.addButton("~b~"..v.name.."~s~ : ~r~"..v.plate, "giveclef", {v.name,v.plate})
@@ -180,9 +177,9 @@ AddEventHandler("getInv:back", function(TableOfKey)
 end)
 
 function giveclef(clef)
-    ClearMenu()
-  MenuTitle = "Details:"
-	MenuDescription = "~b~"..clef[1].." plaque : "..clef[2]
+    Menu.clearMenu()
+  Menu.setTitle( "Details:")
+	Menu.setSubtitle( "~b~"..clef[1].." plaque : "..clef[2])
   Menu.addButton("Donner un double de la clef", "givecleff", {clef[1], clef[2]})
 end
 
@@ -198,9 +195,9 @@ function givecleff(item)
 end
 
 function MyWeapon(Data)
-	ClearMenu()
+	Menu.clearMenu()
 	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
-	MenuDescription = "Mes armes"
+	Menu.setSubtitle( "Mes armes")
 	for k,v in pairs(Data.Weapon) do
 		if v.libelle ~= nil then
 			if tonumber(v.ammo) > 0 then
@@ -215,8 +212,8 @@ end
 --############# Doc ##################
 
 function MyDoc(data)
-	ClearMenu()
-	MenuDescription = "Mes Documents"
+	Menu.clearMenu()
+	Menu.setSubtitle( "Mes Documents")
 	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
 	if data.Citoyen == 1 then
 		Menu.addButton("Carte d'identité", "optionIdCard", data)
@@ -248,24 +245,24 @@ function CloseDoc()
 end
 
 function optionPermis(data)
-	ClearMenu()
-	MenuDescription = "Permis de conduire"
+	Menu.clearMenu()
+	Menu.setSubtitle( "Permis de conduire")
 	Menu.addButton("~r~↩ Retour", "MyDoc", data)
 	Menu.addButton("Regarder", "ShowPermis", data)
 	Menu.addButton("Montrer", "ShowToOtherPermis", data)
 end
 
 function optionIdCard(data)
-	ClearMenu()
-	MenuDescription = "Carte d'identité"
+	Menu.clearMenu()
+	Menu.setSubtitle( "Carte d'identité")
 	Menu.addButton("~r~↩ Retour", "MyDoc", data)
 	Menu.addButton("Regarder", "ShowIdCard", data)
 	Menu.addButton("Montrer", "ShowToOtherIdCard", data)
 end
 
 function optionVisa(data)
-	ClearMenu()
-	MenuDescription = "Permis de séjour"
+	Menu.clearMenu()
+	Menu.setSubtitle( "Permis de séjour")
 	Menu.addButton("~r~↩ Retour", "MyDoc", data)
 	Menu.addButton("Regarder", "ShowVisa", data)
 	Menu.addButton("Montrer", "ShowToOtherVisa", data)
@@ -388,7 +385,7 @@ end
 --############# Weapon ##################
 
 function OptionWeapon(table)
-	ClearMenu()
+	Menu.clearMenu()
 	Menu.addButton("~r~↩ Retour", "MyWeapon", table[7])
 	Menu.addButton("Donner", "GiveWeapon", table)
 	Menu.addButton("Jeter", "DropWeapon", table)
@@ -448,7 +445,7 @@ end)
 --############# Money ##################
 
 function OptionMoney(table)
-	ClearMenu()
+	Menu.clearMenu()
 	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
 	Menu.addButton("Donner", "GiveMoney", table)
 	Menu.addButton("Jeter", "DropMoney", table)
@@ -497,8 +494,8 @@ end)
 
 --############# ITEM ##################
 function OptionItem(table)
-	ClearMenu()
-	MenuDescription = table[3]
+	Menu.clearMenu()
+	Menu.setSubtitle( table[3])
 	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
 	Menu.addButton("Utiliser", "UseItem", {table[1],table[2]})
 	Menu.addButton("Donner", "GiveItem", {table[1],table[2],table[4]})

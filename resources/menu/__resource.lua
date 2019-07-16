@@ -10,6 +10,7 @@ server_script {
 
 files {
     "html/index.html",
+    "html/vehicleInformation.js",
     "html/menu.js",
     "html/scss/menu.css",
 }

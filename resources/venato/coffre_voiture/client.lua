@@ -31,8 +31,7 @@ end)
 
 function OpenVehicleCoffre()
   open = true
-  Menu.hidden = false
-  showPageInfo = true
+  Menu.open()
   SetVehicleDoorOpen(CloseVehicle, 5, false, false)
   local plate = GetVehicleNumberPlateText(CloseVehicle)
   local class = GetVehicleClass(CloseVehicle)
@@ -45,9 +44,8 @@ end
 
 function CloseVehicleCoffre()
   open = false
-  showPageInfo = false
   SetVehicleDoorShut(CloseVehicle, 5, false)
-  Menu.hidden = true
+  Menu.close()
 end
 
 RegisterNetEvent("VehicleCoffre:Close")
@@ -68,15 +66,15 @@ AddEventHandler("VehicleCoffre:CallData:cb2", function(data)
 end)
 
 function OpenMenuCv()
-  ClearMenu()
+  Menu.clearMenu()
   local color = ""
   if VehicleData.nbItems > VehicleData.itemcapacite - 2 then
     color = "~r~"
   elseif VehicleData.nbItems > VehicleData.itemcapacite - 5 then
     color = "~o~"
   end
-  MenuTitle = color..""..VehicleData.nbItems.."~s~ / "..VehicleData.itemcapacite
-  MenuDescription = "Coffre"
+  Menu.setTitle( color..""..VehicleData.nbItems.."~s~ / "..VehicleData.itemcapacite)
+  Menu.setSubtitle( "Coffre")
   Menu.addButton("~r~Fermer le coffre", "CloseVehicleCoffre", nil)
   Menu.addButton("~o~Armes", "WeaponCoffreVehicle", nil)
   Menu.addButton("~r~-----------------------  ~g~items~r~  -----------------------", "none", nil)
@@ -87,8 +85,8 @@ function OpenMenuCv()
 end
 
 function WeaponCoffreVehicle()
-  ClearMenu()
-  MenuTitle = "Armes dans le véhicule"
+  Menu.clearMenu()
+  Menu.setTitle( "Armes dans le véhicule")
   Menu.addButton("~r~↩ Retour", "OpenMenuCv", nil)
   Menu.addButton("~o~Déposer une arme", "DropWeaponCv", nil)
   for k,v in pairs(VehicleData.weapon) do
@@ -97,8 +95,8 @@ function WeaponCoffreVehicle()
 end
 
 function DropItemCv()
-  ClearMenu()
-  MenuTitle = "mon inventaire"
+  Menu.clearMenu()
+  Menu.setTitle( "mon inventaire")
   Menu.addButton("~r~↩ Retour", "OpenMenuCv", nil)
   for k,v in pairs(DataUser.Inventaire) do
     if v.quantity ~= 0 then
@@ -118,7 +116,7 @@ function ConfDropItemCv(index)
 end
 
 function OptionItemsCv(index)
-  ClearMenu()
+  Menu.clearMenu()
   Menu.addButton("~r~↩ Retour", "WeaponCoffreVehicle", nil)
   Menu.addButton("Prendre", "GetItemCv", index)
 end
@@ -134,7 +132,7 @@ function GetItemCv(index)
 end
 
 function OptionWeaponCv(index)
-  ClearMenu()
+  Menu.clearMenu()
   Menu.addButton("~r~↩ Retour", "WeaponCoffreVehicle", nil)
   Menu.addButton("Récupérer l'arme", "GetWpCv", index)
 end
@@ -144,8 +142,8 @@ function GetWpCv(index)
 end
 
 function DropWeaponCv()
-  ClearMenu()
-  MenuTitle = "Mes armes"
+  Menu.clearMenu()
+  Menu.setTitle( "Mes armes")
   Menu.addButton("~r~↩ Retour", "OpenMenuCv", index)
   for k,v in pairs(DataUser.Weapon) do
     Menu.addButton(v.libelle.." avec ~r~"..v.ammo.." balles", "DropConfirmWeaponCv", k)
@@ -154,9 +152,9 @@ end
 
 function DropConfirmWeaponCv(index)
   if VehicleData.nbWeapon + 1 <= VehicleData.maxWeapon then
-    ClearMenu()
-    MenuTitle = "Confirmation"
-    MenuDescription = "Voulez vous vraiment déposer l'arme ?"
+    Menu.clearMenu()
+    Menu.setTitle( "Confirmation")
+    Menu.setSubtitle( "Voulez vous vraiment déposer l'arme ?")
     Menu.addButton("~r~Non", "DropWeaponCv", nil)
     Menu.addButton("~g~Déposer l'arme dans le coffre", "CoffreVehicleDropWp", index)
   else

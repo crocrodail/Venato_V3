@@ -15,9 +15,8 @@ ShopPages = {}
 function ShopPages.drawPage(content)
   ConfigShop.menuOpen = true
 
-  ClearMenu()
-  Menu.hidden = false
-  showPageInfo = true
+  Menu.clearMenu()
+  Menu.open()
 
   if ConfigShop.page == "admin" then
     ShopPages.admin(content)
@@ -35,13 +34,13 @@ function ShopPages.client(shop)
     ConfigShop.currentOrderId = nil
     local color = "~s~"
     local shopName_ = shop.Renamed or shop.Name or "Shop"
-    MenuTitle = color..""..shopName_
-    MenuDescription = "Stocks"
+    Menu.setTitle( color..""..shopName_)
+    Menu.setSubtitle( "Stocks")
 
     if shop.Supervisor == 1 then
-      MenuDescription = MenuDescription .. " supervised by: "
+      Menu.setSubtitle( MenuDescription .. " supervised by: ")
       for _, manager in ipairs(shop.Managers) do
-        MenuDescription = MenuDescription .. " ".. manager.Name
+        Menu.setSubtitle( MenuDescription .. " ".. manager.Name)
       end
     end
 
@@ -59,8 +58,8 @@ function ShopPages.admin(shop)
     end
 
     local color = "~y~"
-    MenuTitle = color.."Administration"
-    MenuDescription = "caisse: "..shop.Money.."€"
+    Menu.setTitle( color.."Administration")
+    Menu.setSubtitle( "caisse: "..shop.Money.."€")
 
     Menu.addButton("~y~↩ Stocks", "goToClientPage")
     Menu.addButton("~b~Récuperer caisse →", "getMoney", {['Id']=shop.Id, ['Money']=shop.Money})
@@ -72,8 +71,8 @@ end
 -- ORDER --
 function ShopPages.order(order)
     local color = "~y~"
-    MenuTitle = color.."Commande: "..order.Ref
-    MenuDescription = "Selectionne un produit pour le modifier"
+    Menu.setTitle( color.."Commande: "..order.Ref)
+    Menu.setSubtitle( "Selectionne un produit pour le modifier")
 
     Menu.addButton("~y~↩ Administration", "goToAdministrationPage")
     Menu.addButton("~o~TODO:~b~ Ajouter un produit", "addItemToStock")
@@ -85,15 +84,15 @@ end
 
 
 function ShopPages.orderItem(item)
-  MenuTitle = item.Name
+  Menu.setTitle( item.Name)
 
   if item.Ordered == nil or item.Ordered == 0 then
-    MenuTitle = MenuTitle.." ~t~(pas de commande)"
+    Menu.setTitle( MenuTitle.." ~t~(pas de commande)")
   elseif item.Ordered > 0 then
-    MenuTitle = MenuTitle.." ~b~(+".. item.Ordered ..")"
+    Menu.setTitle( MenuTitle.." ~b~(+".. item.Ordered ..")")
   end
 
-	MenuDescription = "Actions"
+	Menu.setSubtitle( "Actions")
 	Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)
 	Menu.addButton("Commander", "orderItem", item)
 	Menu.addButton("Modifier prix", "setPrice", item)
