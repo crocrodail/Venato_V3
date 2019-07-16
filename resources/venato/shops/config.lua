@@ -5,15 +5,14 @@
   @date 2019-07-11
   @version 1.0
 --]]
-
 ConfigShop = {}
 ConfigShop.EnableShops = true
-ConfigShop.page = 'client'
+ConfigShop.page = "client"
 ConfigShop.menuOpen = false
 ConfigShop.currentShopId = nil
 ConfigShop.currentOrderId = nil
+ConfigShop.currentInventoryId = nil
 ConfigShop.inShopMarker = false
-
 
 ConfigShop.shopsNotification = {
   title = "Magasin",
