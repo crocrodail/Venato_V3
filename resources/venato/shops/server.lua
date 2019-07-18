@@ -3,40 +3,33 @@ local PoidMax = 20 -- Kg
 -- ##############################
 
 local getShopsRequest = "SELECT * FROM shops WHERE Enabled=1"
-local getShopRequest =
-  "SELECT s.Id, s.Name, s.Renamed, s.Money, s.Supervised, s.InventoryId FROM shops s WHERE s.Id=@Id"
-local getShopItemsRequest =
-  "SELECT it.id, it.libelle, c.Price, c.Quantity, c.Id as ContentId FROM shops s INNER JOIN shop_inventory i ON s.InventoryId = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id WHERE s.Id=@Id"
-local getShopOrdersRequest =
-  "SELECT o.Id, o.Ref, o.Started, o.Signed, o.Finalized FROM shops s INNER JOIN shop_orders o ON s.Id = o.ShopId WHERE s.Id=@Id ORDER BY o.Id DESC "
-local getShopOrderRequest =
-  "SELECT o.Id, o.Ref, o.Signed, o.Started, o.Finalized FROM shop_orders o WHERE o.Id=@OrderId"
-local getManagersRequest =
-  "SELECT u.id, u.identifier, u.nom FROM shops s INNER JOIN shop_manager m ON s.Id = m.ShopId INNER JOIN users u ON u.Id = m.ManagerId WHERE s.Id=@Id"
-local getContentItemRequest =
-  "SELECT c.Quantity, c.Price, c.ItemId, it.poid, it.libelle FROM shop_content c INNER JOIN items it on c.ItemId = it.id WHERE c.Id=@Id"
-local getOrderItemsRequest =
-  "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered FROM shop_orders o INNER JOIN shops s ON o.ShopID = s.Id INNER JOIN shop_inventory i ON s.InventoryId = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId WHERE o.Id=@OrderId"
-local getOrderItemRequest =
-  "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered, oc.Price as OrderPrice FROM shops s INNER JOIN shop_inventory i ON s.InventoryID = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id LEFT JOIN shop_orders o ON s.Id = o.ShopId LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId WHERE it.id=@ItemId and s.Id=@ShopId"
+local getShopRequest = "SELECT s.Id, s.Name, s.Renamed, s.Money, s.Supervised, s.InventoryId FROM shops s WHERE s.Id=@Id"
+local getShopItemsRequest = "SELECT it.id, it.libelle, c.Price, c.Quantity, c.Id as ContentId FROM shops s INNER JOIN shop_inventory i ON s.InventoryId = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id WHERE s.Id=@Id"
+local getShopOrdersRequest = "SELECT o.Id, o.Ref, o.Started, o.Signed, o.Finalized FROM shops s INNER JOIN shop_orders o ON s.Id = o.ShopId WHERE s.Id=@Id ORDER BY o.Id DESC "
+local getShopOrderRequest = "SELECT o.Id, o.Ref, o.Signed, o.Started, o.Finalized FROM shop_orders o WHERE o.Id=@OrderId"
+local getManagersRequest = "SELECT u.id, u.identifier, u.nom FROM shops s INNER JOIN shop_manager m ON s.Id = m.ShopId INNER JOIN users u ON u.Id = m.ManagerId WHERE s.Id=@Id"
+local getContentItemRequest = "SELECT c.Quantity, c.Price, c.ItemId, it.poid, it.libelle FROM shop_content c INNER JOIN items it on c.ItemId = it.id WHERE c.Id=@Id"
+local getOrderItemsRequest = "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered FROM shop_orders o INNER JOIN shops s ON o.ShopID = s.Id INNER JOIN shop_inventory i ON s.InventoryId = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId WHERE o.Id=@OrderId"
+local getStockItemRequest = "SELECT it.id, it.libelle, c.Quantity, c.Price, c.Id as ContentId FROM shops s INNER JOIN shop_inventory i ON s.InventoryID = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id WHERE it.id=@ItemId and s.Id=@ShopId"
+local getQuantityItemByContentIdRequest = "SELECT c.Quantity FROM shop_content c WHERE c.Id=@ContentId"
+local getOrderItemRequest = "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered, oc.Price as OrderPrice FROM shops s INNER JOIN shop_inventory i ON s.InventoryID = i.Id INNER JOIN shop_content c ON i.Id = c.InventoryId INNER JOIN items it on c.ItemId = it.id LEFT JOIN shop_orders o ON s.Id = o.ShopId LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId WHERE it.id=@ItemId and s.Id=@ShopId"
 local getAllItemsRequest = "SELECT it.id, it.libelle, it.price FROM items it"
 
-local addItemRequest =
-  "INSERT shop_content (InventoryId, ItemId, Price, Quantity) VALUES (@InventoryId, @ItemId, @Price, @Quantity)"
-local updateQuantityItemRequest = "UPDATE shop_content SET Quantity = Quantity + @Quantity WHERE Id=@Id"
-local updatePriceItemRequest = "UPDATE shop_content SET Price = Price + @Price WHERE Id=@Id"
+local addItemRequest = "INSERT shop_content (InventoryId, ItemId, Price, Quantity) VALUES (@InventoryId, @ItemId, @Price, @Quantity)"
+local removeQuantityItemRequest = "UPDATE shop_content SET Quantity = Quantity - @Quantity WHERE Id=@Id"
+local updatePriceItemRequest = "UPDATE shop_content SET Price = @Price WHERE Id=@Id"
 
 local addMoneyRequest = "UPDATE shops SET Money = Money + @Price WHERE Id=@Id"
 local removeMoneyRequest = "UPDATE shops SET Money = Money - @Price WHERE Id=@Id"
 
-local orderNewItemRequest =
-  "INSERT INTO shop_orders_content (ShopOrderId, ItemId, Quantity, Price) VALUES (@OrderId, @ItemId, @Quantity, @Price)"
-local updateQuantityOrderItemRequest =
-  "UPDATE shop_orders_content SET Quantity=@Quantity WHERE ShopOrderId=@OrderId and ItemId=@ItemId"
+local orderNewItemRequest = "INSERT INTO shop_orders_content (ShopOrderId, ItemId, Quantity, Price) VALUES (@OrderId, @ItemId, @Quantity, @Price)"
+local updateQuantityOrderItemRequest = "UPDATE shop_orders_content SET Quantity=@Quantity WHERE ShopOrderId=@OrderId and ItemId=@ItemId"
 
 local createOrderRequest = "INSERT INTO shop_orders (ShopId, Ref) VALUES (@ShopId, @Ref)"
 local finalizeOrderRequest = "UPDATE shop_orders SET Finalized=1 WHERE Id=@OrderId"
 local deleteOrderRequest = "DELETE FROM shop_orders WHERE Id=@OrderId"
+
+local removeItemFromStockRequest = "DELETE FROM shop_content WHERE Id=@Id"
 
 RegisterServerEvent("Shops:LoadShops")
 AddEventHandler(
@@ -60,7 +53,7 @@ function getManagers(shopId, source)
   local isSupervisor = false
 
   local steamId = getSteamID(source)
-  local resultManagers = MySQL.Sync.fetchAll(getManagersRequest, {["@Id"] = shopId})
+  local resultManagers = MySQL.Sync.fetchAll(getManagersRequest, { ["@Id"] = shopId })
   for _, item in ipairs(resultManagers) do
     table.insert(
       managers,
@@ -82,7 +75,7 @@ function getShop(shopId, source)
   shop.Items = {}
   shop.Orders = {}
   shop.Managers = {}
-  local result = MySQL.Sync.fetchAll(getShopRequest, {["@Id"] = shopId})
+  local result = MySQL.Sync.fetchAll(getShopRequest, { ["@Id"] = shopId })
   for _, item in ipairs(result) do
     shop.Id = item.Id
     shop.Name = item.Name
@@ -92,7 +85,7 @@ function getShop(shopId, source)
     shop.InventoryId = item.InventoryId
   end
 
-  result = MySQL.Sync.fetchAll(getShopItemsRequest, {["@Id"] = shopId})
+  result = MySQL.Sync.fetchAll(getShopItemsRequest, { ["@Id"] = shopId })
   for _, item in ipairs(result) do
     table.insert(
       shop.Items,
@@ -106,7 +99,7 @@ function getShop(shopId, source)
     )
   end
 
-  result = MySQL.Sync.fetchAll(getShopOrdersRequest, {["@Id"] = shopId})
+  result = MySQL.Sync.fetchAll(getShopOrdersRequest, { ["@Id"] = shopId })
   for _, item in ipairs(result) do
     table.insert(
       shop.Orders,
@@ -131,7 +124,7 @@ function getOrder(orderId)
   local order = {}
   order.Items = {}
 
-  local result = MySQL.Sync.fetchAll(getShopOrderRequest, {["@OrderId"] = orderId})
+  local result = MySQL.Sync.fetchAll(getShopOrderRequest, { ["@OrderId"] = orderId })
   for _, item in ipairs(result) do
     order["Id"] = item.Id
     order["Ref"] = item.Ref
@@ -140,7 +133,7 @@ function getOrder(orderId)
     order["Finalized"] = item.Finalized
   end
 
-  result = MySQL.Sync.fetchAll(getOrderItemsRequest, {["@OrderId"] = orderId})
+  result = MySQL.Sync.fetchAll(getOrderItemsRequest, { ["@OrderId"] = orderId })
   for _, item in ipairs(result) do
     table.insert(
       order.Items,
@@ -157,24 +150,56 @@ function getOrder(orderId)
   return order
 end
 
-function getItem(itemId, shopId)
+function getStockItem(shopId, itemId)
   local item_ = {}
-  local result =
-    MySQL.Sync.fetchAll(
+  local result = MySQL.Sync.fetchAll(
+    getStockItemRequest,
+    {
+      ["@ItemId"] = itemId,
+      ["@ShopId"] = shopId
+    }
+  )
+  for _, item in ipairs(result) do
+    item_["Id"] = item.id
+    item_["Name"] = item.libelle
+    item_["Quantity"] = item.Quantity
+    item_["Price"] = item.Price
+    item_["ContentId"] = item.ContentId
+  end
+
+  return item_
+end
+
+function getQuantityItemByContentId(contentId)
+  local result = MySQL.Sync.fetchAll(
+    getQuantityItemByContentIdRequest,
+    {
+      ["@ContentId"] = contentId
+    }
+  )
+  for _, item in ipairs(result) do
+    return item.Quantity
+  end
+  return -1
+end
+
+function getOrderItem(shopId, itemId)
+  local item_ = {}
+  local result = MySQL.Sync.fetchAll(
     getOrderItemRequest,
     {
       ["@ItemId"] = itemId,
       ["@ShopId"] = shopId
     }
   )
-  for _, item__ in ipairs(result) do
-    item_["Id"] = item__.id
-    item_["ShopId"] = item__.ShopId
-    item_["Name"] = item__.libelle
-    item_["Quantity"] = item__.Quantity
-    item_["Price"] = item__.Price
-    item_["Ordered"] = item__.Ordered
-    item_["OrderPrice"] = item__.OrderPrice or 0
+  for _, item in ipairs(result) do
+    item_["Id"] = item.id
+    item_["ShopId"] = item.ShopId
+    item_["Name"] = item.libelle
+    item_["Quantity"] = item.Quantity
+    item_["Price"] = item.Price
+    item_["Ordered"] = item.Ordered
+    item_["OrderPrice"] = item.OrderPrice or 0
   end
 
   return item_
@@ -199,9 +224,9 @@ end
 
 function getUsedItems(shopId)
   local items = {}
-  local result = MySQL.Sync.fetchAll(getShopItemsRequest, {["@Id"] = shopId})
+  local result = MySQL.Sync.fetchAll(getShopItemsRequest, { ["@Id"] = shopId })
   for _, item in ipairs(result) do
-    table.insert(items, {["Id"] = item.ItemId, ["Name"] = item.libelle})
+    table.insert(items, { ["Id"] = item.ItemId, ["Name"] = item.libelle })
   end
 
   return items
@@ -248,7 +273,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    local result = MySQL.Sync.fetchAll(getContentItemRequest, {["@Id"] = ContentId})
+    local result = MySQL.Sync.fetchAll(getContentItemRequest, { ["@Id"] = ContentId })
     if result[1] == nil then
       return
     end
@@ -285,7 +310,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    MySQL.Async.execute(updateQuantityItemRequest, {["@Quantity"] = -quantity, ["@Id"] = contentId})
+    MySQL.Async.execute(removeQuantityItemRequest, { ["@Quantity"] = quantity, ["@Id"] = contentId })
   end
 )
 
@@ -297,7 +322,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    MySQL.Async.execute(addMoneyRequest, {["@Price"] = price, ["@Id"] = shopId})
+    MySQL.Async.execute(addMoneyRequest, { ["@Price"] = price, ["@Id"] = shopId })
   end
 )
 
@@ -309,22 +334,23 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    MySQL.Async.execute(removeMoneyRequest, {["@Price"] = price, ["@Id"] = shopId})
+    MySQL.Async.execute(removeMoneyRequest, { ["@Price"] = price, ["@Id"] = shopId })
   end
 )
 
 RegisterServerEvent("Shops:getMoney")
 AddEventHandler(
   "Shops:getMoney",
-  function(price, shopId, newSource)
+  function(shopId, newSource)
     local source = source
     if newSource ~= nil then
       source = newSource
     end
     local shop = getShop(shopId, source)
-    if not shop.IsSupervisor or shop.Money < price then
-      TriggerClientEvent("Shops:NotEnoughShopMoney", source, price)
+    if not shop.IsSupervisor then
+      TriggerClientEvent("Shops:NotEnoughShopMoney", source, shop.Money)
     else
+      price = shop.Money
       TriggerEvent("Inventory:AddMoney", price, source)
       TriggerEvent("Shops:RemoveMoney", price, shopId)
       TriggerClientEvent("Shops:getMoney:cb", source, price)
@@ -335,12 +361,12 @@ AddEventHandler(
 RegisterServerEvent("Shops:showOrder")
 AddEventHandler(
   "Shops:showOrder",
-  function(shopId, newSource)
+  function(orderId, newSource)
     local source = source
     if newSource ~= nil then
       source = newSource
     end
-    TriggerClientEvent("Shops:UpdateMenu:cb", source, getOrder(shopId))
+    TriggerClientEvent("Shops:UpdateMenu:cb", source, getOrder(orderId))
   end
 )
 
@@ -352,7 +378,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    TriggerClientEvent("Shops:UpdateMenu:cb", source, getItem(item.Id, shopId))
+    TriggerClientEvent("Shops:UpdateMenu:cb", source, getOrderItem(shopId, item.Id))
   end
 )
 
@@ -396,7 +422,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    MySQL.Sync.execute(createOrderRequest, {["@ShopId"] = shopId, ["@Ref"] = uuid()})
+    MySQL.Sync.execute(createOrderRequest, { ["@ShopId"] = shopId, ["@Ref"] = uuid() })
     TriggerClientEvent("Shops:UpdateMenu:cb", source, getShop(shopId, source))
   end
 )
@@ -409,7 +435,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    MySQL.Sync.execute(finalizeOrderRequest, {["@OrderId"] = orderId})
+    MySQL.Sync.execute(finalizeOrderRequest, { ["@OrderId"] = orderId })
     TriggerClientEvent("Shops:UpdateMenu:cb", source, getShop(shopId, source))
   end
 )
@@ -422,7 +448,7 @@ AddEventHandler(
     if newSource ~= nil then
       source = newSource
     end
-    MySQL.Sync.execute(deleteOrderRequest, {["@OrderId"] = orderId})
+    MySQL.Sync.execute(deleteOrderRequest, { ["@OrderId"] = orderId })
     TriggerClientEvent("Shops:UpdateMenu:cb", source, getShop(shopId, source))
   end
 )
@@ -439,6 +465,19 @@ AddEventHandler(
   end
 )
 
+RegisterServerEvent("Shops:showAdminItem")
+AddEventHandler(
+  "Shops:showAdminItem",
+  function(shopId, item, newSource)
+    local source = source
+    if newSource ~= nil then
+      source = newSource
+    end
+
+    TriggerClientEvent("Shops:UpdateMenu:cb", source, getStockItem(shopId, item.Id))
+  end
+)
+
 RegisterServerEvent("Shops:AddItemToShop")
 AddEventHandler(
   "Shops:AddItemToShop",
@@ -450,14 +489,56 @@ AddEventHandler(
 
     MySQL.Sync.execute(
       addItemRequest,
-      {["@InventoryId"] = inventoryId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price}
+      { ["@InventoryId"] = inventoryId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price }
     )
     MySQL.Sync.execute(
       orderNewItemRequest,
-      {["@OrderId"] = orderId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price}
+      { ["@OrderId"] = orderId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price }
     )
 
     TriggerClientEvent("Shops:AddItemToShop:cb", source, item)
+  end
+)
+
+RegisterServerEvent("Shops:ChangePriceItem")
+AddEventHandler(
+  "Shops:ChangePriceItem",
+  function(item, price, newSource)
+    local source = source
+    if newSource ~= nil then
+      source = newSource
+    end
+
+    MySQL.Sync.execute(
+      updatePriceItemRequest,
+      { ["@Id"] = item.ContentId, ["@Price"] = price }
+    )
+
+    TriggerClientEvent("Shops:ChangePriceItem:cb", source, item, price)
+  end
+)
+
+RegisterServerEvent("Shops:removeItemFromStock")
+AddEventHandler(
+  "Shops:removeItemFromStock",
+  function(item, newSource)
+    local source = source
+    if newSource ~= nil then
+      source = newSource
+    end
+
+    Quantity = getQuantityItemByContentId(item.ContentId)
+
+    if Quantity ~= 0 then
+      TriggerClientEvent("Shops:StockNotEmpty", source, item)
+    else
+      MySQL.Sync.execute(
+        removeItemFromStockRequest,
+        { ["@Id"] = item.ContentId }
+      )
+
+      TriggerClientEvent("Shops:removeItemFromStock:cb", source, item)
+    end
   end
 )
 

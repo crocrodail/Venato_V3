@@ -8,6 +8,7 @@
 ConfigShop = {}
 ConfigShop.EnableShops = true
 ConfigShop.page = "client"
+ConfigShop.pages = {}
 ConfigShop.menuOpen = false
 ConfigShop.currentShopId = nil
 ConfigShop.currentOrderId = nil
@@ -21,6 +22,18 @@ ConfigShop.shopsNotification = {
 
 function ConfigShop.textInRedColor(msg)
   return ("<span class='red--text'>" .. msg .. "</span>")
+end
+
+function ConfigShop.textInYellowColor(msg)
+  return ("<span class='yellow--text'>" .. msg .. "</span>")
+end
+
+function ConfigShop.textInGrayColor(msg)
+  return ("<span class='grey--text'>" .. msg .. "</span>")
+end
+
+function ConfigShop.textInBlueColor(msg)
+  return ("<span class='blue--text'>" .. msg .. "</span>")
 end
 
 function ConfigShop.textInGreenColor(msg)

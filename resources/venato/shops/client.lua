@@ -25,8 +25,10 @@ AddEventHandler(
 
         for _, item in ipairs(shops) do
           if item.Supervised ~= 1 then
-            local npc =
-              CreatePed(4, 0xA1435105, item.PositionX, item.PositionY, item.PositionZ, item.NpcHeading, false, true)
+            local npc = CreatePed(4, 0xA1435105,
+              item.PositionX, item.PositionY, item.PositionZ, item.NpcHeading,
+              false, true
+            )
 
             SetEntityHeading(npc, item.NpcHeading)
             FreezeEntityPosition(npc, true)
@@ -107,12 +109,7 @@ CreateThread(
 -- ==================== --
 
 RegisterNetEvent("Shops:UpdateMenu:cb")
-AddEventHandler(
-  "Shops:UpdateMenu:cb",
-  function(content)
-    ShopPages.drawPage(content)
-  end
-)
+AddEventHandler("Shops:UpdateMenu:cb", Shops.drawPage)
 
 RegisterNetEvent("Shops:getMoney:cb")
 AddEventHandler(
@@ -138,8 +135,7 @@ RegisterNetEvent("Shops:NotEnoughMoney")
 AddEventHandler(
   "Shops:NotEnoughMoney",
   function(Name)
-    ConfigShop.shopsNotification.message =
-      ConfigShop.textInRedColor("Vous n'avez pas assez d'argent pour acheter " .. Name .. ".")
+    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Vous n'avez pas assez d'argent pour acheter " .. Name .. ".")
     Venato.notify(ConfigShop.shopsNotification)
     TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
   end
@@ -149,8 +145,7 @@ RegisterNetEvent("Shops:NotEnoughShopMoney")
 AddEventHandler(
   "Shops:NotEnoughShopMoney",
   function(Price)
-    ConfigShop.shopsNotification.message =
-      ConfigShop.textInRedColor("Le magasin n'a pas assez d'argent pour récupérer " .. Price .. "€.")
+    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Le magasin n'a pas assez d'argent pour récupérer " .. Price .. "€.")
     Venato.notify(ConfigShop.shopsNotification)
     TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
   end
@@ -170,10 +165,20 @@ RegisterNetEvent("Shops:TooHeavy")
 AddEventHandler(
   "Shops:TooHeavy",
   function(Name)
-    ConfigShop.shopsNotification.message =
-      ConfigShop.textInRedColor("Vous etes trop lourd pour acheter " .. Name .. ".")
+    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Vous etes trop lourd pour acheter " .. Name .. ".")
     Venato.notify(ConfigShop.shopsNotification)
     TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+  end
+)
+
+RegisterNetEvent("Shops:StockNotEmpty")
+AddEventHandler(
+  "Shops:StockNotEmpty",
+  function(item)
+    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Vous devez videz le stock de " .. item.Name .. " avant de le retirer de l'inventaire.")
+    Venato.notify(ConfigShop.shopsNotification)
+    ConfigShop.page = "adminItem"
+    TriggerServerEvent("Shops:showAdminItem", ConfigShop.currentShopId, item)
   end
 )
 
@@ -181,8 +186,7 @@ RegisterNetEvent("Shops:OrderItem:cb")
 AddEventHandler(
   "Shops:OrderItem:cb",
   function(Quantity, Name)
-    ConfigShop.shopsNotification.message =
-      ConfigShop.textInGreenColor("Vous avez bien commandé pour " .. Quantity .. ": " .. Name .. ".")
+    ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor("Vous avez bien commandé pour " .. Quantity .. ": " .. Name .. ".")
     Venato.notify(ConfigShop.shopsNotification)
     ConfigShop.page = "order"
     TriggerServerEvent("Shops:showOrder", ConfigShop.currentOrderId)
@@ -197,5 +201,29 @@ AddEventHandler(
     Venato.notify(ConfigShop.shopsNotification)
     ConfigShop.page = "order"
     TriggerServerEvent("Shops:showOrder", ConfigShop.currentOrderId)
+  end
+)
+
+RegisterNetEvent("Shops:ChangePriceItem:cb")
+AddEventHandler(
+  "Shops:ChangePriceItem:cb",
+  function(item, price)
+    ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor("Vous avez bien changé le prix de " .. item.Name
+      .. " à " .. price .. ".")
+    Venato.notify(ConfigShop.shopsNotification)
+    ConfigShop.page = "adminItem"
+    TriggerServerEvent("Shops:showAdminItem", ConfigShop.currentShopId, item)
+  end
+)
+
+RegisterNetEvent("Shops:removeItemFromStock:cb")
+AddEventHandler(
+  "Shops:removeItemFromStock:cb",
+  function(item)
+    ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor("Vous avez bien retiré " .. item.Name
+      .. " du stock.")
+    Venato.notify(ConfigShop.shopsNotification)
+    ConfigShop.page = "admin"
+    TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
   end
 )
