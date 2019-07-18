@@ -5,59 +5,50 @@
   @date 2019-07-11
   @version 1.0
 --]]
+Shops = {}
 ShopPages = {}
 
 -- ========== --
 -- Draw Pages --
 -- ========== --
 
-function ShopPages.drawPage(content)
+function Shops.drawPage(content)
   ConfigShop.menuOpen = true
 
   Menu.clearMenu()
   Menu.open()
 
-  if ConfigShop.page == "admin" then
-    ShopPages.admin(content)
-  elseif ConfigShop.page == "order" then
-    ShopPages.order(content)
-  elseif ConfigShop.page == "orderItem" then
-    ShopPages.orderItem(content)
-  elseif ConfigShop.page == "addItem" then
-    ShopPages.addItem(content)
-  else
-    ShopPages.client(content)
-  end
+  -- Search in registered pages the current one
+  -- and if found, show it with content in parameters
+  if ShopPages[ConfigShop.page] ~= nil then ShopPages[ConfigShop.page](content) end
 end
 
 -- CLIENT --
 function ShopPages.client(shop)
-    ConfigShop.currentOrderId = nil
-    local color = "~s~"
-    local shopName_ = shop.Renamed or shop.Name or "Shop"
-    Menu.setTitle( color..""..shopName_)
-    Menu.setSubtitle( "Stocks")
+  ConfigShop.currentOrderId = nil
+  local shopName_ = shop.Renamed or shop.Name or "Shop"
+  Menu.setTitle(shopName_)
+  local subTitle = "Stocks"
 
   ConfigShop.currentInventoryId = shop.InventoryId
-    if shop.Supervisor == 1 then
-      Menu.setSubtitle( MenuDescription .. " supervised by: ")
-      for _, manager in ipairs(shop.Managers) do
-        Menu.setSubtitle( MenuDescription .. " ".. manager.Name)
-      end
-    end
-
-  if shop.Supervisor == 1 then
-    MenuDescription = MenuDescription .. " supervised by: "
-    for _, manager in ipairs(shop.Managers) do
-      MenuDescription = MenuDescription .. " " .. manager.Name
+  if shop.Supervised == 1 then
+    subTitle = subTitle .. " supervised by: "
+    for index, manager in ipairs(shop.Managers) do
+      if index > 1 then subTitle = subTitle .. "," end
+      subTitle = subTitle .. manager.Name
     end
   end
+  Menu.setSubtitle(subTitle)
 
   if shop.IsSupervisor then
-    Menu.addButton("~b~Administration →", "goToAdministrationPage")
+    Menu.addButton(ConfigShop.textInYellowColor("Administration →"), "goTo", table.pack("admin",
+      "Shops:ShowInventory", ConfigShop.currentShopId))
   end
 
-  showProducts(shop.Items)
+  for _, item in ipairs(shop.Items) do
+    local textButton = itemToString(item)
+    Menu.addButton(textButton, "buyItem", item)
+  end
 end
 
 -- ADMIN --
@@ -66,122 +57,129 @@ function ShopPages.admin(shop)
     goToClientPage()
   end
 
-    local color = "~y~"
-    Menu.setTitle( color.."Administration")
-    Menu.setSubtitle( "caisse: "..shop.Money.."€")
+  Menu.setTitle(ConfigShop.textInYellowColor("Administration"))
+  Menu.setSubtitle("caisse: " .. shop.Money .. "€")
 
-  Menu.addButton("~y~↩ Stocks", "goToClientPage")
-  Menu.addButton("~b~Récuperer caisse →", "getMoney", {["Id"] = shop.Id, ["Money"] = shop.Money})
-  Menu.addButton("~b~Créer commande →", "createOrder")
+  Menu.addButton(ConfigShop.textInYellowColor("↩ Stocks"), "goTo",
+    table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId))
+  Menu.addButton(ConfigShop.textInBlueColor("Récuperer caisse →"), "getMoney")
+  Menu.addButton(ConfigShop.textInBlueColor("Créer commande →"), "createOrder")
 
-  showOrders(shop.Orders)
+  for _, order in ipairs(shop.Orders) do
+    local textButton = orderToString(order)
+
+    Menu.addButton(textButton, "goTo", table.pack("order", "Shops:showOrder", order.Id))
+  end
+
+  for _, item in ipairs(shop.Items) do
+    local textButton = itemToString(item)
+    Menu.addButton(textButton, "goTo", table.pack("adminItem", "Shops:showAdminItem", ConfigShop.currentShopId, item))
+  end
 end
 
 -- ORDER --
 function ShopPages.order(order)
-    local color = "~y~"
-    Menu.setTitle( color.."Commande: "..order.Ref)
-    Menu.setSubtitle( "Selectionne un produit pour le modifier")
+  ConfigShop.currentOrderId = order.Id
+  Menu.setTitle(ConfigShop.textInYellowColor("Commande: " .. order.Ref))
+  Menu.setSubtitle("Selectionne un produit pour le modifier")
 
-  Menu.addButton("~y~↩ Administration", "goToAdministrationPage")
-  Menu.addButton("~b~ Ajouter un produit", "goToAddItemToStock")
-  Menu.addButton("~b~ Supprimer commande", "deleteOrder")
+  Menu.addButton(ConfigShop.textInYellowColor("↩ Administration"), "goTo",
+    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId))
+  Menu.addButton(ConfigShop.textInBlueColor("Ajouter un produit"), "goTo",
+    table.pack("addItem", "Shops:showAddItem", ConfigShop.currentShopId))
+  Menu.addButton(ConfigShop.textInBlueColor("Supprimer commande"), "deleteOrder")
   if order.Finalized ~= 1 and #order.Items > 0 then
-    Menu.addButton("~b~ Finaliser commande", "finalizeOrder")
+    Menu.addButton(ConfigShop.textInBlueColor("Finaliser commande"), "finalizeOrder")
   end
 
-  showProducts(order.Items)
+  for _, item in ipairs(order.Items) do
+    local textButton = itemToString(item)
+    Menu.addButton(textButton, "goTo",
+      table.pack("orderItem", "Shops:ShowItem", ConfigShop.currentShopId, item))
+  end
 end
 
 function ShopPages.orderItem(item)
-  Menu.setTitle( item.Name)
-
-  if item.Ordered == nil or item.Ordered == 0 then
-    Menu.setTitle( MenuTitle.." ~t~(pas de commande)")
-  elseif item.Ordered > 0 then
-    Menu.setTitle( MenuTitle.." ~b~(+".. item.Ordered ..")")
+  menuTitle = item.Name
+  if item.Ordered == 0 then
+    menuTitle = menuTitle .. ConfigShop.textInGrayColor(" (pas de commande)")
+  else
+    menuTitle = menuTitle .. ConfigShop.textInBlueColor(" (+" .. item.Ordered .. ")")
   end
+  Menu.setTitle(menuTitle)
 
-	Menu.setSubtitle( "Actions")
-	Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)
-	Menu.addButton("Commander", "orderItem", item)
-	Menu.addButton("Modifier prix", "setPrice", item)
-	Menu.addButton("Retirer", "removeItem", item)
+  Menu.setSubtitle("Actions")
+  Menu.addButton(ConfigShop.textInYellowColor("↩ Commande"), "goTo",
+    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId))
+  Menu.addButton("Définir la quantité", "orderItem", item)
+  Menu.addButton("Retirer de la commande", "removeItemFromOrder", item)
+end
+
+function ShopPages.adminItem(item)
+  Menu.setTitle(item.Name)
+  Menu.setSubtitle("info: " .. itemToString(item))
+
+  Menu.addButton(ConfigShop.textInYellowColor("↩ Administration"), "goTo",
+    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId))
+  Menu.addButton("Modifier prix", "setPrice", item)
+  Menu.addButton("Retirer du stock", "removeItemFromStock", item)
 end
 
 function ShopPages.addItem(items)
   Menu.setTitle("Ajouter un produit")
-  MenuDescription = "Selectionne le produit à ajouter"
+  Menu.setSubtitle("Sélectionne le produit à ajouter")
 
-  Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)
-  showProducts(items)
+  Menu.addButton(ConfigShop.textInYellowColor("↩ Commande"), "goTo",
+    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId))
+
+  for _, item in ipairs(items) do
+    local textButton = itemToString(item)
+    Menu.addButton(textButton, "addItemToStock", item)
+  end
 end
 
 -- ===== --
 -- Tools --
 -- ===== --
 
-function showProducts(items)
-  for _, item in ipairs(items) do
-    local textButton = itemToString(item, ConfigShop.page == "order")
-
-    local action = "buyItem"
-    if ConfigShop.page == "order" then
-      action = "goToOrderItemPage"
-    elseif ConfigShop.page == "addItem" then
-      action = "addItemToStock"
-    end
-
-    Menu.addButton(textButton, action, item)
-  end
-end
-
-function itemToString(item, isOrder)
-  local s = "~s~" .. item.Name
+function itemToString(item)
+  local s = item.Name
 
   if item.Price ~= nil then
-    s = s .. " ~o~" .. item.Price .. "€~s~"
+    s = s .. ConfigShop.textInOrangeColor(" " .. item.Price .. "€")
   end
 
   if item.Quantity == nil then
     -- nothing todo
   elseif item.Quantity == 0 then
-    s = s .. " ~r~Rupture"
+    s = s .. ConfigShop.textInRedColor(" rupture")
   elseif item.Quantity > 0 then
-    s = "~s~" .. s .. " ~g~" .. item.Quantity .. " en stock"
+    s = s .. ConfigShop.textInGreenColor(" " .. item.Quantity .. " en stock")
   else
-    s = "~s~" .. s .. "~g~ stock illimité"
+    s = s .. ConfigShop.textInGreenColor(" stock illimité")
   end
 
-  if isOrder then
-    if item.Ordered == nil or item.Ordered == 0 then
-      s = s .. " ~t~(pas de commande)"
-    elseif item.Ordered > 0 then
-      s = s .. " ~b~(+" .. item.Ordered .. ")"
-    end
+  if item.Ordered == nil then
+    -- nothing todo
+  elseif item.Ordered == 0 then
+    s = s .. ConfigShop.textInGrayColor(" (pas de commande)")
+  elseif item.Ordered > 0 then
+    s = s .. ConfigShop.textInBlueColor(" (+" .. item.Ordered .. ")")
   end
 
   return s
 end
 
-function showOrders(orders)
-  for _, order in ipairs(orders) do
-    local textButton = orderToString(order)
-
-    Menu.addButton(textButton, "goToOrderPage", order.Id)
-  end
-end
-
 function orderToString(order)
-  local s = "~s~" .. order.Ref
+  local s = "Commande " .. order.Ref
   if order.Signed == 1 then
-    s = s .. " ~g~signée"
+    s = s .. ConfigShop.textInGreenColor(" signée")
   elseif order.Started == 1 then
-    s = s .. " ~y~livraison en cours"
+    s = s .. ConfigShop.textInYellowColor(" livraison en cours")
   elseif order.Finalized == 0 then
-    s = s .. " ~o~à finaliser"
+    s = s .. ConfigShop.textInOrangeColor(" à finaliser")
   else
-    s = s .. " ~t~en attente"
+    s = s .. ConfigShop.textInGrayColor(" en attente")
   end
   return s
 end
@@ -190,48 +188,25 @@ end
 -- Buttons action --
 -- ============== --
 
-function goToOrderItemPage(item)
-  ConfigShop.page = "orderItem"
-  TriggerServerEvent("Shops:ShowItem", ConfigShop.currentShopId, item)
-end
-
-function goToClientPage()
-  ConfigShop.page = "client"
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
-end
-
-function goToAdministrationPage()
-  ConfigShop.page = "admin"
-  TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
-end
-
-function goToOrderPage(orderId)
-  ConfigShop.page = "order"
-  ConfigShop.currentOrderId = orderId
-  TriggerServerEvent("Shops:showOrder", ConfigShop.currentOrderId)
+function goTo(args)
+  ConfigShop.page = args[1]
+  TriggerServerEvent(table.unpack(args, 2))
 end
 
 function buyItem(item)
   TriggerServerEvent("Shops:TestBuy", item.ContentId, ConfigShop.currentShopId)
 end
 
-function getMoney(shop)
-  TriggerServerEvent("Shops:getMoney", shop.Money, ConfigShop.currentShopId)
+function getMoney()
+  TriggerServerEvent("Shops:getMoney", ConfigShop.currentShopId)
 end
 
-function goToAddItemToStock()
-  ConfigShop.page = "addItem"
-  TriggerServerEvent("Shops:showAddItem", ConfigShop.currentShopId)
-end
-
-function removeItemFromStock()
-  ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
-  Venato.notify(ConfigShop.shopsNotification)
+function removeItemFromStock(item)
+  TriggerServerEvent("Shops:removeItemFromStock", item)
 end
 
 function orderItem(item)
-  local nb =
-    Venato.OpenKeyboard(
+  local nb = Venato.OpenKeyboard(
     "",
     "" .. (item.Ordered or 0),
     10,
@@ -240,17 +215,27 @@ function orderItem(item)
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
   else
-    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre choisi.")
+    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre saisi.")
     Venato.notify(ConfigShop.shopsNotification)
   end
 end
 
-function setPrice()
-  ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
-  Venato.notify(ConfigShop.shopsNotification)
+function setPrice(item)
+  local nb = Venato.OpenKeyboard(
+    "",
+    "" .. (item.Price or 0),
+    10,
+    "Quel prix voulez-vous pour '" .. item.Name .. "'"
+  )
+  if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
+    TriggerServerEvent("Shops:ChangePriceItem", item, tonumber(nb))
+  else
+    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre saisi.")
+    Venato.notify(ConfigShop.shopsNotification)
+  end
 end
 
-function removeItem(item)
+function removeItemFromOrder(item)
   ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
   Venato.notify(ConfigShop.shopsNotification)
 end
