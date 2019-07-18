@@ -68,3 +68,16 @@ local defaultNotification = {
  timeout = time
 }
 Venato.notify(defaultNotification)
+
+Venato.notifyError(msg)
+
+### function utile ###
+
+Venato.Text3D(x,y,z, text, font, fontSize)                                   # Text flottant ingame
+Venato.InteractTxt(text)                                                     # Text aide affiché en haut a gauche
+result = Venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)   # console d'ecriture
+target, distance = Venato.ClosePlayer()                                      # return source du joueur le plus proche et ça distance
+objet = Venato.CreateObject(objet, x, y, z)                                  # Crée un prop et return son id
+Venato.CreateVehicle(modelName, coords, heading, function())                 # Crée un vehicule et retourne l'id du vehicule dans l'arg de la fonction
+Venato.DeleteCar(entity)                                                     # Delete une voiture
+vehicle = Venato.CloseVehicle()                                              # return le vehicule le plus proche
