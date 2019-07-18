@@ -31,7 +31,7 @@ function ShopPages.drawPage(content)
 end
 
 -- CLIENT --
-function ShopPages.client(shop)  
+function ShopPages.client(shop)
     ConfigShop.currentOrderId = nil
     local color = "~s~"
     local shopName_ = shop.Renamed or shop.Name or "Shop"
@@ -110,7 +110,7 @@ function ShopPages.orderItem(item)
 end
 
 function ShopPages.addItem(items)
-  MenuTitle = "Ajouter un produit"
+  Menu.setTitle("Ajouter un produit")
   MenuDescription = "Selectionne le produit à ajouter"
 
   Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)

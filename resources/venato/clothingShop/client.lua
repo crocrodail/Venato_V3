@@ -1,12 +1,12 @@
 local cam = nil
 local shopOpen = false
 local x,y,z = nil
-local onPantalong = false
 local colorIndex = 1
 local bras = 1
 local LastArg = nil
 local componentId = nil
 local BagIsEquiped = false
+local ActualDomponentId = nil
 
 Citizen.CreateThread(function()
   while true do
@@ -29,25 +29,21 @@ Citizen.CreateThread(function()
         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour accèder au shop.')
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
           OpenClothingShop()
-          showPageInfo = not showPageInfo
-          Menu.hidden = not Menu.hidden
+          Menu.toggle()
         end
       end
     end
-		if onPantalong and Menu.GUI[Menu.selection +1]["args"]~= nil then
-			if Menu.hidden then
-				onPantalong = false
-			end
-			if Menu.GUI[Menu.selection +1]["args"] ~= LastArg then
+		if ActualDomponentId ~= nil then
+			if ActualDomponentId ~= LastArg then
 				colorIndex = 1
 			end
-			LastArg = Menu.GUI[Menu.selection +1]["args"]
-			SetPedComponentVariation(Venato.GetPlayerPed(), componentId, Menu.GUI[Menu.selection +1]["args"], colorIndex, 1)
-			ShowInfoColor(GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, Menu.GUI[Menu.selection +1]["args"]))
+			LastArg = ActualDomponentId
+			SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+			ShowInfoColor(GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId))
       DrawRect(0.5, 0.9, 0.2, 0.05, 0, 0, 0, 215)
     	printTxt(bras.." / "..GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(),3)-1 ,0.5, 0.89, true)
 			if IsControlJustPressed(1, Keys["RIGHT"]) then
-				if colorIndex + 1 <= GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, Menu.GUI[Menu.selection +1]["args"])-1 then
+				if colorIndex + 1 <= GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId)-1 then
 					colorIndex = colorIndex + 1
 				end
 			end
@@ -74,9 +70,13 @@ Citizen.CreateThread(function()
   end
 end)
 
+function ChangeDomponentId(arg)
+  ActualDomponentId = arg
+end
+
 function ShowInfoColor(a)
 	DrawRect(0.5, 0.95, 0.2, 0.05, 0, 0, 0, 215)
-	printTxt(colorIndex.." / "..GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, Menu.GUI[Menu.selection +1]["args"])-1 ,0.5, 0.933, true)
+	printTxt(colorIndex.." / "..GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId)-1 ,0.5, 0.933, true)
 end
 
 function printTxt(text, x,y, center)
@@ -108,8 +108,8 @@ function OpenClothingShop()
 	SetCamCoord(cam,  coords.x,  coords.y-2.0,  coords.z)
 	PointCamAtCoord(cam,x-1.0,y,z)
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
-	ClearMenu()
-	MenuTitle = "Clothing Shop"
+	Menu.clearMenu()
+	Menu.setTitle("Clothing Shop")
   Menu.addButton("sexe switch", "CSswitchsex", nil)
 	Menu.addButton("Pantalong", "CSpantalong", nil)
   Menu.addButton("Chausure", "CSchausure", nil)
@@ -148,13 +148,12 @@ end
 
 function CSAccessoire()
   componentId = 7-- Parachute / bag
-  ClearMenu()
+  Menu.clearMenu()
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	onPantalong = true
-	Menu.addButton("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -173,21 +172,21 @@ function CSAccessoire()
 			end
 		end
 		if dont == false then
-			Menu.addButton("~b~Accessoire ~r~#"..id, "OpenClothingShop", i)
+			Menu.addButton2("~b~Accessoire ~r~#"..id, "OpenClothingShop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
+  Menu.CreateMenu()
 end
 
 function CStop()
   componentId = 11-- Parachute / bag
-  ClearMenu()
+  Menu.clearMenu()
   SetCamCoord(cam,  x,  y-1.0,  z)
 	PointCamAtCoord(cam,x,y,z)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	onPantalong = true
-	Menu.addButton("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -206,23 +205,24 @@ function CStop()
 			end
 		end
 		if dont == false then
-			Menu.addButton("~b~Haut Primaire ~r~#"..i, "ChoseSecondeTop", i)
+			Menu.addButton2("~b~Haut Primaire ~r~#"..i, "ChoseSecondeTop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
+  Menu.CreateMenu()
 end
 
 function ChoseSecondeTop(i)
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
   componentId = 8
-  ClearMenu()
+  Menu.clearMenu()
   local id = 1
   local ped = Venato.GetPlayerPed()
-  Menu.addButton("~r~Back", "CStop", nil)
+  Menu.addButton2("~r~Back", "CStop", nil)
   for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-      Menu.addButton("~b~Haut Secondaire ~r~#"..i, "ChoseSecondeTop", i)
+      Menu.addButton2("~b~Haut Secondaire ~r~#"..i, "ChoseSecondeTop", i, "ChangeDomponentId")
       --for k,v in pairs(MaleCombinaisonTop) do
       --  Menu.addButton("~b~Haut Secondaire ~r~#"..k, "ChoseSecondeTop", k)
       --end
@@ -232,18 +232,18 @@ function ChoseSecondeTop(i)
       --end
     end
   end
+  Menu.CreateMenu()
 end
 
 
 function CSchausure()
   componentId = 6 -- Shoes
-  ClearMenu()
+  Menu.clearMenu()
   SetCamCoord(cam,  x,  y-1.0,  z-0.5)
 	PointCamAtCoord(cam,x,y,z-0.8)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	onPantalong = true
-	Menu.addButton("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -262,21 +262,21 @@ function CSchausure()
 			end
 		end
 		if dont == false then
-			Menu.addButton("~b~Chaussure ~r~#"..id, "OpenClothingShop", i)
+			Menu.addButton2("~b~Chaussure ~r~#"..id, "OpenClothingShop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
+  Menu.CreateMenu()
 end
 
 function CSpantalong()
   componentId = 4 -- legs
-	ClearMenu()
+	Menu.clearMenu()
   SetCamCoord(cam,  x,  y-1.0,  z)
 	PointCamAtCoord(cam,x,y,z-0.5)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	onPantalong = true
-	Menu.addButton("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -295,8 +295,9 @@ function CSpantalong()
 			end
 		end
 		if dont == false then
-			Menu.addButton("~b~Pantalong ~r~#"..id, "OpenClothingShop", i)
+			Menu.addButton2("~b~Pantalong ~r~#"..id, "OpenClothingShop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
+  Menu.CreateMenu()
 end

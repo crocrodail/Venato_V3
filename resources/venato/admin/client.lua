@@ -8,9 +8,8 @@ local wp = false
 local xtppers = "0.0"
 local ytppers = "0.0"
 local ztppers = "0.0"
-local AdminBlips = false
-local AdminBlipsString = "Blips : ~b~Off"
-local AdminShowCoordString = "Afficher les coordonées : ~b~Off"
+local AdminBlipsBool = false
+local AdminShowCoordBool = false
 local indexToShow = nil
 local indexToSpectate = nil
 local LastCoords = {}
@@ -36,32 +35,26 @@ function openVenatoadmin()
 	Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
   Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
 	Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
-  Menu.addButton( AdminShowCoordString , "AdminShowCoord", nil)
+  Menu.addButton( "Afficher/Masquer les coordonées" , "AdminShowCoord", nil)
   --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
 	if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
-  	Menu.addButton(AdminBlipsString , "AdminBlipsOption", nil)
+  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
 	end
 end
 
 function AdminShowCoord()
-  if AdminShowCoordString == "Afficher les coordonées : ~b~Off" then
-    AdminShowCoordString = "Afficher les coordonées : ~b~On"
-    Menu.GUI[Menu.selection +1]["name"] = AdminShowCoordString
+  if AdminShowCoordBool == false then
+    AdminShowCoordBool = true
   else
-    AdminShowCoordString = "Afficher les coordonées : ~b~Off"
-    Menu.GUI[Menu.selection +1]["name"] = AdminShowCoordString
+    AdminShowCoordBool = false
   end
 end
 
 function AdminBlipsOption()
-  if AdminBlips == false then
-    AdminBlips = true
-    AdminBlipsString = "Blips : ~b~On"
-    Menu.GUI[Menu.selection +1]["name"] = AdminBlipsString
+  if AdminBlipsBool == false then
+    AdminBlipsBool = true
   else
-    AdminBlips = false
-    AdminBlipsString = "Blips : ~b~Off"
-    Menu.GUI[Menu.selection +1]["name"] = AdminBlipsString
+    AdminBlipsBool = false
     for k,v in pairs(AdminDataPlayers) do
       local Player = GetPlayerFromServerId(v.Source)
       if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= GetPlayerPed(-1) then
@@ -79,8 +72,8 @@ function AdminBlipsOption()
 end
 
 function AdminCustomTP()
-	MenuTitle = "Venato Admin Menu"
-	MenuDescription = "~b~La vitamine c mais ne dira rien "
+	Menu.setTitle("Venato Admin Menu")
+  Menu.setSubtitle("~b~La vitamine c mais ne dira rien")
 	ClearMenu()
 	Menu.addButton("~r~Retour", "openVenatoadmin", nil)
 	Menu.addButton("Modifier les Coordonées", "coordtp", nil)
@@ -239,8 +232,8 @@ end
 
 function AdminPlayerOption(index)
   indexToShow = index
-  MenuTitle = "Venato Admin Menu Player"
-  ClearMenu()
+  Menu.setTitle("Venato Admin Menu Player")
+  Menu.clearMenu()
   Menu.addButton("Retour", "AdminListPlayer", nil)
   Menu.addButton("Spectate (Voyeur :3)", "AdminSpectate", nil)
   Menu.addButton("Kick (Pour le lol)", "AdminActionOnPlayer", "kick")
@@ -363,7 +356,7 @@ end
 
 Citizen.CreateThread(function()
   local HeadId = {}
-  while AdminBlips do
+  while AdminBlipsBool do
     Citizen.Wait(0)
     for k,v in pairs(AdminDataPlayers) do
       local Player = GetPlayerFromServerId(v.Source)

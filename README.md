@@ -56,8 +56,9 @@ Menu.setSubtitle( "")
 showPageInfo = false | true     # affiche le nombre de bouton
 Menu.clearMenu()    # supprime tout les boutons
 Menu.open() | true   # affiche le menu
-Menu.addButton(string1, string2, parametre)   #string1 = text du bouton ,  string2 = fonction a execute , parametre = parametre de la dite fonction
-
+Menu.addButton(string1, string2, parametre, hover)   #string1 = text du bouton ,  string2 = fonction a execute , parametre = parametre de la dite fonction , hover = function executer lors du survol du bouton
+Menu.addButton2(string1, string2, parametre, hover)   #l'équivalent au 1 mais ne s'affiche pas tout seul, il attent "Menu.CreateMenu()" pour s'afficher
+Menu.CreateMenu()   # Affiche les bouton "Menu.addButton2"
 ### notif ###
 
 local defaultNotification = {

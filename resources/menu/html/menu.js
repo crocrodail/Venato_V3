@@ -77,6 +77,11 @@ new Vue({
         this.selectedItem = 0;
       } else if (event.data.action == "addButton") {
         this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args })
+      } else if (event.data.action == "genMenu") {
+        var obj = JSON.parse(event.data[1]);
+        for (var i = 0; i < obj.length; i++) {
+           this.items.push({ title: obj[i].name, subtitle: '', confirm: obj[i].func, hover: obj[i].hover, data: obj[i].args })
+         };
       } else if (event.data.action == "init") {
         this.title = event.data.title;
         this.subtitle = event.data.subtitle;
@@ -126,7 +131,7 @@ new Vue({
     }
   },
   computed: {
-    
+
   },
   watch: {
     selectedItem: function (val) {

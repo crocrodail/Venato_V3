@@ -11,7 +11,6 @@ local PapierOpen = 0
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		Menu.renderGUI()
 		if IsControlJustPressed(1, Keys['K']) and GetLastInputMethod(2) then
 			Menu.clearMenu()
 			if Menu.hidden == true then
