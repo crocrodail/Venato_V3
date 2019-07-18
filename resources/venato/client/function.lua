@@ -24,6 +24,11 @@ function Venato.notifyError(msg)
 	Venato.notify(data)
 end
 
+RegisterNetEvent("Menu:Execute")
+AddEventHandler("Menu:Execute", function(params)
+  _G[params.fn](params.args)
+end)
+
 function Venato.notify(notif)
   if not notif.message then
     return
@@ -353,4 +358,17 @@ function Venato.DisplayInfoVehicle(vehicle)
 	PushScaleformMovieFunctionParameterInt(vehicle.handling)
 	EndScaleformMovieMethodReturn()
 	return scaleform2
+end
+
+function Venato.dump(o)
+  if type(o) == 'table' then
+     local s = '{ '
+     for k,v in pairs(o) do
+        if type(k) ~= 'number' then k = '"'..k..'"' end
+        s = s .. '['..k..'] = ' .. Venato.dump(v) .. ','
+     end
+     return s .. '} '
+  else
+     return tostring(o)
+  end
 end

@@ -72,6 +72,7 @@ setMapMarker()
   end
 end)
 
+
 function backToOpenGarage()
   resend = true
 end
@@ -82,7 +83,7 @@ function openGarage(name, x, y, z, h)
 end
 
 function close()
-  Menu.hidden = true
+  Menu.close()
 end
 
 function getCars(garage)
@@ -92,10 +93,9 @@ end
 
 function MyCar(table)
   local ads = false
-  showPageInfo = true
-  MenuTitle = "Garage"
-  MenuDescription = "~b~Mes Véhicules"
-  ClearMenu()
+  Menu.setTitle( "Garage")
+  Menu.setSubtitle( "~b~Mes Véhicules")
+  Menu.clearMenu()
   if Vehicule ~= nil then
   for a, v in pairs(Vehicule) do
     if v.type == 1 then
@@ -135,7 +135,6 @@ function StoreMyCar(garage)
       end
       if mind and  model ~= nil then
         TriggerServerEvent("Garage:RangeVoiture", plate,model,engineHealth,vehicleHealth,garage.name,current)
-        TriggerServerEvent("Garage:GetAllVehicle", garage)
         return
       end
     end
@@ -148,17 +147,13 @@ end
 
 function SortirVoiture(vhl)
   Citizen.CreateThread(function()
-    Menu.hidden = true
+    Menu.close()
     local customs = json.decode(tostring(vhl.customs))
     local health = json.decode(tostring(vhl.Health))
     Citizen.Wait(300)
     local CarOnPoint = GetClosestVehicle(vhl.x,vhl.y,vhl.z, 5.000, 0, 70)
     if not DoesEntityExist(CarOnPoint) then
       local car = tonumber(vhl.model)
-      RequestModel(car)
-      while not HasModelLoaded(car) do
-        Citizen.Wait(0)
-      end
       Venato.CreateVehicle(car, {x=vhl.x,y=vhl.y,z=vhl.z}, vhl.h, function(veh)
         if health ~= nil then
           if (health[1] ~= nil and health[1] > 0 and health[1] < 1000) or health[2] ~= nil then
@@ -292,18 +287,21 @@ end)
 RegisterNetEvent("Garage:AllVehicle")
 AddEventHandler("Garage:AllVehicle", function(garage)
   Vehicule = garage.vehicles
-  showPageInfo = true
-  MenuTitle = "Garage"
-  MenuDescription = "~b~Option"
-  ClearMenu()
+  Menu.setTitle( "Garage")
+  Menu.setSubtitle( "~b~Option")
+  Menu.clearMenu()
   Menu.addButton("~g~Mes vehicules", "getCars", garage)
   Menu.addButton("~o~Rentrer son véhicule", "StoreMyCar", garage)
   Menu.addButton("~r~Fermer", "close", nil)
-  Menu.hidden = false
+  Menu.open()
 end)
 
 RegisterNetEvent("Garage:deleteVoiture")
 AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
+  if IsPedInAnyVehicle( GetPlayerPed(-1), false ) then
+    TaskLeaveVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 262144)
+    Citizen.Wait(2500)
+  end
   if GetEntityModel(vehicle) ~= nil then
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(vehicle))
     Venato.DeleteCar(vehicle)
@@ -312,11 +310,10 @@ AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(current))
     Venato.DeleteCar(vehicle)
   end
-
+  Menu.close()
   defaultNotification.message = "Véhicule rangé"
   defaultNotification.type = "alert"
   Venato.notify(defaultNotification)
-
 end)
 
 function GetBlacklistedList()

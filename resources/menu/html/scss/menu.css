@@ -1,0 +1,87 @@
+html {
+  background-color: transparent;
+  overflow: hidden;
+}
+
+html body {
+  background-color: transparent;
+}
+
+html body #app {
+  background-color: transparent;
+}
+
+html body #app .v-card {
+  border-radius: 30px;
+  background-color: #f7f7f780;
+}
+
+html body #app .v-card.theme--dark {
+  background-color: #2e2e2ede;
+}
+
+html body #app .v-card .menu_title {
+  font-size: 0.8em;
+  height: 100%;
+  width: 100%;
+}
+
+html body #app .v-card .menu_title p {
+  padding-top: 15px;
+  color: white;
+}
+
+html body #app .v-card .v-card__title {
+  padding-bottom: 10px;
+}
+
+html body #app .v-card .v-list {
+  padding: 20px !important;
+  background: transparent;
+}
+
+html body #app .v-card .v-list .v-subheader {
+  font-size: 0.3em;
+  color: black;
+  font-style: italic;
+}
+
+html body #app .v-card .v-list .v-subheader.theme--dark {
+  color: white;
+}
+
+html body #app .v-card .v-list .v-list__tile {
+  font-size: 0.5em;
+  font-family: "Poppins";
+}
+
+html body #app .v-card .v-list .v-list__tile__sub-title {
+  font-size: 0.4em;
+  font-family: "Poppins";
+}
+
+.menu_container {
+  padding-top: 10vh;
+  max-height: 70vh;
+  font-size: 45px;
+}
+
+.menu_container .v-card {
+  max-height: 60vh;
+}
+
+.menu_container .v-card .v-list {
+  max-height: 50vh;
+  overflow-y: hidden;
+}
+
+.v-list--dense .v-list__tile .v-icon {
+  font-size: 0.75em !important;
+}
+
+.vehicle_information {
+  position: absolute;
+  right: 10%;
+  top: 30%;
+}
+/*# sourceMappingURL=menu.css.map */

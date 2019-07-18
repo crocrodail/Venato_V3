@@ -48,10 +48,10 @@ AddEventHandler('Bank:GetDataMoneyForBank:cb', function(data)
 end)
 
 function menuBank(data)
-  Menu.hidden = false
-  MenuTitle = "Banque"
-  MenuDescription = "Options"
-  ClearMenu()
+  Menu.open()
+  Menu.setTitle( "Banque")
+  Menu.setSubtitle( "Options")
+  Menu.clearMenu()
   if data.Account == 'aucun' then
     Menu.addButton("Créer un compte banquaire pour ~g~1 000 €", "CreatAcount", data)
   else
@@ -63,10 +63,10 @@ function menuBank(data)
 end
 
 function depoCheque(data)
-  Menu.hidden = false
-  ClearMenu()
-  MenuTitle = "Mes chèques"
-	MenuDescription = "Choisisez le chèque à déposer"
+  Menu.open()
+  Menu.clearMenu()
+  Menu.setTitle( "Mes chèques")
+	Menu.setSubtitle( "Choisisez le chèque à déposer")
   Menu.addButton("~r~↩ Retour", "menuBank", data)
   for k,v in pairs(data.Documents) do
     if v.type == "cheque" then
@@ -76,7 +76,7 @@ function depoCheque(data)
 end
 
 function selecChequedepot(row)
-  ClearMenu()
+  Menu.clearMenu()
   Menu.addButton("~r~↩ Retour", "depoCheque", row[1])
   Menu.addButton("Encaissé", "encaise", row)
   Menu.addButton("~r~Annuler ce cheque", "cancelChequetest", row)
@@ -84,20 +84,20 @@ end
 
 function encaise(row)
   TriggerServerEvent("Bank:DepotCheque", row[2])
-  Menu.hidden = true
+  Menu.close()
 end
 
 function cancelChequetest(row)
-  ClearMenu()
-  MenuTitle = "~r~Confirmer l'annulation"
-  MenuDescription = "Etes vous sur de vouloir annuler ce chèque ?"
+  Menu.clearMenu()
+  Menu.setTitle( "~r~Confirmer l'annulation")
+  Menu.setSubtitle( "Etes vous sur de vouloir annuler ce chèque ?")
   Menu.addButton("~r~Annuler l'annulation", "selecChequedepot", row)
   Menu.addButton("~b~Confirmer l'annulation", "cancelCheque", row)
 end
 
 function cancelCheque(row)
   TriggerServerEvent("Bank:CancelCheque", row[2])
-  Menu.hidden = true
+  Menu.close()
 end
 
 
@@ -116,7 +116,7 @@ function buyCheque(data)
       Venato.notify("~r~Vous possèdez déjà un chèquier.")
     end
   else
-    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour acheter un chequier.")
+    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour acheter un chequier.")
   end
 end
 
@@ -125,22 +125,23 @@ function buyCard(data)
     TriggerServerEvent("Bank:createCard")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour acheter une carte banquaire.")
+    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte banquaire.")
   end
 end
 
 function CreatAcount(data)
-  Menu.hidden = true
+  Menu.close()
   if data.Money >= 1000 then
     TriggerServerEvent("Bank:createAccount")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notify("Vous n'avez pas les 1 000 € néssaisaire pour ouvrir un compte.")
+    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour ouvrir un compte.")
   end
 end
 
 function myAcount(data)
-	open = true
+  open = true
+  SetNuiFocus(true, true)
 	SendNUIMessage({
 		action = "openBank",
 		bank = data.Bank,
@@ -166,7 +167,7 @@ Citizen.CreateThread(function ()
 		if IsControlJustReleased(0, 38) and inBankMarker and GetLastInputMethod(2) then
 			TriggerServerEvent("Bank:GetDataMoneyForBank")
 		end
-		if open then
+    if open then      
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack

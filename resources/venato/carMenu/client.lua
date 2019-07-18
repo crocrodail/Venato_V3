@@ -44,10 +44,10 @@ function showMenu()
     local car = GetVehiclePedIsIn(PlayerPedId(), false)
     if car ~= 0 then
         menuIsOpen = true
-        Menu.hidden = false
-        ClearMenu()
-        MenuTitle = "Voiture"
-        MenuDescription = "Choisir une action"
+        Menu.open()
+        Menu.clearMenu()
+        Menu.setTitle( "Voiture")
+        Menu.setSubtitle( "Choisir une action")
         Menu.addButton("~r~↩ Retour", "hideMenu")
 
         if setRegu then
@@ -100,7 +100,7 @@ end
 
 function hideMenu()
     menuIsOpen = false
-    Menu.hidden = true
+    Menu.close()
 end
 
 function toggleEngine(car)
@@ -125,9 +125,9 @@ function openDoor(data)
 end
 
 function openRegulMenu(car)
-    ClearMenu()
-    MenuTitle = "Voiture"
-    MenuDescription = "Réglage régulateur"
+    Menu.clearMenu()
+    Menu.setTitle( "Voiture")
+    Menu.setSubtitle( "Réglage régulateur")
     Menu.addButton("~r~↩ Retour", "showMenu")
 
     Menu.addButton("30 km/h", "activRegu", {car = car, vitesse = 30})
@@ -141,9 +141,9 @@ function openRegulMenu(car)
 end
 
 function settingsMenu()
-    ClearMenu()
-    MenuTitle = "Voiture"
-    MenuDescription = "Changer affichage compteur"
+    Menu.clearMenu()
+    Menu.setTitle( "Voiture")
+    Menu.setSubtitle( "Changer affichage compteur")
     Menu.addButton("~r~↩ Retour", "showMenu")
 
     Menu.addButton("Style 1", "setSpeedmeter", 0, "previewSpeedmeter")

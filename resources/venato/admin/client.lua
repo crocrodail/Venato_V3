@@ -22,10 +22,9 @@ function ResetDefaultNotification()
 end
 
 function openVenatoadmin()
-	ClearMenu()
-	MenuTitle = "Venato Admin Menu"
-  showPageInfo = true
-  MenuDescription = "~b~La vitamine c mais ne dira rien "
+	Menu.clearMenu()
+	Menu.setTitle("Venato Admin Menu")
+  Menu.setSubtitle( "~b~La vitamine c mais ne dira rien ")
 	Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
 	Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
 	Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
@@ -221,8 +220,8 @@ function AdminSendMsg()
 end
 
 RegisterNetEvent("Admin:CallDataUsers:cb")
-AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
-	ClearMenu()
+AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers)
+	Menu.clearMenu()
 	AdminDataPlayers = dataPlayers
 	ClientSource = DataSource
 	openVenatoadmin()
@@ -359,7 +358,7 @@ end
 
 
 function AdminCloseMenu()
-	Menu.hidden = true
+	Menu.close()
 end
 
 Citizen.CreateThread(function()
@@ -481,10 +480,10 @@ Citizen.CreateThread(function()
 		if IsControlPressed(1, Keys["5"]) and IsControlPressed(1, Keys["G"]) and GetLastInputMethod(2) and open == false then
 			open = true
 			if Menu.hidden == true then
-				TriggerServerEvent("Admin:CallDataUsers")
-				Menu.hidden = false
+				openVenatoadmin()
+				Menu.open()
 			else
-				Menu.hidden = true
+				Menu.close()
 			end
 		end
 		if ListPlayer then

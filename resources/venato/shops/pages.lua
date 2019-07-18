@@ -14,9 +14,8 @@ ShopPages = {}
 function ShopPages.drawPage(content)
   ConfigShop.menuOpen = true
 
-  ClearMenu()
-  Menu.hidden = false
-  showPageInfo = true
+  Menu.clearMenu()
+  Menu.open()
 
   if ConfigShop.page == "admin" then
     ShopPages.admin(content)
@@ -32,14 +31,20 @@ function ShopPages.drawPage(content)
 end
 
 -- CLIENT --
-function ShopPages.client(shop)
-  ConfigShop.currentOrderId = nil
-  local color = "~s~"
-  local shopName_ = shop.Renamed or shop.Name or "Shop"
-  MenuTitle = color .. "" .. shopName_
-  MenuDescription = "Stocks"
+function ShopPages.client(shop)  
+    ConfigShop.currentOrderId = nil
+    local color = "~s~"
+    local shopName_ = shop.Renamed or shop.Name or "Shop"
+    Menu.setTitle( color..""..shopName_)
+    Menu.setSubtitle( "Stocks")
 
   ConfigShop.currentInventoryId = shop.InventoryId
+    if shop.Supervisor == 1 then
+      Menu.setSubtitle( MenuDescription .. " supervised by: ")
+      for _, manager in ipairs(shop.Managers) do
+        Menu.setSubtitle( MenuDescription .. " ".. manager.Name)
+      end
+    end
 
   if shop.Supervisor == 1 then
     MenuDescription = MenuDescription .. " supervised by: "
@@ -61,9 +66,9 @@ function ShopPages.admin(shop)
     goToClientPage()
   end
 
-  local color = "~y~"
-  MenuTitle = color .. "Administration"
-  MenuDescription = "caisse: " .. shop.Money .. "€"
+    local color = "~y~"
+    Menu.setTitle( color.."Administration")
+    Menu.setSubtitle( "caisse: "..shop.Money.."€")
 
   Menu.addButton("~y~↩ Stocks", "goToClientPage")
   Menu.addButton("~b~Récuperer caisse →", "getMoney", {["Id"] = shop.Id, ["Money"] = shop.Money})
@@ -74,9 +79,9 @@ end
 
 -- ORDER --
 function ShopPages.order(order)
-  local color = "~y~"
-  MenuTitle = color .. "Commande: " .. order.Ref
-  MenuDescription = "Selectionne un produit pour le modifier"
+    local color = "~y~"
+    Menu.setTitle( color.."Commande: "..order.Ref)
+    Menu.setSubtitle( "Selectionne un produit pour le modifier")
 
   Menu.addButton("~y~↩ Administration", "goToAdministrationPage")
   Menu.addButton("~b~ Ajouter un produit", "goToAddItemToStock")
@@ -89,19 +94,19 @@ function ShopPages.order(order)
 end
 
 function ShopPages.orderItem(item)
-  MenuTitle = item.Name
+  Menu.setTitle( item.Name)
 
   if item.Ordered == nil or item.Ordered == 0 then
-    MenuTitle = MenuTitle .. " ~t~(pas de commande)"
+    Menu.setTitle( MenuTitle.." ~t~(pas de commande)")
   elseif item.Ordered > 0 then
-    MenuTitle = MenuTitle .. " ~b~(+" .. item.Ordered .. ")"
+    Menu.setTitle( MenuTitle.." ~b~(+".. item.Ordered ..")")
   end
 
-  MenuDescription = "Actions"
-  Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)
-  Menu.addButton("Commander", "orderItem", item)
-  Menu.addButton("Modifier prix", "setPrice", item)
-  Menu.addButton("Retirer", "removeItem", item)
+	Menu.setSubtitle( "Actions")
+	Menu.addButton("~y~↩ Commande", "goToOrderPage", ConfigShop.currentOrderId)
+	Menu.addButton("Commander", "orderItem", item)
+	Menu.addButton("Modifier prix", "setPrice", item)
+	Menu.addButton("Retirer", "removeItem", item)
 end
 
 function ShopPages.addItem(items)

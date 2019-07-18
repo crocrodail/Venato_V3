@@ -6,7 +6,6 @@ local colorSec = 0
 local playerPed = PlayerPedId()
 local menuIsOpen = false
 local currentVehicle
-local showInformationVehicle = false
 local currentShop = 0
 local LastCar = nil
 local defaultNotification = {
@@ -15,11 +14,12 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
 }
 
-function HideMenu()
+RegisterNetEvent("CarShop:HideMenu")
+AddEventHandler('CarShop:HideMenu', function()
   menuIsOpen = false
-  showInformationVehicle = false
-  Menu.hidden = true
-end
+  TriggerEvent('Menu:HideVehicleInformation')
+  TriggerEvent('Menu:Close')
+end)
 
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
@@ -35,17 +35,9 @@ Citizen.CreateThread(function ()
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
 
-    if showInformationVehicle and currentVehicle then
-      scaleform2 = Venato.DisplayInfoVehicle(currentVehicle)
-      local x = 0.85
-			local y = 0.1
-			local width = 1.20
-			local height = 1.20
-      DrawScaleformMovie(scaleform2, x, y, width, height)
-    end
-
     for i=1, #Config.CarShop, 1 do
-      local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
+      setCarShopMapMarker(Config.CarShop[i])
+      distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
@@ -69,7 +61,6 @@ Citizen.CreateThread(function ()
               defaultNotification.type = 'error'
               Venato.notify(defaultNotification)
           else
-
             GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 500)
             GiveWeaponToPed(PlayerPedId(), "WEAPON_CARBINERIFLE", 5000)
             GiveWeaponToPed(PlayerPedId(), "WEAPON_REVOLVER", 5000)
@@ -81,12 +72,12 @@ Citizen.CreateThread(function ()
           end
         end
         if IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])  or IsControlJustPressed(1, Keys["F2"]) then
-          HideMenu()
+          TriggerEvent("CarShop:HideMenu")
           RemoveCurrentCar()
         end
       else
         if menuIsOpen and Config.CarShop[i].id == currentShop then
-          HideMenu()
+          TriggerEvent("CarShop:HideMenu")
           RemoveCurrentCar()
         end
       end
@@ -118,36 +109,42 @@ end
 
 function OpenCarMenu(vehiculeType)
   if not menuIsOpen then
+    TriggerEvent("Menu:Clear")
     TriggerServerEvent("CarShop:ShowCategory", vehiculeType)
+    menuIsOpen = true
   else
     menuIsOpen = false
-    Menu.hidden = true
+    TriggerEvent('Menu:Close')
   end
-  showInformationVehicle = false
+  TriggerEvent('Menu:HideVehicleInformation')
 end
 
-function showCategory(category)
+RegisterNetEvent("CarShop:ShowCategory")
+AddEventHandler('CarShop:ShowCategory',
+function (category)
   if IsPedInAnyVehicle( playerPed, false ) then
     car = GetVehiclePedIsIn( playerPed, false )
     Venato.DeleteCar( car )
   end
-  showInformationVehicle = false
-  showVehicles(category)
-end
+  TriggerEvent('Menu:HideVehicleInformation')
+  TriggerEvent("CarShop:ShowVehicles",category)
+end)
 
-function showVehicles(category)
+RegisterNetEvent("CarShop:ShowVehicles")
+AddEventHandler('CarShop:ShowVehicles', function(category)
   TriggerServerEvent("CarShop:ShowVehicles", category)
-end
+end)
 
-function returnToCategory(category)
+RegisterNetEvent("CarShop:ReturnToCategory")
+AddEventHandler('CarShop:ReturnToCategory',function(category)
   RemoveNotification(lastNotif)
   if IsPedInAnyVehicle( playerPed, false ) then
     car = GetVehiclePedIsIn( playerPed, false )
     Venato.DeleteCar( car )
   end
   TriggerServerEvent("CarShop:ShowCategory", category)
-  showInformationVehicle = false
-end
+  TriggerEvent('Menu:HideVehicleInformation')
+end)
 
 function formatPrice(price)
   if not price then
@@ -194,30 +191,33 @@ function changeColor()
   SetVehicleColours(car,color,colorSec)
 end
 
-function previewVehicle(data)
-  showInformationVehicle = false
-  if not IsModelInCdimage(data.model) or not IsModelAVehicle(data.model) then
-    defaultNotification.message = "Ce modèle n'est pas disponible."
-    defaultNotification.type = "error"
-    Venato.notify(defaultNotification)
-    return
-  end
-  local pos = GetEntityCoords(playerPed)
-  Venato.CreateVehicle(data.model, {x = pos.x, y = pos.y, z = pos.z}, GetEntityHeading(playerPed), function(vehicle)
-    LastCar = vehicle
-    SetVehicleColours(vehicle,color,colorSec)
-    if IsPedInAnyVehicle( playerPed, false ) then
-      car = GetVehiclePedIsIn( playerPed, false )
-      Venato.DeleteCar( car )
+RegisterNetEvent("CarShop:PreviewVehicle")
+AddEventHandler('CarShop:PreviewVehicle', function(data)
+   TriggerEvent('Menu:HideVehicleInformation')
+   if not IsModelInCdimage(data.model) or not IsModelAVehicle(data.model) then
+        defaultNotification.message = "Ce modèle n'est pas disponible."
+        defaultNotification.type = "error"
+        Venato.notify(defaultNotification)
+        return
     end
-    currentVehicle = data
-    showInformationVehicle = true
-    SetPedIntoVehicle(playerPed, vehicle, -1)
-    SetVehicleUndriveable(vehicle, true)
-  end)
-end
+    Venato.CreateVehicle(data.model, {x = pos.x, y = pos.y, z = pos.z}, GetEntityHeading(playerPed), function(vehicle)
+      LastCar = vehicle
+      SetVehicleColours(vehicle,color,colorSec)
+      SetVehicleFuelLevel(vehicle, GetVehicleFuelLevel(vehicle) + 50)
+      SetVehicleDirtLevel(vehicle,0)
+      if IsPedInAnyVehicle( playerPed, false ) then
+        car = GetVehiclePedIsIn( playerPed, false )
+        Venato.DeleteCar( car )
+      end
+      currentVehicle = data
+      TriggerEvent('Menu:ShowVehicleInformation', data)
+      SetPedIntoVehicle(playerPed, vehicle, -1)
+      SetVehicleUndriveable(vehicle, true)
+    end)
+end)
 
-function buyVehicle(data)
+RegisterNetEvent("CarShop:BuyVehicle")
+AddEventHandler('CarShop:BuyVehicle', function(data)
   local car = GetVehiclePedIsIn( playerPed, false )
   local currentVhl = {}
   currentVhl.primary_red, currentVhl.primary_green, currentVhl.primary_blue   = GetVehicleCustomPrimaryColour(car);
@@ -249,34 +249,38 @@ function buyVehicle(data)
   }
   if data.vp_enabled then
     if data.vp_only then
-      payWithVp(vehicle)
-      return
+      TriggerEvent("CarShop:PayWithVp", vehicle)
     else
-      ClearMenu()
-      MenuTitle = "Concessionnaire"
-      MenuDescription = "Confirmer paiement"
-      showInformationVehicle = false
-      Menu.addButton("~r~↩ Retour", "showVehicles", data.type)
-      Menu.addButton("Payer avec de l'argent", "pay", vehicle)
-      Menu.addButton("Payer avec des Venato Points", "payWithVp", vehicle)
+      print('Coucou')
+      TriggerEvent('Menu:Title', "Concessionnaire", "Confirmer paiement")
+      TriggerEvent('Menu:Close')
+      TriggerEvent('Menu:Clear')
+      TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "CarShop:ShowVehicles", data.type)
+      TriggerEvent('Menu:AddButton',"Payer avec de l'argent", "CarShop:Pay", vehicle)
+      TriggerEvent('Menu:AddButton',"Payer avec des Venato Points", "CarShop:PayWithVp", vehicle)
+      TriggerEvent('Menu:Open')
     end
   else
-    pay(vehicle)
+    TriggerEvent("CarShop:Pay", vehicle)
   end
-end
+end)
 
-function payWithVp(vehicle)
+RegisterNetEvent("CarShop:PayWithVp")
+AddEventHandler('CarShop:PayWithVp', function(vehicle)
   TriggerServerEvent("CarShop:BuyVP", vehicle)
-end
+end)
 
-function pay(vehicle)
+RegisterNetEvent("CarShop:Pay")
+AddEventHandler('CarShop:Pay', function(vehicle)
   TriggerServerEvent("CarShop:Buy", vehicle)
-end
+end)
 
-function hideInfo()
-  showInformationVehicle = false
+RegisterNetEvent("CarShop:HideInfo")
+AddEventHandler('CarShop:HideInfo', function()
   currentVehicle = nil
+  TriggerEvent("Menu:HideVehicleInformation")
 end
+)
 
 
 function pairsByKeys (t, f)
@@ -299,8 +303,8 @@ AddEventHandler('CarShop:PaiementOk:response', function(data)
   SetNuiFocus(false, false)
   local car = GetVehiclePedIsIn( playerPed, false )
   SetVehicleUndriveable(car, false)
-  showInformationVehicle = false
-  HideMenu()
+  TriggerEvent('Menu:HideVehicleInformation')
+  TriggerEvent("CarShop:HideMenu")
   defaultNotification.type = "alert"
   defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Faites attention sur la route.";
   Venato.notify(defaultNotification)
@@ -313,43 +317,49 @@ AddEventHandler('CarShop:PaiementKo:response', function(data)
   defaultNotification.message = "Erreur de paiement. Verifiez votre solde.";
   defaultNotification.type = "error"
   Venato.notify(defaultNotification)
+  TriggerEvent("Menu:Open")
 end)
+
+function testCarShop(data)
+  print("Crocro est trop balèze")
+end
+
 
 RegisterNetEvent('CarShop:ShowCategory:response')
 AddEventHandler('CarShop:ShowCategory:response', function(data)
-  ClearMenu()
-  MenuTitle = "Concessionnaire"
-  MenuDescription = "Catégories"
-  Menu.addButton("~r~↩ Retour", "HideMenu", data)
+  TriggerEvent('Menu:Clear')
+  TriggerEvent('Menu:Init', "Concessionnaire", "Catégories", '#1A237E99', "https://images.caradisiac.com/logos/0/3/1/6/240316/S0-parc-automobile-il-n-y-a-jamais-eu-autant-de-vehicules-sur-nos-routes-161246.jpg")
+  TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "CarShop:HideMenu", data)
+  TriggerEvent('Menu:AddButton', "Test", "testCarShop", data)
 
   for k,v in pairsByKeys(data) do
-    Menu.addButton(v.type, "showCategory", v.type)
+    TriggerEvent('Menu:AddButton',v.type, "CarShop:ShowCategory", v.type)
   end
-  Menu.addButton("~r~↩ Retour", "HideMenu", data)
+  TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "CarShop:HideMenu", data)
   menuIsOpen = true
-  showInformationVehicle = false
-  Menu.hidden = false
+  TriggerEvent('Menu:HideVehicleInformation')
+  TriggerEvent('Menu:Open')hidden = false
 end)
 
 RegisterNetEvent('CarShop:ShowVehicles:response')
 AddEventHandler('CarShop:ShowVehicles:response', function(data)
-  ClearMenu()
-  MenuTitle = "Concessionnaire"
+  TriggerEvent('Menu:Clear')
+  TriggerEvent('Menu:Title', "Concessionnaire", "Choissez votre prochain véhicule")
   local returnAdded = false
   local carShopType = 0
 
   for k,v in pairsByKeys(data) do
     if(not returnAdded) then
-      Menu.addButton("~r~↩ Retour", "returnToCategory", v.carShopType, "hideInfo")
+      TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "CarShop:ReturnToCategory", v.carShopType, "CarShop:HideInfo")
       carShopType = v.carShopType
       returnAdded = true
     end
-    MenuDescription = v.type
-    Menu.addButton(v.name, "buyVehicle", v, "previewVehicle")
+    TriggerEvent('Menu:Title', "Concessionnaire", v.type)
+    TriggerEvent('Menu:AddButton',v.name, "CarShop:BuyVehicle", v, "CarShop:PreviewVehicle")
   end
-  Menu.addButton("~r~↩ Retour", "returnToCategory", carShopType, "hideInfo")
+  TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "CarShop:ReturnToCategory", carShopType, "CarShop:HideInfo")
 
   menuIsOpen = true
-  showInformationVehicle = false
-  Menu.hidden = false
+  TriggerEvent('Menu:HideVehicleInformation')
+  TriggerEvent('Menu:Open')hidden = false
 end)
