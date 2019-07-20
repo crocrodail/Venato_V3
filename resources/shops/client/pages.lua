@@ -15,8 +15,8 @@ ShopPages = {}
 function Shops.drawPage(content)
   ConfigShop.menuOpen = true
 
-  Menu.clearMenu()
-  Menu.open()
+  TriggerEvent('Menu:Clear')
+  TriggerEvent('Menu:Open')
 
   -- Search in registered pages the current one
   -- and if found, show it with content in parameters
@@ -27,7 +27,7 @@ end
 function ShopPages.client(shop)
   ConfigShop.currentOrderId = nil
   local shopName_ = shop.Renamed or shop.Name or "Shop"
-  Menu.setTitle(shopName_)
+  TriggerEvent('Menu:Title', shopName_)
   local subTitle = "Stocks"
 
   ConfigShop.currentInventoryId = shop.InventoryId
@@ -38,16 +38,16 @@ function ShopPages.client(shop)
       subTitle = subTitle .. manager.Name
     end
   end
-  Menu.setSubtitle(subTitle)
+  TriggerEvent('Menu:SubTitle', subTitle)
 
   if shop.IsSupervisor then
-    Menu.addButton(ConfigShop.textInYellowColor("Administration →"), "goTo", table.pack("admin",
-      "Shops:ShowInventory", ConfigShop.currentShopId))
+    TriggerEvent('Menu:AddButton', ConfigShop.textInYellowColor("Administration →"), "goTo", table.pack("admin",
+      "Shops:ShowInventory", ConfigShop.currentShopId), nil)
   end
 
   for _, item in ipairs(shop.Items) do
     local textButton = itemToString(item)
-    Menu.addButton(textButton, "buyItem", item)
+    TriggerEvent('Menu:AddButton', textButton, "buyItem", item, nil)
   end
 end
 
@@ -57,84 +57,87 @@ function ShopPages.admin(shop)
     goToClientPage()
   end
 
-  Menu.setTitle(ConfigShop.textInYellowColor("Administration"))
-  Menu.setSubtitle("caisse: " .. shop.Money .. "€")
+  TriggerEvent('Menu:Title', ConfigShop.textInYellowColor("Administration"))
+  TriggerEvent('Menu:SubTitle', "caisse: " .. shop.Money .. "€")
 
-  Menu.addButton(ConfigShop.textInYellowColor("↩ Stocks"), "goTo",
-    table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId))
-  Menu.addButton(ConfigShop.textInBlueColor("Récuperer caisse →"), "getMoney")
-  Menu.addButton(ConfigShop.textInBlueColor("Créer commande →"), "createOrder")
+  TriggerEvent('Menu:AddButton', ConfigShop.textInYellowColor("↩ Stocks"), "goTo",
+    table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
+  TriggerEvent('Menu:AddButton', ConfigShop.textInBlueColor("Récuperer caisse →"), "getMoney", nil)
+  TriggerEvent('Menu:AddButton', ConfigShop.textInBlueColor("Créer commande →"), "createOrder", nil)
 
   for _, order in ipairs(shop.Orders) do
     local textButton = orderToString(order)
 
-    Menu.addButton(textButton, "goTo", table.pack("order", "Shops:showOrder", order.Id))
+    TriggerEvent('Menu:AddButton', textButton, "goTo", table.pack("order", "Shops:showOrder", order.Id), nil)
   end
 
   for _, item in ipairs(shop.Items) do
     local textButton = itemToString(item)
-    Menu.addButton(textButton, "goTo", table.pack("adminItem", "Shops:showAdminItem", ConfigShop.currentShopId, item))
+    TriggerEvent('Menu:AddButton', textButton, "goTo",
+      table.pack("adminItem", "Shops:showAdminItem", ConfigShop.currentShopId, item), nil)
   end
 end
 
 -- ORDER --
 function ShopPages.order(order)
   ConfigShop.currentOrderId = order.Id
-  Menu.setTitle(ConfigShop.textInYellowColor("Commande: " .. order.Ref))
-  Menu.setSubtitle("Selectionne un produit pour le modifier")
+  TriggerEvent('Menu:Title', ConfigShop.textInYellowColor("Commande: " .. order.Ref))
+  TriggerEvent('Menu:SubTitle', "Selectionne un produit pour le modifier")
 
-  Menu.addButton(ConfigShop.textInYellowColor("↩ Administration"), "goTo",
-    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId))
-  Menu.addButton(ConfigShop.textInBlueColor("Ajouter un produit"), "goTo",
-    table.pack("addItem", "Shops:showAddItem", ConfigShop.currentShopId))
-  Menu.addButton(ConfigShop.textInBlueColor("Supprimer commande"), "deleteOrder")
+  TriggerEvent('Menu:AddButton', ConfigShop.textInYellowColor("↩ Administration"), "goTo",
+    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
+  TriggerEvent('Menu:AddButton', ConfigShop.textInBlueColor("Ajouter un produit"), "goTo",
+    table.pack("addItem", "Shops:showAddItem", ConfigShop.currentShopId), nil)
+  TriggerEvent('Menu:AddButton', ConfigShop.textInBlueColor("Supprimer commande"), "deleteOrder", nil)
   if order.Finalized ~= 1 and #order.Items > 0 then
-    Menu.addButton(ConfigShop.textInBlueColor("Finaliser commande"), "finalizeOrder")
+    TriggerEvent('Menu:AddButton', ConfigShop.textInBlueColor("Finaliser commande"), "finalizeOrder", nil)
   end
 
   for _, item in ipairs(order.Items) do
     local textButton = itemToString(item)
-    Menu.addButton(textButton, "goTo",
-      table.pack("orderItem", "Shops:ShowItem", ConfigShop.currentShopId, item))
+    TriggerEvent('Menu:AddButton', textButton, "goTo",
+      table.pack("orderItem", "Shops:ShowItem", ConfigShop.currentShopId, item), nil)
   end
 end
 
 function ShopPages.orderItem(item)
   menuTitle = item.Name
-  if item.Ordered == 0 then
+  if item.Ordered == nil then
+    --  nothing to do
+  elseif item.Ordered == 0 then
     menuTitle = menuTitle .. ConfigShop.textInGrayColor(" (pas de commande)")
   else
     menuTitle = menuTitle .. ConfigShop.textInBlueColor(" (+" .. item.Ordered .. ")")
   end
-  Menu.setTitle(menuTitle)
+  TriggerEvent('Menu:Title', menuTitle)
 
-  Menu.setSubtitle("Actions")
-  Menu.addButton(ConfigShop.textInYellowColor("↩ Commande"), "goTo",
-    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId))
-  Menu.addButton("Définir la quantité", "orderItem", item)
-  Menu.addButton("Retirer de la commande", "removeItemFromOrder", item)
+  TriggerEvent('Menu:SubTitle', "Actions")
+  TriggerEvent('Menu:AddButton', ConfigShop.textInYellowColor("↩ Commande"), "goTo",
+    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), nil)
+  TriggerEvent('Menu:AddButton', "Définir la quantité", "orderItem", item, nil)
+  TriggerEvent('Menu:AddButton', "Retirer de la commande", "removeItemFromOrder", item, nil)
 end
 
 function ShopPages.adminItem(item)
-  Menu.setTitle(item.Name)
-  Menu.setSubtitle("info: " .. itemToString(item))
+  TriggerEvent('Menu:Title', item.Name)
+  TriggerEvent('Menu:SubTitle', "info: " .. itemToString(item))
 
-  Menu.addButton(ConfigShop.textInYellowColor("↩ Administration"), "goTo",
-    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId))
-  Menu.addButton("Modifier prix", "setPrice", item)
-  Menu.addButton("Retirer du stock", "removeItemFromStock", item)
+  TriggerEvent('Menu:AddButton', ConfigShop.textInYellowColor("↩ Administration"), "goTo",
+    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
+  TriggerEvent('Menu:AddButton', "Modifier prix", "setPrice", item, nil)
+  TriggerEvent('Menu:AddButton', "Retirer du stock", "removeItemFromStock", item, nil)
 end
 
 function ShopPages.addItem(items)
-  Menu.setTitle("Ajouter un produit")
-  Menu.setSubtitle("Sélectionne le produit à ajouter")
+  TriggerEvent('Menu:Title', "Ajouter un produit")
+  TriggerEvent('Menu:SubTitle', "Sélectionne le produit à ajouter")
 
-  Menu.addButton(ConfigShop.textInYellowColor("↩ Commande"), "goTo",
-    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId))
+  TriggerEvent('Menu:AddButton', ConfigShop.textInYellowColor("↩ Commande"), "goTo",
+    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), nil)
 
   for _, item in ipairs(items) do
     local textButton = itemToString(item)
-    Menu.addButton(textButton, "addItemToStock", item)
+    TriggerEvent('Menu:AddButton', textButton, "addItemToStock", item, nil)
   end
 end
 
@@ -206,38 +209,30 @@ function removeItemFromStock(item)
 end
 
 function orderItem(item)
-  local nb = Venato.OpenKeyboard(
-    "",
-    "" .. (item.Ordered or 0),
-    10,
-    "Combien voulez-vous de '" .. item.Name .. "' à " .. item.Price .. "€/unité"
-  )
+  local nb = ShopsTools.OpenKeyboard("", "" .. (item.Ordered or 0), 10,
+    "Combien voulez-vous de '" .. item.Name .. "' à " .. item.Price .. "€/unité")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
   else
     ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre saisi.")
-    Venato.notify(ConfigShop.shopsNotification)
+    TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   end
 end
 
 function setPrice(item)
-  local nb = Venato.OpenKeyboard(
-    "",
-    "" .. (item.Price or 0),
-    10,
-    "Quel prix voulez-vous pour '" .. item.Name .. "'"
-  )
+  local nb = ShopsTools.OpenKeyboard("", "" .. (item.Price or 0), 10,
+    "Quel prix voulez-vous pour '" .. item.Name .. "'")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:ChangePriceItem", item, tonumber(nb))
   else
     ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre saisi.")
-    Venato.notify(ConfigShop.shopsNotification)
+    TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   end
 end
 
 function removeItemFromOrder(item)
   ConfigShop.shopsNotification.message = ConfigShop.textInOrangeColor("Pas encore implémenté ...")
-  Venato.notify(ConfigShop.shopsNotification)
+  TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
 end
 
 function addItemToStock(item)
