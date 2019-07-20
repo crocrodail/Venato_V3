@@ -55,8 +55,16 @@ function Menu.setSubtitle(subtitle)
 	TriggerEvent('Menu:SubTitle', subtitle)
 end
 
-function Menu.addButton(name, func, args, hover)	
+function Menu.addButton(name, func, args, hover)
 	TriggerEvent('Menu:AddButton', name, func, args, hover)
+end
+
+function Menu.addButton2(name, func, args, hover)
+	TriggerEvent('Menu:AddButton2', name, func, args, hover)
+end
+
+function Menu.CreateMenu()
+	TriggerEvent('Menu:CreateMenu')
 end
 --------------------------------------------------------------------------------------------------------------------
 

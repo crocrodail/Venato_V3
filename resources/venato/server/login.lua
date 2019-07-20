@@ -120,20 +120,13 @@ end)
 
 
 AddEventHandler('playerDropped', function(reason)
-  if startConnection == 1 then
-    local player = getPlayerID(source)
-    if player == nil then
-      player = Venato.identifier(source)
-    end
-    if player == nil then
-      player = tableau[source]
-    end
-    print('playerDropped('..reason..'): ' .. player)
-    MySQL.Async.execute("UPDATE user_vehicle SET foufou=1 WHERE owner=@owner AND type =1", {['@owner'] = player})
-    MySQL.Async.execute("UPDATE users SET source=@source WHERE identifier=@identifier", {['@identifier'] =  player, ['@source'] = "disconnect"})
-    MySQL.Async.execute("UPDATE Whitelist_Rocade SET wait=@wait WHERE identifier=@identifier", {['@identifier'] =  player, ['@wait'] = "1"})
-    PlayerLeaving(player)
-  end
+	local source = source
+	local player = DataPlayers[source].SteamId
+  print('^3playerDropped('..reason..'): ' .. player.."^7^7")
+  MySQL.Async.execute("UPDATE user_vehicle SET foufou=1 WHERE owner=@owner AND type =1", {['@owner'] = player})
+  MySQL.Async.execute("UPDATE users SET source=@source WHERE identifier=@identifier", {['@identifier'] =  player, ['@source'] = "disconnect"})
+  MySQL.Async.execute("UPDATE Whitelist_Rocade SET wait=@wait WHERE identifier=@identifier", {['@identifier'] =  player, ['@wait'] = "1"})
+  PlayerLeaving(player)
 end)
 
 RegisterServerEvent('ConfirmationConnection')

@@ -26,7 +26,7 @@ function accessGranded(SteamId, source)
           sexe = "femme"
         end
         DataPlayers[source] = {
-          SteamId = SteamId,
+          Ip = GetPlayerEP(source),SteamId = SteamId,
           Source = source,
           Group = DataUser[1].group,
           Nom = DataUser[1].nom,
@@ -85,22 +85,23 @@ function ControlVisa(SteamId, source)
       end
       local num = result[1].listed
       local start = result[1].visadebut
-      if tonumber(num) == 2 then
+      local endv = result[1].visafinif tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
       end
-      if tonumber(num) == 1 or tonumber(num) == 2 and tonumber(start) == 0 then
+      if (tonumber(num) == 1 or tonumber(num) == 2) and start == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60
         DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)
         DataPlayers[source].VisaEnd = os.date('%d-%m-%Y', tsEnd)
         MySQL.Async.execute("UPDATE whitelist SET visadebut=@ts, visafin=@tsEnd WHERE identifier=@identifier",
           { ["@ts"] = DataPlayers[source].VisaStart, ["@tsEnd"] = DataPlayers[source].VisaEnd, ["identifier"] = SteamId })
-      elseif tonumber(num) == 1 or tonumber(num) == 2 and tonumber(start) ~= 0 then
+      elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) ~= 0 then
         local ts = os.time()
         local d, m, y = start:match '(%d+)-(%d+)-(%d+)'
         local tsStart = os.time { year = y, month = m, day = d, }
         local testTS = tsStart + 14 * 24 * 60 * 60
-        if ts > testTS then
+        DataPlayers[source].VisaStart = start
+      DataPlayers[source].VisaEnd =  endvif ts > testTS then
           MySQL.Async.execute("UPDATE whitelist SET listed=0 WHERE identifier=@identifier",
             { ["identifier"] = SteamId })
           DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : (" .. testTS .. ")")
@@ -108,7 +109,8 @@ function ControlVisa(SteamId, source)
           DataPlayers[source].VisaCanBeReload = true
         end
       else
-        DataPlayers[source].Citoyen = 1
+        DataPlayers[source].Citoyen = 1DataPlayers[source].VisaStart = start
+      DataPlayers[source].VisaEnd =  endv
       end
     end)
 end

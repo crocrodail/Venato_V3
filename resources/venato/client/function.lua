@@ -9,25 +9,36 @@ AddEventHandler("Venato:notify", function(notif)
   Venato.notify(notif)
 end)
 
+RegisterNetEvent("Venato:notifyError")
+AddEventHandler("Venato:notifyError", function(msg)
+  Venato.notifyError(msg)
+end)
+
+function Venato.notifyError(msg)
+	local data = {
+		logo = "https://img.icons8.com/color/48/000000/high-priority.png",
+		type = "error",
+		title = "Erreur",
+		message = msg,
+	}
+	Venato.notify(data)
+end
+
 RegisterNetEvent("Menu:Execute")
 AddEventHandler("Menu:Execute", function(params)
   _ = _G[params.fn] and _G[params.fn](params.args)
 end)
 
 function Venato.notify(notif)
-
   if not notif.message then
     return
   end
-
   if not notif.type then
     notif.type = 'alert'
   end
-
   if not notif.timeout then
     notif.timeout = 3500
   end
-
   TriggerEvent("Hud:Update", {
     action = "notify",
     message = notif.message,
@@ -107,6 +118,15 @@ function Venato.ClosePlayer()
   return GetPlayerServerId(closestPlayer), closestDistance
 end
 
+function Venato.GetPlayerPedFromSource(source)
+	local targetPlayerId = GetPlayerFromServerId(source)
+  return GetPlayerPed(targetPlayerId)
+end
+
+function Venato.GetPlayerPed()
+	return GetPlayerPed(-1)
+end
+
 function GetPlayers()
   local players = {}
   for i = 0, 255 do
@@ -126,6 +146,38 @@ function Venato.CreateObject(objet, x, y, z)
   local objet = CreateObject(model, x, y, z, true, false, false)
   PlaceObjectOnGroundProperly(object)
   return objet
+end
+
+function Venato.CreateVehicle(modelName, coords, heading, cb)
+	local model = GetHashKey(modelName)
+	Citizen.CreateThread(function()
+		if not HasModelLoaded(model) then
+			RequestModel(model)
+			while not HasModelLoaded(model) do
+				Citizen.Wait(1)
+			end
+		end
+		local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, true, false)
+		local id = NetworkGetNetworkIdFromEntity(vehicle)
+		SetNetworkIdCanMigrate(id, true)
+		SetEntityAsMissionEntity(vehicle, true, false)
+		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+		SetVehicleNeedsToBeHotwired(vehicle, false)
+		SetModelAsNoLongerNeeded(model)
+		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
+		while not HasCollisionLoadedAroundEntity(vehicle) do
+			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
+			Citizen.Wait(0)
+		end
+		SetVehRadioStation(vehicle, 'OFF')
+		if cb ~= nil then
+			cb(vehicle)
+		end
+	end)
+end
+
+function Venato.DeleteCar(entity)
+	Citizen.InvokeNative( 0xAE3CBE5BF394C9C9, Citizen.PointerValueIntInitialized( entity ) )
 end
 
 function Venato.ConvertUrl(url)
@@ -265,7 +317,6 @@ function Venato.GetCarMenuIntruction()
   scaleform = Venato.ScaleForm("instructional_buttons")
   PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
   PopScaleformMovieFunctionVoid()
-
   PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
   PushScaleformMovieFunctionParameterInt(2)
   Button(GetControlInstructionalButton(2, Keys["Y"], true))
@@ -277,23 +328,19 @@ function Venato.GetCarMenuIntruction()
   Button(GetControlInstructionalButton(2, Keys["L"], true))
   ButtonMessage("Ouvrir l'inventaire du coffre")
   PopScaleformMovieFunctionVoid()
-
   PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
   PushScaleformMovieFunctionParameterInt(0)
   Button(GetControlInstructionalButton(2, Keys["H"], true))
   ButtonMessage("Régler les phares")
   PopScaleformMovieFunctionVoid()
-
   PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
   PopScaleformMovieFunctionVoid()
-
   PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(80)
   EndScaleformMovieMethodReturn()
-
   DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
 end
 

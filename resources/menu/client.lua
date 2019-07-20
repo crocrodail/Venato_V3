@@ -1,4 +1,6 @@
 local menuOpen = false
+local idButton = 0
+local MenuGen = {}
 local Keys = {
 	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57,
 	["~"] = 243, ["1"] = 157, ["2"] = 158, ["3"] = 160, ["4"] = 164, ["5"] = 165, ["6"] = 159, ["7"] = 161, ["8"] = 162, ["9"] = 163, ["-"] = 84, ["="] = 83, ["BACKSPACE"] = 177,
@@ -29,12 +31,12 @@ Citizen.CreateThread(function ()
                 actionCall = "right"
             elseif IsControlJustPressed(1, Keys["ENTER"]) then
                 actionCall = "enter"
-            end   
+            end
             if actionCall ~= '' then
                 SendNUIMessage({
                     action= actionCall
-                }) 
-            end         
+                })
+            end
         end
     end
 end)
@@ -57,15 +59,17 @@ AddEventHandler('Menu:Close', function()
 end)
 
 RegisterNetEvent('Menu:Clear')
-AddEventHandler('Menu:Clear', function()	
+AddEventHandler('Menu:Clear', function()
 	SendNUIMessage({
 		action = "clear"
 	})
+	idButton = 0
+	MenuGen = {}
 end)
 
 
 RegisterNetEvent('Menu:Init')
-AddEventHandler('Menu:Init', function(title, subtitle, color, background)	
+AddEventHandler('Menu:Init', function(title, subtitle, color, background)
 	SendNUIMessage({
         action = "init",
         title = title,
@@ -76,7 +80,7 @@ AddEventHandler('Menu:Init', function(title, subtitle, color, background)
 end)
 
 RegisterNetEvent('Menu:Title')
-AddEventHandler('Menu:Title', function(title)	
+AddEventHandler('Menu:Title', function(title)
 	SendNUIMessage({
         action = "title",
         title = title
@@ -84,7 +88,7 @@ AddEventHandler('Menu:Title', function(title)
 end)
 
 RegisterNetEvent('Menu:SubTitle')
-AddEventHandler('Menu:SubTitle', function(subtitle)	
+AddEventHandler('Menu:SubTitle', function(subtitle)
 	SendNUIMessage({
         action = "subtitle",
         subtitle = subtitle
@@ -92,18 +96,32 @@ AddEventHandler('Menu:SubTitle', function(subtitle)
 end)
 
 RegisterNetEvent('Menu:AddButton')
-AddEventHandler('Menu:AddButton', function(name, func, args, hover)	
+AddEventHandler('Menu:AddButton', function(name, func, args, hover)
 	SendNUIMessage({
         action = "addButton",
         name = name,
         func = func,
-        args = args,        
+        args = args,
         hover = hover
 	})
 end)
 
+RegisterNetEvent('Menu:AddButton2')
+AddEventHandler('Menu:AddButton2', function(name, func, args, hover)
+	idButton = idButton + 1
+	MenuGen[idButton] = {name = name, func = func, args = args, hover = hover}
+end)
+
+RegisterNetEvent('Menu:CreateMenu')
+AddEventHandler('Menu:CreateMenu', function()
+	SendNUIMessage({
+        action = "genMenu",
+        json.encode(MenuGen),
+	})
+end)
+
 RegisterNetEvent('Menu:ShowVehicleInformation')
-AddEventHandler('Menu:ShowVehicleInformation', function(vehicle)	
+AddEventHandler('Menu:ShowVehicleInformation', function(vehicle)
     SendNUIMessage({
         action = "showVehicleInfo",
         vehicle = vehicle
@@ -111,21 +129,21 @@ AddEventHandler('Menu:ShowVehicleInformation', function(vehicle)
 end)
 
 RegisterNetEvent('Menu:HideVehicleInformation')
-AddEventHandler('Menu:HideVehicleInformation', function()	
+AddEventHandler('Menu:HideVehicleInformation', function()
 	SendNUIMessage({
         action = "hideVehicleInfo"
 	})
 end)
 
 RegisterNetEvent('Menu:ShowShopAdmin')
-AddEventHandler('Menu:ShowShopAdmin', function()	
+AddEventHandler('Menu:ShowShopAdmin', function()
     SendNUIMessage({
         action = "showShopAdmin",
 	})
 end)
 
 RegisterNetEvent('Menu:HideShopAdmin')
-AddEventHandler('Menu:HideShopAdmin', function()	
+AddEventHandler('Menu:HideShopAdmin', function()
 	SendNUIMessage({
         action = "hideShopAdmin"
 	})

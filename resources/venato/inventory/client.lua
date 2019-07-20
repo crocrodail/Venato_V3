@@ -11,7 +11,6 @@ local PapierOpen = 0
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		Menu.renderGUI()
 		if IsControlJustPressed(1, Keys['K']) and GetLastInputMethod(2) then
 			Menu.clearMenu()
 			if Menu.hidden == true then
@@ -52,7 +51,7 @@ Citizen.CreateThread(function()
 								DeleteEntity(objet)
 							end
 						else
-							Venato.notify("Vous etes trop lourd pour ramasser "..v.qty.." "..v.libelle.." .")
+							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
@@ -79,7 +78,7 @@ Citizen.CreateThread(function()
 								DeleteEntity(objet)
 							end
 						else
-							Venato.notify("Vous etes trop lourd pour ramasser "..v.qty.." € .")
+							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." € .")
 						end
 					end
 				elseif dis < 10 then
@@ -106,7 +105,7 @@ Citizen.CreateThread(function()
 								DeleteEntity(objet)
 							end
 						else
-							Venato.notify("Vous etes trop lourd pour ramasser "..v.libelle.." .")
+							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
@@ -190,7 +189,7 @@ function givecleff(item)
 		TriggerEvent("Inventory:AnimGive")
 		Venato.notify("~g~Vous avez donné les clef du vehicule "..item[1])
 	else
-		Venato.notify("~r~Aucun joueurs à proximité")
+		Venato.notifyError("~r~Aucun joueurs à proximité")
 	end
 end
 
@@ -273,7 +272,7 @@ function ShowToOtherPermis(data)
 	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
 		TriggerServerEvent("Inventory:ShowToOtherPermis", data, ClosePlayer)
 	else
-		Venato.notify("Il n'y a personne à proximité.")
+		Venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -282,7 +281,7 @@ function ShowToOtherIdCard(data)
 	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
 		TriggerServerEvent("Inventory:ShowToOtherIdCard", data, ClosePlayer)
 	else
-		Venato.notify("Il n'y a personne à proximité.")
+		Venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -291,7 +290,7 @@ function ShowToOtherVisa(data)
 	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
 		TriggerServerEvent("Inventory:ShowToOtherVisa", data, ClosePlayer)
 	else
-		Venato.notify("Il n'y a personne à proximité.")
+		Venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -397,7 +396,7 @@ function GiveWeapon(table)
 		TriggerServerEvent("Inventory:CallInfoWeapon", ClosePlayer, table)
 		OpenInventory()
 	else
-		Venato.notify("Il n'y a personne à proximité.")
+		Venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -459,10 +458,10 @@ function GiveMoney(table)
 			TriggerServerEvent("Inventory:CallInfoMoney", ClosePlayer, tonumber(nb), table)
 			OpenInventory()
 		else
-			Venato.notify("Une erreur dans le nombre choisi.")
+			Venato.notifyError("Une erreur dans le nombre choisi.")
 		end
 	else
-		Venato.notify("Il n'y a personne à proximité.")
+		Venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -477,10 +476,10 @@ function DropMoney(tableau)
 			FreezeEntityPosition(objet, true)
 			OpenInventory()
 		else
-			Venato.notify("Vous ne pouvez pas jeter plus que ce que vous avez.")
+			Venato.notifyError("Vous ne pouvez pas jeter plus que ce que vous avez.")
 		end
 	else
-		Venato.notify("Erreur dans le nombre désiré.")
+		Venato.notifyError("Erreur dans le nombre désiré.")
 	end
 end
 
@@ -506,7 +505,7 @@ function UseItem(table)
 	if table[1] - 1 >= 0 then
 		TriggerServerEvent("Inventory:DataItem", table[2],table[1])
 	else
-		Venato.notify("Error !")
+		Venato.notifyError("Error !")
 	end
 end
 
@@ -519,7 +518,7 @@ function GiveItem(table)
 			OpenInventory()
 		end
 	else
-		Venato.notify("Il n'y a personne à proximité.")
+		Venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -530,10 +529,10 @@ AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, 
 			TriggerServerEvent("Inventory:SetItem", table[1] - nb , id)
 			TriggerServerEvent("Inventory:SetItem", qty + nb , id, ClosePlayer)
 		else
-			Venato.notify("La personne est trop lourde pour ces items.")
+			Venato.notifyError("La personne est trop lourde pour ces items.")
 		end
 	else
-		Venato.notify("Vous ne pouvez pas donner plus que ce que vous avez.")
+		Venato.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")
 	end
 end)
 
@@ -549,10 +548,10 @@ function DropItem(tableau)
 			Venato.notify("Vous avez jeté "..nb.." "..tableau[3].." .")
 			OpenInventory()
 		else
-			Venato.notify("Vous ne pouvez pas jeter plus que ce que vous avez.")
+			Venato.notifyError("Vous ne pouvez pas jeter plus que ce que vous avez.")
 		end
 	else
-		Venato.notify("Erreur dans le nombre désiré.")
+		Venato.notifyError("Erreur dans le nombre désiré.")
 	end
 end
 

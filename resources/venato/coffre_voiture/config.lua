@@ -30,6 +30,6 @@ PlateExeption = { --max = 8
 }
 
 StingPlateExeption = {
-  { 300, 3, "C", "R", "O", "C", "R", "O"},
+  { 10000, 100, "A", "D", "M", "I", "N"},
   { 300, 3, "C", "R", "O", "C", "R", "O"},
 }
