@@ -33,7 +33,7 @@ new Vue({
       { title: "Element2", subtitle: "Element2 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 2, text: 'Texte' } },
       { title: "Element3", subtitle: "Element3 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 3, text: 'Texte' } },
       { title: "Element4", subtitle: "Element4 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 4, text: 'Texte' } },
-      { title: "Element1", subtitle: "Element1 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 5, text: 'Texte' } }
+      { title: "Element1", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 5, text: 'Texte' } }
     ],
     showVehicleInformation: false,
     showShopAdmin: false,
@@ -58,6 +58,7 @@ new Vue({
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
+      console.log(JSON.stringify(this.window));
     },
     handleMessage(event) {
       if (event.data.action == "open") {

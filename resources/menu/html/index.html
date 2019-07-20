@@ -29,20 +29,18 @@
         <v-layout>
           <v-flex class="menu_container" sm3 pl-5>
             <v-card class="elevation-10" :dark="isDark" v-if="open">
-              <v-img :src="background" height="90px">
+              <v-img :src="background" height="8vh">
                 <div
                   class="menu_title"
                   :dark="isDark"
                   :style="'background-color:'+color"
                 >
-                  <p class="text-xs-center">
-                    {{ title }}
-                  </p>
+                  <p class="text-xs-center" v-html="title"></p>
+                  <p class="menu_info">({{selectedItem+1}}/{{items.length}})</p>
                 </div>
               </v-img>
               <v-list two-line :dark="isDark" id="menuList">
-                <v-subheader :dark="isDark">
-                  {{ subtitle }}
+                <v-subheader :dark="isDark" v-html="subtitle">
                 </v-subheader>
                 <template v-for="(item, index) in items">
                   <v-list-tile
