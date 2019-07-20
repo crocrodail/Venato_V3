@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
 			for k,v in pairs(ItemsOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
-					Venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." "..v.libelle)
+					Venato.Text3D(v.x, v.y, v.z, "<span class='blue--text'>"..v.qty.." "..v.libelle)
 					Venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." "..v.libelle)
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if (v.qty*v.uPoid + DataUser.Poid) <= PoidMax then
@@ -122,8 +122,7 @@ end
 
 
 function OpenInventory()
-	Menu.setTitle( "00 / 20 Kg")
-	Menu.setSubtitle( "Inventaire")
+	TriggerEvent('Menu:Init', "00 / 20 Kg", "Inventaire", '#01579B99', "https://www.expertpublic.fr/wp-content/uploads/2019/01/se-faire-argent-de-poche.jpg")
 	TriggerServerEvent("Inventory:ShowMe")
 end
 
@@ -132,28 +131,28 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
 	Menu.clearMenu()
 	DataUser = Data
 	local WeaponPoid = 0
-	Menu.addButton("~r~Syncdata", "debuge", {})
+	Menu.addButton("<span class='red--text'>Syncdata</span>", "debuge", {})
 	for k,v in pairs(Data.Weapon) do
 		if v.libelle ~= nil then
 			WeaponPoid = WeaponPoid + v.poid
 		end
 	end
-	Menu.addButton("~o~Mes Clefs", "Myclef", Data)
-	Menu.addButton("~r~🔫 Mes Armes ~o~("..WeaponPoid.." Kg )", "MyWeapon", Data)
-	Menu.addButton("~y~Mes Documents", "MyDoc", Data)
-	local color = "~s~"
+	Menu.addButton("<span class='orange--text'>Mes Clefs</span>", "Myclef", Data)
+	Menu.addButton("<span class='red--text'>🔫 Mes Armes</span> <span class='orange--text'>("..WeaponPoid.." Kg )</span>", "MyWeapon", Data)
+	Menu.addButton("<span class='yellow--text'>Mes Documents</span>", "MyDoc", Data)
+	local color = "</span>"
 	if Data.Poid > 18 then
-		color = "~r~"
+		color = "<span class='red--text'>"
 	elseif Data.Poid > 14 then
-		color = "~o~"
+		color = "<span class='orange--text'>"
 	end
-	Menu.setTitle( color..""..Data.Poid.." ~s~/ 20 Kg")
+	Menu.setTitle( color..""..Data.Poid.."</span>/ 20 Kg")
 	Menu.setSubtitle( "Inventaire")
 	local MoneyPoid = Venato.MoneyToPoid(Data.Money)
-	Menu.addButton("~g~Argent : "..Venato.FormatMoney(Data.Money,2).." € ~o~( "..MoneyPoid.." Kg )", "OptionMoney", {Data.Money, MoneyPoid, Data.Poid,Data})
+	Menu.addButton("<span class='green--text'>Argent : "..Venato.FormatMoney(Data.Money,2).."</span> € <span class='orange--text'>( "..MoneyPoid.." Kg )</span>", "OptionMoney", {Data.Money, MoneyPoid, Data.Poid,Data})
 	for k,v in pairs(Data.Inventaire) do
 		if v.quantity > 0 then
-			Menu.addButton("~b~"..v.libelle.." ~s~: ~r~"..v.quantity.." ~o~( "..v.poid.." Kg )", "OptionItem", {v.quantity, v.id, v.libelle, v.uPoid, Data.Poid})
+			Menu.addButton("<span class='blue--text'>"..v.libelle.." </span>: <span class='red--text'>"..v.quantity.."</span> <span class='orange--text'>( "..v.poid.." Kg )</span>", "OptionItem", {v.quantity, v.id, v.libelle, v.uPoid, Data.Poid})
 		end
 	end
 end)
@@ -166,19 +165,22 @@ RegisterNetEvent("getInv:back")
 AddEventHandler("getInv:back", function(TableOfKey)
 	Menu.clearMenu()
 	Menu.setTitle( "Mes clefs")
+	Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
+	if #TableOfKey > 0 then
 		for i, v in pairs(TableOfKey) do
 			if v.name ~= nil then
-					Menu.addButton("~b~"..v.name.."~s~ : ~r~"..v.plate, "giveclef", {v.name,v.plate})
-				else
-					Menu.addButton("~r~Vous n'avez aucune clef", "none", nil)
-				end
+					Menu.addButton("<span class='blue--text'>"..v.name.."</span> : <span class='red--text'>"..v.plate.."</span>", "giveclef", {v.name,v.plate})
+			else
+				Menu.addButton("<span class='red--text'>Vous n'avez aucune clef</span>", "none", nil)
+			end
 		end
+	end
 end)
 
 function giveclef(clef)
     Menu.clearMenu()
   Menu.setTitle( "Details:")
-	Menu.setSubtitle( "~b~"..clef[1].." plaque : "..clef[2])
+  Menu.setSubtitle( "<span class='blue--text'>"..clef[1].." plaque : "..clef[2].."</span>")
   Menu.addButton("Donner un double de la clef", "givecleff", {clef[1], clef[2]})
 end
 
@@ -187,22 +189,22 @@ function givecleff(item)
 	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("inv:giveclef",GetPlayerServerId(ClosePlayer), item[1],item[2])
 		TriggerEvent("Inventory:AnimGive")
-		Venato.notify("~g~Vous avez donné les clef du vehicule "..item[1])
+		Venato.notify("<span class='green--text'>Vous avez donné les clef du vehicule "..item[1].."</span>")
 	else
-		Venato.notifyError("~r~Aucun joueurs à proximité")
+		Venato.notifyError("Aucun joueurs à proximité")
 	end
 end
 
 function MyWeapon(Data)
 	Menu.clearMenu()
-	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
+	Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
 	Menu.setSubtitle( "Mes armes")
 	for k,v in pairs(Data.Weapon) do
 		if v.libelle ~= nil then
 			if tonumber(v.ammo) > 0 then
-				Menu.addButton("~b~"..v.libelle.." ~s~munition : ~r~"..v.ammo.." ~o~( "..v.poid.." Kg )", "OptionWeapon", {k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data})
+				Menu.addButton("<span class='blue--text'>"..v.libelle.." </span> munition : <span class='red--text'>"..v.ammo.."</span> <span class='orange--text'>( "..v.poid.." Kg )</span>", "OptionWeapon", {k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data})
 			else
-				Menu.addButton("~b~"..v.libelle.." ~o~( "..v.poid.." Kg )", "OptionWeapon", {k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data})
+				Menu.addButton("<span class='blue--text'>"..v.libelle.."</span> <span class='orange--text'>( "..v.poid.." Kg )</span>", "OptionWeapon", {k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data})
 			end
 		end
 	end
@@ -213,7 +215,7 @@ end
 function MyDoc(data)
 	Menu.clearMenu()
 	Menu.setSubtitle( "Mes Documents")
-	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
 	if data.Citoyen == 1 then
 		Menu.addButton("Carte d'identité", "optionIdCard", data)
 	else
@@ -224,10 +226,10 @@ function MyDoc(data)
 	end
 	for k,v in pairs(data.Documents) do
 		if v.type == "chequier" then
-			Menu.addButton("Chèquier ~o~("..Venato.FormatMoney(v.montant,2).." restant)", "showCheque", {data,k})
+			Menu.addButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "showCheque", {data,k})
 		end
 		if v.type == "cheque" then
-			Menu.addButton("Cheque de ~g~"..Venato.FormatMoney(v.montant,2).." €", "showCheque", {data,k})
+			Menu.addButton("Cheque de <span class='green--text'>"..Venato.FormatMoney(v.montant,2).."</span> €", "showCheque", {data,k})
 		end
 	end
 end
@@ -246,7 +248,7 @@ end
 function optionPermis(data)
 	Menu.clearMenu()
 	Menu.setSubtitle( "Permis de conduire")
-	Menu.addButton("~r~↩ Retour", "MyDoc", data)
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
 	Menu.addButton("Regarder", "ShowPermis", data)
 	Menu.addButton("Montrer", "ShowToOtherPermis", data)
 end
@@ -254,7 +256,7 @@ end
 function optionIdCard(data)
 	Menu.clearMenu()
 	Menu.setSubtitle( "Carte d'identité")
-	Menu.addButton("~r~↩ Retour", "MyDoc", data)
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
 	Menu.addButton("Regarder", "ShowIdCard", data)
 	Menu.addButton("Montrer", "ShowToOtherIdCard", data)
 end
@@ -262,7 +264,7 @@ end
 function optionVisa(data)
 	Menu.clearMenu()
 	Menu.setSubtitle( "Permis de séjour")
-	Menu.addButton("~r~↩ Retour", "MyDoc", data)
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
 	Menu.addButton("Regarder", "ShowVisa", data)
 	Menu.addButton("Montrer", "ShowToOtherVisa", data)
 end
@@ -385,7 +387,7 @@ end
 
 function OptionWeapon(table)
 	Menu.clearMenu()
-	Menu.addButton("~r~↩ Retour", "MyWeapon", table[7])
+	Menu.addButton("<span class='red--text'>↩ Retour", "MyWeapon", table[7])
 	Menu.addButton("Donner", "GiveWeapon", table)
 	Menu.addButton("Jeter", "DropWeapon", table)
 end
@@ -445,7 +447,7 @@ end)
 
 function OptionMoney(table)
 	Menu.clearMenu()
-	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
 	Menu.addButton("Donner", "GiveMoney", table)
 	Menu.addButton("Jeter", "DropMoney", table)
 end
@@ -495,7 +497,7 @@ end)
 function OptionItem(table)
 	Menu.clearMenu()
 	Menu.setSubtitle( table[3])
-	Menu.addButton("~r~↩ Retour", "OpenInventory", nil)
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
 	Menu.addButton("Utiliser", "UseItem", {table[1],table[2]})
 	Menu.addButton("Donner", "GiveItem", {table[1],table[2],table[4]})
 	Menu.addButton("Jeter", "DropItem", {table[1],table[2],table[3],table[4],table[5]})
