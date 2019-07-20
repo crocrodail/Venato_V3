@@ -2,17 +2,21 @@ local cam = nil
 local shopOpen = false
 local x,y,z = nil
 local colorIndex = 1
+local lastcolorIndex = 1
 local bras = 1
 local LastArg = nil
 local componentId = nil
 local BagIsEquiped = false
 local ActualDomponentId = nil
+local Vtop = false
+local PrimaryTopIndex = nil
 
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
 		if shopOpen then
 			if Menu.hidden then
+        Vtop = false
 				shopOpen = false
 				SetCamActive(cam,  false)
 			  RenderScriptCams(false,  false,  0,  true,  true)
@@ -28,20 +32,39 @@ Citizen.CreateThread(function()
         DrawMarker(27,v.x,v.y,v.z-0.99,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour accèder au shop.')
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-          OpenClothingShop()
           Menu.toggle()
+          OpenClothingShop()
         end
       end
     end
 		if ActualDomponentId ~= nil then
+      if componentId == 8 and ActualDomponentId == 15 then
+      end
+      if colorIndex ~= lastcolorIndex then
+        lastcolorIndex = colorIndex
+        SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+      end
 			if ActualDomponentId ~= LastArg then
 				colorIndex = 1
-			end
-			LastArg = ActualDomponentId
-			SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+			  LastArg = ActualDomponentId
+			  SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+        if Vtop == true then
+          if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
+            SetPedComponentVariation(Venato.GetPlayerPed(), 3, MaleCombinaisonTop[PrimaryTopIndex].bras, 0, 1)
+            if componentId ~= 8 then
+              SetPedComponentVariation(Venato.GetPlayerPed(), 8, MaleCombinaisonTop[PrimaryTopIndex].list[1], 0, 1)
+            end
+    		  else
+            SetPedComponentVariation(Venato.GetPlayerPed(), 3, FemaleCombinaisonTop[PrimaryTopIndex].bras, 0, 1)
+            if componentId ~= 8 then
+              SetPedComponentVariation(Venato.GetPlayerPed(), 8, FemaleCombinaisonTop[PrimaryTopIndex].list[1], 0, 1)
+            end
+    		  end
+        end
+      end
 			ShowInfoColor(GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId))
       DrawRect(0.5, 0.9, 0.2, 0.05, 0, 0, 0, 215)
-    	printTxt(bras.." / "..GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(),3)-1 ,0.5, 0.89, true)
+    	printTxt(bras.." - "..MaleCombinaisonTop[PrimaryTopIndex].bras.." / "..GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(),3)-1 ,0.5, 0.89, true)
 			if IsControlJustPressed(1, Keys["RIGHT"]) then
 				if colorIndex + 1 <= GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId)-1 then
 					colorIndex = colorIndex + 1
@@ -72,6 +95,9 @@ end)
 
 function ChangeDomponentId(arg)
   ActualDomponentId = arg
+  if componentId == 11 then
+    PrimaryTopIndex = arg
+  end
 end
 
 function ShowInfoColor(a)
@@ -93,6 +119,7 @@ function printTxt(text, x,y, center)
 end
 
 function OpenClothingShop()
+  Vtop = false
 	local ped = Venato.GetPlayerPed()
 	SetEntityHeading(ped, 180)
 	shopOpen = true
@@ -147,6 +174,7 @@ end
 
 
 function CSAccessoire()
+  Vtop = false
   componentId = 7-- Parachute / bag
   Menu.clearMenu()
   SetCamActive(cam,  false)
@@ -180,6 +208,7 @@ function CSAccessoire()
 end
 
 function CStop()
+  Vtop = true
   componentId = 11-- Parachute / bag
   Menu.clearMenu()
   SetCamCoord(cam,  x,  y-1.0,  z)
@@ -213,6 +242,8 @@ function CStop()
 end
 
 function ChoseSecondeTop(i)
+  Menu.setTitle(i)
+  PrimaryTopIndex = i
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
   componentId = 8
@@ -220,23 +251,23 @@ function ChoseSecondeTop(i)
   local id = 1
   local ped = Venato.GetPlayerPed()
   Menu.addButton2("~r~Back", "CStop", nil)
-  for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-      Menu.addButton2("~b~Haut Secondaire ~r~#"..i, "ChoseSecondeTop", i, "ChangeDomponentId")
-      --for k,v in pairs(MaleCombinaisonTop) do
-      --  Menu.addButton("~b~Haut Secondaire ~r~#"..k, "ChoseSecondeTop", k)
-      --end
+      for k,v in pairs(MaleCombinaisonTop[PrimaryTopIndex].list) do
+        Menu.addButton2("Haut Secondaire #"..v, "ChoseSecondeTop", v, "ChangeDomponentId")
+        id = id + 1
+      end
     else
+      Menu.addButton2("~Haut Secondaire #"..i, "ChoseSecondeTop", i, "ChangeDomponentId")
       --for k,v in pairs(table_name) do
 
       --end
     end
-  end
   Menu.CreateMenu()
 end
 
 
 function CSchausure()
+  Vtop = false
   componentId = 6 -- Shoes
   Menu.clearMenu()
   SetCamCoord(cam,  x,  y-1.0,  z-0.5)
@@ -270,6 +301,7 @@ function CSchausure()
 end
 
 function CSpantalong()
+  Vtop = false
   componentId = 4 -- legs
 	Menu.clearMenu()
   SetCamCoord(cam,  x,  y-1.0,  z)

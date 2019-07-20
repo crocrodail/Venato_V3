@@ -15,6 +15,7 @@ local indexToSpectate = nil
 local LastCoords = {}
 local state = false
 local cam = nil
+local AdminShowPlayerInfo = nil
 
 function ResetDefaultNotification()
   defaultNotification = {type = "alert", title ="Staff Venato",logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png"}
@@ -22,6 +23,7 @@ end
 
 function openVenatoadmin()
 	Menu.clearMenu()
+  AdminShowPlayerInfo = nil
 	Menu.setTitle("Venato Admin Menu")
   Menu.setSubtitle( "~b~La vitamine c mais ne dira rien ")
 	Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
@@ -37,9 +39,9 @@ function openVenatoadmin()
 	Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
   Menu.addButton( "Afficher/Masquer les coordonées" , "AdminShowCoord", nil)
   --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
-	if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
-  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
-	end
+--	if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
+  --	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+	--end
 end
 
 function AdminShowCoord()
@@ -221,11 +223,11 @@ AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers)
 end)
 
 function AdminListPlayer()
-	ClearMenu()
+	Menu.clearMenu()
 	ListPlayer = true
 	Menu.addButton("~r~↩ Retour", "openVenatoadmin", nil)
 	for k,v in pairs(AdminDataPlayers) do
-		Menu.addButton("[~r~"..k.."~s~] "..v.Prenom.." "..v.Nom.." (~y~"..v.Pseudo.."~s~)", "AdminPlayerOption", k)
+		Menu.addButton("[~r~"..k.."~s~] "..v.Prenom.." "..v.Nom.." (~y~"..v.Pseudo.."~s~)", "AdminPlayerOption", k , "AdminShowPlayerInfoo")
 	end
 	Menu.addButton("~r~↩ Retour", "openVenatoadmin", nil)
 end
@@ -467,14 +469,17 @@ Citizen.CreateThread(function()
 				zHeigt = 0.0
 			end
 		end
+    if Menu.hidden then
+      AdminShowPlayerInfo = nil
+    end
 		if IsControlReleased(1, Keys["5"]) and IsControlReleased(1, Keys["G"]) and GetLastInputMethod(2) and open == true then
 			open = false
 		end
 		if IsControlPressed(1, Keys["5"]) and IsControlPressed(1, Keys["G"]) and GetLastInputMethod(2) and open == false then
 			open = true
 			if Menu.hidden == true then
-				openVenatoadmin()
-				Menu.open()
+        TriggerServerEvent("Admin:CallDataUsers")
+        Menu.open()
 			else
 				Menu.close()
 			end
@@ -483,16 +488,16 @@ Citizen.CreateThread(function()
 			if Menu.hidden then
 				ListPlayer = false
 			end
-			if Menu.GUI[Menu.selection +1]["args"] ~= nil then
-				ShowInfoClient(Menu.GUI[Menu.selection +1]["args"])
+			if AdminShowPlayerInfo ~= nil then
+			 	ShowInfoClient(AdminShowPlayerInfo)
 			end
-      if MenuTitle == "Venato Admin Menu Player" then
-        ShowInfoClient(indexToShow)
-      end
+      -- if MenuTitle == "Venato Admin Menu Player" then
+      --   ShowInfoClient(indexToShow)
+      -- end
 		end
-    if AdminShowCoordString == "Afficher les coordonées : ~b~On" then
-      ShowInfoCoord()
-    end
+    -- if AdminShowCoordString == "Afficher les coordonées : ~b~On" then
+    --   ShowInfoCoord()
+    -- end
     if InSpectatorMode then
       local playerPed      = Venato.GetPlayerPed()
       local targetPed      = Venato.GetPlayerPedFromSource(indexToShow)
@@ -525,6 +530,11 @@ Citizen.CreateThread(function()
     end
 	end
 end)
+
+function AdminShowPlayerInfoo(source)
+  AdminShowPlayerInfo = source
+end
+
 
 function polar3DToWorld3D(entityPosition, radius, polarAngleDeg, azimuthAngleDeg)
     local polarAngleRad   = polarAngleDeg   * math.pi / 180.0
