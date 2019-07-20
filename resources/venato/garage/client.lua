@@ -94,28 +94,29 @@ end
 function MyCar(table)
   local ads = false
   Menu.setTitle( "Garage")
-  Menu.setSubtitle( "~b~Mes Véhicules")
+  Menu.setSubtitle( "Mes Véhicules")  
   Menu.clearMenu()
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
   if Vehicule ~= nil then
   for a, v in pairs(Vehicule) do
     if v.type == 1 then
       if v.state == 2 then
         ads = true
-        Menu.addButton("~r~[Fourière] "..v.name.." ~s~| ~o~" ..v.plate , "none", nil)
+        Menu.addButton("<span class='red--text'>Fourière |</span> "..v.name.." | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
       elseif v.state == 1 then
         ads = true
-        Menu.addButton("~o~[Sortie] "..v.name.." ~s~| ~o~" ..v.plate , "none", nil)
+        Menu.addButton("<span class='orange--text'>Sortie |</span> "..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
       else
         ads = true
-        Menu.addButton("~g~"..v.name.." ~s~| ~o~" ..v.plate , "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h})
+        Menu.addButton("<span class='green--text'>"..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h})
       end
     end
   end
   end
   if not ads then
-    Menu.addButton("~r~Aucun vehicule dans ce garage" , "none", nil)
+    Menu.addButton("<span class='red--text'>Aucun vehicule dans ce garage</span>" , "none", nil)
   end
-  Menu.addButton("~r~Fermer", "backToOpenGarage", nil)
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
 end
 
 function StoreMyCar(garage)
@@ -286,13 +287,12 @@ end)
 
 RegisterNetEvent("Garage:AllVehicle")
 AddEventHandler("Garage:AllVehicle", function(garage)
-  Vehicule = garage.vehicles
-  Menu.setTitle( "Garage")
-  Menu.setSubtitle( "~b~Option")
+  Vehicule = garage.vehicles  
+  TriggerEvent('Menu:Init', "Garage", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
   Menu.clearMenu()
-  Menu.addButton("~g~Mes vehicules", "getCars", garage)
-  Menu.addButton("~o~Rentrer son véhicule", "StoreMyCar", garage)
-  Menu.addButton("~r~Fermer", "close", nil)
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "close", nil)
+  Menu.addButton("<span class='green--text'>Mes vehicules</span></span>", "getCars", garage)
+  Menu.addButton("<span class='orange--text'>Rentrer son véhicule", "StoreMyCar", garage)
   Menu.open()
 end)
 

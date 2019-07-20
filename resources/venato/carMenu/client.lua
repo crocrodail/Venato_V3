@@ -46,13 +46,13 @@ function showMenu()
         menuIsOpen = true
         Menu.open()
         Menu.clearMenu()
-        Menu.setTitle( "Voiture")
-        Menu.setSubtitle( "Choisir une action")
-        Menu.addButton("~r~↩ Retour", "hideMenu")
+        TriggerEvent('Menu:Init', "Voiture", "Choisir une action", '#4527A099', "https://www.tesla.com/content/dam/tesla-site/sx-redesign/img/model3-proto/specs/compare-model3--center.png")
+        
+        Menu.addButton("<span class='red--text'>↩ Retour</span>", "hideMenu")
 
         if setRegu then
             Menu.addButton(
-                "~r~Désactiver régulateur : " .. vitesseRegu .. " km/h",
+                "<span class='red--text'>Désactiver régulateur : " .. vitesseRegu .. " km/h</span>",
                 "activRegu",
                 {car = car, vitesse = -1}
             )
@@ -128,7 +128,7 @@ function openRegulMenu(car)
     Menu.clearMenu()
     Menu.setTitle( "Voiture")
     Menu.setSubtitle( "Réglage régulateur")
-    Menu.addButton("~r~↩ Retour", "showMenu")
+    Menu.addButton("<span class='red--text'>↩ Retour", "showMenu")
 
     Menu.addButton("30 km/h", "activRegu", {car = car, vitesse = 30})
     Menu.addButton("50 km/h", "activRegu", {car = car, vitesse = 50})
@@ -144,7 +144,7 @@ function settingsMenu()
     Menu.clearMenu()
     Menu.setTitle( "Voiture")
     Menu.setSubtitle( "Changer affichage compteur")
-    Menu.addButton("~r~↩ Retour", "showMenu")
+    Menu.addButton("<span class='red--text'>↩ Retour</span>", "showMenu")
 
     Menu.addButton("Style 1", "setSpeedmeter", 0, "previewSpeedmeter")
     Menu.addButton("Style 2", "setSpeedmeter", 1, "previewSpeedmeter")

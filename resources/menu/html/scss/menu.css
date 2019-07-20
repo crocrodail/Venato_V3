@@ -21,7 +21,7 @@ html body #app .v-card.theme--dark {
 }
 
 html body #app .v-card .menu_title {
-  font-size: 0.8em;
+  font-size: 1.9vw;
   height: 100%;
   width: 100%;
 }
@@ -29,6 +29,14 @@ html body #app .v-card .menu_title {
 html body #app .v-card .menu_title p {
   padding-top: 15px;
   color: white;
+}
+
+html body #app .v-card .menu_info {
+  position: absolute;
+  right: 10px;
+  bottom: -10px;
+  color: white;
+  font-size: 0.8vw;
 }
 
 html body #app .v-card .v-card__title {
@@ -41,7 +49,7 @@ html body #app .v-card .v-list {
 }
 
 html body #app .v-card .v-list .v-subheader {
-  font-size: 0.3em;
+  font-size: 0.8vw;
   color: black;
   font-style: italic;
 }
@@ -51,12 +59,13 @@ html body #app .v-card .v-list .v-subheader.theme--dark {
 }
 
 html body #app .v-card .v-list .v-list__tile {
-  font-size: 0.5em;
+  height: 4.7vh;
+  font-size: 0.8vw;
   font-family: "Poppins";
 }
 
 html body #app .v-card .v-list .v-list__tile__sub-title {
-  font-size: 0.4em;
+  font-size: 0.7vw;
   font-family: "Poppins";
 }
 
@@ -64,6 +73,7 @@ html body #app .v-card .v-list .v-list__tile__sub-title {
   padding-top: 10vh;
   max-height: 70vh;
   font-size: 45px;
+  max-width: 40% !important;
 }
 
 .menu_container .v-card {
