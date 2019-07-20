@@ -10,6 +10,7 @@ local BagIsEquiped = false
 local ActualDomponentId = nil
 local Vtop = false
 local PrimaryTopIndex = nil
+local brasidTop = 0
 
 Citizen.CreateThread(function()
   while true do
@@ -48,6 +49,9 @@ Citizen.CreateThread(function()
 				colorIndex = 1
 			  LastArg = ActualDomponentId
 			  SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+        if Vtop then
+          brasidTop = MaleCombinaisonTop[PrimaryTopIndex].bras
+        end
         if Vtop == true then
           if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
             SetPedComponentVariation(Venato.GetPlayerPed(), 3, MaleCombinaisonTop[PrimaryTopIndex].bras, 0, 1)
@@ -64,7 +68,7 @@ Citizen.CreateThread(function()
       end
 			ShowInfoColor(GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId))
       DrawRect(0.5, 0.9, 0.2, 0.05, 0, 0, 0, 215)
-    	printTxt(bras.." - "..MaleCombinaisonTop[PrimaryTopIndex].bras.." / "..GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(),3)-1 ,0.5, 0.89, true)
+    	printTxt(bras.." - "..brasidTop.." / "..GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(),3)-1 ,0.5, 0.89, true)
 			if IsControlJustPressed(1, Keys["RIGHT"]) then
 				if colorIndex + 1 <= GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId)-1 then
 					colorIndex = colorIndex + 1
