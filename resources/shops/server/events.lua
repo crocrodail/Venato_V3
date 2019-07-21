@@ -20,6 +20,7 @@ RegisterServerEvent("Shops:showAdminItem")
 RegisterServerEvent("Shops:AddItemToShop")
 RegisterServerEvent("Shops:ChangePriceItem")
 RegisterServerEvent("Shops:removeItemFromStock")
+RegisterServerEvent("Shops:removeItemFromOrder")
 
 function getSource(source, newSource)
   return newSource or source
@@ -100,15 +101,16 @@ end)
 
 AddEventHandler("Shops:ShowItem", function(shopId, item, newSource)
   local source = getSource(source, newSource)
-  TriggerClientEvent("Shops:UpdateMenu:cb", source, ShopDbFunctions.getOrderItem(shopId, item.Id))
+  TriggerEvent('Venato:dump', { shopId, item })
+  TriggerClientEvent("Shops:UpdateMenu:cb", source, ShopDbFunctions.getOrderItem(shopId, item.ItemId))
 end)
 
 AddEventHandler("Shops:OrderItem", function(orderId, item, quantity, newSource)
   local source = getSource(source, newSource)
   if item.Ordered == nil then
-    ShopDbFunctions.orderNewItem(orderId, item.Id, quantity, item.Price)
+    ShopDbFunctions.orderNewItem(orderId, item.ItemId, quantity, item.Price)
   else
-    ShopDbFunctions.updateQuantityOrderItem(orderId, item.Id, quantity)
+    ShopDbFunctions.updateQuantityOrderItem(orderId, item.ItemId, quantity)
   end
   TriggerClientEvent("Shops:OrderItem:cb", source, quantity, item.Name)
 end)
@@ -156,11 +158,20 @@ end)
 AddEventHandler("Shops:removeItemFromStock", function(item, newSource)
   local source = getSource(source, newSource)
   Quantity = ShopDbFunctions.getQuantityItemByContentId(item.ContentId)
+  OrdersCount = ShopDbFunctions.getOrdersCountWithContentId(item.ContentId)
 
-  if Quantity ~= 0 then
+  if Quantity > 0 then
     TriggerClientEvent("Shops:StockNotEmpty", source, item)
+  elseif OrdersCount > 0 then
+    TriggerClientEvent("Shops:OrderContainsItem", source, item)
   else
     ShopDbFunctions.removeItemFromStock(item.ContentId)
     TriggerClientEvent("Shops:removeItemFromStock:cb", source, item)
   end
+end)
+
+AddEventHandler("Shops:removeItemFromOrder", function(item, newSource)
+  local source = getSource(source, newSource)
+  ShopDbFunctions.removeItemFromOrder(item.Id)
+  TriggerClientEvent("Shops:removeItemFromOrder:cb", source, item)
 end)

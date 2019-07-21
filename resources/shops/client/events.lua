@@ -10,10 +10,12 @@ RegisterNetEvent("Shops:NotEnoughShopMoney")
 RegisterNetEvent("Shops:NotEnoughQuantity")
 RegisterNetEvent("Shops:TooHeavy")
 RegisterNetEvent("Shops:StockNotEmpty")
+RegisterNetEvent("Shops:OrderContainsItem")
 RegisterNetEvent("Shops:OrderItem:cb")
 RegisterNetEvent("Shops:AddItemToShop:cb")
 RegisterNetEvent("Shops:ChangePriceItem:cb")
 RegisterNetEvent("Shops:removeItemFromStock:cb")
+RegisterNetEvent("Shops:removeItemFromOrder:cb")
 
 AddEventHandler("Shops:UpdateMenu:cb", Shops.drawPage)
 
@@ -67,6 +69,14 @@ AddEventHandler("Shops:StockNotEmpty", function(item)
   TriggerServerEvent("Shops:showAdminItem", ConfigShop.currentShopId, item)
 end)
 
+AddEventHandler("Shops:OrderContainsItem", function(item)
+  msg = "Impossible, au moins une commande contient cette article (" .. item.Name .. ")."
+  ConfigShop.shopsNotification.message = ConfigShop.textInRedColor(msg)
+  TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
+  ConfigShop.page = "adminItem"
+  TriggerServerEvent("Shops:showAdminItem", ConfigShop.currentShopId, item)
+end)
+
 AddEventHandler("Shops:OrderItem:cb", function(Quantity, Name)
   msg = "Vous avez bien commandé pour " .. Quantity .. ": " .. Name .. "."
   ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor(msg)
@@ -97,4 +107,13 @@ AddEventHandler("Shops:removeItemFromStock:cb", function(item)
   TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   ConfigShop.page = "admin"
   TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+end)
+
+
+AddEventHandler("Shops:removeItemFromOrder:cb", function(item)
+  msg = "Vous avez bien retiré " .. item.Name .. " de la commande."
+  ConfigShop.shopsNotification.message = ConfigShop.textInGreenColor(msg)
+  TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
+  ConfigShop.page = "order"
+  TriggerServerEvent("Shops:showOrder", ConfigShop.currentOrderId)
 end)

@@ -26,7 +26,7 @@ function accessGranded(SteamId, source)
           sexe = "femme"
         end
         DataPlayers[source] = {
-          Ip = GetPlayerEP(source),SteamId = SteamId,
+          Ip = GetPlayerEP(source), SteamId = SteamId,
           Source = source,
           Group = DataUser[1].group,
           Nom = DataUser[1].nom,
@@ -85,7 +85,8 @@ function ControlVisa(SteamId, source)
       end
       local num = result[1].listed
       local start = result[1].visadebut
-      local endv = result[1].visafinif tonumber(num) == 2 then
+      local endv = result[1].visafin
+      if tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
       end
       if (tonumber(num) == 1 or tonumber(num) == 2) and start == 0 then
@@ -101,7 +102,8 @@ function ControlVisa(SteamId, source)
         local tsStart = os.time { year = y, month = m, day = d, }
         local testTS = tsStart + 14 * 24 * 60 * 60
         DataPlayers[source].VisaStart = start
-      DataPlayers[source].VisaEnd =  endvif ts > testTS then
+        DataPlayers[source].VisaEnd = endv
+        if ts > testTS then
           MySQL.Async.execute("UPDATE whitelist SET listed=0 WHERE identifier=@identifier",
             { ["identifier"] = SteamId })
           DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : (" .. testTS .. ")")
@@ -109,8 +111,9 @@ function ControlVisa(SteamId, source)
           DataPlayers[source].VisaCanBeReload = true
         end
       else
-        DataPlayers[source].Citoyen = 1DataPlayers[source].VisaStart = start
-      DataPlayers[source].VisaEnd =  endv
+        DataPlayers[source].Citoyen = 1
+        DataPlayers[source].VisaStart = start
+        DataPlayers[source].VisaEnd = endv
       end
     end)
 end

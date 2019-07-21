@@ -47,7 +47,7 @@ ShopRequests.getStockItem = "SELECT it.id, it.libelle, c.Quantity, c.Price, c.Id
   "INNER JOIN items it on c.ItemId = it.id " ..
   "WHERE it.id=@ItemId and s.Id=@ShopId"
 -- Get all items in the order with id '@OrderId'
-ShopRequests.getOrderItems = "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered " ..
+ShopRequests.getOrderItems = "SELECT oc.Id, it.id as ItemId, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered " ..
   "FROM shop_orders o " ..
   "INNER JOIN shops s ON o.ShopID = s.Id " ..
   "INNER JOIN shop_inventory i ON s.InventoryId = i.Id " ..
@@ -57,15 +57,22 @@ ShopRequests.getOrderItems = "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.
   "WHERE o.Id=@OrderId"
 -- Get remaining quantity of an item in stock with '@ContentId'
 ShopRequests.getQuantityItemByContentId = "SELECT Quantity FROM shop_content WHERE Id=@ContentId"
--- Get item in the order with "@ItemId" and "@ShopId"
-ShopRequests.getOrderItem = "SELECT it.id, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered, oc.Price as OrderPrice " ..
+-- Get orders count contains an item with '@ContentId'
+ShopRequests.getOrdersCountWithContentId = "SELECT COUNT(*) as OrdersCount " ..
+  "FROM shop_content c " ..
+  "INNER JOIN shop_orders_content oc ON oc.ItemId = c.ItemId " ..
+  "INNER JOIN shop_orders o ON o.Id = oc.ShopOrderId " ..
+  "INNER JOIN shops s ON s.Id = o.ShopId and s.InventoryId = c.InventoryId " ..
+  "WHERE c.Id=@ContentId"
+-- Get item in the order with "@Id" and "@ShopId"
+ShopRequests.getOrderItem = "SELECT oc.Id, it.id as ItemId, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered, oc.Price as OrderPrice " ..
   "FROM shops s " ..
   "INNER JOIN shop_inventory i ON s.InventoryID = i.Id " ..
   "INNER JOIN shop_content c ON i.Id = c.InventoryId " ..
   "INNER JOIN items it on c.ItemId = it.id " ..
   "LEFT JOIN shop_orders o ON s.Id = o.ShopId " ..
   "LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId " ..
-  "WHERE it.id=@ItemId and s.Id=@ShopId"
+  "WHERE it.id=@Id and s.Id=@ShopId"
 -- Get all available items
 ShopRequests.getAllItems = "SELECT it.id, it.libelle, it.price FROM items it"
 
@@ -95,6 +102,8 @@ ShopRequests.deleteOrder = "DELETE FROM shop_orders WHERE Id=@OrderId"
 
 -- Remove an item of the stock
 ShopRequests.removeItemFromStock = "DELETE FROM shop_content WHERE Id=@Id"
+-- Remove an item of the order
+ShopRequests.removeItemFromOrder = "DELETE FROM shop_orders_content WHERE Id=@Id"
 
 ShopRequests.getCurrentPlayerMoney = "SELECT Money FROM users WHERE identifier = @SteamId"
 
@@ -210,7 +219,8 @@ function ShopDbFunctions.getOrder(orderId)
     table.insert(
       order.Items,
       {
-        ["Id"] = item.id,
+        ["Id"] = item.Id,
+        ["ItemId"] = item.ItemId,
         ["Name"] = item.libelle,
         ["Quantity"] = item.Quantity,
         ["Price"] = item.Price,
@@ -244,11 +254,20 @@ function ShopDbFunctions.getQuantityItemByContentId(contentId)
   return -1
 end
 
+function ShopDbFunctions.getOrdersCountWithContentId(contentId)
+  local result = MySQL.Sync.fetchAll(ShopRequests.getOrdersCountWithContentId, { ["@ContentId"] = contentId })
+  for _, item in ipairs(result) do
+    return item.OrdersCount
+  end
+  return -1
+end
+
 function ShopDbFunctions.getOrderItem(shopId, itemId)
   local item_ = {}
-  local result = MySQL.Sync.fetchAll(ShopRequests.getOrderItem, { ["@ItemId"] = itemId, ["@ShopId"] = shopId })
+  local result = MySQL.Sync.fetchAll(ShopRequests.getOrderItem, { ["@Id"] = itemId, ["@ShopId"] = shopId })
   for _, item in ipairs(result) do
-    item_["Id"] = item.id
+    item_["Id"] = item.Id
+    item_["ItemId"] = item.ItemId
     item_["ShopId"] = item.ShopId
     item_["Name"] = item.libelle
     item_["Quantity"] = item.Quantity
@@ -281,7 +300,7 @@ function ShopDbFunctions.getUsedItems(shopId)
   local items = {}
   local result = MySQL.Sync.fetchAll(ShopRequests.getShopItems, { ["@Id"] = shopId })
   for _, item in ipairs(result) do
-    table.insert(items, { ["Id"] = item.ItemId, ["Name"] = item.libelle })
+    table.insert(items, { ["Id"] = item.id, ["Name"] = item.libelle })
   end
 
   return items
@@ -293,14 +312,14 @@ function ShopDbFunctions.getNotUsedItems(shopId)
   local usedItems = ShopDbFunctions.getUsedItems(shopId)
 
   for _, item in ipairs(allItems) do
-    local notUsed = true
+    local isUsed = false
     for _, usedItem in ipairs(usedItems) do
       if item.Id == usedItem.Id then
-        notUsed = false
+        isUsed = true
         break
       end
     end
-    if notUsed then
+    if isUsed ~= true then
       table.insert(items, item)
     end
   end
@@ -314,6 +333,10 @@ end
 
 function ShopDbFunctions.removeItemFromStock(ContentId)
   MySQL.Sync.execute(ShopRequests.removeItemFromStock, { ["@Id"] = ContentId })
+end
+
+function ShopDbFunctions.removeItemFromOrder(OrderContentId)
+  MySQL.Sync.execute(ShopRequests.removeItemFromOrder, { ["@Id"] = OrderContentId })
 end
 
 function ShopDbFunctions.decreaseQuantityItem(contentId, quantity)
@@ -364,10 +387,10 @@ end
 function ShopDbFunctions.addItemToShop(inventoryId, orderId, item)
   -- First add item to stock without quantity
   MySQL.Sync.execute(ShopRequests.addItem,
-    { ["@InventoryId"] = inventoryId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price })
+    { ["@InventoryId"] = inventoryId, ["@ItemId"] = item.ItemId, ["@Quantity"] = 0, ["@Price"] = item.Price })
   -- Then add it to the order
   MySQL.Sync.execute(ShopRequests.orderNewItem,
-    { ["@OrderId"] = orderId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price })
+    { ["@OrderId"] = orderId, ["@ItemId"] = item.ItemId, ["@Quantity"] = 0, ["@Price"] = item.Price })
 end
 
 function ShopDbFunctions.updatePriceItem(contentId, price)
