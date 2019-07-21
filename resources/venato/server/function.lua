@@ -15,7 +15,10 @@ end
 DataPlayers = {}
 
 function accessGranded(SteamId, source)
-  MySQL.Async.fetchAll("SELECT * FROM users INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` WHERE identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)--JOIN whitelist ON `users`.`identifier` = `whitelist`.`identifier`
+  MySQL.Async.fetchAll("SELECT * FROM users "..
+   "INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
+   "INNER JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
+   "WHERE users.identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)
     if DataUser[1] == nil then
       DropPlayer(source, "Une erreur s'est produite, si cette dernière persiste contactez un membre du staff.")
     else
@@ -63,7 +66,26 @@ function accessGranded(SteamId, source)
         Point = DataUser[1].point,
         Citoyen = 0,
         Url = DataUser[1].url,
-        Speedometer = DataUser[1].speedometer
+        Speedometer = DataUser[1].speedometer,
+        Clothes = json.decode(DataUser[1].clothes),
+        Skin = {
+          model = DataUser[1].model,
+          face = DataUser[1].face,
+          head = DataUser[1].head,
+          body_color = DataUser[1].body_color,
+          hair = DataUser[1].hair,
+          hair_color = DataUser[1].hair_color,
+          beard = DataUser[1].beard,
+          beard_color = DataUser[1].beard_color,
+          eyebrows = DataUser[1].eyebrows,
+          eyebrows_color = DataUser[1].eyebrows_color,
+          percing = DataUser[1].percing,
+          percing_txt = DataUser[1].percing_txt,
+          makeup = DataUser[1].makeup,
+          makeup_opacity = DataUser[1].makeup_opacity,
+          lipstick = DataUser[1].lipstick,
+          lipstick_color = DataUser[1].lipstick_color
+        }
       }
       TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
       TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)

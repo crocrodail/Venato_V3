@@ -1,13 +1,3 @@
-AddEventHandler('playerSpawned', function()
-	LoadBlips()
-end)
-
-
-RegisterNetEvent("VenatoSpawn")
-AddEventHandler("VenatoSpawn", function()
-	LoadBlips()
-end)
-
 function LoadBlips()
 	Citizen.CreateThread(function()
 		for i,v in ipairs(Config.ATMS) do
@@ -30,6 +20,16 @@ function LoadBlips()
 				AddTextComponentString("Distributeur")
 				EndTextCommandSetBlipName(blip)
 			end
+		end
+		for i,v in ipairs(ClothingShop) do
+			local blip = AddBlipForCoord(v.x, v.y, v.z)
+			SetBlipSprite(blip, 73)
+			SetBlipColour(blip, 47)
+			SetBlipScale(blip, 1.0)
+			SetBlipAsShortRange(blip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString(v.name)
+			EndTextCommandSetBlipName(blip)
 		end
 	end)
 end

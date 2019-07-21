@@ -18,6 +18,7 @@ Keys = {
 }
 
 Menu = {}
+Menu.hidden = true
 
 
 -- Audio = {
