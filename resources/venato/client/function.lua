@@ -142,8 +142,11 @@ function Venato.CreateObject(objet, x, y, z)
     return objet
 end
 
-function Venato.CreateVehicle(modelName, coords, heading, cb)
-	local model = GetHashKey(modelName)
+function Venato.CreateVehicle(modelName, coords, heading, cb)  
+  local model = modelName
+  if tonumber(modelName) == nil then
+   model = GetHashKey(modelName)
+  end
 	Citizen.CreateThread(function()
 		if not HasModelLoaded(model) then
 			RequestModel(model)

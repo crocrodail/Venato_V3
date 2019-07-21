@@ -200,7 +200,7 @@ function PreviewVehicle(data)
         Venato.notify(defaultNotification)
         return
     end
-    Venato.CreateVehicle(data.model, {x = pos.x, y = pos.y, z = pos.z}, GetEntityHeading(playerPed), function(vehicle)
+    Venato.CreateVehicle(data.model, GetEntityCoords(GetPlayerPed(-1)), GetEntityHeading(playerPed), function(vehicle)
       LastCar = vehicle
       SetVehicleColours(vehicle,color,colorSec)
       SetVehicleFuelLevel(vehicle, GetVehicleFuelLevel(vehicle) + 50)
@@ -248,9 +248,8 @@ function BuyVehicle(data)
   }
   if data.vp_enabled then
     if data.vp_only then
-      TriggerEvent("CarShop:PayWithVp", vehicle)
+      PayWithVp(vehicle)
     else
-      print('Coucou')
       TriggerEvent('Menu:Title', "Concessionnaire", "Confirmer paiement")
       TriggerEvent('Menu:Close')
       TriggerEvent('Menu:Clear')
@@ -260,7 +259,7 @@ function BuyVehicle(data)
       TriggerEvent('Menu:Open')
     end
   else
-    TriggerEvent("CarShop:Pay", vehicle)
+    Pay(vehicle)
   end
 end
 
@@ -320,8 +319,7 @@ RegisterNetEvent('CarShop:ShowCategory:response')
 AddEventHandler('CarShop:ShowCategory:response', function(data)
   TriggerEvent('Menu:Clear')
   TriggerEvent('Menu:Init', "Concessionnaire", "Catégories", '#2E7D3299', "https://images.caradisiac.com/logos/0/3/1/6/240316/S0-parc-automobile-il-n-y-a-jamais-eu-autant-de-vehicules-sur-nos-routes-161246.jpg")
-  TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)
-  
+  TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)  
   
   for k,v in pairsByKeys(data) do
     TriggerEvent('Menu:AddButton',v.type, "ShowCategory", v.type)
@@ -329,11 +327,12 @@ AddEventHandler('CarShop:ShowCategory:response', function(data)
   TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)
   menuIsOpen = true
   TriggerEvent('Menu:HideVehicleInformation')
-  TriggerEvent('Menu:Open')hidden = false
+  TriggerEvent('Menu:Open')
 end)
 
 RegisterNetEvent('CarShop:ShowVehicles:response')
 AddEventHandler('CarShop:ShowVehicles:response', function(data)
+  TriggerEvent('Menu:Close')
   TriggerEvent('Menu:Clear')
   TriggerEvent('Menu:Title', "Concessionnaire", "Choissez votre prochain véhicule")
   local returnAdded = false
@@ -352,5 +351,5 @@ AddEventHandler('CarShop:ShowVehicles:response', function(data)
   
   menuIsOpen = true
   TriggerEvent('Menu:HideVehicleInformation')
-  TriggerEvent('Menu:Open')hidden = false
+  TriggerEvent('Menu:Open')
 end)

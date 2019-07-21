@@ -87,6 +87,7 @@ function close()
 end
 
 function getCars(garage)
+  Menu.close()
   TriggerServerEvent("Garage:CallAllCar", garage)
 end
 
@@ -117,10 +118,12 @@ function MyCar(table)
     Menu.addButton("<span class='red--text'>Aucun vehicule dans ce garage</span>" , "none", nil)
   end
   Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
+  Menu.open()
 end
 
 function StoreMyCar(garage)
   local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  print(DoesEntityExist(current))
   if DoesEntityExist(current) then
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
     local engineHealth = GetVehicleEngineHealth(current)
@@ -162,6 +165,7 @@ function SortirVoiture(vhl)
     		    SetVehicleEngineHealth(veh, tonumber(health[1]))
     	    end
         end
+        SetPedIntoVehicle(GetPlayerPed(-1), veh, -1)
         SetVehicleNumberPlateText(veh, vhl.plate)
         TriggerEvent('lock:addVeh', vhl.plate, vhl.name)
         TriggerServerEvent("Garage:SortiVehicule", vhl.plate, vhl.model)
