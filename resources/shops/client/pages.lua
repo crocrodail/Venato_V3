@@ -31,6 +31,7 @@ function ShopPages.client(shop)
   local shopName_ = shop.Renamed or shop.Name or "Shop"
   TriggerEvent('Menu:Title', shopName_)
   local subTitle = "Stocks"
+  TriggerEvent('Menu:Init', shopName_, subTitle, shop.ColorMenu, shop.ImageMenu)
 
   ConfigShop.currentInventoryId = shop.InventoryId
   if shop.Supervised == 1 then

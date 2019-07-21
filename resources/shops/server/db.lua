@@ -6,7 +6,7 @@ ShopRequests = {}
 -- Get all shops enabled
 ShopRequests.getShops = "SELECT * FROM shops WHERE Enabled=1"
 -- Get shop with id '@Id'
-ShopRequests.getShop = "SELECT s.Id, s.Name, s.Renamed, s.Money, s.Supervised, s.InventoryId " ..
+ShopRequests.getShop = "SELECT s.Id, s.Name, s.Renamed, s.Money, s.Supervised, s.InventoryId, s.ColorMenu, s .ImageMenu " ..
   "FROM shops s " ..
   "WHERE s.Id=@Id"
 -- Get all stocks of shop with id '@Id'
@@ -164,6 +164,8 @@ function ShopDbFunctions.getShop(shopId, source)
     shop.Money = item.Money
     shop.Supervised = item.Supervised
     shop.InventoryId = item.InventoryId
+    shop.ColorMenu = item.ColorMenu
+    shop.ImageMenu = item.ImageMenu
   end
 
   result = MySQL.Sync.fetchAll(ShopRequests.getShopItems, { ["@Id"] = shopId })
