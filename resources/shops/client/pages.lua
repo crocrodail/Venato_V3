@@ -43,7 +43,7 @@ function ShopPages.client(shop)
   TriggerEvent('Menu:SubTitle', subTitle)
 
   if shop.IsSupervisor then
-    TriggerEvent('Menu:AddButton2', ConfigShop.textInYellowColor("Administration →"), "goTo", table.pack("admin",
+    TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "Administration →"), "goTo", table.pack("admin",
       "Shops:ShowInventory", ConfigShop.currentShopId), nil)
   end
 
@@ -59,13 +59,13 @@ function ShopPages.admin(shop)
     goToClientPage()
   end
 
-  TriggerEvent('Menu:Title', ConfigShop.textInYellowColor("Administration"))
-  TriggerEvent('Menu:SubTitle', "Caisse: " .. ConfigShop.textInOrangeColor(shop.Money .. "€"))
+  TriggerEvent('Menu:Title', ConfigShop.textInColor('yellow', "Administration"))
+  TriggerEvent('Menu:SubTitle', "Caisse: " .. ConfigShop.textInColor('orange', shop.Money .. "€"))
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInYellowColor("↩ Stocks"), "goTo",
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Stocks"), "goTo",
     table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInBlueColor("Récuperer caisse →"), "getMoney", nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInBlueColor("Créer commande →"), "createOrder", nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Récuperer caisse →"), "getMoney", nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Créer commande →"), "createOrder", nil)
 
   for _, order in ipairs(shop.Orders) do
     local textButton = orderToString(order)
@@ -83,16 +83,16 @@ end
 -- ORDER --
 function ShopPages.order(order)
   ConfigShop.currentOrderId = order.Id
-  TriggerEvent('Menu:Title', ConfigShop.textInYellowColor("Commande: " .. order.Ref))
+  TriggerEvent('Menu:Title', ConfigShop.textInColor('yellow', "Commande: " .. order.Ref))
   TriggerEvent('Menu:SubTitle', "Selectionne un produit pour le modifier")
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInYellowColor("↩ Administration"), "goTo",
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Administration"), "goTo",
     table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInBlueColor("Ajouter un produit"), "goTo",
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Ajouter un produit"), "goTo",
     table.pack("addItem", "Shops:showAddItem", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInBlueColor("Supprimer commande"), "deleteOrder", nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Supprimer commande"), "deleteOrder", nil)
   if order.Finalized ~= 1 and #order.Items > 0 then
-    TriggerEvent('Menu:AddButton2', ConfigShop.textInBlueColor("Finaliser commande"), "finalizeOrder", nil)
+    TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Finaliser commande"), "finalizeOrder", nil)
   end
 
   for _, item in ipairs(order.Items) do
@@ -107,14 +107,14 @@ function ShopPages.orderItem(item)
   if item.Ordered == nil then
     --  nothing to do
   elseif item.Ordered == 0 then
-    menuTitle = menuTitle .. ConfigShop.textInGrayColor(" (pas de commande)")
+    menuTitle = menuTitle .. ConfigShop.textInColor('grey', " (pas de commande)")
   else
-    menuTitle = menuTitle .. ConfigShop.textInBlueColor(" (+" .. item.Ordered .. ")")
+    menuTitle = menuTitle .. ConfigShop.textInColor('blue', " (+" .. item.Ordered .. ")")
   end
   TriggerEvent('Menu:Title', menuTitle)
 
   TriggerEvent('Menu:SubTitle', "Actions")
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInYellowColor("↩ Commande"), "goTo",
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Commande"), "goTo",
     table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), nil)
   TriggerEvent('Menu:AddButton2', "Définir la quantité", "orderItem", item, nil)
   if item.Id ~= nil then
@@ -126,7 +126,7 @@ function ShopPages.adminItem(item)
   TriggerEvent('Menu:Title', item.Name)
   TriggerEvent('Menu:SubTitle', "info: " .. itemToString(item))
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInYellowColor("↩ Administration"), "goTo",
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Administration"), "goTo",
     table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
   TriggerEvent('Menu:AddButton2', "Modifier prix", "setPrice", item, nil)
   TriggerEvent('Menu:AddButton2', "Retirer du stock", "removeItemFromStock", item, nil)
@@ -136,7 +136,7 @@ function ShopPages.addItem(items)
   TriggerEvent('Menu:Title', "Ajouter un produit")
   TriggerEvent('Menu:SubTitle', "Sélectionne le produit à ajouter")
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInYellowColor("↩ Commande"), "goTo",
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Commande"), "goTo",
     table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), nil)
 
   for _, item in ipairs(items) do
@@ -153,25 +153,25 @@ function itemToString(item)
   local s = item.Name
 
   if item.Price ~= nil then
-    s = s .. ConfigShop.textInOrangeColor(" " .. item.Price .. "€")
+    s = s .. ConfigShop.textInColor('orange', " " .. item.Price .. "€")
   end
 
   if item.Quantity == nil then
     -- nothing todo
   elseif item.Quantity == 0 then
-    s = s .. ConfigShop.textInRedColor(" rupture")
+    s = s .. ConfigShop.textInColor('red', " rupture")
   elseif item.Quantity > 0 then
-    s = s .. ConfigShop.textInGreenColor(" " .. item.Quantity .. " en stock")
+    s = s .. ConfigShop.textInColor('green', " " .. item.Quantity .. " en stock")
   else
-    s = s .. ConfigShop.textInGreenColor(" stock illimité")
+    s = s .. ConfigShop.textInColor('green', " stock illimité")
   end
 
   if item.Ordered == nil then
     -- nothing todo
   elseif item.Ordered == 0 then
-    s = s .. ConfigShop.textInGrayColor(" (pas de commande)")
+    s = s .. ConfigShop.textInColor('grey', " (pas de commande)")
   elseif item.Ordered > 0 then
-    s = s .. ConfigShop.textInBlueColor(" (+" .. item.Ordered .. ")")
+    s = s .. ConfigShop.textInColor('blue', " (+" .. item.Ordered .. ")")
   end
 
   return s
@@ -180,13 +180,13 @@ end
 function orderToString(order)
   local s = "Commande " .. order.Ref
   if order.Signed == 1 then
-    s = s .. ConfigShop.textInGreenColor(" signée")
+    s = s .. ConfigShop.textInColor('green', " signée")
   elseif order.Started == 1 then
-    s = s .. ConfigShop.textInYellowColor(" livraison en cours")
+    s = s .. ConfigShop.textInColor('yellow', " livraison en cours")
   elseif order.Finalized == 0 then
-    s = s .. ConfigShop.textInOrangeColor(" à finaliser")
+    s = s .. ConfigShop.textInColor('orange', " à finaliser")
   else
-    s = s .. ConfigShop.textInGrayColor(" en attente")
+    s = s .. ConfigShop.textInColor('grey', " en attente")
   end
   return s
 end
@@ -218,7 +218,7 @@ function orderItem(item)
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
   else
-    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre saisi.")
+    ConfigShop.shopsNotification.message = ConfigShop.textInColor('red', "Une erreur dans le nombre saisi.")
     TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   end
 end
@@ -229,7 +229,7 @@ function setPrice(item)
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:ChangePriceItem", item, tonumber(nb))
   else
-    ConfigShop.shopsNotification.message = ConfigShop.textInRedColor("Une erreur dans le nombre saisi.")
+    ConfigShop.shopsNotification.message = ConfigShop.textInColor('red', "Une erreur dans le nombre saisi.")
     TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   end
 end
