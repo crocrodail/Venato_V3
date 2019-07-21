@@ -1,15 +1,15 @@
 Venato = {}
 
 function getSteamID(source)
- 	local identifiers = GetPlayerIdentifiers(source)
- 	local player = getIdentifiant(identifiers)
- 	return player
+  local identifiers = GetPlayerIdentifiers(source)
+  local player = getIdentifiant(identifiers)
+  return player
 end
 
 function getIdentifiant(id)
- 	for _, v in ipairs(id) do
-		return v
-	end
+  for _, v in ipairs(id) do
+    return v
+  end
 end
 
 DataPlayers = {}
@@ -99,41 +99,44 @@ end
 
 function ControlVisa(SteamId, source)
   local source = source
-  MySQL.Async.fetchAll("SELECT * FROM whitelist WHERE identifier = @identifier",{["@identifier"]=SteamId},function(result)
-    if not result[1] then
-      return
-    end
-    local num = result[1].listed
-    local start = result[1].visadebut
-    local endv = result[1].visafin
-    if  tonumber(num) == 2 then
-      DataPlayers[source].CanBeACitoyen = true
-    end
-    if (tonumber(num) == 1 or tonumber(num) == 2) and start == 0 then
-      local ts = os.time()
-      local tsEnd = ts + 14*24*60*60
-      DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)
-      DataPlayers[source].VisaEnd =  os.date('%d-%m-%Y', tsEnd)
-      MySQL.Async.execute("UPDATE whitelist SET visadebut=@ts, visafin=@tsEnd WHERE identifier=@identifier", {["@ts"]=DataPlayers[source].VisaStart,["@tsEnd"]=DataPlayers[source].VisaEnd,["identifier"]=SteamId})
-    elseif  (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) ~= 0 then
-      local ts = os.time()
-      local d, m, y = start:match '(%d+)-(%d+)-(%d+)'
-      local tsStart =os.time{ year = y, month = m, day = d,}
-      local testTS = tsStart + 14*24*60*60
-      DataPlayers[source].VisaStart = start
-      DataPlayers[source].VisaEnd =  endv
-      if ts > testTS then
-        MySQL.Async.execute("UPDATE whitelist SET listed=0 WHERE identifier=@identifier", {["identifier"]=SteamId})
-        DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : ("..testTS..")")
-      elseif ts > tsStart + 7*24*60*60 then
-        DataPlayers[source].VisaCanBeReload = true
+  MySQL.Async.fetchAll("SELECT * FROM whitelist WHERE identifier = @identifier", { ["@identifier"] = SteamId },
+    function(result)
+      if not result[1] then
+        return
       end
-    else
-      DataPlayers[source].Citoyen = 1
-      DataPlayers[source].VisaStart = start
-      DataPlayers[source].VisaEnd =  endv
-    end
-  end)
+      local num = result[1].listed
+      local start = result[1].visadebut
+      local endv = result[1].visafin
+      if tonumber(num) == 2 then
+        DataPlayers[source].CanBeACitoyen = true
+      end
+      if (tonumber(num) == 1 or tonumber(num) == 2) and start == 0 then
+        local ts = os.time()
+        local tsEnd = ts + 14 * 24 * 60 * 60
+        DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)
+        DataPlayers[source].VisaEnd = os.date('%d-%m-%Y', tsEnd)
+        MySQL.Async.execute("UPDATE whitelist SET visadebut=@ts, visafin=@tsEnd WHERE identifier=@identifier",
+          { ["@ts"] = DataPlayers[source].VisaStart, ["@tsEnd"] = DataPlayers[source].VisaEnd, ["identifier"] = SteamId })
+      elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) ~= 0 then
+        local ts = os.time()
+        local d, m, y = start:match '(%d+)-(%d+)-(%d+)'
+        local tsStart = os.time { year = y, month = m, day = d, }
+        local testTS = tsStart + 14 * 24 * 60 * 60
+        DataPlayers[source].VisaStart = start
+        DataPlayers[source].VisaEnd = endv
+        if ts > testTS then
+          MySQL.Async.execute("UPDATE whitelist SET listed=0 WHERE identifier=@identifier",
+            { ["identifier"] = SteamId })
+          DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : (" .. testTS .. ")")
+        elseif ts > tsStart + 7 * 24 * 60 * 60 then
+          DataPlayers[source].VisaCanBeReload = true
+        end
+      else
+        DataPlayers[source].Citoyen = 1
+        DataPlayers[source].VisaStart = start
+        DataPlayers[source].VisaEnd = endv
+      end
+    end)
 end
 
 function PlayerLeaving(SteamID)
@@ -145,7 +148,7 @@ function PlayerLeaving(SteamID)
 end
 
 function Venato.Round(num, numDecimalPlaces)
-  local mult = 10^(numDecimalPlaces or 0)
+  local mult = 10 ^ (numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
 end
 
@@ -155,7 +158,8 @@ function Venato.paymentCB(source, amount)
     return false
   else
     DataPlayers[source].Bank = DataPlayers[source].Bank - amount
-    MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier", {["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].Bank})
+    MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier",
+      { ["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].Bank })
     return true
   end
 end
@@ -166,24 +170,34 @@ function Venato.paymentVP(source, amount)
     return false
   else
     DataPlayers[source].VenatoPoint = DataPlayers[source].VenatoPoint - amount
-    MySQL.Async.execute("UPDATE users SET venato_point=@money WHERE identifier=@identifier", {["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].VenatoPoint})
+    MySQL.Async.execute("UPDATE users SET venato_point=@money WHERE identifier=@identifier",
+      { ["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].VenatoPoint })
     return true
   end
 end
 
 function Venato.MoneyToPoid(money)
-	return Venato.Round(money*0.000075,1)
+  return Venato.Round(money * 0.000075, 1)
 end
+
+RegisterNetEvent("Venato:dump")
+AddEventHandler("Venato:dump", function(arg)
+  local str = ''
+  for _, item in ipairs(arg) do
+    str = str .. ' ' .. Venato.dump(item)
+  end
+  print(str)
+end)
 
 function Venato.dump(o)
   if type(o) == 'table' then
-     local s = '{ '
-     for k,v in pairs(o) do
-        if type(k) ~= 'number' then k = '"'..k..'"' end
-        s = s .. '['..k..'] = ' .. Venato.dump(v) .. ','
-     end
-     return s .. '} '
+    local s = '{ '
+    for k, v in pairs(o) do
+      if type(k) ~= 'number' then k = '"' .. k .. '"' end
+      s = s .. '[' .. k .. '] = ' .. Venato.dump(v) .. ','
+    end
+    return s .. '} '
   else
-     return tostring(o)
+    return tostring(o)
   end
 end
