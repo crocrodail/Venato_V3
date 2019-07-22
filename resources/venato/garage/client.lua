@@ -95,7 +95,7 @@ end
 function MyCar(table)
   local ads = false
   Menu.setTitle( "Garage")
-  Menu.setSubtitle( "Mes Véhicules")  
+  Menu.setSubtitle( "Mes Véhicules")
   Menu.clearMenu()
   Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
   if Vehicule ~= nil then
@@ -149,131 +149,143 @@ function StoreMyCar(garage)
 end
 
 
-function SortirVoiture(vhl)
+function SortirVoiture(vhll)
   Citizen.CreateThread(function()
     Menu.close()
-    local customs = json.decode(tostring(vhl.customs))
-    local health = json.decode(tostring(vhl.Health))
+    local customs = json.decode(tostring(vhll.customs))
+    local health = json.decode(tostring(vhll.Health))
     Citizen.Wait(300)
-    local CarOnPoint = GetClosestVehicle(vhl.x,vhl.y,vhl.z, 5.000, 0, 70)
+    local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     if not DoesEntityExist(CarOnPoint) then
-      local car = tonumber(vhl.model)
-      Venato.CreateVehicle(car, {x=vhl.x,y=vhl.y,z=vhl.z}, vhl.h, function(veh)
+      local car = tonumber(vhll.model)
+      Venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
         if health ~= nil then
           if (health[1] ~= nil and health[1] > 0 and health[1] < 1000) or health[2] ~= nil then
             --print(health[1]..' ezfzsfdvsd')
-    		    SetVehicleEngineHealth(veh, tonumber(health[1]))
+    		    SetVehicleEngineHealth(vhl, tonumber(health[1]))
     	    end
         end
-        SetPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-        SetVehicleNumberPlateText(veh, vhl.plate)
-        TriggerEvent('lock:addVeh', vhl.plate, vhl.name)
-        TriggerServerEvent("Garage:SortiVehicule", vhl.plate, vhl.model)
-        SetVehicleOnGroundProperly(veh)
-        SetVehicleModKit(veh, 0 )
-        SetVehicleColours(veh,customs.color.primary,customs.color.secondary)
-        ToggleVehicleMod(veh, 18, false)
+        SetPedIntoVehicle(GetPlayerPed(-1), vhl, -1)
+        SetVehicleNumberPlateText(vhl, vhll.plate)
+        TriggerEvent('lock:addVeh', vhll.plate, vhll.name)
+        TriggerServerEvent("Garage:SortiVehicule", vhll.plate, vhll.model)
+        SetVehicleOnGroundProperly(vhl)
+        SetVehicleModKit(vhl, 0 )
+        SetVehicleModColor_1(vhl, customs.color.primary.type, 0,0)
+        SetVehicleCustomPrimaryColour(vhl, customs.color.primary.red,  customs.color.primary.green,  customs.color.primary.blue)
+        SetVehicleModColor_2(vhl, customs.color.secondary.type, 0,0)
+        SetVehicleCustomSecondaryColour(vhl, customs.color.secondary.red,  customs.color.secondary.green,  customs.color.secondary.blue)
+        SetVehicleExtraColours(vhl, customs.color.pearlescent, customs.wheels.color)
         for i = 0, 49 do
-          if i ~= 11 and i ~= 12 and i ~= 13 and i ~= 15 and i ~= 18 then
-            SetVehicleMod(veh, i, -1, false)
-          else
-            SetVehicleMod(veh, i, 0, false)
-          end
-          if customs.mods[""..i..""] ~= nil then
-            SetVehicleMod(veh, i, customs.mods[""..i..""], false)
-            if i == 11 then
-              --SetVehicleEnginePowerMultiplier(veh, GetVehicleModModifierValue(veh, i, customs.mods[""..i..""])/5 + 0.1)
-            end
-          end
-          if i == 18 and customs.mods[""..i..""] == false then
-  	        ToggleVehicleMod(veh, 18, false)
-          elseif i == 18 and customs.mods[""..i..""] == 1 then
-  	        ToggleVehicleMod(veh, 18, true)
-          end
-        end
-        SetVehicleMod(veh, 15, customs.mods["15"], false)
-        if vhl.type == 1 then
-          if customs.neons.enabled then
-            SetVehicleNeonLightEnabled(veh, 0, customs.neons.enabled)
-            SetVehicleNeonLightEnabled(veh, 1, customs.neons.enabled)
-            SetVehicleNeonLightEnabled(veh, 2, customs.neons.enabled)
-            SetVehicleNeonLightEnabled(veh, 3, customs.neons.enabled)
-            SetVehicleNeonLightsColour(veh, customs.neons.red, customs.neons.green, customs.neons.blue)
-          end
-          SetVehicleWindowTint(veh, customs.windows)
-          SetVehicleWheelType(veh, tonumber(customs.wheels.type))
-          SetVehicleMod(veh, 23, tonumber(customs.wheels.choice), false)
-          SetVehicleMod(veh, 24, tonumber(customs.wheels.choice), false)
-          if  customs.tyreburst.enabled then
-            ToggleVehicleMod(veh, 20, true)
-            SetVehicleTyreSmokeColor(veh, customs.tyreburst.red, customs.tyreburst.green, customs.tyreburst.blue)
-          end
-  	      if customs.xenons == 1 then
-  		      ToggleVehicleMod(veh, 22, true)
-  	      else
-  	        ToggleVehicleMod(veh, 22, false)
-          end
-  	      if customs.horn ~= nil then
-  	        SetVehicleMod(veh, 14, customs.horn)
-  	      end
-        end
-        SetVehicleDirtLevel(veh)
-        Citizen.Wait(100)
-        local debugvar = false
-        local var87 = 10000
-        local VehClassModel = GetVehicleClass(veh)
-        local entitymdl = GetEntityModel(veh)
-        local Model = GetDisplayNameFromVehicleModel(entitymdl)
-        if debugvar == true then msginf("NEW CATEGORIE : " .. VehClassModel .. " " .. Model .. " Entity mdl : " .. entitymdl,10000) end
-        for k, v in pairs(listedcar) do
-          if not IsVehicleModel(veh, v) then
-            table.insert(listedcar, entitymdl)
-          end
-        end
-        for k, v in pairs(listedcar) do
-          if IsVehicleModel(veh, v) then
-            for j, l in pairs(classmdl) do
-              local GetClassModel = GetVehicleClass(veh)
-              local Model = GetDisplayNameFromVehicleModel(GetEntityModel(veh))
-              ResultatClassmodel = j
-              if GetVehicleClass(veh) == j then
-                resultatcalcul = GetVehicleModModifierValue(veh, 11, GetVehicleMod(veh,11))/l.Multiplicateur + 0.1
-                SetVehicleEnginePowerMultiplier(veh, resultatcalcul)
-                globalclassmodelforblacklist = l.classmodel
-                blacklistedmultip = l.BlacklistedMultiplicateur
-                if debugvar == true then msginf("CATEGORIE : " .. l.classmodel .. " " .. Model .. " V : " .. l.Multiplicateur .. " result : " .. resultatcalcul .. " Vehicule n°: " .. k ,10000) end
-                if k == 1080 and debugvar == true then msginf("Voiture non CATEGORISÉ : " .. l.classmodel .. " " .. Model .. " V : " .. l.Multiplicateur .. " Multipl : " .. resultatcalcul .. " Vehicule n°: " .. k ,10000) end -- end  debugvar == true
-                break
-              else
-                if debugvar == true then msginf("BUG: " .. GetClassModel .. " V : " .. v .. " J : " .. ResultatClassmodel .. " l : " .. l.classmodel ,10000) end
-              end
-            end
-          end
-        end
-
-        for k2, v2 in pairs(blacklistedmodel) do
-          if IsVehicleModel(veh, v2) then
-            --Voiture buggé reelement au cas par cas:
-            if IsVehicleModel(veh, blacklistedmodel[6]) then -- PFISTER811
-              resultatcalcul = GetVehicleModModifierValue(veh, 11, GetVehicleMod(veh,11))/8.5 + 0.1
-              SetVehicleEnginePowerMultiplier(veh, resultatcalcul)
-            elseif IsVehicleModel(veh, blacklistedmodel[2]) then -- SCHAFTERV12
-              resultatcalcul = GetVehicleModModifierValue(veh, 11, GetVehicleMod(veh,11))/13.5 + 0.1
-              SetVehicleEnginePowerMultiplier(veh, resultatcalcul)
-            elseif IsVehicleModel(veh, blacklistedmodel[10]) then -- SLAMVAN3
-              resultatcalcul = GetVehicleModModifierValue(veh, 11, GetVehicleMod(veh,11))/23.5 + 0.1 -- 22.5 = 250 km/h |  23.5 = 180 km/h ...
-              SetVehicleEnginePowerMultiplier(veh, resultatcalcul)
-            elseif IsVehicleModel(veh, blacklistedmodel[11]) then -- BANSHEE2
-              resultatcalcul = GetVehicleModModifierValue(veh, 11, GetVehicleMod(veh,11))/2.5 + 0.01
-              SetVehicleEnginePowerMultiplier(veh, resultatcalcul)
+            if i ~= 11 and i ~= 12 and i ~= 13 and i ~= 15 and i ~= 18 then
+                SetVehicleMod(vhl, i, -1, false)
             else
-              SetVehicleEnginePowerMultiplier(veh, GetVehicleModModifierValue(veh, 11, GetVehicleMod(veh,11))/blacklistedmultip + 0.1)
-              resultatcalcul = math.ceil((GetVehicleMod(veh,11)/blacklistedmultip + 0.1)*var87)/var87
+                SetVehicleMod(vhl, i, 0, false)
             end
-            if debugvar == true then msginf("~r~NERF CATEGORIE : ~w~" .. globalclassmodelforblacklist .. " ~r~Diviser : " .. blacklistedmultip .. " Multiplicateur : " .. resultatcalcul,10000) end
-            break
-          end
+    		if i == 18 and customs.mods[""..i..""] == false then
+    			ToggleVehicleMod(vhl, 18, false)
+    		elseif i == 18 and customs.mods[""..i..""] == 1 then
+    			ToggleVehicleMod(vhl, 18, true)
+    		end
+            if customs.mods[""..i..""] ~= nil then
+                SetVehicleMod(vhl, i, customs.mods[""..i..""], false)
+                if i == 11 then
+                    --SetVehicleEnginePowerMultiplier(vhl, GetVehicleModModifierValue(vhl, i, customs.mods[""..i..""])/5 + 0.1)
+                end
+            end
         end
+        SetVehicleMod(vhl, 15, customs.mods["15"], false)
+        if veh.type == 1 then
+            -- Set neons
+            if customs.neons.enabled then
+                ToggleVehicleMod(vhl, 22, false)
+                SetVehicleNeonLightEnabled(vhl, 0, customs.neons.enabled)
+                SetVehicleNeonLightEnabled(vhl, 1, customs.neons.enabled)
+                SetVehicleNeonLightEnabled(vhl, 2, customs.neons.enabled)
+                SetVehicleNeonLightEnabled(vhl, 3, customs.neons.enabled)
+                SetVehicleNeonLightsColour(vhl, customs.neons.red, customs.neons.green, customs.neons.blue)
+            end
+            -- Set windows
+            SetVehicleWindowTint(vhl, customs.windows)
+            -- Set Jantes
+            SetVehicleWheelType(vhl, tonumber(customs.wheels.type))
+            SetVehicleMod(vhl, 23, tonumber(customs.wheels.choice), false)
+            SetVehicleMod(vhl, 24, tonumber(customs.wheels.choice), false)
+            -- Set Tyreburst
+            if customs.tyreburst.enabled then
+                ToggleVehicleMod(vhl, 20, true)
+                SetVehicleTyreSmokeColor(vhl, customs.tyreburst.red, customs.tyreburst.green, customs.tyreburst.blue)
+            end
+    		if customs.xenons == 1 then
+    			ToggleVehicleMod(vhl, 22, true)
+    		else
+    			ToggleVehicleMod(vhl, 22, false)
+    		end
+    		if customs.horn ~= nil then
+    			SetVehicleMod(vhl, 14, customs.horn)
+    		end
+        end
+    	local debugvar = false
+    	local var87 = 10000
+    	local VehClassModel = GetVehicleClass(vhl)
+    	local entitymdl = GetEntityModel(vhl)
+    	local Model = GetDisplayNameFromVehicleModel(entitymdl)
+
+    	blacklistedmodel = GetBlacklistedList()
+    	listedcar = GetBalancedList()
+    	classmdl = GetBalancedCatList()
+
+    	if debugvar == true then msginf("NEW CATEGORIE : " .. VehClassModel .. " " .. Model .. " Entity mdl : " .. entitymdl,10000) end
+    	for k, v in pairs(listedcar) do
+    		if not IsVehicleModel(vhl, v) then
+    			table.insert(listedcar, entitymdl)
+    		end
+    	end
+
+    	for k, v in pairs(listedcar) do
+    		if IsVehicleModel(vhl, v) then
+    			for j, l in pairs(classmdl) do
+    				local GetClassModel = GetVehicleClass(vhl)
+    				local Model = GetDisplayNameFromVehicleModel(GetEntityModel(vhl))
+    				ResultatClassmodel = j
+    				if GetVehicleClass(vhl) == j then
+    					local resultatcalcul = GetVehicleModModifierValue(vhl, 11, GetVehicleMod(vhl,11))/l.Multiplicateur + 0.1
+    					SetVehicleEnginePowerMultiplier(vhl, resultatcalcul)
+    					globalclassmodelforblacklist = l.classmodel
+    					blacklistedmultip = l.BlacklistedMultiplicateur
+    					if debugvar == true then msginf("CATEGORIE : " .. l.classmodel .. " " .. Model .. " V : " .. l.Multiplicateur .. " result : " .. resultatcalcul .. " Vehicule n°: " .. k ,10000) end
+    					if k == 1080 and debugvar == true then msginf("Voiture non CATEGORISÉ : " .. l.classmodel .. " " .. Model .. " V : " .. l.Multiplicateur .. " Multipl : " .. resultatcalcul .. " Vehicule n°: " .. k ,10000) end
+    					break
+    				else
+    					if debugvar == true then msginf("BUG: " .. GetClassModel .. " V : " .. v .. " J : " .. ResultatClassmodel .. " l : " .. l.classmodel ,10000) end
+    				end
+    			end
+    		end
+    	end
+
+    	for k2, v2 in pairs(blacklistedmodel) do
+    		if IsVehicleModel(vhl, v2) then
+    			--Voiture buggé reelement au cas par cas:
+    			if IsVehicleModel(vhl, blacklistedmodel[6]) then -- PFISTER811
+    				resultatcalcul = GetVehicleModModifierValue(vhl, 11, GetVehicleMod(vhl,11))/8.5 + 0.1
+    				SetVehicleEnginePowerMultiplier(vhl, resultatcalcul)
+    			elseif IsVehicleModel(vhl, blacklistedmodel[2]) then -- SCHAFTERV12
+    				resultatcalcul = GetVehicleModModifierValue(vhl, 11, GetVehicleMod(vhl,11))/13.5 + 0.1
+    				SetVehicleEnginePowerMultiplier(vhl, resultatcalcul)
+    			elseif IsVehicleModel(vhl, blacklistedmodel[10]) then -- SLAMVAN3
+    				resultatcalcul = GetVehicleModModifierValue(vhl, 11, GetVehicleMod(vhl,11))/23.5 + 0.1 -- 22.5 = 250 km/h |  23.5 = 180 km/h ...
+    				SetVehicleEnginePowerMultiplier(vhl, resultatcalcul)
+    			elseif IsVehicleModel(vhl, blacklistedmodel[11]) then -- BANSHEE2
+    				resultatcalcul = GetVehicleModModifierValue(vhl, 11, GetVehicleMod(vhl,11))/2.5 + 0.1
+    				SetVehicleEnginePowerMultiplier(vhl, resultatcalcul)
+    			else
+    				SetVehicleEnginePowerMultiplier(vhl, GetVehicleModModifierValue(vhl, 11, GetVehicleMod(vhl,11))/blacklistedmultip + 0.1)
+    				resultatcalcul = math.ceil((GetVehicleMod(vhl,11)/blacklistedmultip + 0.1)*var87)/var87
+    			end
+    			if debugvar == true then msginf("~r~NERF CATEGORIE : ~w~" .. globalclassmodelforblacklist .. " ~r~Diviser : " .. blacklistedmultip .. " Multiplicateur : " .. resultatcalcul,10000) end
+    			break
+    		end
+    	end
       end)
     else
       defaultNotification.message = "Véhicule dans la zone"
@@ -291,7 +303,7 @@ end)
 
 RegisterNetEvent("Garage:AllVehicle")
 AddEventHandler("Garage:AllVehicle", function(garage)
-  Vehicule = garage.vehicles  
+  Vehicule = garage.vehicles
   TriggerEvent('Menu:Init', "Garage", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
   Menu.clearMenu()
   Menu.addButton("<span class='red--text'>↩ Retour</span>", "close", nil)

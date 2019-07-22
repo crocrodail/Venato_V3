@@ -15,7 +15,7 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
 }
 
-function HideMenu()  
+function HideMenu()
   menuIsOpen = false
   TriggerEvent('Menu:HideVehicleInformation')
   TriggerEvent('Menu:Close')
@@ -35,10 +35,7 @@ Citizen.CreateThread(function ()
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
 
-    for i=1, #Config.CarShop, 1 do  
-      if init == false then
-      setCarShopMapMarker(Config.CarShop[i])   
-      end      
+    for i=1, #Config.CarShop, 1 do
       distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
@@ -73,13 +70,13 @@ Citizen.CreateThread(function ()
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end
         end
-        if IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])  or IsControlJustPressed(1, Keys["F2"]) then          
+        if IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or IsControlJustPressed(1, Keys["K"]) or IsControlJustPressed(1, Keys["F5"])  or IsControlJustPressed(1, Keys["F2"]) then
           HideMenu()
           RemoveCurrentCar()
         end
       else
-        if menuIsOpen and Config.CarShop[i].id == currentShop then          
-          HideMenu() 
+        if menuIsOpen and Config.CarShop[i].id == currentShop then
+          HideMenu()
           RemoveCurrentCar()
         end
       end
@@ -136,7 +133,7 @@ AddEventHandler('CarShop:ShowVehicles', function(category)
   TriggerServerEvent("CarShop:ShowVehicles", category)
 end)
 
-function ReturnToCategory(category)  
+function ReturnToCategory(category)
   RemoveNotification(lastNotif)
   if IsPedInAnyVehicle( playerPed, false ) then
     car = GetVehiclePedIsIn( playerPed, false )
@@ -193,7 +190,7 @@ end
 
 function PreviewVehicle(data)
    -- check if the vehicle actually exists
-   TriggerEvent('Menu:HideVehicleInformation') 
+   TriggerEvent('Menu:HideVehicleInformation')
    if not IsModelInCdimage(data.model) or not IsModelAVehicle(data.model) then
         defaultNotification.message = "Ce modèle n'est pas disponible."
         defaultNotification.type = "error"
@@ -216,8 +213,8 @@ function PreviewVehicle(data)
     end)
 end
 
-function BuyVehicle(data)  
-  local car = GetVehiclePedIsIn( playerPed, false ) 
+function BuyVehicle(data)
+  local car = GetVehiclePedIsIn( playerPed, false )
   local currentVhl = {}
   currentVhl.primary_red, currentVhl.primary_green, currentVhl.primary_blue   = GetVehicleCustomPrimaryColour(car);
   currentVhl.secondary_red, currentVhl.secondary_green, currentVhl.secondary_blue = GetVehicleCustomSecondaryColour(car);
@@ -226,8 +223,8 @@ function BuyVehicle(data)
   currentVhl.extra ,currentVhl.wheelcolor = GetVehicleExtraColours(car);
   local customs = {
       color = {
-          primary = color,
-          secondary = colorSec,
+          primary = { type= currentVhl.primary_type, red = currentVhl.primary_red,green= currentVhl.primary_green, blue = currentVhl.primary_blue},
+          secondary = { type= currentVhl.secondary_type,  red = currentVhl.secondary_red,green= currentVhl.secondary_green, blue = currentVhl.secondary_blue},
           pearlescent = currentVhl.extra
       },
       wheels = {
@@ -253,9 +250,9 @@ function BuyVehicle(data)
       TriggerEvent('Menu:Title', "Concessionnaire", "Confirmer paiement")
       TriggerEvent('Menu:Close')
       TriggerEvent('Menu:Clear')
-      TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "ShowVehicles", data.type)    
-      TriggerEvent('Menu:AddButton',"Payer avec de l'argent", "Pay", vehicle)    
-      TriggerEvent('Menu:AddButton',"Payer avec des Venato Points", "PayWithVp", vehicle)    
+      TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "ShowVehicles", data.type)
+      TriggerEvent('Menu:AddButton',"Payer avec de l'argent", "Pay", vehicle)
+      TriggerEvent('Menu:AddButton',"Payer avec des Venato Points", "PayWithVp", vehicle)
       TriggerEvent('Menu:Open')
     end
   else
@@ -319,8 +316,8 @@ RegisterNetEvent('CarShop:ShowCategory:response')
 AddEventHandler('CarShop:ShowCategory:response', function(data)
   TriggerEvent('Menu:Clear')
   TriggerEvent('Menu:Init', "Concessionnaire", "Catégories", '#2E7D3299', "https://images.caradisiac.com/logos/0/3/1/6/240316/S0-parc-automobile-il-n-y-a-jamais-eu-autant-de-vehicules-sur-nos-routes-161246.jpg")
-  TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)  
-  
+  TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)
+
   for k,v in pairsByKeys(data) do
     TriggerEvent('Menu:AddButton',v.type, "ShowCategory", v.type)
   end
@@ -348,7 +345,7 @@ AddEventHandler('CarShop:ShowVehicles:response', function(data)
     TriggerEvent('Menu:AddButton',v.name, "BuyVehicle", v, "PreviewVehicle")
   end
   TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "ReturnToCategory", carShopType, "HideInfo")
-  
+
   menuIsOpen = true
   TriggerEvent('Menu:HideVehicleInformation')
   TriggerEvent('Menu:Open')

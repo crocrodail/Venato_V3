@@ -76,7 +76,7 @@ end
 function AdminCustomTP()
 	Menu.setTitle("Venato Admin Menu")
   Menu.setSubtitle("~b~La vitamine c mais ne dira rien")
-	ClearMenu()
+	Menu.clearMenu()
 	Menu.addButton("~r~Retour", "openVenatoadmin", nil)
 	Menu.addButton("Modifier les Coordonées", "coordtp", nil)
 	Menu.addButton("Teleporte sur ~g~"..tonumber(xtppers).." ~s~|~g~ "..tonumber(ytppers).." ~s~|~g~ "..tonumber(ztppers), "AdminTpCustomCoord", nil)
@@ -491,13 +491,10 @@ Citizen.CreateThread(function()
 			if AdminShowPlayerInfo ~= nil then
 			 	ShowInfoClient(AdminShowPlayerInfo)
 			end
-      -- if MenuTitle == "Venato Admin Menu Player" then
-      --   ShowInfoClient(indexToShow)
-      -- end
 		end
-    -- if AdminShowCoordString == "Afficher les coordonées : ~b~On" then
-    --   ShowInfoCoord()
-    -- end
+     if AdminShowCoordBool then
+       ShowInfoCoord()
+     end
     if InSpectatorMode then
       local playerPed      = Venato.GetPlayerPed()
       local targetPed      = Venato.GetPlayerPedFromSource(indexToShow)

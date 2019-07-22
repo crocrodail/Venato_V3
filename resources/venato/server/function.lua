@@ -12,6 +12,10 @@ function getIdentifiant(id)
   end
 end
 
+function GetDatePlayers()
+  return DataPlayers
+end
+
 DataPlayers = {}
 
 function accessGranded(SteamId, source)
@@ -92,7 +96,7 @@ function accessGranded(SteamId, source)
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
     TriggerEvent("Inventory:UpdateInventory", source)
-    TriggerClientEvent("VenatoSpawn", source)
+    TriggerClientEvent("Venato:Connection", source)
     ControlVisa(SteamId, source)
   end)
 end

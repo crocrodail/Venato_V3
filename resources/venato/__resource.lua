@@ -110,3 +110,4 @@ files {
 export 'GetBlacklistedList'
 export 'GetBalancedList'
 export 'GetBalancedCatList'
+server_export 'GetDatePlayers'
