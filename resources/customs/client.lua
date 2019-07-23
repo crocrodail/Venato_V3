@@ -1,4 +1,4 @@
-
+local ActualCustoms = {}
 local currentVhl = {
     vehicleId                   = 0,
     doorsclosed             = 0,
@@ -192,24 +192,15 @@ end)
 -------------------------------------------------- NUI LISTENER --------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 
-function drawNotification(text)
-    SetNotificationTextEntry("STRING")
-    AddTextComponentString(text)
-    DrawNotification(false, false)
-end
-
 RegisterNetEvent('customs:playsound')
 AddEventHandler('customs:playsound', function(soundlib, sound)
     PlaySound(-1, soundlib, sound, 0, 0, 1)
-end)
-
-RegisterNetEvent('customs:notifs')
-AddEventHandler('customs:notifs', function(notif)
-    drawNotification(notif)
+    local row = json.decode(ActualCustoms)
+    SendNUIMessage({ config = json.encode(row.mods) })
 end)
 
 RegisterNetEvent('customs:checkifowner_fromdb')
-AddEventHandler('customs:checkifowner_fromdb', function(check)
+AddEventHandler('customs:checkifowner_fromdb', function(check, customs)
     if not check then
       TriggerEvent("Hud:Update", {
         action = "notify",
@@ -220,6 +211,9 @@ AddEventHandler('customs:checkifowner_fromdb', function(check)
         title = "LS Customs",
       })
         closeGui()
+    else
+      print('10/4 '..customs)
+      ActualCustoms = customs
     end
 end)
 
@@ -270,19 +264,54 @@ RegisterNUICallback('init', function(data, cb)
 
     if GetVehicleDirtLevel(currentVhl.vehicleId) > 0.50 then
         SetVehicleDirtLevel(currentVhl.vehicleId)
-        TriggerEvent("es_freeroam:notify", "CHAR_LS_CUSTOMS", 1, "LS Customs", false, "La prochaine fois va laver ta caisse avant, ici c'est pas la zone !")
+        TriggerEvent("Hud:Update", {
+          action = "notify",
+          message = "La prochaine fois va laver ta caisse avant, ici c'est pas la zone !",
+          timeout = 3500,
+          logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
+          type = "error",
+          title = "LS Customs",
+        })
     end
     -- SetVehicleModKit(currentVhl.vehicleId, 0 )
     if GetVehicleBodyHealth(currentVhl.vehicleId) < 990 then
         local easterEgg = math.random(1,4)
         if easterEgg == 1 then
-            TriggerEvent("es_freeroam:notify", "CHAR_LS_CUSTOMS", 1, "LS Customs", false, "Tu te crois où ? ~r~Va réparer ~w~ton véhicule je suis pas ta ~y~boniche !")
+          TriggerEvent("Hud:Update", {
+            action = "notify",
+            message = "Tu te crois où ? Va réparer ton véhicule je suis pas ta boniche !",
+            timeout = 3500,
+            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
+            type = "error",
+            title = "LS Customs",
+          })
         elseif easterEgg == 2 then
-            TriggerEvent("es_freeroam:notify", "CHAR_LS_CUSTOMS", 1, "LS Customs", false, "Tu te fous de ma gueule ? C'est quoi ce ~r~taudis~w~ vas ~y~réparer ça !")
+          TriggerEvent("Hud:Update", {
+            action = "notify",
+            message = "Tu te fous de ma gueule ? C'est quoi ce taudis vas réparer ça !",
+            timeout = 3500,
+            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
+            type = "error",
+            title = "LS Customs",
+          })
         elseif easterEgg == 3 then
-            TriggerEvent("es_freeroam:notify", "CHAR_LS_CUSTOMS", 1, "LS Customs", false, "T'es serieux ? ~r~Va réparer~w~ ta ~y~poubelle roulante !")
+          TriggerEvent("Hud:Update", {
+            action = "notify",
+            message = "T'es serieux ? Va réparer ta ~y~poubelle roulante !",
+            timeout = 3500,
+            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
+            type = "error",
+            title = "LS Customs",
+          })
         else
-            TriggerEvent("es_freeroam:notify", "CHAR_LS_CUSTOMS", 1, "LS Customs", false, "OK ... tu veut que je fasse quoi avec ~r~ta merde~w~ ~y~répare moi ça !")
+          TriggerEvent("Hud:Update", {
+            action = "notify",
+            message = "OK ... tu veut que je fasse quoi avec ta merde répare moi ça !",
+            timeout = 3500,
+            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
+            type = "error",
+            title = "LS Customs",
+          })
         end
         closeGui()
     end
@@ -367,6 +396,8 @@ end)
 RegisterNUICallback('getperflist', function(data, cb)
     currentVhl.acceleration = GetVehicleAcceleration(currentVhl.vehicleId)
     currentVhl.brake = GetVehicleMaxBraking(currentVhl.vehicleId)
+    local row = json.decode(ActualCustoms)
+    SendNUIMessage({ config = json.encode(row.mods) })
     SendNUIMessage({ resetstats = true })
     SendNUIMessage({ setperfstats = json.encode({name = 'Acceleration', value= currentVhl.acceleration}) })
     SendNUIMessage({ setperfstats = json.encode({name = 'Freins', value= currentVhl.brake}) })

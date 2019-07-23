@@ -168,6 +168,10 @@ function Venato.paymentCB(source, amount)
   end
 end
 
+function ExportPaymentCB(source, amount)
+  return Venato.paymentCB(source, amount)
+end
+
 function Venato.paymentVP(source, amount)
   print(DataPlayers[source].VenatoPoint)
   if DataPlayers[source].VenatoPoint <= amount then

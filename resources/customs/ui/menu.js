@@ -266,6 +266,7 @@ let CustomPrice = {
 	}
 };
 
+configMods = {};
 let currentVhl = {};
 let on_m_per_km_converter =  0.277777777778;
 
@@ -428,27 +429,33 @@ let paint =  {
 	index: 0
 };
 
-function perfKitItems(type, id, values){
-	let list = [];
-	for(let i = 0; i < values.length; i++ ) {
-		list.push({
-			key: values[i].n1,
-			action: function(){
-				$.post('http://customs/pay', JSON.stringify({
-					data: 'performance',
-					type: type,
-					id: id,
-					price: CustomPrice['performance'][type]['val_'+i] }));
-				store.commit('RETURN_BACK');
-				$.post('http://customs/setperfmod', JSON.stringify({id: i-1, mod: id}))
-			},
-			help:"Prix: <span>" + CustomPrice['performance'][type]['val_'+i].toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ") + "</span> $"
-		})
-	}
-	return list;
+function perfKitItems(type, id, values) {
+    let list = [];
+    for (let i = 0; i < values.length; i++) {
+        console.log("value "+ i+ "=>"+ values[i].ref);
+        list.push({
+            key: values[i].n1,
+            action: function () {
+                $.post('http://customs/pay', JSON.stringify({
+                    data: 'performance',
+                    type: type,
+                    id: id,
+                    price: CustomPrice['performance'][type]['val_' + values[i].ref]
+                }));
+                store.commit('RETURNBACK');
+                $.post('http://customs/setperfmod', JSON.stringify({id: values[i].ref - 1, mod: id}))
+            },
+            help: "Prix: <span>" + CustomPrice['performance'][type]['val' + values[i].ref].toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ") + "</span> $"
+        })
+    }
+    return list;
 }
 
+
 function perfKitChooser(type, id, values) {
+	values = values
+		.map((value, i) => ({...value, ref: i}))
+		.filter((value, index) => (configMods[''+id] || -1) !== (index-1) );
 	return {
 		title: "<img src='static/img/header.png'>",
 		subtitle: "Niveau de performance",
@@ -635,10 +642,8 @@ $(document).ready(function(){
 });
 
 this.message = function (e) {
-	console.log("recept")
 	let data = e.detail || e.data;
 	if (data.openUI === true) {
-		console.log("open")
 		store.commit('TOGGLE_MENU', true);
 		$.post("http://customs/init", JSON.stringify({}))
 	}
@@ -648,7 +653,6 @@ this.message = function (e) {
         $('.debug').fadeIn();
     }
 	if (data.closeUI === true) {
-			console.log("close")
 		store.commit('TOGGLE_MENU', false);
 		store.commit('RETURN_BACK');
 		store.commit('RETURN_BACK');
@@ -696,6 +700,10 @@ this.message = function (e) {
 	}
 	if (data.resetstats) {
 		store.commit('RESET_STATS', {});
+	}
+	if (data.config) {
+		console.log(data.config)
+		configMods = JSON.parse(data.config);
 	}
 	if (data.setperfstats) {
 		let row = JSON.parse(data.setperfstats);
