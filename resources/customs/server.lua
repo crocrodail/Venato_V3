@@ -6,9 +6,11 @@ AddEventHandler('customs:buy', function(data)
     local currentSource = source
     local model = tostring(datas.model)
     local plate = string.gsub(datas.plate, "^%s*(.-)%s*$", "%1")
-    if Venato.paymentCB(source, datas.price) then
-      MySQL.Async.fetchAll("SELECT * FROM user_vehicle WHERE owner=@owner AND model=@model AND plate=@plate ORDER BY name ASC LIMIT 1", {['@owner'] = identifiers[1], ['@model'] =  model, ['@plate'] = plate }, function(vehicle)
+    if exports.venato:ExportPaymentCB(source, datas.price) then
+      print("past")
+      MySQL.Async.fetchAll("SELECT * FROM user_vehicle WHERE owner=@owner AND model=@model AND plate=@plate ORDER BY name ASC LIMIT 1", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate }, function(vehicle)
         if vehicle[1] then
+          print("past2")
           vehicle[1].customs = json.decode(vehicle[1].customs)
           if datas.mod == 'neons' or datas.mod == 'xenons' or datas.mod == 'windows' or datas.mod == 'tyreburst' then
             vehicle[1].customs[datas.mod] = datas.value
@@ -24,6 +26,7 @@ AddEventHandler('customs:buy', function(data)
             vehicle[1].customs[datas.mod] = datas.value -- + 1
           end
           vehicle[1].customs = json.encode(vehicle[1].customs)
+          print(vehicle[1].customs)
           MySQL.Async.execute("UPDATE user_vehicle SET customs=@mods WHERE owner=@owner AND model=@model AND plate=@plate ORDER BY name ASC LIMIT 1", {
             ['@owner']  = identifiers,
             ['@model']  = model,
@@ -85,10 +88,9 @@ AddEventHandler('customs:checkifowner', function(vehicle)
 	    MySQL.Async.fetchAll("SELECT * FROM user_vehicle WHERE owner=@owner AND model=@model AND plate=@plate ORDER BY name ASC LIMIT 1", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate }, function(vehicle)
 
 	        if vehicle[1] then
-	            TriggerClientEvent('customs:checkifowner_fromdb', currentSource, true)
+	           TriggerClientEvent('customs:checkifowner_fromdb', currentSource, true, vehicle[1].customs)
 	        else
-
-	            TriggerClientEvent('customs:checkifowner_fromdb', currentSource, false)
+	           TriggerClientEvent('customs:checkifowner_fromdb', currentSource, false)
 	        end
 
 	    end)
