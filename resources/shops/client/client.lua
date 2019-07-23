@@ -36,6 +36,16 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
       BeginTextCommandSetBlipName("STRING")
       AddTextComponentString(item.Renamed or item.Name)
       EndTextCommandSetBlipName(blip)
+
+      blip = AddBlipForCoord(item.GarageX, item.GarageY, item.GarageZ)
+      SetBlipSprite(blip, 50)
+      SetBlipColour(blip, item.BlipColor)
+      SetBlipScale(blip, 1.0)
+      SetBlipCategory(blip, 10)
+      SetBlipAsShortRange(blip, true)
+      BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString(item.Renamed or item.Name)
+      EndTextCommandSetBlipName(blip)
     end
 
     while true do
@@ -75,7 +85,7 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
           else
             TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
           end
-        elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > 1.5 then
+        elseif ConfigShop.currentShopId == item.Id and distance > 1.5 then
           ConfigShop.inGarageMarker = false
           ConfigShop.spawnConfig = false
         end
