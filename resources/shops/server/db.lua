@@ -389,10 +389,10 @@ end
 function ShopDbFunctions.addItemToShop(inventoryId, orderId, item)
   -- First add item to stock without quantity
   MySQL.Sync.execute(ShopRequests.addItem,
-    { ["@InventoryId"] = inventoryId, ["@ItemId"] = item.ItemId, ["@Quantity"] = 0, ["@Price"] = item.Price })
+    { ["@InventoryId"] = inventoryId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price })
   -- Then add it to the order
   MySQL.Sync.execute(ShopRequests.orderNewItem,
-    { ["@OrderId"] = orderId, ["@ItemId"] = item.ItemId, ["@Quantity"] = 0, ["@Price"] = item.Price })
+    { ["@OrderId"] = orderId, ["@ItemId"] = item.Id, ["@Quantity"] = 0, ["@Price"] = item.Price })
 end
 
 function ShopDbFunctions.updatePriceItem(contentId, price)
