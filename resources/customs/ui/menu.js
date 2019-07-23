@@ -445,7 +445,7 @@ function perfKitItems(type, id, values) {
                 store.commit('RETURNBACK');
                 $.post('http://customs/setperfmod', JSON.stringify({id: values[i].ref - 1, mod: id}))
             },
-            help: "Prix: <span>" + CustomPrice['performance'][type]['val' + values[i].ref].toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ") + "</span> $"
+            help: "Prix: <span>" + CustomPrice['performance'][type]['val_' + values[i].ref].toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ") + "</span> $"
         })
     }
     return list;
@@ -465,7 +465,7 @@ function perfKitChooser(type, id, values) {
 		colorPicker: null,
 		grid: false,
 		style: null,
-		onItemChange:function(index){ $.post('http://customs/setperfmod', JSON.stringify( {id: index -1, mod: id} ) ) },
+		onItemChange:function(index){ $.post('http://customs/setperfmod', JSON.stringify( {id: values[index].ref -1, mod: id} ) ) },
 		index: 0
 	}
 };
