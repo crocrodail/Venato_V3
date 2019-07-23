@@ -61,6 +61,24 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
           TriggerEvent('Menu:Close')
           ConfigShop.page = "client"
         end
+        distance = GetDistanceBetweenCoords(playerPos, item.GarageX, item.GarageY, item.GarageZ, true)
+        if distance < 20 then
+          DrawMarker(27, item.GarageX, item.GarageY, item.GarageZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 150, 255, 200, 0,
+            0, 0, 0)
+        end
+        if distance < 1 then
+          ConfigShop.inGarageMarker = true
+          ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
+          ConfigShop.currentShopId = item.Id
+          if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+            TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
+          else
+            TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
+          end
+        elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > 1.5 then
+          ConfigShop.inGarageMarker = false
+          ConfigShop.spawnConfig = false
+        end
       end
     end
   end
@@ -82,6 +100,12 @@ CreateThread(function()
     if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and ConfigShop.inShopMarker then
       TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
       ConfigShop.menuOpen = true
+    elseif IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and ConfigShop.inGarageMarker then
+      if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+        despawnForklift()
+      else
+        spawnForklift()
+      end
     end
     if ConfigShop.menuOpen then
       DisableControlAction(0, 1, true) -- LookLeftRight
@@ -93,3 +117,59 @@ CreateThread(function()
     end
   end
 end)
+
+function spawnForklift()
+  local name = "forklift"
+  if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
+    despawnForklift()
+    _CreateVehicle(
+      string.upper(name),
+      ConfigShop.spawnConfig[1], ConfigShop.spawnConfig[2], ConfigShop.spawnConfig[3],
+      ConfigShop.spawnConfig[4],
+      function(vehicle)
+        ConfigShop.forklift = vehicle
+        SetVehicleNumberPlateText(vehicle, "SHOP_" .. math.random(100, 999))
+        SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
+        TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
+          GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
+      end)
+  end
+end
+
+function despawnForklift()
+  if ConfigShop.forklift ~= nil then
+    Citizen.InvokeNative(0xAE3CBE5BF394C9C9, Citizen.PointerValueIntInitialized(ConfigShop.forklift))
+  end
+end
+
+function _CreateVehicle(modelName, coordX, coordY, coordZ, heading, cb)
+  local model = modelName
+  if tonumber(modelName) == nil then
+    model = GetHashKey(modelName)
+  end
+  CreateThread(function()
+    if not HasModelLoaded(model) then
+      RequestModel(model)
+      while not HasModelLoaded(model) do
+        Wait(1)
+      end
+    end
+    print(heading)
+    local vehicle = CreateVehicle(model, coordX, coordY, coordZ, heading, true, false)
+    local id = NetworkGetNetworkIdFromEntity(vehicle)
+    SetNetworkIdCanMigrate(id, true)
+    SetEntityAsMissionEntity(vehicle, true, false)
+    SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+    SetVehicleNeedsToBeHotwired(vehicle, false)
+    SetModelAsNoLongerNeeded(model)
+    RequestCollisionAtCoord(coordX, coordY, coordZ)
+    while not HasCollisionLoadedAroundEntity(vehicle) do
+      RequestCollisionAtCoord(coordX, coordY, coordZ)
+      Wait(0)
+    end
+    SetVehRadioStation(vehicle, 'OFF')
+    if cb ~= nil then
+      cb(vehicle)
+    end
+  end)
+end
