@@ -124,9 +124,17 @@ function getSteamID(source)
   return player
 end
 
-function ShopDbFunctions.getShops()
+function ShopDbFunctions.getShops(source)
+  local shops = {}
   local result = MySQL.Sync.fetchAll(ShopRequests.getShops, {})
-  return result or {}
+  for _, shop in ipairs(result) do
+    if shop.Supervised then
+      shop.Managers, shop.IsSupervisor = ShopDbFunctions.getManagers(shop.Id, source)
+    end
+    table.insert(shops, shop)
+  end
+
+  return shops
 end
 
 function ShopDbFunctions.getManagers(shopId, source)

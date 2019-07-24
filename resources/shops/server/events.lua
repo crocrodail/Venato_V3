@@ -28,7 +28,7 @@ end
 
 AddEventHandler("Shops:LoadShops", function(newSource)
   local source = getSource(source, newSource)
-  TriggerClientEvent("Shops:LoadShops:cb", source, ShopDbFunctions.getShops())
+  TriggerClientEvent("Shops:LoadShops:cb", source, ShopDbFunctions.getShops(source))
 end)
 
 AddEventHandler("Shops:ShowInventory", function(shopId, newSource)

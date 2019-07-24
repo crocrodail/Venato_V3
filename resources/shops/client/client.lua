@@ -37,15 +37,17 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
       AddTextComponentString(item.Renamed or item.Name)
       EndTextCommandSetBlipName(blip)
 
-      blip = AddBlipForCoord(item.GarageX, item.GarageY, item.GarageZ)
-      SetBlipSprite(blip, 50)
-      SetBlipColour(blip, item.BlipColor)
-      SetBlipScale(blip, 1.0)
-      SetBlipCategory(blip, 10)
-      SetBlipAsShortRange(blip, true)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString(item.Renamed or item.Name)
-      EndTextCommandSetBlipName(blip)
+      if item.IsSupervisor then
+        blip = AddBlipForCoord(item.GarageX, item.GarageY, item.GarageZ)
+        SetBlipSprite(blip, 50)
+        SetBlipColour(blip, item.BlipColor)
+        SetBlipScale(blip, 1.0)
+        SetBlipCategory(blip, 10)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString(item.Renamed or item.Name)
+        EndTextCommandSetBlipName(blip)
+      end
     end
 
     while true do
@@ -72,11 +74,11 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
           ConfigShop.page = "client"
         end
         distance = GetDistanceBetweenCoords(playerPos, item.GarageX, item.GarageY, item.GarageZ, true)
-        if distance < 20 then
+        if distance < 20 and item.IsSupervisor then
           DrawMarker(27, item.GarageX, item.GarageY, item.GarageZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 150, 255, 200, 0,
             0, 0, 0)
         end
-        if distance < 1 then
+        if distance < 1 and item.IsSupervisor then
           ConfigShop.inGarageMarker = true
           ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
           ConfigShop.currentShopId = item.Id
@@ -164,7 +166,6 @@ function _CreateVehicle(modelName, coordX, coordY, coordZ, heading, cb)
         Wait(1)
       end
     end
-    print(heading)
     local vehicle = CreateVehicle(model, coordX, coordY, coordZ, heading, true, false)
     local id = NetworkGetNetworkIdFromEntity(vehicle)
     SetNetworkIdCanMigrate(id, true)
