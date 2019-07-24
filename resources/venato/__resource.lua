@@ -25,7 +25,7 @@ client_script {
   '/life/client.lua',
   '/admin/client.lua',
   '/clothingShop/client.lua',
-  '/clothingShop/config.lua',
+  '/clothingShop/config.lua'
 }
 
 server_script {
@@ -44,7 +44,7 @@ server_script {
   '/lockVehicule/server.lua',
   '/admin/server.lua',
   '/carMenu/server.lua',
-  '/clothingShop/server.lua',
+  '/clothingShop/server.lua'
 }
 
 files {
