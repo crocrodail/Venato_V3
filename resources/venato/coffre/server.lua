@@ -12,8 +12,7 @@ function reloadDataCoffre()
     MySQL.Async.fetchAll("SELECT * FROM coffre_pack JOIN coffres ON coffres.Pack = coffre_pack.Id ORDER BY coffres.Id", {}, function(result)
       if result[1] ~= nil then
         for k,v in pairs(result) do
-          if v.Id == 1168 then
-          print(v.Id.."  =  " .. v.Nom)
+        --  print(v.Id.."  =  " .. v.Nom)
           Cof = {
             ["id"] = v.Id,
             ["nom"] = v.Nom,
@@ -87,9 +86,7 @@ function reloadDataCoffre()
         end
       end
       TriggerClientEvent('Coffre:CallData:cb', -1, DataCoffre)
-      print("Stop loading coffre")
-      print(json.encode(DataCoffre))
-    end
+      print("End loading coffre")
     end)
   end)
 end
