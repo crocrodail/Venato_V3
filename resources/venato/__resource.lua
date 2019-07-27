@@ -25,7 +25,8 @@ client_script {
   '/life/client.lua',
   '/admin/client.lua',
   '/clothingShop/client.lua',
-  '/clothingShop/config.lua'
+  '/clothingShop/config.lua',
+  'test.lua'
 }
 
 server_script {
