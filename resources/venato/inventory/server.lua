@@ -1,7 +1,7 @@
 RegisterServerEvent('debuge')
 AddEventHandler('debuge', function()
-	local SteamId = getSteamID(source)
-	accessGranded(SteamId, source)
+  local SteamId = getSteamID(source)
+  accessGranded(SteamId, source, "")
 end)
 
 RegisterServerEvent('Inventory:UpdateInventory')
