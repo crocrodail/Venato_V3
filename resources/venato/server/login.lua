@@ -93,7 +93,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
       end
     else
       deferrals.done()
-      accessGranded(SteamId, source)
+      accessGranded(SteamId, source, SteamPseudo)
       MySQL.Async.execute("UPDATE Whitelist_Rocade SET wait=@wait WHERE identifier=@identifier", {['@wait'] =  "0", ['@identifier'] = SteamId})
     end
   else
@@ -110,7 +110,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
       ingame = ingame + 1
     else
       deferrals.done()
-      accessGranded(SteamId, source)
+      accessGranded(SteamId, source, SteamPseudo)
       MySQL.Async.execute("UPDATE Whitelist_Rocade SET wait=@wait WHERE identifier=@identifier", {['@identifier'] =  SteamId, ['@wait'] = "0"})
     end
   end

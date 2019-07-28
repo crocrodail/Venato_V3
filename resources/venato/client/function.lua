@@ -144,11 +144,13 @@ function Venato.CreateObject(objet, x, y, z)
     Citizen.Wait(100)
   end
   local objet = CreateObject(model, x, y, z, true, false, false)
-  PlaceObjectOnGroundProperly(object)
+  SetNetworkIdCanMigrate(objet, true)
+  SetEntityAsMissionEntity(objet, true, false)
+  SetModelAsNoLongerNeeded(model)
   return objet
 end
 
-function Venato.CreateVehicle(modelName, coords, heading, cb)  
+function Venato.CreateVehicle(modelName, coords, heading, cb)
   local model = modelName
   if tonumber(modelName) == nil then
    model = GetHashKey(modelName)

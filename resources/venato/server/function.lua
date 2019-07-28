@@ -18,10 +18,10 @@ end
 
 DataPlayers = {}
 
-function accessGranded(SteamId, source)
+function accessGranded(SteamId, source, pseudo)
   MySQL.Async.fetchAll("SELECT * FROM users "..
-   "INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
-   "INNER JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
+   "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
+   "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
    "WHERE users.identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)
     if DataUser[1] == nil then
       DropPlayer(source, "Une erreur s'est produite, si cette dernière persiste contactez un membre du staff.")
@@ -54,7 +54,7 @@ function accessGranded(SteamId, source)
         Need = DataUser[1].needs,
         Sool = DataUser[1].sool,
         PhoneNumber = DataUser[1].phone_number,
-        Pseudo = DataUser[1].pseudo,
+        Pseudo = pseudo,
         Poid = Venato.MoneyToPoid(DataUser[1].money),
         Inventaire = {nil},
         Weapon = {nil},

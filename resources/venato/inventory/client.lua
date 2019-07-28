@@ -47,6 +47,7 @@ Citizen.CreateThread(function()
 							Venato.notify("Vous avez ramassez "..v.qty.." "..v.libelle.." .")
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropItem))
+							PlaceObjectOnGroundProperly(objet)
 							if objet ~= 0 and objet ~= nil then
 								DeleteEntity(objet)
 							end
@@ -74,6 +75,7 @@ Citizen.CreateThread(function()
 							Venato.notify("Vous avez ramassez "..Venato.FormatMoney(v.qty,2).." € .")
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropMoney))
+							PlaceObjectOnGroundProperly(objet)
 							if objet ~= 0 and objet ~= nil then
 								DeleteEntity(objet)
 							end
@@ -101,6 +103,7 @@ Citizen.CreateThread(function()
 							Venato.notify("Vous avez ramassez "..v.libelle.." .")
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropWeapon))
+							PlaceObjectOnGroundProperly(objet)
 							if objet ~= 0 and objet ~= nil then
 								DeleteEntity(objet)
 							end
