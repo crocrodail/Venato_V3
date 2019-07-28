@@ -5,77 +5,81 @@
   @date 2019-07-24
   @version 1.0
 --]]
+DeliveryJob = {}
+function DeliveryJob.init()
+  CreateThread(function()
+    if DeliveryJobConfig.enabled then
+      local defaultDestinations = DeliveryJobConfig.defaultDropLocations
+      local defaultOrders = DeliveryJobConfig.defaultOrders
+      local trunkDrops = DeliveryJobConfig.trunkDrops
+      local warehouses = DeliveryJobConfig.warehouses
+      local warehouse_underground = DeliveryJobConfig.warehouse_underground
 
-CreateThread(function()
-  if DeliveryJobConfig.enabled then
-    local defaultDestinations = DeliveryJobConfig.defaultDropLocations
-    local defaultOrders = DeliveryJobConfig.defaultOrders
-    local trunkDrops = DeliveryJobConfig.trunkDrops
-    local warehouses = DeliveryJobConfig.warehouses
-    local warehouse_underground = DeliveryJobConfig.warehouse_underground
+      local mission = DeliveryJobConfig.defaultMissions[1]
 
-    local mission = DeliveryJobConfig.defaultMissions[1]
-
-    for warehouseName, warehouse in pairs(warehouses) do
-      TriggerEvent("Teleport:SetTeleport",
-        warehouseName,
-        warehouse,
-        warehouse_underground
-      )
-    end
-
-    if DeliveryJobConfig.trunk == nil then
-      for _, dropPoint in ipairs(trunkDrops) do
-        addTrunkDropsBlip(dropPoint)
+      for warehouseName, warehouse in pairs(warehouses) do
+        TriggerEvent("Teleport:SetTeleport",
+          warehouseName,
+          warehouse,
+          warehouse_underground
+        )
       end
-    end
 
-    if mission then
-      local destination = defaultDestinations[mission.targetId]
-      local order = defaultOrders[mission.orderId]
-      addDestinationBlip(destination)
-    end
-
-    while true do
-      Wait(0)
-      local playerPos = GetEntityCoords(GetPlayerPed(-1))
-
-      for _, dropPoint in ipairs(trunkDrops) do
-        distance = GetDistanceBetweenCoords(playerPos, dropPoint.posX, dropPoint.posY, dropPoint.posZ, true)
-        if distance < 20 then
-          DrawMarker(27, dropPoint.posX, dropPoint.posY, dropPoint.posZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
-            174, 0, 0, 0, 0)
-        end
-        if distance < 1.5 then
-          DeliveryJobConfig.onTrunkDrop = dropPoint
-          TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette")
-        elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
-          DeliveryJobConfig.onTrunkDrop = nil
+      if DeliveryJobConfig.trunk == nil then
+        for _, dropPoint in ipairs(trunkDrops) do
+          addTrunkDropsBlip(dropPoint)
         end
       end
 
-      --TriggerEvent("Venato:InteractTxt", "Livraison en cours, veuillez vous rendre à destination ~BLIP_119~")
+      if mission then
+        local destination = defaultDestinations[mission.targetId]
+        local order = defaultOrders[mission.orderId]
+        addDestinationBlip(destination)
+      end
 
-    end
+      while true do
+        Wait(0)
+        local playerPos = GetEntityCoords(GetPlayerPed(-1))
 
-  end
-end)
-
-CreateThread(function()
-  if DeliveryJobConfig.enabled then
-    while true do
-      Wait(1)
-      if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and DeliveryJobConfig.onTrunkDrop ~= nil then
-        if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
-          despawnTrunk()
-        else
-          spawnTrunk()
+        for _, dropPoint in ipairs(trunkDrops) do
+          distance = GetDistanceBetweenCoords(playerPos, dropPoint.posX, dropPoint.posY, dropPoint.posZ, true)
+          if distance < 20 then
+            DrawMarker(27, dropPoint.posX, dropPoint.posY, dropPoint.posZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
+              174, 0, 0, 0, 0)
+          end
+          if distance < 1.5 then
+            DeliveryJobConfig.onTrunkDrop = dropPoint
+            TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette")
+          elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
+            DeliveryJobConfig.onTrunkDrop = nil
+          end
         end
+
+        --TriggerEvent("Venato:InteractTxt", "Livraison en cours, veuillez vous rendre à destination ~BLIP_119~")
+
       end
 
     end
-  end
-end)
+  end)
+end
+
+function DeliveryJob.commands()
+  CreateThread(function()
+    if DeliveryJobConfig.enabled then
+      while true do
+        Wait(1)
+        if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and DeliveryJobConfig.onTrunkDrop ~= nil then
+          if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
+            despawnTrunk()
+          else
+            spawnTrunk()
+          end
+        end
+
+      end
+    end
+  end)
+end
 
 function addTrunkDropsBlip(point)
   addBlip(point, "camionnette", 85, 12, false)
