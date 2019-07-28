@@ -165,13 +165,8 @@ Drawing = setmetatable({}, Drawing)
 Drawing.__index = Drawing
 
 RegisterNetEvent("Teleport:SetTeleport")
-AddEventHandler("Teleport:SetTeleport", function(name, from, to)
-  local teleport = {
-    positionFrom = from,
-    positionTo = to
-  }
+AddEventHandler("Teleport:SetTeleport", function(name, teleport)
   TeleportFromTo[name] = teleport
-  print('Teleport added:', Venato.dump(TeleportFromTo))
 end)
 
 function Drawing.draw3DText(x, y, z, textInput, fontId, scaleX, scaleY, r, g, b, a)
