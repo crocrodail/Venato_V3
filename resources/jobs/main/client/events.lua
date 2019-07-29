@@ -16,7 +16,7 @@ RegisterNetEvent("Jobs:salary:cb")
 AddEventHandler("Jobs:checkPlayerJob:cb", function(jobId)
   JobsConfig.jobId = jobId
 
-  job = JobsConfig.jobs[jobId]
+  local job = JobsConfig.jobs[jobId]
   if job == nil then return end
 
   -- Step 2
@@ -36,7 +36,23 @@ AddEventHandler("Jobs:checkPlayerJob:cb", function(jobId)
   Jobs.SalaryLoop()
 end)
 
-AddEventHandler("Jobs:salary:cb", function(primeCo, salary)
-  JobsConfig.jobsNotification.message = "Prime de temps de connexion : <span class='green--text'>" .. primeCo .. " €</span> Salaire métier reçu : <span class='green--text'>" .. salary .. " €</span>"
+AddEventHandler("Jobs:salary:cb", function(jobName, primeCo, salary, primeJob)
+  local notification = {}
+  notification.title = jobName
+  if salary > 0 then
+    notification.title = notification.title .. " (<span class='green--text'>" .. primeCo + salary + primeJob .. " €</span>)"
+  end
+  notification.logo = JobsConfig.jobsNotification.logo
+  notification.message = "Prime de temps de connexion : <span class='green--text'>" .. primeCo .. " €</span>"
+  if salary > 0 then
+    notification.message = notification.message .. "<br />Salaire reçu : <span class='green--text'>" .. salary .. " €</span>"
+    if primeJob > 0 then
+      notification.message = notification.message .. " (+ Prime : <span class='green--text'>" .. primeJob .. " €</span>)"
+    end
+  else
+    notification.message = notification.message .. "<br /><span class='orange--text'>Pas de salaire</span>"
+  end
+  TriggerEvent("Venato:notify", notification)
+  JobsConfig.message = "Toto ?"
   TriggerEvent("Venato:notify", JobsConfig.jobsNotification)
 end)

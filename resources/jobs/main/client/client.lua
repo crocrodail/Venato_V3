@@ -16,12 +16,11 @@ function Jobs.Start()
   end)
 end
 
-local SALARY_INTERVAL = 15 * 60 * 1000
 function Jobs.SalaryLoop()
   print('Jobs: Salary Loop Module started !')
   CreateThread(function()
     while true do
-      Wait(SALARY_INTERVAL)
+      Wait(JobsConfig.SalaryInterval)
       TriggerServerEvent("Jobs:salary")
     end
   end)

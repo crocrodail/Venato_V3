@@ -20,12 +20,9 @@ end)
 
 AddEventHandler("Jobs:salary", function(newSource)
   local source = getSource(source, newSource)
-
-  local primeConn = 50
-  local salary = JobsDbFunctions.getPlayerSalary(source)
-
-  TriggerEvent("Inventory:AddMoney", primeConn + salary, source)
-
-  TriggerClientEvent("Jobs:salary:cb", source, primeConn, salary)
-
+  local primeConn = JobsConfig.PrimeConnection
+  local jobName = JobsDbFunctions.getPlayerJobName(source)
+  local salary, primeJob = JobsDbFunctions.getPlayerSalary(source)
+  TriggerEvent("Inventory:AddMoney", primeConn + salary + primeJob, source)
+  TriggerClientEvent("Jobs:salary:cb", source, jobName, primeConn, salary, primeJob)
 end)
