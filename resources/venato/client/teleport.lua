@@ -169,6 +169,11 @@ AddEventHandler("Teleport:SetTeleport", function(name, teleport)
   TeleportFromTo[name] = teleport
 end)
 
+RegisterNetEvent("Teleport:RemoveTeleport")
+AddEventHandler("Teleport:RemoveTeleport", function(name)
+  TeleportFromTo[name] = nil
+end)
+
 function Drawing.draw3DText(x, y, z, textInput, fontId, scaleX, scaleY, r, g, b, a)
   local px, py, pz = table.unpack(GetGameplayCamCoords())
   local dist = GetDistanceBetweenCoords(px, py, pz, x, y, z, 1)

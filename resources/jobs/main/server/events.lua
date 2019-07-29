@@ -7,6 +7,7 @@
 --]]
 
 RegisterServerEvent("Jobs:checkPlayerJob")
+RegisterServerEvent("Jobs:salary")
 
 function getSource(source, newSource)
   return newSource or source
@@ -15,4 +16,16 @@ end
 AddEventHandler("Jobs:checkPlayerJob", function(newSource)
   local source = getSource(source, newSource)
   TriggerClientEvent("Jobs:checkPlayerJob:cb", source, JobsDbFunctions.getPlayerJob(source))
+end)
+
+AddEventHandler("Jobs:salary", function(newSource)
+  local source = getSource(source, newSource)
+
+  local primeConn = 50
+  local salary = JobsDbFunctions.getPlayerSalary(source)
+
+  TriggerEvent("Inventory:AddMoney", primeConn + salary, source)
+
+  TriggerClientEvent("Jobs:salary:cb", source, primeConn, salary)
+
 end)

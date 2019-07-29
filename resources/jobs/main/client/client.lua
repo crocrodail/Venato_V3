@@ -5,15 +5,26 @@
   @date 2019-07-28
   @version 1.0
 --]]
+Jobs = {}
 
-CreateThread(function()
-  -- Step 1
-  --  Check the job of the player
-  TriggerServerEvent("Jobs:checkPlayerJob")
-end)
+function Jobs.Start()
+  CreateThread(function()
+    print('Jobs Module started !')
+    -- Step 1
+    --  Check the job of the player
+    TriggerServerEvent("Jobs:checkPlayerJob")
+  end)
+end
 
--- Step 4
---  Appeler La boucle principale du métier
+local SALARY_INTERVAL = 15 * 60 * 1000
+function Jobs.SalaryLoop()
+  print('Jobs: Salary Loop Module started !')
+  CreateThread(function()
+    while true do
+      Wait(SALARY_INTERVAL)
+      TriggerServerEvent("Jobs:salary")
+    end
+  end)
+end
 
--- Step 5
---  Appeler la boucle des salaires
+Jobs.Start()
