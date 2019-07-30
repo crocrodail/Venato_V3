@@ -19,10 +19,10 @@ end
 DataPlayers = {}
 
 function accessGranded(SteamId, source, pseudo)
-  MySQL.Async.fetchAll("SELECT * FROM users "..
-   "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
-   "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
-   "WHERE users.identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)
+  MySQL.Async.fetchAll("SELECT * FROM users " ..
+    "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` " ..
+    "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` " ..
+    "WHERE users.identifier = @SteamId", { ['@SteamId'] = SteamId }, function(DataUser)
     if DataUser[1] == nil then
       DropPlayer(source, "Une erreur s'est produite, si cette dernière persiste contactez un membre du staff.")
     else
@@ -47,7 +47,7 @@ function accessGranded(SteamId, source, pseudo)
         Position = DataUser[1].lastPosition,
         Sexe = sexe,
         Taille = DataUser[1].taille,
-        Age = os.date("%x",DataUser[1].dateNaissance/1000),
+        Age = os.date("%x", DataUser[1].dateNaissance / 1000),
         Health = DataUser[1].health,
         Food = DataUser[1].food,
         Water = DataUser[1].water,
@@ -56,9 +56,9 @@ function accessGranded(SteamId, source, pseudo)
         PhoneNumber = DataUser[1].phone_number,
         Pseudo = pseudo,
         Poid = Venato.MoneyToPoid(DataUser[1].money),
-        Inventaire = {nil},
-        Weapon = {nil},
-        Documents = {nil},
+        Inventaire = { nil },
+        Weapon = { nil },
+        Documents = { nil },
         PoidMax = 20,
         Index = 0,
         VisaStart = nil,
@@ -93,7 +93,9 @@ function accessGranded(SteamId, source, pseudo)
       }
       TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
       TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
-      print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+      TriggerClientEvent("Inventory:MoneyChanged:cb", source, DataUser[1].Money)
+      TriggerClientEvent("Bank:BankChanged:cb", source, DataUser[1].bank)
+      print("^3SyncData for : " .. DataPlayers[source].Prenom .. " " .. DataPlayers[source].Nom .. " (" .. DataPlayers[source].Pseudo .. ")^7")
     end
     TriggerEvent("Inventory:UpdateInventory", source)
     TriggerClientEvent("Venato:Connection", source)
