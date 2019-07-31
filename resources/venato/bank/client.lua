@@ -212,8 +212,3 @@ RegisterNUICallback('error', function(data, cb)
   Venato.notify('The machine is working. Please wait')
 end)
 
-RegisterNetEvent('Bank:BankChanged:cb')
-AddEventHandler('Bank:BankChanged:cb', function(bank)
-  StatSetInt("BANK_BALANCE", bank, true)
-  ShowHudComponentThisFrame(4)
-end)

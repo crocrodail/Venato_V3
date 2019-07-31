@@ -15,5 +15,6 @@ end)
 
 AddEventHandler('playerSpawned', function(spawn)
 	Venato.Spawn()
+  DisplayCash(false)
   LoadBlips()
 end)

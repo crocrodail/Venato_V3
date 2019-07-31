@@ -586,10 +586,3 @@ AddEventHandler('Inventory:AnimGive', function()
   end)
 end)
 --############# ITEM ##################
-
-RegisterNetEvent('Inventory:MoneyChanged:cb')
-AddEventHandler('Inventory:MoneyChanged:cb', function(money)
-  N_0x170f541e1cadd1de(false)
-  StatSetInt("MP0_WALLET_BALANCE", money, true)
-  ShowHudComponentThisFrame(4)
-end)

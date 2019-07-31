@@ -207,7 +207,6 @@ AddEventHandler("Inventory:AddMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Money + qty
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
-	TriggerClientEvent("Inventory:MoneyChanged:cb", source, new)
 end)
 
 RegisterNetEvent("Inventory:RemoveMoney")
@@ -221,7 +220,6 @@ AddEventHandler("Inventory:RemoveMoney", function(qty, NewSource)
 	DataPlayers[source].Poid = DataPlayers[source].Poid - Venato.MoneyToPoid(qty)
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
-	TriggerClientEvent("Inventory:MoneyChanged:cb", source, new)
 end)
 
 RegisterNetEvent("Inventory:SetMoney")
@@ -236,7 +234,6 @@ AddEventHandler("Inventory:SetMoney", function(qty, NewSource)
 	DataPlayers[source].Poid = DataPlayers[source].Poid + Venato.MoneyToPoid(qty)
 	DataPlayers[source].Money = new
 	MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
-	TriggerClientEvent("Inventory:MoneyChanged:cb", source, new)
 end)
 
 MoneyOnTheGround = {}

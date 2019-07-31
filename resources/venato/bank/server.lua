@@ -154,7 +154,6 @@ AddEventHandler("Bank:AddBankMoney", function(qty, NewSource)
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
 	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
-	TriggerClientEvent("Bank:BankChanged:cb", source, new)
 end)
 
 RegisterNetEvent("Bank:RemoveBankMoney")
@@ -168,7 +167,6 @@ AddEventHandler("Bank:RemoveBankMoney", function(qty, NewSource)
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
 	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
-	TriggerClientEvent("Bank:BankChanged:cb", source, new)
 end)
 
 RegisterNetEvent("Bank:SetBankMoney")
@@ -182,5 +180,4 @@ AddEventHandler("Bank:SetBankMoney", function(qty, NewSource)
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
 	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
-	TriggerClientEvent("Bank:BankChanged:cb", source, new)
 end)
