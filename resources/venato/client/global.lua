@@ -1,7 +1,11 @@
 DataUser = {}
 
 AddEventHandler('playerSpawned', function()
-  TriggerServerEvent("Venato:CallDataPlayerSpawn")
+  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
+end)
+
+Citizen.CreateThread(function()
+    TriggerServerEvent("Venato:SyncData")
 end)
 
 RegisterNetEvent("Venato:displaytext")
@@ -19,16 +23,9 @@ end)
 
 RegisterNetEvent("Venato:SpawnInit")
 AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
-  print("la")
   if DataPlayers[source] ~= nil then
-    print("couocu")
     LoadBlips()
     Venato.LoadClothes()
     Venato.LoadSkin(DataPlayers[source])
   end
 end)
-
-if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) or (GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_f_freemode_01")) then
-	TriggerServerEvent("debuge")
-	SetTimeout(3000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
-end

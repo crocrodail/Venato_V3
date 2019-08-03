@@ -75,7 +75,7 @@ end)
 
 	Citizen.CreateThread(function()
 		while true do
-			Wait(2000)
+			Citizen.Wait(2000)
       vnt()
 			local player = GetPlayerPed(-1)
 			if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
@@ -98,7 +98,7 @@ function lockVeh()
   local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
   local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
   local vehName = ''
-  
+
   if clostestvehicle == 0 then
     local pos = GetEntityCoords(GetPlayerPed(-1))
     local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
