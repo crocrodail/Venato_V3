@@ -26,7 +26,6 @@ end)
 DataPlayers = {}
 
 function accessGranded(SteamId, source , balek)
-  print(source)
   MySQL.Async.fetchAll("SELECT * FROM users "..
    "INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
    "INNER JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
@@ -114,7 +113,6 @@ function accessGranded(SteamId, source , balek)
       TriggerEvent("Inventory:UpdateInventory", source)
       TriggerClientEvent("Venato:Connection", source)
       ControlVisa(SteamId, source)
-      print(json.encode(DataPlayers[source]))
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
   end)
