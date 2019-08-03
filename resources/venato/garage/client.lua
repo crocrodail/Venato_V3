@@ -47,10 +47,10 @@ AddEventHandler('onClientMapStart', function()
 end)
 
 Citizen.CreateThread(function()
-setMapMarker()
+  setMapMarker()
+  local ply = GetPlayerPed(-1)
   while true do
       Citizen.Wait(0)
-      local ply = GetPlayerPed(-1)
       local plyCoords = GetEntityCoords(ply, 0)
       for _, item in pairs(garage) do
         local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)

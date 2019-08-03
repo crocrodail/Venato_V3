@@ -36,7 +36,7 @@ Citizen.CreateThread(function ()
     end
 
     for i=1, #Config.CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
+      distance = GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
@@ -197,7 +197,7 @@ function PreviewVehicle(data)
         Venato.notify(defaultNotification)
         return
     end
-    Venato.CreateVehicle(data.model, GetEntityCoords(GetPlayerPed(-1)), GetEntityHeading(playerPed), function(vehicle)
+    Venato.CreateVehicle(data.model, GetEntityCoords(Venato.GetPlayerPed()), GetEntityHeading(playerPed), function(vehicle)
       LastCar = vehicle
       SetVehicleColours(vehicle,color,colorSec)
       SetVehicleFuelLevel(vehicle, GetVehicleFuelLevel(vehicle) + 50)

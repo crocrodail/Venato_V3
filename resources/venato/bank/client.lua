@@ -10,10 +10,10 @@ Citizen.CreateThread(function ()
 		inBankMarker = false
 
     for i=1, #Config.ATMS, 1 do
-      if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 20 and ( Config.ATMS[i].b ~= nil ) then
+      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 20 and ( Config.ATMS[i].b ~= nil ) then
         DrawMarker(27,Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2  then
+      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2  then
 				time = 0
 				if ( Config.ATMS[i].b == nil ) then
 					inMarker = true
@@ -23,7 +23,7 @@ Citizen.CreateThread(function ()
 					type = Config.ATMS[i].t
 					Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
 				end
-			elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) > 4 then
+			elseif GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) > 4 then
 				time = 500
 			end
     end
@@ -167,11 +167,11 @@ Citizen.CreateThread(function ()
 		if IsControlJustReleased(0, 38) and inBankMarker and GetLastInputMethod(2) then
 			TriggerServerEvent("Bank:GetDataMoneyForBank")
 		end
-    if open then      
+    if open then
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack
-      DisablePlayerFiring(GetPlayerPed(-1), true) -- Disable weapon firing
+      DisablePlayerFiring(Venato.GetPlayerPed(), true) -- Disable weapon firing
       DisableControlAction(0, 142, true) -- MeleeAttackAlternate
       DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
     end

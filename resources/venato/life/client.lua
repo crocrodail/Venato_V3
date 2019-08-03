@@ -6,10 +6,13 @@ local old_water = 0
 local old_food = 0
 local reserveTrigger = false
 
+function LifeInit()
+  TriggerServerEvent("Life:Init")
+end
+
 Citizen.CreateThread(
     function()
-        Citizen.Wait(1500)
-        TriggerServerEvent("Life:Init")
+        Citizen.Wait(3500)
         while true do
             local playerPed = PlayerPedId()
             Citizen.Wait(1000)
@@ -40,11 +43,11 @@ Citizen.CreateThread(
                 if GetIsVehicleEngineRunning(car) then
                     SetVehicleFuelLevel(car, GetVehicleFuelLevel(car) - (GetVehicleCurrentRpm(car) / 10))
                 end
-                
+
                 if(GetVehicleFuelLevel(car) > 20) then
                     reserveTrigger = false
                 end
-                                
+
                 if(GetVehicleFuelLevel(car) < 20 and not reserveTrigger) then
                     local defaultNotification = {
                         title ="Info. Véhicule",
@@ -100,7 +103,7 @@ Citizen.CreateThread(
                 end
                 old_food = food
                 old_water = water
-                
+
                 local needs = {
                     food = Venato.Round(food, 2),
                     water = Venato.Round(water, 2),

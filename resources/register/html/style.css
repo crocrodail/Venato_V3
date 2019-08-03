@@ -1,0 +1,283 @@
+body{
+  margin:0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+#cursor {
+    position: absolute;
+    z-index: 99999999;
+    display: none;
+}
+
+#home {
+ background-color: #FFF;
+}
+
+#red {
+  fill: none;
+  opacity: 0.15;
+  stroke: #CE1B5F;
+  stroke-width: 12;
+  stroke-miterlimit:10;
+  animation: show 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+#blue {
+  fill: none;
+  opacity: 0.15;
+  stroke: #06A1C4;
+  stroke-width: 12;
+  stroke-miterlimit:10;
+  animation: show 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+#light-blue {
+  fill: none;
+  opacity: 0.15;
+  stroke: #06A1C4;
+  stroke-width: 6;
+  stroke-miterlimit:10;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 800;
+  animation: draw 4s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+ }
+    }
+
+@keyframes show {
+  0% {
+    opacity: 0.15;
+ }
+  50% {
+    opacity: 0.2;
+ }
+  100% {
+    opacity: 0.15;
+ }
+    }
+
+.container-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    display: flex;
+    align-items: center;
+    width: 899px;
+    height: 590px;
+    border-radius: 24px;
+    background-color: #FFF;
+}
+
+.container-form2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    display: flex;
+    align-items: center;
+    width: 909px;
+    height: 600px;
+    border-radius: 24px;
+    background-color: #5C5E60;
+    opacity: 0.15;
+}
+
+/* sidebar */
+.info-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 366px;
+    height: 590px;
+    border-radius: 24px 0 0 24px;
+    background-color: #1250C2;
+    letter-spacing: 0.3px;
+    color: #000;
+}
+
+.info-member > .avatar {
+    margin-bottom: 24px;
+    width: 150px;
+    height: 150px;
+}
+
+.info-member > .title {
+    color: #D9EAF2;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0 90px 16px;
+}
+
+.info-member > .description {
+    line-height: 1.5;
+    margin: 0 42px;
+}
+
+/* form */
+.column-wrapper.-form {
+    margin: 0 auto;
+}
+
+.form-wrapper {
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+}
+
+.form-wrapper > .label {
+    display:inline-flex;
+    width: 136px;
+    font-weight: 700;
+    color: #373d40;
+}
+
+.form-wrapper > .input {
+    display: inline-flex;
+    width: 305px;
+    height: 40px;
+    border: 1px solid #f5f8f9;
+    border-radius: 4px;
+		font: inherit;
+		font-size: inherit;
+		font-weight: inherit;
+    background-color: #f5f8f9;
+    color: #7E7E7E;
+    padding: 12px 16px;
+		transition: all 200ms linear;
+}
+
+.form-wrapper > .input:focus {
+    border: 1px solid #cad7dd;
+    background-color: #f5f8f9;
+		color: #373d40;
+}
+
+.form-wrapper.-last {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.form-wrapper > .homme {
+    opacity: 0;
+		width: 0;
+  	height: 0;
+}
+
+.form-wrapper > .femme {
+    opacity: 0;
+		width: 0;
+  	height: 0;
+}
+
+.form-wrapper > .femme + .category {
+    background: #c7c7c7 url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
+    background-size: 80% auto;
+    height: 38px;
+    width: 38px;
+    border-radius: 100%;
+    display: inline-flex;
+    cursor: pointer;
+    transition: all 100ms linear;
+}
+
+.form-wrapper > .femme:checked + .category {
+    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
+    background-size: 80% auto;
+}
+
+.form-wrapper > .femme:hover + .category {
+    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
+    background-size: 80% auto;
+}
+
+.form-wrapper > .homme + .category {
+    background: #c7c7c7 url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
+    background-size: 80% auto;
+    height: 38px;
+    width: 38px;
+    border-radius: 100%;
+    display: inline-flex;
+    cursor: pointer;
+    transition: all 100ms linear;
+}
+
+.form-wrapper > .homme:checked + .category {
+    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
+    background-size: 80% auto;
+}
+
+.form-wrapper > .homme:hover + .category {
+    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
+    background-size: 80% auto;
+}
+
+.form-wrapper > .title {
+    color: #121010;
+    margin-right: 16px;
+    margin-left: 6px;
+}
+
+.form-wrapper > .title.-last {
+    margin-right: 0;
+    color: #D9EAF2;
+}
+
+.buttons-wrapper {
+    display: flex;
+    align-content: flex-end;
+    justify-content: flex-end;
+}
+
+.button-default {
+    width: 124px;
+    height: 48px;
+    border: none;
+    border-radius: 4px;
+    text-transform: uppercase;
+    transition: all 200ms linear;
+    margin-right: 24px;
+}
+
+.button-default.-cancel {
+    border: 1px solid #c7c7c7;
+    background: transparent;
+}
+
+.button-default.-cancel:hover {
+    background-color: #f0f0f0;
+}
+
+.button-default.-save {
+    font-weight: 700;
+    background-color: #2ec39e;
+    color: #fff;
+}
+
+.button-default.-save:hover {
+    background-color: #3ddbb4;
+}
+
+.button-default.-save.-last {
+    margin-right: 0;
+}

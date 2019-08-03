@@ -54,10 +54,6 @@ local priceTop = 200
 local priceLegs = 200
 local priceShoes = 200
 
-function Venato.Spawn()
-  Venato.LoadClothes()
-end
-
 function Venato.LoadClothes()
   TriggerServerEvent("ClothingShop:CallData")
 end
@@ -86,6 +82,8 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
 		if shopOpen then
 			if Menu.hidden then
+        DetachEntity(Venato.GetPlayerPed(), true, true)
+        DeleteEntity(Prop)
         Vtop = false
 				shopOpen = false
 				SetCamActive(cam,  false)
@@ -119,9 +117,8 @@ Citizen.CreateThread(function()
           printTxt("~g~Chaussure :                                      ~r~"..priceShoes.." €",0.4, coordchaussure, true)
         end
 			end
-			SetEntityCoords(Venato.GetPlayerPed(), x, y, z-1)
 		end
-    local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+    local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
     for k,v in pairs(ClothingShop) do
       if Vdist(x, y, z, v.x, v.y, v.z) < 20 then
         DrawMarker(27,v.x,v.y,v.z-0.99,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
@@ -271,6 +268,12 @@ function OpenClothingShop()
 	z = coords.z
 	SetEntityHeading(ped, 180)
 	shopOpen = true
+  local Coords = GetEntityCoords(ped, true)
+  Prop = Venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+  FreezeEntityPosition(Prop, true)
+  AttachEntityToEntity(ped, Prop, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 180.0, false, false, false, false, 2, false)
+  SetEntityVisible(Prop, false, 0)
+  SetEntityVisible(ped, true, 0)
 	if not DoesCamExist(cam) then
 		cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
 	end
@@ -287,6 +290,28 @@ function OpenClothingShop()
   Menu.addButton("Chaussure", "CSchausure", nil)
   Menu.addButton("Payer : "..tatalPrice.." €", "BuyClothe", nil)
 end
+tablee = {
+  ComponentVariation = {
+    Mask = {id = 0, color = 0},
+    torso = {id = GetPedDrawableVariation(ped, 3), color = GetPedTextureVariation(ped, 3)},
+    leg = {id = GetPedDrawableVariation(ped, 4), color = GetPedTextureVariation(ped, 4)},
+    parachute = {id = GetPedDrawableVariation(ped, 5), color = GetPedTextureVariation(ped, 5)},
+    shoes = {id = GetPedDrawableVariation(ped, 6), color = GetPedTextureVariation(ped, 6)},
+    accessory = {id = GetPedDrawableVariation(ped, 7), color = GetPedTextureVariation(ped, 7)},
+    undershirt = {id = GetPedDrawableVariation(ped, 8), color = GetPedTextureVariation(ped, 8)},
+    kevlar = {id = GetPedDrawableVariation(ped, 9), color = GetPedTextureVariation(ped, 9)},
+    badge = {id = GetPedDrawableVariation(ped, 10), color = GetPedTextureVariation(ped, 10)},
+    torso2 = {id = GetPedDrawableVariation(ped, 11), color = GetPedTextureVariation(ped, 11)},
+  },
+  prop = {
+    hat = {id = GetPedPropIndex(ped, 0), color = GetPedPropTextureIndex(ped, 0)},
+    glass = {id = GetPedPropIndex(ped, 1), color = GetPedPropTextureIndex(ped, 1)},
+    ear = {id = GetPedPropIndex(ped, 2), color = GetPedPropTextureIndex(ped, 2)},
+    watch = {id = GetPedPropIndex(ped, 6), color = GetPedPropTextureIndex(ped, 6)},
+    bracelet = {id = GetPedPropIndex(ped, 7), color = GetPedPropTextureIndex(ped, 7)},
+  }
+}
+print(json.encode(tablee))
 
 function BuyClothe()
   local ped = Venato.GetPlayerPed()
@@ -344,7 +369,7 @@ end)
 
 function CSswitchsex()
   Citizen.CreateThread(function()
-  if(GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01")) then
+  if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
     local model = "mp_f_freemode_01"
     RequestModel(model)
     while not HasModelLoaded(model) do
@@ -353,8 +378,8 @@ function CSswitchsex()
     end
     SetPlayerModel(PlayerId(), model)
     SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(GetPlayerPed(-1))
-    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
   else
     local model = "mp_m_freemode_01"
     RequestModel(model)
@@ -364,8 +389,8 @@ function CSswitchsex()
     end
     SetPlayerModel(PlayerId(), model)
     SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(GetPlayerPed(-1))
-    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
   end
 end)
 end

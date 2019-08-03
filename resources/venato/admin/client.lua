@@ -39,9 +39,9 @@ function openVenatoadmin()
   Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
   Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
   --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
-  --	if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
-  --	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
-  --end
+  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
+  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+  end
 end
 
 function AdminShowCoord()
@@ -59,7 +59,7 @@ function AdminBlipsOption()
     AdminBlipsBool = false
     for k, v in pairs(AdminDataPlayers) do
       local Player = GetPlayerFromServerId(v.Source)
-      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= GetPlayerPed(-1) then
+      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
         local ped = GetPlayerPed(Player)
         local blip = GetBlipFromEntity(ped)
         if DoesBlipExist(blip) then
@@ -85,7 +85,7 @@ function AdminCustomTP()
 end
 
 function AdminTpCustomCoord()
-  SetEntityCoords(GetPlayerPed(-1), tonumber(xtppers) + 0.001, tonumber(ytppers) + 0.001, tonumber(ztppers) + 0.001)
+  SetEntityCoords(Venato.GetPlayerPed(), tonumber(xtppers) + 0.001, tonumber(ytppers) + 0.001, tonumber(ztppers) + 0.001)
 end
 
 function coordtp()
@@ -144,7 +144,7 @@ function getGroundZ(x, y, z)
 end
 
 function AdminFixVehicle()
-  local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+  local vehicle = GetVehiclePedIsUsing(Venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
     vehicle = Venato.CloseVehicle()
     SetVehicleFixed(vehicle)
@@ -168,7 +168,7 @@ function AdminFixVehicle()
 end
 
 function AdminGetClef()
-  local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+  local vehicle = GetVehiclePedIsUsing(Venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
     vehicle = Venato.CloseVehicle()
     TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
@@ -180,7 +180,7 @@ function AdminGetClef()
 end
 
 function AdminDespawnVoiture()
-  local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+  local vehicle = GetVehiclePedIsUsing(Venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
     vehicle = Venato.CloseVehicle()
     Venato.DeleteCar(vehicle)
@@ -221,7 +221,7 @@ function AdminSendMsg()
 end
 
 RegisterNetEvent("Admin:CallDataUsers:cb")
-AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers)
+AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
   Menu.clearMenu()
   AdminDataPlayers = dataPlayers
   ClientSource = DataSource
@@ -316,24 +316,27 @@ function Admintptoelle()
 end
 
 function AdminFreeze()
-  local ped = Venato.GetPlayerPedFromSource(indexToShow)
-  if state == true then
-    if not IsEntityVisible(ped) then
-      SetEntityVisible(ped, true)
-    end
-    if not IsPedInAnyVehicle(ped) then
-      SetEntityCollision(ped, true)
-    end
-    FreezeEntityPosition(ped, false)
-    state = false
-  else
-    SetEntityCollision(ped, false)
-    FreezeEntityPosition(ped, true)
-    state = true
-    if not IsPedFatallyInjured(ped) then
-      ClearPedTasksImmediately(ped)
-    end
-  end
+  local playerIdx = GetPlayerFromServerId(indexToShow)
+  print(playerIdx)
+  local ped = GetPlayerPed(playerIdx)
+  FreezeEntityPosition(ped, true)
+  -- if state == true then
+  --   if not IsEntityVisible(ped) then
+  --     SetEntityVisible(ped, true)
+  --   end
+  --   if not IsPedInAnyVehicle(ped) then
+  --     SetEntityCollision(ped, true)
+  --   end
+  --   FreezeEntityPosition(ped, false)
+  --   state = false
+  -- else
+  --   SetEntityCollision(ped, false)
+  --   FreezeEntityPosition(ped, true)
+  --   state = true
+  --   if not IsPedFatallyInjured(ped) then
+  --     ClearPedTasksImmediately(ped)
+  --   end
+  -- end
 end
 
 function AdminSpectate()
@@ -343,7 +346,7 @@ function AdminSpectate()
     end
     SetCamActive(cam, true)
     RenderScriptCams(true, false, 0, true, true)
-    LastCoords = GetEntityCoords(GetPlayerPed(-1))
+    LastCoords = GetEntityCoords(Venato.GetPlayerPed())
     indexToSpectate = indexToShow
     InSpectatorMode = true
   else
@@ -366,7 +369,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     for k, v in pairs(AdminDataPlayers) do
       local Player = GetPlayerFromServerId(v.Source)
-      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= GetPlayerPed(-1) then
+      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
         local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
         local blip = GetBlipFromEntity(ped)
         HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "",
@@ -431,7 +434,7 @@ Citizen.CreateThread(function()
           if IsPauseMenuActive() then
             SetBlipAlpha(blip, 255)
           else
-            local x1, y1 = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+            local x1, y1 = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
             local x2, y2 = table.unpack(GetEntityCoords(GetPlayerPed(Player), true))
             local distance = (math.floor(math.abs(math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) / -1)) + 900
             if distance < 0 then
@@ -457,11 +460,11 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if wp then
-      if IsPedInAnyVehicle(GetPlayerPed(-1), 0) and (GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), 0),
-        -1) == GetPlayerPed(-1)) then
-        entity = GetVehiclePedIsIn(GetPlayerPed(-1), 0)
+      if IsPedInAnyVehicle(Venato.GetPlayerPed(), 0) and (GetPedInVehicleSeat(GetVehiclePedIsIn(Venato.GetPlayerPed(), 0),
+        -1) == Venato.GetPlayerPed()) then
+        entity = GetVehiclePedIsIn(Venato.GetPlayerPed(), 0)
       else
-        entity = GetPlayerPed(-1)
+        entity = Venato.GetPlayerPed()
       end
       SetEntityCoords(entity, WaypointCoords.x, WaypointCoords.y, height)
       FreezeEntityPosition(entity, true)

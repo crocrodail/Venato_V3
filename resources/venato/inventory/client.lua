@@ -20,11 +20,6 @@ Citizen.CreateThread(function()
 				Menu.close()
 			end
 		end
-		if IsControlJustPressed(1, Keys['F3']) and GetLastInputMethod(2) then
-			Menu.clearMenu()
-			Menu.toggle()
-			--OpenMenuPerso()
-		end
 		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) and GetLastInputMethod(2) then
 			if Menu.hidden then
 				CloseDoc()
@@ -34,7 +29,7 @@ Citizen.CreateThread(function()
 		end
 
 		if ItemsOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			for k,v in pairs(ItemsOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
@@ -61,7 +56,7 @@ Citizen.CreateThread(function()
 		end
 
 		if MoneyOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			for k,v in pairs(MoneyOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
@@ -88,7 +83,7 @@ Citizen.CreateThread(function()
 		end
 
 		if WeaponOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			for k,v in pairs(WeaponOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
@@ -115,7 +110,7 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
-TriggerServerEvent("debuge")
+
 function debuge()
  TriggerServerEvent("debuge")
 end
@@ -403,7 +398,7 @@ function GiveWeapon(table)
 end
 
 function DropWeapon(tableau)
-		local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+		local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 		TriggerServerEvent("Inventory:DropWeapon", tableau, x,y,z-0.5)
 		TriggerServerEvent("Inventory:RemoveWeapon",tableau[3], tableau[1], tableau[4])
 		local objet = Venato.CreateObject(dropWeapon, x, y, z-1)
@@ -416,9 +411,9 @@ AddEventHandler('Inventory:AddWeaponClient', function(weapon, ammo)
 	local weaponHash = GetHashKey(weapon)
 	local ammo = tonumber(ammo)
 	if ammo == 0 then
-		GiveWeaponToPed(GetPlayerPed(-1), weaponHash, false, false)
+		GiveWeaponToPed(Venato.GetPlayerPed(), weaponHash, false, false)
 	else
-		GiveWeaponToPed(GetPlayerPed(-1), weaponHash, ammo , false, false)
+		GiveWeaponToPed(Venato.GetPlayerPed(), weaponHash, ammo , false, false)
 	end
 end)
 
@@ -426,14 +421,14 @@ RegisterNetEvent('Inventory:RemoveWeaponAmmoClient')
 AddEventHandler('Inventory:RemoveWeaponAmmoClient', function(weapon, ammo)
 	local weaponHash = GetHashKey(weapon)
 	local ammo = tonumber(ammo)
-	SetPedAmmo(GetPlayerPed(-1), weapon, ammo)
+	SetPedAmmo(Venato.GetPlayerPed(), weapon, ammo)
 end)
 
 RegisterNetEvent('Inventory:RemoveWeaponClient')
 AddEventHandler('Inventory:RemoveWeaponClient', function(weapon)
 	local weaponHash = GetHashKey(weapon)
-	SetPedAmmo(GetPlayerPed(-1), weaponHash, 0)
-  RemoveWeaponFromPed(GetPlayerPed(-1), weaponHash)
+	SetPedAmmo(Venato.GetPlayerPed(), weaponHash, 0)
+  RemoveWeaponFromPed(Venato.GetPlayerPed(), weaponHash)
 end)
 
 RegisterNetEvent('Inventory:SendWeaponOnTheGround')
@@ -471,7 +466,7 @@ function DropMoney(tableau)
 	local nb = Venato.OpenKeyboard('', '0', 10,"Nombre à jeter")
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
-			local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			TriggerServerEvent("Inventory:DropMoney", tonumber(nb), tableau, x,y,z-0.5)
 			TriggerServerEvent("Inventory:RemoveMoney", tonumber(nb))
 			local objet = Venato.CreateObject(dropMoney, x, y, z-1)
@@ -542,7 +537,7 @@ function DropItem(tableau)
 	local nb = Venato.OpenKeyboard('', '0', 2,"Nombre à jeter")
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
-			local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			TriggerServerEvent("Inventory:DropItem",tableau[3], tonumber(nb), tableau[2], tableau[4], x,y,z-0.5, tableau[5])
 			TriggerServerEvent("Inventory:SetItem", tableau[1] - tonumber(nb) , tableau[2])
 			local objet = Venato.CreateObject(dropItem, x, y, z-1)
@@ -565,7 +560,7 @@ end)
 RegisterNetEvent('Inventory:AnimGive')
 AddEventHandler('Inventory:AnimGive', function()
 	Citizen.CreateThread(function()
-		local ped = GetPlayerPed(-1)
+		local ped = Venato.GetPlayerPed()
 		TaskStartScenarioInPlace(ped, "PROP_HUMAN_PARKING_METER", 0, false)
 		Citizen.Wait(1500)
 		ClearPedTasks(ped)

@@ -26,6 +26,10 @@ client_script {
   '/admin/client.lua',
   '/clothingShop/client.lua',
   '/clothingShop/config.lua',
+  '/skin/client.lua',
+  '/skin/face_client.lua',
+  '/calmIA/client.lua',
+  'test.lua'
 }
 
 server_script {
@@ -45,6 +49,8 @@ server_script {
   '/admin/server.lua',
   '/carMenu/server.lua',
   '/clothingShop/server.lua',
+  '/skin/server.lua',
+  '/skin/face_server.lua',
 }
 
 files {
@@ -104,8 +110,12 @@ files {
 	"/html/index.html",
 	"/html/bank.html",
 	"/html/identity.html",
-	"/html/cheque.html"
+	"/html/cheque.html",
+  '/calmIA/events.meta',
+	'/calmIA/relationships.dat'
 }
+
+data_file 'FIVEM_LOVES_YOU_4B38E96CC036038F' '/calmIA/events.meta'
 
 export 'GetBlacklistedList'
 export 'GetBalancedList'

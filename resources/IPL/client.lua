@@ -4,6 +4,9 @@ Citizen.CreateThread(function()
     -- =--------------------- [GTA V: Single player] ---------------------=
     -- ====================================================================
 
+    --LSPD extended
+    LoadInterior(GetInteriorAtCoords(440.84, -983.14, 30.69))
+
     -- Michael: -802.311, 175.056, 72.8446
     Michael.LoadDefault()
 
@@ -12,13 +15,13 @@ Citizen.CreateThread(function()
 
     -- Franklin's aunt: -9.96562, -1438.54, 31.1015
     FranklinAunt.LoadDefault()
-	
+
 	-- Franklin
     Franklin.LoadDefault()
-		
+
 	--Floyd: -1150.703, -1520.713, 10.633
     Floyd.LoadDefault()
-	
+
     -- Trevor: 1985.48132, 3828.76757, 32.5
     TrevorsTrailer.LoadDefault()
 
@@ -36,10 +39,10 @@ Citizen.CreateThread(function()
     UFO.Hippie.Enable(false)    -- 2490.47729, 3774.84351, 2414.035
     UFO.Chiliad.Enable(false)   -- 501.52880000, 5593.86500000, 796.23250000
     UFO.Zancudo.Enable(false)   -- -2051.99463, 3237.05835, 1456.97021
-    
+
     -- Red Carpet: 300.5927, 199.7589, 104.3776
     RedCarpet.Enable(false)
-    
+
     -- North Yankton: 3217.697, -4834.826, 111.8152
     NorthYankton.Enable(false)
 
@@ -81,7 +84,7 @@ Citizen.CreateThread(function()
     ExecApartment1.LoadDefault()    -- -787.7805 334.9232 215.8384 (EclipseTowers, Penthouse Suite 1)
     ExecApartment2.LoadDefault()    -- -773.2258 322.8252 194.8862 (EclipseTowers, Penthouse Suite 2)
     ExecApartment3.LoadDefault()    -- -787.7805 334.9232 186.1134 (EclipseTowers, Penthouse Suite 3)
-    
+
     -- ====================================================================
     -- =-------------------- [DLC: Finance  & Felony] --------------------=
     -- ====================================================================
@@ -115,7 +118,7 @@ Citizen.CreateThread(function()
     -- ====================================================================
     GunrunningBunker.LoadDefault()  -- 892.6384, -3245.8664, -98.2645
     GunrunningYacht.Enable(true)    -- -1363.724, 6734.108, 2.44598
-    
+
     -- ====================================================================
     -- =---------------------- [DLC: Smuggler's Run] ---------------------=
     -- ====================================================================
@@ -132,4 +135,3 @@ Citizen.CreateThread(function()
     AfterHoursNightclubs.LoadDefault()          -- -1604.664, -3012.583, -78.000
 
 end)
-

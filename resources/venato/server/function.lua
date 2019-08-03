@@ -16,14 +16,29 @@ function GetDatePlayers()
   return DataPlayers
 end
 
+RegisterNetEvent("Venato:SyncData")
+AddEventHandler("Venato:SyncData", function(steam, newSource)
+  local source = newSource or source
+  accessGranded(steam, source)
+end)
+
 DataPlayers = {}
 
-function accessGranded(SteamId, source)
+function accessGranded(SteamId, source , balek)
   MySQL.Async.fetchAll("SELECT * FROM users "..
    "INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
    "INNER JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
    "WHERE users.identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)
     if DataUser[1] == nil then
+      TriggerEvent("Register:AddPlayer", source, false)
+      print("^Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
+    elseif DataUser[1].nom == nil or DataUser[1].nom == "" then
+      TriggerEvent("Register:AddPlayer", source, true)
+      print("^Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
+    elseif DataUser[1].model == nil or DataUser[1].model == "" then
+      print("^3Create Skin : "..DataUser[1].prenom.." "..DataUser[1].nom.." ("..GetPlayerName(source)..")^7")
+      TriggerClientEvent("Skin:Create", source)
+    elseif SteamId == nil or SteamId == "" then
       DropPlayer(source, "Une erreur s'est produite, si cette dernière persiste contactez un membre du staff.")
     else
       local sexe = "homme"
@@ -34,6 +49,7 @@ function accessGranded(SteamId, source)
         Ip = GetPlayerEP(source),
         SteamId = SteamId,
         Source = source,
+        PlayerPed = GetPlayerPed(source),
         Group = DataUser[1].group,
         Nom = DataUser[1].nom,
         Prenom = DataUser[1].prenom,
@@ -54,7 +70,7 @@ function accessGranded(SteamId, source)
         Need = DataUser[1].needs,
         Sool = DataUser[1].sool,
         PhoneNumber = DataUser[1].phone_number,
-        Pseudo = DataUser[1].pseudo,
+        Pseudo = GetPlayerName(source),
         Poid = Venato.MoneyToPoid(DataUser[1].money),
         Inventaire = {nil},
         Weapon = {nil},
@@ -74,7 +90,7 @@ function accessGranded(SteamId, source)
         Clothes = json.decode(DataUser[1].clothes),
         Skin = {
           model = DataUser[1].model,
-          face = DataUser[1].face,
+          face = json.decode(DataUser[1].face),
           head = DataUser[1].head,
           body_color = DataUser[1].body_color,
           hair = DataUser[1].hair,
@@ -93,11 +109,11 @@ function accessGranded(SteamId, source)
       }
       TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
       TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
+      TriggerEvent("Inventory:UpdateInventory", source)
+      TriggerClientEvent("Venato:Connection", source)
+      ControlVisa(SteamId, source)
       print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
     end
-    TriggerEvent("Inventory:UpdateInventory", source)
-    TriggerClientEvent("Venato:Connection", source)
-    ControlVisa(SteamId, source)
   end)
 end
 

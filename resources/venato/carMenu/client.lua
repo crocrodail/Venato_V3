@@ -20,7 +20,7 @@ Citizen.CreateThread(
             if menuIsOpen then
                 Venato.GetCarMenuIntruction()
             end
-            if IsControlJustPressed(1, Keys["F2"]) then
+            if IsControlJustPressed(1, Keys["F3"]) then
                 if menuIsOpen then
                     hideMenu()
                 else
@@ -29,7 +29,7 @@ Citizen.CreateThread(
             end
             if
                 menuIsOpen and
-                    (IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or
+                    (IsControlJustPressed(1, Keys["F2"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or
                         IsControlJustPressed(1, Keys["K"]) or
                         IsControlJustPressed(1, Keys["F5"]))
              then
@@ -47,7 +47,7 @@ function showMenu()
         Menu.open()
         Menu.clearMenu()
         TriggerEvent('Menu:Init', "Voiture", "Choisir une action", '#4527A099', "https://www.tesla.com/content/dam/tesla-site/sx-redesign/img/model3-proto/specs/compare-model3--center.png")
-        
+
         Menu.addButton("<span class='red--text'>↩ Retour</span>", "hideMenu")
 
         if setRegu then
