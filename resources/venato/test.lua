@@ -4,12 +4,11 @@ local AllObject = {}
 local CoordForCarries = {}
 local GobalBox = nil
 local forklift = nil
-local WaitWhile = 1000
 
 Citizen.CreateThread(function()
 	local ply = GetPlayerPed(-1)
 	while true do
-		Citizen.Wait(WaitWhile)
+		Citizen.Wait(0)
 		if IsControlJustPressed(1, Keys["U"]) then
 			OpenTestMenu()
 			Menu.toggle()
@@ -19,10 +18,8 @@ Citizen.CreateThread(function()
 			for i,v in ipairs(CoordForCarries) do
 				local distance = GetDistanceBetweenCoords(v.x, v.y, v.z,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 				if distance < 50 then
-					WaitWhile = 0
 					DrawMarker(27,v.x, v.y, v.z,0,0,0,0,0,0,0.2,0.2,0.2,0,150,255,200,0,0,0,0)
 				else
-					WaitWhile = 1000
 				end
 				if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
 					Venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour .")

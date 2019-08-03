@@ -8,12 +8,10 @@ function reloadDataCoffre()
   Citizen.CreateThread(function()
     local Cof = {}
     local inCof = {}
-    print("Start Loading coffre")
     MySQL.Async.fetchAll("SELECT * FROM coffre_pack JOIN coffres ON coffres.Pack = coffre_pack.Id ORDER BY coffres.Id", {}, function(result)
       if result[1] ~= nil then
         for k,v in pairs(result) do
           if v.Id == 1168 then
-          print(v.Id.."  =  " .. v.Nom)
           Cof = {
             ["id"] = v.Id,
             ["nom"] = v.Nom,
@@ -37,7 +35,7 @@ function reloadDataCoffre()
             ["whitelist"] = {nil}
           }
           DataCoffre[v.Id] = Cof
-          Citizen.Wait(10)
+          Citizen.Wait(50)
           MySQL.Async.fetchAll("SELECT * FROM coffres_contenu JOIN items ON coffres_contenu.ItemId = items.id WHERE CoffreId = @CoffreId", {["@CoffreId"] = v.Id}, function(resultContenu)
             if resultContenu[1] ~= nil then
               for k2,v2 in pairs(resultContenu) do
@@ -53,7 +51,7 @@ function reloadDataCoffre()
               end
             end
           end)
-          Citizen.Wait(50)
+          Citizen.Wait(100)
           MySQL.Async.fetchAll("SELECT * FROM coffres_weapons JOIN weapon_model ON coffres_weapons.Weapon = weapon_model.weapond WHERE CoffreId = @CoffreId", {["@CoffreId"] = v.Id}, function(resultweapon)
             if resultweapon[1] ~= nil then
               local qtyWp = 0
@@ -70,7 +68,7 @@ function reloadDataCoffre()
               DataCoffre[v.Id].nbWeapon = qtyWp
             end
           end)
-          Citizen.Wait(50)
+          Citizen.Wait(100)
           MySQL.Async.fetchAll("SELECT * FROM coffres_whitelist JOIN users ON coffres_whitelist.UserId = users.identifier WHERE CoffreId = @coffreId", {["@coffreId"] = v.Id}, function(resultwhhtelist)
             if resultwhhtelist[1] ~= nil then
               for k4,v4 in pairs(resultwhhtelist) do
@@ -87,9 +85,8 @@ function reloadDataCoffre()
         end
       end
       TriggerClientEvent('Coffre:CallData:cb', -1, DataCoffre)
-      print("Stop loading coffre")
-      print(json.encode(DataCoffre))
-    end
+      print("^2Coffres Loaded !^7")
+      end
     end)
   end)
 end
