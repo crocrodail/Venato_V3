@@ -6,7 +6,7 @@ local dropWeapon = "prop_hockey_bag_01"
 local dropItem = "prop_cs_box_clothes"
 local PapierOpen = 0
 -- ######## COFIG ##############
-	local PoidMax = 20 -- Kg
+local PoidMax = 20 -- Kg
 --##############################
 Citizen.CreateThread(function()
 	while true do
@@ -112,97 +112,104 @@ Citizen.CreateThread(function()
 end)
 
 function debuge()
- TriggerServerEvent("debuge")
+  TriggerServerEvent("debuge")
 end
 
-
 function OpenInventory()
-	TriggerEvent('Menu:Init', "00 / 20 Kg", "Inventaire", '#01579B99', "https://www.expertpublic.fr/wp-content/uploads/2019/01/se-faire-argent-de-poche.jpg")
-	TriggerServerEvent("Inventory:ShowMe")
+  TriggerEvent('Menu:Init', "00 / 20 Kg", "Inventaire", '#01579B99',
+    "https://www.expertpublic.fr/wp-content/uploads/2019/01/se-faire-argent-de-poche.jpg")
+  TriggerServerEvent("Inventory:ShowMe")
 end
 
 RegisterNetEvent('Inventory:ShowMe:cb')
 AddEventHandler('Inventory:ShowMe:cb', function(Data)
-	Menu.clearMenu()
-	DataUser = Data
-	local WeaponPoid = 0
-	Menu.addButton("<span class='red--text'>Syncdata</span>", "debuge", {})
-	for k,v in pairs(Data.Weapon) do
-		if v.libelle ~= nil then
-			WeaponPoid = WeaponPoid + v.poid
-		end
-	end
-	Menu.addButton("<span class='orange--text'>Mes Clefs</span>", "Myclef", Data)
-	Menu.addButton("<span class='red--text'>🔫 Mes Armes</span> <span class='orange--text'>("..WeaponPoid.." Kg )</span>", "MyWeapon", Data)
-	Menu.addButton("<span class='yellow--text'>Mes Documents</span>", "MyDoc", Data)
-	local color = "</span>"
-	if Data.Poid > 18 then
-		color = "<span class='red--text'>"
-	elseif Data.Poid > 14 then
-		color = "<span class='orange--text'>"
-	end
-	Menu.setTitle( color..""..Data.Poid.."</span>/ 20 Kg")
-	Menu.setSubtitle( "Inventaire")
-	local MoneyPoid = Venato.MoneyToPoid(Data.Money)
-	Menu.addButton("<span class='green--text'>Argent : "..Venato.FormatMoney(Data.Money,2).."</span> € <span class='orange--text'>( "..MoneyPoid.." Kg )</span>", "OptionMoney", {Data.Money, MoneyPoid, Data.Poid,Data})
-	for k,v in pairs(Data.Inventaire) do
-		if v.quantity > 0 then
-			Menu.addButton("<span class='blue--text'>"..v.libelle.." </span>: <span class='red--text'>"..v.quantity.."</span> <span class='orange--text'>( "..v.poid.." Kg )</span>", "OptionItem", {v.quantity, v.id, v.libelle, v.uPoid, Data.Poid})
-		end
-	end
+  Menu.clearMenu()
+  DataUser = Data
+  local WeaponPoid = 0
+  Menu.addButton("<span class='red--text'>Syncdata</span>", "debuge", {})
+  for k, v in pairs(Data.Weapon) do
+    if v.libelle ~= nil then
+      WeaponPoid = WeaponPoid + v.poid
+    end
+  end
+  Menu.addButton("<span class='orange--text'>Mes Clefs</span>", "Myclef", Data)
+  Menu.addButton("<span class='red--text'>🔫 Mes Armes</span> <span class='orange--text'>(" .. WeaponPoid .. " Kg )</span>",
+    "MyWeapon", Data)
+  Menu.addButton("<span class='yellow--text'>Mes Documents</span>", "MyDoc", Data)
+  local color = "</span>"
+  if Data.Poid > 18 then
+    color = "<span class='red--text'>"
+  elseif Data.Poid > 14 then
+    color = "<span class='orange--text'>"
+  end
+  Menu.setTitle(color .. "" .. Data.Poid .. "</span>/ 20 Kg")
+  Menu.setSubtitle("Inventaire")
+  local MoneyPoid = Venato.MoneyToPoid(Data.Money)
+  Menu.addButton("<span class='green--text'>Argent : " .. Venato.FormatMoney(Data.Money,
+    2) .. "</span> € <span class='orange--text'>( " .. MoneyPoid .. " Kg )</span>", "OptionMoney",
+    { Data.Money, MoneyPoid, Data.Poid, Data })
+  for k, v in pairs(Data.Inventaire) do
+    if v.quantity > 0 then
+      Menu.addButton("<span class='blue--text'>" .. v.libelle .. " </span>: <span class='red--text'>" .. v.quantity .. "</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
+        "OptionItem", { v.quantity, v.id, v.libelle, v.uPoid, Data.Poid })
+    end
+  end
 end)
 
 function Myclef(Data)
-	TriggerEvent("getInv:clef")
+  TriggerEvent("getInv:clef")
 end
 
 RegisterNetEvent("getInv:back")
 AddEventHandler("getInv:back", function(TableOfKey)
-	Menu.clearMenu()
-	Menu.setTitle( "Mes clefs")
-	Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
-	if #TableOfKey > 0 then
-		for i, v in pairs(TableOfKey) do
-			if v.name ~= nil then
-					Menu.addButton("<span class='blue--text'>"..v.name.."</span> : <span class='red--text'>"..v.plate.."</span>", "giveclef", {v.name,v.plate})
-			else
-				Menu.addButton("<span class='red--text'>Vous n'avez aucune clef</span>", "none", nil)
-			end
-		end
-	end
+  Menu.clearMenu()
+  Menu.setTitle("Mes clefs")
+  Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
+  if #TableOfKey > 0 then
+    for i, v in pairs(TableOfKey) do
+      if v.name ~= nil then
+        Menu.addButton("<span class='blue--text'>" .. v.name .. "</span> : <span class='red--text'>" .. v.plate .. "</span>",
+          "giveclef", { v.name, v.plate })
+      else
+        Menu.addButton("<span class='red--text'>Vous n'avez aucune clef</span>", "none", nil)
+      end
+    end
+  end
 end)
 
 function giveclef(clef)
-    Menu.clearMenu()
-  Menu.setTitle( "Details:")
-  Menu.setSubtitle( "<span class='blue--text'>"..clef[1].." plaque : "..clef[2].."</span>")
-  Menu.addButton("Donner un double de la clef", "givecleff", {clef[1], clef[2]})
+  Menu.clearMenu()
+  Menu.setTitle("Details:")
+  Menu.setSubtitle("<span class='blue--text'>" .. clef[1] .. " plaque : " .. clef[2] .. "</span>")
+  Menu.addButton("Donner un double de la clef", "givecleff", { clef[1], clef[2] })
 end
 
 function givecleff(item)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-    TriggerServerEvent("inv:giveclef",GetPlayerServerId(ClosePlayer), item[1],item[2])
-		TriggerEvent("Inventory:AnimGive")
-		Venato.notify("<span class='green--text'>Vous avez donné les clef du vehicule "..item[1].."</span>")
-	else
-		Venato.notifyError("Aucun joueurs à proximité")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("inv:giveclef", GetPlayerServerId(ClosePlayer), item[1], item[2])
+    TriggerEvent("Inventory:AnimGive")
+    Venato.notify("<span class='green--text'>Vous avez donné les clef du vehicule " .. item[1] .. "</span>")
+  else
+    Venato.notifyError("Aucun joueurs à proximité")
+  end
 end
 
 function MyWeapon(Data)
-	Menu.clearMenu()
-	Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
-	Menu.setSubtitle( "Mes armes")
-	for k,v in pairs(Data.Weapon) do
-		if v.libelle ~= nil then
-			if tonumber(v.ammo) > 0 then
-				Menu.addButton("<span class='blue--text'>"..v.libelle.." </span> munition : <span class='red--text'>"..v.ammo.."</span> <span class='orange--text'>( "..v.poid.." Kg )</span>", "OptionWeapon", {k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data})
-			else
-				Menu.addButton("<span class='blue--text'>"..v.libelle.."</span> <span class='orange--text'>( "..v.poid.." Kg )</span>", "OptionWeapon", {k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data})
-			end
-		end
-	end
+  Menu.clearMenu()
+  Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
+  Menu.setSubtitle("Mes armes")
+  for k, v in pairs(Data.Weapon) do
+    if v.libelle ~= nil then
+      if tonumber(v.ammo) > 0 then
+        Menu.addButton("<span class='blue--text'>" .. v.libelle .. " </span> munition : <span class='red--text'>" .. v.ammo .. "</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
+          "OptionWeapon", { k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data })
+      else
+        Menu.addButton("<span class='blue--text'>" .. v.libelle .. "</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
+          "OptionWeapon", { k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data })
+      end
+    end
+  end
 end
 
 --############# Doc ##################
@@ -230,80 +237,80 @@ function MyDoc(data)
 end
 
 function CloseDoc()
-	SendNUIMessage({
-		action = 'showIdentity',
-		string = "type=close"
-	})
-	SendNUIMessage({
-		action = 'showCheque',
-		string = "type=close"
-	})
+  SendNUIMessage({
+    action = 'showIdentity',
+    string = "type=close"
+  })
+  SendNUIMessage({
+    action = 'showCheque',
+    string = "type=close"
+  })
 end
 
 function optionPermis(data)
-	Menu.clearMenu()
-	Menu.setSubtitle( "Permis de conduire")
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
-	Menu.addButton("Regarder", "ShowPermis", data)
-	Menu.addButton("Montrer", "ShowToOtherPermis", data)
+  Menu.clearMenu()
+  Menu.setSubtitle("Permis de conduire")
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+  Menu.addButton("Regarder", "ShowPermis", data)
+  Menu.addButton("Montrer", "ShowToOtherPermis", data)
 end
 
 function optionIdCard(data)
-	Menu.clearMenu()
-	Menu.setSubtitle( "Carte d'identité")
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
-	Menu.addButton("Regarder", "ShowIdCard", data)
-	Menu.addButton("Montrer", "ShowToOtherIdCard", data)
+  Menu.clearMenu()
+  Menu.setSubtitle("Carte d'identité")
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+  Menu.addButton("Regarder", "ShowIdCard", data)
+  Menu.addButton("Montrer", "ShowToOtherIdCard", data)
 end
 
 function optionVisa(data)
-	Menu.clearMenu()
-	Menu.setSubtitle( "Permis de séjour")
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
-	Menu.addButton("Regarder", "ShowVisa", data)
-	Menu.addButton("Montrer", "ShowToOtherVisa", data)
+  Menu.clearMenu()
+  Menu.setSubtitle("Permis de séjour")
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+  Menu.addButton("Regarder", "ShowVisa", data)
+  Menu.addButton("Montrer", "ShowToOtherVisa", data)
 end
 
 function ShowToOtherPermis(data)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		TriggerServerEvent("Inventory:ShowToOtherPermis", data, ClosePlayer)
-	else
-		Venato.notifyError("Il n'y a personne à proximité.")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("Inventory:ShowToOtherPermis", data, ClosePlayer)
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 function ShowToOtherIdCard(data)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		TriggerServerEvent("Inventory:ShowToOtherIdCard", data, ClosePlayer)
-	else
-		Venato.notifyError("Il n'y a personne à proximité.")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("Inventory:ShowToOtherIdCard", data, ClosePlayer)
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 function ShowToOtherVisa(data)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		TriggerServerEvent("Inventory:ShowToOtherVisa", data, ClosePlayer)
-	else
-		Venato.notifyError("Il n'y a personne à proximité.")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("Inventory:ShowToOtherVisa", data, ClosePlayer)
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 RegisterNetEvent('Inventory:ShowToOtherPermis:cb')
 AddEventHandler('Inventory:ShowToOtherPermis:cb', function(data)
-	ShowPermis(data)
+  ShowPermis(data)
 end)
 
 RegisterNetEvent('Inventory:ShowToOtherIdCard:cb')
 AddEventHandler('Inventory:ShowToOtherIdCard:cb', function(data)
-	ShowIdCard(data)
+  ShowIdCard(data)
 end)
 
 RegisterNetEvent('Inventory:ShowToOtherVisa:cb')
 AddEventHandler('Inventory:ShowToOtherVisa:cb', function(data)
-		ShowVisa(data)
+  ShowVisa(data)
 end)
 
 function CreateCheque(data)
@@ -328,73 +335,73 @@ function CreateChequeConf(data)
 end
 
 function showCheque(data)
-	if PapierOpen == 0 then
-		PapierOpen = 1
-		SendNUIMessage({
-			action = 'showCheque',
-			string = "&type=show&date="..data[1].Documents[data[2]].date..
-						 	 "&nomprenom="..data[1].Documents[data[2]].nom1.." "..data[1].Documents[data[2]].prenom1..
-					   	 "&nomprenomd="..data[1].Documents[data[2]].nom2.." "..data[1].Documents[data[2]].prenom2..
-						   "&montant="..data[1].Documents[data[2]].montant.."&num="..data[1].Documents[data[2]].numeroDeCompte
-						 })
-	else
-		PapierOpen = 0
-		CloseDoc()
-	end
+  if PapierOpen == 0 then
+    PapierOpen = 1
+    SendNUIMessage({
+      action = 'showCheque',
+      string = "&type=show&date=" .. data[1].Documents[data[2]].date ..
+        "&nomprenom=" .. data[1].Documents[data[2]].nom1 .. " " .. data[1].Documents[data[2]].prenom1 ..
+        "&nomprenomd=" .. data[1].Documents[data[2]].nom2 .. " " .. data[1].Documents[data[2]].prenom2 ..
+        "&montant=" .. data[1].Documents[data[2]].montant .. "&num=" .. data[1].Documents[data[2]].numeroDeCompte
+    })
+  else
+    PapierOpen = 0
+    CloseDoc()
+  end
 end
 
 function ShowPermis(data)
-	if PapierOpen == 0 then
-		PapierOpen = 1
-		SendNUIMessage({
-			action = 'showIdentity',
-			string = "type=permis&nom="..data.Nom.."&prenom="..data.Prenom..
-						 	 "&age="..data.Age.."&sex="..data.Sexe.."&job="..data.NameJob..
-						   "&id="..data.Source.."&steam="..data.SteamId.."&datevoiture="..data.PermisVoiture..
-					  	 "&datecamion="..data.PermisCamion.."&point="..data.Point..
-					  	 "&startvisa="..data.VisaStart.."&endvisa="..data.VisaEnd..
-						   "&url="..Venato.ConvertUrl(data.Url)
-						 })
-	else
-		PapierOpen = 0
-		CloseDoc()
-	end
+  if PapierOpen == 0 then
+    PapierOpen = 1
+    SendNUIMessage({
+      action = 'showIdentity',
+      string = "type=permis&nom=" .. data.Nom .. "&prenom=" .. data.Prenom ..
+        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
+        "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
+        "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
+        "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
+        "&url=" .. Venato.ConvertUrl(data.Url)
+    })
+  else
+    PapierOpen = 0
+    CloseDoc()
+  end
 end
 
 function ShowIdCard(data)
-	if PapierOpen == 0 then
-		PapierOpen = 1
-		SendNUIMessage({
-			action = 'showIdentity',
-			string = "type=identity&nom="..data.Nom.."&prenom="..data.Prenom..
-					  	 "&age="..data.Age.."&sex="..data.Sexe.."&job="..data.NameJob..
-					  	 "&id="..data.Source.."&steam="..data.SteamId.."&datevoiture="..data.PermisVoiture..
-					  	 "&datecamion="..data.PermisCamion.."&point="..data.Point..
-					  	 "&startvisa="..data.VisaStart.."&endvisa="..data.VisaEnd..
-					  	 "&url="..Venato.ConvertUrl(data.Url)
-					 })
-	else
-		PapierOpen = 0
-		CloseDoc()
-	end
+  if PapierOpen == 0 then
+    PapierOpen = 1
+    SendNUIMessage({
+      action = 'showIdentity',
+      string = "type=identity&nom=" .. data.Nom .. "&prenom=" .. data.Prenom ..
+        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
+        "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
+        "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
+        "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
+        "&url=" .. Venato.ConvertUrl(data.Url)
+    })
+  else
+    PapierOpen = 0
+    CloseDoc()
+  end
 end
 
 function ShowVisa(data)
-	if PapierOpen == 0 then
-		PapierOpen = 1
-		SendNUIMessage({
-			action = 'showIdentity',
-			string = "type=visa&nom="..data.Nom.."&prenom="..data.Prenom..
-				  		 "&age="..data.Age.."&sex="..data.Sexe.."&job="..data.NameJob..
-				  		 "&id="..data.Source.."&steam="..data.SteamId.."&datevoiture="..data.PermisVoiture..
-					  	 "&datecamion="..data.PermisCamion.."&point="..data.Point..
-					  	 "&startvisa="..data.VisaStart.."&endvisa="..data.VisaEnd..
-					  	 "&url="..Venato.ConvertUrl(data.Url)
-					 })
-	else
-		PapierOpen = 0
-		CloseDoc()
-	end
+  if PapierOpen == 0 then
+    PapierOpen = 1
+    SendNUIMessage({
+      action = 'showIdentity',
+      string = "type=visa&nom=" .. data.Nom .. "&prenom=" .. data.Prenom ..
+        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
+        "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
+        "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
+        "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
+        "&url=" .. Venato.ConvertUrl(data.Url)
+    })
+  else
+    PapierOpen = 0
+    CloseDoc()
+  end
 end
 
 --############# Doc ##################
@@ -402,20 +409,20 @@ end
 --############# Weapon ##################
 
 function OptionWeapon(table)
-	Menu.clearMenu()
-	Menu.addButton("<span class='red--text'>↩ Retour", "MyWeapon", table[7])
-	Menu.addButton("Donner", "GiveWeapon", table)
-	Menu.addButton("Jeter", "DropWeapon", table)
+  Menu.clearMenu()
+  Menu.addButton("<span class='red--text'>↩ Retour", "MyWeapon", table[7])
+  Menu.addButton("Donner", "GiveWeapon", table)
+  Menu.addButton("Jeter", "DropWeapon", table)
 end
 
 function GiveWeapon(table)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		TriggerServerEvent("Inventory:CallInfoWeapon", ClosePlayer, table)
-		OpenInventory()
-	else
-		Venato.notifyError("Il n'y a personne à proximité.")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("Inventory:CallInfoWeapon", ClosePlayer, table)
+    OpenInventory()
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 function DropWeapon(tableau)
@@ -454,7 +461,7 @@ end)
 
 RegisterNetEvent('Inventory:SendWeaponOnTheGround')
 AddEventHandler('Inventory:SendWeaponOnTheGround', function(ParWeaponOnTheGround)
-	WeaponOnTheGround = ParWeaponOnTheGround
+  WeaponOnTheGround = ParWeaponOnTheGround
 end)
 
 --############# Weapon ##################
@@ -462,25 +469,25 @@ end)
 --############# Money ##################
 
 function OptionMoney(table)
-	Menu.clearMenu()
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
-	Menu.addButton("Donner", "GiveMoney", table)
-	Menu.addButton("Jeter", "DropMoney", table)
+  Menu.clearMenu()
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
+  Menu.addButton("Donner", "GiveMoney", table)
+  Menu.addButton("Jeter", "DropMoney", table)
 end
 
 function GiveMoney(table)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		local nb = Venato.OpenKeyboard('', '0', 10,"Nombre à donner")
-		if tonumber(nb) ~= nil and tonumber(nb) ~= 0 and tonumber(nb) > 0 and table[1] - tonumber(nb) >= 0 then
-			TriggerServerEvent("Inventory:CallInfoMoney", ClosePlayer, tonumber(nb), table)
-			OpenInventory()
-		else
-			Venato.notifyError("Une erreur dans le nombre choisi.")
-		end
-	else
-		Venato.notifyError("Il n'y a personne à proximité.")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    local nb = Venato.OpenKeyboard('', '0', 10, "Nombre à donner")
+    if tonumber(nb) ~= nil and tonumber(nb) ~= 0 and tonumber(nb) > 0 and table[1] - tonumber(nb) >= 0 then
+      TriggerServerEvent("Inventory:CallInfoMoney", ClosePlayer, tonumber(nb), table)
+      OpenInventory()
+    else
+      Venato.notifyError("Une erreur dans le nombre choisi.")
+    end
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 function DropMoney(tableau)
@@ -503,7 +510,7 @@ end
 
 RegisterNetEvent('Inventory:SendMoneyOnTheGround')
 AddEventHandler('Inventory:SendMoneyOnTheGround', function(ParMoneyOnTheGround)
-	MoneyOnTheGround = ParMoneyOnTheGround
+  MoneyOnTheGround = ParMoneyOnTheGround
 end)
 
 --############# Money ##################
@@ -511,47 +518,47 @@ end)
 
 --############# ITEM ##################
 function OptionItem(table)
-	Menu.clearMenu()
-	Menu.setSubtitle( table[3])
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
-	Menu.addButton("Utiliser", "UseItem", {table[1],table[2]})
-	Menu.addButton("Donner", "GiveItem", {table[1],table[2],table[4]})
-	Menu.addButton("Jeter", "DropItem", {table[1],table[2],table[3],table[4],table[5]})
+  Menu.clearMenu()
+  Menu.setSubtitle(table[3])
+  Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
+  Menu.addButton("Utiliser", "UseItem", { table[1], table[2] })
+  Menu.addButton("Donner", "GiveItem", { table[1], table[2], table[4] })
+  Menu.addButton("Jeter", "DropItem", { table[1], table[2], table[3], table[4], table[5] })
 end
 
 function UseItem(table)
-	if table[1] - 1 >= 0 then
-		TriggerServerEvent("Inventory:DataItem", table[2],table[1])
-	else
-		Venato.notifyError("Error !")
-	end
+  if table[1] - 1 >= 0 then
+    TriggerServerEvent("Inventory:DataItem", table[2], table[1])
+  else
+    Venato.notifyError("Error !")
+  end
 end
 
 function GiveItem(table)
-	local ClosePlayer, distance = Venato.ClosePlayer()
-	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		local nb = Venato.OpenKeyboard('', '0', 2,"Nombre à donner")
-		if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
-			TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), table)
-			OpenInventory()
-		end
-	else
-		Venato.notifyError("Il n'y a personne à proximité.")
-	end
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    local nb = Venato.OpenKeyboard('', '0', 2, "Nombre à donner")
+    if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
+      TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), table)
+      OpenInventory()
+    end
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 RegisterNetEvent('Inventory:CallInfo:cb')
 AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, qty)
-	if table[1] - nb >= 0 then
-		if table[3]*nb + poid <= PoidMax then
-			TriggerServerEvent("Inventory:SetItem", table[1] - nb , id)
-			TriggerServerEvent("Inventory:SetItem", qty + nb , id, ClosePlayer)
-		else
-			Venato.notifyError("La personne est trop lourde pour ces items.")
-		end
-	else
-		Venato.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")
-	end
+  if table[1] - nb >= 0 then
+    if table[3] * nb + poid <= PoidMax then
+      TriggerServerEvent("Inventory:SetItem", table[1] - nb, id)
+      TriggerServerEvent("Inventory:SetItem", qty + nb, id, ClosePlayer)
+    else
+      Venato.notifyError("La personne est trop lourde pour ces items.")
+    end
+  else
+    Venato.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")
+  end
 end)
 
 function DropItem(tableau)
@@ -575,7 +582,7 @@ end
 
 RegisterNetEvent('Inventory:SendItemsOnTheGround')
 AddEventHandler('Inventory:SendItemsOnTheGround', function(ParItemsOnTheGround)
-	ItemsOnTheGround = ParItemsOnTheGround
+  ItemsOnTheGround = ParItemsOnTheGround
 end)
 
 RegisterNetEvent('Inventory:AnimGive')

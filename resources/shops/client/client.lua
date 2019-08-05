@@ -93,10 +93,8 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
         end
       end
     end
-  end
-  )
-end
-)
+  end)
+end)
 
 --
 CreateThread(function()
