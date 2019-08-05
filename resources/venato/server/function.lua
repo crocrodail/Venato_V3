@@ -27,15 +27,15 @@ DataPlayers = {}
 
 function accessGranded(SteamId, source , balek)
   MySQL.Async.fetchAll("SELECT * FROM users "..
-   "INNER JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
-   "INNER JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
-   "WHERE users.identifier = @SteamId", {['@SteamId'] = SteamId}, function(DataUser)
+   "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
+   "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
+   "WHERE users.identifier = @SteamId", {['@SteamId'] = getSteamID(source)}, function(DataUser)
     if DataUser[1] == nil then
       TriggerEvent("Register:AddPlayer", source, false)
-      print("^Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
+      print("^3Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
     elseif DataUser[1].nom == nil or DataUser[1].nom == "" then
       TriggerEvent("Register:AddPlayer", source, true)
-      print("^Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
+      print("^3Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
     elseif DataUser[1].model == nil or DataUser[1].model == "" then
       print("^3Create Skin : "..DataUser[1].prenom.." "..DataUser[1].nom.." ("..GetPlayerName(source)..")^7")
       TriggerClientEvent("Skin:Create", source)
@@ -108,12 +108,14 @@ function accessGranded(SteamId, source , balek)
           lipstick_color = DataUser[1].lipstick_color
         }
       }
-      TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
-      TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
-      TriggerEvent("Inventory:UpdateInventory", source)
-      TriggerClientEvent("Venato:Connection", source)
-      ControlVisa(SteamId, source)
-      print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+      MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo",{["@source"] = source, ["@pseudo"] = GetPlayerName(source)}, function()
+        TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
+        TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
+        TriggerEvent("Inventory:UpdateInventory", source)
+        TriggerClientEvent("Venato:Connection", source)
+        ControlVisa(SteamId, source)
+        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+      end)
     end
   end)
 end

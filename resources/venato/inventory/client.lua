@@ -221,7 +221,7 @@ function MyDoc(data)
 	end
 	for k,v in pairs(data.Documents) do
 		if v.type == "chequier" then
-			Menu.addButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "showCheque", {data,k})
+			Menu.addButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "CreateCheque", {data,k})
 		end
 		if v.type == "cheque" then
 			Menu.addButton("Cheque de <span class='green--text'>"..Venato.FormatMoney(v.montant,2).."</span> €", "showCheque", {data,k})
@@ -305,6 +305,27 @@ RegisterNetEvent('Inventory:ShowToOtherVisa:cb')
 AddEventHandler('Inventory:ShowToOtherVisa:cb', function(data)
 		ShowVisa(data)
 end)
+
+function CreateCheque(data)
+	Menu.clearMenu()
+	Menu.setSubtitle("Chèque pour la persone à proximité")
+	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+	Menu.addButton("Donner un chèque", "CreateChequeConf", data)
+end
+
+function CreateChequeConf(data)
+	local ClosePlayer, distance = Venato.ClosePlayer()
+	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+		local montant = Venato.OpenKeyboard('', '0', 10,"Montant du chèque")
+		if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
+			TriggerServerEvent("Inventory:CreateCheque", ClosePlayer, montant)
+		else
+			Venato.notifyError("Le montant indiqué est erroné.")
+		end
+	else
+		Venato.notifyError("Il n'y a personne à proximité.")
+	end
+end
 
 function showCheque(data)
 	if PapierOpen == 0 then

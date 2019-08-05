@@ -1,11 +1,8 @@
 DataUser = {}
 
-AddEventHandler('playerSpawned', function()
-  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
-end)
-
 Citizen.CreateThread(function()
     TriggerServerEvent("Venato:SyncData")
+    SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
 end)
 
 RegisterNetEvent("Venato:displaytext")
@@ -18,7 +15,7 @@ end)
 
 RegisterNetEvent("Venato:Connection")
 AddEventHandler("Venato:Connection", function()
-  LifeInit()
+  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
 end)
 
 RegisterNetEvent("Venato:SpawnInit")

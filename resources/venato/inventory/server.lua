@@ -350,3 +350,9 @@ RegisterServerEvent('Inventory:ShowToOtherVisa')
 AddEventHandler('Inventory:ShowToOtherVisa', function(data, target)
 	TriggerClientEvent("Inventory:ShowToOtherVisa:cb", target, data)
 end)
+
+RegisterServerEvent('Inventory:CreateCheque')
+AddEventHandler('Inventory:CreateCheque', function(player, montant)
+	local source = source
+	MySQL.Async.execute("INSERT INTO user_document (`identifier`, `type`, `nom`, `prenom`, `montant`, `numero_de_compte`, `nom_du_factureur`,`prenom_du_factureur`, `date`) VALUES (@identifier, @weapon_model, @balles)")
+end)

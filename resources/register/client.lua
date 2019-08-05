@@ -33,7 +33,6 @@ end)
 
 RegisterNUICallback('register', function(data, cb)
     closeGui()
-    print(json.encode(data))
     if cansend then
       TriggerServerEvent('Register:setIdentity', data)
       cansend = false

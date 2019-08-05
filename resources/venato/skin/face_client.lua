@@ -153,6 +153,7 @@ function saveFace()
         table.insert(data, v.currentValue)
     end
     TriggerServerEvent('face:save', data)
+    TriggerServerEvent("Venato:SyncData")
     DoScreenFadeOut(3500)
     Citizen.Wait(3500)
     FreezeEntityPosition(GetPlayerPed(-1), true)

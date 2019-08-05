@@ -1,5 +1,10 @@
 local open = false
 local type = 'fleeca'
+local defaultNotification = {
+  type = "info",
+  title ="Banque",
+  logo = "https://img.icons8.com/officel/16/000000/bank-euro.png"
+}
 
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
@@ -48,9 +53,10 @@ AddEventHandler('Bank:GetDataMoneyForBank:cb', function(data)
 end)
 
 function menuBank(data)
+  TriggerEvent('Menu:Init', "Banque", "Options", '#11751C70', "http://www.kiplinger.com/kipimages/pages/18919.jpg")
   Menu.open()
-  Menu.setTitle( "Banque")
-  Menu.setSubtitle( "Options")
+  Menu.setTitle("Banque")
+  Menu.setSubtitle("Options")
   Menu.clearMenu()
   if data.Account == 'aucun' then
     Menu.addButton("Créer un compte banquaire pour ~g~1 000 €", "CreatAcount", data)
@@ -113,10 +119,10 @@ function buyCheque(data)
       TriggerServerEvent("Bank:createCheque")
       TriggerServerEvent("Inventory:RemoveMoney", 1000)
     else
-      Venato.notify("~r~Vous possèdez déjà un chèquier.")
+      Venato.notifyError("~r~Vous possèdez déjà un chèquier.")
     end
   else
-    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour acheter un chequier.")
+    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter un chequier.")
   end
 end
 
@@ -125,7 +131,7 @@ function buyCard(data)
     TriggerServerEvent("Bank:createCard")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte banquaire.")
+    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte banquaire.")
   end
 end
 
@@ -135,14 +141,23 @@ function CreatAcount(data)
     TriggerServerEvent("Bank:createAccount")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notify("Vous n'avez pas les 1 000 € nécessaire pour ouvrir un compte.")
+    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour ouvrir un compte.")
   end
 end
 
+RegisterNetEvent('Bank:ActuSoldeErrone')
+AddEventHandler('Bank:ActuSoldeErrone', function(data)
+  myAcount(data)
+end)
+
 function myAcount(data)
+  Menu.close()
   open = true
   SetNuiFocus(true, true)
-	SendNUIMessage({
+  SendNUIMessage({
+    action = "ResetIndex",
+  })
+  SendNUIMessage({
 		action = "openBank",
 		bank = data.Bank,
 		cash = data.Money,
@@ -157,7 +172,7 @@ end
 Citizen.CreateThread(function ()
   while true do
     Citizen.Wait(0)
-		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) and GetLastInputMethod(2) then
+		if IsControlJustPressed(1, Keys['BACKSPACE']) or IsControlJustPressed(1, Keys['RIGHTMOUSE']) or IsControlJustPressed(1, Keys['ESC']) and GetLastInputMethod(2) then
 			SetNuiFocus(false, false)
 			open = false
 		end
@@ -176,6 +191,12 @@ Citizen.CreateThread(function ()
       DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
     end
 	end
+end)
+
+RegisterNUICallback('closeBank', function(data, cb)
+	cb('ok')
+  SetNuiFocus(false, false)
+  open = false
 end)
 
 RegisterNUICallback('insert', function(data, cb)
@@ -202,9 +223,6 @@ RegisterNUICallback('escape', function(data, cb)
 end)
 
 -- Handles the error message
-RegisterNUICallback('error', function(data, cb)
-	SetNuiFocus(false, false)
-	open = false
-	cb('ok')
-	Venato.notify('The machine is working. Please wait')
+RegisterNUICallback('errorbank', function(data, cb)
+  Venato.notifyError("Erreur dans le montant entré")
 end)

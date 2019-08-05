@@ -9,7 +9,7 @@ function SkinChooser:create()
     local self = {}
     setmetatable(self,SkinChooser)
     self.name           = nil
-    self.model          = nil
+    self.model          = "mp_m_freemode_01"
     self.age            = nil
     self.head           = nil
     self.body_color     = nil
