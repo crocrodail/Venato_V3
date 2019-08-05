@@ -551,8 +551,8 @@ RegisterNetEvent('Inventory:CallInfo:cb')
 AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, qty)
   if table[1] - nb >= 0 then
     if table[3] * nb + poid <= PoidMax then
-      TriggerServerEvent("Inventory:SetItem", table[1] - nb, id)
-      TriggerServerEvent("Inventory:SetItem", qty + nb, id, ClosePlayer)
+      TriggerServerEvent("Inventory:SetItem", table[1] - nb, table[2])
+      TriggerServerEvent("Inventory:SetItem", qty + nb, table[2], ClosePlayer)
     else
       Venato.notifyError("La personne est trop lourde pour ces items.")
     end

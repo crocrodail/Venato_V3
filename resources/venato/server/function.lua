@@ -108,7 +108,7 @@ function accessGranded(SteamId, source , balek)
           lipstick_color = DataUser[1].lipstick_color
         }
       }
-      MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo",{["@source"] = source, ["@pseudo"] = GetPlayerName(source)}, function()
+      MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = getSteamID(source),  ["@pseudo"] = GetPlayerName(source)}, function()
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
@@ -133,7 +133,7 @@ function ControlVisa(SteamId, source)
       if tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
       end
-      if (tonumber(num) == 1 or tonumber(num) == 2) and start == 0 then
+      if (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60
         DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)

@@ -161,7 +161,7 @@ end)
 
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, table)
-	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[source].Inventaire[table[2]].quantity)
+	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[table[2]].quantity)
 end)
 
 ItemsOnTheGround = {}
