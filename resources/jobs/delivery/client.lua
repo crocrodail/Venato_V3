@@ -19,9 +19,9 @@ function DeliveryJob.init()
       local mission = DeliveryJobConfig.defaultMissions[1]
 
       local teleportAction = "Teleport:SetTeleport"
-      if not JobsConfig.inService then
-        teleportAction = "Teleport:RemoveTeleport"
-      end
+      --if not JobsConfig.inService then
+      --  teleportAction = "Teleport:RemoveTeleport"
+      --end
       for warehouseName, warehouse in pairs(warehouses) do
         TriggerEvent(teleportAction,
           warehouseName,
@@ -43,22 +43,15 @@ function DeliveryJob.init()
 end
 
 function DeliveryJob.commands()
-  CreateThread(function()
-    if DeliveryJobConfig.enabled then
-      while true do
-        Wait(1)
-        if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and DeliveryJobConfig.onTrunkDrop ~= nil then
-          if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
-            despawnTrunk()
-          else
-            spawnTrunk()
-          end
-        end
-
-      end
+  if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and DeliveryJobConfig.onTrunkDrop ~= nil then
+    if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
+      despawnTrunk()
+    else
+      spawnTrunk()
     end
-  end)
+  end
 end
+
 function DeliveryJob.mainLoop()
   CreateThread(function()
     if DeliveryJobConfig.enabled then

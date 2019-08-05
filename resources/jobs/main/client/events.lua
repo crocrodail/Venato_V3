@@ -23,9 +23,7 @@ AddEventHandler("Jobs:checkPlayerJob:cb", function(jobId)
   --  Call initialization of the job
   _G[job.Class].init()
 
-  -- Step 3
-  --  Call controls management of the job
-  _G[job.Class].commands()
+  Jobs.Commands(job)
 
   -- Step 4
   --  Appeler La boucle principale du métier
