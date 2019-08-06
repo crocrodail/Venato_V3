@@ -435,7 +435,7 @@ Citizen.CreateThread(function()
                 ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
               end
             end
-            SetBlipNameToPlayerName(blip, Player) -- update blip name
+            SetBlipNameToPlayerName(blip, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")") -- update blip name
             SetBlipScale(blip, 0.85) -- set scale
             if IsPauseMenuActive() then
               SetBlipAlpha(blip, 255)
@@ -520,10 +520,6 @@ Citizen.CreateThread(function()
       local playerPed      = Venato.GetPlayerPed()
       local targetPed      = GetPlayerPed(targetPlayerId)
       local coords         = GetEntityCoords(targetPed)
-      print(TargetSpectate)
-      print(targetPlayerId)
-      print(targetPed)
-      print(coords.x)
       for k, v in pairs(AdminDataPlayers) do
         if v.PlayerIdClient ~= PlayerId() then
           local otherPlayerPed = GetPlayerPed(v.PlayerIdClient)
