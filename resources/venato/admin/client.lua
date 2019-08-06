@@ -341,21 +341,27 @@ end
 
 function AdminSpectate()
   if InSpectatorMode == false then
-    if not DoesCamExist(cam) then
-      cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-    end
-    SetCamActive(cam, true)
-    RenderScriptCams(true, false, 0, true, true)
     LastCoords = GetEntityCoords(Venato.GetPlayerPed())
     indexToSpectate = indexToShow
     InSpectatorMode = true
+    Citizen.CreateThread(function()
+      if not DoesCamExist(cam) then
+        cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+      end
+      SetCamActive(cam,  true)
+      RenderScriptCams(true,  false,  0,  true,  true)
+      InSpectatorMode = true
+      TargetSpectate  = target
+    end)
   else
     InSpectatorMode = false
-    SetCamActive(cam, false)
-    RenderScriptCams(false, false, 0, true, true)
-    SetEntityCollision(playerPed, true, true)
-    SetEntityVisible(playerPed, true)
-    SetEntityCoords(playerPed, LastCoords.x, LastCoords.y, LastCoords.z)
+      TargetSpectate  = nil
+      local playerPed = Venato.GetPlayerPed()
+      SetCamActive(cam,  false)
+      RenderScriptCams(false,  false,  0,  true,  true)
+      SetEntityCollision(playerPed,  true,  true)
+      SetEntityVisible(playerPed,  true)
+      SetEntityCoords(playerPed, LastPosition.x, LastPosition.y, LastPosition.z)
   end
 end
 
@@ -511,9 +517,16 @@ Citizen.CreateThread(function()
       ShowInfoCoord()
     end
     if InSpectatorMode then
-      local playerPed = Venato.GetPlayerPed()
-      local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
-      local coords = GetEntityCoords(targetPed)
+      local targetPlayerId = GetPlayerFromServerId(TargetSpectate)
+      local playerPed      = Venato.GetPlayerPed()
+      local targetPed      = GetPlayerPed(targetPlayerId)
+      local coords         = GetEntityCoords(targetPed)
+      for k, v in pairs(AdminDataPlayers) do
+        if v.PlayerIdClient ~= PlayerId() then
+          local otherPlayerPed = GetPlayerPed(v.PlayerIdClient)
+          SetEntityNoCollisionEntity(playerPed,  otherPlayerPed,  true)
+        end
+      end
       if IsControlPressed(2, 241) then
         radius = radius + 0.5;
       end
@@ -523,8 +536,8 @@ Citizen.CreateThread(function()
       if radius > -1 then
         radius = -1
       end
-      local xMagnitude = GetDisabledControlNormal(0, 1);
-      local yMagnitude = GetDisabledControlNormal(0, 2);
+      local xMagnitude = GetDisabledControlNormal(0,  1);
+      local yMagnitude = GetDisabledControlNormal(0,  2);
       polarAngleDeg = polarAngleDeg + xMagnitude * 10;
       if polarAngleDeg >= 360 then
         polarAngleDeg = 0
@@ -534,11 +547,9 @@ Citizen.CreateThread(function()
         azimuthAngleDeg = 0;
       end
       local nextCamLocation = polar3DToWorld3D(coords, radius, polarAngleDeg, azimuthAngleDeg)
-      SetCamCoord(cam, nextCamLocation.x, nextCamLocation.y, nextCamLocation.z)
-      PointCamAtEntity(cam, targetPed)
-      SetEntityCollision(playerPed, false, false)
-      SetEntityVisible(playerPed, false)
-      SetEntityCoords(playerPed, coords.x, coords.y, coords.z + 10)
+      SetCamCoord(cam,  nextCamLocation.x,  nextCamLocation.y,  nextCamLocation.z)
+      PointCamAtEntity(cam,  targetPed)
+      SetEntityCoords(playerPed,  coords.x, coords.y, coords.z + 10)
     end
   end
 end)

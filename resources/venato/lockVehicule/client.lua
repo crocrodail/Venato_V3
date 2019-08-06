@@ -9,10 +9,6 @@ local defaultNotification = {
   logo = "https://i.ibb.co/tmqZqty/icons8-key-96px.png"
 }
 
-AddEventHandler('playerSpawned', function()
-TriggerServerEvent('lock:synchr')
-end)
-
 RegisterNetEvent("lock:refresh")
 AddEventHandler("lock:refresh", function(listrefresh)
 
