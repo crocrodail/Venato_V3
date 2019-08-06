@@ -50,7 +50,7 @@ function accessGranded(SteamId, source , balek)
         Ip = GetPlayerEP(source),
         SteamId = SteamId,
         Source = source,
-        PlayerPed = GetPlayerPed(source),
+        PlayerIdClient = nil,
         Group = DataUser[1].group,
         Nom = DataUser[1].nom,
         Prenom = DataUser[1].prenom,

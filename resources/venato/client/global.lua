@@ -14,7 +14,7 @@ Citizen.CreateThread(function()
 	SetEveryoneIgnorePlayer(ped, true)
   Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), 'FE_THDR_GTAO', 'Venato.fr')
   TriggerServerEvent("Venato:SyncData")
-  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
+  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn", PlayerId()) end)
   while true do
     Citizen.Wait(50)
     SetPlayerWantedLevel(playerId, 0 , false)

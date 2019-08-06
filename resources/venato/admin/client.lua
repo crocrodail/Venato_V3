@@ -316,10 +316,7 @@ function Admintptoelle()
 end
 
 function AdminFreeze()
-  local playerIdx = GetPlayerFromServerId(indexToShow)
-  print(playerIdx)
-  local ped = GetPlayerPed(playerIdx)
-  FreezeEntityPosition(ped, true)
+  FreezeEntityPosition(AdminDataPlayers[indexToShow].PlayerIdClient, true)
   -- if state == true then
   --   if not IsEntityVisible(ped) then
   --     SetEntityVisible(ped, true)
