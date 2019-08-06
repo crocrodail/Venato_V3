@@ -10,7 +10,7 @@ ShopRequests.getShop = "SELECT s.Id, s.Name, s.Renamed, s.Money, s.Supervised, s
   "FROM shops s " ..
   "WHERE s.Id=@Id"
 -- Get all stocks of shop with id '@Id'
-ShopRequests.getShopItems = "SELECT it.id, it.libelle, c.Price, c.Quantity, c.Id as ContentId " ..
+ShopRequests.getShopItems = "SELECT it.id, it.libelle, c.Price, c.Quantity, c.Id as ContentId, it.picture " ..
   "FROM shops s " ..
   "INNER JOIN shop_inventory i ON s.InventoryId = i.Id " ..
   "INNER JOIN shop_content c ON i.Id = c.InventoryId " ..
@@ -47,7 +47,7 @@ ShopRequests.getStockItem = "SELECT it.id, it.libelle, c.Quantity, c.Price, c.Id
   "INNER JOIN items it on c.ItemId = it.id " ..
   "WHERE it.id=@ItemId and s.Id=@ShopId"
 -- Get all items in the order with id '@OrderId'
-ShopRequests.getOrderItems = "SELECT oc.Id, it.id as ItemId, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered " ..
+ShopRequests.getOrderItems = "SELECT oc.Id, it.id as ItemId, it.libelle, c.Quantity, c.Price, oc.Quantity as Ordered, it.picture " ..
   "FROM shop_orders o " ..
   "INNER JOIN shops s ON o.ShopID = s.Id " ..
   "INNER JOIN shop_inventory i ON s.InventoryId = i.Id " ..
@@ -74,7 +74,7 @@ ShopRequests.getOrderItem = "SELECT oc.Id, it.id as ItemId, it.libelle, c.Quanti
   "LEFT JOIN shop_orders_content oc ON o.Id = oc.ShopOrderId and it.id = oc.ItemId " ..
   "WHERE it.id=@Id and s.Id=@ShopId"
 -- Get all available items
-ShopRequests.getAllItems = "SELECT it.id, it.libelle, it.price FROM items it"
+ShopRequests.getAllItems = "SELECT it.id, it.libelle, it.price, it.picture FROM items it"
 
 -- Add item in stock
 ShopRequests.addItem = "INSERT shop_content (InventoryId, ItemId, Price, Quantity) VALUES (@InventoryId, @ItemId, @Price, @Quantity)"
@@ -185,7 +185,8 @@ function ShopDbFunctions.getShop(shopId, source)
         ["Name"] = item.libelle,
         ["Price"] = item.Price,
         ["Quantity"] = item.Quantity,
-        ["ContentId"] = item.ContentId
+        ["ContentId"] = item.ContentId,
+        ["Picture"] = item.picture
       }
     )
   end
@@ -234,7 +235,8 @@ function ShopDbFunctions.getOrder(orderId)
         ["Name"] = item.libelle,
         ["Quantity"] = item.Quantity,
         ["Price"] = item.Price,
-        ["Ordered"] = item.Ordered
+        ["Ordered"] = item.Ordered,
+        ["Picture"] = item.picture
       }
     )
   end
@@ -298,7 +300,8 @@ function ShopDbFunctions.getAllItems()
       {
         ["Id"] = item.id,
         ["Name"] = item.libelle,
-        ["Price"] = item.price
+        ["Price"] = item.price,
+        ["Picture"] = item.picture
       }
     )
   end

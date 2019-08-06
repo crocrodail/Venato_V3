@@ -44,14 +44,15 @@ function ShopPages.client(shop)
   TriggerEvent('Menu:SubTitle', subTitle)
 
   if shop.IsSupervisor then
-    TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "Administration →"), "goTo", table.pack("admin",
-      "Shops:ShowInventory", ConfigShop.currentShopId), nil)
+    TriggerEvent('Menu:AddButton2', "Administration", "goTo", table.pack("admin",
+      "Shops:ShowInventory", ConfigShop.currentShopId), "", "https://i.ibb.co/cQmJ84r/icons8-administrative-tools-96px.png")
   end
 
   for _, item in ipairs(shop.Items) do
     local textButton = itemToString(item)
-    TriggerEvent('Menu:AddButton2', textButton, "buyItem", item, nil)
+    TriggerEvent('Menu:AddShopButton', item.Name, "buyItem", item, item.Picture, formatQte(item.Quantity), item.Price)
   end
+  
 end
 
 -- ADMIN --
@@ -60,47 +61,53 @@ function ShopPages.admin(shop)
     goToClientPage()
   end
 
-  TriggerEvent('Menu:Title', ConfigShop.textInColor('yellow', "Administration"))
+  TriggerEvent('Menu:Title', ConfigShop.textInColor('white', "Administration"))
   TriggerEvent('Menu:SubTitle', "Caisse: " .. ConfigShop.textInColor('orange', shop.Money .. "€"))
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Stocks"), "goTo",
-    table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Récuperer caisse →"), "getMoney", nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Créer commande →"), "createOrder", nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",
+    table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:AddButton2', "Récuperer caisse", "getMoney", "", "", "https://i.ibb.co/Y3fwFnQ/icons8-request-money-96px-1.png")
+  TriggerEvent('Menu:AddButton2', "Créer commande", "createOrder", "", "", "https://i.ibb.co/48yLQfj/icons8-bill-96px.png")
 
   for _, order in ipairs(shop.Orders) do
     local textButton = orderToString(order)
-
-    TriggerEvent('Menu:AddButton2', textButton, "goTo", table.pack("order", "Shops:showOrder", order.Id), nil)
+    TriggerEvent('Menu:AddShopButton', textButton, "goTo", table.pack("order", "Shops:showOrder", order.Id),"https://i.ibb.co/dgKX7bR/icons8-purchase-order-96px.png", orderStatusToString(order), nil)
   end
 
   for _, item in ipairs(shop.Items) do
     local textButton = itemToString(item)
-    TriggerEvent('Menu:AddButton2', textButton, "goTo",
-      table.pack("adminItem", "Shops:showAdminItem", ConfigShop.currentShopId, item), nil)
+    TriggerEvent('Menu:AddShopButton', item.Name, "goTo",
+    table.pack("adminItem", "Shops:showAdminItem", ConfigShop.currentShopId, item), item.Picture, formatQte(item.Quantity), item.Price)
   end
+  
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",
+    table.pack("client", "Shops:ShowInventory", ConfigShop.currentShopId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
 end
 
 -- ORDER --
 function ShopPages.order(order)
   ConfigShop.currentOrderId = order.Id
-  TriggerEvent('Menu:Title', ConfigShop.textInColor('yellow', "Commande: " .. order.Ref))
+  TriggerEvent('Menu:Title', "Commande: <small>" .. order.Ref .. "</small>")
   TriggerEvent('Menu:SubTitle', "Selectionne un produit pour le modifier")
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Administration"), "goTo",
-    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Ajouter un produit"), "goTo",
-    table.pack("addItem", "Shops:showAddItem", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Supprimer commande"), "deleteOrder", nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",
+    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+
+  TriggerEvent('Menu:AddButton2', "Ajouter un produit", "goTo",
+    table.pack("addItem", "Shops:showAddItem", ConfigShop.currentShopId), "", "https://i.ibb.co/NWMhJF9/icons8-plus-96px.png")
+
+  TriggerEvent('Menu:AddButton2', "Supprimer commande", "deleteOrder", "", "", "https://i.ibb.co/Vg1fxzB/icons8-remove-book-96px-1.png")
+
   if order.Finalized ~= 1 and #order.Items > 0 then
-    TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('blue', "Finaliser commande"), "finalizeOrder", nil)
+    TriggerEvent('Menu:AddButton2', "Finaliser commande", "finalizeOrder", "", "", "https://i.ibb.co/df5S2VV/icons8-check-file-96px.png")
   end
 
   for _, item in ipairs(order.Items) do
-    local textButton = itemToString(item)
-    TriggerEvent('Menu:AddButton2', textButton, "goTo",
-      table.pack("orderItem", "Shops:ShowItem", ConfigShop.currentShopId, item), nil)
+    TriggerEvent('Menu:AddShopButton', item.Name, "goTo", table.pack("orderItem", "Shops:ShowItem", ConfigShop.currentShopId, item), item.Picture, formatQte(item.Quantity)..formatOrdered(item.Ordered), item.Price)
   end
+  
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",
+    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
 end
 
 function ShopPages.orderItem(item)
@@ -115,11 +122,10 @@ function ShopPages.orderItem(item)
   TriggerEvent('Menu:Title', menuTitle)
 
   TriggerEvent('Menu:SubTitle', "Actions")
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Commande"), "goTo",
-    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), nil)
-  TriggerEvent('Menu:AddButton2', "Définir la quantité", "orderItem", item, nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:AddButton2', "Définir la quantité", "orderItem", item, "", "https://i.ibb.co/grvhJmy/icons8-add-shopping-cart-96px.png")
   if item.Id ~= nil then
-    TriggerEvent('Menu:AddButton2', "Retirer de la commande", "removeItemFromOrder", item, nil)
+    TriggerEvent('Menu:AddButton2', "Retirer de la commande", "removeItemFromOrder", item, "", "https://i.ibb.co/qk2MtcN/icons8-buy-96px.png")
   end
 end
 
@@ -127,23 +133,25 @@ function ShopPages.adminItem(item)
   TriggerEvent('Menu:Title', item.Name)
   TriggerEvent('Menu:SubTitle', "info: " .. itemToString(item))
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Administration"), "goTo",
-    table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), nil)
-  TriggerEvent('Menu:AddButton2', "Modifier prix", "setPrice", item, nil)
-  TriggerEvent('Menu:AddButton2', "Retirer du stock", "removeItemFromStock", item, nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",table.pack("admin", "Shops:ShowInventory", ConfigShop.currentShopId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  
+  TriggerEvent('Menu:AddButton2', "Modifier prix", "setPrice", item, '', "https://i.ibb.co/k1c1MCS/icons8-price-tag-usd-96px.png")
+  TriggerEvent('Menu:AddButton2', "Retirer du stock", "removeItemFromStock", item, "", "https://i.ibb.co/d5skfBK/icons8-return-purchase-96px-1.png")
 end
 
 function ShopPages.addItem(items)
   TriggerEvent('Menu:Title', "Ajouter un produit")
   TriggerEvent('Menu:SubTitle', "Sélectionne le produit à ajouter")
 
-  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('yellow', "↩ Commande"), "goTo",
-    table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), nil)
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",  table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
 
   for _, item in ipairs(items) do
     local textButton = itemToString(item)
-    TriggerEvent('Menu:AddButton2', textButton, "addItemToStock", item, nil)
+    print(item.Picture)
+    TriggerEvent('Menu:AddShopButton', item.Name, "addItemToStock", item, item.Picture, "", item.Price)
   end
+  
+  TriggerEvent('Menu:AddButton2', ConfigShop.textInColor('red', "Retour"), "goTo",  table.pack("order", "Shops:showOrder", ConfigShop.currentOrderId), "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
 end
 
 -- ===== --
@@ -179,15 +187,19 @@ function itemToString(item)
 end
 
 function orderToString(order)
-  local s = "Commande " .. order.Ref
+  return "Commande " .. order.Ref 
+end
+
+function orderStatusToString(order)
+  s = ""
   if order.Signed == 1 then
-    s = s .. ConfigShop.textInColor('green', " signée")
+    s = s .. ConfigShop.textInColor('green', "Signée")
   elseif order.Started == 1 then
-    s = s .. ConfigShop.textInColor('yellow', " livraison en cours")
+    s = s .. ConfigShop.textInColor('yellow', "Livraison en cours")
   elseif order.Finalized == 0 then
-    s = s .. ConfigShop.textInColor('orange', " à finaliser")
+    s = s .. ConfigShop.textInColor('orange', "A finaliser")
   else
-    s = s .. ConfigShop.textInColor('grey', " en attente")
+    s = s .. ConfigShop.textInColor('grey', "En attente")
   end
   return s
 end
@@ -214,7 +226,7 @@ function removeItemFromStock(item)
 end
 
 function orderItem(item)
-  local nb = ShopsTools.OpenKeyboard("", "" .. (item.Ordered or 0), 10,
+  local nb = ShopsTools.OpenKeyboard("", "" .. (item.Ordered or ''), 10,
     "Combien voulez-vous de '" .. item.Name .. "' à " .. item.Price .. "€/unité")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
@@ -225,7 +237,7 @@ function orderItem(item)
 end
 
 function setPrice(item)
-  local nb = ShopsTools.OpenKeyboard("", "" .. (item.Price or 0), 10,
+  local nb = ShopsTools.OpenKeyboard("", "" .. (item.Price or ''), 10,
     "Quel prix voulez-vous pour '" .. item.Name .. "'")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:ChangePriceItem", item, tonumber(nb))
@@ -255,4 +267,26 @@ end
 function finalizeOrder()
   ConfigShop.page = "admin"
   TriggerServerEvent("Shops:FinalizeOrder", ConfigShop.currentOrderId, ConfigShop.currentShopId)
+end
+
+function formatQte(quantity)
+  if quantity == nil then
+    return ""
+  elseif quantity == 0 then
+    return ConfigShop.textInColor('red', "Rupture de stock")
+  elseif quantity > 0 then
+    return "Stock : " .. ConfigShop.textInColor('deep-orange', quantity.."")
+  else
+    return "Stock : " .. ConfigShop.textInColor('amber', "illimité")
+  end
+end
+
+function formatOrdered(ordered)
+  if ordered == nil then
+    return ""
+  elseif ordered == 0 then
+    return ConfigShop.textInColor('grey', " (pas de commande)")
+  else
+    return ConfigShop.textInColor('blue', " (+" .. ordered .. ")")
+  end
 end

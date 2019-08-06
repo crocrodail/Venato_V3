@@ -77,7 +77,11 @@ new Vue({
       } else if (event.data.action == "genMenu") {
         var obj = JSON.parse(event.data[1]);
         for (var i = 0; i < obj.length; i++) {
-           this.items.push({ title: obj[i].name, subtitle: '', confirm: obj[i].func, hover: obj[i].hover, data: obj[i].args })
+          if(!obj[i].isShopItem){
+            this.items.push({ title: obj[i].name, subtitle: '', confirm: obj[i].func, hover: obj[i].hover, data: obj[i].args, avatar: obj[i].avatar })
+          }else{
+           this.items.push({ title: obj[i].name, subtitle: obj[i].stock, confirm: obj[i].func, data: obj[i].args, avatar: obj[i].avatar, price: obj[i].price, isShopItem: obj[i].isShopItem })
+          }
          };
       } else if (event.data.action == "init") {
         this.title = event.data.title;

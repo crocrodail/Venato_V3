@@ -61,11 +61,12 @@
                       ></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
-                      <v-btn icon ripple>
+                      <v-btn icon ripple v-if="!item.price">
                         <v-icon :color="(isDark ? 'white':'black')">{{
                           item.icon || "fa fa-chevron-right fa-xs"
                         }}</v-icon>
                       </v-btn>
+                      <span v-else>{{item.price | toCurrency}} €</span>
                     </v-list-tile-action>
                   </v-list-tile>
                 </template>
