@@ -11,8 +11,8 @@ Citizen.CreateThread(function()
   TriggerServerEvent("Venato:SyncData")
   SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
   while true do
-    Citizen.Wait(0)
-    --SetPlayerWantedLevel(ped, 0 , false)
+    Citizen.Wait(50)
+    SetPlayerWantedLevel(ped, 0 , false)
     SetPlayerWantedLevelNow(ped, false, false)
   end
 end)
