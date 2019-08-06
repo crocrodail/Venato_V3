@@ -512,7 +512,7 @@ Citizen.CreateThread(function()
     end
     if InSpectatorMode then
       local playerPed = Venato.GetPlayerPed()
-      local targetPed = Venato.GetPlayerPedFromSource(indexToShow)
+      local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
       local coords = GetEntityCoords(targetPed)
       if IsControlPressed(2, 241) then
         radius = radius + 0.5;
