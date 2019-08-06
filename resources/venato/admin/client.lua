@@ -369,8 +369,9 @@ Citizen.CreateThread(function()
     if AdminBlipsBool then
       for k, v in pairs(AdminDataPlayers) do
         local Player = v.PlayerIdClient
+        print(Player.." player not pass")
         if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
-          print(Player.." player")
+          print(Player.." player pass")
           local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
           local blip = GetBlipFromEntity(ped)
           HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "", false)
