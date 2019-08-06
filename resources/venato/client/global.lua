@@ -13,6 +13,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     SetPlayerWantedLevel(ped, 0 , false)
+    print("1")
   end
 end)
 
