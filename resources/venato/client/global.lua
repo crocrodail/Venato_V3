@@ -1,7 +1,10 @@
 DataUser = {}
 
 Citizen.CreateThread(function()
-  print(GetPlayerPed(GetPlayerFromServerId(1)))
+  print(PlayerId())
+  print(GetPlayerFromServerId(PlayerId()))
+  print(GetPlayerPed(GetPlayerFromServerId(PlayerId())))
+  print(Venato.GetPlayerPed())
   local ped = Venato.GetPlayerPed()
   local playerId = PlayerId()
   NetworkSetFriendlyFireOption(true)
