@@ -15,6 +15,10 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
 }
 
+local colors = {}
+local maxColorIndex = 11
+
+
 function HideMenu()
   menuIsOpen = false
   TriggerEvent('Menu:HideVehicleInformation')
@@ -153,7 +157,7 @@ end
 
 function nextVehicleColor()
   color = color +1
-  if color > 159 then
+  if color > maxColorIndex then
     color = 0
   end
   changeColor()
@@ -162,14 +166,14 @@ end
 function previousVehicleColor()
     color = color -1
     if color < 0 then
-      color = 159
+      color = maxColorIndex
     end
     changeColor()
 end
 
 function nextVehicleSecColor()
   colorSec = colorSec +1
-  if colorSec > 159 then
+  if colorSec > maxColorIndex then
     colorSec = 0
   end
   changeColor()
@@ -178,13 +182,13 @@ end
 function previousVehicleSecColor()
     colorSec = colorSec -1
     if colorSec < 0 then
-      colorSec = 159
+      colorSec = maxColorIndex
     end
     changeColor()
 end
 
 function changeColor()
-  local car = GetVehiclePedIsIn( playerPed, false )
+  local car = GetVehiclePedIsIn( playerPed, false )    
   SetVehicleColours(car,color,colorSec)
 end
 

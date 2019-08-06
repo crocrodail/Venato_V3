@@ -165,6 +165,8 @@ function SortirVoiture(vhll)
     		    SetVehicleEngineHealth(vhl, tonumber(health[1]))
     	    end
         end
+        local colorName = GetVehicleModColor_1Name(vhl,0)
+        print(colorName)
         SetPedIntoVehicle(GetPlayerPed(-1), vhl, -1)
         SetVehicleNumberPlateText(vhl, vhll.plate)
         TriggerEvent('lock:addVeh', vhll.plate, vhll.name)
@@ -195,7 +197,7 @@ function SortirVoiture(vhll)
             end
         end
         SetVehicleMod(vhl, 15, customs.mods["15"], false)
-        if veh.type == 1 then
+        if vhl.type == 1 then
             -- Set neons
             if customs.neons.enabled then
                 ToggleVehicleMod(vhl, 22, false)
