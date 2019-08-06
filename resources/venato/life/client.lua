@@ -94,7 +94,7 @@ Citizen.CreateThread(
             )
 
             if food <= 0 or water <= 0 then
-                SetEntityHealth(GetPlayerPed(-1), 0)
+                SetEntityHealth(Venato.GetPlayerPed(), 0)
                 if food <= 0 then
                     food = 25
                 end

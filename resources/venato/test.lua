@@ -12,7 +12,7 @@ local ClotheVehicle = false
 local BoxOnCamion = false
 
 Citizen.CreateThread(function()
-	local ply = GetPlayerPed(-1)
+	local ply = Venato.GetPlayerPed()
 	while true do
 		Citizen.Wait(0)
 		if IsControlJustPressed(1, Keys["U"]) then
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	local ply = GetPlayerPed(-1)
+	local ply = Venato.GetPlayerPed()
 	while true do
 		Citizen.Wait(1000)
 		local plyCoords = GetEntityCoords(ply, 0)
@@ -97,7 +97,7 @@ Citizen.CreateThread(function()
 end)
 
 function CreateBox(x,y,z)
-	local coords = GetEntityCoords(GetPlayerPed(-1), 0)
+	local coords = GetEntityCoords(Venato.GetPlayerPed(), 0)
 	local objet = Venato.CreateObject(BoxJobs, x or coords["x"], y or coords["y"], z or coords["z"])
 	AllObject[objet] = objet
 	local bassin1 = Venato.CreateObject(BassinBox, x or coords["x"], y or coords["y"], z or coords["z"])
@@ -121,12 +121,12 @@ function AttacheOnCamion()
 end
 
 function takebox()
-	AttachEntityToEntity(GobalBox, GetVehiclePedIsIn(GetPlayerPed(-1), false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0, false, false, false, false, 2, true)
+	AttachEntityToEntity(GobalBox, GetVehiclePedIsIn(Venato.GetPlayerPed(), false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0, false, false, false, false, 2, true)
 	SetEntityCollision(GobalBox, false, true)
 end
 
 function dropBoxInForklift()
-	local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0)
+	local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
 	DetachEntity(GobalBox)
 	PlaceObjectOnGroundProperly(GobalBox)
 	coords = GetEntityCoords(GobalBox, 0)
@@ -136,7 +136,7 @@ function dropBoxInForklift()
 end
 
 function DetacheBoxInForklift()
-	local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0)
+	local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
 	DetachEntity(GobalBox)
 	PlaceObjectOnGroundProperly(GobalBox)
 	coords = GetEntityCoords(GobalBox, 0)
@@ -154,7 +154,7 @@ function OpenTestMenu()
 end
 
 function SpawnForkliftTest()
-	local coord = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0)
+	local coord = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
 	Venato.CreateVehicle("forklift", coord , 0, function(vehicle)
 		forklift = vehicle
 	end)

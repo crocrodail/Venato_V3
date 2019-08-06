@@ -77,7 +77,7 @@ end)
 		while true do
 			Citizen.Wait(2000)
       vnt()
-			local player = GetPlayerPed(-1)
+			local player = Venato.GetPlayerPed()
 			if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
 				local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
 				local lock = GetVehicleDoorLockStatus(veh)
@@ -95,14 +95,14 @@ end)
 
 function lockVeh()
   local isvehiclefoundlock = false
-  local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
+  local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(),true))
   local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
   local vehName = ''
 
   if clostestvehicle == 0 then
-    local pos = GetEntityCoords(GetPlayerPed(-1))
-    local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+    local pos = GetEntityCoords(Venato.GetPlayerPed())
+    local entityWorld = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 3.0, 0.0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, Venato.GetPlayerPed(), 0)
     local a, b, c, d, result = GetRaycastResult(rayHandle)
     clostestvehicle = result
   end
@@ -149,12 +149,12 @@ end
 
 function vnt()
   local isvehiclefound = nil
-  local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1),true))
+  local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(),true))
 	local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
   if clostestvehicle == 0 then
-    local pos = GetEntityCoords(GetPlayerPed(-1))
-    local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+    local pos = GetEntityCoords(Venato.GetPlayerPed())
+    local entityWorld = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 3.0, 0.0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, Venato.GetPlayerPed(), 0)
     local a, b, c, d, result = GetRaycastResult(rayHandle)
     clostestvehicle = result
   end

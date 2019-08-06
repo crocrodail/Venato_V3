@@ -216,7 +216,7 @@ end
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    local pos = GetEntityCoords(GetPlayerPed(-1), true)
+    local pos = GetEntityCoords(Venato.GetPlayerPed(), true)
 
     for k, j in pairs(TeleportFromTo) do
 
@@ -235,11 +235,11 @@ Citizen.CreateThread(function()
             if IsControlJustPressed(1, 38) then
               DoScreenFadeOut(1000)
               Citizen.Wait(1000)
-              FreezeEntityPosition(GetPlayerPed(-1), true)
-              SetEntityCoords(GetPlayerPed(-1), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
+              FreezeEntityPosition(Venato.GetPlayerPed(), true)
+              SetEntityCoords(Venato.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
               Citizen.Wait(2000)
               DoScreenFadeIn(1000)
-              FreezeEntityPosition(GetPlayerPed(-1), false)
+              FreezeEntityPosition(Venato.GetPlayerPed(), false)
             end
           end
         end
@@ -259,11 +259,11 @@ Citizen.CreateThread(function()
             if IsControlJustPressed(1, 38) then
               DoScreenFadeOut(1000)
               Citizen.Wait(1000)
-              FreezeEntityPosition(GetPlayerPed(-1), true)
-              SetEntityCoords(GetPlayerPed(-1), j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1)
+              FreezeEntityPosition(Venato.GetPlayerPed(), true)
+              SetEntityCoords(Venato.GetPlayerPed(), j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1)
               Citizen.Wait(2000)
               DoScreenFadeIn(1000)
-              FreezeEntityPosition(GetPlayerPed(-1), false)
+              FreezeEntityPosition(Venato.GetPlayerPed(), false)
             end
           end
         end

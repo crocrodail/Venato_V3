@@ -1,4 +1,5 @@
 Venato = {}
+PedPlayer = nil
 
 function none()
   local a = ""
@@ -101,7 +102,7 @@ function Venato.ClosePlayer()
   local players = GetPlayers()
   local closestDistance = -1
   local closestPlayer = -1
-  local ply = GetPlayerPed(-1)
+  local ply = Venato.GetPlayerPed()
   local plyCoords = GetEntityCoords(ply, 0)
   for index, value in ipairs(players) do
     local target = GetPlayerPed(value)
@@ -119,7 +120,10 @@ function Venato.ClosePlayer()
 end
 
 function Venato.GetPlayerPed()
-	return GetPlayerPed(-1)
+  if PedPlayer == nil then
+    PedPlayer = GetPlayerPed(-1)
+  end
+	return PedPlayer
 end
 
 function GetPlayers()
@@ -243,16 +247,16 @@ function Venato.MoneyToPoid(money)
 end
 
 function Venato.CloseVehicle()
-  if (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false) then
-    local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+  if (IsPedInAnyVehicle(Venato.GetPlayerPed(), true) == false) then
+    local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
     local clostestvehicle = GetClosestVehicle(x, y, z, 4.000, 0, 127)
     if clostestvehicle ~= 0 then
       return clostestvehicle
     else
-      local pos = GetEntityCoords(GetPlayerPed(-1))
-      local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
+      local pos = GetEntityCoords(Venato.GetPlayerPed())
+      local entityWorld = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 3.0, 0.0)
       local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10,
-        GetPlayerPed(-1), 0)
+        Venato.GetPlayerPed(), 0)
       local a, b, c, d, result = GetRaycastResult(rayHandle)
       return result
     end

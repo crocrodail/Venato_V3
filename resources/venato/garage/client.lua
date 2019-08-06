@@ -48,7 +48,7 @@ end)
 
 Citizen.CreateThread(function()
   setMapMarker()
-  local ply = GetPlayerPed(-1)
+  local ply = Venato.GetPlayerPed()
   while true do
       Citizen.Wait(0)
       local plyCoords = GetEntityCoords(ply, 0)
@@ -122,7 +122,7 @@ function MyCar(table)
 end
 
 function StoreMyCar(garage)
-  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
   print(DoesEntityExist(current))
   if DoesEntityExist(current) then
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
@@ -165,7 +165,7 @@ function SortirVoiture(vhll)
     		    SetVehicleEngineHealth(vhl, tonumber(health[1]))
     	    end
         end
-        SetPedIntoVehicle(GetPlayerPed(-1), vhl, -1)
+        SetPedIntoVehicle(Venato.GetPlayerPed(), vhl, -1)
         SetVehicleNumberPlateText(vhl, vhll.plate)
         TriggerEvent('lock:addVeh', vhll.plate, vhll.name)
         TriggerServerEvent("Garage:SortiVehicule", vhll.plate, vhll.model)
@@ -314,15 +314,15 @@ end)
 
 RegisterNetEvent("Garage:deleteVoiture")
 AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
-  if IsPedInAnyVehicle( GetPlayerPed(-1), false ) then
-    TaskLeaveVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 262144)
+  if IsPedInAnyVehicle( Venato.GetPlayerPed(), false ) then
+    TaskLeaveVehicle(Venato.GetPlayerPed(), GetVehiclePedIsIn(Venato.GetPlayerPed(), false), 262144)
     Citizen.Wait(2500)
   end
   if GetEntityModel(vehicle) ~= nil then
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(vehicle))
     Venato.DeleteCar(vehicle)
   else
-    local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+    local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(current))
     Venato.DeleteCar(vehicle)
   end

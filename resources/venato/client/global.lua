@@ -1,8 +1,19 @@
 DataUser = {}
 
 Citizen.CreateThread(function()
-    TriggerServerEvent("Venato:SyncData")
-    SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
+  print(GetPlayerPed(GetPlayerFromServerId(1)))
+  local ped = Venato.GetPlayerPed()
+  NetworkSetFriendlyFireOption(true)
+  SetCanAttackFriendly(ped, true, false)
+  SetPlayerCanBeHassledByGangs(ped, true)
+	SetEveryoneIgnorePlayer(ped, true)
+  Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), 'FE_THDR_GTAO', 'Venato.fr')
+  TriggerServerEvent("Venato:SyncData")
+  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
+  while true do
+    Citizen.Wait(0)
+    SetPlayerWantedLevel(ped, 0 , false)
+  end
 end)
 
 RegisterNetEvent("Venato:displaytext")

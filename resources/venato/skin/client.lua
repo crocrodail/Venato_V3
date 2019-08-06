@@ -45,7 +45,7 @@ end)
 
 function OpenCreatMainMenu()
     PersonnalisationMenu = true
-    local ped = GetPlayerPed(-1)
+    local ped = Venato.GetPlayerPed()
     SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
     Coords = GetEntityCoords(ped, true)
     Prop = Venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
@@ -80,9 +80,9 @@ function skinMenu(skin)
     SetPlayerModel(PlayerId(), skin)
     SetModelAsNoLongerNeeded(skin)
     -- SetPedHeadBlendData(playerPed, 0, 0, skin, 0, 0, skin, 1.0, 1.0, 1.0, true)
-    SetPedDefaultComponentVariation(GetPlayerPed(-1))
-    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
-    AttachEntityToEntity(GetPlayerPed(-1), Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
+    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
+    AttachEntityToEntity(Venato.GetPlayerPed(), Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
 end
 
 function shapeMenu(skin)
@@ -153,8 +153,8 @@ function shapeMenu(skin)
 end
 
 function setShape(skin)
-    SetPedHeadBlendData(GetPlayerPed(-1), skin, skin, skin, 0, 0, 0, 1.0, 1.0, 1.0, true)
-    SetPedComponentVariation(GetPlayerPed(-1), 0, skin, 0, 0)
+    SetPedHeadBlendData(Venato.GetPlayerPed(), skin, skin, skin, 0, 0, 0, 1.0, 1.0, 1.0, true)
+    SetPedComponentVariation(Venato.GetPlayerPed(), 0, skin, 0, 0)
 
 end
 
@@ -193,8 +193,8 @@ function bodyColor()
     Menu.CreateMenu()
 end
 function setBodyColor(skin)
-    SetPedHeadBlendData(GetPlayerPed(-1), current_skin.head, current_skin.head, current_skin.head, skin, skin, skin, 1.0, 1.0, 1.0, true)
-    SetPedComponentVariation(GetPlayerPed(-1), 0, skin, 0, 0)
+    SetPedHeadBlendData(Venato.GetPlayerPed(), current_skin.head, current_skin.head, current_skin.head, skin, skin, skin, 1.0, 1.0, 1.0, true)
+    SetPedComponentVariation(Venato.GetPlayerPed(), 0, skin, 0, 0)
 end
 function setBodyColorEnter(skin)
     current_skin.body_color = skin
@@ -214,8 +214,8 @@ function eyebrowsMenu()
 end
 
 function eyebrowsSelectorMenu(id)
-    SetPedHeadOverlay(GetPlayerPed(-1),  2,  id,  0.9)
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  2, 1, 1, 0)
+    SetPedHeadOverlay(Venato.GetPlayerPed(),  2,  id,  0.9)
+    SetPedHeadOverlayColor(Venato.GetPlayerPed(),  2, 1, 1, 0)
 end
 
 function eyebrowsSelectorMenuEnter(id)
@@ -236,8 +236,8 @@ function eyebrowsColorMenu()
 end
 
 function eyebrowsColorSelectorMenu(id)
-    SetPedHeadOverlay(GetPlayerPed(-1),  2,  current_skin.eyebrows,  0.9)        -- Beard Color
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  2, 1, id, 0)  -- Beard
+    SetPedHeadOverlay(Venato.GetPlayerPed(),  2,  current_skin.eyebrows,  0.9)        -- Beard Color
+    SetPedHeadOverlayColor(Venato.GetPlayerPed(),  2, 1, id, 0)  -- Beard
 end
 
 function eyebrowsColorSelectorMenuEnter(id)
@@ -250,7 +250,7 @@ function hairSelectorMenu()
     Menu.clearMenu()
     Menu.addButton2("Retour", "eyebrowsColorMenu", nil)
     local id = 0
-    for i = 0, GetNumberOfPedDrawableVariations(GetPlayerPed(-1), 2) -1 do
+    for i = 0, GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(), 2) -1 do
       if i ~= 23 and i ~= 24 and i ~= 61 then
         id = id + 1
         Menu.addButton2("Coupe n°"..id, "hairSelectorSwitcherEnter", i, "hairSelectorSwitcher")
@@ -261,7 +261,7 @@ function hairSelectorMenu()
 end
 
 function hairSelectorSwitcher(id)
-    SetPedComponentVariation(GetPlayerPed(-1), 2, id, 0, 0)
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, id, 0, 0)
 end
 
 function hairSelectorSwitcherEnter(id)
@@ -282,7 +282,7 @@ function hairColorVariationSelectorMenu()
 end
 
 function hairColorVariationSelectorSwitcher(id)
-    SetPedHairColor(GetPlayerPed(-1), id,4)
+    SetPedHairColor(Venato.GetPlayerPed(), id,4)
 end
 
 function hairColorVariationSelectorSwitcherEnter(id)
@@ -318,8 +318,8 @@ function beardColorMenu()
 end
 
 function beardSelectorCutMenu(id)
-    SetPedHeadOverlay(GetPlayerPed(-1),  1,  id,  0.9)
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  1,  1,  1, 1)
+    SetPedHeadOverlay(Venato.GetPlayerPed(),  1,  id,  0.9)
+    SetPedHeadOverlayColor(Venato.GetPlayerPed(),  1,  1,  1, 1)
 end
 
 function beardSelectorCutMenuEnter(id)
@@ -329,8 +329,8 @@ function beardSelectorCutMenuEnter(id)
 end
 
 function beardSelectorColorMenu(id)
-    SetPedHeadOverlay(GetPlayerPed(-1),  1,  current_skin.beard ,  (current_skin.beard  / 10) + 0.0)  -- Beard
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  1,  1,  id, id)
+    SetPedHeadOverlay(Venato.GetPlayerPed(),  1,  current_skin.beard ,  (current_skin.beard  / 10) + 0.0)  -- Beard
+    SetPedHeadOverlayColor(Venato.GetPlayerPed(),  1,  1,  id, id)
 end
 
 function beardSelectorColorMenuEnter(id)
@@ -341,7 +341,7 @@ end
 
 function endGenSkin()
   TriggerServerEvent("ClothingShop:CallData")
-  DetachEntity(GetPlayerPed(-1), true, true)
+  DetachEntity(Venato.GetPlayerPed(), true, true)
   DeleteEntity(Prop)
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
@@ -361,11 +361,11 @@ end)
 
 
 function Venato.LoadSkin(DataUser)
-    local playerPed = GetPlayerPed(-1)
+    local playerPed = Venato.GetPlayerPed()
     local skin = DataUser.Skin
     if skin then
         local hashSkin = GetHashKey("mp_m_freemode_01")
-        if(GetEntityModel(GetPlayerPed(-1)) == hashSkin) then
+        if(GetEntityModel(Venato.GetPlayerPed()) == hashSkin) then
             SetPedHeadBlendData(playerPed, skin.head, skin.head, skin.head, skin.body_color, skin.body_color, skin.body_color, 1.0, 1.0, 1.0, true)
             SetPedComponentVariation(playerPed, 0, skin.head, 0, 0)
             SetPedComponentVariation(playerPed, 2, skin.hair, 0, 0)
@@ -390,7 +390,7 @@ function Venato.LoadSkin(DataUser)
                 SetPedHeadOverlay(playerPed,  8,  -1, 0)
             end
             if skin.percing == 0 then
-                ClearPedProp(GetPlayerPed(-1),2)
+                ClearPedProp(Venato.GetPlayerPed(),2)
             else
                 SetPedPropIndex(playerPed, 2, skin.percing,skin.percing_txt, 0)
             end
@@ -417,13 +417,13 @@ function Venato.LoadSkin(DataUser)
                 SetPedHeadOverlay(playerPed,  8,  -1, 0)
             end
             if skin.percing == 0 then
-                ClearPedProp(GetPlayerPed(-1),2)
+                ClearPedProp(Venato.GetPlayerPed(),2)
             else
                 SetPedPropIndex(playerPed, 2, skin.percing,skin.percing_txt, 0)
             end
         end
 
-        local me = GetPlayerPed(-1)
+        local me = Venato.GetPlayerPed()
         for k, v in ipairs(skin.face) do
             local value = 1.0 * v
             SetPedFaceFeature(me, k - 1, value)
