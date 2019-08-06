@@ -12,5 +12,6 @@ RegisterNetEvent("Venato:CallDataPlayerSpawn")
 AddEventHandler("Venato:CallDataPlayerSpawn", function(PlayerId)
   local source = source
   DataPlayers[source].PlayerIdClient = PlayerId
+  print(DataPlayers[source].PlayerIdClient)
   TriggerClientEvent("Venato:SpawnInit", source, DataPlayers, source)
 end)
