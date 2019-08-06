@@ -5,9 +5,17 @@ local dropMoney = "prop_cash_case_01"
 local dropWeapon = "prop_hockey_bag_01"
 local dropItem = "prop_cs_box_clothes"
 local PapierOpen = 0
--- ######## COFIG ##############
+
+local defaultNotification = {
+  name = "Inventaire",
+  type = "alert",
+  logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
+}
+
+-- ######## CONFIG ##############
 local PoidMax = 20 -- Kg
 --##############################
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -38,8 +46,12 @@ Citizen.CreateThread(function()
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if (v.qty*v.uPoid + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddItem", v.qty , v.id)
-							TriggerServerEvent("Inventory:DelItemsOnTheGround", k)
-							Venato.notify("Vous avez ramassez "..v.qty.." "..v.libelle.." .")
+              TriggerServerEvent("Inventory:DelItemsOnTheGround", k)
+              local notif = defaultNotification;
+              notif.message = "Vous avez ramassé "..v.qty.." "..v.libelle.." ."
+              notif.logo = v.picture
+              notif.title = "Inventaire"
+							Venato.notify(defaultNotification)
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropItem))
 							if objet ~= 0 and objet ~= nil then
@@ -66,7 +78,8 @@ Citizen.CreateThread(function()
 						if (Venato.MoneyToPoid(v.qty) + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddMoney", v.qty)
 							TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
-							Venato.notify("Vous avez ramassez "..Venato.FormatMoney(v.qty,2).." € .")
+              defaultNotification.message = "Vous avez ramassez "..Venato.FormatMoney(v.qty,2).." € .";
+							Venato.notify(defaultNotification)
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropMoney))
 							if objet ~= 0 and objet ~= nil then
@@ -93,7 +106,10 @@ Citizen.CreateThread(function()
 						if v.uPoid + DataUser.Poid <= PoidMax then
 							TriggerServerEvent("Inventory:AddWeapon", v.id, v.ammo, v.uPoid, v.libelle)
 							TriggerServerEvent("Inventory:DelWeaponOnTheGround", k)
-							Venato.notify("Vous avez ramassez "..v.libelle.." .")
+              
+              defaultNotification.message = "Vous avez ramassez "..v.libelle.." .";
+							Venato.notify(defaultNotification)
+              
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropWeapon))
 							if objet ~= 0 and objet ~= nil then
@@ -124,18 +140,7 @@ end
 RegisterNetEvent('Inventory:ShowMe:cb')
 AddEventHandler('Inventory:ShowMe:cb', function(Data)
   Menu.clearMenu()
-  DataUser = Data
-  local WeaponPoid = 0
-  Menu.addButton("<span class='red--text'>Syncdata</span>", "debuge", {})
-  for k, v in pairs(Data.Weapon) do
-    if v.libelle ~= nil then
-      WeaponPoid = WeaponPoid + v.poid
-    end
-  end
-  Menu.addButton("<span class='orange--text'>Mes Clefs</span>", "Myclef", Data)
-  Menu.addButton("<span class='red--text'>🔫 Mes Armes</span> <span class='orange--text'>(" .. WeaponPoid .. " Kg )</span>",
-    "MyWeapon", Data)
-  Menu.addButton("<span class='yellow--text'>Mes Documents</span>", "MyDoc", Data)
+
   local color = "</span>"
   if Data.Poid > 18 then
     color = "<span class='red--text'>"
@@ -144,14 +149,28 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
   end
   Menu.setTitle(color .. "" .. Data.Poid .. "</span>/ 20 Kg")
   Menu.setSubtitle("Inventaire")
+
+  DataUser = Data
+  local WeaponPoid = 0
+  Menu.addButton("<span class='red--text'>Syncdata</span>", "debuge", {})
+  for k, v in pairs(Data.Weapon) do
+    if v.libelle ~= nil then
+      WeaponPoid = WeaponPoid + v.poid
+    end
+  end
+  Menu.addButton("Clefs", "Myclef", Data)
+  Menu.addButton("Armes <span class='orange--text'>(" .. WeaponPoid .. " kg)</span>","MyWeapon", Data)
+  Menu.addButton("Documents", "MyDoc", Data)
+  
   local MoneyPoid = Venato.MoneyToPoid(Data.Money)
-  Menu.addButton("<span class='green--text'>Argent : " .. Venato.FormatMoney(Data.Money,
-    2) .. "</span> € <span class='orange--text'>( " .. MoneyPoid .. " Kg )</span>", "OptionMoney",
+  Menu.addButton("Argent : <span class='green--text'>" .. Venato.FormatMoney(Data.Money,
+    2) .. " €</span> <span class='orange--text'>(" .. MoneyPoid .. " kg)</span>", "OptionMoney",
     { Data.Money, MoneyPoid, Data.Poid, Data })
   for k, v in pairs(Data.Inventaire) do
     if v.quantity > 0 then
-      Menu.addButton("<span class='blue--text'>" .. v.libelle .. " </span>: <span class='red--text'>" .. v.quantity .. "</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
-        "OptionItem", { v.quantity, v.id, v.libelle, v.uPoid, Data.Poid })
+      Menu.addItemButton(v.libelle .. " : " .. v.quantity .. " <span class='orange--text'>(" .. v.poid .. " kg)</span>",
+        v.picture,
+        "OptionItem", { v.quantity, v.id, v.libelle, v.uPoid, Data.Poid, v.picture })
     end
   end
 end)
@@ -523,12 +542,14 @@ function OptionItem(table)
   Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
   Menu.addButton("Utiliser", "UseItem", { table[1], table[2] })
   Menu.addButton("Donner", "GiveItem", { table[1], table[2], table[4] })
-  Menu.addButton("Jeter", "DropItem", { table[1], table[2], table[3], table[4], table[5] })
+  Menu.addButton("Jeter", "DropItem", { table[1], table[2], table[3], table[4], table[5], table[6] })
 end
 
 function UseItem(table)
   if table[1] - 1 >= 0 then
     TriggerServerEvent("Inventory:DataItem", table[2], table[1])
+    Citizen.Wait(1500)
+    OpenInventory()
   else
     Venato.notifyError("Error !")
   end
@@ -562,11 +583,12 @@ AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, 
 end)
 
 function DropItem(tableau)
-	local nb = Venato.OpenKeyboard('', '0', 2,"Nombre à jeter")
+	local nb = Venato.OpenKeyboard('', '', 2,"Nombre à jeter")
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
-			local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-			TriggerServerEvent("Inventory:DropItem",tableau[3], tonumber(nb), tableau[2], tableau[4], x,y,z-0.5, tableau[5])
+      local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
+      print(tableau[6])
+			TriggerServerEvent("Inventory:DropItem",tableau[3], tonumber(nb), tableau[2], tableau[4], x,y,z-0.5, tableau[5], tableau[6])
 			TriggerServerEvent("Inventory:SetItem", tableau[1] - tonumber(nb) , tableau[2])
 			local objet = Venato.CreateObject(dropItem, x, y, z-1)
 			FreezeEntityPosition(objet, true)

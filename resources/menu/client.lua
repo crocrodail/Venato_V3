@@ -97,9 +97,23 @@ end)
 
 RegisterNetEvent('Menu:AddButton')
 AddEventHandler('Menu:AddButton', function(name, func, args, hover)
+    
 	SendNUIMessage({
         action = "addButton",
         name = name,
+        func = func,
+        args = args,
+        hover = hover
+	})
+end)
+
+RegisterNetEvent('Menu:AddItemButton')
+AddEventHandler('Menu:AddItemButton', function(name, picture, func, args, hover)
+    
+	SendNUIMessage({
+        action = "addItemButton",
+        name = name,
+        picture = picture,
         func = func,
         args = args,
         hover = hover

@@ -49,6 +49,9 @@
                     @click="selectedItem = index"
                     :class="[{selected: index === selectedItem}]"
                   >
+                    <v-list-tile-avatar v-if="item.avatar">
+                      <v-img :src="item.avatar" aspect-ratio="1" contain></v-img>
+                    </v-list-tile-avatar>
                     <v-list-tile-content>
                       <v-list-tile-title
                         v-html="item.title"

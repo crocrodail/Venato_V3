@@ -29,11 +29,6 @@ new Vue({
     subtitle: 'Choisissez votre prochaine voiture',
     maxItemsShow: 5,
     items: [
-      { title: "Element1", subtitle: "Element1 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 1, text: 'Texte' } },
-      { title: "Element2", subtitle: "Element2 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 2, text: 'Texte' } },
-      { title: "Element3", subtitle: "Element3 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 3, text: 'Texte' } },
-      { title: "Element4", subtitle: "Element4 sous-titre", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 4, text: 'Texte' } },
-      { title: "Element1", confirm: "CarShop:confirm", hover: "CarShop:hover", data: { id: 5, text: 'Texte' } }
     ],
     showVehicleInformation: false,
     showShopAdmin: false,
@@ -77,7 +72,11 @@ new Vue({
         this.items = [];
         this.selectedItem = 0;
       } else if (event.data.action == "addButton") {
-        this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args })
+        this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: undefined })
+      } else if (event.data.action == "addItemButton") {
+        console.log("Test item picture");
+        console.log(event.data.picture);
+        this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: event.data.picture })
       } else if (event.data.action == "genMenu") {
         var obj = JSON.parse(event.data[1]);
         for (var i = 0; i < obj.length; i++) {

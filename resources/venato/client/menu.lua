@@ -60,6 +60,10 @@ function Menu.addButton(name, func, args, hover)
 	TriggerEvent('Menu:AddButton', name, func, args, hover)
 end
 
+function Menu.addItemButton(name, picture, func, args, hover)
+	TriggerEvent('Menu:AddItemButton', name, picture, func, args, hover)
+end
+
 function Menu.addButton2(name, func, args, hover)
 	TriggerEvent('Menu:AddButton2', name, func, args, hover)
 end
