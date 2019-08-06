@@ -461,7 +461,6 @@ Citizen.CreateThread(function()
   local zHeigt = 0.0;
   height = 1000.0
   local radius = -3.5;
-  local cam = nil
   local polarAngleDeg = 0;
   local azimuthAngleDeg = 90;
   while true do
