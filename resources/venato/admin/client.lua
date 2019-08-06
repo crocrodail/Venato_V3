@@ -435,7 +435,8 @@ Citizen.CreateThread(function()
                 ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
               end
             end
-            SetBlipNameFromTextFile(blip, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")") -- update blip name
+            AddTextComponentString(v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")")
+      			EndTextCommandSetBlipName(blip)
             SetBlipScale(blip, 0.85) -- set scale
             if IsPauseMenuActive() then
               SetBlipAlpha(blip, 255)
