@@ -7,6 +7,12 @@
 --]]
 JobTools = {}
 
+-- Wrapper for button actions
+RegisterNetEvent("Menu:Execute")
+AddEventHandler("Menu:Execute", function(params)
+  _ = _G[params.fn] and _G[params.fn](params.args)
+end)
+
 function JobTools._CreateVehicle(modelName, coordX, coordY, coordZ, heading, cb)
   local model = modelName
   if tonumber(modelName) == nil then

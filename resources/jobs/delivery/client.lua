@@ -63,6 +63,7 @@ function takeMission(mission)
   print('Mission taken !' .. mission)
   TriggerServerEvent("Venato:dump", { "Mission taken !", mission })
   DeliveryJobConfig.isInMission = true
+  JobsConfig.isMenuOpen = false
 end
 
 function DeliveryJob.showMenu()
