@@ -58,7 +58,7 @@ function AdminBlipsOption()
   else
     AdminBlipsBool = false
     for k, v in pairs(AdminDataPlayers) do
-      local Player = GetPlayerFromServerId(v.Source)
+      local Player = v.PlayerIdClient
       if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
         local ped = GetPlayerPed(Player)
         local blip = GetBlipFromEntity(ped)
@@ -66,8 +66,10 @@ function AdminBlipsOption()
           -- Removes blip
           RemoveBlip(blip)
         end
-        if IsMpGamerTagActive(HeadId[Player]) then
-          RemoveMpGamerTag(HeadId[Player])
+        if HeadId[1] ~= nil then
+          if IsMpGamerTagActive(HeadId[Player]) then
+            RemoveMpGamerTag(HeadId[Player])
+          end
         end
       end
     end
@@ -362,84 +364,86 @@ end
 
 Citizen.CreateThread(function()
   local HeadId = {}
-  while AdminBlipsBool do
+  while true do
     Citizen.Wait(0)
-    for k, v in pairs(AdminDataPlayers) do
-      local Player = v.PlayerIdClient
-      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
-        local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
-        local blip = GetBlipFromEntity(ped)
-        HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "",
-          false)
-        if NetworkIsPlayerTalking(Player) then
-          SetMpGamerTagVisibility(HeadId[Player], 9, true)
-        else
-          SetMpGamerTagVisibility(HeadId[Player], 9, false)
-        end
-        if not DoesBlipExist(blip) then
-          blip = AddBlipForEntity(ped)
-          SetBlipSprite(blip, 1)
-          ShowHeadingIndicatorOnBlip(blip, true)
-        else
-          local veh = GetVehiclePedIsIn(ped, false)
-          local blipSprite = GetBlipSprite(blip)
-          local vehClass = GetVehicleClass(veh)
-          local vehModel = GetEntityModel(veh)
-          if veh ~= 0 then
-            if vehClass == 15 then
-              -- Helicopters
-              if blipSprite ~= 422 then
-                SetBlipSprite(blip, 422)
-                ShowHeadingIndicatorOnBlip(blip, false)
+    if AdminBlipsBool then
+      for k, v in pairs(AdminDataPlayers) do
+        local Player = v.PlayerIdClient
+        if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
+          print(Player.." player")
+          local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
+          local blip = GetBlipFromEntity(ped)
+          HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "", false)
+          if NetworkIsPlayerTalking(Player) then
+            SetMpGamerTagVisibility(HeadId[Player], 9, true)
+          else
+            SetMpGamerTagVisibility(HeadId[Player], 9, false)
+          end
+          if not DoesBlipExist(blip) then
+            blip = AddBlipForEntity(ped)
+            SetBlipSprite(blip, 1)
+            ShowHeadingIndicatorOnBlip(blip, true)
+          else
+            local veh = GetVehiclePedIsIn(ped, false)
+            local blipSprite = GetBlipSprite(blip)
+            local vehClass = GetVehicleClass(veh)
+            local vehModel = GetEntityModel(veh)
+            if veh ~= 0 then
+              if vehClass == 15 then
+                -- Helicopters
+                if blipSprite ~= 422 then
+                  SetBlipSprite(blip, 422)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
+              elseif vehClass == 16 then
+                if blipSprite ~= 307 then
+                  SetBlipSprite(blip, 307)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
+              elseif tonumber(v.IdJob) == 2 then
+                if blipSprite ~= 56 then
+                  SetBlipSprite(blip, 56)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
+              else
+                if blipSprite ~= 326 then
+                  SetBlipSprite(blip, 326)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
               end
-            elseif vehClass == 16 then
-              if blipSprite ~= 307 then
-                SetBlipSprite(blip, 307)
-                ShowHeadingIndicatorOnBlip(blip, false)
+              local passengers = GetVehicleNumberOfPassengers(veh)
+              if passengers then
+                if not IsVehicleSeatFree(veh, -1) then
+                  passengers = passengers + 1
+                end
+                ShowNumberOnBlip(blip, passengers)
+              else
+                HideNumberOnBlip(blip)
               end
-            elseif tonumber(v.IdJob) == 2 then
-              if blipSprite ~= 56 then
-                SetBlipSprite(blip, 56)
-                ShowHeadingIndicatorOnBlip(blip, false)
-              end
-            else
-              if blipSprite ~= 326 then
-                SetBlipSprite(blip, 326)
-                ShowHeadingIndicatorOnBlip(blip, false)
-              end
-            end
-            local passengers = GetVehicleNumberOfPassengers(veh)
-            if passengers then
-              if not IsVehicleSeatFree(veh, -1) then
-                passengers = passengers + 1
-              end
-              ShowNumberOnBlip(blip, passengers)
+              SetBlipRotation(blip, math.ceil(GetEntityHeading(veh)))
             else
               HideNumberOnBlip(blip)
+              if blipSprite ~= 1 then
+                -- default blip
+                SetBlipSprite(blip, 1)
+                ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
+              end
             end
-            SetBlipRotation(blip, math.ceil(GetEntityHeading(veh)))
-          else
-            HideNumberOnBlip(blip)
-            if blipSprite ~= 1 then
-              -- default blip
-              SetBlipSprite(blip, 1)
-              ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
+            SetBlipNameToPlayerName(blip, Player) -- update blip name
+            SetBlipScale(blip, 0.85) -- set scale
+            if IsPauseMenuActive() then
+              SetBlipAlpha(blip, 255)
+            else
+              local x1, y1 = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
+              local x2, y2 = table.unpack(GetEntityCoords(GetPlayerPed(Player), true))
+              local distance = (math.floor(math.abs(math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) / -1)) + 900
+              if distance < 0 then
+                distance = 0
+              elseif distance > 255 then
+                distance = 255
+              end
+              SetBlipAlpha(blip, distance)
             end
-          end
-          SetBlipNameToPlayerName(blip, Player) -- update blip name
-          SetBlipScale(blip, 0.85) -- set scale
-          if IsPauseMenuActive() then
-            SetBlipAlpha(blip, 255)
-          else
-            local x1, y1 = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-            local x2, y2 = table.unpack(GetEntityCoords(GetPlayerPed(Player), true))
-            local distance = (math.floor(math.abs(math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) / -1)) + 900
-            if distance < 0 then
-              distance = 0
-            elseif distance > 255 then
-              distance = 255
-            end
-            SetBlipAlpha(blip, distance)
           end
         end
       end
