@@ -305,14 +305,14 @@ function AdminGivePoche()
 end
 
 function Admintptome()
-  local targetPed = Venato.GetPlayerPedFromSource(indexToShow)
+  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
   local ped = Venato.GetPlayerPed()
   local Coord = GetEntityCoords(ped)
   SetEntityCoords(Targetped, Coord.x, Coord.y, Coord.z)
 end
 
 function Admintptoelle()
-  local targetPed = Venato.GetPlayerPedFromSource(indexToShow)
+  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
   local ped = Venato.GetPlayerPed()
   local TargetCoord = GetEntityCoords(Targetped)
   SetEntityCoords(ped, TargetCoord.x, TargetCoord.y, TargetCoord.z)
