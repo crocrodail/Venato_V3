@@ -343,7 +343,7 @@ end
 function AdminSpectate()
   if InSpectatorMode == false then
     LastCoords = GetEntityCoords(Venato.GetPlayerPed())
-    indexToSpectate = indexToShow
+    TargetSpectate = indexToShow
     InSpectatorMode = true
     Citizen.CreateThread(function()
       if not DoesCamExist(cam) then
@@ -352,7 +352,6 @@ function AdminSpectate()
       SetCamActive(cam,  true)
       RenderScriptCams(true,  false,  0,  true,  true)
       InSpectatorMode = true
-      TargetSpectate  = target
     end)
   else
     InSpectatorMode = false
