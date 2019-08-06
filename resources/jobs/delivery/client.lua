@@ -125,6 +125,6 @@ function despawnTrunk()
 end
 
 function takeMission(mission)
-
+  print('Mission take', mission)
 end
 
