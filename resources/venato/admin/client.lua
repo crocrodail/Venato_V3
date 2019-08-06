@@ -435,6 +435,7 @@ Citizen.CreateThread(function()
                 ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
               end
             end
+            BeginTextCommandSetBlipName("STRING")
             AddTextComponentString(v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")")
       			EndTextCommandSetBlipName(blip)
             SetBlipScale(blip, 0.85) -- set scale
