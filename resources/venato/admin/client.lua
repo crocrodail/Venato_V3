@@ -522,6 +522,10 @@ Citizen.CreateThread(function()
       local playerPed      = Venato.GetPlayerPed()
       local targetPed      = GetPlayerPed(targetPlayerId)
       local coords         = GetEntityCoords(targetPed)
+      print(TargetSpectate)
+      print(targetPlayerId)
+      print(targetPed)
+      print(coords.x)
       for k, v in pairs(AdminDataPlayers) do
         if v.PlayerIdClient ~= PlayerId() then
           local otherPlayerPed = GetPlayerPed(v.PlayerIdClient)
