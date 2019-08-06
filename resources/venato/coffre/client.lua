@@ -51,7 +51,7 @@ end
 function CoffreAddItem(index)
   Menu.clearMenu()
   Menu.setTitle( "Mes items")
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", index)
   for k,v in pairs(DataUser.Inventaire) do
 		if v.quantity > 0 then
       Menu.addButton(v.libelle.." : ~r~"..v.quantity, "CoffreDropItem", {index, k})
@@ -71,7 +71,7 @@ end
 function CoffreWeapon(index)
   Menu.clearMenu()
   Menu.setTitle( "Armes : "..DataCoffre[index].nbWeapon.." / "..DataCoffre[index].maxWeapon)
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", index)
   Menu.addButton("~y~Déposer une armes", "CoffreDropWeapon", index)
   for k,v in pairs(DataCoffre[index].weapon) do
     Menu.addButton(v.libelle.." avec ~r~"..v.balles.." balles", "CoffreWeaponOption", {index, k})
@@ -81,7 +81,7 @@ end
 function CoffreDropWeapon(index)
   Menu.clearMenu()
   Menu.setTitle( "Mes armes")
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", index)
   for k,v in pairs(DataUser.Weapon) do
     Menu.addButton(v.libelle.." avec ~r~"..v.ammo.." balles", "CoffreConfirmDropWeapon", {index, k})
   end
@@ -106,7 +106,7 @@ end
 
 function CoffreWeaponOption(row)
   Menu.clearMenu()
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", row[1])
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", row[1])
   Menu.addButton("Recuperer l'arme", "CoffreTakeWeapon", row)
 end
 
@@ -122,7 +122,7 @@ end
 function CoffreParametre(index)
   Menu.clearMenu()
   Menu.setTitle( "~b~ Parametres")
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", index)
   Menu.addButton("Liste des perssones avec l'acces", "CoffreListWhitelist", index)
   Menu.addButton("Donner l'acces à une perssones", "CoffreAddWhitelist", index)
 end
@@ -134,7 +134,7 @@ function CoffreAddWhitelist(index)
   if player ~= 0 and player ~= nil and dist < 10 then
     TriggerServerEvent("Coffre:CallDataClosePlayer", index, player)
   else
-    Menu.addButton("~r~↩ Retour", "CoffreParametre", index)
+    Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
     Menu.addButton("~r~Aucune personne à proximité", "CoffreParametre", index)
   end
 end
@@ -143,7 +143,7 @@ RegisterNetEvent("Coffre:CallDataClosePlayer:cb")
 AddEventHandler("Coffre:CallDataClosePlayer:cb", function(Coffre, index, user)
   DataCoffre = Coffre
   local DataUserClose = user
-  Menu.addButton("~r~↩ Retour", "CoffreParametre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
   Menu.addButton("Whitelister "..DataUserClose.Prenom.." "..DataUserClose, "CoffreWhitelistPlayer", {index, user})
 end)
 
@@ -155,7 +155,7 @@ end
 function CoffreListWhitelist(index)
   Menu.clearMenu()
   Menu.setTitle( "~b~Whitelist")
-  Menu.addButton("~r~↩ Retour", "CoffreParametre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
   for k,v in pairs(DataCoffre[index].whitelist) do
     Menu.addButton(v.prenom.." "..v.nom, "unwhitelist", {index, v.identifier, v.nom, v.prenom})
   end
@@ -174,7 +174,7 @@ end
 
 function CoffreMenuMoney(index)
   Menu.clearMenu()
-  Menu.addButton("~r~↩ Retour", "OpenCoffre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", index)
   Menu.addButton("Prendre de l'argents", "CoffreTakeMoney", index)
   Menu.addButton("Déposer de l'argents", "CoffreDropMoney", index)
 end

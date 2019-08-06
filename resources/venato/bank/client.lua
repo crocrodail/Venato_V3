@@ -77,7 +77,7 @@ function depoCheque(data)
   Menu.clearMenu()
   Menu.setTitle("Mes chèques")
   Menu.setSubtitle("Choisisez le chèque à déposer")
-  Menu.addButton("~r~↩ Retour", "menuBank", data)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "menuBank", data)
   for k, v in pairs(data.Documents) do
     if v.type == "cheque" then
       Menu.addButton("Cheque de ~g~" .. v.montant .. " €", "selecChequedepot", { data, k })
@@ -87,7 +87,7 @@ end
 
 function selecChequedepot(row)
   Menu.clearMenu()
-  Menu.addButton("~r~↩ Retour", "depoCheque", row[1])
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "depoCheque", row[1])
   Menu.addButton("Encaissé", "encaise", row)
   Menu.addButton("~r~Annuler ce cheque", "cancelChequetest", row)
 end

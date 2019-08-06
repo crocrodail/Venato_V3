@@ -152,19 +152,15 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
 
   DataUser = Data
   local WeaponPoid = 0
-  Menu.addButton("<span class='red--text'>Syncdata</span>", "debuge", {})
   for k, v in pairs(Data.Weapon) do
     if v.libelle ~= nil then
       WeaponPoid = WeaponPoid + v.poid
     end
   end
-  Menu.addButton("Clefs", "Myclef", Data)
-  Menu.addButton("Armes <span class='orange--text'>(" .. WeaponPoid .. " kg)</span>","MyWeapon", Data)
-  Menu.addButton("Documents", "MyDoc", Data)
   
   local MoneyPoid = Venato.MoneyToPoid(Data.Money)
-  Menu.addButton("Argent : <span class='green--text'>" .. Venato.FormatMoney(Data.Money,
-    2) .. " €</span> <span class='orange--text'>(" .. MoneyPoid .. " kg)</span>", "OptionMoney",
+  Menu.addItemButton("Argent : <span class='green--text'>" .. Venato.FormatMoney(Data.Money,
+    2) .. " €</span> <span class='orange--text'>(" .. MoneyPoid .. " kg)</span>", "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png", "OptionMoney",
     { Data.Money, MoneyPoid, Data.Poid, Data })
   for k, v in pairs(Data.Inventaire) do
     if v.quantity > 0 then
@@ -173,6 +169,10 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
         "OptionItem", { v.quantity, v.id, v.libelle, v.uPoid, Data.Poid, v.picture })
     end
   end
+  Menu.addItemButton("Clefs", "https://i.ibb.co/VwgB5xz/icons8-key-2-96px.png", "Myclef", Data)
+  Menu.addItemButton("Armes <span class='orange--text'>(" .. WeaponPoid .. " kg)</span>", "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png","MyWeapon", Data)
+  Menu.addItemButton("Documents", "https://i.ibb.co/c2HDBMf/icons8-documents-96px-2.png", "MyDoc", Data)
+  Menu.addItemButton("<span class='red--text'>Syncdata</span>", "https://i.ibb.co/Y2QYFcX/icons8-synchronize-96px.png", "debuge", {})
 end)
 
 function Myclef(Data)
@@ -183,7 +183,7 @@ RegisterNetEvent("getInv:back")
 AddEventHandler("getInv:back", function(TableOfKey)
   Menu.clearMenu()
   Menu.setTitle("Mes clefs")
-  Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenInventory", nil)
   if #TableOfKey > 0 then
     for i, v in pairs(TableOfKey) do
       if v.name ~= nil then
@@ -216,7 +216,7 @@ end
 
 function MyWeapon(Data)
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour", "OpenInventory", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenInventory", nil)
   Menu.setSubtitle("Mes armes")
   for k, v in pairs(Data.Weapon) do
     if v.libelle ~= nil then
@@ -236,21 +236,21 @@ end
 function MyDoc(data)
 	Menu.clearMenu()
 	Menu.setSubtitle( "Mes Documents")
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
+	Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenInventory", nil)
 	if data.Citoyen == 1 then
-		Menu.addButton("Carte d'identité", "optionIdCard", data)
+		Menu.addItemButton("Carte d'identité","https://i.ibb.co/V2vy2Y6/icons8-id-card-96px.png", "optionIdCard", data)
 	else
-		Menu.addButton("Carte de séjour", "optionVisa", data)
+		Menu.addItemButton("Carte de séjour", "https://i.ibb.co/vm9WFHn/icons8-electronic-identity-card-96px.png", "optionVisa", data)
 	end
 	if data.PermisVoiture ~= "non aquis" or data.PermisVoiture ~= "non aquis" then
-		Menu.addButton("Permis de conduire", "optionPermis", data)
+		Menu.addItemButton("Permis de conduire", "https://i.ibb.co/D8PPnXK/icons8-driver-license-card-96px-1.png", "optionPermis", data)
 	end
 	for k,v in pairs(data.Documents) do
 		if v.type == "chequier" then
-			Menu.addButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "CreateCheque", {data,k})
+			Menu.addItemButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "https://i.ibb.co/vs3ptjz/icons8-paycheque-96px-2.png", "CreateCheque", {data,k})
 		end
 		if v.type == "cheque" then
-			Menu.addButton("Cheque de <span class='green--text'>"..Venato.FormatMoney(v.montant,2).."</span> €", "showCheque", {data,k})
+			Menu.addItemButton("Cheque de <span class='green--text'>"..Venato.FormatMoney(v.montant,2).."</span> €", "https://i.ibb.co/ZXZgqSF/icons8-paycheque-96px.png", "showCheque", {data,k})
 		end
 	end
 end
@@ -269,7 +269,7 @@ end
 function optionPermis(data)
   Menu.clearMenu()
   Menu.setSubtitle("Permis de conduire")
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "MyDoc", data)
   Menu.addButton("Regarder", "ShowPermis", data)
   Menu.addButton("Montrer", "ShowToOtherPermis", data)
 end
@@ -277,7 +277,7 @@ end
 function optionIdCard(data)
   Menu.clearMenu()
   Menu.setSubtitle("Carte d'identité")
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "MyDoc", data)
   Menu.addButton("Regarder", "ShowIdCard", data)
   Menu.addButton("Montrer", "ShowToOtherIdCard", data)
 end
@@ -285,7 +285,7 @@ end
 function optionVisa(data)
   Menu.clearMenu()
   Menu.setSubtitle("Permis de séjour")
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "MyDoc", data)
   Menu.addButton("Regarder", "ShowVisa", data)
   Menu.addButton("Montrer", "ShowToOtherVisa", data)
 end
@@ -335,7 +335,7 @@ end)
 function CreateCheque(data)
 	Menu.clearMenu()
 	Menu.setSubtitle("Chèque pour la persone à proximité")
-	Menu.addButton("<span class='red--text'>↩ Retour</span>", "MyDoc", data)
+	Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "MyDoc", data)
 	Menu.addButton("Donner un chèque", "CreateChequeConf", data)
 end
 
@@ -429,7 +429,7 @@ end
 
 function OptionWeapon(table)
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour", "MyWeapon", table[7])
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "MyWeapon", table[7])
   Menu.addButton("Donner", "GiveWeapon", table)
   Menu.addButton("Jeter", "DropWeapon", table)
 end
@@ -489,7 +489,7 @@ end)
 
 function OptionMoney(table)
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenInventory", nil)
   Menu.addButton("Donner", "GiveMoney", table)
   Menu.addButton("Jeter", "DropMoney", table)
 end
@@ -539,7 +539,7 @@ end)
 function OptionItem(table)
   Menu.clearMenu()
   Menu.setSubtitle(table[3])
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "OpenInventory", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenInventory", nil)
   Menu.addButton("Utiliser", "UseItem", { table[1], table[2] })
   Menu.addButton("Donner", "GiveItem", { table[1], table[2], table[4] })
   Menu.addButton("Jeter", "DropItem", { table[1], table[2], table[3], table[4], table[5], table[6] })
@@ -587,7 +587,6 @@ function DropItem(tableau)
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
       local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-      print(tableau[6])
 			TriggerServerEvent("Inventory:DropItem",tableau[3], tonumber(nb), tableau[2], tableau[4], x,y,z-0.5, tableau[5], tableau[6])
 			TriggerServerEvent("Inventory:SetItem", tableau[1] - tonumber(nb) , tableau[2])
 			local objet = Venato.CreateObject(dropItem, x, y, z-1)

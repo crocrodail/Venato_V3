@@ -97,7 +97,7 @@ function MyCar(table)
   Menu.setTitle( "Garage")
   Menu.setSubtitle( "Mes Véhicules")
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "backToOpenGarage", nil)
   if Vehicule ~= nil then
   for a, v in pairs(Vehicule) do
     if v.type == 1 then
@@ -117,7 +117,7 @@ function MyCar(table)
   if not ads then
     Menu.addButton("<span class='red--text'>Aucun vehicule dans ce garage</span>" , "none", nil)
   end
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "backToOpenGarage", nil)
   Menu.open()
 end
 
@@ -306,7 +306,7 @@ AddEventHandler("Garage:AllVehicle", function(garage)
   Vehicule = garage.vehicles
   TriggerEvent('Menu:Init', "Garage", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "close", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "close", nil)
   Menu.addButton("<span class='green--text'>Mes vehicules</span></span>", "getCars", garage)
   Menu.addButton("<span class='orange--text'>Rentrer son véhicule", "StoreMyCar", garage)
   Menu.open()

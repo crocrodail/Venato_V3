@@ -87,7 +87,7 @@ end
 function WeaponCoffreVehicle()
   Menu.clearMenu()
   Menu.setTitle( "Armes dans le véhicule")
-  Menu.addButton("~r~↩ Retour", "OpenMenuCv", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
   Menu.addButton("~o~Déposer une arme", "DropWeaponCv", nil)
   for k,v in pairs(VehicleData.weapon) do
     Menu.addButton(v.libelle.." avec ~r~"..v.balles.."~s~ balles", "OptionWeaponCv", k)
@@ -97,7 +97,7 @@ end
 function DropItemCv()
   Menu.clearMenu()
   Menu.setTitle( "mon inventaire")
-  Menu.addButton("~r~↩ Retour", "OpenMenuCv", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
   for k,v in pairs(DataUser.Inventaire) do
     if v.quantity ~= 0 then
       Menu.addButton(v.libelle.." : ~r~"..v.quantity, "ConfDropItemCv", k)
@@ -117,7 +117,7 @@ end
 
 function OptionItemsCv(index)
   Menu.clearMenu()
-  Menu.addButton("~r~↩ Retour", "WeaponCoffreVehicle", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "WeaponCoffreVehicle", nil)
   Menu.addButton("Prendre", "GetItemCv", index)
 end
 
@@ -133,7 +133,7 @@ end
 
 function OptionWeaponCv(index)
   Menu.clearMenu()
-  Menu.addButton("~r~↩ Retour", "WeaponCoffreVehicle", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "WeaponCoffreVehicle", nil)
   Menu.addButton("Récupérer l'arme", "GetWpCv", index)
 end
 
@@ -144,7 +144,7 @@ end
 function DropWeaponCv()
   Menu.clearMenu()
   Menu.setTitle( "Mes armes")
-  Menu.addButton("~r~↩ Retour", "OpenMenuCv", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", index)
   for k,v in pairs(DataUser.Weapon) do
     Menu.addButton(v.libelle.." avec ~r~"..v.ammo.." balles", "DropConfirmWeaponCv", k)
   end

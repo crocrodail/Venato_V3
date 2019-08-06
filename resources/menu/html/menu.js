@@ -53,7 +53,6 @@ new Vue({
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
-      console.log(JSON.stringify(this.window));
     },
     handleMessage(event) {
       if (event.data.action == "open") {
@@ -74,8 +73,6 @@ new Vue({
       } else if (event.data.action == "addButton") {
         this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: undefined })
       } else if (event.data.action == "addItemButton") {
-        console.log("Test item picture");
-        console.log(event.data.picture);
         this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: event.data.picture })
       } else if (event.data.action == "genMenu") {
         var obj = JSON.parse(event.data[1]);
