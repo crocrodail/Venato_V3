@@ -17,6 +17,7 @@ local state = false
 local cam = nil
 local AdminShowPlayerInfo = nil
 local HeadId = {}
+local InSpectatorMode = false
 
 function ResetDefaultNotification()
   defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
@@ -361,7 +362,7 @@ function AdminSpectate()
       RenderScriptCams(false,  false,  0,  true,  true)
       SetEntityCollision(playerPed,  true,  true)
       SetEntityVisible(playerPed,  true)
-      SetEntityCoords(playerPed, LastPosition.x, LastPosition.y, LastPosition.z)
+      SetEntityCoords(playerPed, LastCoords.x, LastCoords.y, LastCoords.z)
   end
 end
 

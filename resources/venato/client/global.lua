@@ -8,9 +8,9 @@ Citizen.CreateThread(function()
   SetPlayerCanBeHassledByGangs(ped, true)
 	SetEveryoneIgnorePlayer(ped, true)
   Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), 'FE_THDR_GTAO', 'Venato.fr')
-  if GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
+  --if GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
     TriggerServerEvent("Venato:SyncData")
-  end
+  --end
   while true do
     Citizen.Wait(50)
     SetPlayerWantedLevel(playerId, 0 , false)
