@@ -3,6 +3,7 @@ DataUser = {}
 Citizen.CreateThread(function()
   print(GetPlayerPed(GetPlayerFromServerId(1)))
   local ped = Venato.GetPlayerPed()
+  local playerId = PlayerId()
   NetworkSetFriendlyFireOption(true)
   SetCanAttackFriendly(ped, true, false)
   SetPlayerCanBeHassledByGangs(ped, true)
@@ -12,8 +13,8 @@ Citizen.CreateThread(function()
   SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
   while true do
     Citizen.Wait(50)
-    SetPlayerWantedLevel(ped, 0 , false)
-    SetPlayerWantedLevelNow(ped, false, false)
+    SetPlayerWantedLevel(playerId, 0 , false)
+    SetPlayerWantedLevelNow(playerId, false, false)
   end
 end)
 
