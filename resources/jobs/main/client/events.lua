@@ -18,16 +18,18 @@ AddEventHandler("Jobs:checkPlayerJob:cb", function(jobId)
 
   local job = JobsConfig.jobs[jobId]
   if job == nil then return end
+  if not _G[job.Class].isEnabled() then return end
 
   -- Step 2
   --  Call initialization of the job
-  _G[job.Class].init()
+  Jobs.init(job)
+
 
   Jobs.Commands(job)
 
   -- Step 4
   --  Appeler La boucle principale du métier
-  _G[job.Class].mainLoop()
+  Jobs.mainLoop(job)
 
   -- Step 5
   --  Appeler la boucle des salaires

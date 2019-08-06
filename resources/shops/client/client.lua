@@ -132,7 +132,7 @@ function spawnForklift()
   local name = "forklift"
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnForklift()
-    _CreateVehicle(
+    JobTools._CreateVehicle(
       string.upper(name),
       ConfigShop.spawnConfig[1], ConfigShop.spawnConfig[2], ConfigShop.spawnConfig[3],
       ConfigShop.spawnConfig[4],

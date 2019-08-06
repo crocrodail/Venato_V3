@@ -13,6 +13,12 @@ JobsConfig.jobs[14] = {
 DeliveryJobConfig = {}
 DeliveryJobConfig.enabled = true
 DeliveryJobConfig.trunk = nil
+DeliveryJobConfig.serviceLocation = { ["x"] = -1546.95, ["y"] = -560.99, ["z"] = 33.72 }
+
+DeliveryJobConfig.isInMission = false
+DeliveryJobConfig.isTrunkReady = false
+DeliveryJobConfig.isTrunkLoaded = false
+DeliveryJobConfig.isGoodDelivered = false
 
 DeliveryJobConfig.defaultDropLocations = {
   ["Commissariat"] = { ["Name"] = "Commissariat",
