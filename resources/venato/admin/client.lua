@@ -16,6 +16,7 @@ local LastCoords = {}
 local state = false
 local cam = nil
 local AdminShowPlayerInfo = nil
+local HeadId = {}
 
 function ResetDefaultNotification()
   defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
@@ -66,7 +67,7 @@ function AdminBlipsOption()
           -- Removes blip
           RemoveBlip(blip)
         end
-        if HeadId[1] ~= nil then
+        if HeadId ~= nil then
           if IsMpGamerTagActive(HeadId[Player]) then
             RemoveMpGamerTag(HeadId[Player])
           end
@@ -363,15 +364,13 @@ function AdminCloseMenu()
 end
 
 Citizen.CreateThread(function()
-  local HeadId = {}
+  HeadId = {}
   while true do
     Citizen.Wait(0)
     if AdminBlipsBool then
       for k, v in pairs(AdminDataPlayers) do
         local Player = v.PlayerIdClient
-        print(Player.." player not pass")
         if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
-          print(Player.." player pass")
           local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
           local blip = GetBlipFromEntity(ped)
           HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "", false)
