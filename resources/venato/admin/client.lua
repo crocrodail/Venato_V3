@@ -365,7 +365,7 @@ Citizen.CreateThread(function()
   while AdminBlipsBool do
     Citizen.Wait(0)
     for k, v in pairs(AdminDataPlayers) do
-      local Player = GetPlayerFromServerId(v.Source)
+      local Player = v.PlayerIdClient
       if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
         local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
         local blip = GetBlipFromEntity(ped)
