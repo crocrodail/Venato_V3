@@ -32,7 +32,7 @@ end)
 
 RegisterNetEvent("Venato:Connection")
 AddEventHandler("Venato:Connection", function()
-  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn") end)
+  SetTimeout(5000, function() TriggerServerEvent("Venato:CallDataPlayerSpawn", PlayerId()) end)
 end)
 
 RegisterNetEvent("Venato:SpawnInit")
