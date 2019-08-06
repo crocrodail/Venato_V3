@@ -59,10 +59,15 @@ function DeliveryJob.commands()
   end
 end
 
+function takeMission(mission)
+  print('Mission taken !' .. mission)
+  TriggerServerEvent("Venato:dump", { "Mission taken !", mission })
+  DeliveryJobConfig.isInMission = true
+end
+
 function DeliveryJob.showMenu()
   if not DeliveryJobConfig.isInMission then
-    mission = {}
-    TriggerEvent('Menu:AddButton2', "Effectuer la livraison", "takeMission", mission, nil)
+    TriggerEvent('Menu:AddButton', "Effectuer la livraison", "takeMission", "toto")
   end
 end
 
@@ -122,9 +127,5 @@ function despawnTrunk()
   if DeliveryJobConfig.trunk ~= nil then
     Citizen.InvokeNative(0xAE3CBE5BF394C9C9, Citizen.PointerValueIntInitialized(DeliveryJobConfig.trunk))
   end
-end
-
-function takeMission(mission)
-  print('Mission take', mission)
 end
 
