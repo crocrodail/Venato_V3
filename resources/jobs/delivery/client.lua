@@ -112,7 +112,7 @@ function addDestinationBlip(destination)
 end
 
 function spawnTrunk()
-  local name = "mule"
+  local name = DeliveryJobConfig.TRUNK_KEY
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnTrunk()
     JobTools._CreateVehicle(
@@ -129,7 +129,7 @@ function spawnTrunk()
 end
 
 function spawnForklift()
-  local name = "forklift"
+  local name = DeliveryJobConfig.FORKLIFT_KEY
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnForklift()
     JobTools._CreateVehicle(
@@ -147,7 +147,30 @@ end
 
 function spawnBox()
   despawnBox()
-  -- TODO: box management
+
+  local coords = {
+    ["x"] = DeliveryJobConfig.onTrunkDrop.posX,
+    ["y"] = DeliveryJobConfig.onTrunkDrop.posY,
+    ["z"] = DeliveryJobConfig.onTrunkDrop.posZ
+  }
+
+  local objet = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, x or coords["x"], y or coords["y"], z or coords["z"])
+  DeliveryJobConfig.AllObject[objet] = objet
+  local bassin1 = Venato.CreateObject(DeliveryJobConfig.BASSIN_KEY, x or coords["x"], y or coords["y"],
+    z or coords["z"])
+  DeliveryJobConfig.AllObject[bassin1] = bassin1
+  SetEntityHeading(bassin1, 90.0)
+  local bassin2 = Venato.CreateObject(DeliveryJobConfig.BASSIN_KEY, x or coords["x"], y or coords["y"],
+    z or coords["z"])
+  DeliveryJobConfig.AllObject[bassin2] = bassin2
+  SetEntityHeading(bassin2, 90.0)
+  AttachEntityToEntity(bassin1, objet, 0, -0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
+  AttachEntityToEntity(bassin2, objet, 0, 0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
+  PlaceObjectOnGroundProperly(objet)
+  coords = GetEntityCoords(objet, 0)
+  SetEntityCoords(objet, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
+  FreezeEntityPosition(objet, true)
+
 end
 
 function despawnTrunk()
@@ -171,3 +194,31 @@ function despawnBox()
   end
 end
 
+function AttachOnCamion()
+  DetachEntity(DeliveryJobConfig.box)
+  AttachEntityToEntity(DeliveryJobConfig.box, DeliveryJobConfig.trunk, nil, 0.0, -3.0, 0.12, 0.0, 0, 0.0, false, false,
+    false, false, 2, true)
+  SetEntityCollision(DeliveryJobConfig.box, true, true)
+end
+
+function dropBoxInForklift()
+  local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
+  DetachEntity(DeliveryJobConfig.box)
+  PlaceObjectOnGroundProperly(DeliveryJobConfig.box)
+  coords = GetEntityCoords(DeliveryJobConfig.box, 0)
+  SetEntityCoords(DeliveryJobConfig.box, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
+  FreezeEntityPosition(DeliveryJobConfig.box, true)
+  SetEntityCollision(DeliveryJobConfig.box, true, true)
+end
+
+function DetacheBoxInForklift()
+  local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
+  DetachEntity(DeliveryJobConfig.box)
+  PlaceObjectOnGroundProperly(DeliveryJobConfig.box)
+  coords = GetEntityCoords(DeliveryJobConfig.box, 0)
+  SetEntityCoords(DeliveryJobConfig.box, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
+  FreezeEntityPosition(DeliveryJobConfig.box, true)
+  SetEntityCollision(DeliveryJobConfig.box, true, true)
+end
+
+-- TODO: See crocro branch and test.lua file to continue forklift, box, ... management

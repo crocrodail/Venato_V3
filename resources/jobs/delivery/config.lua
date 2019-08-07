@@ -14,6 +14,11 @@ DeliveryJobConfig = {}
 DeliveryJobConfig.enabled = true
 DeliveryJobConfig.serviceLocation = { ["posX"] = -423.96, ["posY"] = -2789.39, ["posZ"] = 6.27 }
 
+DeliveryJobConfig.BOX_KEY = "prop_box_wood05a"
+DeliveryJobConfig.BASSIN_KEY = "prop_apple_box_01"
+DeliveryJobConfig.TRUNK_KEY = "mule"
+DeliveryJobConfig.FORKLIFT_KEY = "mule"
+
 DeliveryJobConfig.trunk = nil
 DeliveryJobConfig.forklift = nil
 DeliveryJobConfig.box = nil
