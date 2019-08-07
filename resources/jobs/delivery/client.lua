@@ -53,8 +53,12 @@ function DeliveryJob.commands()
   if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and DeliveryJobConfig.onTrunkDrop ~= nil then
     if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
       despawnTrunk()
+      despawnForklift()
+      despawnBox()
     else
       spawnTrunk()
+      spawnForklift()
+      spawnBox()
     end
   end
 end
@@ -124,9 +128,46 @@ function spawnTrunk()
   end
 end
 
+function spawnForklift()
+  local name = "forklift"
+  if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
+    despawnForklift()
+    JobTools._CreateVehicle(
+      string.upper(name),
+      DeliveryJobConfig.onTrunkDrop.posX, DeliveryJobConfig.onTrunkDrop.posY, DeliveryJobConfig.onTrunkDrop.posZ,
+      DeliveryJobConfig.onTrunkDrop.heading, function(vehicle)
+        DeliveryJobConfig.forklift = vehicle
+        SetVehicleNumberPlateText(vehicle, "DeliveryForklift_" .. math.random(100, 999))
+        SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
+        TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
+          GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
+      end)
+  end
+end
+
+function spawnBox()
+  despawnBox()
+  -- TODO: box management
+end
+
 function despawnTrunk()
   if DeliveryJobConfig.trunk ~= nil then
     Citizen.InvokeNative(0xAE3CBE5BF394C9C9, Citizen.PointerValueIntInitialized(DeliveryJobConfig.trunk))
+    DeliveryJobConfig.trunk = nil
+  end
+end
+
+function despawnForklift()
+  if DeliveryJobConfig.forklift ~= nil then
+    Citizen.InvokeNative(0xAE3CBE5BF394C9C9, Citizen.PointerValueIntInitialized(DeliveryJobConfig.forklift))
+    DeliveryJobConfig.forklift = nil
+  end
+end
+
+function despawnBox()
+  if DeliveryJobConfig.box ~= nil then
+    -- TODO: box management
+    DeliveryJobConfig.box = nil
   end
 end
 

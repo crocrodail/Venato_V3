@@ -12,8 +12,11 @@ JobsConfig.jobs[14] = {
 
 DeliveryJobConfig = {}
 DeliveryJobConfig.enabled = true
-DeliveryJobConfig.trunk = nil
 DeliveryJobConfig.serviceLocation = { ["posX"] = -423.96, ["posY"] = -2789.39, ["posZ"] = 6.27 }
+
+DeliveryJobConfig.trunk = nil
+DeliveryJobConfig.forklift = nil
+DeliveryJobConfig.box = nil
 
 DeliveryJobConfig.isInMission = false
 DeliveryJobConfig.isTrunkReady = false
@@ -50,8 +53,7 @@ DeliveryJobConfig.warehouses = {
   }
 }
 
+-- TODO: redefine position where spawn "mule" "forklift" and "box"
 DeliveryJobConfig.trunkDrops = {
-  { ["posX"] = -1523.38, ["posY"] = -550.78, ["posZ"] = 32.35, ["heading"] = 212.2 },
-  { ["posX"] = 905.34, ["posY"] = -1222.15, ["posZ"] = 24.50, ["heading"] = 180.58 },
-  { ["posX"] = 504.996, ["posY"] = -610.303, ["posZ"] = 24.751, ["heading"] = 261.976 },
+  { ["posX"] = -500.96, ["posY"] = -2789.39, ["posZ"] = 6.27, ["heading"] = 212.2 }
 }
