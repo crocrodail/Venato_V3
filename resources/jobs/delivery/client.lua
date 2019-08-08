@@ -81,20 +81,19 @@ function DeliveryJob.mainLoop()
     while true do
       Wait(0)
       local playerPos = GetEntityCoords(GetPlayerPed(-1))
-      local trunkDrops = DeliveryJobConfig.trunkDrops
+      local dropPoint = DeliveryJobConfig.trunkDrops['trunk']
 
-      for _, dropPoint in ipairs(trunkDrops) do
-        distance = GetDistanceBetweenCoords(playerPos, dropPoint.posX, dropPoint.posY, dropPoint.posZ, true)
-        if distance < 20 then
-          DrawMarker(27, dropPoint.posX, dropPoint.posY, dropPoint.posZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
-            174, 0, 0, 0, 0)
-        end
-        if distance < 1.5 then
-          DeliveryJobConfig.onTrunkDrop = dropPoint
-          TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette")
-        elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
-          DeliveryJobConfig.onTrunkDrop = nil
-        end
+      distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
+
+      if distance < 20 then
+        DrawMarker(27, dropPoint.x, dropPoint.y, dropPoint.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
+          174, 0, 0, 0, 0)
+      end
+      if distance < 1.5 then
+        DeliveryJobConfig.onTrunkDrop = dropPoint
+        TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette")
+      elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
+        DeliveryJobConfig.onTrunkDrop = nil
       end
 
       --TriggerEvent("Venato:InteractTxt", "Livraison en cours, veuillez vous rendre à destination ~BLIP_119~")
@@ -113,12 +112,13 @@ end
 
 function spawnTrunk()
   local name = DeliveryJobConfig.TRUNK_KEY
+  local coords = DeliveryJobConfig.trunkDrops.trunk
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnTrunk()
     JobTools._CreateVehicle(
       string.upper(name),
-      DeliveryJobConfig.onTrunkDrop.posX, DeliveryJobConfig.onTrunkDrop.posY, DeliveryJobConfig.onTrunkDrop.posZ,
-      DeliveryJobConfig.onTrunkDrop.heading, function(vehicle)
+      coords.x, coords.y, coords.z, coords.heading,
+      function(vehicle)
         DeliveryJobConfig.trunk = vehicle
         SetVehicleNumberPlateText(vehicle, "Trunk_" .. math.random(100, 999))
         SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
@@ -130,12 +130,13 @@ end
 
 function spawnForklift()
   local name = DeliveryJobConfig.FORKLIFT_KEY
+  local coords = DeliveryJobConfig.trunkDrops.forklift
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnForklift()
     JobTools._CreateVehicle(
       string.upper(name),
-      DeliveryJobConfig.onTrunkDrop.posX, DeliveryJobConfig.onTrunkDrop.posY, DeliveryJobConfig.onTrunkDrop.posZ,
-      DeliveryJobConfig.onTrunkDrop.heading, function(vehicle)
+      coords.x, coords.y, coords.z, coords.heading,
+      function(vehicle)
         DeliveryJobConfig.forklift = vehicle
         SetVehicleNumberPlateText(vehicle, "DeliveryForklift_" .. math.random(100, 999))
         SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
@@ -148,27 +149,21 @@ end
 function spawnBox()
   despawnBox()
 
-  local coords = {
-    ["x"] = DeliveryJobConfig.onTrunkDrop.posX,
-    ["y"] = DeliveryJobConfig.onTrunkDrop.posY,
-    ["z"] = DeliveryJobConfig.onTrunkDrop.posZ
-  }
+  local coords = DeliveryJobConfig.trunkDrops.box
 
-  local objet = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, x or coords["x"], y or coords["y"], z or coords["z"])
+  local objet = JobTools.CreateObject(DeliveryJobConfig.BOX_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[objet] = objet
-  local bassin1 = Venato.CreateObject(DeliveryJobConfig.BASSIN_KEY, x or coords["x"], y or coords["y"],
-    z or coords["z"])
+  local bassin1 = JobTools.CreateObject(DeliveryJobConfig.BASSIN_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[bassin1] = bassin1
   SetEntityHeading(bassin1, 90.0)
-  local bassin2 = Venato.CreateObject(DeliveryJobConfig.BASSIN_KEY, x or coords["x"], y or coords["y"],
-    z or coords["z"])
+  local bassin2 = JobTools.CreateObject(DeliveryJobConfig.BASSIN_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[bassin2] = bassin2
   SetEntityHeading(bassin2, 90.0)
   AttachEntityToEntity(bassin1, objet, 0, -0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
   AttachEntityToEntity(bassin2, objet, 0, 0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
   PlaceObjectOnGroundProperly(objet)
   coords = GetEntityCoords(objet, 0)
-  SetEntityCoords(objet, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
+  SetEntityCoords(objet, coords.x, coords.y, coords.z + 0.12, 0, 0, 0, true)
   FreezeEntityPosition(objet, true)
 
 end

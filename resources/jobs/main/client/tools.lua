@@ -96,3 +96,16 @@ function JobTools.hideServiceMessage()
   locksound = false
   SetScaleformMovieAsNoLongerNeeded(deathscale)
 end
+
+function JobTools.CreateObject(objet, x, y, z)
+  local model = GetHashKey(objet)
+  RequestModel(model)
+  while not HasModelLoaded(model) do
+    Citizen.Wait(100)
+  end
+  local objet = CreateObject(model, x, y, z, true, false, false)
+  SetNetworkIdCanMigrate(objet, true)
+  SetEntityAsMissionEntity(objet, true, false)
+  SetModelAsNoLongerNeeded(model)
+  return objet
+end

@@ -17,11 +17,12 @@ DeliveryJobConfig.serviceLocation = { ["posX"] = -423.96, ["posY"] = -2789.39, [
 DeliveryJobConfig.BOX_KEY = "prop_box_wood05a"
 DeliveryJobConfig.BASSIN_KEY = "prop_apple_box_01"
 DeliveryJobConfig.TRUNK_KEY = "mule"
-DeliveryJobConfig.FORKLIFT_KEY = "mule"
+DeliveryJobConfig.FORKLIFT_KEY = "forklift"
 
 DeliveryJobConfig.trunk = nil
 DeliveryJobConfig.forklift = nil
 DeliveryJobConfig.box = nil
+DeliveryJobConfig.AllObject = {}
 
 DeliveryJobConfig.isInMission = false
 DeliveryJobConfig.isTrunkReady = false
@@ -60,5 +61,7 @@ DeliveryJobConfig.warehouses = {
 
 -- TODO: redefine position where spawn "mule" "forklift" and "box"
 DeliveryJobConfig.trunkDrops = {
-  { ["posX"] = -500.96, ["posY"] = -2789.39, ["posZ"] = 6.27, ["heading"] = 212.2 }
+  ["trunk"] = { ["x"] = -403.08, ["y"] = -2828.43, ["z"] = 6.0, ["heading"] = 243.53 },
+  ["forklift"] = { ["x"] = -426.68, ["y"] = -2846.43, ["z"] = 6.0, ["heading"] = 307.20 },
+  ["box"] = { ["x"] = -417.86, ["y"] = -2835.53, ["z"] = 5.0 }
 }
