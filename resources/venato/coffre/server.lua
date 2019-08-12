@@ -45,6 +45,7 @@ function reloadDataCoffre()
                   ["libelle"] = v2.libelle,
                   ["quantity"] = math.floor(v2.Quantity),
                   ["uPoid"] = v2.poid,
+                  ["picture"] = v2.picture
                 }
                 DataCoffre[v.Id].nbItems =  DataCoffre[v.Id].nbItems + v2.Quantity
                 DataCoffre[v.Id].inventaire[v2.ItemId] = inCof
@@ -144,7 +145,15 @@ AddEventHandler("Coffre:DropItem", function(qty, row)
     if DataCoffre[indexCoffre].inventaire[indexItem] ~= nil then
       qtyInCoffre = DataCoffre[indexCoffre].inventaire[indexItem].quantity
     end
-    TriggerClientEvent("Venato:notify", source, "~g~Vous avez déposé "..qty.." "..DataPlayers[source].Inventaire[indexItem].libelle.." dans le coffre.")
+    
+    defaultNotification = {
+      title = 'Coffre',
+      type = "alert",
+      logo = DataPlayers[source].Inventaire[row[2]].picture,
+      message = "Vous avez déposé "..qty.." "..DataPlayers[source].Inventaire[row[2]].libelle.." dans le coffre."
+    }
+    TriggerClientEvent("Venato:notify", source, defaultNotification)
+
     TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[indexItem].quantity - qty, indexItem, source)
     TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre + qty, source)
   else
@@ -159,12 +168,24 @@ AddEventHandler("Coffre:TakeItems", function(qty, row)
     local indexCoffre = row[1]
     local indexItem = row[2]
     local qtyInCoffre = DataCoffre[indexCoffre].inventaire[indexItem].quantity or 0
-    local qtyOnPlayer = DataPlayers[source].Inventaire[indexItem].quantity or 0
-    TriggerClientEvent("Venato:notify", source, "~g~Vous avez récuperé "..qty.." "..DataCoffre[indexCoffre].inventaire[indexItem].libelle.." dans le coffre.")
-    TriggerEvent("Inventory:SetItem",qtyOnPlayer + qty, indexItem, source)
+    -- Si l'objet n'existe pas le prendre
+    local qtyOnPlayer = 0
+    if DataPlayers[source].Inventaire[indexItem] then
+      qtyOnPlayer = DataPlayers[source].Inventaire[indexItem].quantity
+    end
+
+    defaultNotification = {
+      title = 'Coffre',
+      type = "alert",
+      logo = DataCoffre[indexCoffre].inventaire[indexItem].picture,
+      message = "Vous avez récuperé "..qty.." "..DataCoffre[indexCoffre].inventaire[indexItem].libelle.." dans le coffre."
+    }
+    print(math.floor(qtyOnPlayer + qty))
+    TriggerClientEvent("Venato:notify", source, defaultNotification)
+    TriggerEvent("Inventory:SetItem",math.floor(qtyOnPlayer + qty), indexItem, source)
     TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre - qty, source)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Une erreur est survenue.")
+    TriggerClientEvent("Venato:notifyError", source, "Une erreur est survenue.")
   end
 end)
 
@@ -186,7 +207,7 @@ AddEventHandler("Coffre:SetItem", function(idCoffre, idItem, qty, NewSource)
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @itemId", {["@itemId"] = idItem}, function(result)
         if result[1] ~= nil then
           DataCoffre[idCoffre].nbItems = DataCoffre[idCoffre].nbItems + qty
-          DataCoffre[idCoffre].inventaire[idItem] = {["coffreId"] = idCoffre, ["itemId"] = idItem, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["uPoid"] = result[1].poid}
+          DataCoffre[idCoffre].inventaire[idItem] = {["coffreId"] = idCoffre, ["itemId"] = idItem, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["uPoid"] = result[1].poid, ["picture"] = result[1].picture }
           MySQL.Async.execute("INSERT INTO coffres_contenu (`CoffreId`, `ItemId`, `Quantity`) VALUES (@coffreId, @itemId, @qty)", {["@coffreId"] = idCoffre, ["itemId"] = idItem, ["qty"] = qty})
         end
       end)

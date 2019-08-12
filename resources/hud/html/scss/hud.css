@@ -60,7 +60,7 @@ html body #app .fullscreen {
 }
 
 #notifVenato .noty_logo img {
-  width: auto;
+  width: 100%;
   height: auto;
   max-height: 90%;
   max-width: 90%;

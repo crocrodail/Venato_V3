@@ -21,7 +21,7 @@ local garage = {
 
 
 local defaultNotification = {
-  name = "Garage",
+  title = "Garage",
   type = "alert",
   logo = "https://i.ibb.co/dpsQ3B9/icons8-parking-96px.png"
 }
@@ -97,27 +97,31 @@ function MyCar(table)
   Menu.setTitle( "Garage")
   Menu.setSubtitle( "Mes Véhicules")
   Menu.clearMenu()
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "backToOpenGarage", nil)
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "backToOpenGarage", "", "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   if Vehicule ~= nil then
-  for a, v in pairs(Vehicule) do
+  for a, v in pairs(Vehicule) do    
     if v.type == 1 then
       if v.state == 2 then
         ads = true
-        Menu.addButton("<span class='red--text'>Fourière |</span> "..v.name.." | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
+        TriggerEvent('Menu:AddShopButton', v.name, "none", "", "https://i.ibb.co/fp5bXcK/icons8-garage-96px.png", v.plate..' <span class="red--text"><small>Fourrière</small></span>', nil)
+        --Menu.addButton("<span class='red--text'>Fourière |</span> "..v.name.." | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
       elseif v.state == 1 then
         ads = true
-        Menu.addButton("<span class='orange--text'>Sortie |</span> "..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
+        TriggerEvent('Menu:AddShopButton', v.name, "none", "", "https://i.ibb.co/2j4253Z/icons8-garage-open-96px.png", v.plate..' <span class="orange--text"><small>Sortie</small></span>', nil)
+        --Menu.addButton("<span class='orange--text'>Sortie |</span> "..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
       else
         ads = true
-        Menu.addButton("<span class='green--text'>"..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h})
+        TriggerEvent('Menu:AddShopButton', v.name, "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h}, "https://i.ibb.co/fx5r19K/icons8-sedan-96px.png", v.plate, nil)
+        --Menu.addButton("<span class='green--text'>"..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h})
       end
     end
   end
   end
   if not ads then
-    Menu.addButton("<span class='red--text'>Aucun vehicule dans ce garage</span>" , "none", nil)
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Aucun vehicule dans ce garage</span>", "" , "none", nil)
   end
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "backToOpenGarage", nil)
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "backToOpenGarage", "", "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:CreateMenu')
   Menu.open()
 end
 
@@ -309,8 +313,8 @@ AddEventHandler("Garage:AllVehicle", function(garage)
   TriggerEvent('Menu:Init', "Garage", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
   Menu.clearMenu()
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "close", nil)
-  Menu.addButton("<span class='green--text'>Mes vehicules</span></span>", "getCars", garage)
-  Menu.addButton("<span class='orange--text'>Rentrer son véhicule", "StoreMyCar", garage)
+  Menu.addItemButton("Mes vehicules","https://i.ibb.co/dfs9NCR/icons8-traffic-jam-96px.png", "getCars", garage)
+  Menu.addItemButton("Rentrer son véhicule","https://i.ibb.co/872sDJ2/icons8-garage-closed-96px-1.png", "StoreMyCar", garage)
   Menu.open()
 end)
 
