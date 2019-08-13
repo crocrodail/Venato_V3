@@ -35,7 +35,7 @@ function openVenatoadmin()
   Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
   Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
   Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
-  Menu.addButton("Jesus Christ ~r~(Non attribuer)", "none", nil) --  non attribuer (revive)
+  Menu.addButton("Jesus Christ", "respawntest", nil) --  non attribuer (revive)
   Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
   Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
   Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
@@ -44,6 +44,11 @@ function openVenatoadmin()
   if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
   end
+end
+
+function respawntest()
+  NetworkResurrectLocalPlayer(-49.158519744873, -1112.1115722656, 26.435813903809, 0, true, true, false)
+  ClearPedTasksImmediately(Venato.GetPlayerPed())
 end
 
 function AdminShowCoord()

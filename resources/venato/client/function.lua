@@ -123,7 +123,7 @@ function Venato.GetPlayerPed()
   if PedPlayer == nil then
     PedPlayer = GetPlayerPed(-1)
   end
-	return PedPlayer
+	return  GetPlayerPed(-1)
 end
 
 function GetPlayers()

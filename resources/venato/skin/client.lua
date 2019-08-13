@@ -2,6 +2,10 @@ local BlackListHair = {23,24,61}
 local PersonnalisationMenu = false
 local Coords = nil
 local Prop = nil
+local loaded = false
+if (GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01") or GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_f_freemode_01")) then
+  loaded = true
+end
 
 SkinChooser =  {}
 SkinChooser.__index = SkinChooser
@@ -96,7 +100,6 @@ function shapeMenu(skin)
 	  RenderScriptCams(true,  false,  0,  true,  true)
 	  SetCamCoord(cam,  coords["x"]-0.6,  coords["y"]+0.7,  coords["z"]+0.7)
 	  PointCamAtCoord(cam,coords["x"],coords["y"],coords["z"]+0.8)
-    print("onvnoijsdoijn")
     Menu.setSubtitle("Forme du visage")
     Menu.clearMenu()
     Menu.addButton2("Retour", "modelMenu", nil, nil)
@@ -363,6 +366,9 @@ end)
 function Venato.LoadSkin(DataUser)
     local playerPed = Venato.GetPlayerPed()
     local skin = DataUser.Skin
+    if not loaded then
+      loadPlayer(DataUser)
+    end
     if skin then
         local hashSkin = GetHashKey("mp_m_freemode_01")
         if(GetEntityModel(Venato.GetPlayerPed()) == hashSkin) then
@@ -430,4 +436,70 @@ function Venato.LoadSkin(DataUser)
         end
 
     end
+end
+
+
+function loadPlayer(data)
+  DoScreenFadeOut(500)
+  while IsScreenFadingOut() do
+      Citizen.Wait(0)
+  end
+  local PosX = data.Position[1]
+	local PosY = data.Position[2]
+	local PosZ = data.Position[3]
+  local PosH = data.Position[4]
+  freezePlayer(PlayerId(), true)
+  if data.Skin.model then
+    RequestModel(data.Skin.model)
+    while not HasModelLoaded(data.Skin.model) do
+      RequestModel(data.Skin.model)
+      Wait(0)
+    end
+    SetPlayerModel(PlayerId(), data.Skin.model)
+    SetModelAsNoLongerNeeded(data.Skin.model)
+    SetPedDefaultComponentVariation(GetPlayerPed(-1))
+    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    Venato.LoadClothes()
+  end
+  RequestCollisionAtCoord(PosX, PosY, PosZ)
+  local ped = GetPlayerPed(-1)
+  SetEntityCoordsNoOffset(ped, PosX, PosY, PosZ, false, false, false, true)
+  NetworkResurrectLocalPlayer(PosX, PosY, PosZ, PosH, true, true, false)
+  ClearPedTasksImmediately(ped)
+  ClearPlayerWantedLevel(PlayerId())
+  while not HasCollisionLoadedAroundEntity(ped) do
+      Citizen.Wait(0)
+  end
+  ShutdownLoadingScreen()
+  DoScreenFadeIn(500)
+  while IsScreenFadingIn() do
+      Citizen.Wait(0)
+  end
+  freezePlayer(PlayerId(), false)
+end
+
+function freezePlayer(id, freeze)
+  local player = id
+  SetPlayerControl(player, not freeze, false)
+  local ped = GetPlayerPed(player)
+  if not freeze then
+    if not IsEntityVisible(ped) then
+      SetEntityVisible(ped, true)
+    end
+    if not IsPedInAnyVehicle(ped) then
+      SetEntityCollision(ped, true)
+    end
+    FreezeEntityPosition(ped, false)
+    SetPlayerInvincible(player, false)
+  else
+    if IsEntityVisible(ped) then
+      SetEntityVisible(ped, false)
+    end
+    SetEntityCollision(ped, false)
+    FreezeEntityPosition(ped, true)
+    SetPlayerInvincible(player, true)
+    if not IsPedFatallyInjured(ped) then
+      ClearPedTasksImmediately(ped)
+    end
+  end
 end

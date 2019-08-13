@@ -61,7 +61,7 @@ function accessGranded(SteamId, source , balek)
         VenatoPoint = DataUser[1].venato_point,
         Account = DataUser[1].account,
         Code = DataUser[1].code,
-        Position = DataUser[1].lastPosition,
+        Position = json.decode(DataUser[1].lastPosition),
         Sexe = sexe,
         Taille = DataUser[1].taille,
         Age = os.date("%x", DataUser[1].dateNaissance / 1000),
@@ -176,7 +176,6 @@ function Venato.Round(num, numDecimalPlaces)
 end
 
 function Venato.paymentCB(source, amount)
-  print(DataPlayers[source].Bank)
   if DataPlayers[source].Bank <= amount then
     return false
   else
