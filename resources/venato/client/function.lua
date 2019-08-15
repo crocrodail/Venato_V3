@@ -15,6 +15,22 @@ AddEventHandler("Venato:notifyError", function(msg)
   Venato.notifyError(msg)
 end)
 
+function Venato.playAnim(data)
+  local flag = data.flag or 0
+    if data.useLib then
+        RequestAnimDict(data.lib)
+        while not HasAnimDictLoaded(data.lib) do
+        Citizen.Wait(0)
+        end
+        if HasAnimDictLoaded(data.lib) then
+            TaskPlayAnim(GetPlayerPed(-1),data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
+        end
+    elseif not data.useLib then
+        TaskStartScenarioInPlace(GetPlayerPed(-1), data.anim.anim, 0, false)
+    end
+end
+
+
 function Venato.notifyError(msg)
 	local data = {
 		logo = "https://img.icons8.com/color/48/000000/high-priority.png",
@@ -158,7 +174,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		if not HasModelLoaded(model) then
 			RequestModel(model)
 			while not HasModelLoaded(model) do
-				Citizen.Wait(1)
+				Citizen.Wait(100)
 			end
 		end
 		local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, true, false)
@@ -171,7 +187,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
 		while not HasCollisionLoadedAroundEntity(vehicle) do
 			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 		end
 		SetVehRadioStation(vehicle, 'OFF')
 		if cb ~= nil then

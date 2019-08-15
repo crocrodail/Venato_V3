@@ -30,6 +30,7 @@ client_script {
   '/skin/client.lua',
   '/skin/face_client.lua',
   '/calmIA/client.lua',
+  '/playerDeath/ClientDeath.lua',
   'test.lua'
 }
 

@@ -35,18 +35,8 @@ local TeleportFromTo = {
   },
 
   ["Hôpital - Entrer - sortir"] = {
-    positionFrom = { ['x'] = -449.749, ['y'] = -340.799, ['z'] = 34.501, nom = "Entrer - Hôpital" },
-    positionTo = { ['x'] = 275.724, ['y'] = -1361.310, ['z'] = 24.537796020508, nom = "Sortir - Hôpital" },
-  },
-
-  ["Hôpital - héliport"] = {
-    positionFrom = { ['x'] = 279.674, ['y'] = -1349.45, ['z'] = 24.537796020508, nom = "héliport" },
-    positionTo = { ['x'] = -443.827, ['y'] = -330.196, ['z'] = 78.168, nom = "Hôpital" },
-  },
-
-  ["Hôpital - administration"] = {
-    positionFrom = { ['x'] = 241.0631, ['y'] = -1369.4433, ['z'] = 24.5321, nom = "Monter - Administration" },
-    positionTo = { ['x'] = 253.2666, ['y'] = -1364.5228, ['z'] = 39.5343, nom = "Sortir - Administration" },
+    positionFrom = { ['x'] = 1151.024, ['y'] = -1529.941, ['z'] = 35.373, nom = "Entrer - Hôpital" },
+    positionTo = { ['x'] = 1146.779, ['y'] = -1560.052, ['z'] = 4.945, nom = "Sortir - Hôpital" },
   },
 
   ["Life invader - Réunion"] = {
@@ -222,7 +212,7 @@ Citizen.CreateThread(function()
 
       --msginf(k .. " " .. tostring(j.positionFrom.x), 15000)
       if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) then
-        DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .801,
+        DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
           255, 255, 255, 255, 0, 0, 0, 0)
         if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 5.0) then
           Drawing.draw3DText(j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1.100, j.positionFrom.nom, 1, 0.2,
@@ -246,7 +236,7 @@ Citizen.CreateThread(function()
       end
 
       if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0) then
-        DrawMarker(1, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .801, 255,
+        DrawMarker(1, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101, 255,
           255, 255, 255, 0, 0, 0, 0)
         if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 5.0) then
           Drawing.draw3DText(j.positionTo.x, j.positionTo.y, j.positionTo.z - 1.100, j.positionTo.nom, 1, 0.2, 0.1, 255,

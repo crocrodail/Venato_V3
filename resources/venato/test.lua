@@ -151,6 +151,40 @@ function OpenTestMenu()
 	Menu.addButton("Spawn box", "CreateBox", nil)
 	Menu.addButton("Spawn Forklift", "SpawnForkliftTest", nil)
 	Menu.addButton("delete", "deleteBox", nil)
+	Menu.addButton("test", "test", nil)
+	Menu.addButton("spawn bed", "stopeffect", nil)
+	Menu.addButton("attach bed", "attachbed", nil)
+	Menu.addButton("deattach bed", "detachebed", nil)
+	Menu.addButton("kill me", "dead", nil)
+end
+local bed = nil
+
+function dead()
+	SetEntityHealth(Venato.GetPlayerPed(), 0.0)
+end
+
+function detachebed()
+	DetachEntity(Venato.GetPlayerPed())
+	ClearPedTasks(GetPlayerPed(-1))
+end
+
+function attachbed()
+	Venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1})
+	AttachEntityToEntity(Venato.GetPlayerPed(), bed, nil, 0.0, -0.25, 1.2, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
+end
+
+function test()
+	--Venato.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
+	--Venato.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
+
+	Venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
+end
+
+function stopeffect()
+	local coord = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
+	bed = Venato.CreateObject("v_med_emptybed", coord["x"], coord["y"], coord["z"])
+	AllObject[bed] = bed
+	PlaceObjectOnGroundProperly(bed)
 end
 
 function SpawnForkliftTest()
