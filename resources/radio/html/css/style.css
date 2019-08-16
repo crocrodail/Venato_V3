@@ -25,16 +25,16 @@ body {
 #radio {
   width: 367px;
   height: 795px;
-  right: 0;
-  bottom: 0;
+  left: 20%;
+  bottom: 10%;
   position: fixed;
 }
 
 
 #onoff {
   position: absolute;
-  top: 32%;
-  right: 0;
+  top: 35%;
+  right: 13%;
   padding: 40px 40px;
   opacity: .0;
 }
@@ -48,15 +48,16 @@ body {
 .ekran {
   position: absolute;
   background-color: #c4dfd3;
-  padding: 95px 100px;
-  top: 71%;
-  left: 22.5%;
+  padding: 40px 68px;
+  top: 61%;
+  left: 30%;
 }
 
 .channel {
   position: absolute;
-  top: 0%;
-  left: 0%;
+  font-size: 10px;
+  top: -25%;
+  left: 10%;
 }
 
 .channel span {
@@ -66,8 +67,7 @@ body {
 .channel input {
   text-align: center;
   border: none;
-  border-bottom: 2px solid black;
   background-color: #c4dfd3;
-  padding: 25px 30px;
-  font-size: 34px;
+  padding: 15px 20px;
+  font-size: 13px;
 }

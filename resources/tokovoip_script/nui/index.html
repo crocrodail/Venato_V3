@@ -19,15 +19,13 @@
 			}
 			.pluginScreenWindow {
 				background: rgba(0, 0, 0, 0.5);
-				width: 300px;
+				width: 350px;
 				height: auto;
 				margin-left: auto;
 				margin-right: auto;
 				position: relative;
 				top: 50%;
 				transform: translateY(-51%);
-				border-top: 2px solid #01b0f0;
-				border-bottom: 2px solid #01b0f0;
 				padding: 20px;
 				color: #eee;
 				font-family: Tahoma, Geneva, sans-serif;
@@ -55,46 +53,27 @@
 	<body>
 		<div id="pluginScreen" class="pluginScreen">
 			<div id="pluginScreenWindow" class="pluginScreenWindow">
-				<div style="font-size:25px;color:#f0eb01;text-align:center;margin-bottom:20px;">
-					TokoVOIP
+				<div style="font-size:25px;color:#CD0000;text-align:center;margin-bottom:20px;">
+					TeamSpeak non connecté
 				</div>
-				<font color="#01b0f0">TokoVOIP</font> is our in-game VOIP replacement, using a custom made TS Plugin.
-
-				<br><br>
-
-				It give us a lot more <font color="green">possibilities</font>, which currently allow such things as:
-				<ul>
-					<li>Better voice quality</li>
-					<li>Radio system</li>
-					<li>Proximity chat unique to each player</li>
-					<li>Phone calls</li>
-					<li>Radio clicks</li>
-					<li>Radio effects</li>
-				</ul>
-
-				<br>
-
-				<font color="#01b0f0">TokoVOIP</font> has to be <font color="red">installed</font> and <font color="red">running</font> to play on our servers.
-				<br><br>
-				If you cannot join the appropriate server channel, please join <font color="#01b0f0" id="TSChannelSupport"></font> channel in teamspeak, so that a support team member can help you.
-				<br><br>
-				You can find more <font color="#f0eb01">information</font> and <font color="#f0eb01">download</font> links at: <font color="#01b0f0" id="TSDownload">http://forums.rmog.us</font>
-				<br><br><br>
-
-				<div id="TSServer">
+				<div style="text-align: center;">
+				TS3	Serveur IP : Gta.Venato.fr
+				</div>
+    		<img src="./tsdown.png" style="height: 300px;width: 350px;"/>
+				<div id="TSServer" style="display: none;">
 					TeamSpeak server:
 				</div>
-				<div id="TSChannel">
+				<div id="TSChannel" style="display: none;">
 					TeamSpeak channel:
 				</div>
-				<br>
+				<br><br><br>
 				<div id="pluginStatus">
 					Plugin status:
 				</div>
 				<div id="pluginVersion">
 					Plugin version:
 				</div>
-			</div>
+
 		</div>
 		<div id="tokovoipInfo" class="tokovoipInfo">
 		</div>

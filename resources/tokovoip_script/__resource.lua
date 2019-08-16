@@ -15,6 +15,7 @@ ui_page "nui/index.html"
 files({
     "nui/index.html",
     "nui/script.js",
+	"nui/tsdown.png",
 })
 
 export "setPlayerData"
