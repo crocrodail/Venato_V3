@@ -16,6 +16,9 @@ JobsRequests.getPlayerJobName = "SELECT job_name FROM users INNER JOIN jobs ON u
 JobsRequests.getPlayerSalary = "SELECT salary FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
 JobsRequests.getPlayerPoliceRank = "SELECT rank FROM police WHERE identifier = @username"
 
+JobsRequests.newSalary = "UPDATE users SET salaryCount = salaryCount+1 WHERE identifier = @identifier"
+JobsRequests.resetSalaryCount = "UPDATE users SET salaryCount = 0 WHERE identifier = @identifier"
+
 -- ============= --
 -- DB functions  --
 -- ============= --
@@ -44,6 +47,14 @@ function JobsDbFunctions.getPlayerPoliceRank(source)
   return MySQL.Sync.fetchScalar(JobsRequests.getPlayerPoliceRank, { ['@identifier'] = getSteamID(source) })
 end
 
+function JobsDbFunctions.newSalary(source)
+  return MySQL.Sync.fetchScalar(JobsRequests.newSalary, { ['@identifier'] = getSteamID(source) })
+end
+
+function JobsDbFunctions.resetSalaryCount(source)
+  return MySQL.Sync.fetchScalar(JobsRequests.resetSalaryCount, { ['@identifier'] = getSteamID(source) })
+end
+
 function JobsDbFunctions.getPlayerSalary(source)
   local salary = MySQL.Sync.fetchScalar(JobsRequests.getPlayerSalary, { ['@identifier'] = getSteamID(source) })
   salary = tonumber(salary)
@@ -56,6 +67,7 @@ function JobsDbFunctions.getPlayerSalary(source)
       primeJob = getPrime(rank)
     end
   end
+  JobsDbFunctions.resetSalaryCount(source)
   return salary, primeJob
 end
 

@@ -8,6 +8,7 @@
 
 RegisterServerEvent("Jobs:checkPlayerJob")
 RegisterServerEvent("Jobs:salary")
+RegisterServerEvent("Jobs:askSalary")
 
 function getSource(source, newSource)
   return newSource or source
@@ -20,9 +21,21 @@ end)
 
 AddEventHandler("Jobs:salary", function(newSource)
   local source = getSource(source, newSource)
+  local jobName = JobsDbFunctions.getPlayerJobName(source)
+  JobsDbFunctions.newSalary(source)
+  TriggerClientEvent("Jobs:salary:cb", source, jobName)
+end)
+
+AddEventHandler("Jobs:askSalary", function(newSource)
+  local source = getSource(source, newSource)
   local primeConn = JobsConfig.PrimeConnection
   local jobName = JobsDbFunctions.getPlayerJobName(source)
   local salary, primeJob = JobsDbFunctions.getPlayerSalary(source)
-  TriggerEvent("Inventory:AddMoney", primeConn + salary + primeJob, source)
-  TriggerClientEvent("Jobs:salary:cb", source, jobName, primeConn, salary, primeJob)
+  local salaryCount = JobsDbFunctions.getSalaryCount(source)
+
+  local factor = 10
+  local bonus = ((factor + 1) * salaryCount - 1) / factor -- factor=10 ==> salaryCount=2 => 2,10, salaryCount=3 => 3.20
+
+  TriggerEvent("Inventory:AddMoney", (primeConn + salary + primeJob) * bonus, source)
+  TriggerClientEvent("Jobs:askSalary:cb", source, jobName, primeConn, salary, primeJob, bonus)
 end)
