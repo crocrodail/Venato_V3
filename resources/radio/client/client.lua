@@ -5,14 +5,7 @@
 --===============================================================================
 
 
-
-local PlayerData                = {}
-
-
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-  PlayerData.job = job
-end)
+local DataUser = {}
 
 
 local radioMenu = false
@@ -55,9 +48,9 @@ RegisterCommand('radiotest', function(source, args)
   print(tonumber(data))
 
   if data == "nil" then
-    exports['mythic_notify']:DoHudText('inform', Config.messages['not_on_radio'])
+    VenatoNotify(Config.messages['not_on_radio'])
   else
-   exports['mythic_notify']:DoHudText('inform', Config.messages['on_radio'] .. data .. '.00 MHz </b>')
+   VenatoNotify(Config.messages['on_radio'] .. data .. '.00 MHz </b>')
  end
 
 end, false)
@@ -66,30 +59,29 @@ end, false)
 
 RegisterNUICallback('joinRadio', function(data, cb)
     local _source = source
-    local PlayerData = ESX.GetPlayerData(_source)
     local playerName = GetPlayerName(PlayerId())
     local getPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
 
     if tonumber(data.channel) ~= tonumber(getPlayerRadioChannel) then
         if tonumber(data.channel) <= Config.RestrictedChannels then
-          if(PlayerData.job.name == 'police' or PlayerData.job.name == 'ambulance' or PlayerData.job.name == 'fire') then
+          if(DataUser.NameJob == 'police' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
             exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
             exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(data.channel), true);
             exports.tokovoip_script:addPlayerToRadio(tonumber(data.channel))
-            exports['mythic_notify']:DoHudText('inform', Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
-          elseif not (PlayerData.job.name == 'police' or PlayerData.job.name == 'ambulance' or PlayerData.job.name == 'fire') then
+            VenatoNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
+          elseif not (DataUser.NameJob == 'police' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
             --- info że nie możesz dołączyć bo nie jesteś policjantem
-            exports['mythic_notify']:DoHudText('error', Config.messages['restricted_channel_error'])
+            VenatoErrorNotify(Config.messages['restricted_channel_error'])
           end
         end
         if tonumber(data.channel) > Config.RestrictedChannels then
           exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
           exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(data.channel), true);
           exports.tokovoip_script:addPlayerToRadio(tonumber(data.channel))
-          exports['mythic_notify']:DoHudText('inform', Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
+          VenatoNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
         end
       else
-        exports['mythic_notify']:DoHudText('error', Config.messages['you_on_radio'] .. data.channel .. '.00 MHz </b>')
+        VenatoErrorNotify(Config.messages['you_on_radio'] .. data.channel .. '.00 MHz </b>')
       end
       --[[
     exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
@@ -108,11 +100,11 @@ RegisterNUICallback('leaveRadio', function(data, cb)
    local getPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
 
     if getPlayerRadioChannel == "nil" then
-      exports['mythic_notify']:DoHudText('inform', Config.messages['not_on_radio'])
+      VenatoNotify(Config.messages['not_on_radio'])
         else
           exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
           exports.tokovoip_script:setPlayerData(playerName, "radio:channel", "nil", true)
-          exports['mythic_notify']:DoHudText('inform', Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
+          VenatoNotify(Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
     end
 
    cb('ok')
@@ -145,7 +137,7 @@ AddEventHandler('ls-radio:onRadioDrop', function(source)
 
     exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
     exports.tokovoip_script:setPlayerData(playerName, "radio:channel", "nil", true)
-    exports['ls_notify']:DoHudText('inform', Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
+    VenatoNotify(Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
 
 end
 end)
@@ -161,11 +153,52 @@ Citizen.CreateThread(function()
             DisableControlAction(0, 106, guiEnabled) -- VehicleMouseControlOverride
 
             if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
-                SendNUIMessage({
-                    type = "click"
-                })
+              TriggerServerEvent("Radio:CallData")
             end
         end
         Citizen.Wait(0)
     end
 end)
+
+Citizen.CreateThread(function()
+    while true do
+            if IsControlJustPressed(0, 20) then
+              if radioMenu then
+                enableRadio(false)
+              else
+                TriggerEvent("ls-radio:use")
+                print("use")
+              end
+            end
+        Citizen.Wait(0)
+    end
+end)
+
+
+RegisterNetEvent('Radio:CallData:cb')
+AddEventHandler('Radio:CallData:cb', function(data)
+  DataUser = data
+  SendNUIMessage({
+      type = "click"
+  })
+end)
+
+function VenatoNotify(text)
+  local notif = {
+    title= "Radio",
+    type = "info", --  danger, error, alert, info, success, warning
+    logo = "https://img.icons8.com/cotton/64/000000/marine-radio.png",
+    message = text,
+  }
+  TriggerEvent("Venato:notify", notif)
+end
+
+function VenatoErrorNotify(text)
+  local notif = {
+    title= "Radio",
+    type = "error", --  danger, error, alert, info, success, warning
+    logo = "https://img.icons8.com/cotton/64/000000/marine-radio.png",
+    message = text,
+  }
+  TriggerEvent("Venato:notify", notif)
+end
