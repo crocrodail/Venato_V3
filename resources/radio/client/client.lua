@@ -162,7 +162,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-            if IsControlJustPressed(0, 20) then
+            if IsControlJustPressed(1, 20) then
               if radioMenu then
                 enableRadio(false)
               else
