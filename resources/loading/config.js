@@ -7,7 +7,7 @@ var config = {
     /* Insert the Youtube Video ID below */
     "videoID": "0-c7kXpRVIQ",
     /* Music Volume (0%-100%) | Lower is Quieter, Higher is Louder */
-    "musicVolume": 30,
+    "musicVolume": 1,
     "text": {
         "title": "Venato",
         "link": "venato.fr",

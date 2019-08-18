@@ -548,7 +548,8 @@ end
 function UseItem(table)
   if table[1] - 1 >= 0 then
     TriggerServerEvent("Inventory:DataItem", table[2], table[1])
-    Citizen.Wait(1500)
+    Menu.clearMenu()
+    Citizen.Wait(1000)
     OpenInventory()
   else
     Venato.notifyError("Error !")
