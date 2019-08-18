@@ -51,3 +51,23 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
     Venato.LoadSkin(DataPlayers[source])
   end
 end)
+
+RegisterNetEvent("Venato:notify")
+AddEventHandler("Venato:notify", function(notif)
+  Venato.notify(notif)
+end)
+
+RegisterNetEvent("Venato:notifyError")
+AddEventHandler("Venato:notifyError", function(msg)
+  Venato.notifyError(msg)
+end)
+
+RegisterNetEvent("Menu:Execute")
+AddEventHandler("Menu:Execute", function(params)
+  _ = _G[params.fn] and _G[params.fn](params.args)
+end)
+
+RegisterNetEvent("Venato:InteractTxt")
+AddEventHandler("Venato:InteractTxt", function(msg)
+  Venato.InteractTxt(msg)
+end)

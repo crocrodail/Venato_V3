@@ -1,6 +1,6 @@
 RegisterServerEvent('customs:buy')
 AddEventHandler('customs:buy', function(data)
-    local UserData = exports.venato:GetDatePlayers()
+    local UserData = exports.venato:GetDataPlayers()
     local datas = json.decode(data)
     local identifiers = UserData[source].SteamId
     local currentSource = source
@@ -76,7 +76,7 @@ AddEventHandler('customs:buy', function(data)
 
 RegisterServerEvent('customs:checkifowner')
 AddEventHandler('customs:checkifowner', function(vehicle)
-    local UserData = exports.venato:GetDatePlayers()
+    local UserData = exports.venato:GetDataPlayers()
     local identifiers = UserData[source].SteamId
     local currentSource = source
     if vehicle.plate ~= nil then
@@ -97,7 +97,7 @@ end)
 
 RegisterServerEvent('customs:resetvhl')
 AddEventHandler('customs:resetvhl', function(vehicle)
-    local UserData = exports.venato:GetDatePlayers()
+    local UserData = exports.venato:GetDataPlayers()
     local identifiers = UserData[source].SteamId
     local currentSource = source
     if vehicle.plate ~= nil then

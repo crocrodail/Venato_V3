@@ -126,5 +126,5 @@ files {
 export 'GetBlacklistedList'
 export 'GetBalancedList'
 export 'GetBalancedCatList'
-server_export 'GetDatePlayers'
+server_export 'GetDataPlayers'
 server_export 'ExportPaymentCB'

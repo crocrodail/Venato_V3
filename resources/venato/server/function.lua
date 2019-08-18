@@ -12,7 +12,7 @@ function getIdentifiant(id)
   end
 end
 
-function GetDatePlayers()
+function GetDataPlayers()
   return DataPlayers
 end
 
