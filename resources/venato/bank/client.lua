@@ -15,12 +15,12 @@ Citizen.CreateThread(function()
     inBankMarker = false
 
     for i = 1, #Config.ATMS, 1 do
-      if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y,
+      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y,
         Config.ATMS[i].z, true) < 20 and (Config.ATMS[i].b ~= nil) then
         DrawMarker(27, Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z + 0.1, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,
           150, 255, 200, 0, 0, 0, 0)
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y,
+      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y,
         Config.ATMS[i].z, true) < 2 then
         time = 0
         if (Config.ATMS[i].b == nil) then
@@ -31,7 +31,7 @@ Citizen.CreateThread(function()
           type = Config.ATMS[i].t
           Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
         end
-      elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.ATMS[i].x, Config.ATMS[i].y,
+      elseif GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y,
         Config.ATMS[i].z, true) > 4 then
         time = 500
       end

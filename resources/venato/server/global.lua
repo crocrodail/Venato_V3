@@ -9,7 +9,8 @@ AddEventHandler("ConsolePrint", function(print)
 end)
 
 RegisterNetEvent("Venato:CallDataPlayerSpawn")
-AddEventHandler("Venato:CallDataPlayerSpawn", function()
+AddEventHandler("Venato:CallDataPlayerSpawn", function(PlayerId)
   local source = source
+  DataPlayers[source].PlayerIdClient = PlayerId
   TriggerClientEvent("Venato:SpawnInit", source, DataPlayers, source)
 end)

@@ -12,7 +12,7 @@ local ClotheVehicle = false
 local BoxOnCamion = false
 
 Citizen.CreateThread(function()
-	local ply = GetPlayerPed(-1)
+	local ply = Venato.GetPlayerPed()
 	while true do
 		Citizen.Wait(0)
 		if IsControlJustPressed(1, Keys["U"]) then
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	local ply = GetPlayerPed(-1)
+	local ply = Venato.GetPlayerPed()
 	while true do
 		Citizen.Wait(1000)
 		local plyCoords = GetEntityCoords(ply, 0)
@@ -97,7 +97,7 @@ Citizen.CreateThread(function()
 end)
 
 function CreateBox(x,y,z)
-	local coords = GetEntityCoords(GetPlayerPed(-1), 0)
+	local coords = GetEntityCoords(Venato.GetPlayerPed(), 0)
 	local objet = Venato.CreateObject(BoxJobs, x or coords["x"], y or coords["y"], z or coords["z"])
 	AllObject[objet] = objet
 	local bassin1 = Venato.CreateObject(BassinBox, x or coords["x"], y or coords["y"], z or coords["z"])
@@ -121,12 +121,12 @@ function AttacheOnCamion()
 end
 
 function takebox()
-	AttachEntityToEntity(GobalBox, GetVehiclePedIsIn(GetPlayerPed(-1), false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0, false, false, false, false, 2, true)
+	AttachEntityToEntity(GobalBox, GetVehiclePedIsIn(Venato.GetPlayerPed(), false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0, false, false, false, false, 2, true)
 	SetEntityCollision(GobalBox, false, true)
 end
 
 function dropBoxInForklift()
-	local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0)
+	local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
 	DetachEntity(GobalBox)
 	PlaceObjectOnGroundProperly(GobalBox)
 	coords = GetEntityCoords(GobalBox, 0)
@@ -136,7 +136,7 @@ function dropBoxInForklift()
 end
 
 function DetacheBoxInForklift()
-	local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0)
+	local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
 	DetachEntity(GobalBox)
 	PlaceObjectOnGroundProperly(GobalBox)
 	coords = GetEntityCoords(GobalBox, 0)
@@ -151,10 +151,108 @@ function OpenTestMenu()
 	Menu.addButton("Spawn box", "CreateBox", nil)
 	Menu.addButton("Spawn Forklift", "SpawnForkliftTest", nil)
 	Menu.addButton("delete", "deleteBox", nil)
+	Menu.addButton("test", "test", nil)
+	Menu.addButton("test2", "test2", nil)
+	Menu.addButton("test3", "test3", nil)
+	Menu.addButton("spawn bed", "stopeffect", nil)
+	Menu.addButton("attach bed", "attachbed", nil)
+	Menu.addButton("deattach bed", "detachebed", nil)
+	Menu.addButton("kill me", "dead", nil)
+end
+local bed = nil
+
+function dead()
+	SetEntityHealth(Venato.GetPlayerPed(), 0.0)
+end
+
+function detachebed()
+	DetachEntity(Venato.GetPlayerPed())
+	ClearPedTasks(GetPlayerPed(-1))
+end
+
+function attachbed()
+	Venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1})
+	AttachEntityToEntity(Venato.GetPlayerPed(), bed, nil, 0.0, -0.25, 1.2, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
+end
+
+function test()
+	--Venato.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
+	--Venato.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
+	--Venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_def", anim = "cpr_intro", useLib = true})
+	Citizen.Wait(15000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
+	Citizen.Wait(1500)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol", useLib = true})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
+	Citizen.Wait(1500)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_success", useLib = true})
+end
+
+function test2()
+	--Venato.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
+	--Venato.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
+	--Venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_intro", useLib = true})
+	Citizen.Wait(15000)
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
+	Citizen.Wait(1500)
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol", useLib = true})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
+	Citizen.Wait(1500)
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true})
+end
+
+function test3()
+	local ClonedPed = ClonePed(Venato.GetPlayerPed(), GetEntityHeading(Venato.GetPlayerPed()), 1, 1)
+	local coord = GetEntityCoords(Venato.GetPlayerPed(), true)
+	SetEntityCoords(ClonedPed, coord.x, coord.y, coord.z, 0, 0, 0, true)
+	SetEntityCoords(Venato.GetPlayerPed(), coord.x-0.9, coord.y-0.1, coord.z, 0, 0, 0, true)
+	local heading = GetEntityHeading(ClonedPed)
+	SetEntityHeading(Venato.GetPlayerPed(), heading-90)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_def", anim = "cpr_intro", useLib = true})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_intro", useLib = true, ped = ClonedPed})
+	Citizen.Wait(15000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1, ped = ClonedPed})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_cpr_to_kol", useLib = true, ped = ClonedPed})
+	Citizen.Wait(1500)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol", useLib = true})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol", useLib = true, ped = ClonedPed})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol_to_cpr", useLib = true, ped = ClonedPed})
+	Citizen.Wait(1500)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1, ped = ClonedPed})
+	Citizen.Wait(5000)
+	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_success", useLib = true})
+	Venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true, ped = ClonedPed})
+	Citizen.Wait(26000)
+	ClearPedTasks(GetPlayerPed(-1))
+end
+
+function stopeffect()
+	local coord = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
+	bed = Venato.CreateObject("v_med_emptybed", coord["x"], coord["y"], coord["z"])
+	AllObject[bed] = bed
+	PlaceObjectOnGroundProperly(bed)
 end
 
 function SpawnForkliftTest()
-	local coord = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 2.0, 0)
+	local coord = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
 	Venato.CreateVehicle("forklift", coord , 0, function(vehicle)
 		forklift = vehicle
 	end)

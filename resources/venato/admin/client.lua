@@ -16,6 +16,12 @@ local LastCoords = {}
 local state = false
 local cam = nil
 local AdminShowPlayerInfo = nil
+local HeadId = {}
+local InSpectatorMode = false
+local noclip = false
+local noclip_pos
+local heading = 0
+local visible = true
 
 function ResetDefaultNotification()
   defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
@@ -33,7 +39,7 @@ function openVenatoadmin()
   Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
   Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
   Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
-  Menu.addButton("Jesus Christ ~r~(Non attribuer)", "none", nil) --  non attribuer (revive)
+  Menu.addButton("Jesus Christ", "respawntest", nil) --  non attribuer (revive)
   Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
   Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
   Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
@@ -41,7 +47,64 @@ function openVenatoadmin()
   --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
   if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+    Menu.addButton("noClip", "AdminNoClip", nil)
+    Menu.addButton("invisible", 'AdminInvisible' , nil)
   end
+end
+
+function AdminInvisible()
+  visible = not visible
+  if visible then
+    SetEntityVisible(Venato.GetPlayerPed(), true, nil)
+  else
+    SetEntityVisible(Venato.GetPlayerPed(), false, nil)
+  end
+end
+
+function AdminNoClip()
+  noclip_pos = GetEntityCoords(Venato.GetPlayerPed(), false)
+  noclip = not noclip
+end
+
+Citizen.CreateThread(function()
+	 while true do
+		Citizen.Wait(0)
+		  if noclip then
+			  SetEntityCoordsNoOffset(Venato.GetPlayerPed(),  noclip_pos.x,  noclip_pos.y,  noclip_pos.z,  0, 0, 0)
+			if(IsControlPressed(1,  34))then
+				heading = heading + 1.5
+				if(heading > 360)then
+					heading = 0
+				end
+				SetEntityHeading(Venato.GetPlayerPed(),  heading)
+			end
+			if(IsControlPressed(1,  9))then
+				heading = heading - 1.5
+				if(heading < 0)then
+					heading = 360
+				end
+				SetEntityHeading(Venato.GetPlayerPed(),  heading)
+			end
+			if(IsControlPressed(1,  8))then
+				noclip_pos = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 1.0, 0.0)
+			end
+			if(IsControlPressed(1,  32))then
+				noclip_pos = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, -1.0, 0.0)
+			end
+
+			if(IsControlPressed(1,  27))then
+				noclip_pos = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 0.0, 1.0)
+			end
+			if(IsControlPressed(1,  173))then
+				noclip_pos = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 0.0, -1.0)
+			end
+		end
+	end
+end)
+
+function respawntest()
+  NetworkResurrectLocalPlayer(-49.158519744873, -1112.1115722656, 26.435813903809, 0, true, true, false)
+  ClearPedTasksImmediately(Venato.GetPlayerPed())
 end
 
 function AdminShowCoord()
@@ -58,7 +121,7 @@ function AdminBlipsOption()
   else
     AdminBlipsBool = false
     for k, v in pairs(AdminDataPlayers) do
-      local Player = GetPlayerFromServerId(v.Source)
+      local Player = v.PlayerIdClient
       if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
         local ped = GetPlayerPed(Player)
         local blip = GetBlipFromEntity(ped)
@@ -66,8 +129,10 @@ function AdminBlipsOption()
           -- Removes blip
           RemoveBlip(blip)
         end
-        if IsMpGamerTagActive(HeadId[Player]) then
-          RemoveMpGamerTag(HeadId[Player])
+        if HeadId ~= nil then
+          if IsMpGamerTagActive(HeadId[Player]) then
+            RemoveMpGamerTag(HeadId[Player])
+          end
         end
       end
     end
@@ -302,24 +367,21 @@ function AdminGivePoche()
 end
 
 function Admintptome()
-  local targetPed = Venato.GetPlayerPedFromSource(indexToShow)
+  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
   local ped = Venato.GetPlayerPed()
   local Coord = GetEntityCoords(ped)
   SetEntityCoords(Targetped, Coord.x, Coord.y, Coord.z)
 end
 
 function Admintptoelle()
-  local targetPed = Venato.GetPlayerPedFromSource(indexToShow)
+  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
   local ped = Venato.GetPlayerPed()
   local TargetCoord = GetEntityCoords(Targetped)
   SetEntityCoords(ped, TargetCoord.x, TargetCoord.y, TargetCoord.z)
 end
 
 function AdminFreeze()
-  local playerIdx = GetPlayerFromServerId(indexToShow)
-  print(playerIdx)
-  local ped = GetPlayerPed(playerIdx)
-  FreezeEntityPosition(ped, true)
+  FreezeEntityPosition(GetPlayerPed(AdminDataPlayers[indexToShow].PlayerIdClient), true)
   -- if state == true then
   --   if not IsEntityVisible(ped) then
   --     SetEntityVisible(ped, true)
@@ -341,21 +403,26 @@ end
 
 function AdminSpectate()
   if InSpectatorMode == false then
-    if not DoesCamExist(cam) then
-      cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-    end
-    SetCamActive(cam, true)
-    RenderScriptCams(true, false, 0, true, true)
     LastCoords = GetEntityCoords(Venato.GetPlayerPed())
-    indexToSpectate = indexToShow
+    TargetSpectate = indexToShow
     InSpectatorMode = true
+    Citizen.CreateThread(function()
+      if not DoesCamExist(cam) then
+        cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+      end
+      SetCamActive(cam,  true)
+      RenderScriptCams(true,  false,  0,  true,  true)
+      InSpectatorMode = true
+    end)
   else
     InSpectatorMode = false
-    SetCamActive(cam, false)
-    RenderScriptCams(false, false, 0, true, true)
-    SetEntityCollision(playerPed, true, true)
-    SetEntityVisible(playerPed, true)
-    SetEntityCoords(playerPed, LastCoords.x, LastCoords.y, LastCoords.z)
+      TargetSpectate  = nil
+      local playerPed = Venato.GetPlayerPed()
+      SetCamActive(cam,  false)
+      RenderScriptCams(false,  false,  0,  true,  true)
+      SetEntityCollision(playerPed,  true,  true)
+      SetEntityVisible(playerPed,  true)
+      SetEntityCoords(playerPed, LastCoords.x, LastCoords.y, LastCoords.z)
   end
 end
 
@@ -364,85 +431,88 @@ function AdminCloseMenu()
 end
 
 Citizen.CreateThread(function()
-  local HeadId = {}
-  while AdminBlipsBool do
+  HeadId = {}
+  while true do
     Citizen.Wait(0)
-    for k, v in pairs(AdminDataPlayers) do
-      local Player = GetPlayerFromServerId(v.Source)
-      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
-        local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
-        local blip = GetBlipFromEntity(ped)
-        HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "",
-          false)
-        if NetworkIsPlayerTalking(Player) then
-          SetMpGamerTagVisibility(HeadId[Player], 9, true)
-        else
-          SetMpGamerTagVisibility(HeadId[Player], 9, false)
-        end
-        if not DoesBlipExist(blip) then
-          blip = AddBlipForEntity(ped)
-          SetBlipSprite(blip, 1)
-          ShowHeadingIndicatorOnBlip(blip, true)
-        else
-          local veh = GetVehiclePedIsIn(ped, false)
-          local blipSprite = GetBlipSprite(blip)
-          local vehClass = GetVehicleClass(veh)
-          local vehModel = GetEntityModel(veh)
-          if veh ~= 0 then
-            if vehClass == 15 then
-              -- Helicopters
-              if blipSprite ~= 422 then
-                SetBlipSprite(blip, 422)
-                ShowHeadingIndicatorOnBlip(blip, false)
+    if AdminBlipsBool then
+      for k, v in pairs(AdminDataPlayers) do
+        local Player = v.PlayerIdClient
+        if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= Venato.GetPlayerPed() then
+          local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
+          local blip = GetBlipFromEntity(ped)
+          HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "", false)
+          if NetworkIsPlayerTalking(Player) then
+            SetMpGamerTagVisibility(HeadId[Player], 9, true)
+          else
+            SetMpGamerTagVisibility(HeadId[Player], 9, false)
+          end
+          if not DoesBlipExist(blip) then
+            blip = AddBlipForEntity(ped)
+            SetBlipSprite(blip, 1)
+            ShowHeadingIndicatorOnBlip(blip, true)
+          else
+            local veh = GetVehiclePedIsIn(ped, false)
+            local blipSprite = GetBlipSprite(blip)
+            local vehClass = GetVehicleClass(veh)
+            local vehModel = GetEntityModel(veh)
+            if veh ~= 0 then
+              if vehClass == 15 then
+                -- Helicopters
+                if blipSprite ~= 422 then
+                  SetBlipSprite(blip, 422)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
+              elseif vehClass == 16 then
+                if blipSprite ~= 307 then
+                  SetBlipSprite(blip, 307)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
+              elseif tonumber(v.IdJob) == 2 then
+                if blipSprite ~= 56 then
+                  SetBlipSprite(blip, 56)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
+              else
+                if blipSprite ~= 326 then
+                  SetBlipSprite(blip, 326)
+                  ShowHeadingIndicatorOnBlip(blip, false)
+                end
               end
-            elseif vehClass == 16 then
-              if blipSprite ~= 307 then
-                SetBlipSprite(blip, 307)
-                ShowHeadingIndicatorOnBlip(blip, false)
+              local passengers = GetVehicleNumberOfPassengers(veh)
+              if passengers then
+                if not IsVehicleSeatFree(veh, -1) then
+                  passengers = passengers + 1
+                end
+                ShowNumberOnBlip(blip, passengers)
+              else
+                HideNumberOnBlip(blip)
               end
-            elseif tonumber(v.IdJob) == 2 then
-              if blipSprite ~= 56 then
-                SetBlipSprite(blip, 56)
-                ShowHeadingIndicatorOnBlip(blip, false)
-              end
-            else
-              if blipSprite ~= 326 then
-                SetBlipSprite(blip, 326)
-                ShowHeadingIndicatorOnBlip(blip, false)
-              end
-            end
-            local passengers = GetVehicleNumberOfPassengers(veh)
-            if passengers then
-              if not IsVehicleSeatFree(veh, -1) then
-                passengers = passengers + 1
-              end
-              ShowNumberOnBlip(blip, passengers)
+              SetBlipRotation(blip, math.ceil(GetEntityHeading(veh)))
             else
               HideNumberOnBlip(blip)
+              if blipSprite ~= 1 then
+                -- default blip
+                SetBlipSprite(blip, 1)
+                ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
+              end
             end
-            SetBlipRotation(blip, math.ceil(GetEntityHeading(veh)))
-          else
-            HideNumberOnBlip(blip)
-            if blipSprite ~= 1 then
-              -- default blip
-              SetBlipSprite(blip, 1)
-              ShowHeadingIndicatorOnBlip(blip, true) -- Player Blip indicator
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentString(v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")")
+      			EndTextCommandSetBlipName(blip)
+            SetBlipScale(blip, 0.85) -- set scale
+            if IsPauseMenuActive() then
+              SetBlipAlpha(blip, 255)
+            else
+              local x1, y1 = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
+              local x2, y2 = table.unpack(GetEntityCoords(GetPlayerPed(Player), true))
+              local distance = (math.floor(math.abs(math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) / -1)) + 900
+              if distance < 0 then
+                distance = 0
+              elseif distance > 255 then
+                distance = 255
+              end
+              SetBlipAlpha(blip, distance)
             end
-          end
-          SetBlipNameToPlayerName(blip, Player) -- update blip name
-          SetBlipScale(blip, 0.85) -- set scale
-          if IsPauseMenuActive() then
-            SetBlipAlpha(blip, 255)
-          else
-            local x1, y1 = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-            local x2, y2 = table.unpack(GetEntityCoords(GetPlayerPed(Player), true))
-            local distance = (math.floor(math.abs(math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) / -1)) + 900
-            if distance < 0 then
-              distance = 0
-            elseif distance > 255 then
-              distance = 255
-            end
-            SetBlipAlpha(blip, distance)
           end
         end
       end
@@ -454,7 +524,6 @@ Citizen.CreateThread(function()
   local zHeigt = 0.0;
   height = 1000.0
   local radius = -3.5;
-  local cam = nil
   local polarAngleDeg = 0;
   local azimuthAngleDeg = 90;
   while true do
@@ -510,9 +579,16 @@ Citizen.CreateThread(function()
       ShowInfoCoord()
     end
     if InSpectatorMode then
-      local playerPed = Venato.GetPlayerPed()
-      local targetPed = Venato.GetPlayerPedFromSource(indexToShow)
-      local coords = GetEntityCoords(targetPed)
+      local targetPlayerId = GetPlayerFromServerId(TargetSpectate)
+      local playerPed      = Venato.GetPlayerPed()
+      local targetPed      = GetPlayerPed(targetPlayerId)
+      local coords         = GetEntityCoords(targetPed)
+      for k, v in pairs(AdminDataPlayers) do
+        if v.PlayerIdClient ~= PlayerId() then
+          local otherPlayerPed = GetPlayerPed(v.PlayerIdClient)
+          SetEntityNoCollisionEntity(playerPed,  otherPlayerPed,  true)
+        end
+      end
       if IsControlPressed(2, 241) then
         radius = radius + 0.5;
       end
@@ -522,8 +598,8 @@ Citizen.CreateThread(function()
       if radius > -1 then
         radius = -1
       end
-      local xMagnitude = GetDisabledControlNormal(0, 1);
-      local yMagnitude = GetDisabledControlNormal(0, 2);
+      local xMagnitude = GetDisabledControlNormal(0,  1);
+      local yMagnitude = GetDisabledControlNormal(0,  2);
       polarAngleDeg = polarAngleDeg + xMagnitude * 10;
       if polarAngleDeg >= 360 then
         polarAngleDeg = 0
@@ -533,11 +609,9 @@ Citizen.CreateThread(function()
         azimuthAngleDeg = 0;
       end
       local nextCamLocation = polar3DToWorld3D(coords, radius, polarAngleDeg, azimuthAngleDeg)
-      SetCamCoord(cam, nextCamLocation.x, nextCamLocation.y, nextCamLocation.z)
-      PointCamAtEntity(cam, targetPed)
-      SetEntityCollision(playerPed, false, false)
-      SetEntityVisible(playerPed, false)
-      SetEntityCoords(playerPed, coords.x, coords.y, coords.z + 10)
+      SetCamCoord(cam,  nextCamLocation.x,  nextCamLocation.y,  nextCamLocation.z)
+      PointCamAtEntity(cam,  targetPed)
+      SetEntityCoords(playerPed,  coords.x, coords.y, coords.z + 10)
     end
   end
 end)

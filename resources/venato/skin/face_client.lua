@@ -30,7 +30,7 @@ function startEditFace()
     Citizen.CreateThread(function()
         currentItem = 0
         inEdit = true
-        local me = GetPlayerPed(-1)
+        local me = Venato.GetPlayerPed()
         local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
         local boneIndex = 65068
 
@@ -156,9 +156,9 @@ function saveFace()
     TriggerServerEvent("Venato:SyncData")
     DoScreenFadeOut(3500)
     Citizen.Wait(3500)
-    FreezeEntityPosition(GetPlayerPed(-1), true)
-    SetEntityCoords(GetPlayerPed(-1), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
+    FreezeEntityPosition(Venato.GetPlayerPed(), true)
+    SetEntityCoords(Venato.GetPlayerPed(), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
     Citizen.Wait(2000)
-    FreezeEntityPosition(GetPlayerPed(-1), false)
+    FreezeEntityPosition(Venato.GetPlayerPed(), false)
     DoScreenFadeIn(2000)
 end

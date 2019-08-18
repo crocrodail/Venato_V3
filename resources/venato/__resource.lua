@@ -9,6 +9,7 @@ client_script {
   '/client/global.lua',
   '/client/sirenControl.js',
   '/client/teleport.lua',
+  '/client/savePos.lua',
   '/inventory/client.lua',
   '/coffre_voiture/client.lua',
   '/bank/config.lua',
@@ -28,7 +29,8 @@ client_script {
   '/clothingShop/config.lua',
   '/skin/client.lua',
   '/skin/face_client.lua',
-  '/calmIA/client.lua',
+  '/playerDeath/ClientDeath.lua',
+  '/playerDeath/DeathFunction.lua',
   'test.lua'
 }
 
@@ -37,6 +39,7 @@ server_script {
   '/server/login.lua',
   '/server/function.lua',
   '/server/global.lua',
+  '/server/savePos.lua',
   '/inventory/server.lua',
   '/coffre_voiture/server.lua',
   '/coffre_voiture/config.lua',
@@ -117,14 +120,11 @@ files {
 	"/html/bank.html",
 	"/html/identity.html",
 	"/html/cheque.html",
-  '/calmIA/events.meta',
-	'/calmIA/relationships.dat'
 }
 
-data_file 'FIVEM_LOVES_YOU_4B38E96CC036038F' '/calmIA/events.meta'
 
 export 'GetBlacklistedList'
 export 'GetBalancedList'
 export 'GetBalancedCatList'
-server_export 'GetDatePlayers'
+server_export 'GetDataPlayers'
 server_export 'ExportPaymentCB'

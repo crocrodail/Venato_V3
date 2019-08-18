@@ -324,41 +324,48 @@ end
 local respawnForced
 local diedAt
 
-Citizen.CreateThread(
-    function()
-        -- main loop thing
-        while true do
-            Citizen.Wait(50)
-
-            local playerPed = GetPlayerPed(-1)
-
-            if playerPed and playerPed ~= -1 then
-                -- check if we want to autospawn
-                if autoSpawnEnabled then
-                    if NetworkIsPlayerActive(PlayerId()) then
-                        if (diedAt and (GetTimeDifference(GetGameTimer(), diedAt) > 2000)) or respawnForced then
-                            if autoSpawnCallback then
-                                autoSpawnCallback()
-                            else
-                                spawnPlayer()
-                            end
-
-                            respawnForced = false
-                        end
-                    end
-                end
-
-                if IsEntityDead(playerPed) then
-                    if not diedAt then
-                        diedAt = GetGameTimer()
-                    end
-                else
-                    diedAt = nil
-                end
-            end
-        end
+Citizen.CreateThread(function()
+  Citizen.Wait(5000)
+  playAnim({anim = { lib = "veh@van@ds@enter_exit", anim = "dead_fall_out" },types="animsAction"})
+  while true do
+    Citizen.Wait(0)
+    local playerPed = GetPlayerPed(-1)
+    if IsEntityDead(playerPed) then
+      print('revive')
+      local ped = ClonePed(playerPed, GetEntityHeading(playerPed), 1, 1)
+      dead = true
+      SetEntityNoCollisionEntity(ped, playerPed, true)
+      SetEntityVisible(playerPed, false, true)
+      SetEntityHealth(ped, 0)
+      ResurrectPed(playerPed)
+      SetEntityHealth(playerPed, GetEntityMaxHealth(playerPed))
+      Citizen.Wait(1500)
+      local coordPed = GetEntityCoords(ped, true)
+      NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, true, true, false)
+      SetPedToRagdoll(playerPed, 12000, 12000, 0, 0, 0, 0)
+      playAnim({anim = { lib = "veh@van@ds@enter_exit", anim = "dead_fall_out" },types="animsAction"})
+      Citizen.Wait(1500)
+      DeleteEntity(ped)
+      SetEntityVisible(playerPed, true, true)
     end
-)
+  end
+end)
+
+function playAnim(data)
+  print(data.types)
+    if data.types == "animsAction" then
+        RequestAnimDict(data.anim.lib)
+        while not HasAnimDictLoaded(data.anim.lib) do
+        Citizen.Wait(0)
+        end
+        if HasAnimDictLoaded(data.anim.lib) then
+            TaskPlayAnim( GetPlayerPed(-1),data.anim.lib,data.anim.anim ,8.0, -8.0, -1, 0, 0, false, false, false )
+            print('anim')
+        end
+    elseif data.types == "animsActionScenario" then
+        TaskStartScenarioInPlace( GetPlayerPed(-1), data.anim.anim, 0, false)
+    end
+end
 
 function forceRespawn()
     spawnLock = false

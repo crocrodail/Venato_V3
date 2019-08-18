@@ -293,6 +293,69 @@ function pairsByKeys (t, f)
   return iter
 end
 
+function Venato.GetCarShopIntruction()
+  scaleform = Venato.ScaleForm("instructional_buttons")
+  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(1)
+  Button(GetControlInstructionalButton(2, 190, true))
+  Button(GetControlInstructionalButton(2, 189, true))
+  ButtonMessage("Changer la couleur principale")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(0)
+  Button(GetControlInstructionalButton(2, 168, true))
+  Button(GetControlInstructionalButton(2, 167, true))
+  ButtonMessage("Changer la couleur secondaire")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(80)
+  EndScaleformMovieMethodReturn()
+
+  return scaleform
+end
+
+function Venato.GetCarMenuIntruction()
+  scaleform = Venato.ScaleForm("instructional_buttons")
+  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(2)
+  Button(GetControlInstructionalButton(2, Keys["Y"], true))
+  ButtonMessage("Vérrouiler/Déverrouiller le véhicule (avec les clès)")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(1)
+  Button(GetControlInstructionalButton(2, Keys["L"], true))
+  ButtonMessage("Ouvrir l'inventaire du coffre")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(0)
+  Button(GetControlInstructionalButton(2, Keys["H"], true))
+  ButtonMessage("Régler les phares")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(80)
+  EndScaleformMovieMethodReturn()
+  DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
+end
+
 RegisterNetEvent('CarShop:PaiementOk:response')
 AddEventHandler('CarShop:PaiementOk:response', function(data)
   RemoveNotification(lastNotif)

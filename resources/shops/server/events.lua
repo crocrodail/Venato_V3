@@ -47,7 +47,7 @@ AddEventHandler("Shops:TestBuy", function(ContentId, shopId, quantity, newSource
   local totalPoid = _quantity * content.poid
 
   local steamId = ShopsTools.getSteamID(source)
-  local DataUsers = exports.venato:GetDatePlayers()
+  local DataUsers = exports.venato:GetDataPlayers()
   currentPlayerMoney = ShopDbFunctions.getCurrentPlayerMoney(steamId)
   if totalPrice > currentPlayerMoney then
     TriggerClientEvent("Shops:NotEnoughMoney", source, content.libelle)

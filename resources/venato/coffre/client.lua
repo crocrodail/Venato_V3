@@ -42,7 +42,7 @@ end)
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+    local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
     for k,v in pairs(DataCoffre) do
       if Vdist(x, y, z, v.x, v.y, v.z) < 1 then
         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour ouvrir le coffre.')

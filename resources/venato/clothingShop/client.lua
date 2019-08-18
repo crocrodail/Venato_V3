@@ -313,7 +313,6 @@ tablee = {
     bracelet = {id = GetPedPropIndex(ped, 7), color = GetPedPropTextureIndex(ped, 7)},
   }
 }
-print(json.encode(tablee))
 
 function BuyClothe()
   local ped = Venato.GetPlayerPed()
