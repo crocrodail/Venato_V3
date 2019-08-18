@@ -7,8 +7,8 @@ client_script {
   '/main/client/events.lua',
   '/main/client/client.lua',
   '/delivery/client.lua',
-  --'/lsmc/ambulancier_client.lua',
-  --'/lsmc/ambulancier_Menu.lua',
+  '/lsmc/ambulancier_client.lua',
+  '/lsmc/ambulancier_Menu.lua',
 }
 
 server_script {
@@ -18,5 +18,5 @@ server_script {
   '/main/server/events.lua',
   '/main/server/db.lua',
   '/delivery/server.lua',
-  --'/lsmc/ambulancier_server.lua',
+  '/lsmc/ambulancier_server.lua',
 }

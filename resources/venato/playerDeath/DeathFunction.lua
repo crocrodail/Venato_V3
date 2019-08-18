@@ -164,7 +164,7 @@ function GetKiller()
 	else
 		Killer = nil
 	end
-	return Killer
+	return GetPlayerServerId(Killer)
 end
 
 function GetWeapon()

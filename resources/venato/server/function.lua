@@ -113,11 +113,16 @@ function accessGranded(SteamId, source , balek)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
         TriggerClientEvent("Venato:Connection", source)
+        TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
         ControlVisa(SteamId, source)
         print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
       end)
     end
   end)
+end
+
+function startScript()
+  reloadDataCoffre()
 end
 
 function ControlVisa(SteamId, source)

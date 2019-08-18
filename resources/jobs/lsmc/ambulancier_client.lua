@@ -127,99 +127,31 @@ local function removeBlipAmbulancier()
 			RemoveBlip(item.blip)
 	end
 end
-local function drawHelpJobAmbulancier()
-    local lines = {
-        { text = '~o~Information Ambulancier', isTitle = true, isCenter = true},
-        { text = '~g~Vous devez sauver les citoyens dans le coma.', isCenter = true, addY = 0.04},
-        { text = ' - Prenez votre service et récupérez votre véhicule dans un garage.'},
-        { text = ' - Lorsque qu\'un appel est lancé, prenez l\'appel et dirrigez-vous pour sauvez une vie.'},
-        { text = ' - Une fois sur place, analysez la situation et agissez dans la mesure du possible.'},
-        { text = ' - Prévenez le centre d\'appels que la mission est terminée.'},
-        { text = ' - Prenez ou attendez le prochain appel.', addY = 0.04},
-        { text = '~b~ Vos véhicules :', size = 0.4, addY = 0.04 },
-        { text = '~g~L\'ambulance ~w~Rapide et maniable, permet d\'intervenir à courte et moyenne distance'},
-        { text = '~g~L\'helicopter ~w~Plus rapide pour les longue distances.', addY = 0.04},
-        { text = '~d~Si vous trouvez des problèmes, utilisez le forum pour nous les signalers.', isCenter = true, addY = 0.06},
-        { text = '~b~Merci & Bonne route', isCenter = true},
-    }
-    DrawRect(0.5, 0.5, 0.48, 0.5, 0,0,0, 225)
-    local y = 0.31 - 0.025
-    local defaultAddY = 0.025
-    local addY = 0.025
-    for _, line in pairs(lines) do
-        y = y + addY
-        local caddY = defaultAddY
-        local x = 0.275
-        local defaultSize = 0.32
-        local defaultFont = 8
-        if line.isTitle == true then
-            defaultFont = 1
-            defaultSize = 0.8
-            caddY = 0.06
-        end
-        SetTextFont(line.font or defaultFont)
-        SetTextScale(0.0,line.size or defaultSize)
-        SetTextCentre(line.isCenter == true)
-        if line.isCenter == true then
-            x = 0.5
-        end
-        SetTextDropShadow(0, 0, 0, 0, 0)
-        SetTextEdge(0, 0, 0, 0, 0)
-        SetTextColour(255, 255, 255, 255)
-        SetTextEntry("STRING")
-        AddTextComponentString(line.text)
-        DrawText(x, y)
-        addY = line.addY or caddY
-    end
-    SetTextComponentFormat("STRING")
-    AddTextComponentString('~INPUT_CELLPHONE_CANCEL~ ~g~Ferme l\'aide')
-    DisplayHelpTextFromStringLabel(0, 0, 1, -1)
-
-end
-
-function Chat(t)
-	TriggerEvent("chatMessage", 'AMBU', { 0, 255, 255}, "" .. tostring(t))
-end
 
 function spawnVehicule(pos, type)
-    deleteVehicle()
-    local vehi = GetClosestVehicle(pos.x, pos.y, pos.z, 2.0, 0, 70)
-    if vehi == 0 then
-        RequestModel(type)
-        while not HasModelLoaded(type) do
-            Wait(1)
-        end
-        local plate = math.random(1000, 9000)
-        myVehiculeEntity = CreateVehicle(type, pos.x, pos.y, pos.z, pos.h , true, true)
+  deleteVehicle()
+  RequestModel(type)
+  while not HasModelLoaded(type) do
+    Wait(100)
+  end
+  local plate = math.random(1000, 9000)
+  Venato.CreateVehicle(string.upper(type), {pos.x, pos.y, pos.z}, pos.h, function(vehicle)
+    myVehiculeEntity = vehicle
 		if type == "polmav" then
 			SetVehicleLivery(myVehiculeEntity, 1)
 		elseif type == "ambulance" or type == "blazer2" or type == "fbi2" or type == "lguard" or type == "rsb_mbsprinter" then
-		SetVehicleEnginePowerMultiplier(myVehiculeEntity, 50.03)
+		    SetVehicleEnginePowerMultiplier(myVehiculeEntity, 50.03)
 		else
-		SetVehicleEnginePowerMultiplier(myVehiculeEntity, pos.OverPowered)
+		    SetVehicleEnginePowerMultiplier(myVehiculeEntity, pos.OverPowered)
 		end
-
-
-        SetVehicleNumberPlateText(myVehiculeEntity, "Amb"..plate)
-        SetVehicleOnGroundProperly(myVehiculeEntity)
-
-		SetEntityAsMissionEntity(myVehiculeEntity, true, true)
+    SetVehicleNumberPlateText(myVehiculeEntity, "Amb"..plate)
+    SetVehicleOnGroundProperly(myVehiculeEntity)
 		plate = GetVehicleNumberPlateText(myVehiculeEntity)
     TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(myVehiculeEntity)))
-    TriggerServerEvent("vnt:saveVeh", myVehiculeEntity)
-		TriggerServerEvent("ls:refreshid",plate,myVehiculeEntity)
 
-        local ObjectId = NetworkGetNetworkIdFromEntity(myVehiculeEntity)
-        SetNetworkIdExistsOnAllMachines(ObjectId, true)
-
-        local p = GetEntityCoords(myVehiculeEntity, 0)
-        local h = GetEntityHeading(myVehiculeEntity)
-        SetModelAsNoLongerNeeded(type)
-        return
-    end
-    -- Citizen.Trace('impossible')
-    notifIcon("CHAR_CALL911", 1, "Urgence", false, TEXTAMBUL.SpawnVehicleImpossible)
+  end)
 end
+
 function invokeVehicle(data)
     if data.type == 1 then
         spawnVehicule(ambulancier_car, "ambulance")
@@ -247,7 +179,6 @@ function toogleServiceAmbulancier()
     ped = GetPlayerPed(-1)
     Menu.hidden = false
     ambulancierIsInService = true
-    Citizen.Trace("toogleServiceAmbulancier")
     MenuTitle = "LSMC"
     MenuDescription = "~b~Choix des tenues  "
   	ClearMenu()
@@ -771,8 +702,8 @@ Citizen.CreateThread(function()
 end)
 
 --
-RegisterNetEvent('ambulancier:drawMarker')
-AddEventHandler('ambulancier:drawMarker', function (boolean)
+RegisterNetEvent('Job:startAmbulancier')
+AddEventHandler('Job:startAmbulancier', function (boolean)
 	isAmbulancier = boolean
 	ambulancierIsInService = false
     if isAmbulancier then
@@ -780,12 +711,6 @@ AddEventHandler('ambulancier:drawMarker', function (boolean)
     else
         removeBlipAmbulancier()
     end
-end)
-RegisterNetEvent('ambulancier:drawBlips')
-AddEventHandler('ambulancier:drawBlips', function ()
-end)
-RegisterNetEvent('ambulancier:marker')
-AddEventHandler('ambulancier:marker', function ()
 end)
 
 RegisterNetEvent('ambulancier:deleteBlips')
@@ -964,61 +889,6 @@ AddEventHandler('ambulancier:cancelCall',function(data)
     TriggerServerEvent('ambulancier:cancelCall')
 end)
 
-Citizen.CreateThread(function()
-	while true do
-			Citizen.Wait(1000)
-			if(TimeToRespawn > 0)then
-				TimeToRespawn = TimeToRespawn - 1
-			end
-		Citizen.Wait(0)
-	end
-end)
-local assommePlayer = false
-Citizen.CreateThread(function()
-	while true do
-    if TimeToRespawn > 0 then
-			drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de respawn.", 255, 255, 255, 255)
-    elseif IsEntityDead(PlayerPedId()) == 1 and assommePlayer == false then
-    --  TriggerServerEvent('sPrint',"Dead")
-      if firtdead then
-        Citizen.Wait(1000)
-        firtdead = false
-      else
-        drawTxt(0.88, 1.02, 1.0,1.0,0.4, "~g~Appuyez sur ~r~X ~g~pour respawn à l'hospital.", 255, 255, 255, 255)
-        if IsControlJustPressed(1, 73) and  GetLastInputMethod(2) then
-          TriggerEvent('ambulancier:selfRespawn')
-        end
-      end
-    else
-      Citizen.Wait(1000)
-      firtdead = true
-    end
-		Citizen.Wait(0)
-	end
-end)
-
-RegisterNetEvent("vnt:noncoma")
-AddEventHandler("vnt:noncoma", function()
-  assommePlayer = true
-end)
-
-RegisterNetEvent('vnt:deassomm')
-AddEventHandler('vnt:deassomm', function()
-  assommePlayer = false
-end)
-
-RegisterNetEvent("ambu:mort")
-AddEventHandler("ambu:mort", function()
-  TimeToRespawn = 300
-end)
-
-RegisterNetEvent("venato:cheaton")
-AddEventHandler("venato:cheaton", function(bool)
-  local bool = bool
-  AdminCheatIsOn = bool
---  print("cheatmode "..bool)
-end)
-
 RegisterNetEvent('ambulancier:selfRespawn')
 AddEventHandler('ambulancier:selfRespawn',function()
   PlayerCanRespawnOrNot()
@@ -1035,57 +905,6 @@ function PlayerCanRespawnOrNot()
   end
 end
 
-
-function drawTxt(x,y ,width,height,scale, text, r,g,b,a, outline)
-    SetTextFont(0)
-    SetTextProportional(0)
-    SetTextScale(scale, scale)
-    SetTextColour(r, g, b, a)
-    SetTextDropShadow(0, 0, 0, 0,255)
-    SetTextEdge(1, 0, 0, 0, 255)
-    SetTextDropShadow()
-    if(outline)then
-	    SetTextOutline()
-	end
-    SetTextEntry("STRING")
-    AddTextComponentString(text)
-    DrawText(x - width/2, y - height/2 + 0.005)
-end
-
-
-function GetPlayers()
-	local players = {}
-
-	for i = 0, 255 do
-		if NetworkIsPlayerActive(i) then
-			table.insert(players, i)
-		end
-	end
-
-	return players
-end
-
-function GetClosestPlayer()
-	local players = GetPlayers()
-	local closestDistance = -1
-	local closestPlayer = -1
-	local ply = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(ply, 0)
-
-	for index,value in ipairs(players) do
-		local target = GetPlayerPed(value)
-		if(target ~= ply) then
-			local targetCoords = GetEntityCoords(GetPlayerPed(value), 0)
-			local distance = GetDistanceBetweenCoords(targetCoords["x"], targetCoords["y"], targetCoords["z"], plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-			if(closestDistance == -1 or closestDistance > distance) then
-				closestPlayer = value
-				closestDistance = distance
-			end
-		end
-	end
-
-	return closestPlayer, closestDistance
-end
 RegisterNetEvent('ambulancier:HealMe')
 AddEventHandler('ambulancier:HealMe',
 function (idToHeal)
@@ -1097,7 +916,7 @@ end)
 RegisterNetEvent('ambulancier:Heal')
 AddEventHandler('ambulancier:Heal',
 function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
           if GetEntityHealth(GetPlayerPed(closestPlayer)) ~= 0 then
             TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
@@ -1115,7 +934,7 @@ end)
 RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',
 function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
             Citizen.Wait(8000)
@@ -1129,7 +948,7 @@ end)
 RegisterNetEvent('ambulancier:getBlassure')
 AddEventHandler('ambulancier:getBlassure',
 function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerServerEvent('ambulancier:GetInTableTheBlassure',GetPlayerServerId(closestPlayer))
         else
@@ -1139,7 +958,7 @@ end)
 
 RegisterNetEvent('facture:amb')
 AddEventHandler('facture:amb', function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerEvent("fact:give", GetPlayerServerId(closestPlayer))
         else

@@ -54,6 +54,7 @@ server_script {
   '/clothingShop/server.lua',
   '/skin/server.lua',
   '/skin/face_server.lua',
+  '/playerDeath/ServerDeath.lua',
 }
 
 files {
