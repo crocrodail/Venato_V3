@@ -364,14 +364,24 @@ end)
 
 
 function Venato.LoadSkin(DataUser)
-    local playerPed = Venato.GetPlayerPed()
     local skin = DataUser.Skin
     if not loaded then
       loadPlayer(DataUser)
     end
+    local model = skin.model
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+        RequestModel(model)
+        Citizen.Wait(0)
+    end
+    SetPlayerModel(PlayerId(), model)
+    SetModelAsNoLongerNeeded(model)
+    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
     if skin then
-        local hashSkin = GetHashKey("mp_m_freemode_01")
-        if(GetEntityModel(Venato.GetPlayerPed()) == hashSkin) then
+      local playerPed = Venato.GetPlayerPed()
+        local Sexemodel = GetHashKey("mp_m_freemode_01")
+        if(GetEntityModel(Venato.GetPlayerPed()) == Sexemodel) then
             SetPedHeadBlendData(playerPed, skin.head, skin.head, skin.head, skin.body_color, skin.body_color, skin.body_color, 1.0, 1.0, 1.0, true)
             SetPedComponentVariation(playerPed, 0, skin.head, 0, 0)
             SetPedComponentVariation(playerPed, 2, skin.hair, 0, 0)
