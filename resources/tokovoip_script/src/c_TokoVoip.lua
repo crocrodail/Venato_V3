@@ -161,7 +161,7 @@ function TokoVoip.initialize(self)
 					setPlayerData(self.serverId, "radio:talking", false, true);
 				end
 				self:updateTokoVoipInfo();
-				
+
 				if lastTalkState == true then
 					lastTalkState = false
 					StopAnimTask(PlayerPedId(), "random@arrests","generic_radio_chatter", -4.0);

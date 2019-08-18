@@ -19,12 +19,12 @@ TokoVoipConfig = {
 		-- TeamSpeak channel name used by the voip
 		-- If the TSChannelWait is enabled, players who are currently in TSChannelWait will be automatically moved
 		-- to the TSChannel once everything is running
-		TSChannel = "Venato In-game",
+		TSChannel = "[cspacer1]● Venato In-game ●",
 		TSPassword = "VOIPVENATO", -- TeamSpeak channel password (can be empty)
 
 		-- Optional: TeamSpeak waiting channel name, players wait in this channel and will be moved to the TSChannel automatically
 		-- If the TSChannel is public and people can join directly, you can leave this empty and not use the auto-move
-		TSChannelWait = "Venato Accueil",
+		TSChannelWait = "[cspacer]● Venato Accueil ●",
 
 		-- Blocking screen informations
 		TSServer = "Gta.Venato.fr", -- TeamSpeak server address to be displayed on blocking screen
@@ -39,7 +39,7 @@ TokoVoipConfig = {
 		local_click_on = true, -- Is local click on sound active
 		local_click_off = true, -- Is local click off sound active
 		remote_click_on = false, -- Is remote click on sound active
-		remote_click_off = true, -- Is remote click off sound active
+		remote_click_off = false, -- Is remote click off sound active
 		enableStereoAudio = true, -- If set to true, positional audio will be stereo (you can hear people more on the left or the right around you)
 
 		localName = "", -- If set, this name will be used as the user's teamspeak display name

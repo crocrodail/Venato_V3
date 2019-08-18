@@ -25,6 +25,7 @@ let connected = false;
 let lastPing = 0;
 let lastReconnect = 0;
 let lastOk = 0;
+var connectedToTeamspeak = false
 
 let voip = {};
 
@@ -163,10 +164,18 @@ function receivedClientCall(event) {
 		// If no Ok status for more than 5 seconds, display screen
 		if (getTickCount() - lastOk > 5000) {
 			displayPluginScreen(true);
+			if (connectedToTeamspeak == true) {
+				connectedToTeamspeak = false
+				$.post('http://tokovoip_script/notConnected', JSON.stringify({state: 0}));
+			}
 		}
 	} else {
 		lastOk = getTickCount();
 		displayPluginScreen(false);
+		if (connectedToTeamspeak == false) {
+			connectedToTeamspeak = true
+			$.post('http://tokovoip_script/notConnected', JSON.stringify({state: 1}));
+		}
 	}
 
 	updateTokovoipInfo();

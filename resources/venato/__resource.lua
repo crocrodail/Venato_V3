@@ -29,8 +29,8 @@ client_script {
   '/clothingShop/config.lua',
   '/skin/client.lua',
   '/skin/face_client.lua',
-  '/calmIA/client.lua',
   '/playerDeath/ClientDeath.lua',
+  '/playerDeath/DeathFunction.lua',
   'test.lua'
 }
 
@@ -120,11 +120,8 @@ files {
 	"/html/bank.html",
 	"/html/identity.html",
 	"/html/cheque.html",
-  '/calmIA/events.meta',
-	'/calmIA/relationships.dat'
 }
 
-data_file 'FIVEM_LOVES_YOU_4B38E96CC036038F' '/calmIA/events.meta'
 
 export 'GetBlacklistedList'
 export 'GetBalancedList'

@@ -17,16 +17,17 @@ end)
 
 function Venato.playAnim(data)
   local flag = data.flag or 0
+  local ped = data.ped or GetPlayerPed(-1)
     if data.useLib then
         RequestAnimDict(data.lib)
         while not HasAnimDictLoaded(data.lib) do
         Citizen.Wait(0)
         end
         if HasAnimDictLoaded(data.lib) then
-            TaskPlayAnim(GetPlayerPed(-1),data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
+            TaskPlayAnim(ped,data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
         end
     elseif not data.useLib then
-        TaskStartScenarioInPlace(GetPlayerPed(-1), data.anim.anim, 0, false)
+        TaskStartScenarioInPlace(ped, data.anim.anim, 0, false)
     end
 end
 

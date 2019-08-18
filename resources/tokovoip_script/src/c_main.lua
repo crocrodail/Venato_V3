@@ -21,6 +21,7 @@ local scriptVersion = "1.3.4";
 local animStates = {}
 local displayingPluginScreen = false;
 local HeadBone = 0x796e;
+local TeampeakConnected = true
 
 --------------------------------------------------------------------------------
 --	Plugin functions
@@ -36,6 +37,32 @@ local function setPlayerTalkingState(player, playerServerId)
 	end
 	animStates[playerServerId] = talking;
 end
+
+RegisterNUICallback("notConnected", function(data)
+	local connected = tonumber(data.state)
+	local ped = GetPlayerPed(-1)
+	if connected == 1 then
+		TeampeakConnected = true
+		SetEntityInvincible(ped, false)
+		FreezeEntityPosition(ped, false)
+		SetEntityVisible(ped, true, nil)
+	elseif connected == 0 then
+		TeampeakConnected = false
+		SetEntityInvincible(ped, true)
+		FreezeEntityPosition(ped, true)
+		SetEntityVisible(ped, false, nil)
+	end
+end);
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		if not TeampeakConnected then
+			DisableAllControlActions(0)
+			DisableAllControlActions(1)
+		end
+	end
+end)
 
 RegisterNUICallback("updatePluginData", function(data)
 	local payload = data.payload;
