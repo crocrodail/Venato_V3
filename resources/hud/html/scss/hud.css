@@ -93,6 +93,11 @@ html body #app .fullscreen {
   color: white;
 }
 
+.noty_layout .noty_type__success {
+  background-color: rgba(5, 63, 8, 0.502);
+  color: white;
+}
+
 .hide {
   display: none;
 }

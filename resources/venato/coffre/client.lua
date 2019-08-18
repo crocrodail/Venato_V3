@@ -17,23 +17,25 @@ end)
 RegisterNetEvent("Coffre:CallData:cb")
 AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
   DataCoffre = Coffre
-  DataUser = user or {}
-  
-  TriggerEvent('Menu:Clear')
-  TriggerEvent('Menu:Init', DataCoffre[coffre_index].nom, "Coffre", 'rgba('..DataCoffre[coffre_index].red..','..DataCoffre[coffre_index].green..','..DataCoffre[coffre_index].blue..', 0.75)', "https://cap.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcap.2F2017.2F05.2F09.2F1c21c36a-b809-4662-bf09-1068218410b9.2Ejpeg/750x375/background-color/ffffff/quality/70/fichet-bauche-la-success-story-du-roi-du-coffre-fort-1123519.jpg" )
-  Menu.setTitle( DataCoffre[coffre_index].nom)
-  Menu.setSubtitle( "Coffre :")
-  TriggerEvent('Menu:AddButton2', "Parametres","CoffreParametre", coffre_index, '', "https://i.ibb.co/cQmJ84r/icons8-administrative-tools-96px.png")
-  TriggerEvent('Menu:AddButton2', Venato.FormatMoney(DataCoffre[coffre_index].argent,2).."€ / "..Venato.FormatMoney(DataCoffre[coffre_index].argentcapacite,2).."€", "CoffreMenuMoney", coffre_index, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
-  TriggerEvent('Menu:AddButton2', "Armes", "CoffreWeapon", coffre_index, '', "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png")
-  TriggerEvent('Menu:AddButton2', "Déposer des objets", "CoffreAddItem", coffre_index, '', "https://i.ibb.co/CQjDCTX/icons8-safe-in-96px-1.png")
-  for k,v in pairs(DataCoffre[coffre_index].inventaire) do
-    if v.quantity ~= 0 then
-      TriggerEvent('Menu:AddShopButton', v.libelle, "CoffreTakeItem", {coffre_index, k}, v.picture, v.quantity, '', true)
+  DataUser = user or {}  
+  print(coffre_index)
+  if coffre_index ~= 0 then
+    TriggerEvent('Menu:Clear')
+    TriggerEvent('Menu:Init', DataCoffre[coffre_index].nom, "Coffre", 'rgba('..DataCoffre[coffre_index].red..','..DataCoffre[coffre_index].green..','..DataCoffre[coffre_index].blue..', 0.75)', "https://cap.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcap.2F2017.2F05.2F09.2F1c21c36a-b809-4662-bf09-1068218410b9.2Ejpeg/750x375/background-color/ffffff/quality/70/fichet-bauche-la-success-story-du-roi-du-coffre-fort-1123519.jpg" )
+    Menu.setTitle( DataCoffre[coffre_index].nom)
+    Menu.setSubtitle( "Coffre :")
+    TriggerEvent('Menu:AddButton2', "Parametres","CoffreParametre", coffre_index, '', "https://i.ibb.co/cQmJ84r/icons8-administrative-tools-96px.png")
+    TriggerEvent('Menu:AddButton2', Venato.FormatMoney(DataCoffre[coffre_index].argent,2).."€ / "..Venato.FormatMoney(DataCoffre[coffre_index].argentcapacite,2).."€", "CoffreMenuMoney", coffre_index, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
+    TriggerEvent('Menu:AddButton2', "Armes", "CoffreWeapon", coffre_index, '', "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png")
+    TriggerEvent('Menu:AddButton2', "Déposer des objets", "CoffreAddItem", coffre_index, '', "https://i.ibb.co/CQjDCTX/icons8-safe-in-96px-1.png")
+    for k,v in pairs(DataCoffre[coffre_index].inventaire) do
+      if v.quantity ~= 0 then
+        TriggerEvent('Menu:AddShopButton', v.libelle, "CoffreTakeItem", {coffre_index, k}, v.picture, v.quantity, '', true)
+      end
     end
+    TriggerEvent('Menu:CreateMenu')
+    TriggerEvent('Menu:Open')
   end
-  TriggerEvent('Menu:CreateMenu')
-  TriggerEvent('Menu:Open')
 
 end)
 
@@ -59,7 +61,7 @@ end)
 function OpenCoffre(index)
   TriggerEvent('Menu:Close')
   Menu.clearMenu()
-  coffre_index = index
+  coffre_index = index  
   TriggerServerEvent("Coffre:CallData")
   Citizen.Wait(0)
 end

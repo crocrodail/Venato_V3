@@ -121,7 +121,9 @@ new Vue({
         document.getElementById('menuList').scrollTop = 0;
       } else {
         this.selectedItem++;
-        document.getElementById('menuList').scrollTop = document.getElementById('menuList').querySelector('.selected').offsetTop - 250;
+        if(document.getElementById('menuList').querySelector('.selected') != null){
+          document.getElementById('menuList').scrollTop = document.getElementById('menuList').querySelector('.selected').offsetTop - 250;
+        }
       }
     },
     confirmNavigation() {

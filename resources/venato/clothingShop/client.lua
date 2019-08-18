@@ -111,10 +111,10 @@ Citizen.CreateThread(function()
           printTxt("~g~Haut :                                           ~r~"..priceTop.." €",0.4, coordtop, true)
         end
         if buypantalong then
-          printTxt("~g~Pantalong :                                      ~r~"..priceLegs.." €",0.4, coordpantalong, true)
+          printTxt("~g~Pantalon :                                      ~r~"..priceLegs.." €",0.4, coordpantalong, true)
         end
         if buychaussure then
-          printTxt("~g~Chaussure :                                      ~r~"..priceShoes.." €",0.4, coordchaussure, true)
+          printTxt("~g~Chaussures :                                      ~r~"..priceShoes.." €",0.4, coordchaussure, true)
         end
 			end
 		end
@@ -229,7 +229,7 @@ function scaleformClothingShop()
   PopScaleformMovieFunctionVoid()
   PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
   PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunction(scaleform, "SET_RetourGROUND_COLOUR")
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(0)
@@ -282,13 +282,15 @@ function OpenClothingShop()
 	SetCamCoord(cam,  coords.x,  coords.y-2.0,  coords.z)
 	PointCamAtCoord(cam,x-1.0,y,z)
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
-	Menu.clearMenu()
-	Menu.setTitle("Clothing Shop")
-  Menu.addButton("sexe switch", "CSswitchsex", nil)
-  Menu.addButton("Haut", "CStop", nil)
-	Menu.addButton("Pantalong", "CSpantalong", nil)
-  Menu.addButton("Chaussure", "CSchausure", nil)
-  Menu.addButton("Payer : "..tatalPrice.." €", "BuyClothe", nil)
+  Menu.clearMenu()
+  TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
+  TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png")
+  TriggerEvent('Menu:AddButton2',"Haut", "CStop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
+	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
+  TriggerEvent('Menu:AddButton2',"Chaussures", "CSchausure", '', '', "https://i.ibb.co/0ZDJsZ4/icons8-trainers-96px.png")
+  TriggerEvent('Menu:AddButton2',"Payer : "..tatalPrice.." €", "BuyClothe", '', '', "https://i.ibb.co/y8LZBy2/icons8-receipt-96px.png")
+  TriggerEvent('Menu:CreateMenu')
+  TriggerEvent('Menu:Open')
 end
 tablee = {
   ComponentVariation = {
@@ -357,7 +359,7 @@ AddEventHandler("ClothingShop:SaveClothes:response", function(response)
     title= "Magasin de vêtements",
     type = "success", --  danger, error, alert, info, success, warning
     logo = "https://img.icons8.com/nolan/64/000000/clothes.png",
-    message = "La transaction s'est bien passé ! C'est vêtement sont à vous.",
+    message = "La transaction s'est bien passé ! Ces vêtements sont à vous.",
    }
    Venato.notify(defaultNotification)
   else
@@ -405,7 +407,7 @@ function CSAccessoire()
   RenderScriptCams(false,  false,  0,  true,  true)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -424,7 +426,7 @@ function CSAccessoire()
 			end
 		end
 		if dont == false then
-			Menu.addButton2("~b~Accessoire ~r~#"..id, "OpenClothingShop", i, "ChangeDomponentId")
+			Menu.addButton2("Accessoires #"..id, "OpenClothingShop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
@@ -440,7 +442,7 @@ function CStop()
 	PointCamAtCoord(cam,x,y,z)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -463,7 +465,7 @@ function CStop()
       if debug then
         number = i
       end
-			Menu.addButton2("~b~Haut Primaire ~r~#"..number, "ChoseSecondeTop", i, "ChangeDomponentId")
+			Menu.addButton2("Haut Primaire #"..number, "ChoseSecondeTop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
@@ -481,7 +483,7 @@ function ChoseSecondeTop(i)
     Menu.clearMenu()
     local id = 1
     local ped = Venato.GetPlayerPed()
-    Menu.addButton2("~r~Back", "CStop", nil)
+    Menu.addButton2("Retour", "CStop", nil)
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
       if MaleCombinaisonTop[PrimaryTopIndex].Secondary == false then
         buytopcs()
@@ -539,7 +541,7 @@ function CSchausure()
 	PointCamAtCoord(cam,x,y,z-0.8)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -562,7 +564,7 @@ function CSchausure()
       if debug then
         number = i
       end
-			Menu.addButton2("~b~Chaussure ~r~#"..number, "buyShoescs", i, "ChangeDomponentId")
+			Menu.addButton2("Chaussures #"..number, "buyShoescs", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
@@ -591,7 +593,7 @@ function CSpantalong()
 	PointCamAtCoord(cam,x,y,z-0.5)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -614,7 +616,7 @@ function CSpantalong()
       if debug then
         number = i
       end
-			Menu.addButton2("~b~Pantalong ~r~#"..number, "buyLegscs", i, "ChangeDomponentId")
+			Menu.addButton2("Pantalon #"..number, "buyLegscs", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
