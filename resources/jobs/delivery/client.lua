@@ -78,9 +78,11 @@ end
 
 function DeliveryJob.mainLoop()
   if DeliveryJob.isEnabled() then
+    local player = GetPlayerPed(-1)
     while true do
       Wait(0)
-      local playerPos = GetEntityCoords(GetPlayerPed(-1))
+
+      local playerPos = GetEntityCoords(player)
       local dropPoint = DeliveryJobConfig.trunkDrops['trunk']
 
       distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
@@ -96,8 +98,85 @@ function DeliveryJob.mainLoop()
         DeliveryJobConfig.onTrunkDrop = nil
       end
 
+      if DeliveryJobConfig.boxCoord ~= {} and (not DeliveryJobConfig.boxOnForklift or DeliveryJobConfig.boxOnTrunk) then
+        for i, v in ipairs(DeliveryJobConfig.boxCoord) do
+          local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, playerPos["x"], playerPos["y"], playerPos["z"], true)
+          if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player, false)) == GetHashKey("FORKLIFT") then
+            TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour charger la caisse.")
+            if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+              takeBox(player)
+              DeliveryJobConfig.boxOnForklift = true
+              DeliveryJobConfig.boxOnTrunk = false
+            end
+          end
+        end
+      elseif DeliveryJobConfig.boxOnForklift and DeliveryJobConfig.globalTrunk == nil then
+        for i, v in ipairs(DeliveryJobConfig.boxCoord) do
+          local distance = GetDistanceBetweenCoords(v.x, v.y, v.z + 0.9,
+            playerPos["x"], playerPos["y"], playerPos["z"],
+            true)
+          if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player, false)) == GetHashKey("FORKLIFT") then
+            TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour poser par terre.")
+            if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+              dropBoxInForklift(player)
+              DeliveryJobConfig.boxOnForklift = false
+              DeliveryJobConfig.boxOnTrunk = false
+            end
+          end
+        end
+      elseif DeliveryJobConfig.globalTrunk ~= nil and not DeliveryJobConfig.boxOnTrunk then
+        local distance = GetDistanceBetweenCoords(
+          DeliveryJobConfig.trunkCoord.x, DeliveryJobConfig.trunkCoord.y, DeliveryJobConfig.trunkCoord.z + 0.9,
+          playerPos["x"], playerPos["y"], playerPos["z"],
+          true)
+        if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player, false)) == GetHashKey("FORKLIFT") then
+          TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour la mettre dans le camion.")
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            loadOnTrunk()
+            DeliveryJobConfig.boxOnForklift = false
+            DeliveryJobConfig.boxOnTrunk = true
+          end
+        end
+      end
       --TriggerEvent("Venato:InteractTxt", "Livraison en cours, veuillez vous rendre à destination ~BLIP_119~")
 
+    end
+  end
+end
+
+function DeliveryJob.checkLoop()
+  local player = GetPlayerPed(-1)
+  while true do
+    Citizen.Wait(1000)
+
+    local playerPos = GetEntityCoords(player)
+    local obj = GetClosestObjectOfType(playerPos.x, playerPos.y, playerPos.z, 10.0,
+      GetHashKey(DeliveryJobConfig.BOX_KEY), false, true, true)
+    local veh = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 10.0, GetHashKey(DeliveryJobConfig.TRUNK_KEY),
+      127)
+    if obj then
+      local x1, y1, z1 = {}
+      local x2, y2, z2 = {}
+      if DeliveryJobConfig.boxOnTrunk then
+        x1, y1, z1 = table.unpack(GetOffsetFromEntityInWorldCoords(obj, 0, 2.0, -0.6))
+        x2, y2, z2 = table.unpack(GetOffsetFromEntityInWorldCoords(obj, 0, -2.7, -0.6))
+      else
+        x1, y1, z1 = table.unpack(GetOffsetFromEntityInWorldCoords(obj, 0, 2.0, -0.2))
+        x2, y2, z2 = table.unpack(GetOffsetFromEntityInWorldCoords(obj, 0, -2.0, -0.2))
+      end
+      DeliveryJobConfig.boxCoord = { { x = x1, y = y1, z = z1 }, { x = x2, y = y2, z = z2 } }
+      DeliveryJobConfig.globalBox = obj
+    --else
+    --  DeliveryJobConfig.globalBox = nil
+    --  DeliveryJobConfig.boxCoord = {}
+    end
+    if veh ~= 0 then
+      local x3, y3, z3 = table.unpack(GetOffsetFromEntityInWorldCoords(veh, 0, -5.5, -1.5))
+      DeliveryJobConfig.trunkCoord = { x = x3, y = y3, z = z3 }
+      DeliveryJobConfig.globalTrunk = veh
+    else
+      DeliveryJobConfig.trunkCoord = {}
+      DeliveryJobConfig.globalTrunk = nil
     end
   end
 end
@@ -188,15 +267,21 @@ function despawnBox()
   end
 end
 
-function AttachOnCamion()
+function takeBox(player)
+  AttachEntityToEntity(DeliveryJobConfig.globalBox, GetVehiclePedIsIn(player, false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0,
+    false, false, false, false, 2, true)
+  SetEntityCollision(DeliveryJobConfig.globalBox, false, true)
+end
+
+function loadOnTrunk()
   DetachEntity(DeliveryJobConfig.box)
   AttachEntityToEntity(DeliveryJobConfig.box, DeliveryJobConfig.trunk, nil, 0.0, -3.0, 0.12, 0.0, 0, 0.0, false, false,
     false, false, 2, true)
   SetEntityCollision(DeliveryJobConfig.box, true, true)
 end
 
-function dropBoxInForklift()
-  local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
+function dropBoxInForklift(player)
+  local coords = GetOffsetFromEntityInWorldCoords(player, 0, 2.0, 0)
   DetachEntity(DeliveryJobConfig.box)
   PlaceObjectOnGroundProperly(DeliveryJobConfig.box)
   coords = GetEntityCoords(DeliveryJobConfig.box, 0)
@@ -205,14 +290,5 @@ function dropBoxInForklift()
   SetEntityCollision(DeliveryJobConfig.box, true, true)
 end
 
-function DetacheBoxInForklift()
-  local coords = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
-  DetachEntity(DeliveryJobConfig.box)
-  PlaceObjectOnGroundProperly(DeliveryJobConfig.box)
-  coords = GetEntityCoords(DeliveryJobConfig.box, 0)
-  SetEntityCoords(DeliveryJobConfig.box, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
-  FreezeEntityPosition(DeliveryJobConfig.box, true)
-  SetEntityCollision(DeliveryJobConfig.box, true, true)
-end
 
 -- TODO: See crocro branch and test.lua file to continue forklift, box, ... management

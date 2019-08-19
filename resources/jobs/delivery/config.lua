@@ -24,6 +24,13 @@ DeliveryJobConfig.forklift = nil
 DeliveryJobConfig.box = nil
 DeliveryJobConfig.AllObject = {}
 
+DeliveryJobConfig.boxOnForklift = false
+DeliveryJobConfig.boxOnTrunk = false
+DeliveryJobConfig.boxCoord = {}
+DeliveryJobConfig.globalBox = nil
+DeliveryJobConfig.trunkCoord = {}
+DeliveryJobConfig.globalTrunk = nil
+
 DeliveryJobConfig.isInMission = false
 DeliveryJobConfig.isTrunkReady = false
 DeliveryJobConfig.isTrunkLoaded = false
@@ -63,5 +70,5 @@ DeliveryJobConfig.warehouses = {
 DeliveryJobConfig.trunkDrops = {
   ["trunk"] = { ["x"] = -396.412, ["y"] = -2835.64, ["z"] = 6.0, ["heading"] = 315.49 },
   ["forklift"] = { ["x"] = -403.13, ["y"] = -2842.22, ["z"] = 6.0, ["heading"] = 315.49 },
-  ["box"] = { ["x"] = -400.73, ["y"] = -2839.92, ["z"] = 5.0, ["heading"] = 130.0 }
+  ["box"] = { ["x"] = -400.73, ["y"] = -2839.92, ["z"] = 5.1, ["heading"] = 130.0 }
 }

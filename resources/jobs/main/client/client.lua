@@ -114,6 +114,9 @@ function Jobs.mainLoop(job)
   CreateThread(function()
     _G[job.Class].mainLoop()
   end)
+  CreateThread(function()
+    _G[job.Class].checkLoop()
+  end)
 end
 
 function Jobs.SalaryLoop()
