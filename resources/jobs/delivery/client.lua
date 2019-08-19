@@ -139,7 +139,6 @@ function spawnForklift()
       function(vehicle)
         DeliveryJobConfig.forklift = vehicle
         SetVehicleNumberPlateText(vehicle, "DeliveryForklift_" .. math.random(100, 999))
-        SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
         TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
           GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
       end)
@@ -162,7 +161,7 @@ function spawnBox()
   AttachEntityToEntity(bassin1, objet, 0, -0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
   AttachEntityToEntity(bassin2, objet, 0, 0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
   PlaceObjectOnGroundProperly(objet)
-  coords = GetEntityCoords(objet, 0)
+  SetEntityHeading(objet, coords.heading)
   SetEntityCoords(objet, coords.x, coords.y, coords.z + 0.12, 0, 0, 0, true)
   FreezeEntityPosition(objet, true)
 
@@ -184,7 +183,7 @@ end
 
 function despawnBox()
   if DeliveryJobConfig.box ~= nil then
-    -- TODO: box management
+    DeleteEntity(DeliveryJobConfig.box)
     DeliveryJobConfig.box = nil
   end
 end

@@ -61,7 +61,7 @@ DeliveryJobConfig.warehouses = {
 
 -- TODO: redefine position where spawn "mule" "forklift" and "box"
 DeliveryJobConfig.trunkDrops = {
-  ["trunk"] = { ["x"] = -403.08, ["y"] = -2828.43, ["z"] = 6.0, ["heading"] = 243.53 },
-  ["forklift"] = { ["x"] = -426.68, ["y"] = -2846.43, ["z"] = 6.0, ["heading"] = 307.20 },
-  ["box"] = { ["x"] = -417.86, ["y"] = -2835.53, ["z"] = 5.0 }
+  ["trunk"] = { ["x"] = -396.412, ["y"] = -2835.64, ["z"] = 6.0, ["heading"] = 315.49 },
+  ["forklift"] = { ["x"] = -403.13, ["y"] = -2842.22, ["z"] = 6.0, ["heading"] = 315.49 },
+  ["box"] = { ["x"] = -400.73, ["y"] = -2839.92, ["z"] = 5.0, ["heading"] = 130.0 }
 }
