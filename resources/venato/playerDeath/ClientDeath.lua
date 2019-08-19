@@ -3,14 +3,11 @@ local playerPed = nil
 local cam = nil
 local ClonedPed = nil
 
-Citizen.CreateThread(dead)
 Citizen.CreateThread(function()
   Citizen.Wait(5000)
   while true do
     Citizen.Wait(0)
-		if playerPed == nil then
-			playerPed = GetPlayerPed(-1)
-		end
+		playerPed = GetPlayerPed(-1)
     if IsEntityDead(playerPed) then
       local Cause = GetCause()
       local killer = GetKiller()
@@ -30,14 +27,14 @@ Citizen.CreateThread(function()
   end
 end)
 
-function dead()
+Citizen.CreateThread(function()
   while true do
     Citizen.Wait(1000)
     if dead then
       Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
     end
   end
-end
+end)
 
 function playemote()
   dead = false

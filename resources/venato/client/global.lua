@@ -16,19 +16,15 @@ Citizen.CreateThread(function()
     Citizen.Wait(50)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
-        print('load')
+
         TriggerServerEvent("Venato:SyncData")
+        TriggerServerEvent('lock:synchr')
         Startload = true
       end
     end
     SetPlayerWantedLevel(playerId, 0 , false)
     SetPlayerWantedLevelNow(playerId, false, false)
   end
-end)
-
-AddEventHandler('playerSpawned', function()
-  TriggerServerEvent('lock:synchr')
-  TriggerServerEvent("Venato:SyncData")
 end)
 
 RegisterNetEvent("Venato:displaytext")
@@ -49,6 +45,7 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
   if DataPlayers[source] ~= nil then
     LoadBlips()
     Venato.LoadSkin(DataPlayers[source])
+    Venato.LoadClothes()
   end
 end)
 
