@@ -47,12 +47,13 @@ AddEventHandler("Shops:TestBuy", function(ContentId, shopId, quantity, newSource
   local totalPoid = _quantity * content.poid
 
   local steamId = ShopsTools.getSteamID(source)
+  local DataUsers = exports.venato:GetDataPlayers()
   currentPlayerMoney = ShopDbFunctions.getCurrentPlayerMoney(steamId)
   if totalPrice > currentPlayerMoney then
     TriggerClientEvent("Shops:NotEnoughMoney", source, content.libelle)
   elseif content.Quantity >= 0 and content.Quantity < _quantity then
     TriggerClientEvent("Shops:NotEnoughQuantity", source, content.libelle)
-  elseif PoidMax < (DataPlayers[source].Poid + totalPoid) then
+  elseif DataUsers[source].PoidMax < (DataUsers[source].Poid + totalPoid) then
     TriggerClientEvent("Shops:TooHeavy", source, content.libelle)
   else
     TriggerEvent("Inventory:AddItem", _quantity, content.ItemId, source)

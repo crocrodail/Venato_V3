@@ -9,6 +9,7 @@ client_script {
   '/client/global.lua',
   '/client/sirenControl.js',
   '/client/teleport.lua',
+  '/client/savePos.lua',
   '/inventory/client.lua',
   '/coffre_voiture/client.lua',
   '/bank/config.lua',
@@ -26,6 +27,10 @@ client_script {
   '/admin/client.lua',
   '/clothingShop/client.lua',
   '/clothingShop/config.lua',
+  '/skin/client.lua',
+  '/skin/face_client.lua',
+  '/playerDeath/ClientDeath.lua',
+  '/playerDeath/DeathFunction.lua',
   'test.lua'
 }
 
@@ -34,6 +39,7 @@ server_script {
   '/server/login.lua',
   '/server/function.lua',
   '/server/global.lua',
+  '/server/savePos.lua',
   '/inventory/server.lua',
   '/coffre_voiture/server.lua',
   '/coffre_voiture/config.lua',
@@ -45,7 +51,9 @@ server_script {
   '/lockVehicule/server.lua',
   '/admin/server.lua',
   '/carMenu/server.lua',
-  '/clothingShop/server.lua'
+  '/clothingShop/server.lua',
+  '/skin/server.lua',
+  '/skin/face_server.lua',
 }
 
 files {
@@ -102,14 +110,21 @@ files {
 	"/html/assets/js/bank.js",
 	"/html/assets/js/identity.js",
 	"/html/assets/js/cheque.js",
+  "/html/assets/css/media/font/Bariol_Regular.otf",
+  "/html/assets/css/media/font/Vision-Black.otf",
+  "/html/assets/css/media/font/Vision-Bold.otf",
+  "/html/assets/css/media/font/Vision-Heavy.otf",
+  "/html/assets/css/media/img/curve.png",
+  "/html/assets/css/media/img/logo-top.png",
 	"/html/index.html",
 	"/html/bank.html",
 	"/html/identity.html",
-	"/html/cheque.html"
+	"/html/cheque.html",
 }
+
 
 export 'GetBlacklistedList'
 export 'GetBalancedList'
 export 'GetBalancedCatList'
-server_export 'GetDatePlayers'
+server_export 'GetDataPlayers'
 server_export 'ExportPaymentCB'

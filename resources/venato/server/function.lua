@@ -12,18 +12,34 @@ function getIdentifiant(id)
   end
 end
 
-function GetDatePlayers()
+function GetDataPlayers()
   return DataPlayers
 end
 
+RegisterNetEvent("Venato:SyncData")
+AddEventHandler("Venato:SyncData", function(steam, newSource)
+  local source = newSource or source
+  local steam = steam or getSteamID(source)
+  accessGranded(steam, source)
+end)
+
 DataPlayers = {}
 
-function accessGranded(SteamId, source, pseudo)
-  MySQL.Async.fetchAll("SELECT * FROM users " ..
-    "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` " ..
-    "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` " ..
-    "WHERE users.identifier = @SteamId", { ['@SteamId'] = SteamId }, function(DataUser)
+function accessGranded(SteamId, source , balek)
+  MySQL.Async.fetchAll("SELECT * FROM users "..
+   "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
+   "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
+   "WHERE users.identifier = @SteamId", {['@SteamId'] = getSteamID(source)}, function(DataUser)
     if DataUser[1] == nil then
+      TriggerEvent("Register:AddPlayer", source, false)
+      print("^3Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
+    elseif DataUser[1].nom == nil or DataUser[1].nom == "" then
+      TriggerEvent("Register:AddPlayer", source, true)
+      print("^3Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
+    elseif DataUser[1].model == nil or DataUser[1].model == "" then
+      print("^3Create Skin : "..DataUser[1].prenom.." "..DataUser[1].nom.." ("..GetPlayerName(source)..")^7")
+      TriggerClientEvent("Skin:Create", source)
+    elseif SteamId == nil or SteamId == "" then
       DropPlayer(source, "Une erreur s'est produite, si cette dernière persiste contactez un membre du staff.")
     else
       local sexe = "homme"
@@ -34,6 +50,7 @@ function accessGranded(SteamId, source, pseudo)
         Ip = GetPlayerEP(source),
         SteamId = SteamId,
         Source = source,
+        PlayerIdClient = nil,
         Group = DataUser[1].group,
         Nom = DataUser[1].nom,
         Prenom = DataUser[1].prenom,
@@ -44,7 +61,7 @@ function accessGranded(SteamId, source, pseudo)
         VenatoPoint = DataUser[1].venato_point,
         Account = DataUser[1].account,
         Code = DataUser[1].code,
-        Position = DataUser[1].lastPosition,
+        Position = json.decode(DataUser[1].lastPosition),
         Sexe = sexe,
         Taille = DataUser[1].taille,
         Age = os.date("%x", DataUser[1].dateNaissance / 1000),
@@ -54,7 +71,7 @@ function accessGranded(SteamId, source, pseudo)
         Need = DataUser[1].needs,
         Sool = DataUser[1].sool,
         PhoneNumber = DataUser[1].phone_number,
-        Pseudo = pseudo,
+        Pseudo = GetPlayerName(source),
         Poid = Venato.MoneyToPoid(DataUser[1].money),
         Inventaire = { nil },
         Weapon = { nil },
@@ -74,7 +91,7 @@ function accessGranded(SteamId, source, pseudo)
         Clothes = json.decode(DataUser[1].clothes),
         Skin = {
           model = DataUser[1].model,
-          face = DataUser[1].face,
+          face = json.decode(DataUser[1].face),
           head = DataUser[1].head,
           body_color = DataUser[1].body_color,
           hair = DataUser[1].hair,
@@ -91,15 +108,15 @@ function accessGranded(SteamId, source, pseudo)
           lipstick_color = DataUser[1].lipstick_color
         }
       }
-      TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
-      TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
-      TriggerClientEvent("Inventory:MoneyChanged:cb", source, DataUser[1].Money)
-      TriggerClientEvent("Bank:BankChanged:cb", source, DataUser[1].bank)
-      print("^3SyncData for : " .. DataPlayers[source].Prenom .. " " .. DataPlayers[source].Nom .. " (" .. DataPlayers[source].Pseudo .. ")^7")
+      MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = getSteamID(source),  ["@pseudo"] = GetPlayerName(source)}, function()
+        TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
+        TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
+        TriggerEvent("Inventory:UpdateInventory", source)
+        TriggerClientEvent("Venato:Connection", source)
+        ControlVisa(SteamId, source)
+        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+      end)
     end
-    TriggerEvent("Inventory:UpdateInventory", source)
-    TriggerClientEvent("Venato:Connection", source)
-    ControlVisa(SteamId, source)
   end)
 end
 
@@ -116,7 +133,7 @@ function ControlVisa(SteamId, source)
       if tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
       end
-      if (tonumber(num) == 1 or tonumber(num) == 2) and start == 0 then
+      if (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60
         DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)
@@ -159,7 +176,6 @@ function Venato.Round(num, numDecimalPlaces)
 end
 
 function Venato.paymentCB(source, amount)
-  print(DataPlayers[source].Bank)
   if DataPlayers[source].Bank <= amount then
     return false
   else

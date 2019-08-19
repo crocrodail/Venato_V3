@@ -49,7 +49,6 @@ end
 -------------------------------------------------------------------------------------------------------------------------------
 
 function openGui()
-    print("send")
     SetNuiFocus(true)
     SendNUIMessage({ openUI = true })
 end
@@ -195,8 +194,8 @@ end)
 RegisterNetEvent('customs:playsound')
 AddEventHandler('customs:playsound', function(soundlib, sound)
     PlaySound(-1, soundlib, sound, 0, 0, 1)
-    local row = json.decode(ActualCustoms)
-    SendNUIMessage({ config = json.encode(row.mods) })
+    closeGui()
+    closeGui()
 end)
 
 RegisterNetEvent('customs:checkifowner_fromdb')
@@ -212,7 +211,6 @@ AddEventHandler('customs:checkifowner_fromdb', function(check, customs)
       })
         closeGui()
     else
-      print('10/4 '..customs)
       ActualCustoms = customs
     end
 end)

@@ -15,6 +15,10 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
 }
 
+local colors = {}
+local maxColorIndex = 11
+
+
 function HideMenu()
   menuIsOpen = false
   TriggerEvent('Menu:HideVehicleInformation')
@@ -36,7 +40,7 @@ Citizen.CreateThread(function ()
     end
 
     for i=1, #Config.CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
+      distance = GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
@@ -153,7 +157,7 @@ end
 
 function nextVehicleColor()
   color = color +1
-  if color > 159 then
+  if color > maxColorIndex then
     color = 0
   end
   changeColor()
@@ -162,14 +166,14 @@ end
 function previousVehicleColor()
     color = color -1
     if color < 0 then
-      color = 159
+      color = maxColorIndex
     end
     changeColor()
 end
 
 function nextVehicleSecColor()
   colorSec = colorSec +1
-  if colorSec > 159 then
+  if colorSec > maxColorIndex then
     colorSec = 0
   end
   changeColor()
@@ -178,13 +182,13 @@ end
 function previousVehicleSecColor()
     colorSec = colorSec -1
     if colorSec < 0 then
-      colorSec = 159
+      colorSec = maxColorIndex
     end
     changeColor()
 end
 
 function changeColor()
-  local car = GetVehiclePedIsIn( playerPed, false )
+  local car = GetVehiclePedIsIn( playerPed, false )    
   SetVehicleColours(car,color,colorSec)
 end
 
@@ -197,7 +201,7 @@ function PreviewVehicle(data)
         Venato.notify(defaultNotification)
         return
     end
-    Venato.CreateVehicle(data.model, GetEntityCoords(GetPlayerPed(-1)), GetEntityHeading(playerPed), function(vehicle)
+    Venato.CreateVehicle(data.model, GetEntityCoords(Venato.GetPlayerPed()), GetEntityHeading(playerPed), function(vehicle)
       LastCar = vehicle
       SetVehicleColours(vehicle,color,colorSec)
       SetVehicleFuelLevel(vehicle, GetVehicleFuelLevel(vehicle) + 50)
@@ -287,6 +291,69 @@ function pairsByKeys (t, f)
     end
   end
   return iter
+end
+
+function Venato.GetCarShopIntruction()
+  scaleform = Venato.ScaleForm("instructional_buttons")
+  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(1)
+  Button(GetControlInstructionalButton(2, 190, true))
+  Button(GetControlInstructionalButton(2, 189, true))
+  ButtonMessage("Changer la couleur principale")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(0)
+  Button(GetControlInstructionalButton(2, 168, true))
+  Button(GetControlInstructionalButton(2, 167, true))
+  ButtonMessage("Changer la couleur secondaire")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(80)
+  EndScaleformMovieMethodReturn()
+
+  return scaleform
+end
+
+function Venato.GetCarMenuIntruction()
+  scaleform = Venato.ScaleForm("instructional_buttons")
+  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(2)
+  Button(GetControlInstructionalButton(2, Keys["Y"], true))
+  ButtonMessage("Vérrouiler/Déverrouiller le véhicule (avec les clès)")
+  PopScaleformMovieFunctionVoid()
+
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(1)
+  Button(GetControlInstructionalButton(2, Keys["L"], true))
+  ButtonMessage("Ouvrir l'inventaire du coffre")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+  PushScaleformMovieFunctionParameterInt(0)
+  Button(GetControlInstructionalButton(2, Keys["H"], true))
+  ButtonMessage("Régler les phares")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+  PopScaleformMovieFunctionVoid()
+  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(0)
+  PushScaleformMovieFunctionParameterInt(80)
+  EndScaleformMovieMethodReturn()
+  DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
 end
 
 RegisterNetEvent('CarShop:PaiementOk:response')

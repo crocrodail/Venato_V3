@@ -1,5 +1,32 @@
 DataUser = {}
 
+Citizen.CreateThread(function()
+  local ped = Venato.GetPlayerPed()
+  local playerId = PlayerId()
+  local Startload = false
+  NetworkSetFriendlyFireOption(true)
+  SetCanAttackFriendly(ped, true, false)
+  SetPlayerCanBeHassledByGangs(ped, true)
+	SetEveryoneIgnorePlayer(ped, true)
+  Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), 'FE_THDR_GTAO', 'Venato.fr')
+  --if GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
+    --TriggerServerEvent("Venato:SyncData")
+  --end
+  while true do
+    Citizen.Wait(50)
+    if not Startload then
+      if NetworkIsPlayerActive(PlayerId()) then
+
+        TriggerServerEvent("Venato:SyncData")
+        TriggerServerEvent('lock:synchr')
+        Startload = true
+      end
+    end
+    SetPlayerWantedLevel(playerId, 0 , false)
+    SetPlayerWantedLevelNow(playerId, false, false)
+  end
+end)
+
 RegisterNetEvent("Venato:displaytext")
 AddEventHandler("Venato:displaytext", function(text, time)
   ClearPrints()
@@ -10,11 +37,34 @@ end)
 
 RegisterNetEvent("Venato:Connection")
 AddEventHandler("Venato:Connection", function()
-  --Venato.Connecting()
+  TriggerServerEvent("Venato:CallDataPlayerSpawn", PlayerId())
 end)
 
-AddEventHandler('playerSpawned', function(spawn)
-	Venato.Spawn()
-  DisplayCash(false)
-  LoadBlips()
+RegisterNetEvent("Venato:SpawnInit")
+AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
+  if DataPlayers[source] ~= nil then
+    LoadBlips()
+    Venato.LoadSkin(DataPlayers[source])
+    Venato.LoadClothes()
+  end
+end)
+
+RegisterNetEvent("Venato:notify")
+AddEventHandler("Venato:notify", function(notif)
+  Venato.notify(notif)
+end)
+
+RegisterNetEvent("Venato:notifyError")
+AddEventHandler("Venato:notifyError", function(msg)
+  Venato.notifyError(msg)
+end)
+
+RegisterNetEvent("Menu:Execute")
+AddEventHandler("Menu:Execute", function(params)
+  _ = _G[params.fn] and _G[params.fn](params.args)
+end)
+
+RegisterNetEvent("Venato:InteractTxt")
+AddEventHandler("Venato:InteractTxt", function(msg)
+  Venato.InteractTxt(msg)
 end)

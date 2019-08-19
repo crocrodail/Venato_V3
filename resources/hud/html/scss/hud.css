@@ -60,7 +60,7 @@ html body #app .fullscreen {
 }
 
 #notifVenato .noty_logo img {
-  width: auto;
+  width: 100%;
   height: auto;
   max-height: 90%;
   max-width: 90%;
@@ -90,6 +90,11 @@ html body #app .fullscreen {
 .noty_layout .noty_type__error,
 .noty_layout .noty_type__danger {
   background-color: rgba(183, 28, 28, 0.459);
+  color: white;
+}
+
+.noty_layout .noty_type__success {
+  background-color: rgba(5, 63, 8, 0.502);
   color: white;
 }
 

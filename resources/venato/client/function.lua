@@ -1,18 +1,26 @@
 Venato = {}
+PedPlayer = nil
 
 function none()
   local a = ""
 end
 
-RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(notif)
-  Venato.notify(notif)
-end)
+function Venato.playAnim(data)
+  local flag = data.flag or 0
+  local ped = data.ped or GetPlayerPed(-1)
+    if data.useLib then
+        RequestAnimDict(data.lib)
+        while not HasAnimDictLoaded(data.lib) do
+        Citizen.Wait(0)
+        end
+        if HasAnimDictLoaded(data.lib) then
+            TaskPlayAnim(ped,data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
+        end
+    elseif not data.useLib then
+        TaskStartScenarioInPlace(ped, data.anim.anim, 0, false)
+    end
+end
 
-RegisterNetEvent("Venato:notifyError")
-AddEventHandler("Venato:notifyError", function(msg)
-  Venato.notifyError(msg)
-end)
 
 function Venato.notifyError(msg)
 	local data = {
@@ -23,11 +31,6 @@ function Venato.notifyError(msg)
 	}
 	Venato.notify(data)
 end
-
-RegisterNetEvent("Menu:Execute")
-AddEventHandler("Menu:Execute", function(params)
-  _ = _G[params.fn] and _G[params.fn](params.args)
-end)
 
 function Venato.notify(notif)
   if not notif.message then
@@ -72,11 +75,6 @@ function Venato.Text3D(x, y, z, text, font, fontSize)
   ClearDrawOrigin()
 end
 
-RegisterNetEvent("Venato:InteractTxt")
-AddEventHandler("Venato:InteractTxt", function(msg)
-  Venato.InteractTxt(msg)
-end)
-
 function Venato.InteractTxt(text)
   SetTextComponentFormat("STRING")
   AddTextComponentString(text)
@@ -101,7 +99,7 @@ function Venato.ClosePlayer()
   local players = GetPlayers()
   local closestDistance = -1
   local closestPlayer = -1
-  local ply = GetPlayerPed(-1)
+  local ply = Venato.GetPlayerPed()
   local plyCoords = GetEntityCoords(ply, 0)
   for index, value in ipairs(players) do
     local target = GetPlayerPed(value)
@@ -118,13 +116,11 @@ function Venato.ClosePlayer()
   return GetPlayerServerId(closestPlayer), closestDistance
 end
 
-function Venato.GetPlayerPedFromSource(source)
-	local targetPlayerId = GetPlayerFromServerId(source)
-  return GetPlayerPed(targetPlayerId)
-end
-
 function Venato.GetPlayerPed()
-	return GetPlayerPed(-1)
+  if PedPlayer == nil then
+    PedPlayer = GetPlayerPed(-1)
+  end
+	return  GetPlayerPed(-1)
 end
 
 function GetPlayers()
@@ -159,7 +155,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		if not HasModelLoaded(model) then
 			RequestModel(model)
 			while not HasModelLoaded(model) do
-				Citizen.Wait(1)
+				Citizen.Wait(100)
 			end
 		end
 		local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, true, false)
@@ -172,7 +168,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
 		while not HasCollisionLoadedAroundEntity(vehicle) do
 			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 		end
 		SetVehRadioStation(vehicle, 'OFF')
 		if cb ~= nil then
@@ -248,16 +244,16 @@ function Venato.MoneyToPoid(money)
 end
 
 function Venato.CloseVehicle()
-  if (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false) then
-    local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+  if (IsPedInAnyVehicle(Venato.GetPlayerPed(), true) == false) then
+    local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
     local clostestvehicle = GetClosestVehicle(x, y, z, 4.000, 0, 127)
     if clostestvehicle ~= 0 then
       return clostestvehicle
     else
-      local pos = GetEntityCoords(GetPlayerPed(-1))
-      local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 3.0, 0.0)
+      local pos = GetEntityCoords(Venato.GetPlayerPed())
+      local entityWorld = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0.0, 3.0, 0.0)
       local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10,
-        GetPlayerPed(-1), 0)
+        Venato.GetPlayerPed(), 0)
       local a, b, c, d, result = GetRaycastResult(rayHandle)
       return result
     end
@@ -284,105 +280,6 @@ end
 
 function Button(ControlButton)
   N_0xe83a3e3557a56640(ControlButton)
-end
-
-function Venato.GetCarShopIntruction()
-  scaleform = Venato.ScaleForm("instructional_buttons")
-  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(1)
-  Button(GetControlInstructionalButton(2, 190, true))
-  Button(GetControlInstructionalButton(2, 189, true))
-  ButtonMessage("Changer la couleur principale")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(0)
-  Button(GetControlInstructionalButton(2, 168, true))
-  Button(GetControlInstructionalButton(2, 167, true))
-  ButtonMessage("Changer la couleur secondaire")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(80)
-  EndScaleformMovieMethodReturn()
-
-  return scaleform
-end
-
-function Venato.GetCarMenuIntruction()
-  scaleform = Venato.ScaleForm("instructional_buttons")
-  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(2)
-  Button(GetControlInstructionalButton(2, Keys["Y"], true))
-  ButtonMessage("Vérrouiler/Déverrouiller le véhicule (avec les clès)")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(1)
-  Button(GetControlInstructionalButton(2, Keys["L"], true))
-  ButtonMessage("Ouvrir l'inventaire du coffre")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(0)
-  Button(GetControlInstructionalButton(2, Keys["H"], true))
-  ButtonMessage("Régler les phares")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(80)
-  EndScaleformMovieMethodReturn()
-  DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
-end
-
-function Venato.DisplayInfoVehicle(vehicle)
-  scaleform2 = Venato.ScaleForm("mp_car_stats_01")
-  PushScaleformMovieFunction(scaleform2, "CLEAR_ALL")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform2, "SET_VEHICLE_INFOR_AND_STATS")
-
-  prix_vp = ""
-  prix = ""
-
-  if (not vehicle.vp_only) then
-    prix = "Prix : " .. formatPrice(vehicle.price) .. "€"
-  end
-
-  if (vehicle.vp_enabled) then
-    prix_vp = "Prix VP : " .. formatPrice(vehicle.price_vp) .. "VP"
-  end
-
-  PushScaleformMovieFunctionParameterString(prix)
-  PushScaleformMovieFunctionParameterString(prix_vp)
-  PushScaleformMovieFunctionParameterString("MPCarHUD")
-  PushScaleformMovieFunctionParameterString("Annis")
-  PushScaleformMovieFunctionParameterString("Vitesse max.")
-  PushScaleformMovieFunctionParameterString("Acceleration")
-  PushScaleformMovieFunctionParameterString("Freinage")
-  PushScaleformMovieFunctionParameterString("Maniabilité")
-
-  PushScaleformMovieFunctionParameterInt(vehicle.speed)
-  PushScaleformMovieFunctionParameterInt(vehicle.acceleration)
-  PushScaleformMovieFunctionParameterInt(vehicle.braking)
-  PushScaleformMovieFunctionParameterInt(vehicle.handling)
-  EndScaleformMovieMethodReturn()
-
-  return scaleform2
 end
 
 function Venato.dump(o)

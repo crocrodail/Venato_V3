@@ -97,6 +97,7 @@ end)
 
 RegisterNetEvent('Menu:AddButton')
 AddEventHandler('Menu:AddButton', function(name, func, args, hover)
+    
 	SendNUIMessage({
         action = "addButton",
         name = name,
@@ -106,10 +107,29 @@ AddEventHandler('Menu:AddButton', function(name, func, args, hover)
 	})
 end)
 
+RegisterNetEvent('Menu:AddItemButton')
+AddEventHandler('Menu:AddItemButton', function(name, picture, func, args, hover)
+    
+	SendNUIMessage({
+        action = "addItemButton",
+        name = name,
+        picture = picture,
+        func = func,
+        args = args,
+        hover = hover
+	})
+end)
+
 RegisterNetEvent('Menu:AddButton2')
-AddEventHandler('Menu:AddButton2', function(name, func, args, hover)
+AddEventHandler('Menu:AddButton2', function(name, func, args, hover, picture)
+    idButton = idButton + 1
+	MenuGen[idButton] = {name = name, func = func, args = args, hover = hover, avatar = picture}
+end)
+
+RegisterNetEvent('Menu:AddShopButton')
+AddEventHandler('Menu:AddShopButton', function(name, func, args, picture, stock, price, isShopItem)
 	idButton = idButton + 1
-	MenuGen[idButton] = {name = name, func = func, args = args, hover = hover}
+	MenuGen[idButton] = {name = name, func = func, args = args, avatar = picture, stock = stock, price = price, isShopItem = true }
 end)
 
 RegisterNetEvent('Menu:CreateMenu')

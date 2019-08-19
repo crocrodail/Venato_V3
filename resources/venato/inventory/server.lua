@@ -17,7 +17,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
 	MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId", { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
 		if result[1] ~= nil then
 			for i,v in ipairs(result) do
-				Inv = {["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid)*v.quantity, ["uPoid"] = tonumber(v.poid) }
+				Inv = {["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid)*v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture }
 				inventaire[v.item_id] = Inv
 				poid = poid + tonumber(v.poid)*v.quantity
 			end
@@ -59,12 +59,12 @@ AddEventHandler('Inventory:DataItem', function(id, qty)
 	local table = {}
 	MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
 		if result[1] ~= nil then
-			if tonumber(result[1].conspmable) == 1 then
+			if tonumber(result[1].consomable) == 1 then
 				TriggerEvent("Inventory:SetItem", qty-1, id, source)
-				table = { water = result[1].water, food = result[1].food, need = result[1].need, sool = result[1].sool, drug = result[1].drug }
+				table = { water = result[1].water, food = result[1].food, sool = result[1].sool, drug = result[1].drug }
 				DataPlayers[source].Food = DataPlayers[source].Food - table.food
 				DataPlayers[source].Water = DataPlayers[source].Water - table.water
-				DataPlayers[source].Need = DataPlayers[source].Need + table.need
+				-- DataPlayers[source].Need = DataPlayers[source].Need + table.need
 				DataPlayers[source].Sool = DataPlayers[source].Sool + table.sool
 				local needs = {
 					water = DataPlayers[source].Water,
@@ -107,7 +107,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
 		else
 			MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
 				if result[1] ~= nil then
-					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid)}
+					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }
 					DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
 				else
 					print("GROS Probleme !!")
@@ -148,7 +148,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
 		else
 			MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
 				if result[1] ~= nil then
-					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid)}
+					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture}
 					DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
 				else
 					print("GROS Probleme !!")
@@ -161,15 +161,15 @@ end)
 
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, table)
-	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[source].Inventaire[table[2]].quantity)
+	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[table[2]].quantity)
 end)
 
 ItemsOnTheGround = {}
 ItemsOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropItem')
-AddEventHandler('Inventory:DropItem', function(libelle, qty, id, uPoid, x,y,z, poid)
+AddEventHandler('Inventory:DropItem', function(libelle, qty, id, uPoid, x,y,z, poid, picture)
 	ItemsOnTheGroundIndex = ItemsOnTheGroundIndex + 1
-	ItemsOnTheGround[ItemsOnTheGroundIndex] = {id = id, libelle = libelle, qty = qty, uPoid = uPoid, poid = poid, x = x, y = y, z = z}
+	ItemsOnTheGround[ItemsOnTheGroundIndex] = {id = id, libelle = libelle, qty = qty, uPoid = uPoid, poid = poid, x = x, y = y, z = z, picture = picture}
 	ActualiseTableOfItemOnTheGround()
 end)
 
@@ -349,4 +349,47 @@ end)
 RegisterServerEvent('Inventory:ShowToOtherVisa')
 AddEventHandler('Inventory:ShowToOtherVisa', function(data, target)
 	TriggerClientEvent("Inventory:ShowToOtherVisa:cb", target, data)
+end)
+
+RegisterServerEvent('Inventory:CreateCheque')
+AddEventHandler('Inventory:CreateCheque', function(player, montant)
+	local source = source
+  local target = player
+  local date = os.date("%Y/%m/%d")
+  local Notification = {
+   title= "Inventaire",
+   type = "success", --  danger, error, alert, info, success, warning
+   logo = "https://img.icons8.com/dusk/64/000000/paycheque.png",
+   message = "Vous avez bien donné un chèque.",
+  }
+	MySQL.Async.execute("INSERT INTO user_document (`identifier`, `type`, `nom`, `prenom`, `montant`, `numero_de_compte`, `nom_du_factureur`,`prenom_du_factureur`, `date`) VALUES (@identifier, @type, @nom, @prenom, @montant, @numero_de_compte, @nom_du_factureur, @prenom_du_factureur, @date)",
+  {
+    ["@identifier"] = DataPlayers[target].SteamId,
+    ["@type"] = "cheque",
+    ["@nom"] = DataPlayers[target].Nom,
+    ["@prenom"] = DataPlayers[target].Prenom,
+    ["@montant"] = montant,
+    ["@numero_de_compte"] = DataPlayers[source].Account,
+    ["@nom_du_factureur"] = DataPlayers[source].Nom,
+    ["@prenom_du_factureur"] = DataPlayers[source].Prenom,
+    ["@date"] = date,
+  }, function()
+    MySQL.Async.fetchScalar("SELECT id FROM user_document WHERE identifier = @identifier ORDER BY id DESC", {["@identifier"] = DataPlayers[target].SteamId}, function(result)
+      DataPlayers[target].Documents[result] = {["type"] = "cheque", ["nom1"] = DataPlayers[target].Nom, ["prenom1"] = DataPlayers[target].Prenom, ["montant"] = montant, ["numeroDeCompte"] = DataPlayers[source].Account, ["date"] = date, ["nom2"] = DataPlayers[source].Nom, ["prenom2"] = DataPlayers[source].Prenom}
+      for k,v in pairs(DataPlayers[source].Documents) do
+        if type == "chequier" then
+          DataPlayers[source].Documents[k].montant = DataPlayers[source].Documents[k].montant - 1
+          if DataPlayers[source].Documents[k].montant == 0 then
+            MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @identifier and id = @id", {["@identifier"] = DataPlayers[source].SteamId, ["@id"] = k})
+          else
+            MySQL.Async.execute("UPDATE user_document SET montant = @montant WHERE identifier = @identifier and id = @id", {["@montant"] = DataPlayers[source].Documents[k].montant, ["@identifier"] = DataPlayers[source].SteamId, ["@id"] = k})
+          end
+          break
+        end
+      end
+      TriggerClientEvent('Venato:notify', source, defaultNotification)
+      Notification.message = "Vous avez reçu un chèque de "..montant.." € ."
+      TriggerClientEvent('Venato:notify', target, defaultNotification)
+    end)
+  end)
 end)

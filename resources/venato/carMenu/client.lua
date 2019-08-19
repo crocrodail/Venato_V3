@@ -20,7 +20,7 @@ Citizen.CreateThread(
             if menuIsOpen then
                 Venato.GetCarMenuIntruction()
             end
-            if IsControlJustPressed(1, Keys["F2"]) then
+            if IsControlJustPressed(1, Keys["F3"]) then
                 if menuIsOpen then
                     hideMenu()
                 else
@@ -29,7 +29,7 @@ Citizen.CreateThread(
             end
             if
                 menuIsOpen and
-                    (IsControlJustPressed(1, Keys["F3"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or
+                    (IsControlJustPressed(1, Keys["F2"]) or IsControlJustPressed(1, Keys["BACKSPACE"]) or
                         IsControlJustPressed(1, Keys["K"]) or
                         IsControlJustPressed(1, Keys["F5"]))
              then
@@ -47,8 +47,8 @@ function showMenu()
         Menu.open()
         Menu.clearMenu()
         TriggerEvent('Menu:Init', "Voiture", "Choisir une action", '#4527A099', "https://www.tesla.com/content/dam/tesla-site/sx-redesign/img/model3-proto/specs/compare-model3--center.png")
-        
-        Menu.addButton("<span class='red--text'>↩ Retour</span>", "hideMenu")
+
+        Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "hideMenu")
 
         if setRegu then
             Menu.addButton(
@@ -128,7 +128,7 @@ function openRegulMenu(car)
     Menu.clearMenu()
     Menu.setTitle( "Voiture")
     Menu.setSubtitle( "Réglage régulateur")
-    Menu.addButton("<span class='red--text'>↩ Retour", "showMenu")
+    Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "showMenu")
 
     Menu.addButton("30 km/h", "activRegu", {car = car, vitesse = 30})
     Menu.addButton("50 km/h", "activRegu", {car = car, vitesse = 50})
@@ -144,7 +144,7 @@ function settingsMenu()
     Menu.clearMenu()
     Menu.setTitle( "Voiture")
     Menu.setSubtitle( "Changer affichage compteur")
-    Menu.addButton("<span class='red--text'>↩ Retour</span>", "showMenu")
+    Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "showMenu")
 
     Menu.addButton("Style 1", "setSpeedmeter", 0, "previewSpeedmeter")
     Menu.addButton("Style 2", "setSpeedmeter", 1, "previewSpeedmeter")

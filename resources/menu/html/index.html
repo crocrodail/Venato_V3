@@ -6,7 +6,10 @@
       href="https://fonts.googleapis.com/css?family=Oswald|Poppins|Roboto&display=swap"
       rel="stylesheet"
     />
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.min.css" rel="stylesheet"/> 
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
@@ -39,13 +42,16 @@
               <v-list two-line :dark="isDark" id="menuList">
                 <v-subheader :dark="isDark" v-html="subtitle">
                 </v-subheader>
-                <template v-for="(item, index) in items">
+                <template v-for="(item, index) in items">                  
                   <v-list-tile
                     :key="index"
                     :dark="isDark"
                     @click="selectedItem = index"
                     :class="[{selected: index === selectedItem}]"
                   >
+                    <v-list-tile-avatar v-if="item.avatar">
+                      <v-img :src="item.avatar" aspect-ratio="1" contain></v-img>
+                    </v-list-tile-avatar>
                     <v-list-tile-content>
                       <v-list-tile-title
                         v-html="item.title"
@@ -55,13 +61,15 @@
                       ></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
-                      <v-btn icon ripple>
+                      <v-btn icon ripple v-if="!item.price">
                         <v-icon :color="(isDark ? 'white':'black')">{{
                           item.icon || "fa fa-chevron-right fa-xs"
                         }}</v-icon>
                       </v-btn>
+                      <span v-else>{{item.price | toCurrency}} €</span>
                     </v-list-tile-action>
                   </v-list-tile>
+                  
                 </template>
               </v-list>
             </v-card>

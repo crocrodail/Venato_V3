@@ -54,10 +54,6 @@ local priceTop = 200
 local priceLegs = 200
 local priceShoes = 200
 
-function Venato.Spawn()
-  Venato.LoadClothes()
-end
-
 function Venato.LoadClothes()
   TriggerServerEvent("ClothingShop:CallData")
 end
@@ -86,6 +82,8 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
 		if shopOpen then
 			if Menu.hidden then
+        DetachEntity(Venato.GetPlayerPed(), true, true)
+        DeleteEntity(Prop)
         Vtop = false
 				shopOpen = false
 				SetCamActive(cam,  false)
@@ -113,15 +111,14 @@ Citizen.CreateThread(function()
           printTxt("~g~Haut :                                           ~r~"..priceTop.." €",0.4, coordtop, true)
         end
         if buypantalong then
-          printTxt("~g~Pantalong :                                      ~r~"..priceLegs.." €",0.4, coordpantalong, true)
+          printTxt("~g~Pantalon :                                      ~r~"..priceLegs.." €",0.4, coordpantalong, true)
         end
         if buychaussure then
-          printTxt("~g~Chaussure :                                      ~r~"..priceShoes.." €",0.4, coordchaussure, true)
+          printTxt("~g~Chaussures :                                      ~r~"..priceShoes.." €",0.4, coordchaussure, true)
         end
 			end
-			SetEntityCoords(Venato.GetPlayerPed(), x, y, z-1)
 		end
-    local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+    local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
     for k,v in pairs(ClothingShop) do
       if Vdist(x, y, z, v.x, v.y, v.z) < 20 then
         DrawMarker(27,v.x,v.y,v.z-0.99,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
@@ -232,7 +229,7 @@ function scaleformClothingShop()
   PopScaleformMovieFunctionVoid()
   PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
   PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+  PushScaleformMovieFunction(scaleform, "SET_RetourGROUND_COLOUR")
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(0)
   PushScaleformMovieFunctionParameterInt(0)
@@ -271,6 +268,12 @@ function OpenClothingShop()
 	z = coords.z
 	SetEntityHeading(ped, 180)
 	shopOpen = true
+  local Coords = GetEntityCoords(ped, true)
+  Prop = Venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+  FreezeEntityPosition(Prop, true)
+  AttachEntityToEntity(ped, Prop, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 180.0, false, false, false, false, 2, false)
+  SetEntityVisible(Prop, false, 0)
+  SetEntityVisible(ped, true, 0)
 	if not DoesCamExist(cam) then
 		cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
 	end
@@ -279,14 +282,37 @@ function OpenClothingShop()
 	SetCamCoord(cam,  coords.x,  coords.y-2.0,  coords.z)
 	PointCamAtCoord(cam,x-1.0,y,z)
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
-	Menu.clearMenu()
-	Menu.setTitle("Clothing Shop")
-  Menu.addButton("sexe switch", "CSswitchsex", nil)
-  Menu.addButton("Haut", "CStop", nil)
-	Menu.addButton("Pantalong", "CSpantalong", nil)
-  Menu.addButton("Chaussure", "CSchausure", nil)
-  Menu.addButton("Payer : "..tatalPrice.." €", "BuyClothe", nil)
+  Menu.clearMenu()
+  TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
+  TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png")
+  TriggerEvent('Menu:AddButton2',"Haut", "CStop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
+	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
+  TriggerEvent('Menu:AddButton2',"Chaussures", "CSchausure", '', '', "https://i.ibb.co/0ZDJsZ4/icons8-trainers-96px.png")
+  TriggerEvent('Menu:AddButton2',"Payer : "..tatalPrice.." €", "BuyClothe", '', '', "https://i.ibb.co/y8LZBy2/icons8-receipt-96px.png")
+  TriggerEvent('Menu:CreateMenu')
+  TriggerEvent('Menu:Open')
 end
+tablee = {
+  ComponentVariation = {
+    Mask = {id = 0, color = 0},
+    torso = {id = GetPedDrawableVariation(ped, 3), color = GetPedTextureVariation(ped, 3)},
+    leg = {id = GetPedDrawableVariation(ped, 4), color = GetPedTextureVariation(ped, 4)},
+    parachute = {id = GetPedDrawableVariation(ped, 5), color = GetPedTextureVariation(ped, 5)},
+    shoes = {id = GetPedDrawableVariation(ped, 6), color = GetPedTextureVariation(ped, 6)},
+    accessory = {id = GetPedDrawableVariation(ped, 7), color = GetPedTextureVariation(ped, 7)},
+    undershirt = {id = GetPedDrawableVariation(ped, 8), color = GetPedTextureVariation(ped, 8)},
+    kevlar = {id = GetPedDrawableVariation(ped, 9), color = GetPedTextureVariation(ped, 9)},
+    badge = {id = GetPedDrawableVariation(ped, 10), color = GetPedTextureVariation(ped, 10)},
+    torso2 = {id = GetPedDrawableVariation(ped, 11), color = GetPedTextureVariation(ped, 11)},
+  },
+  prop = {
+    hat = {id = GetPedPropIndex(ped, 0), color = GetPedPropTextureIndex(ped, 0)},
+    glass = {id = GetPedPropIndex(ped, 1), color = GetPedPropTextureIndex(ped, 1)},
+    ear = {id = GetPedPropIndex(ped, 2), color = GetPedPropTextureIndex(ped, 2)},
+    watch = {id = GetPedPropIndex(ped, 6), color = GetPedPropTextureIndex(ped, 6)},
+    bracelet = {id = GetPedPropIndex(ped, 7), color = GetPedPropTextureIndex(ped, 7)},
+  }
+}
 
 function BuyClothe()
   local ped = Venato.GetPlayerPed()
@@ -332,7 +358,7 @@ AddEventHandler("ClothingShop:SaveClothes:response", function(response)
     title= "Magasin de vêtements",
     type = "success", --  danger, error, alert, info, success, warning
     logo = "https://img.icons8.com/nolan/64/000000/clothes.png",
-    message = "La transaction s'est bien passé ! C'est vêtement sont à vous.",
+    message = "La transaction s'est bien passé ! Ces vêtements sont à vous.",
    }
    Venato.notify(defaultNotification)
   else
@@ -344,7 +370,7 @@ end)
 
 function CSswitchsex()
   Citizen.CreateThread(function()
-  if(GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01")) then
+  if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
     local model = "mp_f_freemode_01"
     RequestModel(model)
     while not HasModelLoaded(model) do
@@ -353,8 +379,8 @@ function CSswitchsex()
     end
     SetPlayerModel(PlayerId(), model)
     SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(GetPlayerPed(-1))
-    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
   else
     local model = "mp_m_freemode_01"
     RequestModel(model)
@@ -364,8 +390,8 @@ function CSswitchsex()
     end
     SetPlayerModel(PlayerId(), model)
     SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(GetPlayerPed(-1))
-    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
   end
 end)
 end
@@ -380,7 +406,7 @@ function CSAccessoire()
   RenderScriptCams(false,  false,  0,  true,  true)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -399,7 +425,7 @@ function CSAccessoire()
 			end
 		end
 		if dont == false then
-			Menu.addButton2("~b~Accessoire ~r~#"..id, "OpenClothingShop", i, "ChangeDomponentId")
+			Menu.addButton2("Accessoires #"..id, "OpenClothingShop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
@@ -415,7 +441,7 @@ function CStop()
 	PointCamAtCoord(cam,x,y,z)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -438,7 +464,7 @@ function CStop()
       if debug then
         number = i
       end
-			Menu.addButton2("~b~Haut Primaire ~r~#"..number, "ChoseSecondeTop", i, "ChangeDomponentId")
+			Menu.addButton2("Haut Primaire #"..number, "ChoseSecondeTop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
@@ -456,7 +482,7 @@ function ChoseSecondeTop(i)
     Menu.clearMenu()
     local id = 1
     local ped = Venato.GetPlayerPed()
-    Menu.addButton2("~r~Back", "CStop", nil)
+    Menu.addButton2("Retour", "CStop", nil)
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
       if MaleCombinaisonTop[PrimaryTopIndex].Secondary == false then
         buytopcs()
@@ -514,7 +540,7 @@ function CSchausure()
 	PointCamAtCoord(cam,x,y,z-0.8)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -537,7 +563,7 @@ function CSchausure()
       if debug then
         number = i
       end
-			Menu.addButton2("~b~Chaussure ~r~#"..number, "buyShoescs", i, "ChangeDomponentId")
+			Menu.addButton2("Chaussures #"..number, "buyShoescs", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
@@ -566,7 +592,7 @@ function CSpantalong()
 	PointCamAtCoord(cam,x,y,z-0.5)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("~r~Back", "OpenClothingShop", nil)
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -589,7 +615,7 @@ function CSpantalong()
       if debug then
         number = i
       end
-			Menu.addButton2("~b~Pantalong ~r~#"..number, "buyLegscs", i, "ChangeDomponentId")
+			Menu.addButton2("Pantalon #"..number, "buyLegscs", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end

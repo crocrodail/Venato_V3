@@ -56,7 +56,7 @@ html {
     padding-top: 1%;
     float: left;
     img {
-      width: auto;
+      width: 100%;
       height: auto;
       max-height: 90%;
       max-width: 90%;
@@ -84,6 +84,10 @@ html {
   .noty_type__error,
   .noty_type__danger {
     background-color: rgba(183, 28, 28, 0.459);
+    color: white;
+  }
+  .noty_type__success {
+    background-color: rgba(5, 63, 8, 0.502);
     color: white;
   }
 }

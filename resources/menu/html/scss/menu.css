@@ -69,6 +69,11 @@ html body #app .v-card .v-list .v-list__tile__sub-title {
   font-family: "Poppins";
 }
 
+.itemPicture {
+  height: 30px;
+  width: 30px;
+}
+
 .menu_container {
   padding-top: 10vh;
   max-height: 70vh;

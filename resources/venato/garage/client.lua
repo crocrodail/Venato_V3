@@ -21,7 +21,7 @@ local garage = {
 
 
 local defaultNotification = {
-  name = "Garage",
+  title = "Garage",
   type = "alert",
   logo = "https://i.ibb.co/dpsQ3B9/icons8-parking-96px.png"
 }
@@ -47,10 +47,10 @@ AddEventHandler('onClientMapStart', function()
 end)
 
 Citizen.CreateThread(function()
-setMapMarker()
+  setMapMarker()
   while true do
       Citizen.Wait(0)
-      local ply = GetPlayerPed(-1)
+      local ply = Venato.GetPlayerPed()
       local plyCoords = GetEntityCoords(ply, 0)
       for _, item in pairs(garage) do
         local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
@@ -97,32 +97,36 @@ function MyCar(table)
   Menu.setTitle( "Garage")
   Menu.setSubtitle( "Mes Véhicules")
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "backToOpenGarage", "", "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   if Vehicule ~= nil then
-  for a, v in pairs(Vehicule) do
+  for a, v in pairs(Vehicule) do    
     if v.type == 1 then
       if v.state == 2 then
         ads = true
-        Menu.addButton("<span class='red--text'>Fourière |</span> "..v.name.." | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
+        TriggerEvent('Menu:AddShopButton', v.name, "none", "", "https://i.ibb.co/fp5bXcK/icons8-garage-96px.png", v.plate..' <span class="red--text"><small>Fourrière</small></span>', nil)
+        --Menu.addButton("<span class='red--text'>Fourière |</span> "..v.name.." | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
       elseif v.state == 1 then
         ads = true
-        Menu.addButton("<span class='orange--text'>Sortie |</span> "..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
+        TriggerEvent('Menu:AddShopButton', v.name, "none", "", "https://i.ibb.co/2j4253Z/icons8-garage-open-96px.png", v.plate..' <span class="orange--text"><small>Sortie</small></span>', nil)
+        --Menu.addButton("<span class='orange--text'>Sortie |</span> "..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "none", nil)
       else
         ads = true
-        Menu.addButton("<span class='green--text'>"..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h})
+        TriggerEvent('Menu:AddShopButton', v.name, "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h}, "https://i.ibb.co/fx5r19K/icons8-sedan-96px.png", v.plate, nil)
+        --Menu.addButton("<span class='green--text'>"..v.name.."</span> | <span class='orange--text'>" ..v.plate.."</span>" , "SortirVoiture", {type=v.type,model=v.model,name=v.name,plate=v.plate,customs=v.customs,Health=v.Health, x=table.x, y=table.y, z=table.z, h=table.h})
       end
     end
   end
   end
   if not ads then
-    Menu.addButton("<span class='red--text'>Aucun vehicule dans ce garage</span>" , "none", nil)
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Aucun vehicule dans ce garage</span>", "" , "none", nil)
   end
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "backToOpenGarage", nil)
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "backToOpenGarage", "", "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:CreateMenu')
   Menu.open()
 end
 
 function StoreMyCar(garage)
-  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
   print(DoesEntityExist(current))
   if DoesEntityExist(current) then
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
@@ -165,7 +169,7 @@ function SortirVoiture(vhll)
     		    SetVehicleEngineHealth(vhl, tonumber(health[1]))
     	    end
         end
-        SetPedIntoVehicle(GetPlayerPed(-1), vhl, -1)
+        SetPedIntoVehicle(Venato.GetPlayerPed(), vhl, -1)
         SetVehicleNumberPlateText(vhl, vhll.plate)
         TriggerEvent('lock:addVeh', vhll.plate, vhll.name)
         TriggerServerEvent("Garage:SortiVehicule", vhll.plate, vhll.model)
@@ -195,7 +199,7 @@ function SortirVoiture(vhll)
             end
         end
         SetVehicleMod(vhl, 15, customs.mods["15"], false)
-        if veh.type == 1 then
+        if vhl.type == 1 then
             -- Set neons
             if customs.neons.enabled then
                 ToggleVehicleMod(vhl, 22, false)
@@ -306,23 +310,23 @@ AddEventHandler("Garage:AllVehicle", function(garage)
   Vehicule = garage.vehicles
   TriggerEvent('Menu:Init', "Garage", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
   Menu.clearMenu()
-  Menu.addButton("<span class='red--text'>↩ Retour</span>", "close", nil)
-  Menu.addButton("<span class='green--text'>Mes vehicules</span></span>", "getCars", garage)
-  Menu.addButton("<span class='orange--text'>Rentrer son véhicule", "StoreMyCar", garage)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "close", nil)
+  Menu.addItemButton("Mes vehicules","https://i.ibb.co/dfs9NCR/icons8-traffic-jam-96px.png", "getCars", garage)
+  Menu.addItemButton("Rentrer son véhicule","https://i.ibb.co/872sDJ2/icons8-garage-closed-96px-1.png", "StoreMyCar", garage)
   Menu.open()
 end)
 
 RegisterNetEvent("Garage:deleteVoiture")
 AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
-  if IsPedInAnyVehicle( GetPlayerPed(-1), false ) then
-    TaskLeaveVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 262144)
+  if IsPedInAnyVehicle( Venato.GetPlayerPed(), false ) then
+    TaskLeaveVehicle(Venato.GetPlayerPed(), GetVehiclePedIsIn(Venato.GetPlayerPed(), false), 262144)
     Citizen.Wait(2500)
   end
   if GetEntityModel(vehicle) ~= nil then
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(vehicle))
     Venato.DeleteCar(vehicle)
   else
-    local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+    local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
     TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(current))
     Venato.DeleteCar(vehicle)
   end
