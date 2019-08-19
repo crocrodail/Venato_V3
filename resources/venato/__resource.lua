@@ -31,7 +31,10 @@ client_script {
   '/skin/face_client.lua',
   '/playerDeath/ClientDeath.lua',
   '/playerDeath/DeathFunction.lua',
-  'test.lua'
+  '/vnt_AdvancedFuel/config.lua',
+  '/vnt_AdvancedFuel/map.lua',
+  '/vnt_AdvancedFuel/models_c.lua',
+  '/vnt_AdvancedFuel/client.lua',
 }
 
 server_script {
@@ -54,6 +57,8 @@ server_script {
   '/clothingShop/server.lua',
   '/skin/server.lua',
   '/skin/face_server.lua',
+  '/vnt_AdvancedFuel/config.lua',
+  '/vnt_AdvancedFuel/server.lua'
 }
 
 files {
@@ -119,7 +124,7 @@ files {
 	"/html/index.html",
 	"/html/bank.html",
 	"/html/identity.html",
-	"/html/cheque.html",
+	"/html/cheque.html"
 }
 
 
