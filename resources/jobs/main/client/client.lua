@@ -36,8 +36,9 @@ function Jobs.Commands(job)
         TriggerEvent('Menu:Close')
         JobsConfig.isMenuOpen = false
       end
-      if IsControlJustReleased(1, Keys["F4"]) and JobsConfig.inService then
-        if JobsConfig.isMenuOpen then
+      if IsControlJustReleased(1, Keys["F2"]) and JobsConfig.inService then
+        JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
+        if not JobsConfig.isMenuOpen then
           TriggerEvent('Menu:Close')
         else
           TriggerEvent('Menu:Clear')
@@ -46,12 +47,12 @@ function Jobs.Commands(job)
           TriggerEvent('Menu:SubTitle', "¿ Vas y KesTuVeFaire ?")
           _G[job.Class].showMenu()
         end
-        JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
       end
 
       -- Enter/Leave Service management
       if JobsConfig.isOnServiceLocation and IsControlJustReleased(1, Keys["E"]) then
-        if JobsConfig.isMenuOpen then
+        JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
+        if not JobsConfig.isMenuOpen then
           TriggerEvent('Menu:Close')
         else
           TriggerEvent('Menu:Clear')
@@ -62,7 +63,6 @@ function Jobs.Commands(job)
             "toggleService", job)
           TriggerEvent('Menu:AddButton', "Récupérer sa paie", "takeSalary")
         end
-        JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
       end
 
       -- Step 3
