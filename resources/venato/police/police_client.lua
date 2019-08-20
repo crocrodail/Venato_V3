@@ -16,7 +16,6 @@ local handCuffed = false
 local isAlreadyDead = false
 local allServiceCops = {}
 local blipsCops = {}
-Citizen.Trace('poloci')
 
 local function sendnotif(message)
 	SetNotificationTextEntry("STRING")
@@ -36,10 +35,6 @@ local stationGarage = {
 	{x=1867.1923, y=3691.2719, z=3300.7599},
 }
 
-AddEventHandler("playerSpawned", function()
-	TriggerServerEvent("police:checkIsCop")
-	GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("GADGET_PARACHUTE"), 150, true, true)
-end)
 
 RegisterNetEvent('police:receiveIsCop')
 AddEventHandler('police:receiveIsCop', function(result)
@@ -116,8 +111,6 @@ AddEventHandler('police:getArrestedHRP', function()
 			TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "LIBRE !")
 		end
 end)
-
-
 
 -- RegisterNetEvent('police:payFines')
 -- AddEventHandler('police:payFines', function(amount, reason)
@@ -412,31 +405,6 @@ if (isCopInService) then
   end
 end
 
-function isNearsheriffservice()
-		local ply = GetPlayerPed(-1)
-		local plyCoords = GetEntityCoords(ply, 0)
-		local distance = GetDistanceBetweenCoords(1857.2152099609, 3688.8889160156, 34.267040252686, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-		if(distance < 30) then
-			DrawMarker(1, 1857.2152099609, 3688.8889160156, 34.267040252686-1, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 155, 255, 200, 0, 0, 2, 0, 0, 0, 0)
-		end
-		if(distance < 2) then
-			return true
-		end
-end
-
-function isNearsheriffgarage()
-if (isCopInService) then
-		local ply = GetPlayerPed(-1)
-		local plyCoords = GetEntityCoords(ply, 0)
-		local distance = GetDistanceBetweenCoords(1867.1923, 3691.2719, 33.7599, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-		if(distance < 30) then
-			DrawMarker(1, 1867.1923, 3691.2719, 33.7599-1, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 155, 255, 200, 0, 0, 2, 0, 0, 0, 0)
-		end
-		if(distance < 2) then
-			return true
-		end
-  end
-end
 
 function isNearStationGarage()
 	for i = 1, #stationGarage do
@@ -455,21 +423,23 @@ end
 function ServiceOn()
 	isCopInService = true
 	--TriggerServerEvent("jobssystem:jobs", 2)
-	TriggerServerEvent("police:takeService")
+  TriggerServerEvent("police:takeService")  
+  TriggerEvent('Menu:Close')
+  menuPoliceVestiaire()
 end
 
 function ServiceOff()
 	isCopInService = false
-  Menu.hidden = true
   TriggerServerEvent("police:setService",false)
-	--TriggerServerEvent("jobssystem:jobs", 7)
 	TriggerServerEvent("police:breakService")
 	allServiceCops = {}
 
 	for k, existingBlip in pairs(blipsCops) do
         RemoveBlip(existingBlip)
     end
-	blipsCops = {}
+  blipsCops = {}
+  civil()  
+  TriggerEvent('Menu:Close')
 end
 
 doorList = {
@@ -509,7 +479,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-  Citizen.Wait(10)
+      Citizen.Wait(10)
  --if (isCop) then
         for i = 1, #doorList do
             local playerCoords = GetEntityCoords( GetPlayerPed(-1) )
@@ -543,108 +513,88 @@ Citizen.CreateThread(function()
     end
 end)
 
+function getPowerFromRole(rank)
+  local power = 0
 
-function menupolicecamere()
-  ClearMenu()
-  ServiceOn()
-  TriggerServerEvent("police:setService",true)
-  showPageInfo = true
-    Menu.addButton("~r~Quitter son service", "ServiceOff", nil)
-  if(rank == "Cadet") then
-    MenuDescription = "~b~Cadet      "
-    Menu.addButton("~g~Equiper tenue standard", "cadetunif", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-        Menu.addButton("Manche longue/Manche courte", "uniformbasic", nil)
-    end
-    Menu.addButton("Equiper / Retirer un gillet fluo", "gillets", nil)
-    Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluos", nil)
-
-  elseif(rank == "Agent") then
-    MenuDescription = "~b~Agent      "
-    Menu.addButton("~g~Equiper tenue standard", "cadetunif", nil)
-    Menu.addButton("~b~Equiper tenue de civil", "civil", nil)
-    Menu.addButton("~b~Equiper tenue de moto", "motounif", nil)
-    Menu.addButton("~b~Equiper tenue de SWAT", "swat", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-      Menu.addButton("Manche longue/Manche courte", "uniformbasic", nil)
-    end
-    Menu.addButton("Equiper / Retirer un gillet fluo", "gillets", nil)
-    Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluos", nil)
-    Menu.addButton("Equiper / Retirer une ceinture", "ceintures", nil)
-    Menu.addButton("Equiper / Retirer un képi", "kepis", nil)
-
-  elseif(rank == "Sergent") then
-    MenuDescription = "~b~Sergent      "
-    Menu.addButton("~g~Equiper tenue standard", "cadetunif", nil)
-    Menu.addButton("~b~Equiper tenue K-9", "k9unif", nil)
-    Menu.addButton("~b~Equiper tenue de civil", "civil", nil)
-    Menu.addButton("~b~Equiper tenue de moto", "motounif", nil)
-    Menu.addButton("~r~Equiper tenue de SWAT", "swat", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-        Menu.addButton("Manche longue/Manche courte", "uniformbasic", nil)
-    end
-    Menu.addButton("Equiper / Retirer un gillet fluo", "gillets", nil)
-    Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluos", nil)
-    Menu.addButton("Equiper / Retirer une ceinture", "ceintures", nil)
-    Menu.addButton("Equiper / Retirer un képi", "kepis", nil)
-    Menu.addButton("Equiper / Retirer des lunette", "lunettes", nil)
-
-
-  elseif(rank == "Sergent-Chef") then
-    MenuDescription = "~b~Sergent-Chef      "
-    Menu.addButton("~g~Equiper tenue standard", "cadetunif", nil)
-    Menu.addButton("~b~Equiper tenue K-9", "k9unif", nil)
-    Menu.addButton("~b~Equiper tenue de civil", "civil", nil)
-    Menu.addButton("~b~Equiper tenue de moto", "motounif", nil)
-    Menu.addButton("~r~Equiper tenue de SWAT", "swat", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-        Menu.addButton("Manche longue/Manche courte", "uniformbasic", nil)
-    end
-    Menu.addButton("Equiper / Retirer un gillet fluo", "gillets", nil)
-    Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluos", nil)
-    Menu.addButton("Equiper / Retirer une ceinture", "ceintures", nil)
-    Menu.addButton("Equiper / Retirer un képi", "kepis", nil)
-    Menu.addButton("Equiper / Retirer des lunette", "lunettes", nil)
-
-
-  elseif(rank == "Lieutenant") then
-    MenuDescription = "~b~Lieutenant      "
-    Menu.addButton("~g~Equiper tenue standard", "cadetunif", nil)
-    Menu.addButton("~b~Equiper tenue K-9", "k9unif", nil)
-    Menu.addButton("~b~Equiper tenue de ville", "villesuit", nil)
-    Menu.addButton("~b~Equiper tenue de civil", "civil", nil)
-    Menu.addButton("~b~Equiper tenue de moto", "motounif", nil)
-    Menu.addButton("~r~Equiper tenue de SWAT", "swat", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-        Menu.addButton("Manche longue/Manche courte", "uniformbasic", nil)
-    end
-    Menu.addButton("Equiper / Retirer un gillet fluo", "gillets", nil)
-    Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluos", nil)
-    Menu.addButton("Equiper / Retirer une ceinture", "ceintures", nil)
-    Menu.addButton("Equiper / Retirer un képi", "kepis", nil)
-    Menu.addButton("Equiper / Retirer des lunette", "lunettes", nil)
-
-
-  elseif(rank == "Capitaine") then
-    MenuDescription = "~b~Capitaine      "
-    Menu.addButton("~g~Equiper tenue de capitaine", "capitaine", nil)
-    Menu.addButton("~b~Equiper tenue standard", "cadetunif", nil)
-    Menu.addButton("~b~Equiper tenue K-9", "k9unif", nil)
-    Menu.addButton("~b~Equiper tenue de ville", "villesuit", nil)
-    Menu.addButton("~b~Equiper tenue de civil", "civil", nil)
-    Menu.addButton("~b~Equiper tenue de moto", "motounif", nil)
-    Menu.addButton("~r~Equiper tenue de SWAT", "swat", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-        Menu.addButton("Manche longue/Manche courte", "uniformbasic", nil)
-    end
-    Menu.addButton("Equiper / Retirer un gillet fluo", "gillets", nil)
-    Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluos", nil)
-    Menu.addButton("Equiper / Retirer une ceinture", "ceintures", nil)
-    Menu.addButton("Equiper / Retirer un képi", "kepis", nil)
-    Menu.addButton("Equiper / Retirer des lunette", "lunettes", nil)
-  else
-    MenuChoixPoliceServiceCadet()
+  if rank == "Cadet" then
+    power = 1
   end
+
+  if rank == "Agent" then
+    power = 2
+  end
+
+  if rank == "Sergent" then
+    power = 3
+  end
+
+  if rank == "Sergent-Chef" then
+    power = 4
+  end
+
+  if rank == "Lieutnant" then
+    power = 5
+  end
+
+  if rank == "Capitaine" then
+    power = 6
+  end
+
+  return power
+
+end
+
+
+function menuPoliceVestiaire()
+  TriggerEvent('Menu:Clear')
+  TriggerEvent('Menu:Init', "Vestaire", "<small>"..rank.."</small>", '#1565C099', "https://i.ibb.co/mRx92ph/police-vestiaire.jpg")
+  if isCopInService then
+
+    local power = getPowerFromRole(rank)
+
+    TriggerEvent('Menu:AddButton2', "<span class='red--text'>Quitter son service</span>", "ServiceOff", "", "", "https://i.ibb.co/wddvMP0/icons8-close-window-96px-1.png")
+    
+    TriggerEvent('Menu:AddButton2', "Equiper tenue standard", "cadetunif", "", "", "")
+
+    if power >= 2 then --Agent
+      TriggerEvent('Menu:AddButton2', "Equiper tenue de civil", "civil", "", "", "")
+      TriggerEvent('Menu:AddButton2', "Equiper tenue de SWAT", "swat", "", "", "")
+
+      if power >= 3 then --Sergent et Sergent-Chef
+
+        if power >= 5 then --Lieutnant
+          TriggerEvent('Menu:AddButton2', "Equiper tenue de ville", "villesuit", "", "", "")
+
+          if power >= 6 then -- Capitaine
+            TriggerEvent('Menu:AddButton2', "Equiper tenue de capitaine", "capitaine", "", "", "")
+          end
+        end
+      end
+    end
+
+    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
+      TriggerEvent('Menu:AddButton2', "Manche longue/Manche courte", "uniformbasic", "", "", "")
+    end
+
+    TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet fluo", "gilletfluos", "", "", "")
+    TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet par balle", "gillets", "", "", "")
+
+    
+    if power >= 2 then --Agent
+      TriggerEvent('Menu:AddButton2', "Equiper / Retirer une ceinture", "ceintures", "", "", "")
+      TriggerEvent('Menu:AddButton2', "Equiper / Retirer un képi", "kepis", "", "", "")
+
+      if power >= 3 then --Sergent, Sergent-Chef, Lieutnant, Capitaine
+        TriggerEvent('Menu:AddButton2', "Equiper / Retirer des lunettes", "lunettes", "", "", "")
+      end
+    end
+
+  else
+    TriggerEvent('Menu:AddButton2', "Prendre son service", "ServiceOn", "", "", "https://i.ibb.co/KXZKdCh/icons8-police-station-96px-1.png")
+  end
+
+  TriggerEvent('Menu:CreateMenu')
+  TriggerEvent('Menu:Open')
 end
 
 function standardEquip()
@@ -716,64 +666,6 @@ TriggerServerEvent("project:armeActu")
 Menu.hidden = true
 end
 
-function sheriffunif()
-	uniforclassic = true
-	local props = {}
-	local components ={}
-	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-	   props = {
-      { 0, -1, 0 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 4, 0 }, -- gant/bras
-      { 4, 25, 0 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
-      { 6, 51, 0 }, --chaussure
-			{ 7, 8, 0 }, --acssessoir
-      { 8, 15, 0 }, -- ceinture/t-shirt
-      { 9, 13, 0 }, -- armur
-      { 10, 0, 0 }, -- emblème
-      { 11, 24, 0 } -- chemise/pull/veste
-    }
-	else -- femme
-		props = {
-      { 0, -1, 0 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 14, 0 }, -- gant/bras
-      { 4, 41, 1 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
-      { 6, 52, 0 }, --chaussure
-			{ 7, 8, 0 }, --acssessoir
-      { 8, 6, 0 }, -- ceinture/t-shirt
-      { 9, 14, 0 }, -- armur
-      { 10, 0, 0 }, -- emblème
-      { 11, 110, 0 } -- chemise/pull/veste
-    }
-
-	end
-
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
-
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
-end
-
 function kepisSheriff()
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
     if kepi then
@@ -794,49 +686,6 @@ function kepisSheriff()
   end
 end
 
-function gilletfluosSheriff()
-  if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
-    if gilletfluo then
-      SetPedComponentVariation(ped, 9, 13, 0, 0)
-      SetPedArmour(ped, 0)
-      gilletfluo = false
-    else
-      SetPedComponentVariation(ped, 9, 12, 1, 0)
-      SetPedArmour(ped, 100)
-      gilletfluo = true
-    end
-  else -- Femme
-		if gillet then
-      SetPedComponentVariation(ped, 9, 14, 0, 0)
-      SetPedArmour(ped, 0)
-      gillet = false
-    else
-      SetPedComponentVariation(ped, 9, 29, 1, 0)
-      SetPedArmour(ped, 100)
-      gillet = true
-    end
-  end
-end
-
-function gilletsSheriff()
-  if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-    if gillet then
-      SetPedComponentVariation(ped, 9, 13, 0, 0)
-      gillet = false
-    else
-      SetPedComponentVariation(ped, 9, 18, 3, 0)
-      gillet = true
-    end
-  else
-		if gilletfluo then
-      SetPedComponentVariation(ped, 9, 14, 0, 0)
-      gilletfluo = false
-    else
-      SetPedComponentVariation(ped, 9, 19, 3, 0)
-      gilletfluo = true
-    end
-  end
-end
 function spawnveh(namevehicul)
 	  local vehicule = namevehicul
 		local myPed = GetPlayerPed(-1)
@@ -929,12 +778,12 @@ function armur()
   end
   Menu.addButton("~r~Ajouter des balles", "ammo", nil)
 end
+
 nopee = true
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         if(isCop) then
-            Menu.renderGUI()
           if IsControlJustPressed(1, 170) then
       			Menu.hidden = true
       		end
@@ -986,52 +835,14 @@ Citizen.CreateThread(function()
               end
               Menu.addButton("~r~Ajouter des balles", "ammo", nil)
     				end
-    			end
+    			end   
 
-          if(isNearsheriffservice() and nopee) then
-
-    				DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le vestiaire',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
-    				if IsControlJustPressed(1,51) then
-              Menu.hidden = false
-              ped = GetPlayerPed(-1)
-              ClearMenu()
-              MenuTitle = "Vestiaire"
-              ServiceOn()
-              MenuDescription = "~b~Sherrif      "
-              Menu.addButton("~b~Equiper tenue standard", "sheriffunif", nil)
-              Menu.addButton("~b~Equiper tenue de civil", "civil", nil)
-              Menu.addButton("~r~Armurerie", "armur", nil)
-              Menu.addButton("Equiper / Retirer un gillet fluo", "gilletsSheriff", nil)
-              Menu.addButton("Equiper / Retirer un gillet par balle", "gilletfluosSheriff", nil)
-              Menu.addButton("Equiper / Retirer une ceinture", "ceintures", nil)
-              Menu.addButton("Equiper / Retirer un Chapeau", "kepisSheriff", nil)
-              Menu.addButton("Equiper / Retirer des lunette", "lunettes", nil)
-    				end
-    			end
-
-
-			if(isNearsheriffgarage() and nopee) then
-
-				DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le garage',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
-				if IsControlJustPressed(1,51) then
-          Menu.hidden = false
-          ClearMenu()
-          ped = GetPlayerPed(-1)
-          MenuTitle = "Vestiaire"
-          MenuDescription = "~b~Sherrif      "
-          Menu.addButton("~b~Sheriff Cruiser", "spawnveh", "sheriff")
-          Menu.addButton("~b~Sheriff SUV", "spawnveh", "sheriff2")
-				end
-			end
 
       if(isNearTakeService()) then
-
 				DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le vestiaire',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
-				if IsControlJustPressed(1,51) then
-          Menu.hidden = false
+				if IsControlJustPressed(1,51) then         
           ped = GetPlayerPed(-1)
-          MenuTitle = "Vestiaire"
-          menupolicecamere()
+          menuPoliceVestiaire()
 				end
 			end
 			if(isCopInService) then
@@ -1194,15 +1005,6 @@ Citizen.CreateThread(function()
 end)
 
 
-
-
-
-
-
-
-
-
-
 function swat()
 	uniforclassic = false
   SetPedArmour(ped, 100)
@@ -1219,7 +1021,7 @@ function swat()
       { 1, 52, 0 }, -- masque
       { 3, 96, 0 }, -- gant/bras
       { 4, 31, 0 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
+      { 5, 0 , 0 }, -- parachute
       { 6, 25, 0 }, --chaussure
 			{ 7, 110, 0 }, --acssessoir
       { 8, 15, 0 }, -- ceinture/t-shirt
@@ -1247,85 +1049,30 @@ function swat()
       { 11, 42, 0 } -- chemise/pull/veste
     }
 	end
+	
+  SetComponent(components)
+  SetProps(props)
 
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
-
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
 end
 
 function civil()
-	TriggerServerEvent("skin_customization:SpawnPlayer")
-	SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)	  -- retrait cravate
-	SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)   -- retrait parballes du swat
-	SetPedComponentVariation(GetPlayerPed(-1), 1, 0, 0, 0)   -- retrait Mask du swat
-	SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 1, 2) -- retour skin joueurs
-	SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2) -- suppression grade
-end
+  
+	local props = {
+    { 0, -1, 0 }, -- casque
+    { 1, -1, 0 }, -- lunette
+    { 2, -1, 0 }, -- ecouteur
+    { 3, 3, 0 } -- montre
+  }
 
-function motounif()
-	uniforclassic = true
+  local components = {
+    { 1, 0, 0 }, -- masque    
+  }
 
-	local props = {}
-	local components ={}
-	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-	   props = {
-      { 0, -1, 0 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 4, 0 }, -- gant/bras
-      { 4, 32, 1 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
-      { 6, 30, 0 }, --chaussure
-			{ 7, 0, 0 }, --acssessoir
-      { 8, 15, 0 }, -- ceinture/t-shirt
-      { 9, 13, 0 }, -- armur
-      { 10, 0, 0 }, -- emblème
-      { 11, 52, 3 } -- chemise/pull/veste
-    }
-	else -- femme
-		props = {
-      { 0, -1, 0 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 14, 0 }, -- gant/bras
-      { 4, 31, 1 }, -- pantalon
-      { 5, 0, 0 }, -- parachute
-      { 6, 9, 0 }, --chaussure
-			{ 7, 0, 0 }, --acssessoir
-      { 8, 2, 0 }, -- ceinture/t-shirt
-      { 9, 14, 0 }, -- armur
-      { 10, 0, 0 }, -- emblème
-      { 11, 36, 0 } -- chemise/pull/veste
-    }
-	end
+  Venato.LoadClothes()
 
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
-
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
+  SetComponent(components)
+  SetProps(props)
+ 
 end
 
 function capitaine()
@@ -1337,6 +1084,7 @@ function capitaine()
 	 { 2, -1, 0 }, -- ecouteur
 	 { 3, 3, 0 } -- montre
  }
+
  local components = {
 	 { 1, 0, 0 }, -- masque
 	 { 3, 12, 0 }, -- gant/bras
@@ -1345,21 +1093,13 @@ function capitaine()
 	 { 6, 10, 0 }, --chaussure
 	 { 7, 10, 1 }, --acssessoir
 	 { 8, 10, 0 }, -- ceinture/t-shirt
-	 { 9, 24, 0 }, -- armur
+   { 9, 13, 0 }, -- armur
 	 { 10, 0, 0 }, -- emblème
 	 { 11, 4, 0 } -- chemise/pull/veste
  }
- for _, comp in ipairs(components) do
-		SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
- end
 
- for _, comp in ipairs(props) do
-		 if comp[2] == -1 then
-				 ClearPedProp(ped, comp[1])
-		 else
-				 SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-		 end
- end
+ SetComponent(components)
+ SetProps(props)
 end
 
 function villesuit()
@@ -1371,26 +1111,26 @@ function villesuit()
 	   props = {
       { 0, -1, 0 }, -- casque
       { 1, -1, 0 }, -- lunette
-      { 2, -1, 0 }, -- ecouteur
+      { 2, 0, 0 }, -- ecouteur
       { 3, 3, 0 } -- montre
     }
     components = {
       { 1, 0, 0 }, -- masque
       { 3, 12, 0 }, -- gant/bras
-      { 4, 10, 3 }, -- pantalon
+      { 4, 10, 0 }, -- pantalon
       { 5, 0, 0 }, -- parachute
       { 6, 10, 0 }, --chaussure
-			{ 7, 38, 0 }, --acssessoir
-      { 8, 10, 3 }, -- ceinture/t-shirt
-      { 9, 24, 0 }, -- armur
+      { 7, 0, 0 }, --acssessoir
+      { 8, 10, 0 }, -- ceinture/t-shirt
+      { 9, 13, 0 }, -- armur
       { 10, 0, 0 }, -- emblème
-      { 11, 4, 1 } -- chemise/pull/veste
+      { 11, 4, 0 } -- chemise/pull/veste
     }
 	else -- femme
 		props = {
       { 0, -1, 0 }, -- casque
       { 1, -1, 0 }, -- lunette
-      { 2, -1, 0 }, -- ecouteur
+      { 2, 0, 0 }, -- ecouteur
       { 3, 3, 0 } -- montre
     }
     components = {
@@ -1402,81 +1142,15 @@ function villesuit()
 			{ 7, 22, 10 }, --acssessoir
       { 8, 38, 0 }, -- ceinture/t-shirt
       { 9, 16, 0 }, -- armur
-      { 10, 0, 0 }, -- emblème
+      { 10, 3, 0 }, -- emblème
       { 11, 24, 0 } -- chemise/pull/veste
     }
 	end
 
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
-
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
+  SetComponent(components)
+  SetProps(props)
 end
 
-function k9unif()
-	uniforclassic = false
-
-	local props = {}
-	local components ={}
-	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-	   props = {
-      { 0, 10, 6 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 0, 0 }, -- gant/bras
-      { 4, 52, 1 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
-      { 6, 24, 0 }, --chaussure
-			{ 7, 1, 0 }, --acssessoir
-      { 8, 37, 0 }, -- ceinture/t-shirt
-      { 9, 13, 0 }, -- armur
-      { 10, 8, 0 }, -- emblème
-      { 11, 102, 0 } -- chemise/pull/veste
-    }
-	else -- femme
-		props = {
-      { 0, -1, 0 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 14, 0 }, -- gant/bras
-      { 4, 54, 1 }, -- pantalon
-      { 5, 0, 0 }, -- parachute
-      { 6, 25, 0 }, --chaussure
-			{ 7, 0, 0 }, --acssessoir
-      { 8, 2, 0 }, -- ceinture/t-shirt
-      { 9, 14, 0 }, -- armur
-      { 10, 7, 0 }, -- emblème
-      { 11, 93, 0 } -- chemise/pull/veste
-    }
-	end
-
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
-
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
-end
 
 function cadetunif()
 	uniforclassic = true
@@ -1493,7 +1167,7 @@ function cadetunif()
       { 1, 11, 2 }, -- masque
       { 3, 0, 0 }, -- gant/bras
       { 4, 35, 0 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
+      { 5, 0, 0 }, -- parachute
       { 6, 51, 0 }, --chaussure
 			{ 7, 0, 0 }, --acssessoir
       { 8, 15, 0 }, -- ceinture/t-shirt
@@ -1523,17 +1197,25 @@ function cadetunif()
 
 	end
 
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
+  SetComponent(components)
+  SetProps(props)
+end
 
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
+
+function SetProps(props)
+  for _, comp in ipairs(props) do
+      if comp[2] == -1 then
+          ClearPedProp(ped, comp[1])
+      else
+          SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
+      end
+  end
+end
+
+function SetComponent(components)
+  for _, comp in ipairs(components) do
+		SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
+ end
 end
 
 function lunettes()
@@ -1608,16 +1290,16 @@ function ceintures()
   end
 end
 
-function gilletfluos()
+function gillets()
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
-    if gilletfluo then
+    if gillet then
       SetPedComponentVariation(ped, 9, 13, 0, 0)
       SetPedArmour(ped, 0)
-      gilletfluo = false
+      gillet = false
     else
       SetPedComponentVariation(ped, 9, 12, 3, 0)
       SetPedArmour(ped, 100)
-      gilletfluo = true
+      gillet = true
     end
   else -- Femme
 		if gillet then
@@ -1632,14 +1314,14 @@ function gilletfluos()
   end
 end
 
-function gillets()
+function gilletfluos()
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-    if gillet then
+    if gilletfluo then
       SetPedComponentVariation(ped, 9, 13, 0, 0)
-      gillet = false
+      gilletfluo = false
     else
       SetPedComponentVariation(ped, 9, 18, 0, 0)
-      gillet = true
+      gilletfluo = true
     end
   else
 		if gilletfluo then

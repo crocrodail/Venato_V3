@@ -506,10 +506,10 @@ end)
 
 RegisterNetEvent('police:receiveIsCop')
 AddEventHandler('police:receiveIsCop', function(result)
+    print(result)
     if (result == "inconnu") then
         isCop = false
         isCopInService = false
-        --onServiceChangePolice()
     else
         isCop = true
     end

@@ -10,9 +10,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(1000)
 		local pedCoords = GetEntityCoords(PlayerPedId())
 		for k,v in pairs(PropData) do
-      local objectId = GetClosestObjectOfType(pedCoords, 1.5, GetHashKey(k), false)
-			print(objectId)
-			print(k)
+      local objectId = GetClosestObjectOfType(pedCoords, 1.5, GetHashKey(k), false)			
 			if obj ~= 0 then
 				NextTo = k
 				Prop = objectId

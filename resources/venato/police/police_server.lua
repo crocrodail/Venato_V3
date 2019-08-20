@@ -27,7 +27,7 @@ AddEventHandler('police:removeCop', function()
 	end)
 end)
 
-function checkIsCop(identifier, source)
+function checkIsCop(identifier,source)
 	MySQL.Async.fetchAll("SELECT * FROM police WHERE identifier = @identifier", { ['@identifier'] = identifier},
 		function(result)
 			if(not result[1]) then
@@ -109,14 +109,10 @@ AddEventHandler('es:playerDropped', function(player)
 end)
 
 RegisterServerEvent('police:checkIsCop')
-AddEventHandler('police:checkIsCop', function()
-	--print(source)
+AddEventHandler('police:checkIsCop', function(source)
 	local source = source
-	TriggerEvent("es:getPlayerFromId", source, function(user)
-		local identifier = user.getIdentifier()
-		--print(identifier)
-		checkIsCop(identifier, source)
-	end)
+	local identifier = Venato.GetSteamID(source)
+	checkIsCop(identifier, source)
 end)
 
 RegisterServerEvent('police:msgserv')
