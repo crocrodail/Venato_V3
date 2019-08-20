@@ -44,7 +44,6 @@ AddEventHandler("Jobs:askSalary", function(newSource)
     bonus = 1
   end
 
-  TriggerEvent("Venato:dump", { salaryCount, primeConn, salary, primeJob, bonus })
   TriggerEvent("Inventory:AddMoney", (primeConn + salary + primeJob) * bonus, source)
   TriggerClientEvent("Jobs:askSalary:cb", source, jobName, primeConn, salary, primeJob, bonus)
 end)

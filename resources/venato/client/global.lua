@@ -64,11 +64,6 @@ AddEventHandler("Venato:InteractTxt", function(msg)
   Venato.InteractTxt(msg)
 end)
 
-RegisterNetEvent("Venato:notify")
-AddEventHandler("Venato:notify", function(notif)
-  Venato.notify(notif)
-end)
-
 RegisterNetEvent("Venato:TestImage")
 AddEventHandler("Venato:TestImage", function()
   none()

@@ -72,7 +72,6 @@ function JobsDbFunctions.getPlayerSalary(source)
       primeJob = getPrime(rank)
     end
   end
-  print(salary, primeJob)
   return salary, primeJob
 end
 

@@ -51,13 +51,17 @@ function Jobs.Commands(job)
 
       -- Enter/Leave Service management
       if JobsConfig.isOnServiceLocation and IsControlJustReleased(1, Keys["E"]) then
-        TriggerEvent('Menu:Clear')
-        TriggerEvent('Menu:Open')
-        TriggerEvent('Menu:Title', job.name)
-        TriggerEvent('Menu:SubTitle', "¿ Vas y KesTuVeFaire ?")
-        TriggerEvent('Menu:AddButton', JobsConfig.inService and "Quitter le service" or "Prendre le service",
-          "toggleService", job)
-        TriggerEvent('Menu:AddButton', "Récupérer sa paie", "takeSalary")
+        if JobsConfig.isMenuOpen then
+          TriggerEvent('Menu:Close')
+        else
+          TriggerEvent('Menu:Clear')
+          TriggerEvent('Menu:Open')
+          TriggerEvent('Menu:Title', job.name)
+          TriggerEvent('Menu:SubTitle', "Que puis-je pour vous ?")
+          TriggerEvent('Menu:AddButton', JobsConfig.inService and "Quitter le service" or "Prendre le service",
+            "toggleService", job)
+          TriggerEvent('Menu:AddButton', "Récupérer sa paie", "takeSalary")
+        end
         JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
       end
 
