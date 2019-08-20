@@ -1,9 +1,5 @@
 DataCoffre = {}
 
-function startScript()
-  reloadDataCoffre()
-end
-
 function reloadDataCoffre()
   Citizen.CreateThread(function()
     local Cof = {}
@@ -145,7 +141,7 @@ AddEventHandler("Coffre:DropItem", function(qty, row)
     if DataCoffre[indexCoffre].inventaire[indexItem] ~= nil then
       qtyInCoffre = DataCoffre[indexCoffre].inventaire[indexItem].quantity
     end
-    
+
     defaultNotification = {
       title = 'Coffre',
       type = "alert",

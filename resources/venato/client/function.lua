@@ -160,6 +160,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		end
 		local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, true, false)
 		local id = NetworkGetNetworkIdFromEntity(vehicle)
+    SetNetworkIdExistsOnAllMachines(id, true)
 		SetNetworkIdCanMigrate(id, true)
 		SetEntityAsMissionEntity(vehicle, true, false)
 		SetVehicleHasBeenOwnedByPlayer(vehicle, true)

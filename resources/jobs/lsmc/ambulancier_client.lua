@@ -1,6 +1,4 @@
-
-local ambulancierIsInService = false
-TimeToRespawn = 0
+ambulancierIsInService = false
 local AdminCheatIsOn = false
 
 local spawnAmbulancierVehicleChoix = {}
@@ -58,11 +56,11 @@ OverPowered=15.0,
 }
 
 ambulancier_emer = { --sotir voiture
-	x=-486.4365,
-	y=-331.8929,
-	z=34.3611,
+	x=-54.4365,
+	y=-1107.8929,
+	z=26.3611,
     h=262.1448,
-    OverPowered=20.0,
+    OverPowered=1.0,
 }
 
 ambulancier_helico = {
@@ -76,11 +74,11 @@ OverPowered=1.0,
 ambulancier_blips = {
 ["Urgences"] = {
 id=61,
-x=267.49099,
-y=-1363.909912,
-z=23.537790,
+x=1148.584,
+y=-1590.365,
+z=3.945,
 distanceBetweenCoords=1,
-distanceMarker=2,
+distanceMarker=1,
 },
 
 ["Garage d\'entreprise"] = {
@@ -89,7 +87,7 @@ id=50,
 	y=-336.0274,
 	z=33.5016,
 distanceBetweenCoords=2,
-distanceMarker=2
+distanceMarker=1
 },
 
 ["Heliport"] = {
@@ -98,7 +96,7 @@ x=-439.2455,
 y=-321.4538,
 z=77.1681,
 distanceBetweenCoords=2,
-distanceMarker=2
+distanceMarker=1
 }
 }
 ambulancier_sortie={
@@ -127,99 +125,31 @@ local function removeBlipAmbulancier()
 			RemoveBlip(item.blip)
 	end
 end
-local function drawHelpJobAmbulancier()
-    local lines = {
-        { text = '~o~Information Ambulancier', isTitle = true, isCenter = true},
-        { text = '~g~Vous devez sauver les citoyens dans le coma.', isCenter = true, addY = 0.04},
-        { text = ' - Prenez votre service et récupérez votre véhicule dans un garage.'},
-        { text = ' - Lorsque qu\'un appel est lancé, prenez l\'appel et dirrigez-vous pour sauvez une vie.'},
-        { text = ' - Une fois sur place, analysez la situation et agissez dans la mesure du possible.'},
-        { text = ' - Prévenez le centre d\'appels que la mission est terminée.'},
-        { text = ' - Prenez ou attendez le prochain appel.', addY = 0.04},
-        { text = '~b~ Vos véhicules :', size = 0.4, addY = 0.04 },
-        { text = '~g~L\'ambulance ~w~Rapide et maniable, permet d\'intervenir à courte et moyenne distance'},
-        { text = '~g~L\'helicopter ~w~Plus rapide pour les longue distances.', addY = 0.04},
-        { text = '~d~Si vous trouvez des problèmes, utilisez le forum pour nous les signalers.', isCenter = true, addY = 0.06},
-        { text = '~b~Merci & Bonne route', isCenter = true},
-    }
-    DrawRect(0.5, 0.5, 0.48, 0.5, 0,0,0, 225)
-    local y = 0.31 - 0.025
-    local defaultAddY = 0.025
-    local addY = 0.025
-    for _, line in pairs(lines) do
-        y = y + addY
-        local caddY = defaultAddY
-        local x = 0.275
-        local defaultSize = 0.32
-        local defaultFont = 8
-        if line.isTitle == true then
-            defaultFont = 1
-            defaultSize = 0.8
-            caddY = 0.06
-        end
-        SetTextFont(line.font or defaultFont)
-        SetTextScale(0.0,line.size or defaultSize)
-        SetTextCentre(line.isCenter == true)
-        if line.isCenter == true then
-            x = 0.5
-        end
-        SetTextDropShadow(0, 0, 0, 0, 0)
-        SetTextEdge(0, 0, 0, 0, 0)
-        SetTextColour(255, 255, 255, 255)
-        SetTextEntry("STRING")
-        AddTextComponentString(line.text)
-        DrawText(x, y)
-        addY = line.addY or caddY
-    end
-    SetTextComponentFormat("STRING")
-    AddTextComponentString('~INPUT_CELLPHONE_CANCEL~ ~g~Ferme l\'aide')
-    DisplayHelpTextFromStringLabel(0, 0, 1, -1)
-
-end
-
-function Chat(t)
-	TriggerEvent("chatMessage", 'AMBU', { 0, 255, 255}, "" .. tostring(t))
-end
 
 function spawnVehicule(pos, type)
-    deleteVehicle()
-    local vehi = GetClosestVehicle(pos.x, pos.y, pos.z, 2.0, 0, 70)
-    if vehi == 0 then
-        RequestModel(type)
-        while not HasModelLoaded(type) do
-            Wait(1)
-        end
-        local plate = math.random(1000, 9000)
-        myVehiculeEntity = CreateVehicle(type, pos.x, pos.y, pos.z, pos.h , true, true)
+  deleteVehicle()
+  RequestModel(type)
+  while not HasModelLoaded(type) do
+    Wait(100)
+  end
+  local plate = math.random(1000, 9000)
+  Venato.CreateVehicle(string.upper(type), {pos.x, pos.y, pos.z}, pos.h, function(vehicle)
+    myVehiculeEntity = vehicle
 		if type == "polmav" then
 			SetVehicleLivery(myVehiculeEntity, 1)
 		elseif type == "ambulance" or type == "blazer2" or type == "fbi2" or type == "lguard" or type == "rsb_mbsprinter" then
-		SetVehicleEnginePowerMultiplier(myVehiculeEntity, 50.03)
+		    SetVehicleEnginePowerMultiplier(myVehiculeEntity, 50.03)
 		else
-		SetVehicleEnginePowerMultiplier(myVehiculeEntity, pos.OverPowered)
+		    SetVehicleEnginePowerMultiplier(myVehiculeEntity, pos.OverPowered)
 		end
-
-
-        SetVehicleNumberPlateText(myVehiculeEntity, "Amb"..plate)
-        SetVehicleOnGroundProperly(myVehiculeEntity)
-
-		SetEntityAsMissionEntity(myVehiculeEntity, true, true)
+    SetVehicleNumberPlateText(myVehiculeEntity, "Amb"..plate)
+    SetVehicleOnGroundProperly(myVehiculeEntity)
 		plate = GetVehicleNumberPlateText(myVehiculeEntity)
     TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(myVehiculeEntity)))
-    TriggerServerEvent("vnt:saveVeh", myVehiculeEntity)
-		TriggerServerEvent("ls:refreshid",plate,myVehiculeEntity)
 
-        local ObjectId = NetworkGetNetworkIdFromEntity(myVehiculeEntity)
-        SetNetworkIdExistsOnAllMachines(ObjectId, true)
-
-        local p = GetEntityCoords(myVehiculeEntity, 0)
-        local h = GetEntityHeading(myVehiculeEntity)
-        SetModelAsNoLongerNeeded(type)
-        return
-    end
-    -- Citizen.Trace('impossible')
-    notifIcon("CHAR_CALL911", 1, "Urgence", false, TEXTAMBUL.SpawnVehicleImpossible)
+  end)
 end
+
 function invokeVehicle(data)
     if data.type == 1 then
         spawnVehicule(ambulancier_car, "ambulance")
@@ -240,34 +170,12 @@ function invokeVehicle(data)
     end
 end
 
-function toogleServiceAmbulancier()
-  if not ambulancierIsInService then
-    TriggerEvent("ambu:service")
-  end
-    ped = GetPlayerPed(-1)
-    Menu.hidden = false
-    ambulancierIsInService = true
-    Citizen.Trace("toogleServiceAmbulancier")
-    MenuTitle = "LSMC"
-    MenuDescription = "~b~Choix des tenues  "
-  	ClearMenu()
-    Menu.addButton("~r~Quitter son service", "leaveserv", nil)
-  	Menu.addButton("Tenue ~b~Infirmier", "Infirmier", nil)
-  	Menu.addButton("Tenue ~b~Ambulancier", "Ambulancierf", nil)
-  	Menu.addButton("Tenue ~b~Docteur", "Docteur", nil)
-  	Menu.addButton("~o~Equiper un stethoscope", "stethoscope", nil)
-  	Menu.addButton("~o~Equiper une casquet", "casquet", nil)
-    Menu.addButton("~o~Equiper casque", "helicop", nil)
-    TriggerServerEvent('ambulancier:takeService')
-    TriggerServerEvent('ambulancier:requestMission')
-    ambulancier_showHelp = true
-end
-
 stethoscopeequip = false
 casquetequip = false
 helicocas = false
 
 function Docteur()
+  local ped = GetPlayerPed(-1)
 	local props = {}
 	local components ={}
 	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -281,8 +189,8 @@ function Docteur()
       { 1, 11, 2 }, -- masque
       { 3, 88, 0 }, -- gant/bras
       { 4, 24, 0 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
-      { 6, 10, 0 }, --chaussure
+      { 5, 0, 0 }, -- parachute
+      { 6, 77, 0 }, --chaussure
 			{ 7, 0, 0 }, --acssessoir
       { 8, 10, 5 }, -- ceinture/t-shirt
       { 9, 13, 0 }, -- armur
@@ -325,6 +233,7 @@ function Docteur()
 end
 
 function Ambulancierf()
+  local ped = GetPlayerPed(-1)
 	local props = {}
 	local components ={}
 	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -338,10 +247,10 @@ function Ambulancierf()
       { 1, 11, 2 }, -- masque
       { 3, 92, 0 }, -- gant/bras
       { 4, 24, 5 }, -- pantalon
-      { 5, 48, 0 }, -- parachute
-      { 6, 8, 0 }, --chaussure
+      { 5, 0, 0 }, -- parachute
+      { 6, 77, 0 }, --chaussure
 			{ 7, 0, 0 }, --acssessoir
-      { 8, 87, 0 }, -- ceinture/t-shirt
+      { 8, 15, 0 }, -- ceinture/t-shirt
       { 9, 13, 0 }, -- armur
       { 10, 0, 0 }, -- emblème
       { 11, 13, 3 } -- chemise/pull/veste
@@ -381,64 +290,8 @@ function Ambulancierf()
 	end
 end
 
-function Infirmier()
-	local props = {}
-	local components ={}
-	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-    props = {
-     { 0, -1, 0 }, -- casque
-     { 1, -1, 0 }, -- lunette
-     { 2, 0, 0 }, -- ecouteur
-     { 3, 3, 0 } -- montre
-   }
-   components = {
-     { 1, 11, 2 }, -- masque
-     { 3, 92, 0 }, -- gant/bras
-     { 4, 24, 5 }, -- pantalon
-     { 5, 48, 0 }, -- parachute
-     { 6, 8, 0 }, --chaussure
-     { 7, 0, 0 }, --acssessoir
-     { 8, 20, 1 }, -- ceinture/t-shirt
-     { 9, 13, 0 }, -- armur
-     { 10, 0, 0 }, -- emblème
-     { 11, 13, 3 } -- chemise/pull/veste
-   }
-	else -- femme
-		props = {
-      { 0, -1, 0 }, -- casque
-      { 1, -1, 0 }, -- lunette
-      { 2, 0, 0 }, -- ecouteur
-      { 3, 3, 0 } -- montre
-    }
-    components = {
-      { 1, 11, 2 }, -- masque
-      { 3, 98, 0 }, -- gant/bras
-      { 4, 50, 2 }, -- pantalon
-      { 5, 0, 0 }, -- parachute
-      { 6, 72, 0 }, --chaussure
-			{ 7, 0, 0 }, --acssessoir
-      { 8, 159, 0 }, -- ceinture/t-shirt
-      { 9, 14, 0 }, -- armur
-      { 10, 0, 0 }, -- emblème
-      { 11, 258, 0 } -- chemise/pull/veste
-    }
-
-	end
-
-	for _, comp in ipairs(components) do
-		 SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
-	end
-
-	for _, comp in ipairs(props) do
-			if comp[2] == -1 then
-					ClearPedProp(ped, comp[1])
-			else
-					SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
-			end
-	end
-end
-
 function stethoscope()
+  local ped = GetPlayerPed(-1)
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
     if stethoscopeequip then
         SetPedComponentVariation(ped, 7, 0, 0, 0)
@@ -458,27 +311,8 @@ function stethoscope()
   end
 end
 
-function helicop()
-  if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
-    if helicocas then
-        ClearPedProp(ped, comp[1])
-      helicocas = false
-    else
-        SetPedPropIndex(ped, 0, 79, 0 , true)
-      helicocas = true
-    end
-  else -- Femme
-    if helicocas then
-      ClearPedProp(ped, comp[1])
-      helicocas = false
-    else
-        SetPedPropIndex(ped, 0, 19 , 0 , true)
-      helicocas = true
-    end
-  end
-end
-
 function casquet()
+  local ped = GetPlayerPed(-1)
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
     if not casquetequip then
       SetPedPropIndex(ped, 0, 122 , 0 , true)
@@ -498,20 +332,29 @@ function casquet()
   end
 end
 
+function AmbuOnService()
+  ambulancierIsInService = true
+  ambulancier_showHelp = true
+  TriggerServerEvent('ambulancier:requestMission')
+  TriggerServerEvent('ambulancier:takeService')
+  Menu.close()
+  toogleServiceAmbulancier()
+end
 
 function leaveserv()
-  if ambulancierIsInService then
-    TriggerEvent("ambu:service")
-  end
   ambulancierIsInService = false
   TriggerServerEvent('ambulancier:endService')
-  TriggerServerEvent("skin_customization:SpawnPlayer")
+  Menu.close()
+  toogleServiceAmbulancier()
 end
 
 local function gestionServiceAmbulancier()
 
-    if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker then
-        DrawMarker(1, ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+    if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker + 15 then
+      DrawMarker(1, ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+    end
+    if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker+1 then
+      DrawMarker(1, ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
         ClearPrints()
         SetTextEntry_2("STRING")
         if ambulancierIsInService then
@@ -526,8 +369,11 @@ local function gestionServiceAmbulancier()
     end
 
     if ambulancierIsInService then
-        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker+5 then
-            DrawMarker(1, ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker + 15 then
+          DrawMarker(1, ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+        end
+        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker then
+          DrawMarker(1, ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
             ClearPrints()
             SetTextEntry_2("STRING")
             AddTextComponentString("Appuyez sur ~g~ENTREE~s~ pour faire sortir/ranger votre ~b~vehicule")
@@ -536,8 +382,11 @@ local function gestionServiceAmbulancier()
                 openMenuChoixVehicleAmbulancier()
             end
         end
-         if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker+5 then
-            DrawMarker(1, ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker+15 then
+          DrawMarker(1, ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+        end
+        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker then
+          DrawMarker(1, ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
             ClearPrints()
             SetTextEntry_2("STRING")
             AddTextComponentString("Appuyez sur ~g~ENTREE~s~ pour faire appairaitre/ranger votre ~b~vehicule")
@@ -733,22 +582,19 @@ end
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-
-        -- local mypos = GetEntityCoords(GetPlayerPed(-1))
-
-        -- DrawMarker(1,mypos.x, mypos.y, 0.0 , 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 250.0, 0, 155, 255, 64, 0, 0, 0, 0)
-        Menu.renderGUI()
-    		if IsControlJustPressed(1, 170) then
-    			Menu.hidden = true
+    		if IsControlJustPressed(1, Keys['F5']) then
+          if ambulancierIsInService then
+              TriggerServerEvent('ambulancier:requestMission')
+              openMenuGeneralAmbulancier()
+          else
+              showMessageInformation("~r~Vous devais etre en service pour accedez au menu")
+          end
     		end
     		if IsControlJustPressed(1, 177) then
-    			Menu.hidden = true
+    			Menu.close()
     		end
     		if IsControlJustPressed(1, 311) then
-    			Menu.hidden = true
-    		end
-    		if IsControlJustPressed(1, 166) then
-    			Menu.hidden = true
+    			Menu.close()
     		end
 
         if isAmbulancier then
@@ -770,9 +616,8 @@ Citizen.CreateThread(function()
     end
 end)
 
---
-RegisterNetEvent('ambulancier:drawMarker')
-AddEventHandler('ambulancier:drawMarker', function (boolean)
+RegisterNetEvent('Job:startAmbulancier')
+AddEventHandler('Job:startAmbulancier', function (boolean)
 	isAmbulancier = boolean
 	ambulancierIsInService = false
     if isAmbulancier then
@@ -780,12 +625,6 @@ AddEventHandler('ambulancier:drawMarker', function (boolean)
     else
         removeBlipAmbulancier()
     end
-end)
-RegisterNetEvent('ambulancier:drawBlips')
-AddEventHandler('ambulancier:drawBlips', function ()
-end)
-RegisterNetEvent('ambulancier:marker')
-AddEventHandler('ambulancier:marker', function ()
 end)
 
 RegisterNetEvent('ambulancier:deleteBlips')
@@ -844,7 +683,6 @@ end)
 
 function updateMenuMissionAmbulancier()
     local items = {
-        {['Title'] = 'Retour', ['ReturnBtn'] = true }
     }
 
     for _,m in pairs(listMissionsAmbulancier) do
@@ -856,20 +694,14 @@ function updateMenuMissionAmbulancier()
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. " (En cours)"..  "["..m.type.."]"
-            item.TextColor = {39, 174, 96, 255}
         end
-        table.insert(items, item)
+        items[m] = item
     end
     if currentMissionAmbulancier ~= nil then
-        table.insert(items, {['Title'] = 'Terminer la mission', ['Function'] = finishMissionAmbulancier})
+        --table.insert(items, {['Title'] = 'Terminer la mission', ['Function'] = finishMissionAmbulancier})
+        currentMissionAmbulancierNotNil = true
     end
-
-    table.insert(items, {['Title'] = 'Fermer'})
-
-    menu = {['Title'] = 'Missions en cours',  ['SubMenu'] = {
-        ['Title'] = 'Missions en cours', ['Items'] = items
-    }}
-    updateMenu(menu)
+    updateMenu(items,currentMissionAmbulancierNotNil)
 end
 
 
@@ -964,61 +796,6 @@ AddEventHandler('ambulancier:cancelCall',function(data)
     TriggerServerEvent('ambulancier:cancelCall')
 end)
 
-Citizen.CreateThread(function()
-	while true do
-			Citizen.Wait(1000)
-			if(TimeToRespawn > 0)then
-				TimeToRespawn = TimeToRespawn - 1
-			end
-		Citizen.Wait(0)
-	end
-end)
-local assommePlayer = false
-Citizen.CreateThread(function()
-	while true do
-    if TimeToRespawn > 0 then
-			drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de respawn.", 255, 255, 255, 255)
-    elseif IsEntityDead(PlayerPedId()) == 1 and assommePlayer == false then
-    --  TriggerServerEvent('sPrint',"Dead")
-      if firtdead then
-        Citizen.Wait(1000)
-        firtdead = false
-      else
-        drawTxt(0.88, 1.02, 1.0,1.0,0.4, "~g~Appuyez sur ~r~X ~g~pour respawn à l'hospital.", 255, 255, 255, 255)
-        if IsControlJustPressed(1, 73) and  GetLastInputMethod(2) then
-          TriggerEvent('ambulancier:selfRespawn')
-        end
-      end
-    else
-      Citizen.Wait(1000)
-      firtdead = true
-    end
-		Citizen.Wait(0)
-	end
-end)
-
-RegisterNetEvent("vnt:noncoma")
-AddEventHandler("vnt:noncoma", function()
-  assommePlayer = true
-end)
-
-RegisterNetEvent('vnt:deassomm')
-AddEventHandler('vnt:deassomm', function()
-  assommePlayer = false
-end)
-
-RegisterNetEvent("ambu:mort")
-AddEventHandler("ambu:mort", function()
-  TimeToRespawn = 300
-end)
-
-RegisterNetEvent("venato:cheaton")
-AddEventHandler("venato:cheaton", function(bool)
-  local bool = bool
-  AdminCheatIsOn = bool
---  print("cheatmode "..bool)
-end)
-
 RegisterNetEvent('ambulancier:selfRespawn')
 AddEventHandler('ambulancier:selfRespawn',function()
   PlayerCanRespawnOrNot()
@@ -1035,57 +812,6 @@ function PlayerCanRespawnOrNot()
   end
 end
 
-
-function drawTxt(x,y ,width,height,scale, text, r,g,b,a, outline)
-    SetTextFont(0)
-    SetTextProportional(0)
-    SetTextScale(scale, scale)
-    SetTextColour(r, g, b, a)
-    SetTextDropShadow(0, 0, 0, 0,255)
-    SetTextEdge(1, 0, 0, 0, 255)
-    SetTextDropShadow()
-    if(outline)then
-	    SetTextOutline()
-	end
-    SetTextEntry("STRING")
-    AddTextComponentString(text)
-    DrawText(x - width/2, y - height/2 + 0.005)
-end
-
-
-function GetPlayers()
-	local players = {}
-
-	for i = 0, 255 do
-		if NetworkIsPlayerActive(i) then
-			table.insert(players, i)
-		end
-	end
-
-	return players
-end
-
-function GetClosestPlayer()
-	local players = GetPlayers()
-	local closestDistance = -1
-	local closestPlayer = -1
-	local ply = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(ply, 0)
-
-	for index,value in ipairs(players) do
-		local target = GetPlayerPed(value)
-		if(target ~= ply) then
-			local targetCoords = GetEntityCoords(GetPlayerPed(value), 0)
-			local distance = GetDistanceBetweenCoords(targetCoords["x"], targetCoords["y"], targetCoords["z"], plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-			if(closestDistance == -1 or closestDistance > distance) then
-				closestPlayer = value
-				closestDistance = distance
-			end
-		end
-	end
-
-	return closestPlayer, closestDistance
-end
 RegisterNetEvent('ambulancier:HealMe')
 AddEventHandler('ambulancier:HealMe',
 function (idToHeal)
@@ -1097,7 +823,7 @@ end)
 RegisterNetEvent('ambulancier:Heal')
 AddEventHandler('ambulancier:Heal',
 function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
           if GetEntityHealth(GetPlayerPed(closestPlayer)) ~= 0 then
             TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
@@ -1115,12 +841,9 @@ end)
 RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',
 function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-            TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
-            Citizen.Wait(8000)
-            ClearPedTasks(GetPlayerPed(-1));
-            TriggerServerEvent('ambulancier:rescueserv',GetPlayerServerId(closestPlayer))
+          TriggerServerEvent('ambulancier:Reanimation',GetPlayerServerId(closestPlayer), GetEntityCoords(closestPlayer, true), GetEntityHeading(closestPlayer))
         else
             showMessageInformation(TEXTAMBUL.NoPatientFound)
         end
@@ -1129,7 +852,7 @@ end)
 RegisterNetEvent('ambulancier:getBlassure')
 AddEventHandler('ambulancier:getBlassure',
 function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerServerEvent('ambulancier:GetInTableTheBlassure',GetPlayerServerId(closestPlayer))
         else
@@ -1139,7 +862,7 @@ end)
 
 RegisterNetEvent('facture:amb')
 AddEventHandler('facture:amb', function()
-        local closestPlayer, closestDistance = GetClosestPlayer()
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerEvent("fact:give", GetPlayerServerId(closestPlayer))
         else
