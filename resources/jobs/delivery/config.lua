@@ -14,6 +14,7 @@ DeliveryJobConfig = {}
 DeliveryJobConfig.enabled = true
 DeliveryJobConfig.serviceLocation = { ["x"] = -423.96, ["y"] = -2789.39, ["z"] = 6.27 }
 DeliveryJobConfig.blips = {}
+DeliveryJobConfig.boxes = {}
 
 DeliveryJobConfig.BOX_KEY = "prop_box_wood05a"
 DeliveryJobConfig.MINI_BOX_KEY = "prop_apple_box_01"

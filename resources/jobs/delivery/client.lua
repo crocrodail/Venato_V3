@@ -21,7 +21,11 @@ function DeliveryJob.init()
 end
 
 function DeliveryJob.commands()
-  if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and DeliveryJobConfig.onTrunkDrop ~= nil then
+  if IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and
+    DeliveryJobConfig.onTrunkDrop ~= nil and
+    (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player,
+      false)) == GetHashKey(DeliveryJobConfig.TRUNK_KEY)
+      or DeliveryJobConfig.trunk == nil) then
     if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
       despawnTrunk()
       despawnForklift()
@@ -61,7 +65,8 @@ function DeliveryJob.mainLoop()
 
         distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
 
-        if distance < 20 then
+        if distance < 20 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player, false)) ==
+          GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then
           DrawMarker(27, dropPoint.x, dropPoint.y, dropPoint.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
             174, 0, 0, 0, 0)
         end
@@ -77,7 +82,9 @@ function DeliveryJob.mainLoop()
           for i, v in ipairs(DeliveryJobConfig.boxCoord) do
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, playerPos["x"], playerPos["y"], playerPos["z"],
               true)
-            if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player, false)) == GetHashKey("FORKLIFT") then
+            if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
+              false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY)
+            then
               TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour charger la caisse.")
               interactTxt = true
               if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
@@ -93,7 +100,8 @@ function DeliveryJob.mainLoop()
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z + 0.9,
               playerPos["x"], playerPos["y"], playerPos["z"],
               true)
-            if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player, false)) == GetHashKey("FORKLIFT") then
+            if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
+              false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
               TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour poser par terre.")
               interactTxt = true
               if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
@@ -108,7 +116,8 @@ function DeliveryJob.mainLoop()
             DeliveryJobConfig.trunkCoord.x, DeliveryJobConfig.trunkCoord.y, DeliveryJobConfig.trunkCoord.z + 0.9,
             playerPos["x"], playerPos["y"], playerPos["z"],
             true)
-          if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player, false)) == GetHashKey("FORKLIFT") then
+          if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
+            false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
             TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour la mettre dans le camion.")
             interactTxt = true
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
@@ -174,9 +183,18 @@ function DeliveryJob.checkLoop()
         DeliveryJobConfig.trunkCoord = {}
         DeliveryJobConfig.globalTrunk = nil
       end
-
     else
       hideBlip()
+    end
+
+    local playerPos = GetEntityCoords(player)
+    if playerPos.z <= -38 and playerPos.x > 1048.35 and playerPos.x < 1073.10 and playerPos.y > -3110.9 and
+      playerPos.y < -3094.4 then
+      print("JOBS: in warehouse")
+      showBigWarehouseBoxes()
+    else
+      print("JOBS: NOT in warehouse")
+      hideBigWarehouseBoxes()
     end
   end
 end
@@ -330,4 +348,28 @@ function dropBoxInForklift(player)
   SetEntityCoords(DeliveryJobConfig.globalBox, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
   FreezeEntityPosition(DeliveryJobConfig.globalBox, true)
   SetEntityCollision(DeliveryJobConfig.globalBox, true, true)
+end
+
+function showBigWarehouseBoxes()
+  if #DeliveryJobConfig.boxes > 0 then
+    return
+  end
+  for index = 0, 41, 1 do
+    print("JOBS: new boxes", index)
+    local x = 1053.0 + (index - (index >= 21 and 21 or 0)) // 3 * 2.4
+    local y = -3109.9 + index % 3 * 7.15
+    local z = index // 21 == 1 and -40.1 or -37.7
+    local object = JobTools.CreateObject(DeliveryJobConfig.BOX_KEY, x, y, z)
+    PlaceObjectOnGroundProperly(object)
+    SetEntityHeading(object, 180.0)
+    FreezeEntityPosition(object, true)
+    SetEntityCoords(object, x, y, z, 0, 0, 0, true)
+    table.insert(DeliveryJobConfig.boxes, object)
+  end
+end
+function hideBigWarehouseBoxes()
+  for _, box in pairs(DeliveryJobConfig.boxes) do
+    DeleteEntity(box)
+  end
+  DeliveryJobConfig.boxes = {}
 end
