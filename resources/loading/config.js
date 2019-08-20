@@ -13,5 +13,5 @@ var config = {
         "link": "venato.fr",
     },
     /* You dont have to include the '/imgs/' dir AND ALSO REMEMBER TO ADD THESE IMGS IN YOUR __resource.lua*/ 
-    "images": ['bg0.png', 'bg1.png', 'bg2.png', 'bg3.png', 'bg4.png', 'bg5.png', 'bg6.png', 'bg7.png']
+    "images": ['SCREEN_V_V2.png', 'SCREEN_V_V22.png', 'SCREEN_V_V23.png', 'SCREEN_V_V24.png']
 }

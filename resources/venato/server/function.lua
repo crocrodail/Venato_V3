@@ -232,3 +232,24 @@ function Venato.dump(o)
     return tostring(o)
   end
 end
+
+
+function Venato.notify(source, notif)
+  if not notif.message then
+    return
+  end
+  if not notif.type then
+    notif.type = 'alert'
+  end
+  if not notif.timeout then
+    notif.timeout = 3500
+  end
+  TriggerClientEvent("Hud:Update", source, {
+    action = "notify",
+    message = notif.message,
+    type = notif.type,
+    timeout = notif.timeout,
+    logo = notif.logo,
+    title = notif.title
+  })
+end
