@@ -227,6 +227,9 @@ Citizen.CreateThread(function()
               Citizen.Wait(1000)
               FreezeEntityPosition(Venato.GetPlayerPed(), true)
               SetEntityCoords(Venato.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
+              if j.insideModer then
+
+              end
               Citizen.Wait(2000)
               DoScreenFadeIn(1000)
               FreezeEntityPosition(Venato.GetPlayerPed(), false)

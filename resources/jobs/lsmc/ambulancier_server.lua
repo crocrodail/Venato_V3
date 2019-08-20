@@ -261,6 +261,14 @@ function closures_ambulancier_server()
       CauseOfDeath[source] = cause
     end)
 
+    RegisterNetEvent("ambulancier:Reanimationh")
+    AddEventHandler("ambulancier:Reanimation", function(idVictim, coord, heading)
+      local source = source
+      local victime = idVictim
+      TriggerClientEvent("Death:Reanimation", source, "medic", coord, heading)
+      TriggerClientEvent("Death:Reanimation", victime, "victim")
+    end)
+
     RegisterNetEvent("ambulancier:GetInTableTheBlassure")
     AddEventHandler("ambulancier:GetInTableTheBlassure", function(sourcePatien)
       local source = source

@@ -179,19 +179,7 @@ function test()
 	--Venato.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
 	--Venato.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
 	--Venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_def", anim = "cpr_intro", useLib = true})
-	Citizen.Wait(15000)
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
-	Citizen.Wait(5000)
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
-	Citizen.Wait(1500)
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol", useLib = true})
-	Citizen.Wait(5000)
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
-	Citizen.Wait(1500)
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
-	Citizen.Wait(5000)
-	Venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_success", useLib = true})
+	Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
 end
 
 function test2()

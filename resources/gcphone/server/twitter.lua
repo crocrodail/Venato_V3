@@ -22,7 +22,7 @@ function TwitterGetTweets (accountId, cb)
       FROM twitter_tweets
         LEFT JOIN twitter_accounts
           ON twitter_tweets.authorId = twitter_accounts.id
-        LEFT JOIN twitter_likes 
+        LEFT JOIN twitter_likes
           ON twitter_tweets.id = twitter_likes.tweetId AND twitter_likes.authorId = @accountId
       ORDER BY time DESC LIMIT 130
     ]===], { ['@accountId'] = accountId }, cb)
@@ -50,7 +50,7 @@ function TwitterGetFavotireTweets (accountId, cb)
       FROM twitter_tweets
         LEFT JOIN twitter_accounts
           ON twitter_tweets.authorId = twitter_accounts.id
-        LEFT JOIN twitter_likes 
+        LEFT JOIN twitter_likes
           ON twitter_tweets.id = twitter_likes.tweetId AND twitter_likes.authorId = @accountId
       WHERE twitter_tweets.TIME > CURRENT_TIMESTAMP() - INTERVAL '15' DAY
       ORDER BY likes DESC, TIME DESC LIMIT 30
@@ -109,7 +109,7 @@ function TwitterToogleLike (username, password, tweetId, sourcePlayer)
       MySQL.Async.fetchAll('SELECT * FROM twitter_likes WHERE authorId = @authorId AND tweetId = @tweetId', {
         ['authorId'] = user.id,
         ['tweetId'] = tweetId
-      }, function (row) 
+      }, function (row)
         if (row[1] == nil) then
           MySQL.Async.insert('INSERT INTO twitter_likes (`authorId`, `tweetId`) VALUES(@authorId, @tweetId)', {
             ['authorId'] = user.id,
@@ -121,7 +121,7 @@ function TwitterToogleLike (username, password, tweetId, sourcePlayer)
               TriggerClientEvent('gcPhone:twitter_updateTweetLikes', -1, tweet.id, tweet.likes + 1)
               TriggerClientEvent('gcPhone:twitter_setTweetLikes', sourcePlayer, tweet.id, true)
               TriggerEvent('gcPhone:twitter_updateTweetLikes', tweet.id, tweet.likes + 1)
-            end)    
+            end)
           end)
         else
           MySQL.Async.execute('DELETE FROM twitter_likes WHERE id = @id', {
@@ -198,12 +198,13 @@ RegisterServerEvent('gcPhone:twitter_createAccount')
 AddEventHandler('gcPhone:twitter_createAccount', function(username, password, avatarUrl)
   local sourcePlayer = tonumber(source)
   TwitterCreateAccount(username, password, avatarUrl, function (id)
-    if (id ~= 0) then
-      TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
-      TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_SUCCESS')
-    else
-      TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_ERROR')
-    end
+  if (id ~= 0) then
+    TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
+    TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_SUCCESS')
+  else
+    TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_ERROR')
+  end
+  TriggerClientEvent("Venato:TestImage", sourcePlayer)
   end)
 end)
 
@@ -264,6 +265,7 @@ AddEventHandler('gcPhone:twitter_setAvatarUrl', function(username, password, ava
     ['@avatarUrl'] = avatarUrl
   }, function (result)
     if (result == 1) then
+      TriggerClientEvent("Venato:TestImage", sourcePlayer)
       TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
       TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_AVATAR_SUCCESS')
     else

@@ -103,8 +103,11 @@ Citizen.CreateThread(function()
 end)
 
 function respawntest()
-  NetworkResurrectLocalPlayer(-49.158519744873, -1112.1115722656, 26.435813903809, 0, true, true, false)
+  local coord = GetEntityCoords(Venato.GetPlayerPed(), false)
+  local heading = GetEntityHeading(Venato.GetPlayerPed())
+  NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
   ClearPedTasksImmediately(Venato.GetPlayerPed())
+  Venato.resurect()
 end
 
 function AdminShowCoord()

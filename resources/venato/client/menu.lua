@@ -1,10 +1,3 @@
---##############################################################################################
---
---                             By Crocrodail  -  Venato.fr
---
---##############################################################################################
-
-
 Keys = {
 	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57,
 	["~"] = 243, ["1"] = 157, ["2"] = 158, ["3"] = 160, ["4"] = 164, ["5"] = 165, ["6"] = 159, ["7"] = 161, ["8"] = 162, ["9"] = 163, ["-"] = 84, ["="] = 83, ["BACKSPACE"] = 177,
@@ -19,16 +12,6 @@ Keys = {
 
 Menu = {}
 Menu.hidden = true
-
-
--- Audio = {
---   Library = "HUD_FRONTEND_DEFAULT_SOUNDSET",
---   UpDown = "NAV_UP_DOWN",
---   LeftRight = "NAV_LEFT_RIGHT",
---   Select = "SELECT",
---   Back = "BACK",
---   Error = "ERROR",
--- }
 
 function Menu.open()
 	TriggerEvent('Menu:Open')
@@ -71,7 +54,6 @@ end
 function Menu.CreateMenu()
 	TriggerEvent('Menu:CreateMenu')
 end
---------------------------------------------------------------------------------------------------------------------
 
 function Menu.clearMenu()
 	TriggerEvent('Menu:Clear')
@@ -81,14 +63,7 @@ function MenuCallFunction(fnc, arg)
 	_G[fnc](arg)
 end
 
-
--- function Menu.stayPressed()
---   if IsControlJustPressed(0,  Keys["DOWN"]) then down = true end
---   if IsControlJustReleased(0,  Keys["DOWN"]) then down = false end
---   if IsControlJustPressed(1, Keys["TOP"]) then top = true end
---   if IsControlJustReleased(1, Keys["TOP"]) then top = false end
--- 	if a > aa then stayPressedUp = true  a = 0 aa = 5 else stayPressedUp = false end
--- 	if top then a = a + 1 else  a = 0 aa = 20 end
--- 	if b > bb then  stayPressedDown = true  b = 0 bb = 5 else  stayPressedDown = false end
--- 	if down then  b = b + 1 else  b = 0  bb = 20 end
--- end
+RegisterNetEvent("Menu:Execute")
+AddEventHandler("Menu:Execute", function(params)
+  _ = _G[params.fn] and _G[params.fn](params.args)
+end)

@@ -56,6 +56,7 @@ function accessGranded(SteamId, source , balek)
         Prenom = DataUser[1].prenom,
         IdJob = DataUser[1].job,
         NameJob = DataUser[1].job_name,
+        IsInService = {"none", false},
         Bank = DataUser[1].bank,
         Money = DataUser[1].money,
         VenatoPoint = DataUser[1].venato_point,
@@ -113,11 +114,16 @@ function accessGranded(SteamId, source , balek)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
         TriggerClientEvent("Venato:Connection", source)
+        TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
         ControlVisa(SteamId, source)
         print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
       end)
     end
   end)
+end
+
+function startScript()
+  reloadDataCoffre()
 end
 
 function ControlVisa(SteamId, source)
@@ -132,8 +138,7 @@ function ControlVisa(SteamId, source)
       local endv = result[1].visafin
       if tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
-      end
-      if (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
+      elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60
         DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)
@@ -142,16 +147,16 @@ function ControlVisa(SteamId, source)
           { ["@ts"] = DataPlayers[source].VisaStart, ["@tsEnd"] = DataPlayers[source].VisaEnd, ["identifier"] = SteamId })
       elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) ~= 0 then
         local ts = os.time()
-        local d, m, y = start:match '(%d+)-(%d+)-(%d+)'
+        local d, m, y = endv:match '(%d+)-(%d+)-(%d+)'
         local tsStart = os.time { year = y, month = m, day = d, }
-        local testTS = tsStart + 14 * 24 * 60 * 60
+        local testTS = tsStart
         DataPlayers[source].VisaStart = start
         DataPlayers[source].VisaEnd = endv
         if ts > testTS then
           MySQL.Async.execute("UPDATE whitelist SET listed=0 WHERE identifier=@identifier",
             { ["identifier"] = SteamId })
-          DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : (" .. testTS .. ")")
-        elseif ts > tsStart + 7 * 24 * 60 * 60 then
+          DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : (" .. os.date('%d-%m-%Y', testTS) .. ")")
+        elseif ts > tsStart - 7 * 24 * 60 * 60 then
           DataPlayers[source].VisaCanBeReload = true
         end
       else
