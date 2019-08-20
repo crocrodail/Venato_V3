@@ -186,3 +186,39 @@ Citizen.CreateThread(function()
     previousPos = currentPos
   end
 end)
+
+RegisterNetEvent("Death:ComaOrNot:cb")
+AddEventHandler("Death:ComaOrNot:cb", function(who, coord, heading)
+  local coord = coord
+  if who == "victim" then
+    Reanim("a")
+  else
+    Reanim("b")
+  end
+end)
+
+function Reanim(char, coord, heading)
+  Citizen.CreateThread(function()
+    if char == "a" then
+      SetEntityCoords(GetPlayerPed(-1), coord.x-0.9, coord.y-0.1, coord.z, 0, 0, 0, true)
+      SetEntityHeading(GetPlayerPed(-1), heading-90)
+    else
+      dead = false
+    end
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_def", anim = "cpr_intro", useLib = true})
+    Citizen.Wait(15000)
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+    Citizen.Wait(5000)
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
+    Citizen.Wait(1500)
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_kol", useLib = true})
+    Citizen.Wait(5000)
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
+    Citizen.Wait(1500)
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+    Citizen.Wait(5000)
+    Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_success", useLib = true})
+    Citizen.Wait(26000)
+    ClearPedTasks(GetPlayerPed(-1))
+  end)
+end

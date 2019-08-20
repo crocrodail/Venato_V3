@@ -1,88 +1,82 @@
---====================================================================================
--- #Author: Jonathan D @ Gannon
---
--- Développée pour la communauté n3mtv
---      https://www.twitch.tv/n3mtv
---      https://twitter.com/n3m_tv
---      https://www.facebook.com/lan3mtv
---====================================================================================
+local mission = {}
+local alreadyTakeMission = false
 
-local Menu = {}
-local itemMenuGeneral = {}
-local itemMenuChoixCar = {}
-local itemMenuChoixHelico = {}
+function updateMenu(newUrgenceMenu, bool)
+    mission = newUrgenceMenu
+    alreadyTakeMission = bool
+end
 
-local UrgenceMenu = { ['Title'] = 'Missions en cours',  ['SubMenu'] = {
-    ['Title'] = 'Missions en cours', ['Items'] = {
-        {['Title'] = 'Retour', ['ReturnBtn'] = true },
-        {['Title'] = 'Fermer'},
-}}}
-
-function updateMenu(newUrgenceMenu)
-    itemMenuGeneral.Items[1] = newUrgenceMenu
+function toogleServiceAmbulancier()
+  Menu.open()
+  Menu.setTitle("LSMC")
+  Menu.setSubtitle("~b~Choix des tenues  ")
+  Menu.clearMenu()
+  if not ambulancierIsInService then
+    Menu.addButton("~r~Prendre son service", "AmbuOnService", nil)
+  else
+    Menu.addButton("~r~Quitter son service", "leaveserv", nil)
+  	Menu.addButton("Tenue Ambulancier", "Ambulancierf", nil)
+    Menu.addButton("Tenue Docteur", "Docteur", nil)
+    Menu.addButton("Equiper un stethoscope", "stethoscope", nil)
+  	Menu.addButton("Equiper une casquet", "casquet", nil)
+    TriggerServerEvent('ambulancier:takeService')
+    TriggerServerEvent('ambulancier:requestMission')
+  end
 end
 
 function openMenuGeneralAmbulancier()
-    Menu.item = itemMenuGeneral
-    Menu.isOpen = true
-    Menu.initMenu()
+  Menu.clearMenu()
+  Menu.open()
+  Menu.setTitle('Ambulancier')
+  TriggerEvent('Menu:AddButton2',"Missions en cours", "AmbulancierGetMissionMenu", '', '')
+  TriggerEvent('Menu:AddButton2',"Soins", "AmbulancierMenuSendEvent", 'ambulancier:Heal', '')
+  TriggerEvent('Menu:AddButton2',"Réanimer", "AmbulancierMenuSendEvent", 'ambulancier:Heal2', '')
+  TriggerEvent('Menu:AddButton2',"Inspecter le type de bléssure", "AmbulancierMenuSendEvent", 'ambulancier:getBlassure', '')
+  TriggerEvent('Menu:AddButton2',"Faire payer", "ambulancier:MakePay", '', '')
+  TriggerEvent('Menu:AddButton2',"Placer un objet", "AmbulancierPlaceObjet", '', '')
+  TriggerEvent('Menu:AddButton2',"Déplacé la personne", "AmbulancierPlaceObjet", '', '')
+  Menu.CreateMenu()
+end
+
+function AmbulancierGetMissionMenu()
+  Menu.clearMenu()
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuGeneralAmbulancier", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  for k,v in pairs(mission) do
+    TriggerEvent('Menu:AddButton2',v.Title, v.Function, {mission = v.mission}, '', "")
+  end
+  if alreadyTakeMission then
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishMissionAmbulancier", nil, '', "")
+  end
+  Menu.CreateMenu()
+end
+
+function AmbulancierPlaceObjet()
+  Menu.clearMenu()
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuGeneralAmbulancier", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:AddButton2',"Placer/retirer un cône", "Ambu_removeOrPlaceCone", '', '', "")
+  TriggerEvent('Menu:AddButton2',"Placer/retirer une barrière", "Ambu_removeOrPlaceBarrier", '', '', "")
+  Menu.CreateMenu()
 end
 
 function openMenuChoixVehicleAmbulancier()
-Citizen.Trace('open choix ceh')
-    Menu.item = itemMenuChoixCar
-    Menu.isOpen = true
-     Menu.initMenu()
+  Menu.clearMenu()
+  Menu.setTitle('Ambulancier - Choix du véhicule')
+  TriggerEvent('Menu:AddButton2',"Ambulance", "invokeVehicle", {type = 1}, '', "")
+  TriggerEvent('Menu:AddButton2',"Vehicule de médecin", "invokeVehicle", {type = 3}, '', "")
+  TriggerEvent('Menu:AddButton2',"Quad Emergency", "invokeVehicle", {type = 4}, '', "")
+  TriggerEvent('Menu:AddButton2',"Corbillard", "invokeVehicle", {type = 5}, '', "")
+  TriggerEvent('Menu:AddButton2',"Ranger le vehicule", "invokeVehicle", {type = -1}, '', "")
+  Menu.CreateMenu()
 end
+
 function openMenuChoixHelicoAmbulancier()
-Citizen.Trace('open choix ceh')
-    Menu.item = itemMenuChoixHelico
-    Menu.isOpen = true
-     Menu.initMenu()
+  Menu.clearmenu()
+  Menu.setTitle('Ambulancier - Choix du véhicule')
+  TriggerEvent('Menu:AddButton2',"Helico", "invokeVehicle", {type = 2}, '', "")
+  TriggerEvent('Menu:AddButton2',"Ranger le vehicule", "invokeVehicle", {type = -1}, '', "")
+  Menu.CreateMenu()
 end
 
-function openCustomMenu()
-
+function AmbulancierMenuSendEvent(EventName)
+  TriggerEvent(EventName)
 end
-
-
-
-itemMenuGeneral = {
-    ['Title'] = 'Ambulancier',
-    ['Items'] = {
-        UrgenceMenu,
-        { ['Title'] = 'Soins', ['Event'] = 'ambulancier:Heal'},
-        { ['Title'] = 'Réanimer', ['Event'] = 'ambulancier:Heal2'},
-        { ['Title'] = 'Inspecter le type de bléssure', ['Event'] = 'ambulancier:getBlassure'},
-        { ['Title'] = 'Mettre une facture', ['Event'] = 'facture:amb'},
-		{['Title'] = 'Placer un objet', ['SubMenu'] = {
-					['Title'] = 'Choix de l\'objet :',
-					['Items'] = {
-								{['Title'] = 'Placer/retirer un cône', ['Function'] = Ambu_removeOrPlaceCone, Close = false},
-								{['Title'] = 'Placer/retirer une barrière', ['Function'] = Ambu_removeOrPlaceBarrier, Close = false},
-                                }
-							}
-						},
-        { ['Title'] = 'Liste des factures impayées', ['Event'] = 'fact:entreprise'},
-       }
-}
-
-itemMenuChoixCar = {
-    ['Title'] = 'Ambulancier - Choix du véhicule',
-    ['Items'] = {
-        {['Title'] = 'Ambulance', ['Function'] = invokeVehicle, type = 1},
-    		{['Title'] = 'Vehicule de médecin', ['Function'] = invokeVehicle, type = 3},
-    		{['Title'] = 'Quad Emergency', ['Function'] = invokeVehicle, type = 4},
-        {['Title'] = 'Corbillard', ['Function'] = invokeVehicle, type = 5},
-        --{['Title'] = 'Midlands Air Ambulance', ['Function'] = invokeVehicle, type = 6},
-        {['Title'] = ' Mercedes-Benz Sprinter', ['Function'] = invokeVehicle, type = 7},
-    		{['Title'] = 'Ranger le vehicule', ['Function'] = invokeVehicle, type = -1},
-    }
-}
-itemMenuChoixHelico = {
-    ['Title'] = 'Mecano - Choix du véhicule',
-    ['Items'] = {
-        {['Title'] = 'Helico', ['Function'] = invokeVehicle, type = 2},
-        {['Title'] = 'Ranger le vehicule', ['Function'] = invokeVehicle, type = -1},
-    }
-}

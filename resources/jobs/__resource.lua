@@ -2,6 +2,7 @@ resource_manifest_version "05cfa83c-a124-4cfa-a768-c24a5811d8f9"
 
 client_script {
   '@venato/client/function.lua',
+  '@venato/client/menu.lua',
   '/main/config.lua',
   '/delivery/config.lua',
   '/main/client/events.lua',

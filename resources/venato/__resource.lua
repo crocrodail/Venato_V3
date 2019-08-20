@@ -10,6 +10,7 @@ client_script {
   '/client/sirenControl.js',
   '/client/teleport.lua',
   '/client/savePos.lua',
+  '/client/InteractWithProp.lua',
   '/inventory/client.lua',
   '/coffre_voiture/client.lua',
   '/bank/config.lua',

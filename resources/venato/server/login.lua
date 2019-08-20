@@ -18,7 +18,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
   if not MysqlAsyncLoad or SteamId == nil then deferrals.done("Un problème s'est produit, réessayer.") CancelEvent() end
   if whitelistUp then
     local whitelist = MySQL.Sync.fetchScalar("SELECT listed FROM whitelist WHERE identifier=@id", {['@id'] = SteamId})
-    if whitelist ~= nil or tonumber(whitelist) == 0 then
+    if whitelist == nil or tonumber(whitelist) == 0 then
       deferrals.done("Vous n'êtes pas whitelist avec le compte : "..SteamPseudo.." ("..SteamId..")")
       --TriggerEvent('DiscordBot:ToDiscord', logwebwook, 'Père noël', "```fix\nPas whitelist : '"..SteamId.."' ("..SteamPseudo..") \n```", 'http://www.icone-png.com/png/8/8168.png', false)
       CancelEvent()
@@ -30,7 +30,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
     CancelEvent()
   end
 	deferrals.update("Accès validé, bon jeu !")
-	Citizen.Wait(5000)
+	Citizen.Wait(2000)
 	deferrals.done()
 	ingame = ingame + 1
 	print('^3Connecting '..playerName.."^7")

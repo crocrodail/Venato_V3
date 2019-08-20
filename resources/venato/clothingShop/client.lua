@@ -20,6 +20,30 @@ local tablee = {
   }
 }
 
+--[[]
+tablee = {
+  ComponentVariation = {
+    Mask = {id = 0, color = 0},
+    torso = {id = GetPedDrawableVariation(ped, 3), color = GetPedTextureVariation(ped, 3)},
+    leg = {id = GetPedDrawableVariation(ped, 4), color = GetPedTextureVariation(ped, 4)},
+    parachute = {id = GetPedDrawableVariation(ped, 5), color = GetPedTextureVariation(ped, 5)},
+    shoes = {id = GetPedDrawableVariation(ped, 6), color = GetPedTextureVariation(ped, 6)},
+    accessory = {id = GetPedDrawableVariation(ped, 7), color = GetPedTextureVariation(ped, 7)},
+    undershirt = {id = GetPedDrawableVariation(ped, 8), color = GetPedTextureVariation(ped, 8)},
+    kevlar = {id = GetPedDrawableVariation(ped, 9), color = GetPedTextureVariation(ped, 9)},
+    badge = {id = GetPedDrawableVariation(ped, 10), color = GetPedTextureVariation(ped, 10)},
+    torso2 = {id = GetPedDrawableVariation(ped, 11), color = GetPedTextureVariation(ped, 11)},
+  },
+  prop = {
+    hat = {id = GetPedPropIndex(ped, 0), color = GetPedPropTextureIndex(ped, 0)},
+    glass = {id = GetPedPropIndex(ped, 1), color = GetPedPropTextureIndex(ped, 1)},
+    ear = {id = GetPedPropIndex(ped, 2), color = GetPedPropTextureIndex(ped, 2)},
+    watch = {id = GetPedPropIndex(ped, 6), color = GetPedPropTextureIndex(ped, 6)},
+    bracelet = {id = GetPedPropIndex(ped, 7), color = GetPedPropTextureIndex(ped, 7)},
+  }
+}
+--[]]
+
 
 local cam = nil
 local canSetClothes = true
@@ -138,73 +162,29 @@ Citizen.CreateThread(function()
       end
     end
 		if ActualDomponentId ~= nil then
-      if componentId == 8 and ActualDomponentId == 15 then
-      end
       if colorIndex ~= lastcolorIndex then
         lastcolorIndex = colorIndex
         SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
       end
 			if ActualDomponentId ~= LastArg then
-				colorIndex = 1
+				colorIndex = 0
 			  LastArg = ActualDomponentId
 			  SetPedComponentVariation(Venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
-        if Vtop == true then
-          if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
-            brasidTop = MaleCombinaisonTop[PrimaryTopIndex].bras
-            if componentId == 8 and ActualDomponentId == 15 then
-              brasidTop = 14
-            elseif componentId == 8 and (ActualDomponentId == 72 or ActualDomponentId == 75 or ActualDomponentId == 31 or ActualDomponentId == 32 or ActualDomponentId == 63 or ActualDomponentId == 94 or ActualDomponentId == 10 or ActualDomponentId == 11) then
-              brasidTop = 4
-            elseif componentId == 8 and (ActualDomponentId == 40 or ActualDomponentId == 17 or ActualDomponentId == 111 or ActualDomponentId == 43) then
-              brasidTop = 6
-            end
-            SetPedComponentVariation(Venato.GetPlayerPed(), 3, brasidTop, 0, 1)
-            if componentId ~= 8 then
-              SetPedComponentVariation(Venato.GetPlayerPed(), 8, MaleCombinaisonTop[PrimaryTopIndex].list[1], 0, 1)
-            end
-    		  else
-            brasidTop = FemaleCombinaisonTop[PrimaryTopIndex].bras
-            if componentId == 8 and (ActualDomponentId == 38 or ActualDomponentId == 39 or ActualDomponentId == 101) then
-              brasidTop = 11
-            end
-            SetPedComponentVariation(Venato.GetPlayerPed(), 3, brasidTop, 0, 1)
-            if componentId ~= 8 then
-              SetPedComponentVariation(Venato.GetPlayerPed(), 8, 2, 0, 1)
-            end
-    		  end
-        end
       end
       if shopOpen and noColor then
         local scaleform = scaleformClothingShop()
         DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
 			  ShowInfoColor(GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId))
-        if debug then
-          DrawRect(0.5, 0.9, 0.2, 0.05, 0, 0, 0, 215)
-    	    printTxt(bras.." - "..brasidTop.." / "..GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(),3)-1 ,0.5, 0.89, true)
-        end
 			  if IsControlJustPressed(1, Keys["RIGHT"]) then
 				  if colorIndex + 1 <= GetNumberOfPedTextureVariations(Venato.GetPlayerPed(), componentId, ActualDomponentId)-1 then
 					  colorIndex = colorIndex + 1
 				  end
 			  end
 			  if IsControlJustPressed(1, Keys["LEFT"]) then
-				  if colorIndex - 1 >= 1 then
+				  if colorIndex - 1 >= 0 then
 				  	colorIndex = colorIndex - 1
 				  end
 			  end
-
-        if IsControlJustPressed(1, Keys["N6"]) and debug then
-          if bras + 1 <= GetNumberOfPedDrawableVariations(Venato.GetPlayerPed(), 3)-1 then
-            bras = bras + 1
-            SetPedComponentVariation(Venato.GetPlayerPed(), 3, bras, 0, 1)
-          end
-        end
-        if IsControlJustPressed(1, Keys["N4"]) and debug  then
-          if bras - 1 >= 1 then
-            bras = bras - 1
-            SetPedComponentVariation(Venato.GetPlayerPed(), 3, bras, 0, 1)
-          end
-        end
       end
 		end
   end
@@ -213,7 +193,8 @@ end)
 function ChangeDomponentId(arg)
   ActualDomponentId = arg
   if componentId == 11 then
-    PrimaryTopIndex = arg
+    SetPedComponentVariation(Venato.GetPlayerPed(), 8, 15, 0, 1)
+    SetPedComponentVariation(Venato.GetPlayerPed(), 3, 15, 0, 1)
   end
 end
 
@@ -284,35 +265,40 @@ function OpenClothingShop()
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
   Menu.clearMenu()
   TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
-  TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png")
-  TriggerEvent('Menu:AddButton2',"Haut", "CStop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
+  if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
+  TriggerEvent('Menu:AddButton2',"Haut", "ClothesShopMenuTop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
 	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
   TriggerEvent('Menu:AddButton2',"Chaussures", "CSchausure", '', '', "https://i.ibb.co/0ZDJsZ4/icons8-trainers-96px.png")
   TriggerEvent('Menu:AddButton2',"Payer : "..tatalPrice.." €", "BuyClothe", '', '', "https://i.ibb.co/y8LZBy2/icons8-receipt-96px.png")
   TriggerEvent('Menu:CreateMenu')
   TriggerEvent('Menu:Open')
 end
-tablee = {
-  ComponentVariation = {
-    Mask = {id = 0, color = 0},
-    torso = {id = GetPedDrawableVariation(ped, 3), color = GetPedTextureVariation(ped, 3)},
-    leg = {id = GetPedDrawableVariation(ped, 4), color = GetPedTextureVariation(ped, 4)},
-    parachute = {id = GetPedDrawableVariation(ped, 5), color = GetPedTextureVariation(ped, 5)},
-    shoes = {id = GetPedDrawableVariation(ped, 6), color = GetPedTextureVariation(ped, 6)},
-    accessory = {id = GetPedDrawableVariation(ped, 7), color = GetPedTextureVariation(ped, 7)},
-    undershirt = {id = GetPedDrawableVariation(ped, 8), color = GetPedTextureVariation(ped, 8)},
-    kevlar = {id = GetPedDrawableVariation(ped, 9), color = GetPedTextureVariation(ped, 9)},
-    badge = {id = GetPedDrawableVariation(ped, 10), color = GetPedTextureVariation(ped, 10)},
-    torso2 = {id = GetPedDrawableVariation(ped, 11), color = GetPedTextureVariation(ped, 11)},
-  },
-  prop = {
-    hat = {id = GetPedPropIndex(ped, 0), color = GetPedPropTextureIndex(ped, 0)},
-    glass = {id = GetPedPropIndex(ped, 1), color = GetPedPropTextureIndex(ped, 1)},
-    ear = {id = GetPedPropIndex(ped, 2), color = GetPedPropTextureIndex(ped, 2)},
-    watch = {id = GetPedPropIndex(ped, 6), color = GetPedPropTextureIndex(ped, 6)},
-    bracelet = {id = GetPedPropIndex(ped, 7), color = GetPedPropTextureIndex(ped, 7)},
-  }
-}
+
+function MainMenuButCantBackSo()
+  Menu.clearMenu()
+  TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
+  TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png")
+  TriggerEvent('Menu:AddButton2',"Haut", "ClothesShopMenuTop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
+	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
+  TriggerEvent('Menu:AddButton2',"Chaussures", "CSchausure", '', '', "https://i.ibb.co/0ZDJsZ4/icons8-trainers-96px.png")
+  TriggerEvent('Menu:AddButton2',"Payer : "..tatalPrice.." €", "BuyClothe", '', '', "https://i.ibb.co/y8LZBy2/icons8-receipt-96px.png")
+  TriggerEvent('Menu:CreateMenu')
+end
+
+function BuyToClothesShopMenuTop()
+  ClothesShopMenuTop()
+  buytopcs()
+end
+
+function ClothesShopMenuTop()
+  Menu.clearMenu()
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "OpenClothingShop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:AddButton2',"Haut", "CStop", '', '', "https://cdn.icon-icons.com/icons2/1082/PNG/512/sweater_78110.png")
+	TriggerEvent('Menu:AddButton2',"Haut de corp", "CStopSecondary", '', '', "https://img.icons8.com/cotton/2x/t-shirt--v1.png")
+  TriggerEvent('Menu:AddButton2',"Bras/corp", "CSBras", '', '', "https://img2.freepng.fr/20180204/hhw/kisspng-arm-muscle-clip-art-arm-png-image-5a76b36707db54.1874529415177286150322.jpg")
+  TriggerEvent('Menu:AddButton2',"Valider le haut", "OpenClothingShop", '', '', "https://icon-library.net/images/validation-icon/validation-icon-10.jpg")
+  TriggerEvent('Menu:CreateMenu')
+end
 
 function BuyClothe()
   local ped = Venato.GetPlayerPed()
@@ -349,7 +335,6 @@ end
 
 RegisterNetEvent("ClothingShop:SaveClothes:response")
 AddEventHandler("ClothingShop:SaveClothes:response", function(response)
-  print("rr")
   if response then
    buyAnything = true
    Menu.close()
@@ -370,6 +355,7 @@ end)
 
 function CSswitchsex()
   Citizen.CreateThread(function()
+    DetachEntity(Venato.GetPlayerPed(), true, true)
   if(GetEntityModel(Venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
     local model = "mp_f_freemode_01"
     RequestModel(model)
@@ -441,7 +427,7 @@ function CStop()
 	PointCamAtCoord(cam,x,y,z)
 	local id = 1
 	local ped = Venato.GetPlayerPed()
-	Menu.addButton2("Retour", "OpenClothingShop", nil)
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -464,57 +450,96 @@ function CStop()
       if debug then
         number = i
       end
-			Menu.addButton2("Haut Primaire #"..number, "ChoseSecondeTop", i, "ChangeDomponentId")
+			Menu.addButton2("Haut Primaire #"..number, "BuyToClothesShopMenuTop", i, "ChangeDomponentId")
 			id = id + 1
 		end
 	end
   Menu.CreateMenu()
 end
 
-function ChoseSecondeTop(i)
+function CStopSecondary()
   noColor = true
-    PrimaryTopIndex = i
-    local notok = false
-    if debug then
-      Menu.setTitle(i)
-    end
-    componentId = 8
-    Menu.clearMenu()
-    local id = 1
-    local ped = Venato.GetPlayerPed()
-    Menu.addButton2("Retour", "CStop", nil)
-    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
-      if MaleCombinaisonTop[PrimaryTopIndex].Secondary == false then
-        buytopcs()
-        notok = true
-      else
-        for k,v in pairs(MaleCombinaisonTop[PrimaryTopIndex].list) do
-          local number = id
-          if debug then
-            number = v
-          end
-          Menu.addButton2("Haut Secondaire #"..number, "buytopcs", v, "ChangeDomponentId")
-          id = id + 1
-        end
+  PrimaryTopIndex = i
+  SetCamCoord(cam,  x,  y-1.0,  z+0.5)
+	PointCamAtCoord(cam,x,y,z)
+  if debug then
+    Menu.setTitle(i)
+  end
+  componentId = 8
+  Menu.clearMenu()
+  local id = 1
+  local ped = Venato.GetPlayerPed()
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  Menu.addButton2("Retour", "ClothesShopMenuTop", nil)
+  for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
+		local dont = false
+  	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
+  		for k,v in pairs(BlackListTorso2Male) do
+  			if i == v then
+  				dont = true
+  				break
+  			end
+  		end
+		else
+			for k,v in pairs(BlackListTorso2Female) do
+  			if i == v then
+  				dont = true
+  				break
+  			end
+  		end
+  	end
+  	if dont == false then
+      local number = id
+      if debug then
+        number = i
       end
-    else
-      if FemaleCombinaisonTop[PrimaryTopIndex].Secondary == false then
-        buytopcs()
-        notok = true
-      else
-        for k,v in pairs(FemaleCombinaisonTop[PrimaryTopIndex].list) do
-          local number = id
-          if debug then
-            number = v
-          end
-          Menu.addButton2("Haut Secondaire #"..number, "buytopcs", v, "ChangeDomponentId")
-          id = id + 1
-        end
+			Menu.addButton2("Haut secondaire #"..number, "BuyToClothesShopMenuTop", i, "ChangeDomponentId")
+  		id = id + 1
+  	end
+	end
+  Menu.CreateMenu()
+end
+
+function CSBras()
+  noColor = true
+  PrimaryTopIndex = i
+  SetCamCoord(cam,  x,  y-1.0,  z+0.5)
+	PointCamAtCoord(cam,x,y,z)
+  if debug then
+    Menu.setTitle(i)
+  end
+  componentId = 3
+  Menu.clearMenu()
+  local id = 1
+  local ped = Venato.GetPlayerPed()
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
+		local dont = false
+  	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
+  		for k,v in pairs(BlackListBrasMale) do
+  			if i == v then
+  				dont = true
+  				break
+  			end
+  		end
+		else
+			for k,v in pairs(BlackListBrasFemale) do
+  			if i == v then
+  				dont = true
+  				break
+  			end
+  		end
+  	end
+  	if dont == false then
+      local number = id
+      if debug then
+        number = i
       end
-    end
-    if notok == false then
-      Menu.CreateMenu()
-    end
+			Menu.addButton2("Bras #"..number, "BuyToClothesShopMenuTop", i, "ChangeDomponentId")
+  		id = id + 1
+  	end
+	end
+  Menu.CreateMenu()
 end
 
 function buytopcs()
@@ -524,9 +549,6 @@ function buytopcs()
     tatalPrice = tatalPrice + priceTop
     coordUI_Y = coordUI_Y +0.05
     coordtop = coordUI_Y
-    OpenClothingShop()
-  else
-    OpenClothingShop()
   end
 end
 
