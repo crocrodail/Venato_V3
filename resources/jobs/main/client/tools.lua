@@ -45,7 +45,7 @@ function JobTools._CreateVehicle(modelName, coordX, coordY, coordZ, heading, cb)
 end
 
 function JobTools.addBlip(position, name, blipId, blipColor, drawRoute)
-  local blip = AddBlipForCoord(position.posX, position.posY, position.posZ)
+  local blip = AddBlipForCoord(position.x or position.posX, position.y or position.posY, position.z or position.posZ)
   SetBlipSprite(blip, blipId)
   SetBlipColour(blip, blipColor)
   SetBlipScale(blip, 1.0)
@@ -56,6 +56,7 @@ function JobTools.addBlip(position, name, blipId, blipColor, drawRoute)
   BeginTextCommandSetBlipName("STRING")
   AddTextComponentString(name)
   EndTextCommandSetBlipName(blip)
+  return blip
 end
 
 local scaleform = nil

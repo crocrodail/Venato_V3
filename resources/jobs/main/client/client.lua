@@ -19,7 +19,7 @@ function Jobs.init(job)
   CreateThread(function()
 
     serviceLocation = _G[job.Class].getServiceLocation()
-    JobTools.addBlip(serviceLocation, "Entreprise", 475, 17, true)
+    JobTools.addBlip(serviceLocation, "Entreprise", 475, 2, false)
 
     _G[job.Class].init()
   end)
@@ -36,7 +36,7 @@ function Jobs.Commands(job)
         TriggerEvent('Menu:Close')
         JobsConfig.isMenuOpen = false
       end
-      if IsControlJustReleased(1, Keys["F3"]) and JobsConfig.inService then
+      if IsControlJustReleased(1, Keys["F4"]) and JobsConfig.inService then
         if JobsConfig.isMenuOpen then
           TriggerEvent('Menu:Close')
         else
@@ -51,16 +51,14 @@ function Jobs.Commands(job)
 
       -- Enter/Leave Service management
       if JobsConfig.isOnServiceLocation and IsControlJustReleased(1, Keys["E"]) then
-        JobsConfig.inService = not JobsConfig.inService
-        CreateThread(function()
-          local time = 1
-          while time < 1000 do
-            Wait(1)
-            JobTools.showServiceMessage(job.name, JobsConfig.inService)
-            time = time + 1
-          end
-          JobTools.hideServiceMessage()
-        end)
+        TriggerEvent('Menu:Clear')
+        TriggerEvent('Menu:Open')
+        TriggerEvent('Menu:Title', job.name)
+        TriggerEvent('Menu:SubTitle', "¿ Vas y KesTuVeFaire ?")
+        TriggerEvent('Menu:AddButton', JobsConfig.inService and "Quitter le service" or "Prendre le service",
+          "toggleService", job)
+        TriggerEvent('Menu:AddButton', "Récupérer sa paie", "takeSalary")
+        JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
       end
 
       -- Step 3
@@ -68,6 +66,27 @@ function Jobs.Commands(job)
       _G[job.Class].commands()
     end
   end)
+end
+
+function toggleService(job)
+  JobsConfig.inService = not JobsConfig.inService
+  CreateThread(function()
+    local time = 1
+    while time < 1000 do
+      Wait(1)
+      JobTools.showServiceMessage(job.name, JobsConfig.inService)
+      time = time + 1
+    end
+    JobTools.hideServiceMessage()
+  end)
+  TriggerEvent('Menu:Close')
+  JobsConfig.isMenuOpen = false
+end
+
+function takeSalary()
+  TriggerServerEvent("Jobs:askSalary")
+  TriggerEvent('Menu:Close')
+  JobsConfig.isMenuOpen = false
 end
 
 function Jobs.mainLoop(job)
@@ -81,20 +100,16 @@ function Jobs.mainLoop(job)
 
       -- Service marker
       if serviceLocation ~= nil then
-        distance = GetDistanceBetweenCoords(playerPos, serviceLocation.posX, serviceLocation.posY, serviceLocation.posZ,
+        distance = GetDistanceBetweenCoords(playerPos, serviceLocation.x, serviceLocation.y, serviceLocation.z,
           true)
         if distance < 20 then
-          DrawMarker(27, serviceLocation.posX, serviceLocation.posY, serviceLocation.posZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9,
+          DrawMarker(27, serviceLocation.x, serviceLocation.y, serviceLocation.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9,
             1.9, 0,
             112, 168, 174, 0, 0, 0, 0)
         end
         if distance < 1.5 then
           JobsConfig.isOnServiceLocation = true
-          if JobsConfig.inService then
-            TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour quitter le service")
-          else
-            TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour prendre le service")
-          end
+          TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir le menu")
         elseif JobsConfig.isOnServiceLocation and distance > 1.5 then
           JobsConfig.isOnServiceLocation = false
         end

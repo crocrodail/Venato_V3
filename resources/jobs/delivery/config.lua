@@ -12,10 +12,11 @@ JobsConfig.jobs[14] = {
 
 DeliveryJobConfig = {}
 DeliveryJobConfig.enabled = true
-DeliveryJobConfig.serviceLocation = { ["posX"] = -423.96, ["posY"] = -2789.39, ["posZ"] = 6.27 }
+DeliveryJobConfig.serviceLocation = { ["x"] = -423.96, ["y"] = -2789.39, ["z"] = 6.27 }
+DeliveryJobConfig.blips = {}
 
 DeliveryJobConfig.BOX_KEY = "prop_box_wood05a"
-DeliveryJobConfig.BASSIN_KEY = "prop_apple_box_01"
+DeliveryJobConfig.MINI_BOX_KEY = "prop_apple_box_01"
 DeliveryJobConfig.TRUNK_KEY = "mule"
 DeliveryJobConfig.FORKLIFT_KEY = "forklift"
 
@@ -31,14 +32,11 @@ DeliveryJobConfig.globalBox = nil
 DeliveryJobConfig.trunkCoord = {}
 DeliveryJobConfig.globalTrunk = nil
 
-DeliveryJobConfig.isInMission = false
-DeliveryJobConfig.isTrunkReady = false
-DeliveryJobConfig.isTrunkLoaded = false
-DeliveryJobConfig.isGoodDelivered = false
+DeliveryJobConfig.currentStep = nil
 
 DeliveryJobConfig.defaultDropLocations = {
   ["Commissariat"] = { ["Name"] = "Commissariat",
-                       ["posX"] = 408.553, ["posY"] = -980.211, ["posZ"] = 28.8 }
+                       ["x"] = 408.553, ["y"] = -980.211, ["z"] = 28.8 }
 }
 DeliveryJobConfig.defaultOrders = {
   ["Munitions"] = {
@@ -66,7 +64,6 @@ DeliveryJobConfig.warehouses = {
   }
 }
 
--- TODO: redefine position where spawn "mule" "forklift" and "box"
 DeliveryJobConfig.trunkDrops = {
   ["trunk"] = { ["x"] = -396.412, ["y"] = -2835.64, ["z"] = 6.0, ["heading"] = 315.49 },
   ["forklift"] = { ["x"] = -403.13, ["y"] = -2842.22, ["z"] = 6.0, ["heading"] = 315.49 },

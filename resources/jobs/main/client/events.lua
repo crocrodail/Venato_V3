@@ -49,10 +49,14 @@ AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob
   notification.title = jobName
   if (primeCo + salary + primeJob) > 0 then
     notification.title = notification.title .. " (<span class='green--text'>" .. (primeCo + salary + primeJob) * bonus .. " €</span>)"
+    notification.message = "Jour de paie !"
+  else
+    notification.message = "Attends un peu voyons !"
   end
   notification.logo = JobsConfig.jobsNotification.logo
+
   if primeCo > 0 then
-    notification.message = "Prime de temps de connexion : <span class='green--text'>" .. primeCo .. " €</span>"
+    notification.message = notification.message .. "<br />Prime de temps de connexion : <span class='green--text'>" .. primeCo .. " €</span>"
   end
   if salary > 0 then
     notification.message = notification.message .. "<br />Salaire reçu : <span class='green--text'>" .. salary .. " €</span>"

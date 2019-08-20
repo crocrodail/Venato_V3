@@ -30,12 +30,21 @@ AddEventHandler("Jobs:askSalary", function(newSource)
   local source = getSource(source, newSource)
   local primeConn = JobsConfig.PrimeConnection
   local jobName = JobsDbFunctions.getPlayerJobName(source)
+  local salaryCount = tonumber(JobsDbFunctions.getSalaryCount(source))
   local salary, primeJob = JobsDbFunctions.getPlayerSalary(source)
-  local salaryCount = JobsDbFunctions.getSalaryCount(source)
+  --JobsDbFunctions.resetSalaryCount(source)
 
   local factor = 10
   local bonus = ((factor + 1) * salaryCount - 1) / factor -- factor=10 ==> salaryCount=2 => 2,10, salaryCount=3 => 3.20
 
+  if salaryCount == 0 then
+    primeConn = 0
+    salary = 0
+    primeJob = 0
+    bonus = 1
+  end
+
+  TriggerEvent("Venato:dump", { salaryCount, primeConn, salary, primeJob, bonus })
   TriggerEvent("Inventory:AddMoney", (primeConn + salary + primeJob) * bonus, source)
   TriggerClientEvent("Jobs:askSalary:cb", source, jobName, primeConn, salary, primeJob, bonus)
 end)
