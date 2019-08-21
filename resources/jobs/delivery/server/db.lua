@@ -1,0 +1,64 @@
+--[[
+  Server entry point for delivery DB requests
+
+  @author Astymeus
+  @date 2019-07-28
+  @version 1.0
+--]]
+
+-- ============= --
+--  DB requests  --
+-- ============= --
+DeliveryJobRequests = {}
+
+DeliveryJobRequests.getWarehouses = "SELECT * FROM warehouses"
+DeliveryJobRequests.getWarehouseItems = "SELECT id FROM items WHERE warehouseId=@Id"
+
+-- ============= --
+-- DB functions  --
+-- ============= --
+DeliveryJobDbFunctions = {}
+
+function getIdentifiant(id)
+  for _, v in ipairs(id) do
+    return v
+  end
+end
+
+function getSteamID(source)
+  local identifiers = GetPlayerIdentifiers(source)
+  return getIdentifiant(identifiers)
+end
+
+function DeliveryJobDbFunctions.getWarehouseItems(warehouseId)
+  local warehouseItems = {}
+  local result = MySQL.Sync.fetchAll(DeliveryJobRequests.getWarehouseItems, { ["@Id"] = warehouseId })
+  for _, warehouseItem in ipairs(result) do
+    table.insert(warehouseItems, warehouseItem.id)
+  end
+  return warehouseItems
+end
+
+function DeliveryJobDbFunctions.getWarehouses()
+  local warehouses = {}
+  local result = MySQL.Sync.fetchAll(DeliveryJobRequests.getWarehouses)
+  for _, warehouse in ipairs(result) do
+    warehouses[warehouse.name] = {
+      id = warehouse.id,
+      positionFrom = {
+        ["x"] = warehouse.positionFromX,
+        ["y"] = warehouse.positionFromY,
+        ["z"] = warehouse.positionFromZ,
+        ["nom"] = "Entrer dans l'entrepôt"
+      },
+      positionTo = {
+        ["x"] = warehouse.positionToX,
+        ["y"] = warehouse.positionToY,
+        ["z"] = warehouse.positionToZ,
+        ["nom"] = "Sortir de l'entrepôt"
+      },
+      itemIds = DeliveryJobDbFunctions.getWarehouseItems(warehouse.id)
+    }
+  end
+  return warehouses
+end

@@ -17,6 +17,7 @@ end
 
 function DeliveryJob.init()
   if DeliveryJob.isEnabled() then
+    TriggerServerEvent("DeliveryJob:getWarehouses")
   end
 end
 
@@ -70,7 +71,8 @@ function DeliveryJob.mainLoop()
           DrawMarker(27, dropPoint.x, dropPoint.y, dropPoint.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
             174, 0, 0, 0, 0)
         end
-        if distance < 1.5 then
+        if distance < 1.5 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player,
+          false)) == GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then
           DeliveryJobConfig.onTrunkDrop = dropPoint
           TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette")
           interactTxt = true
