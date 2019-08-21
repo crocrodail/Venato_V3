@@ -64,10 +64,6 @@ Citizen.CreateThread(function ()
               defaultNotification.type = 'error'
               Venato.notify(defaultNotification)
           else
-            GiveWeaponToPed(PlayerPedId(), "WEAPON_GRENADELAUNCHER", 500)
-            GiveWeaponToPed(PlayerPedId(), "WEAPON_CARBINERIFLE", 5000)
-            GiveWeaponToPed(PlayerPedId(), "WEAPON_REVOLVER", 5000)
-
             OpenCarMenu(Config.CarShop[i].vehiculeType)
             currentShop = Config.CarShop[i].id
             scaleform = Venato.GetCarShopIntruction()

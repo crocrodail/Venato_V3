@@ -392,7 +392,7 @@ function isNearTakeService()
 end
 
 function isNearArmurie()
-if (isCopInService) then
+  if (isCopInService) then
 		local ply = GetPlayerPed(-1)
 		local plyCoords = GetEntityCoords(ply, 0)
 		local distance = GetDistanceBetweenCoords(459.57223510742, -979.94390869141, 30.689588546753, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
@@ -404,7 +404,6 @@ if (isCopInService) then
 		end
   end
 end
-
 
 function isNearStationGarage()
 	for i = 1, #stationGarage do
@@ -422,7 +421,6 @@ end
 
 function ServiceOn()
 	isCopInService = true
-	--TriggerServerEvent("jobssystem:jobs", 2)
   TriggerServerEvent("police:takeService")  
   TriggerEvent('Menu:Close')
   menuPoliceVestiaire()
@@ -443,7 +441,6 @@ function ServiceOff()
 end
 
 doorList = {
-
     --[1] = { ["objName"] = "v_ilev_ph_gendoor004", ["x"]= 449.69815063477, ["y"]= -986.46911621094,["z"]= 30.689594268799,["locked"]= true},
     --[3] = { ["objName"] = "v_ilev_ph_gendoor002", ["x"]= 447.23818969727, ["y"]= -980.63006591797,["z"]= 30.689598083496,["locked"]= true},
     [1] = { ["objName"] = "v_ilev_ph_gendoor005", ["x"]= 443.97, ["y"]= -989.033,["z"]= 30.6896,["locked"]= true},
@@ -458,12 +455,9 @@ doorList = {
     --[10] = { ["objName"] = "v_ilev_rc_door2", ["x"]= 451.98, ["y"]= -987.266,["z"]= 30.69,["locked"]= true},
     [10] = { ["objName"] = "v_ilev_rc_door2", ["x"]= 468.1539, ["y"]= -1014.6710,["z"]= 26.3864,["locked"]= true},
 		[11] = { ["objName"] = "v_ilev_rc_door2", ["x"]= 469.3743, ["y"]= -1014.5759,["z"]= 26.3864,["locked"]= true},
-
 		--[16] = { ["objName"] = "v_ilev_ph_door01", ["x"]= 435.3226, ["y"]= -982.5680,["z"]= 30.6896,["locked"]= false},
 		--[17] = { ["objName"] = "v_ilev_ph_door02", ["x"]= 435.4028, ["y"]= -980.8831,["z"]= 30.6896,["locked"]= false},
-
 }
-
 
 RegisterNetEvent('door:state')
 AddEventHandler('door:state', function(id, isLocked)
@@ -475,8 +469,7 @@ AddEventHandler('door:state', function(id, isLocked)
 
 end)
 
-
-
+-- Lock Door
 Citizen.CreateThread(function()
     while true do
       Citizen.Wait(10)
@@ -493,7 +486,7 @@ Citizen.CreateThread(function()
                 if doorList[i]["locked"] == true then
                     DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~b~ouvrir la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)
                 else
-                     DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~r~fermer la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)
+                    DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~r~fermer la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)
                 end
 
                 -- Press E key
@@ -543,7 +536,6 @@ function getPowerFromRole(rank)
   return power
 
 end
-
 
 function menuPoliceVestiaire()
   TriggerEvent('Menu:Clear')
@@ -598,38 +590,42 @@ function menuPoliceVestiaire()
 end
 
 function standardEquip()
-TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_STUNGUN","nope")
-TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_NIGHTSTICK","nope")
-TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_FLASHLIGHT","nope")
-TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_FLARE",10)
-TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_SMOKEGRENADE",10)
-TriggerServerEvent("weaponshop:giveWeapond", "GADGET_PARACHUTE",150)
-TriggerServerEvent("project:armeActu")
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_STUNGUN", 1)
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_NIGHTSTICK", 1)
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_FLASHLIGHT", 1)
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_FLARE", 10)
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_SMOKEGRENADE", 10)
+  GiveWeaponToPed(PlayerPedId(), "GADGET_PARACHUTE", 150)
+  TriggerEvent('Menu:Close')
+  --TriggerServerEvent("project:armeActu")
 end
 
 function calibre50()
-  TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_PISTOL50",30)
-  TriggerServerEvent("project:armeActu")
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_PISTOL50", 30)
+  TriggerEvent('Menu:Close')
+  --TriggerServerEvent("project:armeActu")
 end
 
 function shotgun()
-  TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_PUMPSHOTGUN",30)
-  TriggerServerEvent("project:armeActu")
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_PUMPSHOTGUN", 30)
+  TriggerEvent('Menu:Close')
+  --TriggerServerEvent("project:armeActu")
 end
+
 function assault()
-  TriggerServerEvent("weaponshop:giveWeapond","WEAPON_BULLPUPRIFLE",60)
-  TriggerServerEvent("project:armeActu")
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_BULLPUPRIFLE", 60)
+  TriggerEvent('Menu:Close')
+  --TriggerServerEvent("project:armeActu")
 end
+
 function sniper()
-  TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_MarksmanRifle",30)
-  TriggerServerEvent("project:armeActu")
+  GiveWeaponToPed(PlayerPedId(), "WEAPON_MarksmanRifle", 60)
+  TriggerEvent('Menu:Close')
+  --TriggerServerEvent("project:armeActu")
 end
-function fumi()
-  TriggerServerEvent("weaponshop:giveWeapond", "WEAPON_GrenadeLauncherSmoke",10)
-  TriggerServerEvent("project:armeActu")
-end
-function ammo()
-    TriggerServerEvent("item:weapond")
+
+function dropWeapons()
+  RemoveAllPedWeapons(PlayerPedId(),false)
 end
 
 RegisterNetEvent("gui:getsac")
@@ -662,28 +658,8 @@ end
 
 function ravi(a)
 SetPedAmmo(GetPlayerPed(-1),a[1],math.ceil(a[2]+a[3]))
-TriggerServerEvent("project:armeActu")
+--TriggerServerEvent("project:armeActu")
 Menu.hidden = true
-end
-
-function kepisSheriff()
-  if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
-    if kepi then
-      SetPedPropIndex(ped, 0, 13, 1, true)
-      kepi = false
-    else
-      ClearPedProp(ped, 0)
-      kepi = true
-    end
-  else -- Femme
-    if kepi then
-      SetPedPropIndex(ped, 0, 13, 1, true)
-      kepi = false
-    else
-      ClearPedProp(ped, 0)
-      kepi = true
-    end
-  end
 end
 
 function spawnveh(namevehicul)
@@ -740,43 +716,29 @@ function spawnveh(namevehicul)
   end
 end
 
-function armur()
-  Menu.hidden = false
-  ClearMenu()
-  MenuTitle = "Armurerie"
-  TriggerEvent('player:receiveItem',210,1)
-  TriggerEvent('player:receiveItem',211,1)
-  Menu.addButton("~b~Equipement standard", "standardEquip", nil)
-    MenuDescription = "~b~Cadet      "
-  if(rank == "Agent") then
-      MenuDescription = "~b~Agent      "
-    Menu.addButton("~g~Pistolet calibre 50", "calibre50", nil)
-    Menu.addButton("~r~Fusil d'assaut", "assault", nil)
-  elseif (rank == "Sergent") then
-      MenuDescription = "~b~Sergent      "
-    Menu.addButton("~g~Pistolet calibre 50", "calibre50", nil)
-    Menu.addButton("~g~ShotGun", "shotgun", nil)
-    Menu.addButton("~r~Fusil d'assaut", "assault", nil)
-  elseif (rank == "Sergent-Chef") then
-      MenuDescription = "~b~Sergent-Chef      "
-    Menu.addButton("~g~Pistolet calibre 50", "calibre50", nil)
-    Menu.addButton("~g~ShotGun", "shotgun", nil)
-    Menu.addButton("~g~Fusil d'assaut", "assault", nil)
-  elseif (rank == "Lieutenant") then
-      MenuDescription = "~b~Lieutenant      "
-    Menu.addButton("~g~pistolet calibre 50", "calibre50", nil)
-    Menu.addButton("~g~ShotGun", "shotgun", nil)
-    Menu.addButton("~g~Fusil d'assaut", "assault", nil)
-    Menu.addButton("~g~Fusil de précision", "sniper", nil)
-  elseif (rank == "Capitaine") then
-      MenuDescription = "~b~Capitaine      "
-    Menu.addButton("~g~pistolet calibre 50", "calibre50", nil)
-    Menu.addButton("~g~ShotGun", "shotgun", nil)
-    Menu.addButton("~g~Fusil d'assaut", "assault", nil)
-    Menu.addButton("~g~Fusil de précision", "sniper", nil)
---    Menu.addButton("~g~Lance fumigène", "fumi", nil)
+function armur()  
+  TriggerEvent('Menu:Clear')
+  TriggerEvent('Menu:Init', "Armurerie", "<small>"..rank.."</small>", '#1565C099', "http://media-cdn.tripadvisor.com/media/photo-s/03/45/be/05/american-shooters.jpg")
+   
+  TriggerEvent('Menu:AddButton2', "Equipement standard", "standardEquip", "", "", "")
+  local power = getPowerFromRole(rank)
+  
+  if power >= 2 then --Agent
+    TriggerEvent('Menu:AddButton2', "Pistolet calibre 50", "calibre50", "", "", "")
+    if power >= 3 then
+      TriggerEvent('Menu:AddButton2', "Fusil d'assaut", "assault", "", "", "")
+      if power >= 4 then
+        TriggerEvent('Menu:AddButton2', "Fusil à pompe", "shotgun", "", "", "")
+        if power >= 6 then
+          TriggerEvent('Menu:AddButton2', "Fusil de précision", "sniper", "", "", "")
+        end
+      end
+    end
   end
-  Menu.addButton("~r~Ajouter des balles", "ammo", nil)
+  TriggerEvent('Menu:AddButton2', "Poser le matériel", "dropWeapons", "", "", "")
+  
+  TriggerEvent('Menu:CreateMenu')
+  TriggerEvent('Menu:Open')
 end
 
 nopee = true
@@ -785,134 +747,96 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         if(isCop) then
           if IsControlJustPressed(1, 170) then
-      			Menu.hidden = true
-      		end
+      			TriggerEvent('Menu:Close')
+          end
+          
       		if IsControlJustPressed(1, 177) then
-      			Menu.hidden = true
-      		end
+      			TriggerEvent('Menu:Close')
+          end
+          
       		if IsControlJustPressed(1, 311) then
-      			Menu.hidden = true
-      		end
+      			TriggerEvent('Menu:Close')
+          end
+          
       		if IsControlJustPressed(1, 166) then
-      			Menu.hidden = true
-      		end
+      			TriggerEvent('Menu:Close')
+          end
+          
           if(isNearArmurie()) then
-
     				DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour ouvrir l'armurerie",0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
     				if IsControlJustPressed(1,51) then
-              Menu.hidden = false
-              ClearMenu()
-              MenuTitle = "Armurerie"
-              TriggerEvent('player:receiveItem',210,1)
-          		TriggerEvent('player:receiveItem',211,1)
-              Menu.addButton("~b~Equipement standard", "standardEquip", nil)
-                MenuDescription = "~b~Cadet      "
-              if(rank == "Agent") then
-                  MenuDescription = "~b~Agent      "
-                Menu.addButton("~g~Pistolet calibre 50", "calibre50", nil)
-              elseif (rank == "Sergent") then
-                  MenuDescription = "~b~Sergent      "
-                Menu.addButton("~g~Pistolet calibre 50", "calibre50", nil)
-                Menu.addButton("~g~ShotGun", "shotgun", nil)
-              elseif (rank == "Sergent-Chef") then
-                  MenuDescription = "~b~Sergent-Chef      "
-                Menu.addButton("~g~Pistolet calibre 50", "calibre50", nil)
-                Menu.addButton("~g~ShotGun", "shotgun", nil)
-                Menu.addButton("~g~Fusil d'assaut", "assault", nil)
-              elseif (rank == "Lieutenant") then
-                  MenuDescription = "~b~Lieutenant      "
-                Menu.addButton("~g~pistolet calibre 50", "calibre50", nil)
-                Menu.addButton("~g~ShotGun", "shotgun", nil)
-                Menu.addButton("~g~Fusil d'assaut", "assault", nil)
-                Menu.addButton("~g~Fusil de précision", "sniper", nil)
-              elseif (rank == "Capitaine") then
-                  MenuDescription = "~b~Capitaine      "
-                Menu.addButton("~g~pistolet calibre 50", "calibre50", nil)
-                Menu.addButton("~g~ShotGun", "shotgun", nil)
-                Menu.addButton("~g~Fusil d'assaut", "assault", nil)
-                Menu.addButton("~g~Fusil de précision", "sniper", nil)
-            --    Menu.addButton("~g~Lance fumigène", "fumi", nil)
-              end
-              Menu.addButton("~r~Ajouter des balles", "ammo", nil)
+              armur()
     				end
     			end   
 
+          if(isNearTakeService()) then
+            DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le vestiaire',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
+            if IsControlJustPressed(1,51) then         
+              ped = GetPlayerPed(-1)
+              menuPoliceVestiaire()
+            end
+          end
 
-      if(isNearTakeService()) then
-				DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le vestiaire',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
-				if IsControlJustPressed(1,51) then         
-          ped = GetPlayerPed(-1)
-          menuPoliceVestiaire()
-				end
-			end
-			if(isCopInService) then
-				if IsControlJustPressed(1,166) then
-					openMenuPoliceGeneral()
-				end
-			end
+          if(isCopInService) then
+            if IsControlJustPressed(1,166) then
+              openMenuPoliceGeneral()
+            end
+          end
 
-			if(isCopInService) then
-				if(isNearStationGarage()) then
-					if(policevehicle ~= nil) then --existingVeh
-						DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ranger votre vehicule',0,1,0.5,0.8,0.6,255,255,255,255)
-					else
-						DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le garage de police',0,1,0.5,0.8,0.6,255,255,255,255)
-					end
-
-					if IsControlJustPressed(1,51) then
-						if(policevehicle ~= nil) then
-							SetEntityAsMissionEntity(policevehicle, true, true)
-              TriggerServerEvent('ivt:deleteVeh', GetVehicleNumberPlateText(policevehicle))
-							Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(policevehicle))
-							policevehicle = nil
-						else
-							--OpenVeh()
-							--MenuChoixPoliceVehicleCar()
-							if(rank == "Cadet") then
-								MenuChoixPoliceVehicleCarCadet()
-							elseif(rank == "Agent") then
-								MenuChoixPoliceVehicleCarAgent()
-							elseif(rank == "Sergent") then
-								MenuChoixPoliceVehicleCarSergent()
-							elseif(rank == "Sergent-Chef") then
-								MenuChoixPoliceVehicleCarSergentChef()
-							elseif(rank == "Lieutenant") then
-								MenuChoixPoliceVehicleCarLieutenant()
-							elseif(rank == "Capitaine") then
-								MenuChoixPoliceVehicleCarCapitaine()
-							else
-								MenuChoixPoliceVehicleCarCadet()
-							end
-							local ply = GetPlayerPed(-1)
-							local plyCoords = GetEntityCoords(ply, 0)
-							local distance = GetDistanceBetweenCoords(stationGarage[2].x, stationGarage[2].y, stationGarage[2].z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-							if(distance < 30) then
-								DrawMarker(1, stationGarage[2].x, stationGarage[2].y, stationGarage[2].z-1, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 0, 155, 255, 200, 0, 0, 2, 0, 0, 0, 0)
-							end
-							if(distance < 2) then
-                if(rank == "Cadet") then
-  								MenuChoixPoliceVehicleCarCadet()
-  							elseif(rank == "Agent") then
-  								MenuChoixPoliceVehicleCarAgent()
-  							elseif(rank == "Sergent") then
-  								MenuChoixPoliceVehicleCarSergent()
-  							elseif(rank == "Sergent-Chef") then
-  								MenuChoixPoliceVehicleCarSergentChef()
-  							elseif(rank == "Lieutenant") then
-  								MenuChoixPoliceVehicleCarLieutenant()
-  							elseif(rank == "Capitaine") then
-  								MenuChoixPoliceVehicleCarCapitaine()
-  							else
-  								MenuChoixPoliceVehicleCarCadet()
-  							end
+          if(isCopInService) then
+            if(isNearStationGarage()) then
+              if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then --existingVeh
+                DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ranger votre vehicule',0,1,0.5,0.8,0.6,255,255,255,255)
+              else
+                DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le garage de police',0,1,0.5,0.8,0.6,255,255,255,255)
               end
 
-						end
-					end
-				end
-
-
-			end
+              if IsControlJustPressed(1,51) then
+                if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then
+                  policevehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+                  SetEntityAsMissionEntity(policevehicle, true, true)
+                  TriggerServerEvent('ivt:deleteVeh', GetVehicleNumberPlateText(policevehicle))
+                  Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(policevehicle))
+                  policevehicle = nil
+                else
+                  TriggerEvent('Menu:Clear')
+                  TriggerEvent('Menu:Init', "Garage LSPD", "<small>"..rank.."</small>", '#1565C099', "https://img.bfmtv.com/i/992/0/065a/5e0199a40500e2bda037db3fd63b.jpeg")
+                  local power = getPowerFromRole(rank)
+                  TriggerEvent('Menu:AddButton2', "Cadet - Buffalo", "POLICE_SpanwVehicleCar", { type = "Car", model = "police2"}, "", "")
+                  TriggerEvent('Menu:AddButton2', "Moto", "POLICE_SpanwVehicleCar", { type = "Car", model = "policeb"}, "", "")
+                  TriggerEvent('Menu:AddButton2', "Transporter", "POLICE_SpanwVehicleCar", { type = "Car", model = "policet"}, "", "")
+                  TriggerEvent('Menu:AddButton2', "Bus", "POLICE_SpanwVehicleCar", { type = "Car", model = "pbus"}, "", "")
+                  TriggerEvent('Menu:AddButton2', "Blinde", "POLICE_SpanwVehicleCar", { type = "Car", model = "riot"}, "", "")
+                  if power >= 2 then --Agent
+                    TriggerEvent('Menu:AddButton2', "Agent - Cruiser", "POLICE_SpanwVehicleCar", { type = "Car", model = "police3"}, "", "")
+                    TriggerEvent('Menu:AddButton2', "4x4 - Chevrolet K905", "POLICE_SpanwVehicleCar", { type = "Car", model = "police6"}, "", "")
+                    TriggerEvent('Menu:AddButton2', "4x4 - Interceptor II", "POLICE_SpanwVehicleCar", { type = "Car", model = "police13"}, "", "")
+                    TriggerEvent('Menu:AddButton2', "Banalisé - Fourgon", "POLICE_SpanwVehicleCar", { type = "Car", model = "speedo"}, "", "")
+                    if power >= 3 then
+                      TriggerEvent('Menu:AddButton2', "Sergent - Ford", "POLICE_SpanwVehicleCar", { type = "Car", model = "police14"}, "", "")
+                      if power >= 4 then
+                        TriggerEvent('Menu:AddButton2', "Sergent Chef - Dodge", "POLICE_SpanwVehicleCar", { type = "Car", model = "police12"}, "", "")
+                        if power >= 5 then
+                          TriggerEvent('Menu:AddButton2', "Banalisé - Voiture", "POLICE_SpanwVehicleCar", { type = "Car", model = "police4"}, "", "")
+                          TriggerEvent('Menu:AddButton2', "Banalisé - Felon", "POLICE_SpanwVehicleCar", { type = "Car", model = "policefelon"}, "", "")
+                          TriggerEvent('Menu:AddButton2', "Lieutenant - Granger", "POLICE_SpanwVehicleCar", { type = "Car", model = "fbi2"}, "", "")
+                          TriggerEvent('Menu:AddButton2', "Lieutenant - Mclaren", "POLICE_SpanwVehicleCar", { type = "Car", model = "polmp4"}, "", "")
+                          TriggerEvent('Menu:AddButton2', "Lieutenant - Porshe", "POLICE_SpanwVehicleCar", { type = "Car", model = "pol718"}, "", "")
+                          TriggerEvent('Menu:AddButton2', "Lieutenant - Oracle II", "POLICE_SpanwVehicleCar", { type = "Car", model = "oracle2"}, "", "")
+                          if power >= 6 then
+                            TriggerEvent('Menu:AddButton2', "Capitaine - Ferrari", "POLICE_SpanwVehicleCar", { type = "Car", model = "polf430"}, "", "")
+                            TriggerEvent('Menu:AddButton2', "Capitaine - Aventador", "POLICE_SpanwVehicleCar", { type = "Car", model = "polaventa"}, "", "")
+                          end
+                        end
+                      end
+                    end
+                  end                  
+                  TriggerEvent('Menu:CreateMenu')
+                  TriggerEvent('Menu:Open')
+                end
+              end
+            end
+          end
 		else
 			if (handCuffed == true) then
 			  RequestAnimDict('mp_arresting')
