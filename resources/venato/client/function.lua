@@ -138,14 +138,12 @@ function Venato.CreateObject(objet, x, y, z)
   RequestModel(model)
   while not HasModelLoaded(model) do
     Citizen.Wait(100)
-  end
-  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0)       
-  local objet = CreateObject(model, pos.x, pos.y, pos.z, true, false, false)
+  end      
+  local objet = CreateObject(model, x, y, z, true, false, false)
 
   local id = NetworkGetNetworkIdFromEntity(objet)
   SetNetworkIdExistsOnAllMachines(id, true)
   SetNetworkIdCanMigrate(id, true)
-  SetEntityRotation(objet, GetEntityRotation(Venato.GetPlayerPed()))
   SetEntityAsMissionEntity(objet, true, false)
   SetModelAsNoLongerNeeded(model)
   return objet

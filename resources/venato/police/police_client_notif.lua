@@ -11,10 +11,10 @@ local POLICE_nbMecanoisInService = 0
 local POLICE_nbMecanoDispo = 0
 
 local defaultNotification = {
-	type = "alert",
-	title ="LSPD",
-	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
-  }
+    type = "alert",
+    title ="LSPD",
+    logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
+}
 
 local POLICE_TEXT = {
     PrendreService = '~INPUT_PICKUP~ Prendre son service de policier',
@@ -123,14 +123,7 @@ end
 
 	RegisterNetEvent('police:getArrested')
 	AddEventHandler('police:getArrested', function()
-			handCuffed = not handCuffed
-			if (handCuffed) then
-				TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Vous avez été menotté.")
-				SetPedComponentVariation(GetPlayerPed(-1), 7, 41, 0 ,0)
-			else
-				TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Liberté ! Adieu merveilleuses menottes ...")
-				SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0 ,0)
-			end
+		TriggerEvent("anim:cuff")
 	end)
 
 	RegisterNetEvent('police:payAmende')
@@ -545,26 +538,6 @@ AddEventHandler("playerSpawned", function(source)
     TriggerServerEvent("police:checkIsCop")
 end)
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(1)
-        if (handCuffed == true) then
-            RequestAnimDict('mp_arresting')
-            SetPedComponentVariation(GetPlayerPed(-1), 7, 41, 0 ,0)
-
-            while not HasAnimDictLoaded('mp_arresting') do
-            Citizen.Wait(0)
-            end
-
-            local myPed = PlayerPedId()
-            local animation = 'idle'
-            local flags = 16
-
-            TaskPlayAnim(myPed, 'mp_arresting', animation, 8.0, -8, -1, flags, 0, 0, 0, 0)
-        end
-    end
-end)
-
 function openTextInput(title, defaultText, maxlength)
 	DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", defaultText or "", "", "", "", maxlength or 180)
 	while (UpdateOnscreenKeyboard() == 0) do
@@ -593,22 +566,13 @@ end
 function POLICE_Cuffed()
 	t, distance = GetClosestPlayer()
 	if(distance ~= -1 and distance < 3) then
-		TriggerServerEvent("police:cuffGranted", GetPlayerServerId(t))
+		TriggerServerEvent("cuff", GetPlayerServerId(t))
     else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
         Venato.notify(defaultNotification)
 	end
 end
 
-function POLICE_CuffedHRP()
-	t, distance = GetClosestPlayer()
-	if(distance ~= -1 and distance < 3) then
-		TriggerServerEvent("police:cuffGrantedHRP", GetPlayerServerId(t))
-	else
-        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
-        Venato.notify(defaultNotification)
-	end
-end
 
 function POLICE_Crocheter()
 	Citizen.CreateThread(function()        
@@ -700,16 +664,14 @@ function POLICE_FINE_CUSTOM()
 end
 
 function POLICE_Fines(amount, reason, points)
-	t, distance = GetClosestPlayer()
-   -- if reason == nil then
-   --     "aucune raison"
-  --  end
+    local t, distance = GetClosestPlayer()
+  
 	if(distance ~= -1 and distance < 3) then
         if points > 0 then
-            TriggerServerEvent("dmv:removePoints", points, GetPlayerServerId(t), source)
+            --TriggerServerEvent("dmv:removePoints", points, GetPlayerServerId(t), source)
             TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
         elseif points < 0 then
-            TriggerServerEvent("dmv:removeLicence", GetPlayerServerId(t), source)
+            --TriggerServerEvent("dmv:removeLicence", GetPlayerServerId(t), source)
             TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
         elseif points == 0 then
             TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
@@ -729,51 +691,6 @@ AddEventHandler('police:payFines', function(amount)
     defaultNotification.message = "Vous avez payé <span class='green--text'>"..amount.."</span>€ d'amende."
     Venato.notify(defaultNotification)
 end)
-
-RegisterNetEvent('police:dropIllegalItem')
-AddEventHandler('police:dropIllegalItem', function(id)
-    TriggerEvent("player:looseItem", tonumber(id), exports.VNT_inventaire:getQuantity(id))
-end)
-
-RegisterNetEvent('police:unseatme')
-AddEventHandler('police:unseatme', function(t)
-    local ped = GetPlayerPed(t)
-    ClearPedTasksImmediately(ped)
-    plyPos = GetEntityCoords(GetPlayerPed(-1),  true)
-    local xnew = plyPos.x + 2
-    local ynew = plyPos.y + 2
-
-    SetEntityCoords(GetPlayerPed(-1), xnew, ynew, plyPos.z)
-end)
-
-RegisterNetEvent('police:forcedEnteringVeh')
-AddEventHandler('police:forcedEnteringVeh', function()
-    if(handCuffed) then
-        -- local pos = GetEntityCoords(GetPlayerPed(-1), 0)
-        -- local entityWorld = GetOffsetFromEntityInWorldCoords(player, 0, 3.0, 0.0)
-        -- local rayHandle = Cast_3dRayPointToPoint(pos.x, pos.y, pos.z-1, entityWorld.x, entityWorld.y, entityWorld.z,5, 10, player, 0)
-        -- local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-        local ped = GetPlayerPed(-1)
-        local coordFrom =GetOffsetFromEntityInWorldCoords( ped, 0.0, 0.0, 0.0 )
-        local coordTo = GetOffsetFromEntityInWorldCoords( ped, 0.0, 3.0, -0.8 )
-        local rayHandle = CastRayPointToPoint( coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed( -1 ), 0 )
-        local _, _, _, _, vehicleHandle = GetRaycastResult( rayHandle )
-        if vehicleHandle ~= nil then
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 2)
-            defaultNotification.message = "Dans la voiture"
-            Venato.notify(defaultNotification)
-        end
-    end
-end)
-
-RegisterNetEvent('police:resultAllCopsInService')
-AddEventHandler('police:resultAllCopsInService', function(array)
-	allServiceCops = array
-	enableCopBlips()
-end)
-
-function enableCopBlips()
-end
 
 --====================================================================================
 -- Initialisation
