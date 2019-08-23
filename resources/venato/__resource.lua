@@ -68,9 +68,9 @@ server_script {
   '/playerDeath/ServerDeath.lua',
   '/vnt_AdvancedFuel/config.lua',
   '/vnt_AdvancedFuel/server.lua',
+  '/police/police_server_cuffs.lua',
 	'/police/police_server.lua',
   '/police/police_server_notif.lua',
-  '/police/police_server_cuffs.lua',
 }
 
 files {

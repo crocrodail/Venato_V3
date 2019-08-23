@@ -1,6 +1,8 @@
 -- Register the cuff command.
-RegisterCommand('police:cuff', function(target)
+RegisterServerEvent('police:cuff')
+AddEventHandler('police:cuff', function(target)
     -- If there is at least 1 argument passed to the command ("/cuff <id>" was used), we want to...
+    local source = source
     print("cuff "..target)
     if target ~= nil then
         -- ...cuff the player specified by the argument (server id)
@@ -24,4 +26,4 @@ RegisterCommand('police:cuff', function(target)
     end
     
     -- And last but not least, make it restricted, only people with the "command.cuff" permission can use this command.
-end, true)
+end)
