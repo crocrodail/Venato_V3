@@ -554,7 +554,9 @@ end
 -- Action
 --====================================================================================
 function POLICE_Check()
-	t, distance = GetClosestPlayer()
+    t, distance = GetClosestPlayer()
+    print(t)
+    print(GetPlayerServerId(t))
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:targetCheckInventory", GetPlayerServerId(t))
 	else

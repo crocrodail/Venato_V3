@@ -71,7 +71,7 @@ function checkInventory(source, target)
 	-- 	TriggerEvent('vnt:chestaddmonney', 20, math.floor(dirtyMoney/5))
 	-- 	TriggerEvent("logserver", 'Prime réquisition argent sale : +' .. math.floor(dirtyMoney/5) ..'$')
 	-- end
-  	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_inventory` JOIN items ON items.id = user_inventory.item_id WHERE user_id = @username", {['@username'] = target})
+  	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_inventory` JOIN items ON items.id = user_inventory.item_id WHERE identifier = @username", {['@username'] = target})
 	  if (result) then
 		  for _, v in ipairs(result) do
 			  if(v.quantity ~= 0) then
@@ -195,7 +195,6 @@ RegisterServerEvent('police:targetCheckInventory')
 AddEventHandler('police:targetCheckInventory', function(t)
 	local source = source
 	local targetSI = Venato.GetSteamID(t)
-	print(sourceSI)
 	print(targetSI)
 	
 	local info = checkInventory(source, targetSI)
