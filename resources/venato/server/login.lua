@@ -56,6 +56,6 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10000)
-		TriggerClientEvent("Venato:ActuPlayer", -1, ingame)
+		TriggerClientEvent("Venato:ActuPlayer", -1, #DataPlayers)
 	end
 end)
