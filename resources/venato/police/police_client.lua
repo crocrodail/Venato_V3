@@ -699,10 +699,6 @@ Citizen.CreateThread(function()
       			TriggerEvent('Menu:Close')
           end
 
-      		if IsControlJustPressed(1, 311) then
-      			TriggerEvent('Menu:Close')
-          end
-
       		if IsControlJustPressed(1, 166) then
       			TriggerEvent('Menu:Close')
           end
