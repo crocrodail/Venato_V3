@@ -131,7 +131,7 @@ function POLICE_showInfoClient()
         local offsetX = 0.87
         local offsetY = 0.785
         DrawRect(offsetX, offsetY, 0.23, 0.035, 0, 0, 0, 215)
-        
+
         SetTextFont(1)
         SetTextScale(0.0,0.5)
         SetTextCentre(true)
@@ -664,8 +664,7 @@ end
 --====================================================================================
 
 RegisterNetEvent('police:payFines')
-AddEventHandler('police:payFines', function(amount)
-	Venato.
+AddEventHandler('police:payFines', function(amount)	
     defaultNotification.message = "Vous avez payé <span class='green--text'>"..amount.."</span>€ d'amende."
     defaultNotification.timeout = 5000
     Venato.notify(defaultNotification)
