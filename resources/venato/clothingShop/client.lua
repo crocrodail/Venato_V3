@@ -324,13 +324,13 @@ function BuyClothe()
     }
   }
   canSetClothes = false
+  TriggerServerEvent("ClothingShop:SaveClothes", tablee, tatalPrice)
   Venato.LoadClothes()
 end
 
 function CSsendMask()
   tablee.ComponentVariation.Mask.id = Clothes.ComponentVariation.Mask.id
   tablee.ComponentVariation.Mask.color = Clothes.ComponentVariation.Mask.color
-  TriggerServerEvent("ClothingShop:SaveClothes", tablee, tatalPrice)
 end
 
 RegisterNetEvent("ClothingShop:SaveClothes:response")
@@ -513,7 +513,7 @@ function CSBras()
   local id = 1
   local ped = Venato.GetPlayerPed()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
-  for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
+  for i=0,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
   	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
   		for k,v in pairs(BlackListBrasMale) do

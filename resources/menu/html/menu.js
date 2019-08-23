@@ -25,6 +25,8 @@ new Vue({
     isDark: true,
     open: false,
     selectedItem: 0,
+    oldSelectedItem: 0,
+    oldItemsLength:0,
     title: 'Concessionnaire',
     subtitle: 'Choisissez votre prochaine voiture',
     maxItemsShow: 5,
@@ -68,7 +70,9 @@ new Vue({
       } else if (event.data.action == "enter") {
         this.confirmNavigation()
       } else if (event.data.action == "clear") {
+        this.oldItemsLength = this.items.length;
         this.items = [];
+        this.oldSelectedItem = this.selectedItem;
         this.selectedItem = 0;
       } else if (event.data.action == "addButton") {
         this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: undefined })
@@ -83,6 +87,7 @@ new Vue({
             this.items.push({ title: obj[i].name, subtitle: obj[i].stock, confirm: obj[i].func, data: obj[i].args, avatar: obj[i].avatar, price: obj[i].price, isShopItem: obj[i].isShopItem})
           }
          };
+         this.selectedItem = this.oldItemsLength != this.items.length ? 0 : this.oldSelectedItem;
       } else if (event.data.action == "init") {
         this.title = event.data.title;
         this.subtitle = event.data.subtitle;

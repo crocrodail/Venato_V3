@@ -113,7 +113,7 @@ function Venato.ClosePlayer()
       end
     end
   end
-  return GetPlayerServerId(closestPlayer), closestDistance
+  return GetPlayerServerId(closestPlayer), closestDistance, closestPlayer
 end
 
 function Venato.GetPlayerPed()
@@ -138,9 +138,12 @@ function Venato.CreateObject(objet, x, y, z)
   RequestModel(model)
   while not HasModelLoaded(model) do
     Citizen.Wait(100)
-  end
+  end      
   local objet = CreateObject(model, x, y, z, true, false, false)
-  SetNetworkIdCanMigrate(objet, true)
+
+  local id = NetworkGetNetworkIdFromEntity(objet)
+  SetNetworkIdExistsOnAllMachines(id, true)
+  SetNetworkIdCanMigrate(id, true)
   SetEntityAsMissionEntity(objet, true, false)
   SetModelAsNoLongerNeeded(model)
   return objet

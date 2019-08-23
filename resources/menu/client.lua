@@ -77,6 +77,7 @@ end
 
 RegisterNetEvent('Menu:Open')
 AddEventHandler('Menu:Open', function()
+  print("trigOpen")
 	menuOpen = true
 	SendNUIMessage({
         action = "open"
@@ -85,6 +86,7 @@ end)
 
 RegisterNetEvent('Menu:Close')
 AddEventHandler('Menu:Close', function()
+  print("trigClose")
 	menuOpen = false
 	SendNUIMessage({
 		action = "close"

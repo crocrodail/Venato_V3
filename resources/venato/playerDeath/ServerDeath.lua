@@ -1,4 +1,9 @@
 local shooting = {}
+local Cause = {}
+
+function GetCauseOfDeath(source)
+  return Cause[source]
+end
 
 RegisterServerEvent('Death:KillerAreShooting')
 AddEventHandler('Death:KillerAreShooting', function(bool)
@@ -7,11 +12,23 @@ AddEventHandler('Death:KillerAreShooting', function(bool)
 end)
 
 RegisterServerEvent('Death:ComaOrNot')
-AddEventHandler('Death:ComaOrNot', function(killer)
+AddEventHandler('Death:ComaOrNot', function(killer, causeOfDeath)
   local source = source
+  Cause[source] = causeOfDeath
 	if shooting[killer] then
 		TriggerClientEvent("Death:ComaOrNot:cb", source, true)
 	else
 		TriggerClientEvent("Death:ComaOrNot:cb", source, false)
   end
+end)
+
+RegisterServerEvent('Death:Dead')
+AddEventHandler('Death:Dead', function(bool, health)
+  local source = source
+  local health = health or 100
+  if bool then
+    health = 0
+  end
+  DataPlayers[source].Health = health
+  MySQL.Async.execute("UPDATE users SET health = @health WHERE identifier = @steamId", {["health"] = health, ["steamId"] = DataPlayers[source].SteamId })
 end)

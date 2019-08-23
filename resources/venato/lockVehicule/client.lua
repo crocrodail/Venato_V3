@@ -143,6 +143,17 @@ function lockVeh()
   end
 end
 
+function unlockveh()
+  local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(),true))
+  local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
+  local plateVehic = GetVehicleNumberPlateText(clostestvehicle)
+  SetVehicleDoorsLocked(clostestvehicle, 1)
+  TriggerServerEvent("lock:unlockveh", plateVehic)
+  Notify("Le véhicule <span class='yellow--text'>" .. plateVehic .. "</span> est <span class='green--text'>déverrouillé</span>.")
+  TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 10, "unlock", 1.0)
+end
+
+
 function vnt()
   local isvehiclefound = nil
   local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(),true))

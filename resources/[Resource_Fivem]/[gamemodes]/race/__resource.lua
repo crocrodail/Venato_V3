@@ -1,7 +1,6 @@
 resource_type 'gametype' { name = 'Race' }
 
 dependencies {
-    "spawnmanager",
     "mapmanager"
 }
 

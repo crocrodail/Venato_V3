@@ -110,13 +110,17 @@ function accessGranded(SteamId, source , balek)
         }
       }
       MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = getSteamID(source),  ["@pseudo"] = GetPlayerName(source)}, function()
+        
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
         TriggerClientEvent("Venato:Connection", source)
         TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
         ControlVisa(SteamId, source)
-        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo.." - ".. DataPlayers[source].NameJob ..")^7")
+        print(SteamId)
+        print(source)
+        TriggerEvent("police:checkIsCop", source)
       end)
     end
   end)
@@ -138,6 +142,8 @@ function ControlVisa(SteamId, source)
       local endv = result[1].visafin
       if tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
+        DataPlayers[source].VisaStart = start
+        DataPlayers[source].VisaEnd = endv
       elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60
@@ -211,6 +217,10 @@ function Venato.MoneyToPoid(money)
   return Venato.Round(money * 0.000075, 1)
 end
 
+function Venato.GetSteamID(source)
+  return getSteamID(source)
+end
+
 RegisterNetEvent("Venato:dump")
 AddEventHandler("Venato:dump", function(arg)
   local str = ''
@@ -253,3 +263,35 @@ function Venato.notify(source, notif)
     title = notif.title
   })
 end
+
+RegisterServerEvent('vnt:chestaddmonney')
+AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
+  local idChest = idChest
+  local qty = qty
+  local notif = "Le compte de votre entreprise est plein"
+  MySQL.Async.fetchAll("SELECT * FROM coffres WHERE Id=@idChest", {['@idChest'] = idChest}, function(result)
+    if (result[1]) then
+      local money = result[1].Argent
+      local pack = result[1].Pack
+      MySQL.Async.fetchScalar("SELECT ArgentMax FROM coffre_pack WHERE Id=@Idpack", {['@Idpack'] = pack}, function(result1)
+        if (result1) then
+          local moneyMax = result1
+          local update = qty + money
+          if update < moneyMax then
+            MySQL.Async.execute("UPDATE coffres SET Argent=@update WHERE Id=@idChest", {['@idChest'] = idChest, ['@update'] = update})
+          else            
+            local defaultNotification = {
+              type = "alert",
+              title ="Coffre",
+              logo = "https://i.ibb.co/fvtWrv3/icons8-spam-96px.png",
+              message = notif
+            }
+            Venato.notify(source, defaultNotification)
+          end
+        else
+        end
+      end)
+    else
+    end
+  end)
+end)

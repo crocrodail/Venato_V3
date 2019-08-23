@@ -36,6 +36,13 @@ client_script {
   '/vnt_AdvancedFuel/map.lua',
   '/vnt_AdvancedFuel/models_c.lua',
   '/vnt_AdvancedFuel/client.lua',
+  '/police/police_client.lua',
+  '/police/police_client_vehicle.lua',
+  '/police/police_client_veset.lua',
+  '/police/police_client_notif.lua',
+  '/police/police_client_cuffs.lua',
+	'/police/police_radar.lua',
+  '/police/police_Menu.lua',
 }
 
 server_script {
@@ -61,6 +68,9 @@ server_script {
   '/playerDeath/ServerDeath.lua',
   '/vnt_AdvancedFuel/config.lua',
   '/vnt_AdvancedFuel/server.lua',
+  '/police/police_server_cuffs.lua',
+	'/police/police_server.lua',
+  '/police/police_server_notif.lua',
 }
 
 files {
@@ -135,3 +145,4 @@ export 'GetBalancedList'
 export 'GetBalancedCatList'
 server_export 'GetDataPlayers'
 server_export 'ExportPaymentCB'
+server_export 'GetCauseOfDeath'

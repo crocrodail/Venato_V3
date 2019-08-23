@@ -1,3 +1,4 @@
+local ingame = 0
 DataUser = {}
 
 Citizen.CreateThread(function()
@@ -13,7 +14,7 @@ Citizen.CreateThread(function()
     --TriggerServerEvent("Venato:SyncData")
   --end
   while true do
-    Citizen.Wait(50)
+    Citizen.Wait(10)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
 
@@ -46,6 +47,7 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
     LoadBlips()
     Venato.LoadSkin(DataPlayers[source])
     Venato.LoadClothes()
+    TriggerServerEvent("GcPhone:Load")
   end
 end)
 
@@ -68,4 +70,21 @@ RegisterNetEvent("Venato:TestImage")
 AddEventHandler("Venato:TestImage", function()
   none()
   --https://openclassrooms.com/bundles/common/images/avatar_defaut.png
+end)
+
+RegisterNetEvent("Venato:ActuPlayer")
+AddEventHandler("Venato:ActuPlayer", function(nb)
+  ingame = nb
+end)
+
+local DiscordAppId = tonumber(GetConvar("RichAppId", "510934092821430282"))
+local DiscordAppAsset = GetConvar("RichAssetId", "discordicon")
+
+Citizen.CreateThread(function()
+	while true do
+  	  SetDiscordAppId(DiscordAppId)
+  	  SetDiscordRichPresenceAsset(DiscordAppAsset)
+		  SetRichPresence(--[[]VNT_ScriptCoreVenato:getPrenom().." "..exports.VNT_ScriptCoreVenato:getNom()..--[]]" "..ingame.." joueurs connectés")
+		  Citizen.Wait(10000)
+	end
 end)

@@ -3,8 +3,9 @@ local stade = 0
 local lastModel = 0
 
 local vehiclesUsed = {}
-
 local currentCans = 0
+
+local done = true
 
 
 Citizen.CreateThread(function()
@@ -81,13 +82,14 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		local isNearFuelStation, stationNumber = isNearStation()
+		local isNearElectricStation, stationElectric = isNearElectricStation()
 		local isNearFuelPStation, stationPlaneNumber = isNearPlaneStation()
 		local isNearFuelHStation, stationHeliNumber = isNearHeliStation()
 		local isNearFuelBStation, stationBoatNumber = isNearBoatStation()
 
 		------------------------------- VEHICLE FUEL PART -------------------------------
 
-		if(isNearFuelStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and not isElectricModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
+		if(done and isNearFuelStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and not isElectricModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
 			Info(settings[lang].openMenu)
 
 			if(IsControlJustPressed(1, 38)) then
@@ -138,49 +140,56 @@ Citizen.CreateThread(function()
 
 		------------------------------- ELECTRIC VEHICLE PART -------------------------------
 
-		if(isNearElectricStation() and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and isElectricModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
+		if(done and isNearElectricStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and isElectricModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
 			Info(settings[lang].openMenu)
 
-			if(IsControlJustPressed(1, 38)) then
-				menu = not menu
-				int = 0
-				--[[Menu.hidden = not Menu.hidden
+			if(IsControlJustPressed(1, 38)) then		
+				local veh = GetVehiclePedIsIn(Venato.GetPlayerPed(), 0)
+				local station = stationElectric
+				local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, station.x, station.y, station.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+				local streetName = GetStreetNameFromHashKey(streetA)
+				local stationPrice = 2
+				local essenceNeed = round(100 - GetVehicleFuelLevel(veh),0)
 
-				Menu.Title = "Station essence"
-				ClearMenu()
-				Menu.addButton("Eteindre le moteur", "stopMotor")]]--
-			end
+				if(menu) then
+					TriggerEvent('Menu:Close')
+				else
+					int = 0
 
-			if(menu) then
-				TriggerEvent("GUI:Title", settings[lang].buyFuel)
-
-				local maxEssence = 60-(essence/0.142)*60
-
-				TriggerEvent("GUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
-					int = cb
-				end)
-
-				TriggerEvent("GUI:Option", settings[lang].confirm, function(cb)
-					if(cb) then
-						menu = not menu
-
-						TriggerServerEvent("essence:buy", int, electricityPrice,true)
-					else
-
+					TriggerEvent('Menu:Clear')
+					TriggerEvent('Menu:Init', streetName, "Prix du carburant : ".. stationPrice .. "€/L", '#8E24AA99', "https://cdn-media.rtl.fr/cache/PBnHCxNdlifvlWMW_w38Vw/880v587-0/online/image/2018/1003/7795039479_un-automobiliste-fait-le-plein-a-une-station-essence-illustration.jpg")
+					TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)
+					TriggerEvent('Menu:AddButton', "Faire le plein : ".. essenceNeed .. "L -> ".. (essenceNeed*stationPrice) .. "€", "Refuel", { stationNumber = -1, liter = essenceNeed })
+					if(essenceNeed > 5) then
+						TriggerEvent('Menu:AddButton', "5 L -> ".. round(5*stationPrice,2) .. "€", "Refuel", { stationNumber = -1, liter = 5 })
 					end
-				end)
+					if(essenceNeed > 10) then
+						TriggerEvent('Menu:AddButton', "10 L -> ".. round(10*stationPrice,2) .. "€", "Refuel", { stationNumber = -1, liter = 10 })
+					end
+					if(essenceNeed > 25) then
+						TriggerEvent('Menu:AddButton', "25 L -> ".. round(25*stationPrice,2) .. "€", "Refuel", { stationNumber = -1, liter = 25 })
+					end
+					if(essenceNeed > 50) then
+						TriggerEvent('Menu:AddButton', "50 L -> ".. round(50*stationPrice,2) .. "€", "Refuel", { stationNumber = -1, liter = 50 })
+					end
+					if(essenceNeed > 75) then
+						TriggerEvent('Menu:AddButton', "75 L -> ".. round(75*stationPrice,2) .. "€", "Refuel", { stationNumber = -1, liter = 75 })
+					end
+					TriggerEvent('Menu:AddButton', "<span class='red--text'>Retour</span>", "HideMenu", data)
 
-				TriggerEvent("GUI:Update")
+					TriggerEvent('Menu:Open')
+				end
+				menu = not menu
 			end
 		else
-			if(isNearElectricStation()  and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and not isElectricModel()) then
+			if(isNearElectricStation  and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and not isElectricModel()) then
 				Info(settings[lang].fuelError)
 			end
 		end
 
 		------------------------------- BOAT PART -------------------------------
 
-		if(isNearFuelBStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
+		if(done and isNearFuelBStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
 			Info(settings[lang].openMenu)
 
 			if(IsControlJustPressed(1, 38)) then
@@ -216,7 +225,7 @@ Citizen.CreateThread(function()
 
 		------------------------------- PLANE PART -------------------------------
 
-		if(isNearFuelPStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and isPlaneModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
+		if(done and isNearFuelPStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and isPlaneModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
 			Info(settings[lang].openMenu)
 
 			if(IsControlJustPressed(1, 38)) then
@@ -258,7 +267,7 @@ Citizen.CreateThread(function()
 
 		------------------------------- HELI PART -------------------------------
 
-		if(isNearFuelHStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and isHeliModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
+		if(done and isNearFuelHStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and isHeliModel() and GetPedVehicleSeat(GetPlayerPed(-1)) == -1) then
 			Info(settings[lang].openMenu)
 
 			if(IsControlJustPressed(1, 38)) then
@@ -348,7 +357,7 @@ AddEventHandler("essence:refuel:ok", function(amountToEssence)
 	TriggerEvent('InteractSound_CL:PlayOnOne', "gas_start", 1.0)
 	Wait(2000)
 	local veh = GetVehiclePedIsIn(Venato.GetPlayerPed(), 0)
-	local done = false
+	done = false
 	if(veh ~= nil and GetVehicleNumberPlateText(veh) ~= nil) then		
 		while done == false do
 			Wait(0)
@@ -363,7 +372,7 @@ AddEventHandler("essence:refuel:ok", function(amountToEssence)
 				SetVehicleUndriveable(veh, true)
 				SetVehicleEngineOn(veh, false, false, false)
 				SetVehicleFuelLevel(veh,GetVehicleFuelLevel(veh) + 0.5)
-				Wait(900)
+				Wait(300)
 			else
 				done = true
 			end
@@ -438,7 +447,7 @@ function isNearElectricStation()
 
 	for _,items in pairs(electric_stations) do
 		if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 2) then
-			return true
+			return true, items
 		end
 	end
 
