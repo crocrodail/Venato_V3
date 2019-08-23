@@ -1,5 +1,5 @@
 -- Register the cuff command.
-RegisterCommand('police:cuff', function(source, target)
+RegisterCommand('police:cuff', function(target)
     -- If there is at least 1 argument passed to the command ("/cuff <id>" was used), we want to...
     print("cuff "..target)
     if target ~= nil then
