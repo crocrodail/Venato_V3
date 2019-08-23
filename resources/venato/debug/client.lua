@@ -84,6 +84,13 @@ RegisterCommand(
 )
 
 RegisterCommand(
+    "policeOn",
+    function(source, args, rawCommand)
+        ServiceOn()
+    end
+)
+
+RegisterCommand(
     "refuel",
     function(source, args, rawCommand)
         local car = GetVehiclePedIsIn(PlayerPedId(), false)

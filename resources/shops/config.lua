@@ -23,7 +23,8 @@ ConfigShop.spawnConfig = nil
 
 ConfigShop.shopsNotification = {
   title = "Magasin",
-  logo = "https://img.icons8.com/nolan/96/000000/online-store.png"
+  logo = "https://i.ibb.co/3vcgPWk/icons8-shopping-basket-96px.png",
+  timeout = 600
 }
 
 function ConfigShop.textInColor(color, msg)

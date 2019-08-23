@@ -24,4 +24,6 @@ files({
     'client/html/sounds/gas_start.wav',
     'client/html/sounds/gas_inprogress.wav',
 	'client/html/sounds/gas_end.wav',
+	'client/html/sounds/lock.wav',
+	'client/html/sounds/unlock.wav',
 })

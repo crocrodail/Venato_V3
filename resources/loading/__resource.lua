@@ -9,6 +9,7 @@ files {
     'config.js',
     'app.js',
     'config.css',
+    'imgs/logo.png', 
     'imgs/SCREEN_V_V2.png', 
     'imgs/SCREEN_V_V22.png', 
     'imgs/SCREEN_V_V23.png', 

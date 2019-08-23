@@ -13,7 +13,7 @@ Citizen.CreateThread(function()
     --TriggerServerEvent("Venato:SyncData")
   --end
   while true do
-    Citizen.Wait(50)
+    Citizen.Wait(10)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
 

@@ -110,13 +110,17 @@ function accessGranded(SteamId, source , balek)
         }
       }
       MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = getSteamID(source),  ["@pseudo"] = GetPlayerName(source)}, function()
+        
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
         TriggerClientEvent("Venato:Connection", source)
         TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
         ControlVisa(SteamId, source)
-        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo.." - ".. DataPlayers[source].NameJob ..")^7")
+        print(SteamId)
+        print(source)
+        TriggerEvent("police:checkIsCop", source)
       end)
     end
   end)
@@ -211,6 +215,10 @@ end
 
 function Venato.MoneyToPoid(money)
   return Venato.Round(money * 0.000075, 1)
+end
+
+function Venato.GetSteamID(source)
+  return getSteamID(source)
 end
 
 RegisterNetEvent("Venato:dump")

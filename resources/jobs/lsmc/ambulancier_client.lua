@@ -1,5 +1,6 @@
 ambulancierIsInService = false
 local AdminCheatIsOn = false
+local TimeToRespawn = 0
 
 local spawnAmbulancierVehicleChoix = {}
 local KEY_ENTER = 18
