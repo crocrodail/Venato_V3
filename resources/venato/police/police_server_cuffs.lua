@@ -1,10 +1,10 @@
 -- Register the cuff command.
-RegisterCommand('cuff', function(source, args)
+RegisterCommand('police:cuff', function(source, target)
     -- If there is at least 1 argument passed to the command ("/cuff <id>" was used), we want to...
-    print("cuff "..args[1])
-    if args[1] ~= nil then
+    print("cuff "..target)
+    if target ~= nil then
         -- ...cuff the player specified by the argument (server id)
-        TriggerClientEvent('anim:cuff', tonumber(args[1]))
+        TriggerClientEvent('anim:cuff', tonumber(target))
     
     -- There's no arguments passed ("/cuff" was used.) then....
     else

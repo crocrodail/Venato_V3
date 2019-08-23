@@ -568,7 +568,7 @@ end
 function POLICE_Cuffed()
 	t, distance = GetClosestPlayer()
 	if(distance ~= -1 and distance < 3) then
-		TriggerServerEvent("cuff", GetPlayerServerId(t))
+		TriggerServerEvent("police:cuff", GetPlayerServerId(t))
     else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
         Venato.notify(defaultNotification)
