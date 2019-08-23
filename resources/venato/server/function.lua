@@ -138,6 +138,8 @@ function ControlVisa(SteamId, source)
       local endv = result[1].visafin
       if tonumber(num) == 2 then
         DataPlayers[source].CanBeACitoyen = true
+        DataPlayers[source].VisaStart = start
+        DataPlayers[source].VisaEnd = endv
       elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60

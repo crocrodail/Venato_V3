@@ -10,6 +10,8 @@ client_script {
   '/delivery/client.lua',
   '/lsmc/ambulancier_client.lua',
   '/lsmc/ambulancier_Menu.lua',
+  '/mecano/mecano_client.lua',
+  '/mecano/mecano_Menu.lua',
 }
 
 server_script {
@@ -20,4 +22,5 @@ server_script {
   '/main/server/db.lua',
   '/delivery/server.lua',
   '/lsmc/ambulancier_server.lua',
+  '/mecano/mecano_server.lua',
 }

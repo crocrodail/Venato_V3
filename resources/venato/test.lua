@@ -10,6 +10,7 @@ local forklift = nil
 local BoxOnForklift = false
 local ClotheVehicle = false
 local BoxOnCamion = false
+	print("e")
 
 Citizen.CreateThread(function()
 	local ply = Venato.GetPlayerPed()
@@ -146,6 +147,7 @@ function DetacheBoxInForklift()
 end
 
 function OpenTestMenu()
+	print('"dsf"')
 	Menu.clearMenu()
 	Menu.setTitle("Test")
 	Menu.addButton("Spawn box", "CreateBox", nil)
@@ -234,7 +236,7 @@ end
 
 function stopeffect()
 	local coord = GetOffsetFromEntityInWorldCoords(Venato.GetPlayerPed(), 0, 2.0, 0)
-	bed = Venato.CreateObject("v_med_emptybed", coord["x"], coord["y"], coord["z"])
+	bed = Venato.CreateObject("xm_lab_chairarm_24", coord["x"], coord["y"], coord["z"])
 	AllObject[bed] = bed
 	PlaceObjectOnGroundProperly(bed)
 end

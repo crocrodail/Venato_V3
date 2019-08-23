@@ -113,7 +113,7 @@ function Venato.ClosePlayer()
       end
     end
   end
-  return GetPlayerServerId(closestPlayer), closestDistance
+  return GetPlayerServerId(closestPlayer), closestDistance, closestPlayer
 end
 
 function Venato.GetPlayerPed()

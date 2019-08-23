@@ -1,4 +1,4 @@
-function closures_ambulancier_server()
+
     local listMissionsAmbulancier = {}
     local listPersonnelAmbulancierActive = {}
     local CauseOfDeath = {}
@@ -267,56 +267,48 @@ function closures_ambulancier_server()
       local victime = idVictim
       TriggerClientEvent("Death:Reanimation", source, "medic", coord, heading)
       TriggerClientEvent("Death:Reanimation", victime, "victim")
+      removeClientAmbulancier(idVictim)
     end)
 
     RegisterNetEvent("ambulancier:GetInTableTheBlassure")
     AddEventHandler("ambulancier:GetInTableTheBlassure", function(sourcePatien)
       local source = source
       local sourcePatien = sourcePatien
-      if CauseOfDeath[sourcePatien] ~= nil then
-        TriggerClientEvent('chatMessage', source, 'Blessure', {255, 130, 130}, "Constat : " ..CauseOfDeath[sourcePatien])
-      else
-        TriggerClientEvent('chatMessage', source, 'Blessure', {255, 130, 130}, "information inconnu!")
-      end
-    end)
-
-    RegisterNetEvent("ambulancier:rescueserv")
-    AddEventHandler("ambulancier:rescueserv", function(sourcerecu)
-      TriggerClientEvent("ambulancier:rescue",sourcerecu)
-      --table.remove(CauseOfDeath,sourcerecu)
-      CauseOfDeath[sourcerecu] = nil
-    end)
-
-    RegisterServerEvent('ambulancier:rescueHim')
-    AddEventHandler('ambulancier:rescueHim',
-    function(id)
-        if(source == id)then
-          print("stop reanim tout seul frere")
-        else
-            TriggerClientEvent('ambulancier:rescue', listMissionsAmbulancier[id].id)
-            --table.remove(CauseOfDeath,listMissionsAmbulancier[id].id)
-            CauseOfDeath[listMissionsAmbulancier[id].id] = nil
-        end
-    end)
-
-
-    RegisterServerEvent('ambulancier:needs')
-    AddEventHandler('ambulancier:needs',
-    function()
-        local player = source
-        TriggerEvent('player_state:change', player, 50 , 50 , 50, 0, 0, 0, false)
-    end)
-    RegisterServerEvent('ambulancier:askSelfRespawn')
-    AddEventHandler('ambulancier:askSelfRespawn', function()
-        removeClientAmbulancier(source)
-        TriggerClientEvent('ambulancier:forceRespawn',source)
+      local cause = exports.venato:GetCauseOfDeath()
+      local notif = {
+        title= "Blessure",
+        type = "info", --  danger, error, alert, info, success, warning
+        logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
+        message = cause,
+      }
+      TriggerClientEvent("Venato:notify", source, notif)
     end)
 
     RegisterServerEvent('ambulancier:healHim')
-    AddEventHandler('ambulancier:healHim',
-    function(idToHeal)
-        TriggerClientEvent('ambulancier:HealMe',-1,idToHeal)
+    AddEventHandler('ambulancier:healHim', function(idToHeal)
+      TriggerClientEvent('ambulancier:HealMe',-1,idToHeal)
     end)
-end
 
-closures_ambulancier_server()
+    RegisterServerEvent('ambulancier:Makepayement')
+    AddEventHandler('ambulancier:Makepayement', function(target, price)
+      local price = price
+      local source = source
+      local target = target
+      local notif = {
+        title= "Blessure",
+        type = "info", --  danger, error, alert, info, success, warning
+        logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
+        message = "Vous venez d'être facturé du montant de "..price.." aux profit du LSMC",
+      }
+      if exports.venato:ExportPaymentCB(target, price) then
+        TriggerClientEvent("Venato:notify", target, notif)
+        notif.message = "Le client à bien payer ça facture !"
+        notif.type = "success"
+        TriggerClientEvent("Venato:notify", source, notif)
+      else
+        notif.type = "danger"
+        notif.message = "Le client n'est pas en messure de payer ça facture !"
+        TriggerClientEvent("Venato:notify", source, notif)
+        notif.message = "Vous n'avez pas les moyene de réglé la facture de ".. price .." € !"
+      end
+    end)

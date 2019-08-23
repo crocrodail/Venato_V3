@@ -49,5 +49,6 @@ AddEventHandler('playerDropped', function(reason)
 	else
 		print('^3Deconnection ('..reason.."): Non Enregistre : "..player.." ^7^7")
 	end
+	DataPlayers[source] = nil
 	ingame = ingame - 1
 end)

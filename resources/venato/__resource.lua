@@ -36,6 +36,7 @@ client_script {
   '/vnt_AdvancedFuel/map.lua',
   '/vnt_AdvancedFuel/models_c.lua',
   '/vnt_AdvancedFuel/client.lua',
+  --'test.lua',
 }
 
 server_script {
@@ -135,3 +136,4 @@ export 'GetBalancedList'
 export 'GetBalancedCatList'
 server_export 'GetDataPlayers'
 server_export 'ExportPaymentCB'
+server_export 'GetCauseOfDeath'

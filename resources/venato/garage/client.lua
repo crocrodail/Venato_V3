@@ -99,7 +99,7 @@ function MyCar(table)
   Menu.clearMenu()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "backToOpenGarage", "", "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   if Vehicule ~= nil then
-  for a, v in pairs(Vehicule) do    
+  for a, v in pairs(Vehicule) do
     if v.type == 1 then
       if v.state == 2 then
         ads = true
@@ -323,11 +323,9 @@ AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
     Citizen.Wait(2500)
   end
   if GetEntityModel(vehicle) ~= nil then
-    TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(vehicle))
     Venato.DeleteCar(vehicle)
   else
     local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
-    TriggerServerEvent("ivt:deleteVeh",GetVehicleNumberPlateText(current))
     Venato.DeleteCar(vehicle)
   end
   Menu.close()

@@ -317,11 +317,8 @@ AddEventHandler('race:weGotPorn', function()
 
     requestedGo = false
 
-    exports.spawnmanager:setAutoSpawn(false)
+  --  exports.spawnmanager:setAutoSpawn(false)
 
-    exports.spawnmanager:spawnPlayer(GetPlayerInteger(GetPlayerId()), function(spawnPoint)
-        spawnVehicle(spawnPoint)
-    end)
 
     TriggerServerEvent('race:requestCheckpoint', '1234')
 end)

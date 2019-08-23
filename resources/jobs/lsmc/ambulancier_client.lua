@@ -573,7 +573,6 @@ end
 function deleteVehicle()
     if myVehiculeEntity ~= nil then
         local plateOfVehicule = GetVehicleNumberPlateText(myVehiculeEntity)
-        TriggerServerEvent('ivt:deleteVeh', plateOfVehicule)
         DeleteVehicle(myVehiculeEntity)
         myVehiculeEntity = nil
     end
@@ -582,14 +581,6 @@ end
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-    		if IsControlJustPressed(1, Keys['F5']) then
-          if ambulancierIsInService then
-              TriggerServerEvent('ambulancier:requestMission')
-              openMenuGeneralAmbulancier()
-          else
-              showMessageInformation("~r~Vous devais etre en service pour accedez au menu")
-          end
-    		end
     		if IsControlJustPressed(1, 177) then
     			Menu.close()
     		end
@@ -603,6 +594,14 @@ Citizen.CreateThread(function()
             if ambulancierIsInService then
                 showInfoJobsAmbulancier()
             end
+            if IsControlJustPressed(1, Keys['F5']) then
+              if ambulancierIsInService then
+                  TriggerServerEvent('ambulancier:requestMission')
+                  openMenuGeneralAmbulancier()
+              else
+                  Venato.notifyError("Vous devais etre en service pour accedez au menu")
+              end
+        		end
         end
         if ambulancier_showHelp == true then
             --drawHelpJobAmbulancier()
@@ -744,41 +743,6 @@ AddEventHandler('ambulancier:MissionChange', function (missions)
     updateMenuMissionAmbulancier()
 end)
 
-
-local function showMessageInformation(message, duree)
-    duree = duree or 2000
-    ClearPrints()
-    SetTextEntry_2("STRING")
-    AddTextComponentString(message)
-    DrawSubtitleTimed(duree, 1)
-end
-
-RegisterNetEvent('ambulancier:openMenu')
-AddEventHandler('ambulancier:openMenu', function()
-    if ambulancierIsInService then
-        TriggerServerEvent('ambulancier:requestMission')
-        openMenuGeneralAmbulancier()
-    else
-        showMessageInformation("~r~Vous devais etre en service pour accedez au menu")
-    end
-end)
-
-RegisterNetEvent('ambulancier:callAmbulancier')
-AddEventHandler('ambulancier:callAmbulancier',function(data)
-    needAmbulance(data.type)
-    TimeToRespawn = TimeToRespawn + 60
-end)
-
-RegisterNetEvent('respawnamb:callaccept')
-AddEventHandler('respawnamb:callaccept',function()
-    TimeToRespawn = TimeToRespawn + 600
-end)
-
-RegisterNetEvent('ambu:stoptimer')
-AddEventHandler('ambu:stoptimer',function()
-    TimeToRespawn = 0
-end)
-
 RegisterNetEvent('ambulancier:callStatus')
 AddEventHandler('ambulancier:callStatus',function(status)
     ambulance_call_accept = status
@@ -796,22 +760,6 @@ AddEventHandler('ambulancier:cancelCall',function(data)
     TriggerServerEvent('ambulancier:cancelCall')
 end)
 
-RegisterNetEvent('ambulancier:selfRespawn')
-AddEventHandler('ambulancier:selfRespawn',function()
-  PlayerCanRespawnOrNot()
-    --TriggerServerEvent('ambulancier:askSelfRespawn')
-end)
-
-function PlayerCanRespawnOrNot()
-  if TimeToRespawn == 0 or AdminCheatIsOn == true then
-    TriggerServerEvent('ambulancier:askSelfRespawn')
-    TriggerEvent('tddeath:askSelfRespawn')
-    TimeToRespawn = 0
-  else
-    TriggerEvent("es_freeroam:notify", "CHAR_MP_STRIPCLUB_PR", 1, "Venato", false, "Vous devez attendre "..TimeToRespawn.." sec pour pouvoir respawn.")
-  end
-end
-
 RegisterNetEvent('ambulancier:HealMe')
 AddEventHandler('ambulancier:HealMe',
 function (idToHeal)
@@ -825,27 +773,23 @@ AddEventHandler('ambulancier:Heal',
 function()
         local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-          if GetEntityHealth(GetPlayerPed(closestPlayer)) ~= 0 then
-            TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
-            Citizen.Wait(8000)
-            ClearPedTasks(GetPlayerPed(-1));
-            TriggerServerEvent('ambulancier:healHim',closestPlayer)
-          else
-            showMessageInformation("Vous ne pouvez pas faire soin sur une personnes dans le coma.")
-          end
+          TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
+          Citizen.Wait(8000)
+          ClearPedTasks(GetPlayerPed(-1));
+          TriggerServerEvent('ambulancier:healHim',closestPlayer)
         else
-            showMessageInformation(TEXTAMBUL.NoPatientFound)
+          Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
 end)
 
 RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',
 function()
-        local closestPlayer, closestDistance = Venato.ClosePlayer()
+        local closestPlayer, closestDistance, a = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-          TriggerServerEvent('ambulancier:Reanimation',GetPlayerServerId(closestPlayer), GetEntityCoords(closestPlayer, true), GetEntityHeading(closestPlayer))
+          TriggerServerEvent('ambulancier:Reanimation', closestPlayer, GetEntityCoords(a, true), GetEntityHeading(a))
         else
-            showMessageInformation(TEXTAMBUL.NoPatientFound)
+            Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
 end)
 
@@ -854,19 +798,24 @@ AddEventHandler('ambulancier:getBlassure',
 function()
         local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-            TriggerServerEvent('ambulancier:GetInTableTheBlassure',GetPlayerServerId(closestPlayer))
+            TriggerServerEvent('ambulancier:GetInTableTheBlassure', closestPlayer)
         else
-            showMessageInformation(TEXTAMBUL.NoPatientFound)
+            Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
 end)
 
-RegisterNetEvent('facture:amb')
-AddEventHandler('facture:amb', function()
+RegisterNetEvent('ambulancier:MakePay')
+AddEventHandler('ambulancier:MakePay', function()
         local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-            TriggerEvent("fact:give", GetPlayerServerId(closestPlayer))
+            local price = Venato.OpenKeyboard('', '0', 10,"Montant du paiement")
+            if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
+        			TriggerServerEvent("ambulancier:Makepayement", ClosePlayer, montant)
+        		else
+        			Venato.notifyError("Le montant indiqué est erroné.")
+        		end
         else
-            TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Pas de joueur proche!")
+            Venato.notifyError("Pas de joueur proche!")
         end
 end)
 --====================================================================================
