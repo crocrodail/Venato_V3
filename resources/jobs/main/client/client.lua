@@ -33,18 +33,18 @@ function Jobs.Commands(job)
         IsControlJustReleased(1, Keys["BACKSPACE"]) or
           IsControlJustReleased(1, Keys["RIGHTMOUSE"])
       ) then
-        TriggerEvent('Menu:Close')
+        Menu.close()
         JobsConfig.isMenuOpen = false
       end
       if IsControlJustReleased(1, Keys["F2"]) and JobsConfig.inService then
         JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
         if not JobsConfig.isMenuOpen then
-          TriggerEvent('Menu:Close')
+          Menu.close()
         else
-          TriggerEvent('Menu:Clear')
-          TriggerEvent('Menu:Open')
-          TriggerEvent('Menu:Title', job.name)
-          TriggerEvent('Menu:SubTitle', "¿ Vas y KesTuVeFaire ?")
+          Menu.clearMenu()
+          Menu.open()
+          Menu.setTitle(job.name)
+          Menu.setSubtitle("¿ Vas y KesTuVeFaire ?")
           _G[job.Class].showMenu()
         end
       end
@@ -53,15 +53,14 @@ function Jobs.Commands(job)
       if JobsConfig.isOnServiceLocation and IsControlJustReleased(1, Keys["E"]) then
         JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
         if not JobsConfig.isMenuOpen then
-          TriggerEvent('Menu:Close')
+          Menu.close()
         else
-          TriggerEvent('Menu:Clear')
-          TriggerEvent('Menu:Open')
-          TriggerEvent('Menu:Title', job.name)
-          TriggerEvent('Menu:SubTitle', "Que puis-je pour vous ?")
-          TriggerEvent('Menu:AddButton', JobsConfig.inService and "Quitter le service" or "Prendre le service",
-            "toggleService", job)
-          TriggerEvent('Menu:AddButton', "Récupérer sa paie", "takeSalary")
+          Menu.clearMenu()
+          Menu.open()
+          Menu.setTitle(job.name)
+          Menu.setSubtitle("Que puis-je pour vous ?")
+          Menu.AddButton(JobsConfig.inService and "Quitter le service" or "Prendre le service", "toggleService", job)
+          Menu.AddButton("Récupérer sa paie", "takeSalary")
         end
       end
 
@@ -83,13 +82,13 @@ function toggleService(job)
     end
     JobTools.hideServiceMessage()
   end)
-  TriggerEvent('Menu:Close')
+  Menu.close()
   JobsConfig.isMenuOpen = false
 end
 
 function takeSalary()
   TriggerServerEvent("Jobs:askSalary")
-  TriggerEvent('Menu:Close')
+  Menu.close()
   JobsConfig.isMenuOpen = false
 end
 

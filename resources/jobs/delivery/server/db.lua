@@ -12,7 +12,7 @@
 DeliveryJobRequests = {}
 
 DeliveryJobRequests.getWarehouses = "SELECT * FROM warehouses"
-DeliveryJobRequests.getWarehouseItems = "SELECT id FROM items WHERE warehouseId=@Id"
+DeliveryJobRequests.getWarehouseItems = "SELECT id, libelle, Picture FROM items WHERE warehouseId=@Id"
 
 -- ============= --
 -- DB functions  --
@@ -31,12 +31,7 @@ function getSteamID(source)
 end
 
 function DeliveryJobDbFunctions.getWarehouseItems(warehouseId)
-  local warehouseItems = {}
-  local result = MySQL.Sync.fetchAll(DeliveryJobRequests.getWarehouseItems, { ["@Id"] = warehouseId })
-  for _, warehouseItem in ipairs(result) do
-    table.insert(warehouseItems, warehouseItem.id)
-  end
-  return warehouseItems
+  return MySQL.Sync.fetchAll(DeliveryJobRequests.getWarehouseItems, { ["@Id"] = warehouseId })
 end
 
 function DeliveryJobDbFunctions.getWarehouses()
@@ -57,7 +52,7 @@ function DeliveryJobDbFunctions.getWarehouses()
         ["z"] = warehouse.positionToZ,
         ["nom"] = "Sortir de l'entrepôt"
       },
-      itemIds = DeliveryJobDbFunctions.getWarehouseItems(warehouse.id)
+      items = DeliveryJobDbFunctions.getWarehouseItems(warehouse.id)
     }
   end
   return warehouses

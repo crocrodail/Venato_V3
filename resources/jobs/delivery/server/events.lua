@@ -9,5 +9,5 @@
 RegisterNetEvent("DeliveryJob:getWarehouses")
 
 AddEventHandler("DeliveryJob:getWarehouses", function()
-  TriggerClientEvent("DeliveryJob:getWarehouses:cb", source, DeliveryJobDbFunctions.getWarehouseItems())
+  TriggerClientEvent("DeliveryJob:getWarehouses:cb", source, DeliveryJobDbFunctions.getWarehouses())
 end)

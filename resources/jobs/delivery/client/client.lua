@@ -7,6 +7,20 @@
 --]]
 DeliveryJob = {}
 
+-- ACTIONS message
+local TAKE_TRUNK_ACTION_MSG = "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette"
+local LOAD_BOXE_IN_TRUNK_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour charger la caisse."
+local PUT_BOX_ON_GROUND_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour poser par terre."
+local PUT_BOX_ON_TRUNK_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour la mettre dans le camion."
+local OPEN_ITEMS_MENU_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour récupérer des marchandises."
+local PUT_ITEMS_IN_BOX_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour mettre vos marchandises dans la caisse"
+
+-- OTHERS message
+local LOAD_TRUNK_MSG = "Veuillez charger le camion avec la caisse pour commencer."
+local LOAD_BOX_MSG = "Veuillez remplir la caisse avec les marchandises dans les entrepots ~BLIP_478~"
+local TAKE_IN_BOX_MSG = "Veuillez prendre les items dans les caisses"
+local DELIVERY_MSG = "veuillez livrer votre chargement à destination ~BLIP_119~"
+
 function DeliveryJob.isEnabled()
   return DeliveryJobConfig.enabled
 end
@@ -41,14 +55,13 @@ end
 
 function takeMission(mission)
   print('JOBS: Mission taken !' .. mission)
-  TriggerServerEvent("Venato:dump", { "Mission taken !", mission })
   DeliveryJobConfig.currentStep = 1
   JobsConfig.isMenuOpen = false
 end
 
 function DeliveryJob.showMenu()
   if DeliveryJobConfig.currentStep == nil then
-    TriggerEvent('Menu:AddButton', "Effectuer la livraison", "takeMission", "toto")
+    Menu.AddButton("Effectuer la livraison", "takeMission", "toto")
   end
 end
 
@@ -74,7 +87,7 @@ function DeliveryJob.mainLoop()
         if distance < 1.5 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player,
           false)) == GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then
           DeliveryJobConfig.onTrunkDrop = dropPoint
-          TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette")
+          Venato.InteractTxt(TAKE_TRUNK_ACTION_MSG)
           interactTxt = true
         elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
           DeliveryJobConfig.onTrunkDrop = nil
@@ -87,7 +100,7 @@ function DeliveryJob.mainLoop()
             if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY)
             then
-              TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour charger la caisse.")
+              Venato.InteractTxt(LOAD_BOXE_IN_TRUNK_ACTION_MSG)
               interactTxt = true
               if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                 takeBox(player)
@@ -104,7 +117,7 @@ function DeliveryJob.mainLoop()
               true)
             if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
-              TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour poser par terre.")
+              Venato.InteractTxt(PUT_BOX_ON_GROUND_ACTION_MSG)
               interactTxt = true
               if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                 dropBoxInForklift(player)
@@ -120,7 +133,7 @@ function DeliveryJob.mainLoop()
             true)
           if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
             false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
-            TriggerEvent("Venato:InteractTxt", "Appuyez sur la touche ~INPUT_CONTEXT~ pour la mettre dans le camion.")
+            Venato.InteractTxt(PUT_BOX_ON_TRUNK_ACTION_MSG)
             interactTxt = true
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
               loadOnTrunk()
@@ -135,12 +148,38 @@ function DeliveryJob.mainLoop()
 
         if not interactTxt then
           if DeliveryJobConfig.currentStep == 1 then
-            TriggerEvent("Venato:InteractTxt", "Veuillez charger le camion avec la caisse pour commencer.")
+            Venato.InteractTxt(LOAD_TRUNK_MSG)
           elseif DeliveryJobConfig.currentStep == 2 then
-            TriggerEvent("Venato:InteractTxt",
-              "Veuillez remplir la caisse avec les marchandises dans les entrepots ~BLIP_478~")
+            if not DeliveryJobConfig.inWarehouse then
+              if DeliveryJobConfig.globalBox ~= nil then
+                Venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
+                if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                  putItemInTrunk()
+                end
+              else
+                Venato.InteractTxt(LOAD_BOX_MSG)
+              end
+            else
+              if DeliveryJobConfig.globalBox ~= nil then
+                Venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
+                if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                  JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
+                  if not JobsConfig.isMenuOpen then
+                    Menu.close()
+                  else
+                    Menu.clearMenu()
+                    Menu.open()
+                    Menu.setTitle("Marchandises")
+                    Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
+                    showWarehouseItemButtons()
+                  end
+                end
+              else
+                Venato.InteractTxt(TAKE_IN_BOX_MSG)
+              end
+            end
           elseif DeliveryJobConfig.currentStep == 3 then
-            TriggerEvent("Venato:InteractTxt", "veuillez livrer votre chargement à destination ~BLIP_119~")
+            Venato.InteractTxt(DELIVERY_MSG)
           end
         end
       end
@@ -156,12 +195,13 @@ function DeliveryJob.checkLoop()
     if JobsConfig.inService then
       showBlip()
       local playerPos = GetEntityCoords(player)
-      local obj = GetClosestObjectOfType(playerPos.x, playerPos.y, playerPos.z, 10.0,
+      local obj = GetClosestObjectOfType(playerPos.x, playerPos.y, playerPos.z,
+        DeliveryJobConfig.inWarehouse and 1. or 10.0,
         GetHashKey(DeliveryJobConfig.BOX_KEY), false, true, true)
       local veh = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 10.0,
         GetHashKey(DeliveryJobConfig.TRUNK_KEY),
         127)
-      if obj then
+      if obj > 0 then
         local x1, y1, z1 = {}
         local x2, y2, z2 = {}
         if DeliveryJobConfig.boxOnTrunk then
@@ -173,9 +213,9 @@ function DeliveryJob.checkLoop()
         end
         DeliveryJobConfig.boxCoord = { { x = x1, y = y1, z = z1 }, { x = x2, y = y2, z = z2 } }
         DeliveryJobConfig.globalBox = obj
-        --else
-        --  DeliveryJobConfig.globalBox = nil
-        --  DeliveryJobConfig.boxCoord = {}
+      else
+        DeliveryJobConfig.globalBox = nil
+        DeliveryJobConfig.boxCoord = {}
       end
       if veh ~= 0 then
         local x3, y3, z3 = table.unpack(GetOffsetFromEntityInWorldCoords(veh, 0, -5.5, -1.5))
@@ -185,20 +225,26 @@ function DeliveryJob.checkLoop()
         DeliveryJobConfig.trunkCoord = {}
         DeliveryJobConfig.globalTrunk = nil
       end
+
+      -- Manage warehouses content
+      local playerPos = GetEntityCoords(player)
+      if playerPos.z <= -38 and playerPos.x >= 992.29 and playerPos.x <= 1027.76 and playerPos.y >= -3113.05 and playerPos .y <= -3090.70 then
+        showBigWarehouseBoxes()
+        DeliveryJobConfig.inWarehouse = "Misc"
+      elseif playerPos.z <= -38 and playerPos.x >= 1048.35 and playerPos.x <= 1073.10 and playerPos.y >= -3110.9 and playerPos .y <= -3094.4 then
+        showMiddleWarehouseBoxes()
+        DeliveryJobConfig.inWarehouse = "Foods"
+      elseif playerPos.z <= -38 and playerPos.x >= 1088.27 and playerPos.x <= 1105.1 and playerPos.y >= -3103.0 and playerPos .y <= -3095.5 then
+        showLittleWarehouseBoxes()
+        DeliveryJobConfig.inWarehouse = "Juices"
+      else
+        hideWarehouseBoxes()
+        DeliveryJobConfig.inWarehouse = nil
+      end
     else
       hideBlip()
     end
 
-    local playerPos = GetEntityCoords(player)
-    if playerPos.z <= -38 and playerPos.x >= 992.29 and playerPos.x <= 1027.76 and playerPos.y >= -3113.05 and playerPos .y <= -3090.70 then
-      showBigWarehouseBoxes()
-    elseif playerPos.z <= -38 and playerPos.x >= 1048.35 and playerPos.x <= 1073.10 and playerPos.y >= -3110.9 and playerPos .y <= -3094.4 then
-      showMiddleWarehouseBoxes()
-    elseif playerPos.z <= -38 and playerPos.x >= 1088.27 and playerPos.x <= 1105.1 and playerPos.y >= -3103.0 and playerPos .y <= -3095.5 then
-      showLittleWarehouseBoxes()
-    else
-      hideWarehouseBoxes()
-    end
   end
 end
 
@@ -206,15 +252,15 @@ function showBlip()
   if #DeliveryJobConfig.blips > 0 then
     return
   end
+
   local defaultDestinations = DeliveryJobConfig.defaultDropLocations
   local defaultOrders = DeliveryJobConfig.defaultOrders
   local warehouses = DeliveryJobConfig.warehouses
 
   local mission = DeliveryJobConfig.defaultMissions[1]
 
-  local teleportAction = "Teleport:SetTeleport"
   for warehouseName, warehouse in pairs(warehouses) do
-    TriggerEvent(teleportAction,
+    TriggerEvent("Teleport:SetTeleport",
       warehouseName,
       warehouse
     )
@@ -223,7 +269,7 @@ function showBlip()
 
   addTrunkDropsBlip(DeliveryJobConfig.trunkDrops['box'])
 
-  if mission then
+  if mission and DeliveryJobConfig.currentStep == 3 then
     local destination = defaultDestinations[mission.targetId]
     local order = defaultOrders[mission.orderId]
     addDestinationBlip(destination)
@@ -233,6 +279,10 @@ end
 function hideBlip()
   for _, blip in pairs(DeliveryJobConfig.blips) do
     RemoveBlip(blip)
+  end
+  local warehouses = DeliveryJobConfig.warehouses
+  for warehouseName, _ in pairs(warehouses) do
+    TriggerEvent("Teleport:RemoveTeleport", warehouseName)
   end
   DeliveryJobConfig.blips = {}
 end
@@ -456,4 +506,40 @@ function hideWarehouseBoxes()
     DeleteEntity(box)
   end
   DeliveryJobConfig.boxes = {}
+end
+
+function showWarehouseItemButtons()
+  print(Venato.dump(DeliveryJobConfig.warehouses))
+  print(Venato.dump(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse]))
+  print(Venato.dump(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse].items))
+  for _, item in pairs(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse]["items"]) do
+    Menu.addButton2(item.libelle, "takeItem", item, '', item.Picture)
+  end
+  Menu.CreateMenu()
+end
+
+function takeItem(item)
+  local nb = Venato.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
+  if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
+    qty = DeliveryJobConfig.itemsTaken[item.id] or 0
+    qty = qty + tonumber(nb)
+    DeliveryJobConfig.itemsTaken[item.id] = qty
+    JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez maintenant " .. qty .. " " .. item .libelle .. "</span"
+    Venato.notify(JobsConfig.jobsNotification)
+  else
+    JobsConfig.jobsNotification.message = "<span class='red--text'>Une erreur dans le nombre saisi</span>"
+    Venato.notify(JobsConfig.jobsNotification)
+  end
+end
+
+function putItemInTrunk(item)
+  for id, qty in pairs(DeliveryJobConfig.itemsTaken) do
+    qty = DeliveryJobConfig.itemsTrunk[id] or 0
+    qty = qty + tonumber(nb)
+    DeliveryJobConfig.itemsTrunk[id] = qty
+  end
+  DeliveryJobConfig.itemsTaken = {}
+  JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchendises dans le camion</span"
+  Venato.notify(JobsConfig.jobsNotification)
+  DeliveryJobConfig.currentStep = 3
 end

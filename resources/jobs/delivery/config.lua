@@ -33,7 +33,9 @@ DeliveryJobConfig.globalBox = nil
 DeliveryJobConfig.trunkCoord = {}
 DeliveryJobConfig.globalTrunk = nil
 
-DeliveryJobConfig.currentStep = nil
+DeliveryJobConfig.currentStep = 2
+DeliveryJobConfig.itemsTaken = {}
+DeliveryJobConfig.itemsTrunk = {}
 
 DeliveryJobConfig.defaultDropLocations = {
   ["Commissariat"] = { ["Name"] = "Commissariat",
@@ -51,6 +53,7 @@ DeliveryJobConfig.defaultMissions = {
 }
 
 DeliveryJobConfig.warehouses = {}
+DeliveryJobConfig.inWarehouse = false
 
 DeliveryJobConfig.trunkDrops = {
   ["trunk"] = { ["x"] = -396.412, ["y"] = -2835.64, ["z"] = 6.0, ["heading"] = 315.49 },
