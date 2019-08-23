@@ -346,7 +346,6 @@ function updateMenuMissionPolice()
     menu = {['Title'] = 'Missions en cours',  ['SubMenu'] = {
         ['Title'] = 'Missions en cours', ['Items'] = items
     }}
-    updateMenuPolice(menu)
 end
 
 function callPolice(type)
@@ -601,10 +600,14 @@ function POLICE_Crocheter()
 end
 
 function POLICE_PutInVehicle()
-	t, distance = GetClosestPlayer()
+	local t, distance = GetClosestPlayer()
+    local pos = GetEntityCoords(GetPlayerPed(-1))
+    local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+    local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
 	if(distance ~= -1 and distance < 3) then
-		local v = GetVehiclePedIsIn(GetPlayerPed(-1), true)
-		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), v)
+		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), vehicleHandle)
 	else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
         Venato.notify(defaultNotification)

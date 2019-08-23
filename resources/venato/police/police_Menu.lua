@@ -24,9 +24,6 @@ local UrgencePoliceMenu = {['Title'] = 'Missions en cours',  ['SubMenu'] = {
         {['Title'] = 'Fermer'},
 }}}
 
-function updateMenuPolice(newUrgenceMenu)
-    itemMenuGeneralPolice.Items[1] = newUrgenceMenu
-end
 
 function openMenuPoliceGeneral(rank)
     TriggerEvent('Menu:Clear')

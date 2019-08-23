@@ -92,9 +92,9 @@ end)
 
 RegisterNetEvent('police:unseatme')
 AddEventHandler('police:unseatme', function(t)
-	local ped = GetPlayerPed(t)
+	local ped = GetPlayerPed(-1)
 	ClearPedTasksImmediately(ped)
-	plyPos = GetEntityCoords(GetPlayerPed(-1),  true)
+	plyPos = GetEntityCoords(ped,  true)
 	local xnew = plyPos.x+2
 	local ynew = plyPos.y+2
 
@@ -103,14 +103,8 @@ end)
 
 RegisterNetEvent('police:forcedEnteringVeh')
 AddEventHandler('police:forcedEnteringVeh', function(veh)	
-		local pos = GetEntityCoords(GetPlayerPed(-1))
-		local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
-
-		local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
-		local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-
 		if vehicleHandle ~= nil then
-			SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 1)
+			SetPedIntoVehicle(GetPlayerPed(-1), veh, 1)
 		end
 end)
 
