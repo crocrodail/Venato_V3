@@ -14,16 +14,19 @@ Menu = {}
 Menu.hidden = true
 
 function Menu.open()
+	print("open")
 	TriggerEvent('Menu:Open')
 	Menu.hidden = false
 end
 
 function Menu.close()
+	print("close")
 	TriggerEvent('Menu:Close')
 	Menu.hidden = true
 end
 
 function Menu.toggle()
+	print("toggle")
 	if Menu.hidden then
 		Menu.open()
 	else

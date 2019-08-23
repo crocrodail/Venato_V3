@@ -72,7 +72,7 @@ AddEventHandler('police:noLongerCop', function()
 		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(existingVeh))
 		existingVeh = nil
 	end
-  ServiceOff()  
+  ServiceOff()
 end)
 
 
@@ -102,7 +102,7 @@ AddEventHandler('police:unseatme', function(t)
 end)
 
 RegisterNetEvent('police:forcedEnteringVeh')
-AddEventHandler('police:forcedEnteringVeh', function()	
+AddEventHandler('police:forcedEnteringVeh', function()
   local pos = GetEntityCoords(GetPlayerPed(-1))
   local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
 
@@ -142,12 +142,12 @@ end
 
 function POLICE_removeOrPlaceCone()
   local mePed = GetPlayerPed(-1)
-  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0) 
+  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0)
   local cone = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_roadcone02a"), false, false, false)
-  if cone ~= 0 then   
+  if cone ~= 0 then
     DeleteObject(cone)
-  else    
-    local object = Venato.CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z)    
+  else
+    local object = Venato.CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z)
     SetEntityRotation(objet, GetEntityRotation(Venato.GetPlayerPed()))
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
@@ -163,15 +163,15 @@ end
 
 function POLICE_removeOrPlaceBarrier()
   local mePed = GetPlayerPed(-1)
-  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0) 
+  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0)
   local barriere = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_barrier_work05"), false, false, false)
-  
+
   if barriere ~= 0 then
     DeleteObject(barriere)
   else
-    local object = Venato.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)	
+    local object = Venato.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)
     local rot = GetEntityRotation(Venato.GetPlayerPed())
-    SetEntityRotation(objet, rot.x, rot.y, rot.z)    
+    SetEntityRotation(objet, rot.x, rot.y, rot.z)
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
     SetEntityInvincible(object , false)
@@ -195,7 +195,7 @@ function POLICE_removeOrPlaceHerse()
   else
   local object = Venato.CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z)
   local rot = GetEntityRotation(Venato.GetPlayerPed())
-  SetEntityRotation(objet, rot.x, rot.y, rot.z)    
+  SetEntityRotation(objet, rot.x, rot.y, rot.z)
   FreezeEntityPosition(object, true)
 	PlaceObjectOnGroundProperly(object)
 	SetEntityDynamic(object , true)
@@ -367,7 +367,7 @@ end
 
 function ServiceOn()
 	isCopInService = true
-  TriggerServerEvent("police:takeService")  
+  TriggerServerEvent("police:takeService")
   TriggerEvent('Menu:Close')
   menuPoliceVestiaire()
 end
@@ -382,7 +382,7 @@ function ServiceOff()
         RemoveBlip(existingBlip)
     end
   blipsCops = {}
-  civil()  
+  civil()
   TriggerEvent('Menu:Close')
 end
 
@@ -491,7 +491,7 @@ function menuPoliceVestiaire()
     local power = getPowerFromRole(rank)
 
     TriggerEvent('Menu:AddButton2', "<span class='red--text'>Quitter son service</span>", "ServiceOff", "", "", "https://i.ibb.co/c393rDv/icons8-export-96px.png")
-    
+
     TriggerEvent('Menu:AddButton2', "Equiper tenue standard", "cadetunif", "", "", "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png")
 
     if power >= 2 then --Agent
@@ -517,7 +517,7 @@ function menuPoliceVestiaire()
     TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet fluo", "gilletfluos", "", "", "https://i.ibb.co/19Sn2kk/yellow-jacket.png")
     TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet pare-balle", "gillets", "", "", "https://i.ibb.co/jv1v2ty/bullet-proof-jacket.png")
 
-    
+
     if power >= 2 then --Agent
       TriggerEvent('Menu:AddButton2', "Equiper / Retirer une ceinture", "ceintures", "", "", "https://i.ibb.co/hFspMWG/icons8-mens-belt-96px.png")
       TriggerEvent('Menu:AddButton2', "Equiper / Retirer un képi", "kepis", "", "", "https://i.ibb.co/1n2X8rb/icons8-air-pilot-hat-96px-1.png")
@@ -605,7 +605,6 @@ end
 function ravi(a)
 SetPedAmmo(GetPlayerPed(-1),a[1],math.ceil(a[2]+a[3]))
 --TriggerServerEvent("project:armeActu")
-Menu.hidden = true
 end
 
 function spawnveh(namevehicul)
@@ -662,13 +661,13 @@ function spawnveh(namevehicul)
   end
 end
 
-function armur()  
+function armur()
   TriggerEvent('Menu:Clear')
   TriggerEvent('Menu:Init', "Armurerie", "<small>"..rank.."</small>", '#1565C099', "http://media-cdn.tripadvisor.com/media/photo-s/03/45/be/05/american-shooters.jpg")
-   
+
   TriggerEvent('Menu:AddButton2', "Equipement standard", "standardEquip", "", "", "")
   local power = getPowerFromRole(rank)
-  
+
   if power >= 2 then --Agent
     TriggerEvent('Menu:AddButton2', "Pistolet calibre 50", "calibre50", "", "", "")
     if power >= 3 then
@@ -682,7 +681,7 @@ function armur()
     end
   end
   TriggerEvent('Menu:AddButton2', "Poser le matériel", "dropWeapons", "", "", "")
-  
+
   TriggerEvent('Menu:CreateMenu')
   TriggerEvent('Menu:Open')
 end
@@ -695,29 +694,29 @@ Citizen.CreateThread(function()
           if IsControlJustPressed(1, 170) then
       			TriggerEvent('Menu:Close')
           end
-          
+
       		if IsControlJustPressed(1, 177) then
       			TriggerEvent('Menu:Close')
           end
-          
+
       		if IsControlJustPressed(1, 311) then
       			TriggerEvent('Menu:Close')
           end
-          
+
       		if IsControlJustPressed(1, 166) then
       			TriggerEvent('Menu:Close')
           end
-          
+
           if(isNearArmurie()) then
     				DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour ouvrir l'armurerie",0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
     				if IsControlJustPressed(1,51) then
               armur()
     				end
-    			end   
+    			end
 
           if(isNearTakeService()) then
             DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le vestiaire',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
-            if IsControlJustPressed(1,51) then         
+            if IsControlJustPressed(1,51) then
               ped = GetPlayerPed(-1)
               menuPoliceVestiaire()
             end
@@ -778,13 +777,13 @@ Citizen.CreateThread(function()
                         end
                       end
                     end
-                  end                  
+                  end
                   TriggerEvent('Menu:CreateMenu')
                   TriggerEvent('Menu:Open')
                 end
               end
             end
-          end		
+          end
     end
   end
 end)
@@ -906,14 +905,14 @@ function swat()
       { 11, 42, 0 } -- chemise/pull/veste
     }
 	end
-	
+
   SetComponent(components)
   SetProps(props)
 
 end
 
 function civil()
-  
+
 	local props = {
     { 0, -1, 0 }, -- casque
     { 1, -1, 0 }, -- lunette
@@ -922,14 +921,14 @@ function civil()
   }
 
   local components = {
-    { 1, 0, 0 }, -- masque    
+    { 1, 0, 0 }, -- masque
   }
 
   Venato.LoadClothes()
 
   SetComponent(components)
   SetProps(props)
- 
+
 end
 
 function capitaine()
@@ -1233,6 +1232,6 @@ Citizen.CreateThread(function()
               SetVehicleTyreBurst(veh, 6, true, 1000.0)
               SetVehicleTyreBurst(veh, 7, true, 1000.0)
           end
-      end      
+      end
   end
 end)
