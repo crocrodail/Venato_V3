@@ -566,8 +566,11 @@ function POLICE_Check()
 end
 
 function POLICE_Cuffed()
-	t, distance = GetClosestPlayer()
-	if(distance ~= -1 and distance < 3) then
+    t, distance = GetClosestPlayer()
+    print("Cuffed : ".. t)
+    print("Cuffed distance : ".. distance)
+    if(distance ~= -1 and distance < 3) then
+        print("Cuffed call server")
 		TriggerServerEvent("police:cuff", GetPlayerServerId(t))
     else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
