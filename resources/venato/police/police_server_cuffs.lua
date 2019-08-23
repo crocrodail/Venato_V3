@@ -1,6 +1,7 @@
 -- Register the cuff command.
 RegisterCommand('cuff', function(source, args)
     -- If there is at least 1 argument passed to the command ("/cuff <id>" was used), we want to...
+    print("cuff "..args[1])
     if args[1] ~= nil then
         -- ...cuff the player specified by the argument (server id)
         TriggerClientEvent('anim:cuff', tonumber(args[1]))
