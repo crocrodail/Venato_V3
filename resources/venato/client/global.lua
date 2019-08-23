@@ -1,4 +1,4 @@
-local ingame
+local ingame = 0
 DataUser = {}
 
 Citizen.CreateThread(function()
