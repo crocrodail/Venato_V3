@@ -36,7 +36,7 @@ function Jobs.Commands(job)
         Menu.close()
         JobsConfig.isMenuOpen = false
       end
-      if IsControlJustReleased(1, Keys["F2"]) and JobsConfig.inService then
+      if IsControlJustReleased(1, Keys["F5"]) and JobsConfig.inService then
         JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
         if not JobsConfig.isMenuOpen then
           Menu.close()
@@ -59,8 +59,8 @@ function Jobs.Commands(job)
           Menu.open()
           Menu.setTitle(job.name)
           Menu.setSubtitle("Que puis-je pour vous ?")
-          Menu.AddButton(JobsConfig.inService and "Quitter le service" or "Prendre le service", "toggleService", job)
-          Menu.AddButton("Récupérer sa paie", "takeSalary")
+          Menu.addButton(JobsConfig.inService and "Quitter le service" or "Prendre le service", "toggleService", job)
+          Menu.addButton("Récupérer sa paie", "takeSalary")
         end
       end
 
@@ -110,10 +110,10 @@ function Jobs.mainLoop(job)
             1.9, 0,
             112, 168, 174, 0, 0, 0, 0)
         end
-        if distance < 1.5 then
+        if distance < 2 then
           JobsConfig.isOnServiceLocation = true
           TriggerEvent("Venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir le menu")
-        elseif JobsConfig.isOnServiceLocation and distance > 1.5 then
+        elseif JobsConfig.isOnServiceLocation and distance > 2 then
           JobsConfig.isOnServiceLocation = false
         end
       end

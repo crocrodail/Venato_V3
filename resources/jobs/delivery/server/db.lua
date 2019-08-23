@@ -13,6 +13,7 @@ DeliveryJobRequests = {}
 
 DeliveryJobRequests.getWarehouses = "SELECT * FROM warehouses"
 DeliveryJobRequests.getWarehouseItems = "SELECT id, libelle, Picture FROM items WHERE warehouseId=@Id"
+DeliveryJobRequests.newMissionCheck = "UPDATE users SET salaryCheck = salaryCheck + @newCheck WHERE identifier=@Id"
 
 -- ============= --
 -- DB functions  --
@@ -56,4 +57,10 @@ function DeliveryJobDbFunctions.getWarehouses()
     }
   end
   return warehouses
+end
+
+function DeliveryJobDbFunctions.newMissionCheck(source)
+  local newCheck = 500
+  MySQL.Sync.execute(DeliveryJobRequests.newMissionCheck, { ["@newCheck"] = newCheck, ["@Id"] = getSteamID(source) })
+  return newCheck
 end

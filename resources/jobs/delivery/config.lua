@@ -33,7 +33,8 @@ DeliveryJobConfig.globalBox = nil
 DeliveryJobConfig.trunkCoord = {}
 DeliveryJobConfig.globalTrunk = nil
 
-DeliveryJobConfig.currentStep = 2
+DeliveryJobConfig.mission = nil
+DeliveryJobConfig.currentStep = nil
 DeliveryJobConfig.itemsTaken = {}
 DeliveryJobConfig.itemsTrunk = {}
 

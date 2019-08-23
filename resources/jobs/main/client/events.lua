@@ -44,11 +44,12 @@ AddEventHandler("Jobs:salary:cb", function(jobName)
   TriggerEvent("Venato:notify", notification)
 end)
 
-AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob, bonus)
+AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob, salaryCheck, bonus)
   local notification = {}
   notification.title = jobName
-  if (primeCo + salary + primeJob) > 0 then
-    notification.title = notification.title .. " (<span class='green--text'>" .. (primeCo + salary + primeJob) * bonus .. " €</span>)"
+  if (primeCo + salary + primeJob + salaryCheck) > 0 then
+    notification.title = notification.title .. " (<span class='green--text'>" ..
+      (primeCo + salary + primeJob) * bonus + salaryCheck .. " €</span>)"
     notification.message = "Jour de paie !"
   else
     notification.message = "Attends un peu voyons !"
@@ -58,16 +59,19 @@ AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob
   if primeCo > 0 then
     notification.message = notification.message .. "<br />Prime de temps de connexion : <span class='green--text'>" .. primeCo .. " €</span>"
   end
+  if salaryCheck > 0 then
+    notification.message = notification.message .. "<br />Chèque reçu : <span class='green--text'>" .. salaryCheck .. " €</span>"
+  end
   if salary > 0 then
     notification.message = notification.message .. "<br />Salaire reçu : <span class='green--text'>" .. salary .. " €</span>"
     if primeJob > 0 then
       notification.message = notification.message .. " (+ Prime : <span class='green--text'>" .. primeJob .. " €</span>)"
     end
-    if bonus > 0 then
-      notification.message = notification.message .. "<br />avec Bonus <span class='green--text'>" .. bonus .. " €</span>"
-    end
   else
     notification.message = notification.message .. "<br /><span class='orange--text'>Pas de salaire</span>"
+  end
+  if (primeCo + salary + primeJob) > 0 and bonus > 0 then
+    notification.message = notification.message .. "<br />avec Bonus <span class='green--text'>" .. bonus .. " €</span>"
   end
   TriggerEvent("Venato:notify", notification)
 end)
