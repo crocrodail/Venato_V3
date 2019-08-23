@@ -12,6 +12,12 @@ local itemMenuGeneralPolice = {}
 local itemMenuChoixPoliceService = {}
 local itemMenuChoixPoliceVehicle = {}
 
+local defaultNotification = {
+	type = "alert",
+	title ="LSPD",
+	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
+  }
+
 local UrgencePoliceMenu = {['Title'] = 'Missions en cours',  ['SubMenu'] = {
     ['Title'] = 'Missions en cours', ['Items'] = {
         {['Title'] = 'Retour', ['ReturnBtn'] = true },
@@ -22,105 +28,80 @@ function updateMenuPolice(newUrgenceMenu)
     itemMenuGeneralPolice.Items[1] = newUrgenceMenu
 end
 
-function openMenuPoliceGeneral()
-    Menu.item = itemMenuGeneralPolice
-    Menu.isOpen = true
-    Menu.initMenu()
+function openMenuPoliceGeneral(rank)
+    TriggerEvent('Menu:Clear')
+    TriggerEvent('Menu:Init', "Police", "<small>"..rank.."</small>", '#1565C099', "https://www.lunel.com/sites/default/files/styles/tetiere/public/tetiere/menu_icon_2939.jpg?itok=q2gesIzz")
+   
+    TriggerEvent('Menu:AddButton2', "Amendes", "POLICE_AmendeMenu", { rank = rank }, "", "https://i.ibb.co/TRSRb5n/icons8-agreement-96px-1.png")
+    TriggerEvent('Menu:AddButton2', "Placer un objet", "POLICE_ObjectMenu", { rank = rank }, "", "https://i.ibb.co/9n9Y54M/icons8-roadblock-96px-1.png")
+    TriggerEvent('Menu:AddButton2', "Verifier la plaque", "POLICE_CheckPlate", {}, "", "https://i.ibb.co/wg04W7Z/icons8-sedan-96px.png") --OK
+    TriggerEvent('Menu:AddButton2', "Fouiller", "POLICE_Check", {}, "", "https://i.ibb.co/GQJWMRt/icons8-customs-officer-96px.png")
+    TriggerEvent('Menu:AddButton2', "Prendre la carte d'identité de force", "gcl:showItentityOther", {}, "", "https://i.ibb.co/V2vy2Y6/icons8-id-card-96px.png")
+    TriggerEvent('Menu:AddButton2', "Menoter", "POLICE_Cuffed", {}, "", "https://i.ibb.co/6D2GVzD/icons8-handcuffs-96px.png")
+    TriggerEvent('Menu:AddButton2', "Menoter HRP", "POLICE_CuffedHRP", {}, "", "https://i.ibb.co/6D2GVzD/icons8-handcuffs-96px.png")
+    TriggerEvent('Menu:AddButton2', "Placer dans le véhicle", "POLICE_PutInVehicle", {}, "", "https://i.ibb.co/6YmCDNq/icons8-enter-2-96px.png")
+    TriggerEvent('Menu:AddButton2', "Sortir du véhicule", "POLICE_UnseatVehicle", {}, "", "https://i.ibb.co/RvNBRyV/icons8-import-96px.png")
+    TriggerEvent('Menu:AddButton2', "Crocheter", "POLICE_Crocheter", {}, "", "https://i.ibb.co/L1yKnXt/icons8-unlock-2-96px.png")
+    TriggerEvent('Menu:AddButton2', "Supprimer le Vehicule", "POLICE_deleteVehicle", {}, "", "https://i.ibb.co/JsGXm4z/icons8-tow-truck-96px-1.png")
+    TriggerEvent('Menu:AddButton2', "Avis de recherche", "POLICE_sendmsg", {}, "", "https://i.ibb.co/fvtWrv3/icons8-spam-96px.png")
+    --Code rouge ?
+    
+    TriggerEvent('Menu:CreateMenu')
+    TriggerEvent('Menu:Open')
 end
 
-function MenuChoixPoliceVehicleCar()
-    Menu.item = itemMenuChoixPoliceVehicleCar
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleCarCadet()
-    Menu.item = itemMenuChoixPoliceVehicleCarCadet
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleCarAgent()
-    Menu.item = itemMenuChoixPoliceVehicleCarAgent
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleCarSergent()
-    Menu.item = itemMenuChoixPoliceVehicleCarSergent
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleCarSergentChef()
-    Menu.item = itemMenuChoixPoliceVehicleCarSergentChef
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleCarLieutenant()
-    Menu.item = itemMenuChoixPoliceVehicleCarLieutenant
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleCarCapitaine()
-    Menu.item = itemMenuChoixPoliceVehicleCarCapitaine
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixSecretVehicleCar()
-    Menu.item = itemMenuChoixSecretVehicleCar
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceVehicleHeli()
-    Menu.item = itemMenuChoixPoliceVehicleHeli
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceServiceCadet()
-    Menu.item = itemMenuChoixPoliceServiceCadet
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceServiceAgent()
-    Menu.item = itemMenuChoixPoliceServiceAgent
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceServiceSergent()
-    Menu.item = itemMenuChoixPoliceServiceSergent
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceServiceSergentChef()
-    Menu.item = itemMenuChoixPoliceServiceSergentChef
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceServiceLieutenant()
-    Menu.item = itemMenuChoixPoliceServiceLieutenant
-    Menu.isOpen = true
-    Menu.initMenu()
-end
-
-function MenuChoixPoliceServiceCapitaine()
-    Menu.item = itemMenuChoixPoliceServiceCapitaine
-    Menu.isOpen = true
-    Menu.initMenu()
-end
 
 function POLICE_coderouge()
 TriggerServerEvent("POLICE:coderouge")
 end
+
+function POLICE_ObjectMenu(data)
+    TriggerEvent('Menu:Clear')
+    TriggerEvent('Menu:Init', "Placer un objet", "<small>"..data.rank.."</small>", '#1565C099', "https://lejournaldugers.fr/uploads/main_imgs/201712171021488K3x-image(postpage).JPG")
+   
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+    TriggerEvent('Menu:AddButton2', "Placer/Retirer un Radar", "POLICE_radar", {}, "", "https://i.ibb.co/PCYgbCY/icons8-speed-96px.png")
+    TriggerEvent('Menu:AddButton2', "Placer/Retirer un cône", "POLICE_removeOrPlaceCone", {}, "", "https://i.ibb.co/hDKjVCq/icons8-vlc-96px.png")
+    TriggerEvent('Menu:AddButton2', "Placer/Retirer une barrière", "POLICE_removeOrPlaceBarrier", {}, "", "https://i.ibb.co/rGn6bYN/barrier.png")
+    TriggerEvent('Menu:AddButton2', "Placer/Retirer une herse", "POLICE_removeOrPlaceHerse", {}, "", "https://i.ibb.co/4KGGKG5/icons8-flat-tire-96px.png")
+    -- TODO Coder le systeme de herse
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+        
+    TriggerEvent('Menu:CreateMenu')
+    TriggerEvent('Menu:Open')
+end
+
+function POLICE_AmendeMenu(data)
+    TriggerEvent('Menu:Clear')
+    TriggerEvent('Menu:Init', "Amende", "<small>"..data.rank.."</small>", '#1565C099', "https://lejournaldugers.fr/uploads/main_imgs/201712171021488K3x-image(postpage).JPG")
+   
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+    TriggerEvent('Menu:AddShopButton', "Non respect du code de la route", "POLICE_FINE_DATA", { tarif = 800, points = 1, title = "Non respect du code de la route" }, "", "1 point", 800)
+    TriggerEvent('Menu:AddShopButton', "Petit excès vitesse  <50km/h", "POLICE_FINE_DATA", { tarif = 1500, points = 0, title = "Petit excès vitesse  <50km/h" }, "", "", 1500)
+    TriggerEvent('Menu:AddShopButton', "Défaut de permis", "POLICE_FINE_DATA", { tarif = 5000, points = 0, title = "Défaut de permis" }, "", "", 5000)
+    TriggerEvent('Menu:AddShopButton', "Stationnement génant", "POLICE_FINE_DATA", { tarif = 1200, points = 0, title = "Stationnement génant" }, "", "", 1200)
+    TriggerEvent('Menu:AddShopButton', "Grand excès vitesse >50km/h", "POLICE_FINE_DATA", { tarif = 3000, points = 3, title = "Grand excès vitesse >50km/h" }, "", "3 points", 3000)
+    TriggerEvent('Menu:AddShopButton', "Conduite dangereuse", "POLICE_FINE_DATA", { tarif = 1500, points = 2, title = "Conduite dangereuse" }, "", "2 points", 1500)
+    TriggerEvent('Menu:AddShopButton', "Véhicule trop endommagé", "POLICE_FINE_DATA", { tarif = 1000, points = 0, title = "Véhicule trop endommagé" }, "", "", 1000)
+    TriggerEvent('Menu:AddShopButton', "Conduite état ivresse / drogue", "POLICE_FINE_DATA", { tarif = 4000, points = 6, title = "Conduite état ivresse / drogue" }, "", "6 points", 4000)
+    TriggerEvent('Menu:AddShopButton', "Délit de fuite", "POLICE_FINE_DATA", { tarif = 4000, points = -1, title = "Délit de fuite" }, "", "Retrait de permis", 4000)
+    TriggerEvent('Menu:AddShopButton', "Retirer le permis", "POLICE_FINE_DATA", { tarif = 0, points = -1, title = "Retirer le permis" }, "", "", 0)
+    TriggerEvent('Menu:AddShopButton', "Activités illicites", "POLICE_FINE_DATA", { tarif = 30000, points = 0, title = "Activités illicites" }, "", "", 30000)
+    TriggerEvent('Menu:AddShopButton', "Possession d'arme blanche", "POLICE_FINE_DATA", { tarif = 10000, points = 0, title = "Possession d'arme blanche" }, "", "", 10000)
+    TriggerEvent('Menu:AddShopButton', "Possession d'arme à feu", "POLICE_FINE_DATA", { tarif = 30000, points = 0, title = "Possession d'arme à feu" }, "", "", 30000)
+    TriggerEvent('Menu:AddShopButton', "Violences", "POLICE_FINE_DATA", { tarif = 5000, points = 0, title = "Violences" }, "", "", 5000)
+    TriggerEvent('Menu:AddShopButton', "Vol de véhicule", "POLICE_FINE_DATA", { tarif = 50000, points = 0, title = "Vol de véhicule"}, "", "", 50000)
+    TriggerEvent('Menu:AddShopButton', "Dégradations", "POLICE_FINE_DATA", { tarif = 5000, points = 0, title = "Dégradations" }, "", "", 5000)
+    TriggerEvent('Menu:AddShopButton', "Outrage contre LSPD", "POLICE_FINE_DATA", { tarif = 5000, points = 0, title = "Outrage contre LSPD" }, "", "", 5000)
+    TriggerEvent('Menu:AddShopButton', "Violences contre LSPD", "POLICE_FINE_DATA", { tarif = 30000, points = 0, title = "Violences contre LSPD" }, "", "", 30000)
+    TriggerEvent('Menu:AddButton2',"Autre", "POLICE_FINE_CUSTOM", {}, "", "")
+    -- TODO Coder le systeme de herse
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+        
+    TriggerEvent('Menu:CreateMenu')
+    TriggerEvent('Menu:Open')
+end
+
 
 function POLICE_fincoderouge()
 TriggerServerEvent("POLICE:fincoderouge")
@@ -137,18 +118,18 @@ function POLICE_deleteVehicle()
 
     if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
         local pos = GetEntityCoords( ped )
-        -- log( "Player is at:\nX: " .. pos.x .. " Y: " .. pos.y .. " Z: " .. pos.z )
-        -- log( "Found vehicle?: " .. tostring( DoesEntityExist( vehicle ) ) )
 
         if ( IsPedSittingInAnyVehicle( ped ) ) then
             local vehicle = GetVehiclePedIsIn( ped, false )
 
             if ( GetPedInVehicleSeat( vehicle, -1 ) == ped ) then
-                ShowNotification( "Vehicule supprime." )
+                defaultNotification.message = "Véhicule supprimé"
+                Venato.notify(defaultNotification)
                 SetEntityAsMissionEntity( vehicle, true, true )
                 deleteCar( vehicle )
             else
-                ShowNotification( "Mettez-vous a la place conducteur" )
+                defaultNotification.message = "Mettez vous à la place du conducteur"
+                Venato.notify(defaultNotification)
             end
         else
             local playerPos = GetEntityCoords( ped, 1 )
@@ -156,12 +137,13 @@ function POLICE_deleteVehicle()
             local vehicle = GetVehicleInDirection( playerPos, inFrontOfPlayer )
 
             if ( DoesEntityExist( vehicle ) ) then
-                -- log( "Distance between ped and vehicle: " .. tostring( GetDistanceBetween( ped, vehicle ) ) )
-                ShowNotification( "Vehicle deleted." )
+                defaultNotification.message = "Véhicule supprimé"
+                Venato.notify(defaultNotification)
                 SetEntityAsMissionEntity( vehicle, true, true )
                 deleteCar( vehicle )
             else
-                ShowNotification( "Rapprochez-vous d'un vehicule" )
+                defaultNotification.message = "Rapprocher vous d'un véhicule"
+                Venato.notify(defaultNotification)
             end
         end
     end
@@ -183,106 +165,3 @@ function GetVehicleInDirection( coordFrom, coordTo )
 end
 
 
-itemMenuGeneralPolice = {
-    ['Title'] = 'Police',
-    ['Items'] = {
-        UrgencePoliceMenu,
-        {['Title'] = 'Fouiller', ['Function'] = POLICE_Check, Close = false},
-        {['Title'] = 'Menoter', ['Function'] = POLICE_Cuffed, Close = false},
-	    	{['Title'] = 'Menoter HRP', ['Function'] = POLICE_CuffedHRP, Close = false},
-        {['Title'] = 'Placer dans le véhicle', ['Function'] = POLICE_PutInVehicle},
-        {['Title'] = 'Sortir du véhicule', ['Function'] = POLICE_UnseatVehicle},
-        {['Title'] = 'Amendes',  ['SubMenu'] = {
-            ['Title'] = 'Amendes',
-            ['Items'] = {
-                {['Title'] = 'Code de la Route',  ['SubMenu'] = {
-                    ['Title'] = 'Amendes - Code de la route',
-                    ['Items'] = {
-                        {['Title'] = 'Non respect du code de la route (-1 points)', ['Function'] = POLICE_FINE_DATA, tarif = 800, points = 1, Close = false},
-                        {['Title'] = 'Petit Excès vitesse -50km/h', ['Function'] = POLICE_FINE_DATA, tarif = 1500, points = 0,  Close = false},
-						            {['Title'] = 'Défaut de permis', ['Function'] = POLICE_FINE_DATA, tarif = 5000, points = 0,  Close = false},
-						            {['Title'] = 'Stationnement genant', ['Function'] = POLICE_FINE_DATA, tarif = 1200, points = 0,  Close = false},
-                        {['Title'] = 'Grand Excès vitesse +50km/h (-3 points)', ['Function'] = POLICE_FINE_DATA, tarif = 3000, points = 3, Close = false },
-                        {['Title'] = 'Conduite dangereuse (-2 points)', ['Function'] = POLICE_FINE_DATA, tarif = 1500, points = 2, Close = false },
-                        {['Title'] = 'Véhicule trop endommagé', ['Function'] = POLICE_FINE_DATA, tarif = 1000, points = 0, Close = false },
-                        {['Title'] = 'Conduite état ivresse / drogue (-6 points)', ['Function'] = POLICE_FINE_DATA, tarif = 4000, points = 6, Close = false },
-                        {['Title'] = 'Délit de fuite (retirer permis)', ['Function'] = POLICE_FINE_DATA, tarif = 20000, points = -1, Close = false },
-                        {['Title'] = 'Retirer permis', ['Function'] = POLICE_FINE_DATA, points = -1, Close = false},
-                    }
-                }},
-                {['Title'] = 'Délits et Crimes Pénal',  ['SubMenu'] = {
-                    ['Title'] = 'Amendes - Délits et Crimes Pénal',
-                    ['Items'] = {
-                        {['Title'] = 'Activités illicites', ['Function'] = POLICE_FINE_DATA, tarif = 30000, points = 0, Close = false},
-						            {['Title'] = 'Possession d arme blanche', ['Function'] = POLICE_FINE_DATA, tarif = 10000, points = 0, Close = false},
-                        {['Title'] = 'Possession d arme a feu', ['Function'] = POLICE_FINE_DATA, tarif = 30000, points = 0, Close = false},
-                        {['Title'] = 'Violences', ['Function'] = POLICE_FINE_DATA, tarif = 5000, points = 0, Close = false}, --
-                        {['Title'] = 'Vol de véhicule', ['Function'] = POLICE_FINE_DATA, tarif = 50000, points = 0, Close = false}, --
-                        --{['Title'] = 'Braquage', ['Function'] = POLICE_FINE_DATA, tarif = 30000, points = 0, Close = false},
-                        {['Title'] = 'Dégradations', ['Function'] = POLICE_FINE_DATA, tarif = 5000, points = 0, Close = false},
-                        {['Title'] = 'Outrage contre LSPD', ['Function'] = POLICE_FINE_DATA, tarif = 5000, points = 0, Close = false},
-                        {['Title'] = 'Violence contre LSPD', ['Function'] = POLICE_FINE_DATA, tarif = 30000, points = 0, Close = false},
-                        --{['Title'] = 'Crimes', ['Function'] = POLICE_FINE_DATA, tarif = 70000, points = 0, Close = false},
-                    }
-                }},
-                { ['Title'] = 'Autre', ['Function'] = POLICE_FINE_CUSTOM }, -- policier/chasseur
-            }
-        }},
-	{['Title'] = 'Prendre la carte d\'identité de force', ['Event'] = 'gcl:showItentityOther'},
-        {['Title'] = 'Crocheter', ['Function'] = POLICE_Crocheter, Close = false},
-        {['Title'] = 'Verifier la plaque', ['Function'] = POLICE_CheckPlate, Close = false},
-		{ ['Title'] = 'Placer un objet', ['SubMenu'] = {
-					['Title'] = 'Choix de l\'objet :',
-					['Items'] = {
-								{['Title'] = 'Placer/retirer un Radar', ['Function'] = POLICE_radar, Close = false},
-								{['Title'] = 'Placer/retirer un cône', ['Function'] = POLICE_removeOrPlaceCone, Close = false},
-								{['Title'] = 'Placer/retirer une barrière', ['Function'] = POLICE_removeOrPlaceBarrier, Close = false},
-								--{['Title'] = 'Placer/retirer une herse', ['Function'] = POLICE_removeOrPlaceHerse, Close = false},
-                                }
-							}
-						},
-		{ ['Title'] = 'Supprimer le Vehicule', ['SubMenu'] = {
-					['Title'] = 'Validation supression:',
-					['Items'] = {
-								{ ['Title'] = 'Quitter' },
-								{ ['Title'] = 'Supprimer le Vehicule',['Function'] = POLICE_deleteVehicle},
-                                }
-                }
-        },
-        { ['Title'] = 'CODE ROUGE - Commissariat', ['SubMenu'] = {
-              ['Title'] = 'Validation CODE ROUGE:',
-              ['Items'] = {
-              { ['Title'] = 'Quitter' },
-              { ['Title'] = 'CODE ROUGE',['Function'] = POLICE_coderouge},
-                          }
-                    }
-            },
-            { ['Title'] = 'Fin du CODE ROUGE - Commissariat', ['SubMenu'] = {
-                  ['Title'] = 'Validation fin du CODE ROUGE:',
-                  ['Items'] = {
-                  { ['Title'] = 'Quitter' },
-                  { ['Title'] = 'FIN CODE ROUGE',['Function'] = POLICE_fincoderouge},
-                              }
-                        }
-                },
-      {['Title'] = 'Avis de recherche', ['Function'] = POLICE_sendmsg, Close = false},
-    }
-}
-
-itemMenuChoixSecretVehicleCar = {
-    ['Title'] = 'Secret - Choix du véhicule',
-    ['Items'] = {
-      {['Title'] = 'Secret 4x4', ['Function'] = POLICE_SpanwVehicleCar, type = 'Car', model = 'xls2'},
-  		{['Title'] = 'Oracle', ['Function'] = POLICE_SpanwVehicleCar, type = 'Car', model = 'oracle'},
-  		{['Title'] = 'Buzzard', ['Function'] = POLICE_SpanwVehicleCar, type = 'Car', model = 'buzzard2'},
-  		{['Title'] = 'Equiper PWD', ['Function'] = POLICE_GiveSpecialWeapon},
-  		{['Title'] = 'Tenue Agent', ['Function'] = EquipProcureur},
-    }
-}
-
-itemMenuChoixPoliceVehicleHeli = {
-    ['Title'] = 'Police - Choix du véhicule',
-    ['Items'] = {
-        {['Title'] = 'Helicopter', ['Function'] = POLICE_invokeVehicle, type = 'Chopper', model = 'polmav'},
-    }
-}

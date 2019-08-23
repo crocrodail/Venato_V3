@@ -112,12 +112,6 @@ AddEventHandler('police:getArrestedHRP', function()
 		end
 end)
 
--- RegisterNetEvent('police:payFines')
--- AddEventHandler('police:payFines', function(amount, reason)
-	-- --TriggerServerEvent('bank:withdrawAmende', amount)
-	-- TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "You paid a $"..amount.." fine for" .. reason )
--- end)
-
 RegisterNetEvent('police:dropIllegalItem')
 AddEventHandler('police:dropIllegalItem', function(id,qty)
 	TriggerEvent("player:looseItem", tonumber(id),tonumber(qty))
@@ -183,27 +177,19 @@ function POLICE_removeOrPlaceCone()
   local mePed = GetPlayerPed(-1)
   local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
   local cone = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_roadcone02a"), false, false, false)
-  if cone ~= 0 then
-    -- ... /!\
-    NetworkRequestControlOfEntity(cone)
-    Citizen.InvokeNative(0xB736A491E64A32CF, Citizen.PointerValueIntInitialized(cone))
-    Citizen.InvokeNative(0x539E0AE3E6634B9F, Citizen.PointerValueIntInitialized(cone))
+  if cone ~= 0 then   
     DeleteObject(cone)
-    SetEntityCoords(cone, -2000.0, -2000.0, -2000.0)
   else
-    local h = GetEntityHeading(mePed)
-    local object = CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z, GetEntityHeading(mePed), true, false)
-	local id = NetworkGetNetworkIdFromEntity(object)
-	SetNetworkIdCanMigrate(id, true)
+    local object = Venato.CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z)    
     PlaceObjectOnGroundProperly(object)
-	SetEntityDynamic(object , true)
-	SetEntityInvincible(object , false)
-	SetEntityCanBeDamaged(object , true)
-	SetEntityHealth(object , 1000)
-	SetEntityHasGravity(object , true)
-	SetEntityAsMissionEntity(object, true, true)
-	SetEntityLoadCollisionFlag(object , true)
-	SetEntityRecordsCollisions(object , true)
+    SetEntityDynamic(object , true)
+    SetEntityInvincible(object , false)
+    SetEntityCanBeDamaged(object , true)
+    SetEntityHealth(object , 1000)
+    SetEntityHasGravity(object , true)
+    SetEntityAsMissionEntity(object, true, true)
+    SetEntityLoadCollisionFlag(object , true)
+    SetEntityRecordsCollisions(object , true)
   end
 end
 
@@ -211,47 +197,35 @@ function POLICE_removeOrPlaceBarrier()
   local mePed = GetPlayerPed(-1)
   local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
   local barriere = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_barrier_work05"), false, false, false)
+  
   if barriere ~= 0 then
-    -- ... /!\
-    NetworkRequestControlOfEntity(barriere)
-    Citizen.InvokeNative(0xB736A491E64A32CF, Citizen.PointerValueIntInitialized(barriere))
-    Citizen.InvokeNative(0x539E0AE3E6634B9F, Citizen.PointerValueIntInitialized(barriere))
     DeleteObject(barriere)
-    SetEntityCoords(barriere, -2000.0, -2000.0, -2000.0)
   else
-    local h = GetEntityHeading(mePed)
-    local object = CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z, GetEntityHeading(mePed), true, false)
-	local id = NetworkGetNetworkIdFromEntity(object)
-	SetNetworkIdCanMigrate(id, true)
+    local object = Venato.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)	
     PlaceObjectOnGroundProperly(object)
-	SetEntityDynamic(object , true)
-	SetEntityInvincible(object , false)
-	SetEntityCanBeDamaged(object , true)
-	SetEntityHealth(object , 1000)
-	SetEntityHasGravity(object , true)
-	SetEntityAsMissionEntity(object, true, true)
-	SetEntityLoadCollisionFlag(object , true)
-	SetEntityRecordsCollisions(object , true)
+    SetEntityDynamic(object , true)
+    SetEntityInvincible(object , false)
+    SetEntityCanBeDamaged(object , true)
+    SetEntityHealth(object , 1000)
+    SetEntityHasGravity(object , true)
+    SetEntityAsMissionEntity(object, true, true)
+    SetEntityLoadCollisionFlag(object , true)
+    SetEntityRecordsCollisions(object , true)
   end
 end
 
 function POLICE_removeOrPlaceHerse()
   local mePed = GetPlayerPed(-1)
   local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
+  local hashHerse = GetHashKey("P_ld_stinger_s")
   local herse = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("p_ld_stinger_s"), false, false, false)
   if herse ~= 0 then
-    -- ... /!\
-    NetworkRequestControlOfEntity(herse)
-    Citizen.InvokeNative(0xB736A491E64A32CF, Citizen.PointerValueIntInitialized(herse))
-    Citizen.InvokeNative(0x539E0AE3E6634B9F, Citizen.PointerValueIntInitialized(herse))
     DeleteObject(herse)
-    SetEntityCoords(herse, -2000.0, -2000.0, -2000.0)
+    herse = 0
   else
-    local h = GetEntityHeading(mePed)
-	local object = CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z, GetEntityHeading(mePed)   -90.0 , true, false)
-	local id = NetworkGetNetworkIdFromEntity(object)
-	SetNetworkIdCanMigrate(id, true)
-    PlaceObjectOnGroundProperly(object)
+  local object = Venato.CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z)
+  FreezeEntityPosition(object, true)
+	PlaceObjectOnGroundProperly(object)
 	SetEntityDynamic(object , true)
 	SetEntityInvincible(object , false)
 	SetEntityCanBeDamaged(object , true)
@@ -259,7 +233,7 @@ function POLICE_removeOrPlaceHerse()
 	SetEntityHasGravity(object , true)
 	SetEntityAsMissionEntity(object, true, true)
 	SetEntityLoadCollisionFlag(object , true)
-	SetEntityRecordsCollisions(object , true)
+  SetEntityRecordsCollisions(object , true)
   end
 end
 
@@ -544,40 +518,40 @@ function menuPoliceVestiaire()
 
     local power = getPowerFromRole(rank)
 
-    TriggerEvent('Menu:AddButton2', "<span class='red--text'>Quitter son service</span>", "ServiceOff", "", "", "https://i.ibb.co/wddvMP0/icons8-close-window-96px-1.png")
+    TriggerEvent('Menu:AddButton2', "<span class='red--text'>Quitter son service</span>", "ServiceOff", "", "", "https://i.ibb.co/c393rDv/icons8-export-96px.png")
     
-    TriggerEvent('Menu:AddButton2', "Equiper tenue standard", "cadetunif", "", "", "")
+    TriggerEvent('Menu:AddButton2', "Equiper tenue standard", "cadetunif", "", "", "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png")
 
     if power >= 2 then --Agent
-      TriggerEvent('Menu:AddButton2', "Equiper tenue de civil", "civil", "", "", "")
-      TriggerEvent('Menu:AddButton2', "Equiper tenue de SWAT", "swat", "", "", "")
+      TriggerEvent('Menu:AddButton2', "Equiper tenue de civil", "civil", "", "", "https://i.ibb.co/P5NBmM1/icons8-t-shirt-96px.png")
+      TriggerEvent('Menu:AddButton2', "Equiper tenue de SWAT", "swat", "", "", "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png")
 
       if power >= 3 then --Sergent et Sergent-Chef
 
         if power >= 5 then --Lieutnant
-          TriggerEvent('Menu:AddButton2', "Equiper tenue de ville", "villesuit", "", "", "")
+          TriggerEvent('Menu:AddButton2', "Equiper tenue de ville", "villesuit", "", "", "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png")
 
           if power >= 6 then -- Capitaine
-            TriggerEvent('Menu:AddButton2', "Equiper tenue de capitaine", "capitaine", "", "", "")
+            TriggerEvent('Menu:AddButton2', "Equiper tenue de capitaine", "capitaine", "", "", "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png")
           end
         end
       end
     end
 
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) and uniforclassic then
-      TriggerEvent('Menu:AddButton2', "Manche longue/Manche courte", "uniformbasic", "", "", "")
+      TriggerEvent('Menu:AddButton2', "Manche longue/Manche courte", "uniformbasic", "", "", "https://i.ibb.co/2MBSRpY/icons8-jumper-96px.png")
     end
 
-    TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet fluo", "gilletfluos", "", "", "")
-    TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet par balle", "gillets", "", "", "")
+    TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet fluo", "gilletfluos", "", "", "https://i.ibb.co/19Sn2kk/yellow-jacket.png")
+    TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet pare-balle", "gillets", "", "", "https://i.ibb.co/jv1v2ty/bullet-proof-jacket.png")
 
     
     if power >= 2 then --Agent
-      TriggerEvent('Menu:AddButton2', "Equiper / Retirer une ceinture", "ceintures", "", "", "")
-      TriggerEvent('Menu:AddButton2', "Equiper / Retirer un képi", "kepis", "", "", "")
+      TriggerEvent('Menu:AddButton2', "Equiper / Retirer une ceinture", "ceintures", "", "", "https://i.ibb.co/hFspMWG/icons8-mens-belt-96px.png")
+      TriggerEvent('Menu:AddButton2', "Equiper / Retirer un képi", "kepis", "", "", "https://i.ibb.co/1n2X8rb/icons8-air-pilot-hat-96px-1.png")
 
       if power >= 3 then --Sergent, Sergent-Chef, Lieutnant, Capitaine
-        TriggerEvent('Menu:AddButton2', "Equiper / Retirer des lunettes", "lunettes", "", "", "")
+        TriggerEvent('Menu:AddButton2', "Equiper / Retirer des lunettes", "lunettes", "", "", "https://i.ibb.co/KyNMhgv/icons8-sun-glasses-96px.png")
       end
     end
 
@@ -779,7 +753,8 @@ Citizen.CreateThread(function()
 
           if(isCopInService) then
             if IsControlJustPressed(1,166) then
-              openMenuPoliceGeneral()
+              print("openPoliceGeneral")
+              openMenuPoliceGeneral(rank)
             end
           end
 
@@ -826,6 +801,7 @@ Citizen.CreateThread(function()
                           if power >= 6 then
                             TriggerEvent('Menu:AddButton2', "Capitaine - Ferrari", "POLICE_SpanwVehicleCar", { type = "Car", model = "polf430"}, "", "")
                             TriggerEvent('Menu:AddButton2', "Capitaine - Aventador", "POLICE_SpanwVehicleCar", { type = "Car", model = "polaventa"}, "", "")
+                            TriggerEvent('Menu:AddButton2', "Capitaine - Chiron", "POLICE_SpanwVehicleCar", { type = "Car", model = "polchiron"}, "", "")
                           end
                         end
                       end
@@ -878,14 +854,14 @@ Citizen.CreateThread(function()
 				DrawMarker(1,449.113,-981.084,42.691,0,0,0,0,0,0,2.0,2.0,2.0,0,155,255,200,0,0,0,0)
 
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), 449.113,-981.084,43.691, true ) < 5 then
-					if(existingVeh ~= nil) then
+					if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then
 						DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ranger votre helicopter',0,1,0.5,0.8,0.6,255,255,255,255)
 					else
 						DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour prendre vote helicopter',0,1,0.5,0.8,0.6,255,255,255,255)
 					end
 
 					if IsControlJustPressed(1,51)  then
-						if(existingVeh ~= nil) then
+						if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then
 							SetEntityAsMissionEntity(existingVeh, true, true)
               TriggerServerEvent('ivt:deleteVeh', GetVehicleNumberPlateText(existingVeh))
 							Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(existingVeh))
@@ -1277,3 +1253,31 @@ function DrawText3d(x,y,z, text)
         DrawText(_x,_y)
     end
 end
+
+
+Citizen.CreateThread(function()
+  while true do
+      Citizen.Wait(0)
+      local ped = GetPlayerPed(-1)
+      local veh = GetVehiclePedIsIn(ped, false)
+      local vehCoord = GetEntityCoords(veh)
+      local hashHerse = GetHashKey("P_ld_stinger_s")
+      if IsPedInAnyVehicle(ped, false) then
+          local herse = GetClosestObjectOfType( vehCoord.x, vehCoord.y, vehCoord.z, 1.3, hashHerse, false, false, false)
+          if herse ~= 0 then
+              print(herse)
+              POLICE_removeOrPlaceHerse()
+              SetVehicleTyreBurst(veh, 0, true, 1000.0)
+              SetVehicleTyreBurst(veh, 1, true, 1000.0)
+              Citizen.Wait(200)
+              SetVehicleTyreBurst(veh, 2, true, 1000.0)
+              SetVehicleTyreBurst(veh, 3, true, 1000.0)
+              Citizen.Wait(200)
+              SetVehicleTyreBurst(veh, 4, true, 1000.0)
+              SetVehicleTyreBurst(veh, 5, true, 1000.0)
+              SetVehicleTyreBurst(veh, 6, true, 1000.0)
+              SetVehicleTyreBurst(veh, 7, true, 1000.0)
+          end
+      end
+  end
+end)

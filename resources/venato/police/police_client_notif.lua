@@ -10,18 +10,11 @@ local POLICE_CALL_ACCEPT_P = 0
 local POLICE_nbMecanoisInService = 0
 local POLICE_nbMecanoDispo = 0
 
-
--- local isCop = false
--- local isCopInService = false
--- local rank = "inconnu"
--- local checkpoints = {}
--- local existingVeh = nil
--- local handCuffed = false
-
--- isCop = true -- famse
--- isisInService = false
--- blipsCops = {}
-
+local defaultNotification = {
+	type = "alert",
+	title ="LSPD",
+	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
+  }
 
 local POLICE_TEXT = {
     PrendreService = '~INPUT_PICKUP~ Prendre son service de policier',
@@ -592,7 +585,8 @@ function POLICE_Check()
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:targetCheckInventory", GetPlayerServerId(t))
 	else
-		TriggerEvent('chatMessage', 'GOUVERNEMENT', {255, 0, 0}, "pas de joueur proche!")
+        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        Venato.notify(defaultNotification)
 	end
 end
 
@@ -600,8 +594,9 @@ function POLICE_Cuffed()
 	t, distance = GetClosestPlayer()
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:cuffGranted", GetPlayerServerId(t))
-	else
-		TriggerEvent('chatMessage', 'GOUVERNEMENT', {255, 0, 0}, "pas de joueur proche!")
+    else
+        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        Venato.notify(defaultNotification)
 	end
 end
 
@@ -610,23 +605,29 @@ function POLICE_CuffedHRP()
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:cuffGrantedHRP", GetPlayerServerId(t))
 	else
-		TriggerEvent('chatMessage', 'GOUVERNEMENT', {255, 0, 0}, "pas de joueur proche!")
+        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        Venato.notify(defaultNotification)
 	end
 end
 
 function POLICE_Crocheter()
-	Citizen.CreateThread(function()
-        Citizen.Trace('POLICE_Crocheter')
-        local ply = GetPlayerPed(-1)
-        local plyCoords = GetEntityCoords(ply, 0)
-        --GetClosestVehicle(x,y,z,distance dectection, 0 = tous les vehicules, Flag 70 = tous les veicules sauf police a tester https://pastebin.com/kghNFkRi)
-        veh = GetClosestVehicle(plyCoords["x"], plyCoords["y"], plyCoords["z"], 5.001, 0, 70)
-        TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_WELDING", 0, true)
-        Citizen.Wait(20000)
-        TriggerEvent("lock:addVeh", GetVehicleNumberPlateText(veh), GetDisplayNameFromVehicleModel(GetEntityModel(veh)))
-        SetVehicleDoorsLocked(veh, 1)
-        ClearPedTasksImmediately(GetPlayerPed(-1))
-        drawNotification("Vous avez recuperé les clefs du vehicule.")
+	Citizen.CreateThread(function()        
+        local pos = GetEntityCoords(GetPlayerPed(-1))
+        local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+
+        local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+        local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
+        if(DoesEntityExist(vehicleHandle)) then
+            TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_WELDING", 0, true)
+            Citizen.Wait(20000)
+            TriggerEvent("lock:addVeh", GetVehicleNumberPlateText(vehicleHandle), GetDisplayNameFromVehicleModel(GetEntityModel(vehicleHandle)))
+            SetVehicleDoorsLocked(vehicleHandle, 1)
+            ClearPedTasksImmediately(GetPlayerPed(-1))
+            unlockveh()
+        else
+            defaultNotification.message = "<span class='red--text'>Pas de véhicule proche.</span>"
+            Venato.notify(defaultNotification)
+        end
 	end)
 end
 
@@ -636,7 +637,8 @@ function POLICE_PutInVehicle()
 		local v = GetVehiclePedIsIn(GetPlayerPed(-1), true)
 		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), v)
 	else
-		TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "pas de joueur proche!")
+        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        Venato.notify(defaultNotification)
 	end
 end
 
@@ -645,7 +647,8 @@ function POLICE_UnseatVehicle()
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:confirmUnseat", GetPlayerServerId(t))
 	else
-		TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "pas de joueur proche")
+        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        Venato.notify(defaultNotification)
 	end
 end
 
@@ -655,39 +658,44 @@ function POLICE_CheckPlate()
 
 	local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
 	local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-	if(DoesEntityExist(vehicleHandle)) then
+    if(DoesEntityExist(vehicleHandle)) then
+        print("VehicleExist")
 		TriggerServerEvent("police:checkingPlate", GetVehicleNumberPlateText(vehicleHandle), GetEntityModel(vehicleHandle))
     else
-        TriggerEvent("es_freeroam:notify", "CHAR_ANDREAS", 1, "Gouvernment", false, "~r~Pas de vehicule proche!")
+        defaultNotification.message = "<span class='red--text'>Pas de véhicule proche.</span>"
+        Venato.notify(defaultNotification)
         --TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Pas de vehicule proche!")
 	end
 end
 
 function POLICE_FINE_DATA(data)
-    POLICE_Fines(data.tarif, data.Title, data.points)
+    POLICE_Fines(data.tarif, data.title, data.points)
 end
 
 function POLICE_FINE_CUSTOM()
-    AddTextEntry('FMMC_MPM_NA', "Titre de l'amande")
+    AddTextEntry('FMMC_MPM_NA', "Titre de l'amende")
     local t = openTextInput('','', 128)
     if t ~= nil and t ~= '' then
       AddTextEntry('FMMC_MPM_NA', "Tarif")
       local r = tonumber(openTextInput('','', 128))
       if r ~= nil then
-        AddTextEntry('FMMC_MPM_NA', "Nombre de Point")
+        AddTextEntry('FMMC_MPM_NA', "Nombre de point")
         local p = tonumber(openTextInput('','', 128))
         if p ~= nil then
           if r ~= nil and t ~= nil and t ~= '' and p ~= nil then
               POLICE_Fines(r,t,p)
           end
         else
-          TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Erreur dans le nombre de point de l'amande!")
+          defaultNotification.message = "<span class='red--text'>Erreur dans le nombre de point de l'amende.</span>"
+          Venato.notify(defaultNotification)
         end
       else
-        TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Erreur dans le tarif de l'amande!")
+        defaultNotification.message = "<span class='red--text'>Erreur dans le tarif de l'amende.</span>"
+        Venato.notify(defaultNotification)
       end
     else
-      TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Erreur dans le titre de l'amande!")
+      defaultNotification.message = "<span class='red--text'>Erreur dans le titre de l'amende.</span>"
+      Venato.notify(defaultNotification)
     end
 end
 
@@ -707,7 +715,8 @@ function POLICE_Fines(amount, reason, points)
             TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
         end
 	else
-		TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Pas de joueur proche!")
+        defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        Venato.notify(defaultNotification)
 	end
 end
 --====================================================================================
@@ -717,7 +726,8 @@ end
 RegisterNetEvent('police:payFines')
 AddEventHandler('police:payFines', function(amount)
 	TriggerServerEvent('bank:withdrawAmende', amount)
-	TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Vous avez payé $"..amount.." d'amende.")
+    defaultNotification.message = "Vous avez payé <span class='green--text'>"..amount.."</span>€ d'amende."
+    Venato.notify(defaultNotification)
 end)
 
 RegisterNetEvent('police:dropIllegalItem')
@@ -750,7 +760,8 @@ AddEventHandler('police:forcedEnteringVeh', function()
         local _, _, _, _, vehicleHandle = GetRaycastResult( rayHandle )
         if vehicleHandle ~= nil then
             TaskWarpPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 2)
-            TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Dans La voiture")
+            defaultNotification.message = "Dans la voiture"
+            Venato.notify(defaultNotification)
         end
     end
 end)
@@ -762,58 +773,6 @@ AddEventHandler('police:resultAllCopsInService', function(array)
 end)
 
 function enableCopBlips()
-
-	-- for k, existingBlip in pairs(blipsCops) do
-        -- RemoveBlip(existingBlip)
-    -- end
-	-- blipsCops = {}
-
-	-- local localIdCops = {}
-	-- for id = 0, 64 do
-		-- if(NetworkIsPlayerActive(id) and GetPlayerPed(id) ~= GetPlayerPed(-1)) then
-			-- for i,c in pairs(allServiceCops) do
-				-- if(i == GetPlayerServerId(id)) then
-					-- localIdCops[id] = c
-					-- break
-				-- end
-			-- end
-		-- end
-	-- end
-
-	-- for id, c in pairs(localIdCops) do
-		-- local ped = GetPlayerPed(id)
-		-- local blip = GetBlipFromEntity(ped)
-
-		-- if not DoesBlipExist( blip ) then
-
-			-- blip = AddBlipForEntity( ped )
-			-- SetBlipSprite( blip, 1 )
-			-- Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true )
-			-- HideNumberOnBlip( blip )
-			-- SetBlipNameToPlayerName( blip, id )
-
-			-- SetBlipScale( blip,  0.85 )
-			-- SetBlipAlpha( blip, 255 )
-
-			-- table.insert(blipsCops, blip)
-		-- else
-
-			-- blipSprite = GetBlipSprite( blip )
-
-			-- HideNumberOnBlip( blip )
-			-- if blipSprite ~= 1 then
-				-- SetBlipSprite( blip, 1 )
-				-- Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true )
-			-- end
-
-			-- Citizen.Trace("Name : "..GetPlayerName(id))
-			-- SetBlipNameToPlayerName( blip, id )
-			-- SetBlipScale( blip,  0.85 )
-			-- SetBlipAlpha( blip, 255 )
-
-			-- table.insert(blipsCops, blip)
-		-- end
-	-- end
 end
 
 --====================================================================================

@@ -1,5 +1,6 @@
 ambulancierIsInService = false
 local AdminCheatIsOn = false
+local TimeToRespawn = 0
 
 local spawnAmbulancierVehicleChoix = {}
 local KEY_ENTER = 18
@@ -586,8 +587,6 @@ Citizen.CreateThread(function()
           if ambulancierIsInService then
               TriggerServerEvent('ambulancier:requestMission')
               openMenuGeneralAmbulancier()
-          else
-              showMessageInformation("~r~Vous devais etre en service pour accedez au menu")
           end
     		end
     		if IsControlJustPressed(1, 177) then

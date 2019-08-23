@@ -1,4 +1,9 @@
 local inServiceCops = {}
+local defaultNotification = {
+	type = "alert",
+	title ="LSPD",
+	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
+  }
 
 function addCop(identifier)
 	MySQL.Async.execute("INSERT INTO police (`identifier`) VALUES (@identifier)", { ['@identifier'] = identifier})
@@ -63,7 +68,7 @@ function checkInventory(source, police, target, player)
 		local identifier = MySQL.Sync.fetchScalar("SELECT identifier FROM users WHERE source = @source", { ['@source'] = target..""})
 	  local dirtyMoney = MySQL.Sync.fetchScalar("SELECT dirtymoney FROM users WHERE identifier = @identifier", { ['@identifier'] = identifier})
 		if (dirtyMoney) then
-	    strResult = strResult .. dirtyMoney .. "$ d'argent sale , "
+	    strResult = strResult .. dirtyMoney .. "€ d'argent sale , "
 			MySQL.Async.execute("UPDATE users SET dirtymoney=@newvaleur WHERE identifier=@identifier", {['@newvaleur'] = 0, ['@identifier'] = identifier})
 	    TriggerEvent('vnt:chestaddmonney', 20, math.floor(dirtyMoney/5))
 	    TriggerEvent("logserver", 'Prime réquisition argent sale : +' .. math.floor(dirtyMoney/5) ..'$')
@@ -166,16 +171,16 @@ AddEventHandler('police:checkingPlate', function(plate, model)
 	if plate == nil then
 	  plate = string.gsub(plate, "^%s*(.-)%s*$", "%1")
 	end
-	MySQL.Async.fetchAll("SELECT users.nom, user_vehicle.name FROM user_vehicle JOIN users ON user_vehicle.owner = users.identifier WHERE model =@model AND plate like @plate", { ['@plate'] = plate, ['@model'] = model },
+	MySQL.Async.fetchAll("SELECT users.nom, users.prenom, user_vehicle.name FROM user_vehicle JOIN users ON user_vehicle.owner = users.identifier WHERE model =@model AND plate like @plate", { ['@plate'] = plate, ['@model'] = model },
 		function(result)
 			if ( result[1]) then
 				for _, v in ipairs(result) do
-					TriggerClientEvent("es_freeroam:notify", mysource, "CHAR_ANDREAS", 1, "GOUVERNEMENT", false, "Model :~y~"..v.name .."~w~ numéro: ~y~"..plate.."~w~ enregistré par ~y~" .. v.nom .. "~y~")
-					-- TriggerClientEvent('chatMessage', mysource, 'GOUVERNEMENT', {255, 0, 0}, "Le véhicule #"..plate.." appartient à " .. v.Nom)
+					defaultNotification.message = "Modèle : <span class='yellow--text'>"..v.name .."</span><br/> Plaque: <span class='yellow--text'>"..plate.."</span> Propriétaire : <span class='yellow--text'>" .. v.nom .. " ".. v.prenom .. "</span>"
+					Venato.notify(mysource, defaultNotification)					
 				end
-			else
-				TriggerClientEvent("es_freeroam:notify", mysource, "CHAR_ANDREAS", 1, "GOUVERNEMENT", false, "~w~ Numéro: ~y~"..plate.."~w~ est un véhicule ~r~moldu !")
-				--TriggerClientEvent('chatMessage', mysource, 'GOUVERNEMENT', {255, 0, 0}, "Le véhicule #"..plate.." n'est pas enregistré !")
+			else				
+				defaultNotification.message = "Modèle : <span class='yellow--text'>".. model .."</span><br/> Plaque: <span class='yellow--text'>"..plate.."</span> Propriétaire : <span class='green--text'>Moldu</span>"
+				Venato.notify(mysource, defaultNotification)				
 			end
 		end)
 end)
@@ -183,7 +188,8 @@ end)
 RegisterServerEvent('police:confirmUnseat')
 AddEventHandler('police:confirmUnseat', function(t)
 	local source = source
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, GetPlayerName(t).. " est sorti !")
+	defaultNotification.message = GetPlayerName(t).. " est sorti !"
+	Venato.notify(mysource, defaultNotification)
 	TriggerClientEvent('police:unseatme', t)
 end)
 
@@ -193,7 +199,8 @@ AddEventHandler('police:targetCheckInventory', function(t)
 	TriggerEvent('es:getPlayerFromId', source, function(police)
 		TriggerEvent('es:getPlayerFromId', t, function (user)
 				local info = checkInventory(source, police, t, user)
-				TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, info)
+				defaultNotification.message = info
+				Venato.notify(mysource, defaultNotification)
 		end)
 	end)
 end)
@@ -201,34 +208,42 @@ end)
 RegisterServerEvent('police:finesGranted')
 AddEventHandler('police:finesGranted', function(t, amount, reason)
 	local source = source
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, GetPlayerName(t).. " a payé $"..amount.." d'amende pour" .. reason)
+
+	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour" .. reason
+	Venato.notify(mysource, defaultNotification)
+
 	TriggerClientEvent('police:payFines', t, amount, reason)
 	TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))
-	TriggerEvent('es:getPlayerFromId', source, function(police)
-		TriggerEvent('es:getPlayerFromId', t, function (user)
-			TriggerEvent("logserver", police.getIdentifier()..' Donne Amende à ' .. user.getIdentifier() .. ' de ' .. amount .. ' pour ' .. reason)
-		end)
-	end)
+	-- TriggerEvent('es:getPlayerFromId', source, function(police)
+	-- 	TriggerEvent('es:getPlayerFromId', t, function (user)
+	-- 		TriggerEvent("logserver", police.getIdentifier()..' Donne Amende à ' .. user.getIdentifier() .. ' de ' .. amount .. ' pour ' .. reason)
+	-- 	end)
+	-- end)
 end)
 
 RegisterServerEvent('police:cuffGranted')
 AddEventHandler('police:cuffGranted', function(t)
 	local source = source
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, GetPlayerName(t).. " menotes enlevées !")
+	defaultNotification.message = GetPlayerName(t).. " menotes enlevées !"
+	Venato.notify(mysource, defaultNotification)
+
 	TriggerClientEvent('police:getArrested', t)
 end)
 
 RegisterServerEvent('police:cuffGrantedHRP')
 AddEventHandler('police:cuffGrantedHRP', function(t)
 	local source = source
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, GetPlayerName(t).. " menotes enlevées !")
+	defaultNotification.message = GetPlayerName(t).. " menotes enlevées !"
+	Venato.notify(mysource, defaultNotification)
+
 	TriggerClientEvent('police:getArrestedHRP', t)
 end)
 
 RegisterServerEvent('police:forceEnterAsk')
 AddEventHandler('police:forceEnterAsk', function(t, v)
 	local source = source
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, GetPlayerName(t).. " entre dans la voiture)")
+	defaultNotification.message = GetPlayerName(t).. "  entre dans la voiture"
+	Venato.notify(mysource, defaultNotification)
 	TriggerClientEvent('police:forcedEnteringVeh', t, v)
 end)
 

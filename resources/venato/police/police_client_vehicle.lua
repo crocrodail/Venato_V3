@@ -34,78 +34,14 @@ local policeveh = {
 	polmp4  = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
 	pol718  = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
 	speedo = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
-	xls2 = { x = 431.47, y = -997.245, z = 25.36, h = 178.83},
-	oracle = { x = 124.466506958008, y = -720.756774902344, z = 42.0282363891602 , h = 340.438323974609},
-	buzzard2 = { x = 169.905395507813, y = -671.843078613281, z = 43.140926361084 , h = 108.344207763672},
+	xls2 = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
+	oracle = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
+	buzzard2 ={ x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
+	polaventa = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
+	polf430 = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
+	polchiron = { x = 463.3115, y = -1019.43, z = 27.84 , h = 90.02},
 }
 
-local policeveh2 = {
-	opened = false,
-	title = "Cop Garage",
-	currentmenu = "main",
-	lastmenu = nil,
-	currentpos = nil,
-	selectedbutton = 0,
-	marker = { r = 0, g = 155, b = 255, a = 200, type = 1 }, -- ???
-	menu = {
-		x = 0.11,
-		y = 0.25,
-		width = 0.2,
-		height = 0.04,
-		buttons = 10,
-		from = 1,
-		to = 10,
-		scale = 0.4,
-		font = 0,
-		["main"] = {
-			title = "CATEGORIES",
-			name = "main",
-			buttons = {
-				--{name = "Police Stanier", costs = 0, description = {}, model = "police"},
-				--{name = "Police Buffalo", costs = 0, description = {}, model = "police2"},
-				--{name = "Police Interceptor", costs = 0, description = {}, model = "police3"},
-				{name = "Cop Car", costs = 0, description = {}, model = "police4"},
-				{name = "Police Riot", costs = 0, description = {}, model = "riot"},
-				--{name = "Police Esperanto", costs = 0, description = {}, model = "policeold2"},
-				--{name = "Police Transport Van", costs = 0, description = {}, model = "policet"},
-				--{name = "FBI", costs = 0, description = {}, model = "fbi"},
-				--{name = "FBI2", costs = 0, description = {}, model = "fbi2"},
-				{name = "Cop Motorcycle", costs = 0, description = {}, model = "policeb"},
-
-			}
-		},
-	},
-	police4 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	policefelon = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	fbi2 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	oracle2 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-
-	police15 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police14 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police13 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police12 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police11 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-
-	police6 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police7 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police8 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	policebike = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-
-	police2 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	sheriff = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	policeb = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	policet = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	police3 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	riot = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	pbus = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	polmp4  = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	pol718  = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	speedo = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	xls2 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	oracle = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-	buzzard2 = { x=1866.9225, y=3698.6623, z=33.3699, h=206.22286},
-}
 
 local stationGarage = {
 	{x=452.115966796875, y=-1018.10681152344, z=28.4786586761475},
@@ -158,10 +94,8 @@ function POLICE_SpanwVehicleCar(data)
 		local plyPolice = GetPlayerPed(-1)
 		local plyCoordsPolice = GetEntityCoords(plyPolice, 0)
 		local distance = GetDistanceBetweenCoords(stationGarage[1].x, stationGarage[1].y, stationGarage[1].z, plyCoordsPolice["x"], plyCoordsPolice["y"], plyCoordsPolice["z"], true)
-		print("distance = "..distance)
-		local pos = distance < 30 and policeveh[data.model] or policeveh2[data.model]
 		
-		Citizen.Trace('P' .. pos.x .. '  '.. pos.y .. '  '.. pos.z .. '  '.. pos.h)
+		local pos = distance < 30 and policeveh[data.model] or plyCoords
 		local veh = CreateVehicle(hash,pos.x,pos.y,pos.z,pos.h,true,true)
 
 		SetModelAsNoLongerNeeded(hash)

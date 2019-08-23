@@ -19,6 +19,12 @@ local LastVehDesc = ""
 local LastSpeed = 0
 local LastInfo = ""
 
+local defaultNotification = {
+	type = "alert",
+	title ="LSPD",
+	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
+}
+
 function GetPlayers2()
     local players = {}
     for i = 0, 255 do
@@ -126,12 +132,14 @@ function POLICE_radar()
             LastSpeed = 0
             LastInfo = ""
 
+            defaultNotification.message = "<span class='red--text'>Radar supprimé</span>"
+            Venato.notify(defaultNotification)
+            TriggerEvent('Menu:Close')
+
         else
 
-            ClearPrints()
-            SetTextEntry_2("STRING")
-            AddTextComponentString("~r~Vous n'êtes pas à coté de votre Radar !")
-            DrawSubtitleTimed(3000, 1)
+            defaultNotification.message = "<span class='yellow--text'>Vous n'êtes pas devant votre radar</span>"
+            Venato.notify(defaultNotification)
 
             Citizen.Wait(1500) -- prevent spam radar
 
@@ -177,6 +185,10 @@ function POLICE_radar()
             AddTextComponentString("Radar")
             EndTextCommandSetBlipName(RadarBlip)
 
+            defaultNotification.message = "<span class='green--text'>Radar placé</span>"
+            Venato.notify(defaultNotification)
+            
+            TriggerEvent('Menu:Close')
         end
 
     end
@@ -210,7 +222,7 @@ Citizen.CreateThread(function()
 
             end
 
-            if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), RadarPos.x, RadarPos.y, RadarPos.z, true) > 100 then -- if the player is too far from his radar
+            if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), RadarPos.x, RadarPos.y, RadarPos.z, true) > 300 then -- if the player is too far from his radar
 
                 SetEntityAsMissionEntity(Radar, false, false)
                 SetEntityVisible(Radar, false)
@@ -230,10 +242,9 @@ Citizen.CreateThread(function()
                 LastSpeed = 0
                 LastInfo = ""
 
-                ClearPrints()
-                SetTextEntry_2("STRING")
-                AddTextComponentString("~r~Vous êtes parti trop loin de votre Radar !")
-                DrawSubtitleTimed(3000, 1)
+                
+            defaultNotification.message = "<span class='red--text'>Vous êtes parti trop loin de votre radar, il a été supprimé.</span>"
+            Venato.notify(defaultNotification)
 
             end
 
@@ -274,8 +285,10 @@ Citizen.CreateThread(function()
                 DrawRect(0.76, 0.0455, 0.18, 0.09, 0,10, 28, 210)
                 drawTxt(0.77, 0.1, 0.185, 0.206, 0.40, info, 255, 255, 255, 255)
 
-                DrawRect(0.76, 0.145, 0.18, 0.09, 0,10, 28, 210)
-                drawTxt(0.77, 0.20, 0.185, 0.206, 0.40, LastInfo, 255, 255, 255, 255)
+                if LastInfo then
+                    DrawRect(0.76, 0.145, 0.18, 0.09, 0,10, 28, 210)
+                    drawTxt(0.77, 0.20, 0.185, 0.206, 0.40, LastInfo, 255, 255, 255, 255)
+                end
 
                 -- end
 
