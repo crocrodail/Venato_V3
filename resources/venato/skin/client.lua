@@ -3,8 +3,31 @@ local PersonnalisationMenu = false
 local Coords = nil
 local Prop = nil
 local loaded = false
+local inEdit = false
+
 if (GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01") or GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_f_freemode_01")) then
   loaded = true
+end
+function camspawn()
+Citizen.CreateThread(function()
+  local currentItem = 0
+  local distanceCam = 0.35
+  local me = GetPlayerPed(-1)
+  local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
+  local boneIndex = 65068
+  SetCamActive(cam, true)
+  RenderScriptCams(true, false, 0, 1, 0)
+  index = 0
+  value = 0.0
+  local h = GetEntityHeading(GetPlayerPed(-1))
+  inEdit = true
+    while inEdit == true do
+      Citizen.Wait(0)
+      local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z
+      AttachCamToPedBone(cam, GetPlayerPed(-1), boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam ,0.05 , true)
+      SetCamRot(cam, 0.0, 0.0, YawCam + h + 90, true)
+    end
+  end)
 end
 
 SkinChooser =  {}
@@ -48,6 +71,7 @@ Citizen.CreateThread(function()
 end)
 
 function OpenCreatMainMenu()
+    ShutdownLoadingScreen()
     PersonnalisationMenu = true
     local ped = Venato.GetPlayerPed()
     SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
@@ -91,15 +115,8 @@ end
 
 function shapeMenu(skin)
     current_skin.model = skin
-    local ped = Venato.GetPlayerPed()
-    local coords = GetEntityCoords(ped)
-    if not DoesCamExist(cam) then
-		  cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-	  end
-	  SetCamActive(cam,  true)
-	  RenderScriptCams(true,  false,  0,  true,  true)
-	  SetCamCoord(cam,  coords["x"]-0.6,  coords["y"]+0.7,  coords["z"]+0.7)
-	  PointCamAtCoord(cam,coords["x"],coords["y"],coords["z"]+0.8)
+    camspawn()
+
     Menu.setSubtitle("Forme du visage")
     Menu.clearMenu()
     Menu.addButton2("Retour", "modelMenu", nil, nil)
@@ -352,6 +369,7 @@ function endGenSkin()
   PersonnalisationMenu = false
   TriggerServerEvent('skin:saveOutfitForNewPlayer', current_skin)
   Menu.close()
+  inEdit = false
   Citizen.CreateThread(function ()
       startEditFace()
   end)

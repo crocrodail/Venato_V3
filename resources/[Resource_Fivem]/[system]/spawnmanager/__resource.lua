@@ -1,4 +1,4 @@
-client_script 'spawnmanager.lua'
+--client_script 'spawnmanager.lua'
 
 export 'getRandomSpawnPoint'
 export 'spawnPlayer'

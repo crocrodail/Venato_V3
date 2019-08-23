@@ -1,6 +1,6 @@
 local StartMoney = 5000
 local StartBank = 5000
-local clothesMale = '{"prop":{"bracelet":{"id":-1,"color":-1},"watch":{"id":-1,"color":-1},"ear":{"id":-1,"color":-1},"hat":{"id":-1,"color":-1},"glass":{"id":-1,"color":-1}},"ComponentVariation":{"accessory":{"id":0,"color":0},"torso2":{"id":29,"color":6},"leg":{"id":24,"color":6},"undershirt":{"id":32,"color":2},"parachute":{"id":0,"color":0},"Mask":{"id":0,"color":0},"torso":{"id":4,"color":0},"kevlar":{"id":0,"color":0},"shoes":{"id":26,"color":9},"badge":{"id":0,"color":0}}'
+local clothesMale = '{"prop":{"bracelet":{"id":-1,"color":-1},"watch":{"id":-1,"color":-1},"hat":{"id":-1,"color":-1},"glass":{"id":-1,"color":-1},"ear":{"id":-1,"color":-1}},"ComponentVariation":{"torso":{"id":0,"color":0},"kevlar":{"id":0,"color":0},"badge":{"id":0,"color":0},"Mask":{"id":0,"color":0},"shoes":{"id":22,"color":5},"torso2":{"id":22,"color":2},"parachute":{"id":0,"color":0},"undershirt":{"id":15,"color":0},"leg":{"id":0,"color":0},"accessory":{"id":0,"color":0}}}'
 local clothesFemale = '{"prop":{"hat":{"id":-1,"color":-1},"bracelet":{"id":-1,"color":-1},"glass":{"id":-1,"color":-1},"ear":{"id":-1,"color":-1},"watch":{"id":-1,"color":-1}},"ComponentVariation":{"badge":{"id":-1,"color":-1},"leg":{"id":-1,"color":-1},"Mask":{"id":0,"color":0},"torso":{"id":-1,"color":-1},"accessory":{"id":-1,"color":-1},"parachute":{"id":-1,"color":-1},"torso2":{"id":-1,"color":-1},"shoes":{"id":-1,"color":-1},"kevlar":{"id":-1,"color":-1},"undershirt":{"id":-1,"color":-1}}}'
 
 function setIdentity(identifier, data, source)

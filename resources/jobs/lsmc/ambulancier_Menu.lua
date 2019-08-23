@@ -1,7 +1,7 @@
 local mission = {}
 local alreadyTakeMission = false
 
-function updateMenu(newUrgenceMenu, bool)
+function updateMenuMeca(newUrgenceMenu, bool)
     mission = newUrgenceMenu
     alreadyTakeMission = bool
 end
@@ -9,12 +9,12 @@ end
 function toogleServiceAmbulancier()
   Menu.open()
   Menu.setTitle("LSMC")
-  Menu.setSubtitle("~b~Choix des tenues  ")
+  Menu.setSubtitle("Choix des tenues  ")
   Menu.clearMenu()
   if not ambulancierIsInService then
-    Menu.addButton("~r~Prendre son service", "AmbuOnService", nil)
+    Menu.addButton("Prendre son service", "AmbuOnService", nil)
   else
-    Menu.addButton("~r~Quitter son service", "leaveserv", nil)
+    Menu.addButton("Quitter son service", "leaveserv", nil)
   	Menu.addButton("Tenue Ambulancier", "Ambulancierf", nil)
     Menu.addButton("Tenue Docteur", "Docteur", nil)
     Menu.addButton("Equiper un stethoscope", "stethoscope", nil)
@@ -29,12 +29,12 @@ function openMenuGeneralAmbulancier()
   Menu.open()
   Menu.setTitle('Ambulancier')
   TriggerEvent('Menu:AddButton2',"Missions en cours", "AmbulancierGetMissionMenu", '', '')
-  TriggerEvent('Menu:AddButton2',"Soins", "AmbulancierMenuSendEvent", 'ambulancier:Heal', '')
-  TriggerEvent('Menu:AddButton2',"Réanimer", "AmbulancierMenuSendEvent", 'ambulancier:Heal2', '')
-  TriggerEvent('Menu:AddButton2',"Inspecter le type de bléssure", "AmbulancierMenuSendEvent", 'ambulancier:getBlassure', '')
+  TriggerEvent('Menu:AddButton2',"Soins", "Jobs.MenuSendEvent", 'ambulancier:Heal', '')
+  TriggerEvent('Menu:AddButton2',"Réanimer", "Jobs.MenuSendEvent", 'ambulancier:Heal2', '')
+  TriggerEvent('Menu:AddButton2',"Inspecter le type de bléssure", "Jobs.MenuSendEvent", 'ambulancier:getBlassure', '')
   TriggerEvent('Menu:AddButton2',"Faire payer", "ambulancier:MakePay", '', '')
   TriggerEvent('Menu:AddButton2',"Placer un objet", "AmbulancierPlaceObjet", '', '')
-  TriggerEvent('Menu:AddButton2',"Déplacé la personne", "AmbulancierPlaceObjet", '', '')
+  --TriggerEvent('Menu:AddButton2',"Déplacé la personne", "AmbulancierPlaceObjet", '', '')
   Menu.CreateMenu()
 end
 
@@ -75,8 +75,4 @@ function openMenuChoixHelicoAmbulancier()
   TriggerEvent('Menu:AddButton2',"Helico", "invokeVehicle", {type = 2}, '', "")
   TriggerEvent('Menu:AddButton2',"Ranger le vehicule", "invokeVehicle", {type = -1}, '', "")
   Menu.CreateMenu()
-end
-
-function AmbulancierMenuSendEvent(EventName)
-  TriggerEvent(EventName)
 end

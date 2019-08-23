@@ -25,7 +25,7 @@ Citizen.CreateThread(function()
       local killer = GetKiller()
       local Weapon = GetWeapon()
 			StartScreenEffect("DeathFailMPIn", 10000 , true)
-      TriggerServerEvent("Death:ComaOrNot", killer)
+      TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
       Citizen.Wait(3000)
       local coordPed = GetEntityCoords(playerPed, true)
       NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
@@ -40,6 +40,7 @@ RegisterNetEvent("Death:ComaOrNot:cb")
 AddEventHandler("Death:ComaOrNot:cb", function(boolean)
   Citizen.CreateThread(function()
     dead = true
+    TriggerServerEvent("Death:Dead", true)
     assommePlayer = boolean
     if assommePlayer and (causeOfDeath == 'Cause inconnue' or causeOfDeath == 'Trace de coup')  then
       TimeToRespawn = 120
@@ -80,6 +81,7 @@ Citizen.CreateThread(function()
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
       dead = false
+      TriggerServerEvent("Death:Dead", false)
     else
       if IsPedShooting(GetPlayerPed(-1)) then
         shooting = 2
@@ -187,8 +189,8 @@ Citizen.CreateThread(function()
   end
 end)
 
-RegisterNetEvent("Death:ComaOrNot:cb")
-AddEventHandler("Death:ComaOrNot:cb", function(who, coord, heading)
+RegisterNetEvent("Death:Reanimation")
+AddEventHandler("Death:Reanimation", function(who, coord, heading)
   local coord = coord
   if who == "victim" then
     Reanim("a")
@@ -204,6 +206,7 @@ function Reanim(char, coord, heading)
       SetEntityHeading(GetPlayerPed(-1), heading-90)
     else
       dead = false
+      TriggerServerEvent("Death:Dead", false)
     end
     Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_def", anim = "cpr_intro", useLib = true})
     Citizen.Wait(15000)

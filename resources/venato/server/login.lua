@@ -1,4 +1,4 @@
-local ingame = 0
+ingame = 0
 local whitelistUp = true
 MysqlAsyncLoad = false
 
@@ -49,5 +49,13 @@ AddEventHandler('playerDropped', function(reason)
 	else
 		print('^3Deconnection ('..reason.."): Non Enregistre : "..player.." ^7^7")
 	end
+	DataPlayers[source] = nil
 	ingame = ingame - 1
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(10000)
+		TriggerClientEvent("Venato:ActuPlayer", -1, ingame)
+	end
 end)

@@ -1,4 +1,6 @@
 FaceChooser =  {}
+local Prop
+local Coords
 FaceChooser.Type = {
     {index = 0,  display = 'Largeur du nez',            min = -1.0, max = 3.0, currentValue = 0},
     {index = 1,  display = 'Hauteur du nez',            min = -1.0, max = 2.0, currentValue = 0},
@@ -27,9 +29,20 @@ local inEdit = false
 local currentItem = 0
 local distanceCam = 0.35
 function startEditFace()
+  ShutdownLoadingScreen()
     Citizen.CreateThread(function()
         currentItem = 0
         inEdit = true
+        local ped = Venato.GetPlayerPed()
+        SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
+        Coords = GetEntityCoords(ped, true)
+        Prop = Venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+        SetEntityHeading(Prop, 27.0)
+        SetEntityCollision(Prop, false, true)
+        FreezeEntityPosition(Prop, true)
+        AttachEntityToEntity(ped, Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
+        SetEntityVisible(Prop, false, 0)
+        SetEntityVisible(ped, true, 0)
         local me = Venato.GetPlayerPed()
         local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
         local boneIndex = 65068
@@ -154,6 +167,8 @@ function saveFace()
     end
     TriggerServerEvent('face:save', data)
     TriggerServerEvent("Venato:SyncData")
+    DetachEntity(Venato.GetPlayerPed(), true, true)
+    DeleteEntity(Prop)
     DoScreenFadeOut(3500)
     Citizen.Wait(3500)
     FreezeEntityPosition(Venato.GetPlayerPed(), true)
