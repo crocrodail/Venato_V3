@@ -263,3 +263,35 @@ function Venato.notify(source, notif)
     title = notif.title
   })
 end
+
+RegisterServerEvent('vnt:chestaddmonney')
+AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
+  local idChest = idChest
+  local qty = qty
+  local notif = "Le compte de votre entreprise est plein"
+  MySQL.Async.fetchAll("SELECT * FROM coffres WHERE Id=@idChest", {['@idChest'] = idChest}, function(result)
+    if (result[1]) then
+      local money = result[1].Argent
+      local pack = result[1].Pack
+      MySQL.Async.fetchScalar("SELECT ArgentMax FROM coffre_pack WHERE Id=@Idpack", {['@Idpack'] = pack}, function(result1)
+        if (result1) then
+          local moneyMax = result1
+          local update = qty + money
+          if update < moneyMax then
+            MySQL.Async.execute("UPDATE coffres SET Argent=@update WHERE Id=@idChest", {['@idChest'] = idChest, ['@update'] = update})
+          else            
+            local defaultNotification = {
+              type = "alert",
+              title ="Coffre",
+              logo = "https://i.ibb.co/fvtWrv3/icons8-spam-96px.png",
+              message = notif
+            }
+            Venato.notify(source, defaultNotification)
+          end
+        else
+        end
+      end)
+    else
+    end
+  end)
+end)

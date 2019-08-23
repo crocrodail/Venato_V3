@@ -119,3 +119,12 @@ RegisterCommand(
         )
     end
 )
+
+RegisterCommand(
+    "menotte",
+    function(source, args, rawCommand)
+        TriggerEvent("police:getArrested")
+    end
+)
+
+

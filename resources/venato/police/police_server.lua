@@ -62,36 +62,34 @@ function getIdentifiant(id)
 
 end
 
-function checkInventory(source, police, target, player)
-	  local strResult = "Possede : "
-		local target = target
-		local identifier = MySQL.Sync.fetchScalar("SELECT identifier FROM users WHERE source = @source", { ['@source'] = target..""})
-	  local dirtyMoney = MySQL.Sync.fetchScalar("SELECT dirtymoney FROM users WHERE identifier = @identifier", { ['@identifier'] = identifier})
-		if (dirtyMoney) then
-	    strResult = strResult .. dirtyMoney .. "€ d'argent sale , "
-			MySQL.Async.execute("UPDATE users SET dirtymoney=@newvaleur WHERE identifier=@identifier", {['@newvaleur'] = 0, ['@identifier'] = identifier})
-	    TriggerEvent('vnt:chestaddmonney', 20, math.floor(dirtyMoney/5))
-	    TriggerEvent("logserver", 'Prime réquisition argent sale : +' .. math.floor(dirtyMoney/5) ..'$')
-    end
-  	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_inventory` JOIN items ON items.id = user_inventory.item_id WHERE user_id = @username", {['@username'] = identifier})
+function checkInventory(source, target)
+	local strResult = "Possede : <br/>"
+	-- local dirtyMoney = MySQL.Sync.fetchScalar("SELECT dirtymoney FROM users WHERE identifier = @identifier", { ['@identifier'] = target})
+	-- if (dirtyMoney) then
+	-- 	strResult = strResult .. dirtyMoney .. "€ d'argent sale , "
+	-- 		MySQL.Async.execute("UPDATE users SET dirtymoney=@newvaleur WHERE identifier=@identifier", {['@newvaleur'] = 0, ['@identifier'] = target})
+	-- 	TriggerEvent('vnt:chestaddmonney', 20, math.floor(dirtyMoney/5))
+	-- 	TriggerEvent("logserver", 'Prime réquisition argent sale : +' .. math.floor(dirtyMoney/5) ..'$')
+	-- end
+  	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_inventory` JOIN items ON items.id = user_inventory.item_id WHERE identifier = @username", {['@username'] = target})
 	  if (result) then
 		  for _, v in ipairs(result) do
 			  if(v.quantity ~= 0) then
-			  	strResult = strResult .. v.quantity .. " de " .. v.libelle .. ", "
-			  	if tonumber(v.isIllegal) == 1 then
-				  	TriggerClientEvent('police:dropIllegalItem', target, v.item_id, v.quantity)
-				  	print("isIllegal")
-			  	end
+			  	strResult = strResult .. v.quantity .. " de " .. v.libelle .. ", <br/>"
+			  	-- if tonumber(v.isIllegal) == 1 then
+				--   	TriggerClientEvent('police:dropIllegalItem', target, v.item_id, v.quantity)
+				--   	print("isIllegal")
+			  	-- end
 		  	end
 		end
 	end
-	strResult = strResult .. " / "
-	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_weapons` WHERE identifier = @username", { ['@username'] = player.getIdentifier()})
+	strResult = strResult .. "Armes : <br/>"
+	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_weapons` WHERE identifier = @username", { ['@username'] = target})
 	if (result) then
 		for _, v in ipairs(result) do
-			strResult = strResult .. "possession de " .. v.weapon_model .. ", "
+			strResult = strResult .. v.weapon_model .. ", <br/>"
 		end
-		TriggerEvent("weaponshop:RemoveWeaponsToPlayerFouille",target)
+		--TriggerEvent("weaponshop:RemoveWeaponsToPlayerFouille",target)
 	end
 	return strResult
 end
@@ -189,29 +187,31 @@ RegisterServerEvent('police:confirmUnseat')
 AddEventHandler('police:confirmUnseat', function(t)
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. " est sorti !"
-	Venato.notify(mysource, defaultNotification)
+	Venato.notify(source, defaultNotification)
 	TriggerClientEvent('police:unseatme', t)
 end)
 
 RegisterServerEvent('police:targetCheckInventory')
 AddEventHandler('police:targetCheckInventory', function(t)
 	local source = source
-	TriggerEvent('es:getPlayerFromId', source, function(police)
-		TriggerEvent('es:getPlayerFromId', t, function (user)
-				local info = checkInventory(source, police, t, user)
-				defaultNotification.message = info
-				Venato.notify(mysource, defaultNotification)
-		end)
-	end)
+	local targetSI = Venato.GetSteamID(t)
+	print(targetSI)
+	
+	local info = checkInventory(source, targetSI)
+
+	defaultNotification.message = info
+	Venato.notify(source, defaultNotification)		
 end)
 
 RegisterServerEvent('police:finesGranted')
 AddEventHandler('police:finesGranted', function(t, amount, reason)
 	local source = source
 
-	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour" .. reason
-	Venato.notify(mysource, defaultNotification)
+	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour " .. reason
+	defaultNotification.timeout = 5000
+	Venato.notify(source, defaultNotification)
 
+	Venato.paymentCB(t, amount)
 	TriggerClientEvent('police:payFines', t, amount, reason)
 	TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))
 	-- TriggerEvent('es:getPlayerFromId', source, function(police)
@@ -222,19 +222,19 @@ AddEventHandler('police:finesGranted', function(t, amount, reason)
 end)
 
 RegisterServerEvent('police:cuffGranted')
-AddEventHandler('police:cuffGranted', function(t)
+AddEventHandler('police:cuffGranted', function(t)	
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. " menotes enlevées !"
-	Venato.notify(mysource, defaultNotification)
+	Venato.notify(source, defaultNotification)
 
 	TriggerClientEvent('police:getArrested', t)
 end)
 
 RegisterServerEvent('police:cuffGrantedHRP')
-AddEventHandler('police:cuffGrantedHRP', function(t)
+AddEventHandler('police:cuffGrantedHRP', function(t)	
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. " menotes enlevées !"
-	Venato.notify(mysource, defaultNotification)
+	Venato.notify(source, defaultNotification)
 
 	TriggerClientEvent('police:getArrestedHRP', t)
 end)
@@ -243,7 +243,7 @@ RegisterServerEvent('police:forceEnterAsk')
 AddEventHandler('police:forceEnterAsk', function(t, v)
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. "  entre dans la voiture"
-	Venato.notify(mysource, defaultNotification)
+	Venato.notify(source, defaultNotification)
 	TriggerClientEvent('police:forcedEnteringVeh', t, v)
 end)
 

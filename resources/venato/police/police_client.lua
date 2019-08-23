@@ -7,12 +7,12 @@
  ceinture = false
  ped = nil
  uniforclassic = false
+
 isCopInService = false
 controlWeapon = true
 local rank = "inconnu"
 local checkpoints = {}
 local existingVeh = nil
-local handCuffed = false
 local isAlreadyDead = false
 local allServiceCops = {}
 local blipsCops = {}
@@ -72,45 +72,17 @@ AddEventHandler('police:noLongerCop', function()
 		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(existingVeh))
 		existingVeh = nil
 	end
-
-	ServiceOff()
+  ServiceOff()  
 end)
 
-RegisterNetEvent('police:getArrested')
-AddEventHandler('police:getArrested', function()
-		handCuffed = not handCuffed
-		if(handCuffed) then
-			TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "vous êtes menoté")
-		else
-			TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "LIBRE !")
-		end
-end)
 
 function restart_server()
 	SetTimeout(1000, function()
-		TriggerEvent('police:HRP')
 		restart_server()
 	end)
 end
 restart_server()
 
-RegisterNetEvent('police:HRP')
-AddEventHandler('police:HRP', function()
-	if(handCuffedHRP) then
-		TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "vous êtes menoté")
-	end
-end)
-
-
-RegisterNetEvent('police:getArrestedHRP')
-AddEventHandler('police:getArrestedHRP', function()
-		handCuffedHRP = not handCuffedHRP
-		if(handCuffedHRP) then
-		TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "vous êtes menoté")
-		else
-			TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "LIBRE !")
-		end
-end)
 
 RegisterNetEvent('police:dropIllegalItem')
 AddEventHandler('police:dropIllegalItem', function(id,qty)
@@ -120,9 +92,9 @@ end)
 
 RegisterNetEvent('police:unseatme')
 AddEventHandler('police:unseatme', function(t)
-	local ped = GetPlayerPed(t)
+	local ped = GetPlayerPed(-1)
 	ClearPedTasksImmediately(ped)
-	plyPos = GetEntityCoords(GetPlayerPed(-1),  true)
+	plyPos = GetEntityCoords(ped,  true)
 	local xnew = plyPos.x+2
 	local ynew = plyPos.y+2
 
@@ -130,18 +102,13 @@ AddEventHandler('police:unseatme', function(t)
 end)
 
 RegisterNetEvent('police:forcedEnteringVeh')
-AddEventHandler('police:forcedEnteringVeh', function(veh)
-	if(handCuffed) then
-		local pos = GetEntityCoords(GetPlayerPed(-1))
-		local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+AddEventHandler('police:forcedEnteringVeh', function()	
+  local pos = GetEntityCoords(GetPlayerPed(-1))
+  local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
 
-		local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
-		local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-
-		if vehicleHandle ~= nil then
-			SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 1)
-		end
-	end
+  local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+  local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
+  SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 1)
 end)
 
 RegisterNetEvent('police:resultAllCopsInService')
@@ -175,12 +142,13 @@ end
 
 function POLICE_removeOrPlaceCone()
   local mePed = GetPlayerPed(-1)
-  local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
+  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0) 
   local cone = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_roadcone02a"), false, false, false)
   if cone ~= 0 then   
     DeleteObject(cone)
-  else
+  else    
     local object = Venato.CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z)    
+    SetEntityRotation(objet, GetEntityRotation(Venato.GetPlayerPed()))
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
     SetEntityInvincible(object , false)
@@ -195,13 +163,15 @@ end
 
 function POLICE_removeOrPlaceBarrier()
   local mePed = GetPlayerPed(-1)
-  local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
+  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0) 
   local barriere = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_barrier_work05"), false, false, false)
   
   if barriere ~= 0 then
     DeleteObject(barriere)
   else
     local object = Venato.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)	
+    local rot = GetEntityRotation(Venato.GetPlayerPed())
+    SetEntityRotation(objet, rot.x, rot.y, rot.z)    
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
     SetEntityInvincible(object , false)
@@ -224,6 +194,8 @@ function POLICE_removeOrPlaceHerse()
     herse = 0
   else
   local object = Venato.CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z)
+  local rot = GetEntityRotation(Venato.GetPlayerPed())
+  SetEntityRotation(objet, rot.x, rot.y, rot.z)    
   FreezeEntityPosition(object, true)
 	PlaceObjectOnGroundProperly(object)
 	SetEntityDynamic(object , true)
@@ -812,23 +784,9 @@ Citizen.CreateThread(function()
                 end
               end
             end
-          end
-		else
-			if (handCuffed == true) then
-			  RequestAnimDict('mp_arresting')
-
-			  while not HasAnimDictLoaded('mp_arresting') do
-				Citizen.Wait(0)
-			  end
-
-			  local myPed = PlayerPedId()
-			  local animation = 'idle'
-			  local flags = 16
-
-			  TaskPlayAnim(myPed, 'mp_arresting', animation, 8.0, -8, -1, flags, 0, 0, 0, 0)
-			end
-		end
+          end		
     end
+  end
 end)
 
 ---------------------------------------------------------------------------------------
@@ -903,7 +861,6 @@ Citizen.CreateThread(function()
 		Citizen.InvokeNative(0xDC0F817884CDD856, i, false)
 	end
 end)
-
 
 function swat()
 	uniforclassic = false
@@ -1051,7 +1008,6 @@ function villesuit()
   SetProps(props)
 end
 
-
 function cadetunif()
 	uniforclassic = true
 	local props = {}
@@ -1100,7 +1056,6 @@ function cadetunif()
   SetComponent(components)
   SetProps(props)
 end
-
 
 function SetProps(props)
   for _, comp in ipairs(props) do
@@ -1254,7 +1209,7 @@ function DrawText3d(x,y,z, text)
     end
 end
 
-
+-- Herses
 Citizen.CreateThread(function()
   while true do
       Citizen.Wait(0)
@@ -1278,6 +1233,6 @@ Citizen.CreateThread(function()
               SetVehicleTyreBurst(veh, 6, true, 1000.0)
               SetVehicleTyreBurst(veh, 7, true, 1000.0)
           end
-      end
+      end      
   end
 end)
