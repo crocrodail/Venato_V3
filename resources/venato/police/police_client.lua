@@ -103,7 +103,7 @@ end)
 
 RegisterNetEvent('police:forcedEnteringVeh')
 AddEventHandler('police:forcedEnteringVeh', function(veh)	
-		if vehicleHandle ~= nil then
+		if veh ~= nil then
 			SetPedIntoVehicle(GetPlayerPed(-1), veh, 1)
 		end
 end)

@@ -606,6 +606,7 @@ function POLICE_PutInVehicle()
 
     local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
     local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
+    print('put in vehicle : ' .. vehicleHandle)
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), vehicleHandle)
 	else
