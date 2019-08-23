@@ -170,7 +170,8 @@ function POLICE_removeOrPlaceBarrier()
     DeleteObject(barriere)
   else
     local object = Venato.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)	
-    SetEntityRotation(objet, GetEntityRotation(Venato.GetPlayerPed()))
+    local rot = GetEntityRotation(Venato.GetPlayerPed())
+    SetEntityRotation(objet, rot.x, rot.y, rot.z)    
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
     SetEntityInvincible(object , false)
@@ -193,6 +194,8 @@ function POLICE_removeOrPlaceHerse()
     herse = 0
   else
   local object = Venato.CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z)
+  local rot = GetEntityRotation(Venato.GetPlayerPed())
+  SetEntityRotation(objet, rot.x, rot.y, rot.z)    
   FreezeEntityPosition(object, true)
 	PlaceObjectOnGroundProperly(object)
 	SetEntityDynamic(object , true)
