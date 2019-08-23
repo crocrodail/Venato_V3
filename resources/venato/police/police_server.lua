@@ -207,9 +207,11 @@ RegisterServerEvent('police:finesGranted')
 AddEventHandler('police:finesGranted', function(t, amount, reason)
 	local source = source
 
-	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour" .. reason
+	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour " .. reason
+	defaultNotification.timeout = 5000
 	Venato.notify(source, defaultNotification)
 
+	Venato.paymentCB(t, amount)
 	TriggerClientEvent('police:payFines', t, amount, reason)
 	TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))
 	-- TriggerEvent('es:getPlayerFromId', source, function(police)

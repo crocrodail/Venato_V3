@@ -84,29 +84,6 @@ end
 -- UserAction restart police
 --====================================================================================
 
-	RegisterNetEvent('police:fouille')
-	AddEventHandler('police:fouille', function()
-		if(isCopInService) then
-			t, distance = GetClosestPlayer()
-			if(distance ~= -1 and distance < 1) then
-				TriggerServerEvent("police:targetFouille", GetPlayerServerId(t))
-			else
-				TriggerServerEvent("police:targetFouilleEmpty")
-			end
-		else
-			TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Vous n'êtes pas en service !")
-		end
-	end)
-
-	RegisterNetEvent('police:amende')
-	AddEventHandler('police:amende', function(t, amount)
-		if(isCopInService) then
-			TriggerServerEvent("police:amendeGranted", t, amount)
-		else
-			TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Vous n'êtes pas en service !")
-		end
-	end)
-
 	RegisterNetEvent('police:cuff')
 	AddEventHandler('police:cuff', function(t)
 		if(isCopInService) then
@@ -125,14 +102,6 @@ end
 	AddEventHandler('police:getArrested', function()
 		TriggerEvent("anim:cuff")
 	end)
-
-	RegisterNetEvent('police:payAmende')
-	AddEventHandler('police:payAmende', function(amount)
-		TriggerServerEvent('bank:withdrawAmende', amount)
-		TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Vous avez payé une amende de $"..amount..".")
-	end)
-
-
 
 	RegisterNetEvent('police:forceEnter')
 	AddEventHandler('police:forceEnter', function(id)
@@ -162,7 +131,7 @@ function POLICE_showInfoClient()
         local offsetX = 0.87
         local offsetY = 0.785
         DrawRect(offsetX, offsetY, 0.23, 0.035, 0, 0, 0, 215)
-
+        
         SetTextFont(1)
         SetTextScale(0.0,0.5)
         SetTextCentre(true)
@@ -696,9 +665,11 @@ end
 
 RegisterNetEvent('police:payFines')
 AddEventHandler('police:payFines', function(amount)
-	TriggerServerEvent('bank:withdrawAmende', amount)
+	Venato.
     defaultNotification.message = "Vous avez payé <span class='green--text'>"..amount.."</span>€ d'amende."
+    defaultNotification.timeout = 5000
     Venato.notify(defaultNotification)
+    defaultNotification.timeout = 3500
 end)
 
 --====================================================================================
