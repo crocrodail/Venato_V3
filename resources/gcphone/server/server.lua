@@ -49,10 +49,9 @@ end)
 function getSourceFromIdentifier(identifier, cb)
     local UserData = exports.venato:GetDataPlayers()
         for k , user in pairs(UserData) do
-            if (user.getIdentifier ~= nil and user.SteamId == identifier) or (user.identifier == identifier) then
-                cb(k)
-                return
-            end
+          if user.SteamId == identifier then
+            cb(k)
+          end
         end
     cb(nil)
 end
@@ -77,14 +76,8 @@ end
 
 
 function getPlayerID(source)
-    local identifiers = GetPlayerIdentifiers(source)
-    local player = getIdentifiant(identifiers)
-    return player
-end
-function getIdentifiant(id)
-    for _, v in ipairs(id) do
-        return v
-    end
+  local UserData = exports.venato:GetDataPlayers()
+  return UserData[source].SteamId
 end
 
 
