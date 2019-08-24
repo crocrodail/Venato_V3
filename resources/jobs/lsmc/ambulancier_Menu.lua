@@ -1,7 +1,7 @@
 local mission = {}
 local alreadyTakeMission = false
 
-function updateMenuMeca(newUrgenceMenu, bool)
+function updateMenuAmbu(newUrgenceMenu, bool)
     mission = newUrgenceMenu
     alreadyTakeMission = bool
 end

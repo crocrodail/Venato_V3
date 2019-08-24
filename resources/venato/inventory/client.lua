@@ -55,7 +55,7 @@ Citizen.CreateThread(function()
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropItem))
 							if objet ~= 0 and objet ~= nil then
-								DeleteEntity(objet)
+								ForceDeleteObject(objet)
 							end
 						else
 							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." "..v.libelle.." .")
@@ -83,7 +83,7 @@ Citizen.CreateThread(function()
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropMoney))
 							if objet ~= 0 and objet ~= nil then
-								DeleteEntity(objet)
+								ForceDeleteObject(objet)
 							end
 						else
 							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." € .")
@@ -113,7 +113,7 @@ Citizen.CreateThread(function()
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropWeapon))
 							if objet ~= 0 and objet ~= nil then
-								DeleteEntity(objet)
+								ForceDeleteObject(objet)
 							end
 						else
 							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.libelle.." .")

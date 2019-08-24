@@ -393,9 +393,9 @@ AddEventHandler('Inventory:CreateCheque', function(player, montant)
           break
         end
       end
-      TriggerClientEvent('Venato:notify', source, defaultNotification)
+      TriggerClientEvent('Venato:notify', source, Notification)
       Notification.message = "Vous avez reçu un chèque de "..montant.." € ."
-      TriggerClientEvent('Venato:notify', target, defaultNotification)
+      TriggerClientEvent('Venato:notify', target, Notification)
     end)
   end)
 end)
@@ -409,9 +409,9 @@ AddEventHandler('Inventory:NotifGive', function(recever, qty, id)
    logo = DataPlayers[source].Inventaire[id].picture,
    message = "Vous avez reçu "..qty.." "..DataPlayers[source].Inventaire[id].libelle..".",
   }
-  TriggerClientEvent('Venato:notify', recever, defaultNotification)
+  TriggerClientEvent('Venato:notify', recever, Notification)
   Notification.message = "Vous avez donné "..qty.." "..DataPlayers[source].Inventaire[id].libelle.."."
-  TriggerClientEvent('Venato:notify', source, defaultNotification)
+  TriggerClientEvent('Venato:notify', source, Notification)
 end)
 
 RegisterServerEvent('Inventaire:ForceDeleteObject')

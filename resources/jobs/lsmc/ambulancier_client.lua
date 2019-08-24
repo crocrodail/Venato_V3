@@ -701,7 +701,7 @@ function updateMenuMissionAmbulancier()
         --table.insert(items, {['Title'] = 'Terminer la mission', ['Function'] = finishMissionAmbulancier})
         currentMissionAmbulancierNotNil = true
     end
-    updateMenu(items,currentMissionAmbulancierNotNil)
+    updateMenuAmbu(items,currentMissionAmbulancierNotNil)
 end
 
 
