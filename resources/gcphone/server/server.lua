@@ -74,13 +74,16 @@ function getIdentifierByPhoneNumber(phone_number)
     return nil
 end
 
-
 function getPlayerID(source)
-  while loaded do
-    Citizen.Wait(0)
+  local identifiers = GetPlayerIdentifiers(source)
+  local player = getIdentifiant(identifiers)
+  return player
+end
+
+function getIdentifiant(id)
+  for _, v in ipairs(id) do
+    return v
   end
-  local UserData = exports.venato:GetDataPlayers()
-  return UserData[source].SteamId
 end
 
 
