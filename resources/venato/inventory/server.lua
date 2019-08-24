@@ -161,14 +161,13 @@ end)
 
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
-  print(ClosePlayer)
-  print(row[2])
-  print(json.encode(DataPlayers[ClosePlayer].Inventaire))
-  local qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity or 0
-  if qtyTarget == nil then
+  local qtyTarget
+  if DataPlayers[ClosePlayer].Inventaire[row[2]] == nil then
     qtyTarget = 0
+  else
+    qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity
   end
-	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[row[2]].quantity)
+	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[source].Poid, qtyTarget)
 end)
 
 ItemsOnTheGround = {}
