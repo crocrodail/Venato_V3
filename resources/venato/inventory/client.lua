@@ -556,15 +556,16 @@ function UseItem(table)
   end
 end
 
-function GiveItem(table)
-  print(table[1])
-  print(table[2])
-  print(table[3])
+function GiveItem(row)
+  local row = row
+  print(row[1])
+  print(row[2])
+  print(row[3])
   local ClosePlayer, distance = Venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     local nb = Venato.OpenKeyboard('', '0', 2, "Nombre à donner")
     if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
-      TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), table)
+      TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), row)
       OpenInventory()
     end
   else

@@ -160,12 +160,13 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
 end)
 
 RegisterServerEvent('Inventory:CallInfo')
-AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, table)
+AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
   print(ClosePlayer)
   print(nb)
-  print(table)
-  print(json.decode(table))
-	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[table[2]].quantity)
+  print(row)
+  print(row[1])
+  print(json.decode(row))
+	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[row[2]].quantity)
 end)
 
 ItemsOnTheGround = {}
