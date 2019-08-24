@@ -110,7 +110,7 @@ function accessGranded(SteamId, source , balek)
         }
       }
       MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = getSteamID(source),  ["@pseudo"] = GetPlayerName(source)}, function()
-        
+
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
@@ -187,7 +187,7 @@ function Venato.Round(num, numDecimalPlaces)
 end
 
 function Venato.paymentCB(source, amount)
-  if DataPlayers[source].Bank <= amount then
+  if DataPlayers[source].Bank <= tonumber(amount) then
     return false
   else
     DataPlayers[source].Bank = DataPlayers[source].Bank - amount
@@ -203,7 +203,7 @@ end
 
 function Venato.paymentVP(source, amount)
   print(DataPlayers[source].VenatoPoint)
-  if DataPlayers[source].VenatoPoint <= amount then
+  if DataPlayers[source].VenatoPoint <= tonumber(amount) then
     return false
   else
     DataPlayers[source].VenatoPoint = DataPlayers[source].VenatoPoint - amount
@@ -279,7 +279,7 @@ AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
           local update = qty + money
           if update < moneyMax then
             MySQL.Async.execute("UPDATE coffres SET Argent=@update WHERE Id=@idChest", {['@idChest'] = idChest, ['@update'] = update})
-          else            
+          else
             local defaultNotification = {
               type = "alert",
               title ="Coffre",

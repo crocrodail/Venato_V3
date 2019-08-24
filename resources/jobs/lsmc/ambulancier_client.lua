@@ -777,7 +777,7 @@ function()
           TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
           Citizen.Wait(8000)
           ClearPedTasks(GetPlayerPed(-1));
-          TriggerServerEvent('ambulancier:healHim',closestPlayer)
+          TriggerServerEvent('ambulancier:healHim',GetPlayerServerId(ClosePlayer))
         else
           Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end

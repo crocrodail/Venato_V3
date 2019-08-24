@@ -193,7 +193,7 @@ RegisterNetEvent("Death:Reanimation")
 AddEventHandler("Death:Reanimation", function(who, coord, heading)
   local coord = coord
   if who ~= "victim" then
-    Reanim("a")
+    Reanim("a",coord,heading)
   else
     Reanim("b")
   end
@@ -223,5 +223,6 @@ function Reanim(char, coord, heading)
     Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_success", useLib = true})
     Citizen.Wait(26000)
     ClearPedTasks(GetPlayerPed(-1))
+    StopAllScreenEffects()
   end)
 end
