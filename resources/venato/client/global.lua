@@ -47,6 +47,7 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
     LoadBlips()
     Venato.LoadSkin(DataPlayers[source])
     Venato.LoadClothes()
+    SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[source].Health))
     TriggerServerEvent("GcPhone:Load")
   end
 end)

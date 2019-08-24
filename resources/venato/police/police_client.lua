@@ -691,18 +691,6 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         if(isCop) then
-          if IsControlJustPressed(1, 170) then
-      			TriggerEvent('Menu:Close')
-          end
-
-      		if IsControlJustPressed(1, 177) then
-      			TriggerEvent('Menu:Close')
-          end
-
-      		if IsControlJustPressed(1, 166) then
-      			TriggerEvent('Menu:Close')
-          end
-
           if(isNearArmurie()) then
     				DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour ouvrir l'armurerie",0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
     				if IsControlJustPressed(1,51) then

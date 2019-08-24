@@ -261,13 +261,20 @@
       CauseOfDeath[source] = cause
     end)
 
-    RegisterNetEvent("ambulancier:Reanimationh")
-    AddEventHandler("ambulancier:Reanimation", function(idVictim, coord, heading)
+    RegisterNetEvent("ambulance:getInfoReanim")
+    AddEventHandler("ambulance:getInfoReanim", function(vict)
       local source = source
-      local victime = idVictim
-      TriggerClientEvent("Death:Reanimation", source, "medic", coord, heading)
-      TriggerClientEvent("Death:Reanimation", victime, "victim")
-      removeClientAmbulancier(idVictim)
+      local vict = vict
+      TriggerClientEvent("ambulance:ClientGetInfoRea", vict, source)
+    end)
+
+    RegisterNetEvent("ambulancier:Reanimation")
+    AddEventHandler("ambulancier:Reanimation", function(ambu, coord, heading)
+      local source = source
+      local ambu = ambu
+      TriggerClientEvent("Death:Reanimation", ambu, "medic", coord, heading)
+      TriggerClientEvent("Death:Reanimation", source, "victim")
+      removeClientAmbulancier(ambu)
     end)
 
     RegisterNetEvent("ambulancier:GetInTableTheBlassure")
@@ -286,7 +293,14 @@
 
     RegisterServerEvent('ambulancier:healHim')
     AddEventHandler('ambulancier:healHim', function(idToHeal)
-      TriggerClientEvent('ambulancier:HealMe',-1,idToHeal)
+      TriggerClientEvent('ambulancier:HealMe',idToHeal)
+      local notif = {
+        title= "LSMC",
+        type = "info", --  danger, error, alert, info, success, warning
+        logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
+        message = "Vous venez d'etre soigné.",
+      }
+      TriggerClientEvent("Venato:notify", idToHeal, notif)
     end)
 
     RegisterServerEvent('ambulancier:Makepayement')

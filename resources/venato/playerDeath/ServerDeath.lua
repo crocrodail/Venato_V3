@@ -15,15 +15,19 @@ RegisterServerEvent('Death:ComaOrNot')
 AddEventHandler('Death:ComaOrNot', function(killer, causeOfDeath)
   local source = source
   Cause[source] = causeOfDeath
-	if shooting[killer] then
-		TriggerClientEvent("Death:ComaOrNot:cb", source, true)
-	else
-		TriggerClientEvent("Death:ComaOrNot:cb", source, false)
+  if killer ~= nil then
+	  if shooting[killer] == false then
+		  TriggerClientEvent("Death:ComaOrNot:cb", source, true)
+	  else
+		  TriggerClientEvent("Death:ComaOrNot:cb", source, false)
+    end
+  else
+    TriggerClientEvent("Death:ComaOrNot:cb", source, false)
   end
 end)
 
-RegisterServerEvent('Death:Dead')
-AddEventHandler('Death:Dead', function(bool, health)
+RegisterServerEvent('Death:health')
+AddEventHandler('Death:health', function(bool, health)
   local source = source
   local health = health or 100
   if bool then

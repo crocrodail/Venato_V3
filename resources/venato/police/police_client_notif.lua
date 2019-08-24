@@ -236,14 +236,11 @@ end)
 -- Notification
 function notifIcon(icon, type, sender, title, text)
 	Citizen.CreateThread(function()
-        Wait(1)
-        SetNotificationTextEntry("STRING");
         if POLICE_TEXT[text] ~= nil then
             text = POLICE_TEXT[text]
         end
-        AddTextComponentString(text);
-        SetNotificationMessage(icon, icon, true, type, sender, title, text);
-        DrawNotification(false, true);
+        defaultNotification.message = text
+        Venato.notify(defaultNotification)
 	end)
 end
 
@@ -258,14 +255,10 @@ RegisterNetEvent("police:recepMsg")
 AddEventHandler("police:recepMsg",function(message)
     if isCopInService then
         --notifIcon("CHAR_CALL911", 1, "Police Info", false, message)
-        TriggerEvent("pNotify:SendNotification", {
-          text = ""..message.."",
-          type = "info",
-          queue = "lmao",
-          timeout = 60000,
-          layout = "centerLeft",
-          theme = "gta"
-        })
+        defaultNotification.message = message
+        defaultNotification.timeout = 60000
+        Venato.notify(defaultNotification)
+        defaultNotification.timeout = 3500
     end
 end)
 
@@ -289,32 +282,26 @@ function finishCurrentMissionPolice()
 end
 
 function updateMenuMissionPolice()
-    local items = {{['Title'] = 'Retour', ['ReturnBtn'] = true }}
-      for k,v in pairs(POLICE_listMissions) do
-        Citizen.Trace('==>' .. k )
-    end
+  local items = {
+  }
     for _,m in pairs(POLICE_listMissions) do
         local item = {
             Title = '' .. m.id .. ' - ' .. m.type,
             mission = m,
-            Function = acceptMissionPolice
+            Function = "acceptMissionAmbulancier"
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. ' (' .. #m.acceptBy ..' Unité)'
-            item.TextColor = {39, 174, 96, 255}
         end
-        table.insert(items, item)
-        Citizen.Trace('add')
+        items[m] = item
     end
 
     if POLICE_currentMissions ~= nil then
-        table.insert(items, {['Title'] = 'Terminer la mission', ['Function'] = finishCurrentMissionPolice})
+        POLICE_currentMissions = true
+      else
+        POLICE_currentMissions = false
     end
-    table.insert(items, {['Title'] = 'Fermer'})
-
-    menu = {['Title'] = 'Missions en cours',  ['SubMenu'] = {
-        ['Title'] = 'Missions en cours', ['Items'] = items
-    }}
+    updateMenuMissionPolice(items,POLICE_currentMissions)
 end
 
 function callPolice(type)
@@ -381,12 +368,12 @@ end)
 
 RegisterNetEvent('police:callPolice')
 AddEventHandler('police:callPolice',function(data)
-    callPolice(data.type)
+    callPolice(data)
 end)
 
 RegisterNetEvent('police:callPoliceCustom')
 AddEventHandler('police:callPoliceCustom',function()
-    local raison = openTextInput('','', 32)
+    local raison = Venato.OpenKeyboard('', '', 100,"Raison de l'appelle")
     if raison ~= nil and raison ~= '' then
         callPolice(raison)
     end
@@ -394,10 +381,14 @@ end)
 
 RegisterNetEvent('police:msg')
 AddEventHandler('police:msg',function()
-    local raison = openTextInput('','', 256)
+    local raison = Venato.OpenKeyboard('', '0', 256,"Message à envoyer à la police")
     if raison ~= nil and raison ~= '' then
         TriggerServerEvent("police:msgserv", raison)
-        TriggerEvent("es_freeroam:notify", "CHAR_ANDREAS", 1, "Telephone", false, "~g~Le message a bien été envoyé !")
+        defaultNotification.message = "Le message a bien été envoyé !"
+        Venato.notify(defaultNotification)
+    else
+        defaultNotification.message = "Le message n'a pas pu etre envoyé"
+        Venato.notify(defaultNotification)
     end
 end)
 
@@ -548,7 +539,7 @@ end
 
 
 function POLICE_Crocheter()
-	Citizen.CreateThread(function()        
+	Citizen.CreateThread(function()
         local pos = GetEntityCoords(GetPlayerPed(-1))
         local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
 
@@ -643,7 +634,7 @@ end
 
 function POLICE_Fines(amount, reason, points)
     local t, distance = GetClosestPlayer()
-  
+
 	if(distance ~= -1 and distance < 3) then
         if points > 0 then
             --TriggerServerEvent("dmv:removePoints", points, GetPlayerServerId(t), source)
@@ -664,7 +655,7 @@ end
 --====================================================================================
 
 RegisterNetEvent('police:payFines')
-AddEventHandler('police:payFines', function(amount)	
+AddEventHandler('police:payFines', function(amount)
     defaultNotification.message = "Vous avez payé <span class='green--text'>"..amount.."</span>€ d'amende."
     defaultNotification.timeout = 5000
     Venato.notify(defaultNotification)

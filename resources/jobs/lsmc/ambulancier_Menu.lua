@@ -1,7 +1,7 @@
 local mission = {}
 local alreadyTakeMission = false
 
-function updateMenuMeca(newUrgenceMenu, bool)
+function updateMenuAmbu(newUrgenceMenu, bool)
     mission = newUrgenceMenu
     alreadyTakeMission = bool
 end
@@ -29,10 +29,10 @@ function openMenuGeneralAmbulancier()
   Menu.open()
   Menu.setTitle('Ambulancier')
   TriggerEvent('Menu:AddButton2',"Missions en cours", "AmbulancierGetMissionMenu", '', '')
-  TriggerEvent('Menu:AddButton2',"Soins", "Jobs.MenuSendEvent", 'ambulancier:Heal', '')
-  TriggerEvent('Menu:AddButton2',"Réanimer", "Jobs.MenuSendEvent", 'ambulancier:Heal2', '')
-  TriggerEvent('Menu:AddButton2',"Inspecter le type de bléssure", "Jobs.MenuSendEvent", 'ambulancier:getBlassure', '')
-  TriggerEvent('Menu:AddButton2',"Faire payer", "ambulancier:MakePay", '', '')
+  TriggerEvent('Menu:AddButton2',"Soins", "MenuSendEvent", 'ambulancier:Heal', '')
+  TriggerEvent('Menu:AddButton2',"Réanimer", "MenuSendEvent", 'ambulancier:Heal2', '')
+  TriggerEvent('Menu:AddButton2',"Inspecter le type de bléssure", "MenuSendEvent", 'ambulancier:getBlassure', '')
+  TriggerEvent('Menu:AddButton2',"Faire payer", "MenuSendEvent", 'ambulancier:MakePay', '')
   TriggerEvent('Menu:AddButton2',"Placer un objet", "AmbulancierPlaceObjet", '', '')
   --TriggerEvent('Menu:AddButton2',"Déplacé la personne", "AmbulancierPlaceObjet", '', '')
   Menu.CreateMenu()

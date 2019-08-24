@@ -194,14 +194,7 @@ Citizen.CreateThread(function()
     Wait(0)
 
     if not chatInputActive then
-      if IsControlPressed(0, 245) --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
-        chatInputActive = true
-        chatInputActivating = true
 
-        SendNUIMessage({
-          type = 'ON_OPEN'
-        })
-      end
     end
 
     if chatInputActivating then

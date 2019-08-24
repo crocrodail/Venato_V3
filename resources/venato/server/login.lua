@@ -43,7 +43,7 @@ AddEventHandler('playerDropped', function(reason)
 	local player = getSteamID(source)
 	if DataPlayers[source] ~= nil then
 		player = DataPlayers[source].SteamId
-  	print('^3playerDropped('..reason..'): ' .. player.."^7^7")
+  	print('^3playerDropped('..reason..'): ' .. player.."^7")
   	MySQL.Async.execute("UPDATE user_vehicle SET foufou=1 WHERE owner=@owner AND type =1", {['@owner'] = player})
   	MySQL.Async.execute("UPDATE users SET source=@source WHERE identifier=@identifier", {['@identifier'] =  player, ['@source'] = "disconnect"})
 	else
@@ -56,6 +56,10 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10000)
-		TriggerClientEvent("Venato:ActuPlayer", -1, #DataPlayers)
+		local players = 0
+		for k,v in pairs(DataPlayers) do
+			players = players + 1
+		end
+		TriggerClientEvent("Venato:ActuPlayer", -1, players)
 	end
 end)

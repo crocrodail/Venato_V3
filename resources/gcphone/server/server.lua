@@ -47,14 +47,12 @@ end)
 --  Utils
 --====================================================================================
 function getSourceFromIdentifier(identifier, cb)
-    TriggerEvent("es:getPlayers", function(users)
-        for k , user in pairs(users) do
-            if (user.getIdentifier ~= nil and user.getIdentifier() == identifier) or (user.identifier == identifier) then
-                cb(k)
-                return
-            end
+    local UserData = exports.venato:GetDataPlayers()
+        for k , user in pairs(UserData) do
+          if user.SteamId == identifier then
+            cb(k)
+          end
         end
-    end)
     cb(nil)
 end
 function getNumberPhone(identifier)
@@ -78,14 +76,11 @@ end
 
 
 function getPlayerID(source)
-    local identifiers = GetPlayerIdentifiers(source)
-    local player = getIdentifiant(identifiers)
-    return player
-end
-function getIdentifiant(id)
-    for _, v in ipairs(id) do
-        return v
-    end
+  while loaded do
+    Citizen.Wait(0)
+  end
+  local UserData = exports.venato:GetDataPlayers()
+  return UserData[source].SteamId
 end
 
 
@@ -561,10 +556,12 @@ end)
 --====================================================================================
 --  OnLoad
 --====================================================================================
+local loaded = true
 RegisterServerEvent('GcPhone:Load')
 AddEventHandler('GcPhone:Load', function()
     local sourcePlayer = tonumber(source)
     local identifier = getPlayerID(source)
+    loaded = false
     getOrGeneratePhoneNumber(sourcePlayer, identifier, function (myPhoneNumber)
         TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, myPhoneNumber)
         TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))

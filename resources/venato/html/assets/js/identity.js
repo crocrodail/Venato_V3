@@ -62,4 +62,5 @@ if (type === "identity") {
   $('#visa').hide();
   $('#licenceDrive').hide();
   $('#identity').hide();
+  window.location.href = 'index.html'
 }

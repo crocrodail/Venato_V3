@@ -146,8 +146,9 @@ function Jobs.SalaryLoop()
   end)
 end
 
-function Jobs.MenuSendEvent(EventName)
+function MenuSendEvent(EventName)
   TriggerEvent(EventName)
+  print(EventName)
 end
 
 Jobs.Start()

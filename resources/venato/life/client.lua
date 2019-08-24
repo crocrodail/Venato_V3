@@ -5,6 +5,11 @@ local alcool = 0
 local old_water = 0
 local old_food = 0
 local reserveTrigger = false
+local FreezeNeed = false
+
+function LiveFreezeNeed(bool)
+  FreezeNeed = bool
+end
 
 function LifeInit()
   TriggerServerEvent("Life:Init")
@@ -70,17 +75,18 @@ Citizen.CreateThread(
                     }
                 )
             end
+            if FreezeNeed then
+                if food > 0 then
+                  food = food - 0.03
+                end
 
-            if food > 0 then
-                food = food - 0.05
-            end
+                if water > 0 then
+                  water = water - 0.07
+                end
 
-            if water > 0 then
-                water = water - 0.1
-            end
-
-            if alcool > 0 then
-                alcool = alcool - 0.2
+                if alcool > 0 then
+                  alcool = alcool - 0.2
+                end
             end
 
             TriggerEvent(

@@ -160,8 +160,14 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
 end)
 
 RegisterServerEvent('Inventory:CallInfo')
-AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, table)
-	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[table[2]].quantity)
+AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
+  local qtyTarget
+  if DataPlayers[ClosePlayer].Inventaire[row[2]] == nil then
+    qtyTarget = 0
+  else
+    qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity
+  end
+	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[source].Poid, qtyTarget)
 end)
 
 ItemsOnTheGround = {}
@@ -387,9 +393,28 @@ AddEventHandler('Inventory:CreateCheque', function(player, montant)
           break
         end
       end
-      TriggerClientEvent('Venato:notify', source, defaultNotification)
+      TriggerClientEvent('Venato:notify', source, Notification)
       Notification.message = "Vous avez reçu un chèque de "..montant.." € ."
-      TriggerClientEvent('Venato:notify', target, defaultNotification)
+      TriggerClientEvent('Venato:notify', target, Notification)
     end)
   end)
+end)
+
+RegisterServerEvent('Inventory:NotifGive')
+AddEventHandler('Inventory:NotifGive', function(recever, qty, id)
+  local source = source
+  local Notification = {
+   title= "Inventaire",
+   type = "info", --  danger, error, alert, info, success, warning
+   logo = DataPlayers[source].Inventaire[id].picture,
+   message = "Vous avez reçu "..qty.." "..DataPlayers[source].Inventaire[id].libelle..".",
+  }
+  TriggerClientEvent('Venato:notify', recever, Notification)
+  Notification.message = "Vous avez donné "..qty.." "..DataPlayers[source].Inventaire[id].libelle.."."
+  TriggerClientEvent('Venato:notify', source, Notification)
+end)
+
+RegisterServerEvent('Inventaire:ForceDeleteObject')
+AddEventHandler('Inventaire:ForceDeleteObject', function(id)
+  TriggerClientEvent("Inventaire:ForceDeleteObject:cb", -1, id)
 end)

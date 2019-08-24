@@ -93,6 +93,7 @@ end
 
 function modelMenu()
     Menu.setSubtitle("Choix du sexe")
+    skinMenu("mp_m_freemode_01")
     Menu.clearMenu()
     Menu.addButton2("Homme", "shapeMenu", 'mp_m_freemode_01', 'skinMenu')
     Menu.addButton2("Femme", "shapeMenu", 'mp_f_freemode_01', 'skinMenu')
