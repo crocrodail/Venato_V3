@@ -161,12 +161,12 @@ end)
 
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
-  print(ClosePlayer)
-  print(nb)
-  print(row)
-  print(row[1])
-  print(row[2])
-  print(row[3])
+  local qtyTarget = nil
+  if DataPlayers[ClosePlayer].Inventaire[row[2]].quantity == nil then
+    qtyTarget = 0
+  else
+    qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity
+  end
 	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[row[2]].quantity)
 end)
 
