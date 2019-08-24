@@ -762,11 +762,8 @@ AddEventHandler('ambulancier:cancelCall',function(data)
 end)
 
 RegisterNetEvent('ambulancier:HealMe')
-AddEventHandler('ambulancier:HealMe',
-function (idToHeal)
-    if idToHeal == PlayerId() then
+AddEventHandler('ambulancier:HealMe',function ()
         SetEntityHealth(GetPlayerPed(-1), GetPedMaxHealth(GetPlayerPed(-1)))
-    end
 end)
 
 RegisterNetEvent('ambulancier:Heal')
@@ -792,11 +789,17 @@ function()
           local coord2 = GetEntityCoords(closestPlayer, true)
           print(coord.x)
           print(coord2.x)
-          TriggerServerEvent('ambulancier:Reanimation', GetPlayerServerId(ClosePlayer), GetEntityCoords(a, true), GetEntityHeading(a))
+          TriggerServerEvent('ambulance:getInfoReanim', GetPlayerServerId(ClosePlayer))
 
         else
             Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
+end)
+
+
+RegisterNetEvent('ambulancier:Heal2')
+AddEventHandler('ambulancier:Heal2',function(ambu)
+  TriggerServerEvent('ambulancier:Reanimation', ambu, GetEntityCoords(GetPlayerPed(-1), true),GetEntityHeading(GetPlayerPed(-1)))
 end)
 
 RegisterNetEvent('ambulancier:getBlassure')
