@@ -4,6 +4,7 @@ MysqlAsyncLoad = false
 
 MySQL.ready(function()
 	MysqlAsyncLoad = true
+	MySQL.Async.execute("UPDATE users SET source=@source", {['@source'] = "disconnect"})
   startScript()
   print("^2MySQL Connector is properly Connected^7")
 end)
