@@ -106,10 +106,10 @@ Citizen.CreateThread(function()
 						if v.uPoid + DataUser.Poid <= PoidMax then
 							TriggerServerEvent("Inventory:AddWeapon", v.id, v.ammo, v.uPoid, v.libelle)
 							TriggerServerEvent("Inventory:DelWeaponOnTheGround", k)
-              
+
               defaultNotification.message = "Vous avez ramassez "..v.libelle.." .";
 							Venato.notify(defaultNotification)
-              
+
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropWeapon))
 							if objet ~= 0 and objet ~= nil then
@@ -157,7 +157,7 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
       WeaponPoid = WeaponPoid + v.poid
     end
   end
-  
+
   local MoneyPoid = Venato.MoneyToPoid(Data.Money)
   Menu.addItemButton("Argent : <span class='green--text'>" .. Venato.FormatMoney(Data.Money,
     2) .. " €</span> <span class='orange--text'>(" .. MoneyPoid .. " kg)</span>", "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png", "OptionMoney",
@@ -557,6 +557,9 @@ function UseItem(table)
 end
 
 function GiveItem(table)
+  print(table[1])
+  print(table[2])
+  print(table[3])
   local ClosePlayer, distance = Venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     local nb = Venato.OpenKeyboard('', '0', 2, "Nombre à donner")
