@@ -59,9 +59,4 @@ function MenuSendEvent(EventName)
   print(EventName)
 end
 
-RegisterNetEvent("Menu:Execute")
-AddEventHandler("Menu:Execute", function(params)
-  _ = _G[params.fn] and _G[params.fn](params.args)
-end)
-
 Jobs.Start()
