@@ -9,6 +9,9 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
   local weapon = {}
   local nbItem = 0
   local Inventaire = {}
+  if plate == nil or class == nil then
+    return
+  end
   local limitItem = maxCapacityCv[class].size
   local limiteWp = maxCapacityCv[class].MaxWeapon
   local customExeption = false

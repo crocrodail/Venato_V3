@@ -47,14 +47,13 @@ end)
 --  Utils
 --====================================================================================
 function getSourceFromIdentifier(identifier, cb)
-    TriggerEvent("es:getPlayers", function(users)
-        for k , user in pairs(users) do
-            if (user.getIdentifier ~= nil and user.getIdentifier() == identifier) or (user.identifier == identifier) then
+    local UserData = exports.venato:GetDataPlayers()
+        for k , user in pairs(UserData) do
+            if (user.getIdentifier ~= nil and user.SteamId == identifier) or (user.identifier == identifier) then
                 cb(k)
                 return
             end
         end
-    end)
     cb(nil)
 end
 function getNumberPhone(identifier)
