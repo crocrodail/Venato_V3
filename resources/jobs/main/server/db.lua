@@ -14,7 +14,12 @@ JobsRequests = {}
 JobsRequests.getPlayerJob = "SELECT job FROM users WHERE identifier = @identifier"
 JobsRequests.getPlayerJobName = "SELECT job_name FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
 JobsRequests.getPlayerSalary = "SELECT salary FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
+JobsRequests.getPlayerSalaryCheck = "SELECT salaryCheck FROM users WHERE identifier = @identifier"
 JobsRequests.getPlayerPoliceRank = "SELECT rank FROM police WHERE identifier = @username"
+JobsRequests.getSalaryCount = "SELECT salaryCount FROM users WHERE identifier = @identifier"
+
+JobsRequests.newSalary = "UPDATE users SET salaryCount = salaryCount+1 WHERE identifier = @identifier"
+JobsRequests.resetSalaryCount = "UPDATE users SET salaryCount = 0, salaryCheck = 0 WHERE identifier = @identifier"
 
 -- ============= --
 -- DB functions  --
@@ -44,9 +49,24 @@ function JobsDbFunctions.getPlayerPoliceRank(source)
   return MySQL.Sync.fetchScalar(JobsRequests.getPlayerPoliceRank, { ['@identifier'] = getSteamID(source) })
 end
 
+function JobsDbFunctions.newSalary(source)
+  return MySQL.Sync.fetchScalar(JobsRequests.newSalary, { ['@identifier'] = getSteamID(source) })
+end
+
+function JobsDbFunctions.getSalaryCount(source)
+  return MySQL.Sync.fetchScalar(JobsRequests.getSalaryCount, { ['@identifier'] = getSteamID(source) })
+end
+
+function JobsDbFunctions.resetSalaryCount(source)
+  return MySQL.Sync.fetchScalar(JobsRequests.resetSalaryCount, { ['@identifier'] = getSteamID(source) })
+end
+
 function JobsDbFunctions.getPlayerSalary(source)
   local salary = MySQL.Sync.fetchScalar(JobsRequests.getPlayerSalary, { ['@identifier'] = getSteamID(source) })
   salary = tonumber(salary)
+  local salaryCheck = MySQL.Sync.fetchScalar(JobsRequests.getPlayerSalaryCheck,
+    { ['@identifier'] = getSteamID(source) })
+  salaryCheck = tonumber(salaryCheck)
   primeJob = 0
   if salary then
     local jobId = JobsDbFunctions.getPlayerJob(source)
@@ -56,7 +76,7 @@ function JobsDbFunctions.getPlayerSalary(source)
       primeJob = getPrime(rank)
     end
   end
-  return salary, primeJob
+  return salary, primeJob, salaryCheck
 end
 
 function getPrime(rank)
