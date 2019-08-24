@@ -161,7 +161,10 @@ end)
 
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
-  local qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity or nil
+  print(ClosePlayer)
+  print(row[2])
+  print(json.encode(DataPlayers[ClosePlayer].Inventaire))
+  local qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity or 0
   if qtyTarget == nil then
     qtyTarget = 0
   end
