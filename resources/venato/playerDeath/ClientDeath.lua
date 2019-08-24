@@ -202,7 +202,7 @@ end)
 function Reanim(char, coord, heading)
   Citizen.CreateThread(function()
     if char == "a" then
-      SetEntityCoords(GetPlayerPed(-1), coord.x-0.9, coord.y-0.1, coord.z, 0, 0, 0, true)
+      SetEntityCoords(GetPlayerPed(-1), coord.x-0.9, coord.y-0.1, coord.z-0.0, 0, 0, 0, true)
       SetEntityHeading(GetPlayerPed(-1), heading-90)
     else
       dead = false
