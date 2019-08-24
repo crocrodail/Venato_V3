@@ -399,3 +399,22 @@ AddEventHandler('Inventory:CreateCheque', function(player, montant)
     end)
   end)
 end)
+
+RegisterServerEvent('Inventory:NotifGive')
+AddEventHandler('Inventory:NotifGive', function(recever, qty, id)
+  local source = source
+  local Notification = {
+   title= "Inventaire",
+   type = "info", --  danger, error, alert, info, success, warning
+   logo = DataPlayers[source].Inventaire[id].picture,
+   message = "Vous avez reçu "..qty.." "..DataPlayers[source].Inventaire[id].libelle..".",
+  }
+  TriggerClientEvent('Venato:notify', recever, defaultNotification)
+  Notification.message = "Vous avez donné "..qty.." "..DataPlayers[source].Inventaire[id].libelle.."."
+  TriggerClientEvent('Venato:notify', source, defaultNotification)
+end)
+
+RegisterServerEvent('Inventaire:ForceDeleteObject')
+AddEventHandler('Inventaire:ForceDeleteObject', function(id)
+  TriggerClientEvent("Inventaire:ForceDeleteObject:cb", -1, id)
+end)

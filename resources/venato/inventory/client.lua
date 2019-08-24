@@ -127,6 +127,18 @@ Citizen.CreateThread(function()
 	end
 end)
 
+function ForceDeleteObject(objet)
+  local id = NetworkGetNetworkIdFromEntity(objet)
+  TriggerServerEvent("Inventaire:ForceDeleteObject", id)
+end
+
+RegisterNetEvent('Inventaire:ForceDeleteObject:cb')
+AddEventHandler('Inventaire:ForceDeleteObject:cb', function(netId)
+  if NetworkHasControlOfNetworkId(netId) then
+    DeleteObject(NetToObj(netId))
+  end
+end)
+
 function debuge()
   TriggerServerEvent("debuge")
 end
@@ -449,6 +461,7 @@ function DropWeapon(tableau)
 		TriggerServerEvent("Inventory:DropWeapon", tableau, x,y,z-0.5)
 		TriggerServerEvent("Inventory:RemoveWeapon",tableau[3], tableau[1], tableau[4])
 		local objet = Venato.CreateObject(dropWeapon, x, y, z-1)
+    PlaceObjectOnGroundProperly(objet)
 		FreezeEntityPosition(objet, true)
 		OpenInventory()
 end
@@ -517,6 +530,7 @@ function DropMoney(tableau)
 			TriggerServerEvent("Inventory:DropMoney", tonumber(nb), tableau, x,y,z-0.5)
 			TriggerServerEvent("Inventory:RemoveMoney", tonumber(nb))
 			local objet = Venato.CreateObject(dropMoney, x, y, z-1)
+      PlaceObjectOnGroundProperly(objet)
 			FreezeEntityPosition(objet, true)
 			OpenInventory()
 		else
@@ -558,9 +572,6 @@ end
 
 function GiveItem(row)
   local row = row
-  print(row[1])
-  print(row[2])
-  print(row[3])
   local ClosePlayer, distance = Venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     local nb = Venato.OpenKeyboard('', '0', 2, "Nombre à donner")
@@ -577,6 +588,7 @@ RegisterNetEvent('Inventory:CallInfo:cb')
 AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, qty)
   if table[1] - nb >= 0 then
     if table[3] * nb + poid <= PoidMax then
+      TriggerServerEvent("Inventory:NotifGive", ClosePlayer, nb, table[2])
       TriggerServerEvent("Inventory:SetItem", table[1] - nb, table[2])
       TriggerServerEvent("Inventory:SetItem", qty + nb, table[2], ClosePlayer)
     else
@@ -595,6 +607,7 @@ function DropItem(tableau)
 			TriggerServerEvent("Inventory:DropItem",tableau[3], tonumber(nb), tableau[2], tableau[4], x,y,z-0.5, tableau[5], tableau[6])
 			TriggerServerEvent("Inventory:SetItem", tableau[1] - tonumber(nb) , tableau[2])
 			local objet = Venato.CreateObject(dropItem, x, y, z-1)
+      PlaceObjectOnGroundProperly(objet)
 			FreezeEntityPosition(objet, true)
 			Venato.notify("Vous avez jeté "..nb.." "..tableau[3].." .")
 			OpenInventory()
