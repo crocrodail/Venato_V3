@@ -76,6 +76,9 @@ end
 
 
 function getPlayerID(source)
+  while loaded do
+    Citizen.Wait(0)
+  end
   local UserData = exports.venato:GetDataPlayers()
   return UserData[source].SteamId
 end
@@ -553,10 +556,12 @@ end)
 --====================================================================================
 --  OnLoad
 --====================================================================================
+local loaded = true
 RegisterServerEvent('GcPhone:Load')
 AddEventHandler('GcPhone:Load', function()
     local sourcePlayer = tonumber(source)
     local identifier = getPlayerID(source)
+    loaded = false
     getOrGeneratePhoneNumber(sourcePlayer, identifier, function (myPhoneNumber)
         TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, myPhoneNumber)
         TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))

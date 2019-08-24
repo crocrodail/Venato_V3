@@ -490,10 +490,7 @@ function jobsSystemAmbulancier()
         if tostring(currentMissionAmbulancier.type) == "Coma" then
             notif('Appuyez sur ENTREE pour réanimer le joueur')
             if (IsControlJustReleased(1, KEY_ENTER)) then
-                TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
-                Citizen.Wait(8000)
-                ClearPedTasks(GetPlayerPed(-1));
-                TriggerServerEvent('ambulancier:rescueHim', currentMissionAmbulancier.id)
+                TriggerServerEvent('ambulance:getInfoReanim', currentMissionAmbulancier.id)
                 finishMissionAmbulancier()
                 --break
             end
@@ -652,29 +649,30 @@ end
 -- restart depanneur
 --====================================================================================
 
-function notifIcon(icon, type, sender, title, text)
-
-
-        SetNotificationTextEntry("STRING");
-        if TEXTAMBUL[text] ~= nil then
-            text = TEXTAMBUL[text]
-        end
-        AddTextComponentString(text);
-        SetNotificationMessage(icon, icon, true, type, sender, title, text);
-        DrawNotification(false, true);
-
+function notifIconAmbu(icon, type, sender, title, text)
+  local text = text
+  if TEXTAMBUL[text] ~= nil then
+    text = TEXTAMBUL[text]
+  end
+  local notif = {
+    title= sender,
+    type = "info", --  danger, error, alert, info, success, warning
+    logo = "https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon-by-vexels.png",
+    message = text,
+  }
+  TriggerEvent("Venato:notify", notif)
 end
 
 RegisterNetEvent("ambulancier:PersonnelMessage")
 AddEventHandler("ambulancier:PersonnelMessage",function(message)
     if ambulancierIsInService then
-        notifIcon("CHAR_CALL911", 1, "Urgence Info", false, message)
+        notifIconAmbu("CHAR_CALL911", 1, "Urgence Info", false, message)
     end
 end)
 
 RegisterNetEvent("ambulancier:ClientMessage")
 AddEventHandler("ambulancier:ClientMessage",function(message)
-    notifIcon("CHAR_CALL911", 1, "Urgence", false, message)
+    notifIconAmbu("CHAR_CALL911", 1, "Urgence", false, message)
 end)
 
 
@@ -690,7 +688,7 @@ function updateMenuMissionAmbulancier()
         local item = {
             Title = 'Mission ' .. m.id .. " ["..m.type.."]" ,
             mission = m,
-            Function = acceptMissionAmbulancier
+            Function = "acceptMissionAmbulancier"
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. " (En cours)"..  "["..m.type.."]"
@@ -699,7 +697,9 @@ function updateMenuMissionAmbulancier()
     end
     if currentMissionAmbulancier ~= nil then
         --table.insert(items, {['Title'] = 'Terminer la mission', ['Function'] = finishMissionAmbulancier})
-        currentMissionAmbulancierNotNil = true
+      currentMissionAmbulancierNotNil = true
+    else
+      currentMissionAmbulancierNotNil= false
     end
     updateMenuAmbu(items,currentMissionAmbulancierNotNil)
 end
@@ -735,7 +735,7 @@ AddEventHandler('ambulancier:MissionChange', function (missions)
     --     Citizen.Trace('ok')
     --     if not find then
     --         currentMissionAmbulancier = nil
-    --         notifIcon("CHAR_CALL911", 1, "Mecano", false, TEXTAMBUL.MissionCancel)
+    --         notifIconAmbu("CHAR_CALL911", 1, "Mecano", false, TEXTAMBUL.MissionCancel)
     --         if currentBlip ~= nil then
     --             RemoveBlip(currentBlip)
     --         end
@@ -754,6 +754,11 @@ AddEventHandler('ambulancier:personnelChange',function(nbPersonnel, nbDispo)
     --Citizen.Trace('nbPersonnel : ' .. nbPersonnel .. ' dispo' .. nbDispo)
     ambulance_nbAmbulanceInService = nbPersonnel
     ambulance_nbAmbulanceDispo = nbDispo
+end)
+
+RegisterNetEvent('ambulancier:callAmbulancier')
+AddEventHandler('ambulancier:callAmbulancier',function(data)
+    needAmbulance(data)
 end)
 
 RegisterNetEvent('ambulancier:cancelCall')

@@ -39,13 +39,13 @@
   "fileUploadService_Field": "files[]",
 
   "background": {
-    "Calvin & Hobbes": "back001.jpg",
+    "Venato": "back001.jpg",
     "Destiny": "back002.jpg",
     "Stormtrooper": "back003.jpg",
     "Custom URL": "URL"
   },
   "background_default": {
-    "label": "Calvin & Hobbes",
+    "label": "Venato",
     "value": "back001.jpg"
   },
 
@@ -67,10 +67,25 @@
       "icon": "/html/static/img/icons_app/police.png",
       "subMenu": [{
           "title": "Envoyer un message",
-          "eventName": "esx_addons_gcphone:call",
+          "eventName": "police:msg",
           "type": {
             "number": "police"
           }
+        },
+        {
+          "title": "Signaler un vol",
+          "eventName": "police:callPolice",
+          "type": "Vole"
+        },
+        {
+          "title": "Signaler une Aggression",
+          "eventName": "police:callPolice",
+          "type": "Aggression"
+        },
+        {
+          "title": "Autre",
+          "eventName": "police:callPoliceCustom",
+          "type": "Autre"
         },
         {
           "title": "Appeler le standard",
@@ -78,19 +93,95 @@
           "type": {
             "number": "911"
           }
+        },
+        {
+          "title": "Annuler l'appel en cour",
+          "eventName": "police:cancelCall"
         }
       ]
     },
     {
       "display": "Ambulance",
       "backgroundColor": "red",
-      "subMenu": [{
-        "title": "Envoyer un message",
-        "eventName": "esx_addons_gcphone:call",
-        "type": {
-          "number": "ambulance"
+      "subMenu": [
+        {
+          "title": "Appel ambulance",
+          "eventName": "ambulancier:callAmbulancier",
+          "type": "Aggression"
+        },
+        {
+          "title": "Appel Coma",
+          "eventName": "ambulancier:callAmbulancier",
+          "type": "Coma"
+        },
+        {
+          "title": "Annuler l'appel en cour",
+          "eventName": "ambulancier:cancelCall"
         }
-      }]
+      ]
+    },
+    {
+      "display": "Taxi/Uber",
+      "subMenu": [
+        {
+          "title": "1 personne",
+          "eventName": "taxi:callService",
+          "type": "1 personne"
+        },
+        {
+          "title": "2 personne",
+          "eventName": "taxi:callService",
+          "type": "2 personnes"
+        },
+        {
+          "title": "3 personne",
+          "eventName": "taxi:callService",
+          "type": "3 personnes"
+        },
+        {
+          "title": "Uber Luxe",
+          "eventName": "taxi:callService",
+          "type": "Uber Luxe"
+        },
+        {
+          "title": "Uber Sport",
+          "eventName": "taxi:callService",
+          "type": "Uber Sport"
+        },
+        {
+          "title": "Annuler l'appel en cour",
+          "eventName": "taxi:cancelCall"
+        }
+      ]
+    },
+    {
+      "display": "Mecano",
+      "subMenu": [
+        {
+          "title": "Moto",
+          "eventName": "mecano:callMecano",
+          "type": "Moto"
+        },
+        {
+          "title": "Voiture",
+          "eventName": "mecano:callMecano",
+          "type": "Voiture"
+        },
+        {
+          "title": "Fourriere",
+          "eventName": "mecano:callMecano",
+          "type": "Fourriere"
+        },
+        {
+          "title": "Camion",
+          "eventName": "mecano:callMecano",
+          "type": "Camion"
+        },
+        {
+          "title": "Annuler l'appel en cour",
+          "eventName": "mecano:cancelCall"
+        }
+      ]
     }
   ],
 

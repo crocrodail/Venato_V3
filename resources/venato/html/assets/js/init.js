@@ -266,6 +266,7 @@ $(document).ready(function(){
       resetAll();
       $('#wrapper').hide();
       $.post('http://venato/escape', JSON.stringify({}));
+      window.location.href = 'index.html'
     }
   });
 });

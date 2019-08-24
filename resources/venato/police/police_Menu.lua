@@ -7,8 +7,8 @@
 --      https://www.facebook.com/lan3mtv
 --====================================================================================
 
-local Menu = {}
-local itemMenuGeneralPolice = {}
+local mission = {}
+local alreadyTakeMission = false
 local itemMenuChoixPoliceService = {}
 local itemMenuChoixPoliceVehicle = {}
 
@@ -18,17 +18,16 @@ local defaultNotification = {
 	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
   }
 
-local UrgencePoliceMenu = {['Title'] = 'Missions en cours',  ['SubMenu'] = {
-    ['Title'] = 'Missions en cours', ['Items'] = {
-        {['Title'] = 'Retour', ['ReturnBtn'] = true },
-        {['Title'] = 'Fermer'},
-}}}
-
+	function updateMenuMissionPolice(newUrgenceMenu)
+		mission = newUrgenceMenu
+    alreadyTakeMission = bool
+end
 
 function openMenuPoliceGeneral(rank)
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', "Police", "<small>"..rank.."</small>", '#1565C099', "https://www.lunel.com/sites/default/files/styles/tetiere/public/tetiere/menu_icon_2939.jpg?itok=q2gesIzz")
-   
+
+  	TriggerEvent('Menu:AddButton2',"Missions en cours", "policeGetMissionMenu", '', '')
     TriggerEvent('Menu:AddButton2', "Amendes", "POLICE_AmendeMenu", { rank = rank }, "", "https://i.ibb.co/TRSRb5n/icons8-agreement-96px-1.png")
     TriggerEvent('Menu:AddButton2', "Placer un objet", "POLICE_ObjectMenu", { rank = rank }, "", "https://i.ibb.co/9n9Y54M/icons8-roadblock-96px-1.png")
     TriggerEvent('Menu:AddButton2', "Verifier la plaque", "POLICE_CheckPlate", {}, "", "https://i.ibb.co/wg04W7Z/icons8-sedan-96px.png") --OK
@@ -41,9 +40,21 @@ function openMenuPoliceGeneral(rank)
     TriggerEvent('Menu:AddButton2', "Supprimer le Vehicule", "POLICE_deleteVehicle", {}, "", "https://i.ibb.co/JsGXm4z/icons8-tow-truck-96px-1.png")
     TriggerEvent('Menu:AddButton2', "Avis de recherche", "POLICE_sendmsg", {}, "", "https://i.ibb.co/fvtWrv3/icons8-spam-96px.png")
     --Code rouge ?
-    
+
     TriggerEvent('Menu:CreateMenu')
     TriggerEvent('Menu:Open')
+end
+
+function policeGetMissionMenu()
+  Menu.clearMenu()
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuGeneralAmbulancier", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  for k,v in pairs(mission) do
+    TriggerEvent('Menu:AddButton2',v.Title, v.Function, {mission = v.mission}, '', "")
+  end
+  if alreadyTakeMission then
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishMissionAmbulancier", nil, '', "")
+  end
+  Menu.CreateMenu()
 end
 
 
@@ -54,7 +65,7 @@ end
 function POLICE_ObjectMenu(data)
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', "Placer un objet", "<small>"..data.rank.."</small>", '#1565C099', "https://lejournaldugers.fr/uploads/main_imgs/201712171021488K3x-image(postpage).JPG")
-   
+
     TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
     TriggerEvent('Menu:AddButton2', "Placer/Retirer un radar", "POLICE_radar", {}, "", "https://i.ibb.co/PCYgbCY/icons8-speed-96px.png")
     TriggerEvent('Menu:AddButton2', "Placer/Retirer un cône", "POLICE_removeOrPlaceCone", {}, "", "https://i.ibb.co/hDKjVCq/icons8-vlc-96px.png")
@@ -62,7 +73,7 @@ function POLICE_ObjectMenu(data)
     TriggerEvent('Menu:AddButton2', "Placer/Retirer une herse", "POLICE_removeOrPlaceHerse", {}, "", "https://i.ibb.co/4KGGKG5/icons8-flat-tire-96px.png")
     -- TODO Coder le systeme de herse
     TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
-        
+
     TriggerEvent('Menu:CreateMenu')
     TriggerEvent('Menu:Open')
 end
@@ -70,7 +81,7 @@ end
 function POLICE_AmendeMenu(data)
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', "Amende", "<small>"..data.rank.."</small>", '#1565C099', "https://lejournaldugers.fr/uploads/main_imgs/201712171021488K3x-image(postpage).JPG")
-   
+
     TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
     TriggerEvent('Menu:AddShopButton', "Non respect du code de la route", "POLICE_FINE_DATA", { tarif = 800, points = 1, title = "Non respect du code de la route" }, "", "1 point", 800)
     TriggerEvent('Menu:AddShopButton', "Petit excès vitesse  <50km/h", "POLICE_FINE_DATA", { tarif = 1500, points = 0, title = "Petit excès vitesse  <50km/h" }, "", "", 1500)
@@ -93,7 +104,7 @@ function POLICE_AmendeMenu(data)
     TriggerEvent('Menu:AddButton2',"Autre", "POLICE_FINE_CUSTOM", {}, "", "")
     -- TODO Coder le systeme de herse
     TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", data.rank, "", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
-        
+
     TriggerEvent('Menu:CreateMenu')
     TriggerEvent('Menu:Open')
 end
@@ -159,5 +170,3 @@ function GetVehicleInDirection( coordFrom, coordTo )
     local _, _, _, _, vehicle = GetRaycastResult( rayHandle )
     return vehicle
 end
-
-

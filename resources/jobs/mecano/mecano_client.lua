@@ -390,7 +390,7 @@ function spawnDepanneuse(coords, type)
         end
     end
     -- Citizen.Trace('impossible')
-    notifIcon("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
+    notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
     -- local myPed = GetPlayerPed(-1)
     -- local player = PlayerId()
     -- RequestModel(VehicleModelKeyTowTruck)
@@ -1173,29 +1173,32 @@ end)
 -- restart depanneur
 --====================================================================================
 
-function notifIcon(icon, type, sender, title, text)
+function notifIconMecaMeca(icon, type, sender, title, text)
 	Citizen.CreateThread(function()
-        Wait(1)
-        SetNotificationTextEntry("STRING");
-        if TEXT[text] ~= nil then
-            text = TEXT[text]
-        end
-        AddTextComponentString(text);
-        SetNotificationMessage(icon, icon, true, type, sender, title, text);
-        DrawNotification(false, true);
+    local text = text
+    if TEXTAMBUL[text] ~= nil then
+      text = TEXTAMBUL[text]
+    end
+    local notif = {
+      title= sender,
+      type = "info", --  danger, error, alert, info, success, warning
+      logo = "https://lashope.com/wp-content/uploads/icon-mecano.png",
+      message = text,
+    }
+    TriggerEvent("Venato:notify", notif)
 	end)
 end
 
 RegisterNetEvent("mecano:PersonnelMessage")
 AddEventHandler("mecano:PersonnelMessage",function(message)
     if inService then
-        notifIcon("CHAR_BLANK_ENTRY", 1, "Mecano Info", false, message)
+        notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano Info", false, message)
     end
 end)
 
 RegisterNetEvent("mecano:ClientMessage")
 AddEventHandler("mecano:ClientMessage",function(message)
-    notifIcon("CHAR_BLANK_ENTRY", 1, "Mecano", false, message)
+    notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, message)
 end)
 
 
@@ -1298,7 +1301,7 @@ AddEventHandler('mecano:MissionChange', function (missions)
     --     Citizen.Trace('ok')
     --     if not find then
     --         currentMissions = nil
-    --         notifIcon("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.MissionCancel)
+    --         notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.MissionCancel)
     --         if currentBlip ~= nil then
     --             RemoveBlip(currentBlip)
     --         end

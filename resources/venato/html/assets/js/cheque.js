@@ -31,4 +31,5 @@ if (type === "show") {
   $('#num').text(num);
 } else if (type === "close") {
   $('#cheque').hide();
+  window.location.href = 'index.html'
 }

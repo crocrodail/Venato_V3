@@ -659,15 +659,11 @@ end)
 -- Add security for event (leuit#0100)
 RegisterNUICallback('callEvent', function(data, cb)
   local eventName = data.eventName or ''
-  if string.match(eventName, 'gcphone') then
     if data.data ~= nil then
       TriggerEvent(data.eventName, data.data)
     else
       TriggerEvent(data.eventName)
     end
-  else
-    print('Event not allowed')
-  end
   cb()
 end)
 RegisterNUICallback('useMouse', function(um, cb)
