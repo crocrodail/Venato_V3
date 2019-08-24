@@ -270,8 +270,8 @@
     RegisterNetEvent("ambulancier:Reanimation")
     AddEventHandler("ambulancier:Reanimation", function(ambu, coord, heading)
       local source = source
-      local victime = ambu
-      TriggerClientEvent("Death:Reanimation", victime, "medic", coord, heading)
+      local ambu = ambu
+      TriggerClientEvent("Death:Reanimation", ambu, "medic", coord, heading)
       TriggerClientEvent("Death:Reanimation", source, "victim")
       removeClientAmbulancier(ambu)
     end)
