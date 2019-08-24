@@ -788,7 +788,12 @@ AddEventHandler('ambulancier:Heal2',
 function()
         local closestPlayer, closestDistance, a = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
+          local coord = GetEntityCoords(a, true)
+          local coord2 = GetEntityCoords(closestPlayer, true)
+          print(coord.x)
+          print(coord2.x)
           TriggerServerEvent('ambulancier:Reanimation', GetPlayerServerId(ClosePlayer), GetEntityCoords(a, true), GetEntityHeading(a))
+
         else
             Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
