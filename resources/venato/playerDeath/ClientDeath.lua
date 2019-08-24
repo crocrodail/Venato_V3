@@ -192,7 +192,7 @@ end)
 RegisterNetEvent("Death:Reanimation")
 AddEventHandler("Death:Reanimation", function(who, coord, heading)
   local coord = coord
-  if who == "victim" then
+  if who ~= "victim" then
     Reanim("a")
   else
     Reanim("b")
