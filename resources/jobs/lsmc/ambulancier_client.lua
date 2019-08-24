@@ -799,6 +799,7 @@ end)
 
 RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',function(ambu)
+  local ambu = ambu
   TriggerServerEvent('ambulancier:Reanimation', ambu, GetEntityCoords(GetPlayerPed(-1), true),GetEntityHeading(GetPlayerPed(-1)))
 end)
 
