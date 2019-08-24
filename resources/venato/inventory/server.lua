@@ -161,6 +161,9 @@ end)
 
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, table)
+  print(ClosePlayer)
+  print(nb)
+  print(json.decode(table))
 	TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, table, DataPlayers[source].Poid, DataPlayers[ClosePlayer].Inventaire[table[2]].quantity)
 end)
 
