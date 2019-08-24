@@ -108,6 +108,7 @@ function respawntest()
   NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
   ClearPedTasksImmediately(Venato.GetPlayerPed())
   Venato.resurect()
+  TriggerServerEvent("Death:health", false)
 end
 
 function AdminShowCoord()

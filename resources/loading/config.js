@@ -12,6 +12,6 @@ var config = {
         "title": "Venato",
         "link": "venato.fr",
     },
-    /* You dont have to include the '/imgs/' dir AND ALSO REMEMBER TO ADD THESE IMGS IN YOUR __resource.lua*/ 
-    "images": ['SCREEN_V_V2.png', 'SCREEN_V_V22.png', 'SCREEN_V_V23.png', 'SCREEN_V_V24.png']
+    /* You dont have to include the '/imgs/' dir AND ALSO REMEMBER TO ADD THESE IMGS IN YOUR __resource.lua*/
+    "images": ['SCREEN_V_V2.png', 'SCREEN_VENATO2_3.png', 'SCREEN_VENATO2_4.png', 'SCREEN_VENATO2_5.png']
 }

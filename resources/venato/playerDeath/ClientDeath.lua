@@ -6,7 +6,7 @@ local TimeToRespawn = 0
 local assommePlayer = false
 local shooting = 0
 local causeOfDeath = 'Cause inconnue'
-local CoordHospital = {x = 0.0, y= 0.0, z = 0.0}
+local CoordHospital = {x = 1141.0, y= -1594.32, z = 7.979}
 
 function Venato.resurect()
   assommePlayer = false
@@ -14,6 +14,7 @@ function Venato.resurect()
   dead = false
   LiveFreezeNeed(false)
   Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
+  TriggerServerEvent("Death:health", false)
   StopAllScreenEffects()
 end
 

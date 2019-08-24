@@ -9,9 +9,10 @@ files {
     'config.js',
     'app.js',
     'config.css',
-    'imgs/logo.png', 
-    'imgs/SCREEN_V_V2.png', 
-    'imgs/SCREEN_V_V22.png', 
-    'imgs/SCREEN_V_V23.png', 
-    'imgs/SCREEN_V_V24.png',
+    'imgs/logo.png',
+    'imgs/SCREEN_V_V2.png',
+    'imgs/SCREEN_V_V22.png',
+    'SCREEN_VENATO2_3.png',
+    'SCREEN_VENATO2_4.png',
+    'SCREEN_VENATO2_5.png'
 }
