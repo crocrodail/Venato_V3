@@ -261,7 +261,7 @@
       CauseOfDeath[source] = cause
     end)
 
-    RegisterNetEvent("ambulancier:Reanimationh")
+    RegisterNetEvent("ambulancier:Reanimation")
     AddEventHandler("ambulancier:Reanimation", function(idVictim, coord, heading)
       local source = source
       local victime = idVictim
