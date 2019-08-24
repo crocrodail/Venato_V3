@@ -262,9 +262,10 @@
     end)
 
     RegisterNetEvent("ambulance:getInfoReanim")
-    AddEventHandler("ambulance:getInfoReanim", function(idVictim)
+    AddEventHandler("ambulance:getInfoReanim", function(vict)
       local source = source
-      TriggerClientEvent("ambulance:ClientGetInfoRea", idVictim, source)
+      local vict = vict
+      TriggerClientEvent("ambulance:ClientGetInfoRea", vict, source)
     end)
 
     RegisterNetEvent("ambulancier:Reanimation")
