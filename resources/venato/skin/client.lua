@@ -4,12 +4,23 @@ local Coords = nil
 local Prop = nil
 local loaded = false
 local inEdit = false
+local instance = nil
+
+RegisterNetEvent('instance:onCreate')
+AddEventHandler('instance:onCreate', function(inst)
+	if inst.type == instance then
+		TriggerEvent('instance:enter', inst)
+	end
+end)
 
 if (GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01") or GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_f_freemode_01")) then
   loaded = true
 end
 function camspawn()
 Citizen.CreateThread(function()
+  instance = tostring(playerid())
+  TriggerEvent('instance:create', instance)
+  TriggerEvent('instance:registerType', instance)
   local currentItem = 0
   local distanceCam = 0.35
   local me = GetPlayerPed(-1)
@@ -362,6 +373,7 @@ end
 
 function endGenSkin()
   TriggerServerEvent("ClothingShop:CallData")
+  TriggerEvent('instance:close')
   DetachEntity(Venato.GetPlayerPed(), true, true)
   DeleteEntity(Prop)
   SetCamActive(cam,  false)

@@ -19,6 +19,11 @@ function openMenuGeneralAmbulancier()
   Menu.clearMenu()
   Menu.open()
   Menu.setTitle('Taxi')
-  TriggerEvent('Menu:AddButton2',"Missions en cours", "AmbulancierGetMissionMenu", '', '')
-  Menu.CreateMenu()
+  Menu.clearMenu()
+  for k,v in pairs(mission) do
+    TriggerEvent('Menu:AddButton2',v.Title, v.Function, {mission = v.mission}, '', "")
+  end
+  if alreadyTakeMission then
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishCurrentMissiontaxi", nil, '', "")
+  end
 end

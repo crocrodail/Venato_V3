@@ -122,9 +122,11 @@ local function showBlipAmbulancier()
 end
 local function removeBlipAmbulancier()
     ambulancier_markerBool = false
+    if ambulancier_blips ~= nil then
 	for _, item in pairs(ambulancier_blips) do
 			RemoveBlip(item.blip)
 	end
+end
 end
 
 function spawnVehicule(pos, type)
@@ -624,8 +626,8 @@ AddEventHandler('Job:startAmbulancier', function (boolean)
     end
 end)
 
-RegisterNetEvent('ambulancier:deleteBlips')
-AddEventHandler('ambulancier:deleteBlips', function ()
+RegisterNetEvent('job:deleteBlips')
+AddEventHandler('job:deleteBlips', function ()
     isAmbulancier = false
 	TriggerServerEvent('ambulancier:endService')
     TriggerServerEvent("skin_customization:SpawnPlayer")

@@ -456,13 +456,13 @@ function showBoxes(startX, startY, startZ,
   for index = 0, totalCount, 1 do
 
     local zFix = 0.0
-    if (index // surfaceCount) > 1.0 then
-      zFix = ((index // surfaceCount) - 1) * .2
+    if (index / surfaceCount) > 1.0 then
+      zFix = ((index / surfaceCount) - 1) * .2
     end
 
-    local x = startX + (index % surfaceCount) // yCount * deltaX
+    local x = startX + (index % surfaceCount) / yCount * deltaX
     local y = startY + (index % yCount) * deltaY
-    local z = startZ + (index // surfaceCount) * deltaZ - zFix
+    local z = startZ + (index / surfaceCount) * deltaZ - zFix
 
     local object = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, x, y, z)
     --PlaceObjectOnGroundProperly(object)

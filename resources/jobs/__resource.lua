@@ -14,6 +14,14 @@ client_script {
   '/lsmc/ambulancier_Menu.lua',
   '/mecano/mecano_client.lua',
   '/mecano/mecano_Menu.lua',
+  '/taxi/taxi_client.lua',
+  '/taxi/taxi_Menu.lua',
+  '/vigneron/vigneron_client.lua',
+  '/vigneron/vigneron_config.lua',
+  '/pompiste/pompiste_client.lua',
+  '/pompiste/pompiste_config.lua',
+  '/brasseur/brasseur_client.lua',
+  '/brasseur/brasseur_config.lua'
 }
 
 server_script {
@@ -27,4 +35,11 @@ server_script {
   '/delivery/server/db.lua',
   '/lsmc/ambulancier_server.lua',
   '/mecano/mecano_server.lua',
+  '/taxi/taxi_server.lua',
+  '/vigneron/vigneron_server.lua',
+  '/vigneron/vigneron_config.lua',
+  '/pompiste/pompiste_server.lua',
+  '/pompiste/pompiste_config.lua',
+  '/brasseur/brasseur_server.lua',
+  '/brasseur/brasseur_config.lua'
 }

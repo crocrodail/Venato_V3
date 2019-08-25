@@ -17,6 +17,9 @@
 TokoVoip = {};
 TokoVoip.__index = TokoVoip;
 local lastTalkState = false
+local SelfForVocal = nil
+local portevoix = 15.0
+local timer = 0
 
 function TokoVoip.init(self, config)
 	local self = setmetatable(config, TokoVoip);
@@ -92,8 +95,57 @@ function TokoVoip.updateConfig(self)
 	data.pluginUUID = self.pluginUUID;
 	self:updatePlugin("updateConfig", data);
 end
+RegisterNetEvent("Tokovoip:switchdistance");
+AddEventHandler("Tokovoip:switchdistance", function()
+	local self = SelfForVocal
+	if (not self.mode) then
+		self.mode = 1;
+	end
+	self.mode = self.mode + 1;
+	if (self.mode > 3) then
+		self.mode = 1;
+	end
+	if (self.mode == 1) then
+		portevoix = 15.0
+	elseif (self.mode == 2) then
+		portevoix = 5.0
+	elseif (self.mode == 3) then
+		portevoix = 45.0
+	end
+	timer = 10
+	local notif = {
+    title= "Vocal",
+    type = "info", --  danger, error, alert, info, success, warning
+    logo = "https://image.winudf.com/v2/image/Y29tLnJlY29yZGVyLm11c2ljLnZvaWNlcmVjb3JkZXJfaWNvbl8xNTM2OTYzNDQ1XzAzMQ/icon.png?w=170&fakeurl=1",
+    message = "Vous parlez maintenant à "..portevoix.."M .",
+  }
+  TriggerEvent("Venato:notify", notif)
+	setPlayerData(self.serverId, "voip:mode", self.mode, true);
+	self:updateTokoVoipInfo();
+end)
+
+Citizen.CreateThread(function()
+	while true do
+			Citizen.Wait(1000)
+			if(timer > 0)then
+				timer = timer - 1
+			end
+		Citizen.Wait(0)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		if timer > 0 then
+			local posPlayer = GetEntityCoords(GetPlayerPed(-1))
+			DrawMarker(1, posPlayer.x, posPlayer.y, posPlayer.z - 1, 0, 0, 0, 0, 0, 0, portevoix * 2, portevoix * 2, 0.8001, 0, 75, 255, 165, 0,0, 0,0)
+		end
+	end
+end)
 
 function TokoVoip.initialize(self)
+	SelfForVocal = self
 	self:updateConfig();
 	self:updatePlugin("initializeSocket", nil);
 	Citizen.CreateThread(function()
@@ -123,16 +175,9 @@ function TokoVoip.initialize(self)
 					self:updateTokoVoipInfo();
 				end
 			elseif (IsControlJustPressed(0, self.keyProximity)) then -- Switch proximity modes (normal / whisper / shout)
-				if (not self.mode) then
-					self.mode = 1;
-				end
-				self.mode = self.mode + 1;
-				if (self.mode > 3) then
-					self.mode = 1;
-				end
-				setPlayerData(self.serverId, "voip:mode", self.mode, true);
-				self:updateTokoVoipInfo();
+
 			end
+
 
 
 			if (IsControlPressed(0, self.radioKey) and self.plugin_data.radioChannel ~= -1) then -- Talk on radio

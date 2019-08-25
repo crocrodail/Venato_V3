@@ -159,6 +159,47 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
 	end
 end)
 
+RegisterServerEvent('Inventory:RemoveItem')
+AddEventHandler('Inventory:RemoveItem', function(qty, id, NewSource)
+	local source = source
+	local qty = qty
+	local AlreadyExist = false
+	if NewSource ~= nil then
+		source = NewSource
+	end
+	if DataPlayers[source].Inventaire ~= nil then
+		for k,v in pairs(DataPlayers[source].Inventaire) do
+			if v.id == id then
+				AlreadyExist = true
+				qty = DataPlayers[source].Inventaire[k].quantity - qty
+			end
+		end
+		if AlreadyExist then
+			local poidBefore = DataPlayers[source].Inventaire[id].poid
+			DataPlayers[source].Poid = DataPlayers[source].Poid - poidBefore
+			if qty > 0 then
+				DataPlayers[source].Inventaire[id].quantity = qty
+				DataPlayers[source].Inventaire[id].poid =  qty * DataPlayers[source].Inventaire[id].uPoid
+				DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
+				MySQL.Async.execute("UPDATE user_inventory SET quantity = @qty WHERE identifier = @SteamId AND item_id = @id", {['@qty'] = qty, ['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = id })
+			else
+				DataPlayers[source].Inventaire[id] = nil
+				MySQL.Async.execute("DELETE FROM user_inventory WHERE identifier = @SteamId AND item_id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = id })
+			end
+		else
+			MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
+				if result[1] ~= nil then
+					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture}
+					DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
+				else
+					print("GROS Probleme !!")
+				end
+			end)
+			MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",{['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
+		end
+	end
+end)
+
 RegisterServerEvent('Inventory:CallInfo')
 AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
   local qtyTarget
@@ -337,7 +378,7 @@ AddEventHandler('Inventory:RemoveWeapon', function(weapon, id, poid, NewSource)
 		DataPlayers[source].Poid = DataPlayers[source].Poid - poid
 	end
 	TriggerClientEvent("Inventory:RemoveWeaponClient", source, weapon)
-	DataPlayers[source].Weapon[id] = nil
+	DataPlayers[source].Weapon[tonumber(id)] = nil
 	MySQL.Async.execute("DELETE FROM user_weapons WHERE id = @id", {['@id'] = tonumber(id) })
 end)
 

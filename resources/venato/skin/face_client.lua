@@ -23,6 +23,13 @@ FaceChooser.Type = {
     {index = 18, display = 'Fossette du menton',        min = -2.0, max = 2.5, currentValue = 0},
     {index = 19, display = 'Epaisseur du cou',          min = -1.5, max = 2.5, currentValue = 0}
 }
+local instance = nil
+RegisterNetEvent('instance:onCreate')
+AddEventHandler('instance:onCreate', function(inst)
+	if inst.type == instance then
+		TriggerEvent('instance:enter', inst)
+	end
+end)
 
 
 local inEdit = false
@@ -33,6 +40,9 @@ function startEditFace()
     Citizen.CreateThread(function()
         currentItem = 0
         inEdit = true
+        instance = tostring(playerid())
+        TriggerEvent('instance:create', instance)
+        TriggerEvent('instance:registerType', instance)
         local ped = Venato.GetPlayerPed()
         SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
         Coords = GetEntityCoords(ped, true)
@@ -166,6 +176,7 @@ function saveFace()
         table.insert(data, v.currentValue)
     end
     TriggerServerEvent('face:save', data)
+    TriggerEvent('instance:close')
     TriggerServerEvent("Venato:SyncData")
     DetachEntity(Venato.GetPlayerPed(), true, true)
     DeleteEntity(Prop)

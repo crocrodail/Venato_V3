@@ -160,7 +160,25 @@ function OpenTestMenu()
 	Menu.addButton("attach bed", "attachbed", nil)
 	Menu.addButton("deattach bed", "detachebed", nil)
 	Menu.addButton("kill me", "dead", nil)
+	Menu.addButton("create instance", "cinstance", nil)
+	Menu.addButton("join instance", "jinstance", nil)
 end
+
+function cinstance()
+TriggerEvent('instance:create', 'garage')
+TriggerEvent('instance:registerType', 'garage')
+end
+RegisterNetEvent('instance:onCreate')
+AddEventHandler('instance:onCreate', function(instance)
+	if instance.type == 'garage' then
+		TriggerEvent('instance:enter', instance)
+	end
+end)
+
+function jinstance()
+	TriggerEvent('instance:close')
+end
+
 local bed = nil
 
 function dead()

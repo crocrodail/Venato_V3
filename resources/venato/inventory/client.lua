@@ -15,6 +15,10 @@ local defaultNotification = {
 -- ######## CONFIG ##############
 local PoidMax = 20 -- Kg
 --##############################
+function extOpenInventory()
+  Menu.open()
+  OpenInventory()
+end
 
 Citizen.CreateThread(function()
 	while true do
@@ -236,7 +240,7 @@ function MyWeapon(Data)
         Menu.addButton("<span class='blue--text'>" .. v.libelle .. " </span> munition : <span class='red--text'>" .. v.ammo .. "</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
           "OptionWeapon", { k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data })
       else
-        Menu.addButton("<span class='blue--text'>" .. v.libelle .. "</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
+        Menu.addButton("<span class='blue--text'>" .. v.libelle .. " "..v.id..""..k.."</span> <span class='orange--text'>( " .. v.poid .. " Kg )</span>",
           "OptionWeapon", { k, v.libelle, v.id, v.poid, v.ammo, Data.Poid, Data })
       end
     end
@@ -460,7 +464,7 @@ function DropWeapon(tableau)
 		local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 		TriggerServerEvent("Inventory:DropWeapon", tableau, x,y,z-0.5)
 		TriggerServerEvent("Inventory:RemoveWeapon",tableau[3], tableau[1], tableau[4])
-		local objet = Venato.CreateObject(dropWeapon, x, y, z-1)
+		local objet = Venato.CreateObject(dropWeapon, x, y+0.5, z-1)
     PlaceObjectOnGroundProperly(objet)
 		FreezeEntityPosition(objet, true)
 		OpenInventory()

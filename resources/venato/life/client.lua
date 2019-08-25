@@ -75,7 +75,7 @@ Citizen.CreateThread(
                     }
                 )
             end
-            if FreezeNeed then
+            if not FreezeNeed then
                 if food > 0 then
                   food = food - 0.03
                 end

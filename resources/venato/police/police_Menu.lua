@@ -47,12 +47,12 @@ end
 
 function policeGetMissionMenu()
   Menu.clearMenu()
-  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuGeneralAmbulancier", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   for k,v in pairs(mission) do
     TriggerEvent('Menu:AddButton2',v.Title, v.Function, {mission = v.mission}, '', "")
   end
   if alreadyTakeMission then
-    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishMissionAmbulancier", nil, '', "")
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishCurrentMissionPolice", nil, '', "")
   end
   Menu.CreateMenu()
 end

@@ -30,11 +30,14 @@ end
 function openVenatoadmin()
   Menu.clearMenu()
   AdminShowPlayerInfo = nil
+  if DataUser.Group == "Admin" or DataUser.Group == "Modo" then
   Menu.setTitle("Venato Admin Menu")
   Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
   Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
   Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
   Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
+  end
+  if DataUser.Group == "Admin" then
   Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
   Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
   Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
@@ -50,6 +53,7 @@ function openVenatoadmin()
     Menu.addButton("noClip", "AdminNoClip", nil)
     Menu.addButton("invisible", 'AdminInvisible' , nil)
   end
+end
 end
 
 function AdminInvisible()
@@ -109,6 +113,8 @@ function respawntest()
   ClearPedTasksImmediately(Venato.GetPlayerPed())
   Venato.resurect()
   TriggerServerEvent("Death:health", false)
+  LiveFreezeNeed(false)
+  fCanCancelOrStartAnim(true)
 end
 
 function AdminShowCoord()
@@ -319,10 +325,12 @@ function AdminPlayerOption(index)
   Menu.addButton("Freeze", "AdminFreeze", nil)
   Menu.addButton("Toi --> elle", "Admintptoelle", nil)
   Menu.addButton("Toi <-- elle", "Admintptome", nil)
+  if DataUser.Group == "Admin" then
   Menu.addButton("Give dans la poche", "AdminGivePoche", nil)
   Menu.addButton("Give en bank", "AdminGiveBank", nil)
   Menu.addButton("Set dans la poche", "AdminSetPoche", nil)
   Menu.addButton("Set en bank", "AdminSetBank", nil)
+end
 end
 
 function AdminActionOnPlayer(action)

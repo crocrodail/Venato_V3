@@ -29,6 +29,27 @@ Citizen.CreateThread(function()
   end
 end)
 
+function extOpenCoffreVeh()
+  CloseVehicle = Venato.CloseVehicle()
+  if CloseVehicle ~= 0 then
+    if not open then
+      if (GetVehicleDoorLockStatus(CloseVehicle) < 2) then
+        if not Menu.Hidden then
+          OpenVehicleCoffre()
+        else
+          CloseVehicleCoffre()
+        end
+      else
+        Venato.notifyError("~r~Vous devez ouvrir le véhicule pour ouvrir le coffre.")
+      end
+    else
+      CloseVehicleCoffre()
+    end
+  else
+    Venato.notifyError("~r~Aucun véhicule à proximité.")
+  end
+end
+
 function OpenVehicleCoffre()
   open = true
   Menu.open()

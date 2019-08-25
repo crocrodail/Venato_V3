@@ -153,7 +153,7 @@ Citizen.CreateThread(function()
             DisableControlAction(0, 106, guiEnabled) -- VehicleMouseControlOverride
 
             if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
-              TriggerServerEvent("Radio:CallData")
+              --TriggerServerEvent("Radio:CallData")
             end
         end
         Citizen.Wait(0)
