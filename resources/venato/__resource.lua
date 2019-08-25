@@ -43,6 +43,8 @@ client_script {
   '/police/police_client_cuffs.lua',
 	'/police/police_radar.lua',
   '/police/police_Menu.lua',
+  '/illegal/config.lua',
+  '/illegal/client.lua'
 }
 
 server_script {
@@ -71,6 +73,8 @@ server_script {
   '/police/police_server_cuffs.lua',
 	'/police/police_server.lua',
   '/police/police_server_notif.lua',
+  '/illegal/config.lua',
+  '/illegal/server.lua'
 }
 
 files {
