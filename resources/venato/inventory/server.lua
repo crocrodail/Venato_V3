@@ -458,7 +458,7 @@ AddEventHandler('Inventory:CreateJobCheck', function(source, amount)
       ["@prenom_du_factureur"] = "",
       ["@date"] = date,
     }, function()
-      notification.message = "Vous avez reçu un chèque de " .. montant .. " € ."
+      notification.message = "Vous avez reçu un chèque de " .. amount .. " € ."
       TriggerClientEvent('Venato:notify', source, notification)
     end)
 end)
