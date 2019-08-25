@@ -15,7 +15,7 @@ function updateMenuTaxi(newUrgenceMenu, bool)
     alreadyTakeMission = bool
 end
 
-function openMenuGeneralAmbulancier()
+function openMenuGeneraltaxi()
   Menu.clearMenu()
   Menu.open()
   Menu.setTitle('Taxi')

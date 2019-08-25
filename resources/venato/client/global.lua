@@ -123,7 +123,6 @@ Citizen.CreateThread(function()
       Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour louer un scouteur')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         getScouteur()
-        Menu.toggle()
       end
     elseif disScouteur < 20 then
       DrawMarker(27,Scouteur.x,Scouteur.y,Scouteur.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
@@ -132,7 +131,7 @@ Citizen.CreateThread(function()
 end)
 
 function getScouteur()
-  Venato.CreateVehicle('Faggio',{Scouteur.x, Scouteur.y, Scouteur.z},-50.0, function(vehicle)
+  Venato.CreateVehicle('Faggio',{x=Scouteur.x, y=Scouteur.y, z=Scouteur.z},-50.0, function(vehicle)
     SetVehicleNumberPlateText(vehicle,"LOCATION")
     plate = GetVehicleNumberPlateText(vehicle)
     SetPedIntoVehicle(Venato.GetPlayerPed(), vehicle, -1)
