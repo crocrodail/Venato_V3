@@ -82,7 +82,7 @@ RegisterServerEvent('VehicleCoffre:DropItem')
 AddEventHandler('VehicleCoffre:DropItem', function(qty, plate, index)
   local source = source
   local qty = tonumber(qty)
-  if tonumber(qty) <= DataPlayers[source].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite then
+  if qty <= DataPlayers[source].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite and qty > 0 then
     TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[index].quantity - qty, index, source)
     if DataVehicle[plate].inventaire[index] ~= nil then
       TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity + qty, index, plate )
@@ -99,7 +99,7 @@ RegisterServerEvent('VehicleCoffre:TakeItems')
 AddEventHandler('VehicleCoffre:TakeItems', function(index, qty, plate)
   local source = source
   local qty = tonumber(qty)
-  if tonumber(qty) <= DataVehicle[plate].inventaire[index].quantity and DataPlayers[source].Poid+DataVehicle[plate].inventaire[index].poid*qty <= DataPlayers[source].PoidMax then
+  if qty <= DataVehicle[plate].inventaire[index].quantity and DataPlayers[source].Poid+DataVehicle[plate].inventaire[index].poid*qty <= DataPlayers[source].PoidMax and qty > 0 then
     TriggerEvent('Inventory:AddItem', qty, index, source)
     TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity - qty, index, plate )
     TriggerClientEvent("VehicleCoffre:Close", source)
