@@ -44,7 +44,8 @@ AddEventHandler("Jobs:askSalary", function(newSource)
     salaryCheck = 0
     bonus = 1
   end
-
-  TriggerEvent("Inventory:AddMoney", (primeConn + salary + primeJob) * bonus + salaryCheck, source)
+  if (primeConn + salary + primeJob) * bonus + salaryCheck > 0 then
+    TriggerEvent("Inventory:CreateJobCheck", source, (primeConn + salary + primeJob) * bonus + salaryCheck)
+  end
   TriggerClientEvent("Jobs:askSalary:cb", source, jobName, primeConn, salary, primeJob, salaryCheck, bonus)
 end)

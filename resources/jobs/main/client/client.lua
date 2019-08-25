@@ -75,7 +75,7 @@ function toggleService(job)
   JobsConfig.inService = not JobsConfig.inService
   CreateThread(function()
     local time = 1
-    while time < 1000 do
+    while time < 200 do
       Wait(1)
       JobTools.showServiceMessage(job.name, JobsConfig.inService)
       time = time + 1

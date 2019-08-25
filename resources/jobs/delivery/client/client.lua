@@ -56,8 +56,22 @@ end
 
 function takeMission()
   DeliveryJobConfig.mission = DeliveryJobConfig.defaultMissions[1]
-  print('JOBS: Mission taken !')
+  DeliveryJobConfig.order = DeliveryJobConfig.defaultOrders[DeliveryJobConfig.mission.orderId]
+  DeliveryJobConfig.destination = DeliveryJobConfig.defaultDropLocations[DeliveryJobConfig.mission.targetId]
+
   DeliveryJobConfig.currentStep = 1
+  Menu.close()
+  JobsConfig.isMenuOpen = false
+end
+
+function abortMission()
+  DeliveryJobConfig.currentStep = nil
+  DeliveryJobConfig.itemsTaken = {}
+  DeliveryJobConfig.itemsTrunk = {}
+  DeliveryJobConfig.mission = nil
+  DeliveryJobConfig.order = nil
+  DeliveryJobConfig.destination = nil
+
   Menu.close()
   JobsConfig.isMenuOpen = false
 end
@@ -65,6 +79,8 @@ end
 function DeliveryJob.showMenu()
   if DeliveryJobConfig.currentStep == nil then
     Menu.addButton("Effectuer la livraison", "takeMission")
+  else
+    Menu.addButton("Abandonner la livraison", "abortMission")
   end
 end
 
@@ -149,9 +165,31 @@ function DeliveryJob.mainLoop()
           end
         end
 
-        if DeliveryJobConfig.mission and DeliveryJobConfig.currentStep == 3 then
-          local defaultDestinations = DeliveryJobConfig.defaultDropLocations
-          local destination = defaultDestinations[DeliveryJobConfig.mission.targetId]
+        if DeliveryJobConfig.mission and DeliveryJobConfig.currentStep >= 1 then
+          DrawRect(0.1, 0.3, 0.2, 0.4, 0, 0, 0, 150)
+          printTxt("~y~Commande :", 0.1, 0.1, true, 0.8)
+          local y_ = 0.15
+          DeliveryJobConfig.orderComplete = false
+          for _, item in pairs(DeliveryJobConfig.order) do
+            local alreadyTaken = DeliveryJobConfig.itemsTrunk[item.id] or 0
+            local checkBox = item.quantity - alreadyTaken > 0 and "~r~[ ]~b~" or "~g~[x]~b~"
+            printTxt(checkBox .. " " .. item.name ..
+              " ~s~(" .. alreadyTaken .. "/" .. item.quantity .. ")",
+              0.01, y_, false)
+            if DeliveryJobConfig.orderComplete and item.quantity - alreadyTaken <= 0 then
+              DeliveryJobConfig.orderComplete = true
+            else
+              DeliveryJobConfig.orderComplete = false
+            end
+            y_ = y_ + .025
+          end
+          if DeliveryJobConfig.orderComplete then
+            DeliveryJobConfig.currentStep = 3
+          end
+        end
+
+        if DeliveryJobConfig.mission and DeliveryJobConfig.orderComplete and DeliveryJobConfig.currentStep == 3 then
+          local destination = DeliveryJobConfig.destination
           distance = GetDistanceBetweenCoords(playerPos, destination.x, destination.y, destination.z, true)
           local boxCoord = GetEntityCoords(DeliveryJobConfig.globalBox)
           local destPos = vector3(destination.x, destination.y, destination.z)
@@ -281,9 +319,6 @@ function DeliveryJob.checkLoop()
 end
 
 function manageBlip()
-
-  local defaultDestinations = DeliveryJobConfig.defaultDropLocations
-  local defaultOrders = DeliveryJobConfig.defaultOrders
   local warehouses = DeliveryJobConfig.warehouses
 
   if DeliveryJobConfig.currentStep == 2 then
@@ -311,12 +346,10 @@ function manageBlip()
     DeliveryJobConfig.blips["Camionnette"] = nil
   end
 
-  if DeliveryJobConfig.mission and DeliveryJobConfig.currentStep == 3 then
-    local destination = defaultDestinations[DeliveryJobConfig.mission.targetId]
-    local order = defaultOrders[DeliveryJobConfig.mission.orderId]
-    addDestinationBlip(destination)
+  if DeliveryJobConfig.mission and DeliveryJobConfig.orderComplete and DeliveryJobConfig.currentStep == 3 then
+    addDestinationBlip(DeliveryJobConfig.destination)
   elseif DeliveryJobConfig.mission then
-    local destination = defaultDestinations[DeliveryJobConfig.mission.targetId]
+    local destination = DeliveryJobConfig.destination
     RemoveBlip(DeliveryJobConfig.blips[destination.Name])
     DeliveryJobConfig.blips[destination.Name] = nil
   end
@@ -584,7 +617,6 @@ function putItemInTrunk(item)
   DeliveryJobConfig.itemsTaken = {}
   JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchendises dans le camion</span"
   Venato.notify(JobsConfig.jobsNotification)
-  DeliveryJobConfig.currentStep = 3
 end
 
 function ValidateMission()
@@ -592,6 +624,22 @@ function ValidateMission()
   DeliveryJobConfig.itemsTaken = {}
   DeliveryJobConfig.itemsTrunk = {}
   DeliveryJobConfig.mission = nil
+  DeliveryJobConfig.order = nil
+  DeliveryJobConfig.destination = nil
 
   TriggerServerEvent("DeliveryJob:finishMission")
+end
+
+function printTxt(text, x, y, center, police)
+  local center = center or false
+  local police = police or 0.5
+  SetTextFont(4)
+  SetTextScale(0.0, police)
+  SetTextCentre(center)
+  SetTextDropShadow(0, 0, 0, 0, 0)
+  SetTextEdge(0, 0, 0, 0, 0)
+  SetTextColour(255, 255, 255, 255)
+  SetTextEntry("STRING")
+  AddTextComponentString(text)
+  DrawText(x, y)
 end
