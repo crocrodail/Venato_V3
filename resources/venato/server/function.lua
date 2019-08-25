@@ -23,6 +23,28 @@ AddEventHandler("Venato:SyncData", function(steam, newSource)
   accessGranded(steam, source)
 end)
 
+RegisterNetEvent("Venato:SwitchJob")
+AddEventHandler("Venato:SwitchJob", function(id)
+  local id = id
+  local source = source
+  TriggerClientEvent("job:deleteBlips", source)
+  TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, false)
+  MySQL.Async.fetchAll("SELECT * FROM jobs WHERE job_id =@id", {["@id"] = id},function(result)
+    DataPlayers[source].IdJob = id
+    DataPlayers[source].NameJob = result[1].job_name
+    local defaultNotification = {
+      type = "alert",
+      title ="PoleEmploie",
+      logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
+      message = "Vous etes maintenant "..DataPlayers[source].NameJob
+    }
+    Venato.notify(source, defaultNotification)
+    MySQL.Async.execute("UPDATE users SET job = @id WHERE identifier = @identifier",{["@id"] = id, ["@identifier"] = getSteamID(source)})
+    print(DataPlayers[source].NameJob)
+    TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
+  end)
+end)
+
 DataPlayers = {}
 
 function accessGranded(SteamId, source , balek)

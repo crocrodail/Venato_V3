@@ -272,10 +272,12 @@ local function showBlipMecano()
     end
 end
 local function removeBlipMecano()
+  if mecano_BlipMecano ~= nil then
     for _ , c in pairs(mecano_BlipMecano) do
         RemoveBlip(c)
     end
     mecano_BlipMecano = {}
+  end
 end
 local function drawHelpJobM()
     local lines = {
@@ -1162,8 +1164,8 @@ RegisterNetEvent('mecano:marker')
 AddEventHandler('mecano:marker', function ()
 end)
 
-RegisterNetEvent('mecano:deleteBlips')
-AddEventHandler('mecano:deleteBlips', function ()
+RegisterNetEvent('job:deleteBlips')
+AddEventHandler('job:deleteBlips', function ()
     isMecano = false
     removeBlipMecano()
 end)

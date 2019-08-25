@@ -13,6 +13,7 @@ function Venato.resurect()
   TimeToRespawn = 0
   dead = false
   LiveFreezeNeed(false)
+  fCanCancelOrStartAnim(true)
   Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
   TriggerServerEvent("Death:health", false)
   StopAllScreenEffects()
@@ -48,6 +49,7 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
   Citizen.CreateThread(function()
     dead = true
     LiveFreezeNeed(true)
+    fCanCancelOrStartAnim(false)
     TriggerServerEvent("Death:health", true)
     assommePlayer = boolean
     if assommePlayer and (causeOfDeath == 'Cause inconnue' or causeOfDeath == 'Trace de coup')  then
@@ -80,7 +82,9 @@ Citizen.CreateThread(function()
       drawTxt(0.88, 1.45, 1.0,1.0,0.4, "~r~Appuyez sur ~g~C ~r~pour appeler un médecin.", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["C"]) and  GetLastInputMethod(2) then
         CallHospital()
-        TimeToRespawn = TimeToRespawn + 300
+        if TimeToRespawn < 300 then
+          TimeToRespawn = TimeToRespawn + 300
+        end
       end
     elseif dead and TimeToRespawn == 0 and not assommePlayer then
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "~g~Appuyez sur ~r~X ~g~pour respawn à l'hospital.", 255, 255, 255, 255)
@@ -94,6 +98,7 @@ Citizen.CreateThread(function()
       StopAllScreenEffects()
       dead = false
       LiveFreezeNeed(false)
+      fCanCancelOrStartAnim(true)
       TriggerServerEvent("Death:health", false)
     else
       if IsPedShooting(GetPlayerPed(-1)) then
@@ -132,8 +137,11 @@ end
 
 function RespawnHospital()
   dead = false
+  TriggerServerEvent("Death:health", false)
   LiveFreezeNeed(false)
+  fCanCancelOrStartAnim(true)
   NetworkResurrectLocalPlayer(CoordHospital.x, CoordHospital.y, CoordHospital.z, 0, false, false, false)
+  SetEntityCoords(GetPlayerPed(-1), CoordHospital.x, CoordHospital.y, CoordHospital.z, 0, 0, 0, true)
   ClearPedTasks(GetPlayerPed(-1))
   StopAllScreenEffects()
 end
@@ -199,6 +207,7 @@ function Reanim(char, coord, heading)
     else
       dead = false
       LiveFreezeNeed(false)
+      fCanCancelOrStartAnim(true)
       TriggerServerEvent("Death:health", false)
     end
     Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_def", anim = "cpr_intro", useLib = true})

@@ -42,7 +42,7 @@ function MecanoGetMissionMenu()
     TriggerEvent('Menu:AddButton2',v.Title, v.Function, {mission = v.mission}, '', "")
   end
   if alreadyTakeMission then
-    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishMissionAmbulancier", nil, '', "")
+    TriggerEvent('Menu:AddButton2',"<span class='red--text'>Terminer la mission</span>", "finishCurrentMission", nil, '', "")
   end
   Menu.CreateMenu()
 end

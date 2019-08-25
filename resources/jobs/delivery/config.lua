@@ -34,6 +34,9 @@ DeliveryJobConfig.trunkCoord = {}
 DeliveryJobConfig.globalTrunk = nil
 
 DeliveryJobConfig.mission = nil
+DeliveryJobConfig.order = nil
+DeliveryJobConfig.orderComplete = false
+DeliveryJobConfig.destination = nil
 DeliveryJobConfig.currentStep = nil
 DeliveryJobConfig.itemsTaken = {}
 DeliveryJobConfig.itemsTrunk = {}
@@ -44,9 +47,9 @@ DeliveryJobConfig.defaultDropLocations = {
 }
 DeliveryJobConfig.defaultOrders = {
   ["Munitions"] = {
-    { ["itemId"] = 1, ["quantity"] = 5 },
-    { ["itemId"] = 2, ["quantity"] = 10 },
-    { ["itemId"] = 3, ["quantity"] = 25 }
+    { ["id"] = 35, ["name"] = "Munitions", ["quantity"] = 5 },
+    { ["id"] = 6, ["name"] = "Bouteille d'eau", ["quantity"] = 15 },
+    { ["id"] = 104, ["name"] = "Chips", ["quantity"] = 15 }
   }
 }
 DeliveryJobConfig.defaultMissions = {

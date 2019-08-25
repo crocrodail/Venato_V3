@@ -30,7 +30,7 @@ RegisterServerEvent('Death:health')
 AddEventHandler('Death:health', function(bool, health)
   local source = source
   local health = health or 100
-  if bool then
+  if bool == true then
     health = 0
   end
   DataPlayers[source].Health = health

@@ -5,6 +5,8 @@ local Prop = nil
 local loaded = false
 local inEdit = false
 
+
+
 if (GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01") or GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_f_freemode_01")) then
   loaded = true
 end

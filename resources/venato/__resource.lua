@@ -43,6 +43,8 @@ client_script {
   '/police/police_client_cuffs.lua',
 	'/police/police_radar.lua',
   '/police/police_Menu.lua',
+  '/interaction/client.lua',
+  '/interaction/menu.lua',
   '/illegal/config.lua',
   '/illegal/client.lua'
 }

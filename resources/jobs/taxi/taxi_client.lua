@@ -372,7 +372,6 @@ function spawnVehicle(coords, type)
         SetNetworkIdExistsOnAllMachines(ObjectId, true)
         plate = GetVehicleNumberPlateText(myVehiculeEntity)
         TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(myVehiculeEntity)))
-        TriggerServerEvent("vnt:saveVeh", myVehiculeEntity)
 
         local p = GetEntityCoords(myVehiculeEntity, 0)
         local h = GetEntityHeading(myVehiculeEntity)
@@ -645,8 +644,8 @@ RegisterNetEvent('taxi:marker')
 AddEventHandler('taxi:marker', function ()
 end)
 
-RegisterNetEvent('taxi:deleteBlips')
-AddEventHandler('taxi:deleteBlips', function ()
+RegisterNetEvent('job:deleteBlips')
+AddEventHandler('job:deleteBlips', function ()
   isTaxi = false
   removeBliptaxi()
 end)
@@ -688,7 +687,7 @@ function acceptMission(data)
   TriggerServerEvent('taxi:AcceptMission', mission.id)
 end
 
-function finishCurrentMission()
+function finishCurrentMissiontaxi()
   TriggerServerEvent('taxi:FinishMission', currentMissions.id)
   currentMissions = nil
   if currentBlip ~= nil then
@@ -788,6 +787,7 @@ end)
 
 RegisterNetEvent('taxi:callService')
 AddEventHandler('taxi:callService',function(data)
+  print(data)
   callService(data)
 end)
 
