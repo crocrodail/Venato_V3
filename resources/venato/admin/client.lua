@@ -30,6 +30,7 @@ end
 function openVenatoadmin()
   Menu.clearMenu()
   AdminShowPlayerInfo = nil
+  print("DataUser.Group : "..DataUser.Group)
   if DataUser.Group == "Admin" or DataUser.Group == "Modo" then
   Menu.setTitle("Venato Admin Menu")
   Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
@@ -53,6 +54,7 @@ function openVenatoadmin()
     Menu.addButton("noClip", "AdminNoClip", nil)
     Menu.addButton("invisible", 'AdminInvisible' , nil)
   end
+  Menu.open()
 end
 end
 
@@ -298,6 +300,7 @@ end
 RegisterNetEvent("Admin:CallDataUsers:cb")
 AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
   Menu.clearMenu()
+  DataUser = dataPlayers[1]
   AdminDataPlayers = dataPlayers
   ClientSource = DataSource
   openVenatoadmin()
@@ -571,10 +574,10 @@ Citizen.CreateThread(function()
     end
     if IsControlPressed(1, Keys["5"]) and IsControlPressed(1,
       Keys["G"]) and GetLastInputMethod(2) and open == false then
-      open = true
+      open = true      
       if Menu.hidden == true then
-        TriggerServerEvent("Admin:CallDataUsers")
-        Menu.open()
+        print("openMenu")
+        TriggerServerEvent("Admin:CallDataUsers")        
       else
         Menu.close()
       end

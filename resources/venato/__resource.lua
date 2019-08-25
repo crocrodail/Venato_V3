@@ -23,7 +23,6 @@ client_script {
   '/garage/table.lua',
   '/carMenu/client.lua',
   '/lockVehicule/client.lua',
-  '/debug/client.lua',
   '/life/client.lua',
   '/admin/client.lua',
   '/clothingShop/client.lua',

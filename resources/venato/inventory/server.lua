@@ -1,3 +1,10 @@
+
+local defaultNotification = {
+  title = "Inventaire",
+  type = "alert",
+  logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
+}
+
 RegisterServerEvent('debuge')
 AddEventHandler('debuge', function()
   local SteamId = getSteamID(source)
@@ -100,6 +107,12 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
       local poidBefore = DataPlayers[source].Inventaire[id].poid
       DataPlayers[source].Poid = DataPlayers[source].Poid - poidBefore
       if qty > 0 then
+        if DataPlayers[source].Poid + (qty * DataPlayers[source].Inventaire[id].uPoid) > DataPlayers[source].PoidMax then
+          DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
+          defaultNotification.message = "Vous êtes trop lourd."
+          Venato.notify(source, defaultNotification)
+          return false
+        end
         MySQL.Async.execute("UPDATE user_inventory SET quantity = @qty WHERE identifier = @SteamId AND item_id = @id",
           { ['@qty'] = qty, ['@SteamId'] = DataPlayers[source].SteamId, ['@id'] = id })
         DataPlayers[source].Inventaire[id].quantity = qty
@@ -115,14 +128,22 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
         if result[1] ~= nil then
           DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }
           DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
+          if DataPlayers[source].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[source].PoidMax then
+            DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
+            defaultNotification.message = "Vous êtes trop lourd."
+            Venato.notify(source, defaultNotification)
+            return false
+          end
+          MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
+        { ['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
         else
           print("GROS Probleme !!")
         end
       end)
-      MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
-        { ['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
+      
     end
   end
+  return false
 end)
 
 RegisterServerEvent('Inventory:AddItem')
@@ -144,6 +165,12 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
       local poidBefore = DataPlayers[source].Inventaire[id].poid
       DataPlayers[source].Poid = DataPlayers[source].Poid - poidBefore
       if qty > 0 then
+        if DataPlayers[source].Poid + (qty * DataPlayers[source].Inventaire[id].uPoid) > DataPlayers[source].PoidMax then
+          DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
+          defaultNotification.message = "Vous êtes trop lourd."
+          Venato.notify(source, defaultNotification)
+          return false
+        end
         DataPlayers[source].Inventaire[id].quantity = qty
         DataPlayers[source].Inventaire[id].poid = qty * DataPlayers[source].Inventaire[id].uPoid
         DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
@@ -157,16 +184,24 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
         if result[1] ~= nil then
+          if DataPlayers[source].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[source].PoidMax then
+            DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
+            defaultNotification.message = "Vous êtes trop lourd."
+            Venato.notify(source, defaultNotification)
+            return false
+          end
           DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }
           DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
+          MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
+          { ['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
         else
           print("GROS Probleme !!")
         end
       end)
-      MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
-        { ['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
+     
     end
   end
+  return false
 end)
 
 RegisterServerEvent('Inventory:RemoveItem')
@@ -235,6 +270,8 @@ AddEventHandler('Inventory:DelItemsOnTheGround', function(index)
   ItemsOnTheGround[index] = nil
   ActualiseTableOfItemOnTheGround()
 end)
+
+
 
 function ActualiseTableOfItemOnTheGround()
   TriggerClientEvent("Inventory:SendItemsOnTheGround", -1, ItemsOnTheGround)

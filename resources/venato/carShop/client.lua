@@ -12,7 +12,7 @@ local init = false
 local defaultNotification = {
   type = "alert",
   title ="Venato CarShop",
-  logo = "https://i.ibb.co/Gthd3WK/icons8-car-96px-1.png"
+  logo = "https://i.ibb.co/DG6wbyY/icons8-traffic-jam-96px-1.png"
 }
 
 local colors = {}

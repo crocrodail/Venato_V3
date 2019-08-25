@@ -286,6 +286,15 @@ function Venato.notify(source, notif)
   })
 end
 
+function Venato.CheckItem(itemId, source)
+  print(Venato.dump(DataPlayers[source].Inventaire))
+  print(Venato.dump(DataPlayers[source].Inventaire[itemId]))
+  if not DataPlayers[source] or not DataPlayers[source].Inventaire[itemId] then    
+    return 0
+  end  
+  return DataPlayers[source].Inventaire[itemId].quantity
+end
+
 RegisterServerEvent('vnt:chestaddmonney')
 AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
   local idChest = idChest

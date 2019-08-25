@@ -25,7 +25,7 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
     MySQL.Async.fetchAll("SELECT * FROM coffres_voiture_contenu JOIN items ON coffres_voiture_contenu.ItemId = items.id WHERE CoffreId = @id", {["@id"] = plate}, function(result)
       if result[1] ~= nil then
         for k,v in pairs(result) do
-          Cof = { ["libelle"] = v.libelle, ["quantity"] = v.Quantity, ["itemId"] = v.ItemId, ["poid"] = v.poid}
+          Cof = { ["libelle"] = v.libelle, ["quantity"] = v.Quantity, ["itemId"] = v.ItemId,  ["picture"] = v.picture, ["poid"] = v.poid}
           Inventaire[v.ItemId] = Cof
           nbItem = nbItem + v.Quantity
         end
@@ -64,7 +64,7 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
       MySQL.Async.fetchAll("SELECT * FROM coffres_voiture_weapons JOIN weapon_model ON coffres_voiture_weapons.Weapon = weapon_model.weapond WHERE CoffreId = @id", {["@id"] = plate}, function(resultWp)
         if resultWp ~= nil then
           for k,v in pairs(resultWp) do
-            CofWp = {["libelle"] = v.libelle, ["weapon"] = v.Weapon, ["balles"] = v.balles, ["poid"] = v.poid}
+            CofWp = {["libelle"] = v.libelle, ["weapon"] = v.Weapon, ["balles"] = v.balles, ["picture"] = v.picture, ["poid"] = v.poid}
             weapon[v.Id] = CofWp
             DataVehicle[plate].nbWeapon = DataVehicle[plate].nbWeapon + 1
           end
