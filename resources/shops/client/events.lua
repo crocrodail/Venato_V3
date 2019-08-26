@@ -55,7 +55,7 @@ AddEventHandler("Shops:NotEnoughQuantity", function(Name)
 end)
 
 AddEventHandler("Shops:TooHeavy", function(Name)
-  msg = "Vous etes trop lourd pour acheter " .. Name .. "."
+  msg = "Vous avez trop d'objets pour acheter " .. Name .. "."
   ConfigShop.shopsNotification.message = ConfigShop.textInColor('red', msg)
   TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)

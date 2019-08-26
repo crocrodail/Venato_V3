@@ -110,7 +110,7 @@ AddEventHandler("Coffre:TakeWeapon", function(row)
     DataCoffre[indexCoffre].weapon[indexWeapon] = nil
     DataCoffre[indexCoffre].nbWeapon =  DataCoffre[indexCoffre].nbWeapon - 1
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Vous etes trop lourd pour prendre l'arme.")
+    TriggerClientEvent("Venato:notify", source, "Vous n'avez pas assez de place pour prendre l'arme.")
   end
 end)
 

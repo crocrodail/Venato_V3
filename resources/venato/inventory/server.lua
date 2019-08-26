@@ -109,7 +109,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
       if qty > 0 then
         if DataPlayers[source].Poid + (qty * DataPlayers[source].Inventaire[id].uPoid) > DataPlayers[source].PoidMax then
           DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
-          defaultNotification.message = "Vous êtes trop lourd."
+          defaultNotification.message = "Vous avez trop d'objets en poche."
           Venato.notify(source, defaultNotification)
           return false
         end
@@ -130,7 +130,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
           DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
           if DataPlayers[source].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[source].PoidMax then
             DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
-            defaultNotification.message = "Vous êtes trop lourd."
+            defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
             return false
           end
@@ -183,7 +183,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
           title = "Inventaire",
           type = "info", --  danger, error, alert, info, success, warning
           logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png",
-          message = "Vous avez êtes trop lourd.",
+          message = "Vous avez trop d'objet en poche pour ça.",
         }
         TriggerClientEvent('Venato:notify', source, Notification)
       end
@@ -192,7 +192,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
         if result[1] ~= nil then
           if DataPlayers[source].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[source].PoidMax then
             DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
-            defaultNotification.message = "Vous êtes trop lourd."
+            defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
             return false
           end
@@ -367,8 +367,8 @@ AddEventHandler('Inventory:CallInfoWeapon', function(ClosePlayer, table)
     TriggerClientEvent("Inventory:AnimGive", source)
     TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu une arme.")
   else
-    TriggerClientEvent("Venato:notify", source, "La personne est trop lourde pour reçevoir une arme.")
-    TriggerClientEvent("Venato:notify", ClosePlayer, "Vous etes trop lourd pour reçevoir une arme.")
+    TriggerClientEvent("Venato:notify", source, "La personne n'a pas la place pour reçevoir une arme.")
+    TriggerClientEvent("Venato:notify", ClosePlayer, "Vous n'avez pas la place pour reçevoir une arme.")
   end
 end)
 

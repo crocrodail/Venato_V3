@@ -144,7 +144,7 @@ AddEventHandler('VehicleCoffre:TakeWpCv', function(index, plate)
     DataVehicle[plate].nbWeapon = DataVehicle[plate].nbWeapon - 1
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notifyError", source, "~r~Cette arme est trop lourd pour toi.")
+    TriggerClientEvent("Venato:notifyError", source, "Cette arme est trop lourde pour toi.")
   end
 end)
 
@@ -161,6 +161,6 @@ AddEventHandler('VehicleCoffre:DropWpCv', function(index, plate)
     end)
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notifyError", source, "~r~Cette arme est trop lourd pour toi.")
+    TriggerClientEvent("Venato:notifyError", source, "Cette arme est trop lourde pour toi.")
   end
 end)

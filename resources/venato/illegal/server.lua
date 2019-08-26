@@ -40,3 +40,11 @@ AddEventHandler('illegal:sell', function(drugId)
     end
     Venato.notify(source, defaultNotification)
 end)
+
+RegisterServerEvent('illegal:requestNbCop')
+AddEventHandler('illegal:requestNbCop', function()
+	getPoliceInService( function(nbPolicier)
+        local nbPolice = nbPolicier
+	    TriggerClientEvent('illegal:setcop',source,nbPolice)
+	end)
+end)
