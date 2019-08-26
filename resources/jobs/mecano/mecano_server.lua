@@ -8,7 +8,7 @@
     local CALL_INFO_NONE = 0
 
     -- Notifyle changement de status des missions
-    function notifyMissionChange(target)
+    function notifyMissionChangeMECA(target)
         target = target or -1
         TriggerClientEvent(preFixEventName .. ':MissionChange', target, listMissions)
     end
@@ -55,7 +55,7 @@
     end
 
 
-    function addMission(source, position, type)
+    function addMissionmeca(source, position, type)
         local sMission = listMissions[source]
         if sMission == nil then
             listMissions[source] = {
@@ -68,7 +68,7 @@
             notifyClient(source, 'CALL_RECU')
             notifyCallStatus(source, CALL_INFO_WAIT)
             notifyAllPersonnel('MISSION_NEW')
-            notifyMissionChange()
+            notifyMissionChangeMECA()
         else -- Missions deja en cours
             notifyClient(source, 'CALL_EN_COURS')
         end
@@ -86,7 +86,7 @@
             listMissions[missionId] = nil
             notifyClient(missionId, 'CALL_FINI')
             notifyCallStatus(missionId, CALL_INFO_NONE)
-            notifyMissionChange()
+            notifyMissionChangeMECA()
             notifyPersonnelChange()
 			notifyGetPersonnelMeca()
         end
@@ -115,7 +115,7 @@
             TriggerClientEvent(preFixEventName .. ':MissionAccept', source, sMission)
             notifyCallStatus(missionId, CALL_INFO_OK)
             setActivePersonnel(source)
-            notifyMissionChange()
+            notifyMissionChangeMECA()
             notifyPersonnelChange()
 			notifyGetPersonnelMeca()
         end
@@ -150,7 +150,7 @@
             end
             listMissions[clientId] = nil
             notifyCallStatus(clientId, CALL_INFO_NONE)
-            notifyMissionChange()
+            notifyMissionChangeMECA()
             notifyPersonnelChange()
 			notifyGetPersonnelMeca()
         end
@@ -223,7 +223,7 @@
 
     RegisterServerEvent(preFixEventName .. ':requestMission')
     AddEventHandler(preFixEventName .. ':requestMission', function ()
-        notifyMissionChange(source)
+        notifyMissionChangeMECA(source)
     end)
 
     RegisterServerEvent(preFixEventName .. ':requestPersonnel')
@@ -233,7 +233,7 @@
 
     RegisterServerEvent(preFixEventName .. ':Call')
     AddEventHandler(preFixEventName .. ':Call', function (posX,posY,posZ,type)
-        addMission(source, {posX, posY, posZ}, type)
+        addMissionmeca(source, {posX, posY, posZ}, type)
     end)
 
     RegisterServerEvent(preFixEventName .. ':CallCancel')

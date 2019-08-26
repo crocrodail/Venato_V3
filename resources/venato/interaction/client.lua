@@ -32,6 +32,10 @@ function DoRagdoll()
 	SetPedToRagdoll(GetPlayerPed(-1), 12000, 12000, 0, 0, 0, 0)
 end
 
+function killYourSelf()
+    SetEntityHealth(GetPlayerPed(-1), 0)
+end
+
 function ClearAnim()
 	local lPed = GetPlayerPed(-1)
 	if CanCancelOrStartAnim then

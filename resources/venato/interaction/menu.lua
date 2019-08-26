@@ -13,6 +13,7 @@ function OpenMenuInteraction()
 	Menu.addButton2("S'évanouir (ALT+G)", "DoRagdoll", nil, nil, nil)
 	--Menu.addButton2("Action", func, nil, nil, nil)
 	--Menu.addButton2("Mes accessoires", func, args, hover, picture)
+	Menu.addButton2("Se suicider", "killYourSelf", nil, nil, nil)
 	Menu.CreateMenu()
 end
 

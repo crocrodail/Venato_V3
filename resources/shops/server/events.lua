@@ -4,7 +4,7 @@
 
 RegisterServerEvent("Shops:LoadShops")
 RegisterServerEvent("Shops:ShowInventory")
-RegisterServerEvent("Shops:TestBuy")
+-- RegisterServerEvent("Shops:TestBuy")
 RegisterServerEvent("Shops:RemoveItem")
 RegisterServerEvent("Shops:AddMoney")
 RegisterServerEvent("Shops:RemoveMoney")
@@ -35,37 +35,37 @@ AddEventHandler("Shops:ShowInventory", function(shopId, newSource)
   local source = getSource(source, newSource)
   TriggerClientEvent("Shops:UpdateMenu:cb", source, ShopDbFunctions.getShop(shopId, source))
 end)
-
-AddEventHandler("Shops:TestBuy", function(ContentId, shopId, quantity, newSource)
-  local source = getSource(source, newSource)
-
-  content = ShopDbFunctions.getContentItem(ContentId)
-  if content == nil then return end
-
-  local _quantity = quantity or 1
-  local totalPrice = _quantity * content.Price
-  local totalPoid = _quantity * content.poid
-
-  local steamId = ShopsTools.getSteamID(source)
-  local DataUsers = exports.venato:GetDataPlayers()
-  currentPlayerMoney = ShopDbFunctions.getCurrentPlayerMoney(steamId)
-  if totalPrice > currentPlayerMoney then
-    TriggerClientEvent("Shops:NotEnoughMoney", source, content.libelle)
-  elseif content.Quantity >= 0 and content.Quantity < _quantity then
-    TriggerClientEvent("Shops:NotEnoughQuantity", source, content.libelle)
-  elseif DataUsers[source].PoidMax < (DataUsers[source].Poid + totalPoid) then
-    TriggerClientEvent("Shops:TooHeavy", source, content.libelle)
-  else
-    TriggerEvent("Inventory:AddItem", _quantity, content.ItemId, source)
-    if content.Quantity > 0 then
-      TriggerEvent("Shops:RemoveItem", _quantity, ContentId)
-    end
-
-    TriggerEvent("Inventory:RemoveMoney", totalPrice, source)
-    TriggerEvent("Shops:AddMoney", totalPrice, shopId)
-    TriggerClientEvent("Shops:TestBuy:cb", source, content.libelle)
-  end
-end)
+--######### PARTI DANS VENATO
+-- AddEventHandler("Shops:TestBuy", function(ContentId, shopId, quantity, newSource)
+--   local source = getSource(source, newSource)
+--
+--   content = ShopDbFunctions.getContentItem(ContentId)
+--   if content == nil then return end
+--
+--   local _quantity = quantity or 1
+--   local totalPrice = _quantity * content.Price
+--   local totalPoid = _quantity * content.poid
+--
+--   local steamId = ShopsTools.getSteamID(source)
+--   local DataUsers = exports.venato:GetDataPlayers()
+--   currentPlayerMoney = ShopDbFunctions.getCurrentPlayerMoney(steamId)
+--   if totalPrice > currentPlayerMoney then
+--     TriggerClientEvent("Shops:NotEnoughMoney", source, content.libelle)
+--   elseif content.Quantity >= 0 and content.Quantity < _quantity then
+--     TriggerClientEvent("Shops:NotEnoughQuantity", source, content.libelle)
+--   elseif DataUsers[source].PoidMax < (DataUsers[source].Poid + totalPoid) then
+--     TriggerClientEvent("Shops:TooHeavy", source, content.libelle)
+--   else
+--     TriggerEvent("Inventory:AddItem", _quantity, content.ItemId, source)
+--     if content.Quantity > 0 then
+--       TriggerEvent("Shops:RemoveItem", _quantity, ContentId)
+--     end
+--
+--     TriggerEvent("Inventory:RemoveMoney", totalPrice, source)
+--     TriggerEvent("Shops:AddMoney", totalPrice, shopId)
+--     TriggerClientEvent("Shops:TestBuy:cb", source, content.libelle)
+--   end
+-- end)
 
 AddEventHandler("Shops:RemoveItem", function(quantity, contentId, newSource)
   local source = getSource(source, newSource)

@@ -54,6 +54,7 @@ end)
 RegisterNetEvent("Venato:SpawnInit")
 AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
   if DataPlayers[source] ~= nil then
+    DataUser = DataPlayers[source]
     LoadBlips()
     Venato.LoadSkin(DataPlayers[source])
     Venato.LoadClothes()

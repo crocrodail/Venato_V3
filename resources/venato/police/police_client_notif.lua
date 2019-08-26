@@ -288,7 +288,7 @@ function updateMenuMissionPolice()
         local item = {
             Title = '' .. m.id .. ' - ' .. m.type,
             mission = m,
-            Function = "acceptMissionAmbulancier"
+            Function = "acceptMissionPolice"
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. ' (' .. #m.acceptBy ..' Unité)'
@@ -301,7 +301,7 @@ function updateMenuMissionPolice()
       else
         POLICE_currentMissions = false
     end
-    updateMenuMissionPolice(items,POLICE_currentMissions)
+    updateMenuMissionPoliceeee(items,POLICE_currentMissions)
 end
 
 function callPolice(type)

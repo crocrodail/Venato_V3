@@ -32,7 +32,7 @@ local oldVhl = {}
 local currentUiState = false
 
 local locations = {
-	{ name= 'lscustoms', x = -212.784408569336, y= -1324.52233886719, z= 29.89040184021, activationDist=12.5, markerWidth = 25.05001, markerType= 72, markerColor= 5 },
+	{ name= 'lscustoms', x = -212.784408569336, y= -1324.52233886719, z= 29.89040184021, activationDist=12.5, markerWidth = 25.05001, markerType= 72, markerColor= 0 },
 
 	--{ name= 'lscustoms', x = -1287.50622558594, y= -2137.49926757813, z= 13.4786577224731, activationDist=12.5, markerWidth = 25.05001, markerType= 72, markerColor= 5 }, -- position aeroport test piste
   }

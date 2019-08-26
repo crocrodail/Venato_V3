@@ -25,25 +25,18 @@
 			BeginTextCommandSetBlipName("STRING")
 			AddTextComponentString(key)
 			EndTextCommandSetBlipName(item.blip)
+			BlipsJobs[item.blip] = item.blip
 		end
 		brasseur_blipsTemp = brasseur_blips
-	end)
-
-	RegisterNetEvent('job:deleteBlips')
-	AddEventHandler('job:deleteBlips', function ()
-		Brasseur_markerBool = false
-		if brasseur_blipsTemp ~= nil then
-		for _, item in pairs(brasseur_blips) do
-			RemoveBlip(item.blip)
-		end
-	end
 	end)
 
 	RegisterNetEvent('Job:startBrasseur')
 	AddEventHandler('Job:startBrasseur', function (boolean)
 		Brasseur_markerBool = boolean
-		TriggerEvent("brasseur:drawBlips")
-		TriggerEvent("brasseur:marker")
+		if boolean then
+			TriggerEvent("brasseur:drawBlips")
+			TriggerEvent("brasseur:marker")
+		end
 		Citizen.CreateThread(function()
 			while Brasseur_markerBool == true do
 				Wait(0)
@@ -160,7 +153,7 @@ AddEventHandler('brasseur:getCar', function (source)
 		local myPed = GetPlayerPed(-1)
 		local player = PlayerId()
 		local plate = math.random(1000, 9000)
-		Venato.CreateVehicle('pounder',{brasseur_car.x, brasseur_car.y, brasseur_car.z},-50.0, function(vehicle)
+		Venato.CreateVehicle('pounder',{x=brasseur_car.x, y=brasseur_car.y, z=brasseur_car.z},-50.0, function(vehicle)
 			existingVeh = vehicle
 			SetVehicleNumberPlateText(existingVeh, brasseur_platesuffix.." "..plate.." ")
 			plate = GetVehicleNumberPlateText(existingVeh)

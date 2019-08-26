@@ -27,6 +27,7 @@ PlateExeption = { --max = 8
   { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
   { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
   { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
+  { plate = "PONPISTE", size = 0 , MaxWeapon = 0},
 }
 
 StingPlateExeption = {

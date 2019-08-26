@@ -24,6 +24,7 @@
 			BeginTextCommandSetBlipName("STRING")
 			AddTextComponentString(key)
 			EndTextCommandSetBlipName(item.blip)
+			BlipsJobs[item.blip] = item.blip
 		end
 		Vigneron_blipsTemp = vigneron_blips
 	end)
@@ -31,18 +32,18 @@
 	RegisterNetEvent('job:deleteBlips')
 	AddEventHandler('job:deleteBlips', function ()
 		Vigneron_markerBool = false
-		if Vigneron_blipsTemp ~= nil then
-		for _, item in pairs(vigneron_blips) do
-			RemoveBlip(item.blip)
-			print("remove "..item.blip)
+		for k, item in pairs(BlipsJobs) do
+			RemoveBlip(k)
+			print("remove "..k)
 		end
-	end
 	end)
 
 	RegisterNetEvent('Job:startVigneron')
 	AddEventHandler('Job:startVigneron', function (boolean)
+		if boolean then
 		TriggerEvent("vigneron:drawBlips")
 		TriggerEvent("vigneron:marker")
+	end
 		Vigneron_markerBool = boolean
 		Citizen.CreateThread(function()
 			while Vigneron_markerBool == true do

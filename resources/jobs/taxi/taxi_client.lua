@@ -414,8 +414,6 @@ function spawnVehicleUber(coords, type)
         SetNetworkIdExistsOnAllMachines(ObjectId, true)
         plate = GetVehicleNumberPlateText(myVehiculeEntity)
         TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(myVehiculeEntity)))
-        TriggerServerEvent("vnt:saveVeh", myVehiculeEntity)
-
         local p = GetEntityCoords(myVehiculeEntity, 0)
         local h = GetEntityHeading(myVehiculeEntity)
         --showMessageInformation('Pos: ' .. p.x .. ' ' .. p.y .. ' ' .. p.z .. ' ' .. h)
@@ -450,7 +448,7 @@ local function toogleService()
   else
     -- Restaure Ped
     TriggerServerEvent('taxi:endService')
-    TriggerServerEvent("skin_customization:SpawnPlayer")
+    TriggerEvent("Venato:LoadClothes")
   end
 end
 
@@ -557,7 +555,7 @@ function showInfoClient()
   end
 end
 
-function showInfoJobs()
+function showInfoJobstaxi()
   local offsetX = 0.9
   local offsetY = 0.845
   DrawRect(offsetX, offsetY, 0.15, 0.07, 0, 0, 0, 215)
@@ -602,7 +600,7 @@ Citizen.CreateThread(function()
     if isTaxi then
       gestionService()
       if inService then
-        showInfoJobs()
+        showInfoJobstaxi()
       end
       if IsControlJustPressed(1, Keys['F5']) then
         if ambulancierIsInService then

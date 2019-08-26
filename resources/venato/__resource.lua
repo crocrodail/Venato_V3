@@ -54,6 +54,8 @@ server_script {
   '/server/function.lua',
   '/server/global.lua',
   '/server/savePos.lua',
+  '/server/shop.lua',
+  '/server/jobs.lua',
   '/inventory/server.lua',
   '/coffre_voiture/server.lua',
   '/coffre_voiture/config.lua',

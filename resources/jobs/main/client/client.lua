@@ -6,6 +6,7 @@
   @version 1.0
 --]]
 Jobs = {}
+BlipsJobs = {}
 
 function Jobs.Start()
   CreateThread(function()

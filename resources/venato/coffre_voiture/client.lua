@@ -95,12 +95,12 @@ function OpenMenuCv()
     color = "<span class='orange--text'>"
   end
   TriggerEvent('Menu:Init', color..""..VehicleData.nbItems.."</span> / "..VehicleData.itemcapacite, "Coffre", '#2E7D3299', "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYDjg60jfde2J-ii7xbyTuU8K8FC1vjK2ebUNTrchvqbTIGI68Xg")
-  
-  Menu.addButton("Fermer le coffre", "CloseVehicleCoffre", nil)
-  Menu.addButton("Armes", "WeaponCoffreVehicle", nil)
+  Menu.addItemButton("<span class='red--text'>Fermer le coffre</span>", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CloseVehicleCoffre", nil)
+  Menu.addItemButton("Armes", "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png", "WeaponCoffreVehicle", nil)
+  Menu.addItemButton("----------------------- items -----------------------",nil, "none", nil)
   Menu.addButton("Déposer des items dans le coffre", "DropItemCv", nil)
   for k,v in pairs(VehicleData.inventaire) do
-    Menu.addItemButton("<span>"..v.libelle.."</span> : <span class='red--text'>"..v.quantity.."</span>", v.picture, "OptionItemsCv", k)
+    Menu.addItemButton(""..v.libelle.." : </span><span class='red--text'>"..v.quantity.."</span>", v.picture, "OptionItemsCv", k)
   end
 end
 
@@ -108,7 +108,7 @@ function WeaponCoffreVehicle()
   Menu.clearMenu()
   Menu.setTitle( "Armes dans le véhicule")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
-  Menu.addButton("Déposer une arme", "DropWeaponCv", nil)
+  Menu.addButton("<span class='orange--text'>Déposer une arme</span>", "DropWeaponCv", nil)
   for k,v in pairs(VehicleData.weapon) do
     Menu.addButton(v.libelle.." avec <span class='red--text'>"..v.balles.."</span> balles", "OptionWeaponCv", k)
   end
@@ -128,8 +128,9 @@ end
 function ConfDropItemCv(index)
   local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à déposer")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
+  if qty ~= nil and qty ~= 0 then
     TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
+    OpenMenuCv()
   else
     Venato.notifyError("Une erreur est survenue.")
   end
@@ -166,7 +167,7 @@ function DropWeaponCv()
   Menu.setTitle( "Mes armes")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", index)
   for k,v in pairs(DataUser.Weapon) do
-    Menu.addButton(v.libelle.." avec ~r~"..v.ammo.." balles", "DropConfirmWeaponCv", k)
+    Menu.addButton(v.libelle.." avec <span class='red--text'>"..v.ammo.."</span> balles", "DropConfirmWeaponCv", k)
   end
 end
 
@@ -175,8 +176,8 @@ function DropConfirmWeaponCv(index)
     Menu.clearMenu()
     Menu.setTitle("Confirmation")
     Menu.setSubtitle( "Voulez vous vraiment déposer l'arme ?")
-    Menu.addButton("Non", "DropWeaponCv", nil)
-    Menu.addButton("Déposer l'arme dans le coffre", "CoffreVehicleDropWp", index)
+    Menu.addButton("<span class='red--text'>Non</span>", "DropWeaponCv", nil)
+    Menu.addButton("<span class='green--text'>Déposer l'arme dans le coffre</span>", "CoffreVehicleDropWp", index)
   else
     Venato.notifyError("Il n'y a pas de place pour cette arme.")
     DropWeaponCv()
