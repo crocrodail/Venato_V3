@@ -5,8 +5,6 @@
 	local isInServicePompiste = false
 
 	function transporteur_callSE(evt)
-		Menu.hidden = not Menu.hidden
-		Menu.renderGUI()
 		TriggerServerEvent(evt)
 	end
 
@@ -30,25 +28,18 @@
 			BeginTextCommandSetBlipName("STRING")
 			AddTextComponentString(key)
 			EndTextCommandSetBlipName(item.blip)
+			BlipsJobs[item.blip] = item.blip
 		end
 		pompiste_blipsTemp = pompiste_blips
-	end)
-
-	RegisterNetEvent('job:deleteBlips')
-	AddEventHandler('job:deleteBlips', function ()
-		pompiste_markerBool = false
-		if pompiste_blipsTemp ~= nil then
-		for _, item in pairs(pompiste_blips) do
-			RemoveBlip(item.blip)
-		end
-	end
 	end)
 
 	RegisterNetEvent('Job:startPompiste')
 	AddEventHandler('Job:startPompiste', function (boolean)
 		pompiste_markerBool = boolean
-		TriggerEvent("pompiste:drawBlips")
-		TriggerEvent("pompiste:marker")
+		if boolean then
+			TriggerEvent("pompiste:drawBlips")
+			TriggerEvent("pompiste:marker")
+		end
 		Citizen.CreateThread(function()
 			while pompiste_markerBool == true do
 				Wait(0)
@@ -160,9 +151,9 @@ end
 			local myPed = GetPlayerPed(-1)
 			local player = PlayerId()
 			local plate = math.random(1000, 9999)
-			Venato.CreateVehicle('packer', {pompiste_car2.x, pompiste_car2.y, pompiste_car2.z},34.0, function(cam)
+			Venato.CreateVehicle('packer', {x=pompiste_car2.x, y=pompiste_car2.y, z=pompiste_car2.z},34.0, function(cam)
 				camion = cam
-				SetVehicleNumberPlateText(camion, "PONPISTEREM")
+				SetVehicleNumberPlateText(camion, "PONPISTE")
 				SetEntityAsMissionEntity(camion, true, true)
 				plate = GetVehicleNumberPlateText(camion)
 				TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(camion)))
@@ -188,7 +179,7 @@ end
 			local player = PlayerId()
 			local vehicle = GetHashKey('tanker')
 			local plate = math.random(1000, 9999)
-			Venato.CreateVehicle('tanker', {pompiste_car.x, pompiste_car.y, pompiste_car.z},34.0,function(rem)
+			Venato.CreateVehicle('tanker', {x=pompiste_car.x, y=pompiste_car.y, z=pompiste_car.z},34.0,function(rem)
 				remorque = rem
 				SetVehicleNumberPlateText(remorque, pompiste_platesuffix.." "..plate.." ")
 				plate = GetVehicleNumberPlateText(remorque)

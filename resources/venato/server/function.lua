@@ -40,7 +40,6 @@ AddEventHandler("Venato:SwitchJob", function(id)
     }
     Venato.notify(source, defaultNotification)
     MySQL.Async.execute("UPDATE users SET job = @id WHERE identifier = @identifier",{["@id"] = id, ["@identifier"] = getSteamID(source)})
-    print(DataPlayers[source].NameJob)
     TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
   end)
 end)

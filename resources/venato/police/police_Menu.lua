@@ -7,10 +7,8 @@
 --      https://www.facebook.com/lan3mtv
 --====================================================================================
 
-local mission = {}
+local missionP = {}
 local alreadyTakeMission = false
-local itemMenuChoixPoliceService = {}
-local itemMenuChoixPoliceVehicle = {}
 
 local defaultNotification = {
 	type = "alert",
@@ -18,8 +16,8 @@ local defaultNotification = {
 	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
   }
 
-	function updateMenuMissionPolice(newUrgenceMenu)
-		mission = newUrgenceMenu
+	function updateMenuMissionPoliceeee(newUrgenceMenu)
+		missionP = newUrgenceMenu
     alreadyTakeMission = bool
 end
 
@@ -27,7 +25,7 @@ function openMenuPoliceGeneral(rank)
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', "Police", "<small>"..rank.."</small>", '#1565C099', "https://www.lunel.com/sites/default/files/styles/tetiere/public/tetiere/menu_icon_2939.jpg?itok=q2gesIzz")
 
-  	TriggerEvent('Menu:AddButton2',"Missions en cours", "policeGetMissionMenu", '', '')
+  	TriggerEvent('Menu:AddButton2',"Missions en cours", "policeGetMissionMenu", rank, '')
     TriggerEvent('Menu:AddButton2', "Amendes", "POLICE_AmendeMenu", { rank = rank }, "", "https://i.ibb.co/TRSRb5n/icons8-agreement-96px-1.png")
     TriggerEvent('Menu:AddButton2', "Placer un objet", "POLICE_ObjectMenu", { rank = rank }, "", "https://i.ibb.co/9n9Y54M/icons8-roadblock-96px-1.png")
     TriggerEvent('Menu:AddButton2', "Verifier la plaque", "POLICE_CheckPlate", {}, "", "https://i.ibb.co/wg04W7Z/icons8-sedan-96px.png") --OK
@@ -45,10 +43,10 @@ function openMenuPoliceGeneral(rank)
     TriggerEvent('Menu:Open')
 end
 
-function policeGetMissionMenu()
+function policeGetMissionMenu(rank)
   Menu.clearMenu()
-  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
-  for k,v in pairs(mission) do
+  TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", rank, '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
+  for k,v in pairs(missionP) do
     TriggerEvent('Menu:AddButton2',v.Title, v.Function, {mission = v.mission}, '', "")
   end
   if alreadyTakeMission then

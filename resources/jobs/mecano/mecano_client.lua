@@ -15,7 +15,7 @@ local KEY_UP = 96 -- N+
 local KEY_DOWN = 97 -- N-
 local KEY_CLOSE = 177
 local currentBlip = nil
-local listMissions = {}
+local listMissionsMeca = {}
 local currentMissions = nil
 local myCallMission = nil
 local mecano_nbMissionEnAttenteText = '-- Aucune Info --'
@@ -445,13 +445,13 @@ local function toogleService()
 			SetPedComponentVariation(GetPlayerPed(-1), 8, 20, 1, 2) -- ACCESSORIE
 		end
 		end)
-        TriggerServerEvent('mecano:takeService')
+        --TriggerServerEvent('mecano:takeService')
         TriggerServerEvent('mecano:requestMission')
         mecano_showHelp = false
     else
         -- Restaure Ped
         TriggerServerEvent('mecano:endService')
-        TriggerServerEvent("skin_customization:SpawnPlayer")
+        TriggerEvent("Venato:LoadClothes")
     end
 end
 
@@ -1082,7 +1082,7 @@ function showInfoClient()
     end
 end
 
-function showInfoJobs()
+function showInfoJobsMeca()
     local offsetX = 0.9
     local offsetY = 0.845
     DrawRect(offsetX, offsetY, 0.15, 0.07, 0, 0, 0, 215)
@@ -1124,7 +1124,7 @@ Citizen.CreateThread(function()
             gestionService()
             jobsSystem()
             if inService then
-                showInfoJobs()
+                showInfoJobsMeca()
             end
             if IsControlJustPressed(1, Keys['F5']) then
               if inService then
@@ -1231,15 +1231,15 @@ function finishCurrentMission()
     end
 end
 
-function updateMenuMission()
+function updateMenuMissionMeca()
     local items = {}
     local currentMissionAmbulancierNotNil
-    for _,m in pairs(listMissions) do
+    for _,m in pairs(listMissionsMeca) do
         -- Citizen.Trace('item mission')
         local item = {
             Title = 'Mission ' .. m.id .. ' [' .. m.type .. ']',
             mission = m,
-            Function = acceptMission
+            Function = "acceptMission"
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. ' (En cours)'
@@ -1248,6 +1248,8 @@ function updateMenuMission()
     end
     if currentMissions ~= nil then
       currentMissionAmbulancierNotNil = true
+    else
+      currentMissionAmbulancierNotNil = false
     end
 
     updateMenuMeca(items,currentMissionAmbulancierNotNil)
@@ -1283,11 +1285,11 @@ AddEventHandler('mecano:MissionChange', function (missions)
     if not inService then
         return
     end
-    listMissions = missions
+    listMissionsMeca = missions
     -- if currentMissions ~= nil then
          local nbMissionEnAttente = 0
     --     local find = false
-         for _,m in pairs(listMissions) do
+         for _,m in pairs(listMissionsMeca) do
       --       if m.id == currentMissions.id then
       --           find = true
        --      end
@@ -1309,7 +1311,7 @@ AddEventHandler('mecano:MissionChange', function (missions)
     --         end
     --     end
     -- end
-    updateMenuMission()
+    updateMenuMissionMeca()
 end)
 
 
@@ -1330,7 +1332,8 @@ end
 
 RegisterNetEvent('mecano:callMecano')
 AddEventHandler('mecano:callMecano',function(data)
-    needMecano(data.type)
+    needMecano(data)
+    print(data)
 end)
 
 RegisterNetEvent('mecano:callStatus')

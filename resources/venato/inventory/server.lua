@@ -129,6 +129,8 @@ RegisterServerEvent('Inventory:AddItem')
 AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
   local source = source
   local qty = qty
+  local qtyadd = qty
+  print(qty)
   local AlreadyExist = false
   if NewSource ~= nil then
     source = NewSource
@@ -141,18 +143,28 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
       end
     end
     if AlreadyExist then
-      local poidBefore = DataPlayers[source].Inventaire[id].poid
-      DataPlayers[source].Poid = DataPlayers[source].Poid - poidBefore
-      if qty > 0 then
-        DataPlayers[source].Inventaire[id].quantity = qty
-        DataPlayers[source].Inventaire[id].poid = qty * DataPlayers[source].Inventaire[id].uPoid
-        DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
-        MySQL.Async.execute("UPDATE user_inventory SET quantity = @qty WHERE identifier = @SteamId AND item_id = @id",
-          { ['@qty'] = qty, ['@SteamId'] = DataPlayers[source].SteamId, ['@id'] = id })
+      if ((DataPlayers[source].Inventaire[id].uPoid * qtyadd) + DataPlayers[source].Poid) <= DataPlayers[source].PoidMax then
+        local poidBefore = DataPlayers[source].Inventaire[id].poid
+        DataPlayers[source].Poid = DataPlayers[source].Poid - poidBefore
+        if qty > 0 then
+          DataPlayers[source].Inventaire[id].quantity = qty
+          DataPlayers[source].Inventaire[id].poid = qty * DataPlayers[source].Inventaire[id].uPoid
+          DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
+          MySQL.Async.execute("UPDATE user_inventory SET quantity = @qty WHERE identifier = @SteamId AND item_id = @id",
+            { ['@qty'] = qty, ['@SteamId'] = DataPlayers[source].SteamId, ['@id'] = id })
+        else
+          DataPlayers[source].Inventaire[id] = nil
+          MySQL.Async.execute("DELETE FROM user_inventory WHERE identifier = @SteamId AND item_id = @id",
+            { ['@SteamId'] = DataPlayers[source].SteamId, ['@id'] = id })
+        end
       else
-        DataPlayers[source].Inventaire[id] = nil
-        MySQL.Async.execute("DELETE FROM user_inventory WHERE identifier = @SteamId AND item_id = @id",
-          { ['@SteamId'] = DataPlayers[source].SteamId, ['@id'] = id })
+        local Notification = {
+          title = "Inventaire",
+          type = "info", --  danger, error, alert, info, success, warning
+          logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png",
+          message = "Vous avez êtes trop lourd.",
+        }
+        TriggerClientEvent('Venato:notify', source, Notification)
       end
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)

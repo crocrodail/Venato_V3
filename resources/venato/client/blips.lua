@@ -115,7 +115,7 @@ local blips = {
      {name="Poste de Police", id=60, x=425.130, y=-979.558, z=30.711},
     --{name="Prison", id=285, x=1679.049, y=2513.711, z=45.565},
 --	 {name="Mairie", id=419, x=-404.769, y=1195.437, z=325.380},
-	 {name="Tequi-la-la", id=76, x=-560.155, y=286.698, z=82.1764},
+	 {name="Tequi-la-la", id=93, x=-560.155, y=286.698, z=82.1764},
 	 {name="Vanilla Unicorn", id=121, x=99.155, y=-1307.698, z=30.1764},
 --	 {name="Banque de Pret", id=500, x=-1570.911, y=-575.501, z=108.522},
 	 {name="Bahama Mamas", id=136, x=-1393.155, y=-609.698, z=30.1764},
@@ -137,6 +137,7 @@ local blips = {
 --	{name="MerryWeather", id=280, x=101.95953369, y=-744.2132568, z=45.754753},
 --    {name="420Time", id=147, x=-1392.2396, y=-1004.0689, z=23.1565},
 --    {name="Lipton", id=273, x=-754.2769, y=5579.2250, z=35.7096},
+  {name="Pole Emploie", id=407, x=-1055.0, y=-242.371, z=44.021},
 
 
    --[[ {name="Départ GerminusRun #3", id=17, x=-1511.18, y=1493.198, z=169.70},

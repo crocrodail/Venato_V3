@@ -18,7 +18,7 @@ end
 
 function enableRadio(enable)
 
-  SetNuiFocus(true, true)
+  --SetNuiFocus(true, true)
   radioMenu = enable
 
   SendNUIMessage({
@@ -114,7 +114,7 @@ end)
 RegisterNUICallback('escape', function(data, cb)
 
     enableRadio(false)
-    SetNuiFocus(false, false)
+    --SetNuiFocus(false, false)
 
 
     cb('ok')

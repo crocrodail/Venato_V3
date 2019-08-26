@@ -6,7 +6,7 @@ local TimeToRespawn = 0
 local assommePlayer = false
 local shooting = 0
 local causeOfDeath = 'Cause inconnue'
-local CoordHospital = {x = 1141.0, y= -1594.32, z = 7.979}
+local CoordHospital = {x = 1141.0, y= -1594.32, z = 4.979}
 
 function Venato.resurect()
   assommePlayer = false
@@ -21,6 +21,10 @@ end
 
 Citizen.CreateThread(function()
   Citizen.Wait(5000)
+  RequestAnimDict("mini@cpr@char_b@cpr_def")
+  while not HasAnimDictLoaded("mini@cpr@char_b@cpr_def") do
+  Citizen.Wait(0)
+  end
   while true do
     Citizen.Wait(0)
 		playerPed = GetPlayerPed(-1)
@@ -39,7 +43,6 @@ Citizen.CreateThread(function()
     end
     if dead then
       DisableControlAction(0, Keys['F2'], true)
-      Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
     end
   end
 end)
