@@ -17,13 +17,13 @@ Citizen.CreateThread(function()
               CloseVehicleCoffre()
             end
           else
-            Venato.notifyError("~r~Vous devez ouvrir le véhicule pour ouvrir le coffre.")
+            Venato.notifyError("Vous devez ouvrir le véhicule pour ouvrir le coffre.")
           end
         else
           CloseVehicleCoffre()
         end
       else
-        Venato.notifyError("~r~Aucun véhicule à proximité.")
+        Venato.notifyError("Aucun véhicule à proximité.")
       end
     end
   end
@@ -40,13 +40,13 @@ function extOpenCoffreVeh()
           CloseVehicleCoffre()
         end
       else
-        Venato.notifyError("~r~Vous devez ouvrir le véhicule pour ouvrir le coffre.")
+        Venato.notifyError("Vous devez ouvrir le véhicule pour ouvrir le coffre.")
       end
     else
       CloseVehicleCoffre()
     end
   else
-    Venato.notifyError("~r~Aucun véhicule à proximité.")
+    Venato.notifyError("Aucun véhicule à proximité.")
   end
 end
 
@@ -59,7 +59,7 @@ function OpenVehicleCoffre()
   if plate or class ~= nil then
     TriggerServerEvent("VehicleCoffre:CallData", plate, class)
   else
-    Venato.notifyError('~r~ERROR ?')
+    Venato.notifyError('ERROR ?')
   end
 end
 
@@ -90,18 +90,18 @@ function OpenMenuCv()
   Menu.clearMenu()
   local color = ""
   if VehicleData.nbItems > VehicleData.itemcapacite - (VehicleData.itemcapacite*10/100) then
-    color = "~r~"
+    color = "<span class='green--red'>"
   elseif VehicleData.nbItems > VehicleData.itemcapacite - (VehicleData.itemcapacite*25/100) then
-    color = "~o~"
+    color = "<span class='green--orange'>"
   end
-  Menu.setTitle( color..""..VehicleData.nbItems.."~s~ / "..VehicleData.itemcapacite)
+  Menu.setTitle( color..""..VehicleData.nbItems.."</span> / "..VehicleData.itemcapacite)
   Menu.setSubtitle( "Coffre")
-  Menu.addButton("~r~Fermer le coffre", "CloseVehicleCoffre", nil)
-  Menu.addButton("~o~Armes", "WeaponCoffreVehicle", nil)
-  Menu.addButton("~r~-----------------------  ~g~items~r~  -----------------------", "none", nil)
-  Menu.addButton("~y~Déposer des items dans le coffre", "DropItemCv", nil)
+  Menu.addItemButton("<span class='red--text'>Fermer le coffre</span>", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CloseVehicleCoffre", nil)
+  Menu.addItemButton("Armes", "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png", "WeaponCoffreVehicle", nil)
+  Menu.addItemButton("----------------------- items -----------------------",nil, "none", nil)
+  Menu.addButton("Déposer des items dans le coffre", "DropItemCv", nil)
   for k,v in pairs(VehicleData.inventaire) do
-    Menu.addButton("~b~"..v.libelle.." : ~r~"..v.quantity, "OptionItemsCv", k)
+    Menu.addItemButton(""..v.libelle.." : </span><span class='red--text'>"..v.quantity.."</span>", v.picture, "OptionItemsCv", k)
   end
 end
 
@@ -109,9 +109,9 @@ function WeaponCoffreVehicle()
   Menu.clearMenu()
   Menu.setTitle( "Armes dans le véhicule")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
-  Menu.addButton("~o~Déposer une arme", "DropWeaponCv", nil)
+  Menu.addButton("<span class='orange--text'>Déposer une arme</span>", "DropWeaponCv", nil)
   for k,v in pairs(VehicleData.weapon) do
-    Menu.addButton(v.libelle.." avec ~r~"..v.balles.."~s~ balles", "OptionWeaponCv", k)
+    Menu.addButton(v.libelle.." avec <span class='red--text'>"..v.balles.."</span> balles", "OptionWeaponCv", k)
   end
 end
 
@@ -121,18 +121,19 @@ function DropItemCv()
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
   for k,v in pairs(DataUser.Inventaire) do
     if v.quantity ~= 0 then
-      Menu.addButton(v.libelle.." : ~r~"..v.quantity, "ConfDropItemCv", k)
+      Menu.addItemButton(v.libelle.." : <span class='red--text'>"..v.quantity.."</span>", v.picture, "ConfDropItemCv", k)
     end
   end
 end
 
 function ConfDropItemCv(index)
-  local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à déposer")
+  local qty =  tonumber(Venato.OpenKeyboard('', '0', 10,"Nombre à déposer"))
   local plate = GetVehicleNumberPlateText(CloseVehicle)
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
+  if qty ~= nil and qty ~= 0 then
     TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
+    OpenMenuCv()
   else
-    Venato.notifyError("~r~Une erreur est survenue.")
+    Venato.notifyError("Une erreur est survenue.")
   end
 end
 
@@ -148,7 +149,7 @@ function GetItemCv(index)
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("VehicleCoffre:TakeItems",index, qty, plate)
   else
-    Venato.notifyError("~r~Une erreur est survenue.")
+    Venato.notifyError("Une erreur est survenue.")
   end
 end
 
@@ -167,7 +168,7 @@ function DropWeaponCv()
   Menu.setTitle( "Mes armes")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", index)
   for k,v in pairs(DataUser.Weapon) do
-    Menu.addButton(v.libelle.." avec ~r~"..v.ammo.." balles", "DropConfirmWeaponCv", k)
+    Menu.addButton(v.libelle.." avec <span class='red--text'>"..v.ammo.."</span> balles", "DropConfirmWeaponCv", k)
   end
 end
 
@@ -176,10 +177,10 @@ function DropConfirmWeaponCv(index)
     Menu.clearMenu()
     Menu.setTitle( "Confirmation")
     Menu.setSubtitle( "Voulez vous vraiment déposer l'arme ?")
-    Menu.addButton("~r~Non", "DropWeaponCv", nil)
-    Menu.addButton("~g~Déposer l'arme dans le coffre", "CoffreVehicleDropWp", index)
+    Menu.addButton("<span class='red--text'>Non</span>", "DropWeaponCv", nil)
+    Menu.addButton("<span class='green--text'>Déposer l'arme dans le coffre</span>", "CoffreVehicleDropWp", index)
   else
-    Venato.notifyError("~r~Il n'y a pas de place pour cette arme.")
+    Venato.notifyError("Il n'y a pas de place pour cette arme.")
     DropWeaponCv()
   end
 end

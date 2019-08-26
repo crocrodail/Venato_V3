@@ -25,7 +25,7 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
     MySQL.Async.fetchAll("SELECT * FROM coffres_voiture_contenu JOIN items ON coffres_voiture_contenu.ItemId = items.id WHERE CoffreId = @id", {["@id"] = plate}, function(result)
       if result[1] ~= nil then
         for k,v in pairs(result) do
-          Cof = { ["libelle"] = v.libelle, ["quantity"] = v.Quantity, ["itemId"] = v.ItemId, ["poid"] = v.poid}
+          Cof = { ["libelle"] = v.libelle, ["quantity"] = v.Quantity, ["itemId"] = v.ItemId, ["poid"] = v.poid, ["picture"] = v.picture}
           Inventaire[v.ItemId] = Cof
           nbItem = nbItem + v.Quantity
         end
