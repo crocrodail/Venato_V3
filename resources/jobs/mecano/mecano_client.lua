@@ -1178,8 +1178,8 @@ end)
 function notifIconMecaMeca(icon, type, sender, title, text)
 	Citizen.CreateThread(function()
     local text = text
-    if TEXTAMBUL[text] ~= nil then
-      text = TEXTAMBUL[text]
+    if TEXT[text] ~= nil then
+      text = TEXT[text]
     end
     local notif = {
       title= sender,
