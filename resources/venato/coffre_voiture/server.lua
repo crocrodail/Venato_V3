@@ -25,7 +25,7 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
     MySQL.Async.fetchAll("SELECT * FROM coffres_voiture_contenu JOIN items ON coffres_voiture_contenu.ItemId = items.id WHERE CoffreId = @id", {["@id"] = plate}, function(result)
       if result[1] ~= nil then
         for k,v in pairs(result) do
-          Cof = { ["libelle"] = v.libelle, ["quantity"] = v.Quantity, ["itemId"] = v.ItemId, ["poid"] = v.poid}
+          Cof = { ["libelle"] = v.libelle, ["quantity"] = v.Quantity, ["itemId"] = v.ItemId, ["poid"] = v.poid, ["picture"] = v.picture}
           Inventaire[v.ItemId] = Cof
           nbItem = nbItem + v.Quantity
         end
@@ -82,7 +82,7 @@ RegisterServerEvent('VehicleCoffre:DropItem')
 AddEventHandler('VehicleCoffre:DropItem', function(qty, plate, index)
   local source = source
   local qty = tonumber(qty)
-  if tonumber(qty) <= DataPlayers[source].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite then
+  if qty <= DataPlayers[source].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite and qty > 0 then
     TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[index].quantity - qty, index, source)
     if DataVehicle[plate].inventaire[index] ~= nil then
       TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity + qty, index, plate )
@@ -99,7 +99,7 @@ RegisterServerEvent('VehicleCoffre:TakeItems')
 AddEventHandler('VehicleCoffre:TakeItems', function(index, qty, plate)
   local source = source
   local qty = tonumber(qty)
-  if tonumber(qty) <= DataVehicle[plate].inventaire[index].quantity and DataPlayers[source].Poid+DataVehicle[plate].inventaire[index].poid*qty <= DataPlayers[source].PoidMax then
+  if qty <= DataVehicle[plate].inventaire[index].quantity and DataPlayers[source].Poid+DataVehicle[plate].inventaire[index].poid*qty <= DataPlayers[source].PoidMax and qty > 0 then
     TriggerEvent('Inventory:AddItem', qty, index, source)
     TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity - qty, index, plate )
     TriggerClientEvent("VehicleCoffre:Close", source)
