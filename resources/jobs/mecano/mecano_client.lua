@@ -392,7 +392,7 @@ function spawnDepanneuse(coords, type)
         end
     end
     -- Citizen.Trace('impossible')
-    notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
+    notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
     -- local myPed = GetPlayerPed(-1)
     -- local player = PlayerId()
     -- RequestModel(VehicleModelKeyTowTruck)
@@ -1178,8 +1178,8 @@ end)
 function notifIconMecaMeca(icon, type, sender, title, text)
 	Citizen.CreateThread(function()
     local text = text
-    if TEXTAMBUL[text] ~= nil then
-      text = TEXTAMBUL[text]
+    if TEXT[text] ~= nil then
+      text = TEXT[text]
     end
     local notif = {
       title= sender,
@@ -1194,18 +1194,19 @@ end
 RegisterNetEvent("mecano:PersonnelMessage")
 AddEventHandler("mecano:PersonnelMessage",function(message)
     if inService then
-        notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano Info", false, message)
+        notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano Info", false, message)
     end
 end)
 
 RegisterNetEvent("mecano:ClientMessage")
 AddEventHandler("mecano:ClientMessage",function(message)
-    notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, message)
+    notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, message)
 end)
 
 
 --=== restart depanneur
-function acceptMission(data)
+function acceptMissionMeca(data)
+  print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee TAMER")
     local mission = data.mission
 
     -- currentMissions = mission
@@ -1239,7 +1240,7 @@ function updateMenuMissionMeca()
         local item = {
             Title = 'Mission ' .. m.id .. ' [' .. m.type .. ']',
             mission = m,
-            Function = "acceptMission"
+            Function = "acceptMissionMeca"
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. ' (En cours)'
