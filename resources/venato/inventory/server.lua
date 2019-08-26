@@ -151,7 +151,6 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
   local source = source
   local qty = qty
   local qtyadd = qty
-  print(qty)
   local AlreadyExist = false
   if NewSource ~= nil then
     source = NewSource

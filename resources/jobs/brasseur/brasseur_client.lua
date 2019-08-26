@@ -3,17 +3,42 @@
 	local existingVeh = nil
 	local isInServiceBrasseur = false
 
+	local defaultNotification = {
+		title = "Brasseur",
+		type = "alert",
+		logo = "https://i.ibb.co/BKmPbdw/icons8-beer-96px.png",
+		timeout = 1800
+	}
+
+	Citizen.CreateThread(function()
+		while true do			
+			Wait(0)
+			if Brasseur_markerBool == true then
+				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceBetweenCoords then
+					TriggerServerEvent('brasseur:serverRequest', "GetOrge")
+					Citizen.Wait(brasseur_blips["Champ"].defaultTime)
+				end
+				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceBetweenCoords then
+					TriggerServerEvent('brasseur:serverRequest', "GetBiere")
+					Citizen.Wait(brasseur_blips["Brasserie"].defaultTime)
+				end
+				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceBetweenCoords then
+					TriggerServerEvent('brasseur:serverRequest', "SellBiere")
+					Citizen.Wait(brasseur_blips["Point de vente"].defaultTime)
+				end
+			end
+		end
+	end)
 
 	function Brasseur_callSE(evt)
 		TriggerServerEvent(evt)
 	end
 
 	function Brasseur_InitMenuVehicules()
-		Menu.open()
-	  Menu.setTitle("Spawn vehicule")
-	  Menu.setSubtitle("Option")
-	  Menu.clearMenu()
+		TriggerEvent('Menu:Init', "Brasserie - Véhicule", "Options", "#FF8F0099", "https://www.atabula.com/wp-content/uploads/2013/10/Biere-copie.jpg")
+	  	Menu.clearMenu()
 		Menu.addButton("Vehicule", "Brasseur_callSE", 'brasseur:Car')
+		Menu.open()
 	end
 
 	RegisterNetEvent('brasseur:drawBlips')
@@ -35,55 +60,36 @@
 		Brasseur_markerBool = boolean
 		if boolean then
 			TriggerEvent("brasseur:drawBlips")
-			TriggerEvent("brasseur:marker")
 		end
-		Citizen.CreateThread(function()
-			while Brasseur_markerBool == true do
-				Wait(0)
-				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceBetweenCoords then
-					TriggerServerEvent('brasseur:serverRequest', "GetOrge")
-					Citizen.Wait(brasseur_blips["Champ"].defaultTime)
-				end
-				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceBetweenCoords then
-					TriggerServerEvent('brasseur:serverRequest', "GetBiere")
-					Citizen.Wait(brasseur_blips["Brasserie"].defaultTime)
-				end
-
-				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceBetweenCoords then
-					TriggerServerEvent('brasseur:serverRequest', "SellBiere")
-					Citizen.Wait(brasseur_blips["Point de vente"].defaultTime)
-				end
-			end
-		end)
+		
 	end)
 
-	RegisterNetEvent('brasseur:marker')
-	AddEventHandler('brasseur:marker', function ()
-		Citizen.CreateThread(function ()
-			while Brasseur_markerBool == true do
-				Citizen.Wait(1)
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, true) <= brasseur_blips["Entreprise"].distanceMarker then
-					DrawMarker(1, brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
-					ClearPrints()
-					SetTextEntry_2("STRING")
+
+Citizen.CreateThread(function ()
+	while true do
+		Citizen.Wait(1)
+		if Brasseur_markerBool == true then
+			local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, true)
+			if distance <= brasseur_blips["Entreprise"].distanceMarker then
+				DrawMarker(1, brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				if distance <= 5 then
 					if isInServiceBrasseur then
-						AddTextComponentString("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
 					else
-						AddTextComponentString("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
 					end
-					DrawSubtitleTimed(2000, 1)
 					if IsControlJustPressed(1, Keys["E"]) then
 						GetServiceBrasseur()
 					end
 				end
+			end
 
-				if isInServiceBrasseur then
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker+5 then
-						DrawMarker(1, brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
-						ClearPrints()
-						SetTextEntry_2("STRING")
-						AddTextComponentString("Appuyez sur ~g~E~s~ pour faire appairaitre/ranger votre ~b~vehicule")
-						DrawSubtitleTimed(2000, 1)
+			if isInServiceBrasseur then
+				local distance2 = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, true)
+				if distance2 <= brasseur_blips["Garage"].distanceMarker+5 then
+					DrawMarker(1, brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+					if distance2 <= 5 then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour faire appairaitre/ranger votre ~b~vehicule")
 						if IsControlJustPressed(1, Keys["E"]) then
 							if(existingVeh ~= nil) then
 								SetEntityAsMissionEntity(existingVeh, true, true)
@@ -94,33 +100,36 @@
 							end
 						end
 					end
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker then
-						DrawMarker(1,brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
-					end
+				end
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker then
+					DrawMarker(1,brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceMarker then
-						DrawMarker(1,brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
-					end
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceMarker then
+					DrawMarker(1,brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceMarker then
-						DrawMarker(1,brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
-					end
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceMarker then
+					DrawMarker(1,brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceMarker then
-						DrawMarker(1,brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
-					end
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceMarker then
+					DrawMarker(1,brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 			end
-		end)
-	end)
+		end
+	end
+end)
 
 function GetServiceBrasseur()
 	local playerPed = GetPlayerPed(-1)
 	if isInServiceBrasseur then
-		notif("Vous n\'êtes plus en service")
+		defaultNotification.message = "Vous n'êtes plus en service."
+		Venato.notify(defaultNotification)
 		TriggerEvent("Venato:LoadClothes")
 	else
-		notif("Début du service")
+		defaultNotification.message = "Début de service."
+		Venato.notify(defaultNotification)
 		TriggerEvent("brasseur:getSkin")
 	end
 	isInServiceBrasseur = not isInServiceBrasseur
@@ -158,75 +167,64 @@ AddEventHandler('brasseur:getCar', function (source)
 			SetVehicleNumberPlateText(existingVeh, brasseur_platesuffix.." "..plate.." ")
 			plate = GetVehicleNumberPlateText(existingVeh)
 			TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(existingVeh)))
+			Menu.close()
 		end)
 	else
-		notif("Zone encombrée.")
+		Venato.notifyError("Zone encombrée.")
 	end
 end)
 
-	RegisterNetEvent('brasseur:drawGetOrge')
-	AddEventHandler('brasseur:drawGetOrge', function (qteBase)
-		if(qteBase == nil) then
-			qteBase = 0
-		end
+RegisterNetEvent('brasseur:drawGetOrge')
+AddEventHandler('brasseur:drawGetOrge', function (qteBase)
+	if(qteBase == nil) then
+		qteBase = 0
+	end
 
-		if qteBase < 30 then
-			TriggerServerEvent('Inventory:AddItem',1,brasseur_ressourceBase)
-			ClearPrints()
-			SetTextEntry_2("STRING")
-			AddTextComponentString("~g~Vous avez recolté de l'orge")
-			DrawSubtitleTimed(4500, 1)
-		else
-			ClearPrints()
-			SetTextEntry_2("STRING")
-			AddTextComponentString("~r~Vous ne pouvez plus recolté")
-			DrawSubtitleTimed(2000, 1)
-		end
-	end)
+	if qteBase < 30 then
+		TriggerServerEvent('Inventory:AddItem',1,tonumber(brasseur_ressourceBase))
+		defaultNotification.message = "Vous avez récolté de l'orge."
+		Venato.notify(defaultNotification)
+	else
+		defaultNotification.message = "Vous ne pouvez plus récolter."
+		Venato.notify(defaultNotification)
+	end
+end)
 
-	RegisterNetEvent('brasseur:drawGetBiere')
-	AddEventHandler('brasseur:drawGetBiere', function(qteBase, qteTraite)
-		if(qteBase == nil) then
-			qteBase = 0
-		end
+RegisterNetEvent('brasseur:drawGetBiere')
+AddEventHandler('brasseur:drawGetBiere', function(qteBase, qteTraite)
+	if(qteBase == nil) then
+		qteBase = 0
+	end
 
-		if(qteTraite == nil) then
-			qteTraite = 0
-		end
+	if(qteTraite == nil) then
+		qteTraite = 0
+	end
 
-		if qteTraite < 100 and qteBase > 0 then
-			TriggerServerEvent("Inventory:RemoveItem", 1, brasseur_ressourceBase)
-			TriggerServerEvent('Inventory:AddItem',1,brasseur_ressourceTraite)
-			ClearPrints()
-			SetTextEntry_2("STRING")
-			AddTextComponentString("~g~+1 Bière brassée")
-			DrawSubtitleTimed(8500, 1)
-		else
-			ClearPrints()
-			SetTextEntry_2("STRING")
-			AddTextComponentString("~r~Vous ne pouvez plus brassée")
-			DrawSubtitleTimed(2000, 1)
-		end
-	end)
+	if qteTraite < 100 and qteBase > 0 then
+		TriggerServerEvent("Inventory:RemoveItem", 1, tonumber(brasseur_ressourceBase))
+		TriggerServerEvent('Inventory:AddItem',1,tonumber(brasseur_ressourceTraite))
+		defaultNotification.message = "+1 bière brassée."
+		Venato.notify(defaultNotification)
+	else
+		defaultNotification.message = "Vous ne pouvez plus brasser."
+		Venato.notify(defaultNotification)
+	end
+end)
 
-	RegisterNetEvent('brasseur:drawSellBiere')
-	AddEventHandler('brasseur:drawSellBiere', function (qte)
-		if(qte == nil) then
-			qte = 0
-		end
+RegisterNetEvent('brasseur:drawSellBiere')
+AddEventHandler('brasseur:drawSellBiere', function (qte)
+	if(qte == nil) then
+		qte = 0
+	end
 
-		if qte > 0 then
-			TriggerServerEvent("Inventory:RemoveItem", 1, brasseur_ressourceTraite)
-			local salaire = math.random(brasseur_pay.minimum, brasseur_pay.maximum)
-			TriggerServerEvent('Bank:AddBankMoney', salaire)
-			ClearPrints()
-			SetTextEntry_2("STRING")
-			AddTextComponentString("~g~Bières vendu")
-			DrawSubtitleTimed(8500, 1)
-		else
-			ClearPrints()
-			SetTextEntry_2("STRING")
-			AddTextComponentString("~r~Vous n'avez plus de Bière")
-			DrawSubtitleTimed(2000, 1)
-		end
-	end)
+	if qte > 0 then
+		TriggerServerEvent("Inventory:RemoveItem", 1, tonumber(brasseur_ressourceTraite))
+		local salaire = math.random(brasseur_pay.minimum, brasseur_pay.maximum)
+		TriggerServerEvent('Bank:AddBankMoney', salaire)
+		defaultNotification.message = "Bières vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
+		Venato.notify(defaultNotification)
+	else
+		defaultNotification.message = "Vous n'avez plus de bières à vendre."
+		Venato.notify(defaultNotification)
+	end
+end)

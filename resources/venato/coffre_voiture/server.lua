@@ -80,18 +80,21 @@ end)
 
 RegisterServerEvent('VehicleCoffre:DropItem')
 AddEventHandler('VehicleCoffre:DropItem', function(qty, plate, index)
+  print("VehicleCoffre:DropItem - plate : "..plate.." - itemId : "..index)
   local source = source
   local qty = tonumber(qty)
   if qty <= DataPlayers[source].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite and qty > 0 then
-    TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[index].quantity - qty, index, source)
+    TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[index].quantity - qty, index, source)    
     if DataVehicle[plate].inventaire[index] ~= nil then
-      TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity + qty, index, plate )
+      print("Update Qte")
+      TriggerEvent("VehicleCoffre:SetItems", DataVehicle[plate].inventaire[index].quantity + qty, index, plate )
     else
+      print("Add Item")
       TriggerEvent("VehicleCoffre:SetItems", qty, index, plate)
     end
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("Venato:notifyError", source, "~r~Erreur dans la quantité.")
+    TriggerClientEvent("Venato:notifyError", source, "Erreur dans la quantité.")
   end
 end)
 
@@ -119,13 +122,16 @@ AddEventHandler('VehicleCoffre:SetItems', function(qty, id, plate)
     DataVehicle[plate].inventaire[id] = nil
     MySQL.Async.execute("DELETE FROM coffres_voiture_contenu WHERE CoffreId = @Plate AND ItemId = @ItemId", {["@Plate"] = plate, ["@ItemId"] = id})
   else
+    print(Venato.dump(DataVehicle[plate].inventaire))
     if DataVehicle[plate].inventaire[id] ~= nil then
+      print("Coffre_voiture : Update item "..id)
       DataVehicle[plate].nbItems = (DataVehicle[plate].nbItems-DataVehicle[plate].inventaire[id].quantity) + qty
       DataVehicle[plate].inventaire[id].quantity = qty
       MySQL.Async.execute("UPDATE coffres_voiture_contenu SET Quantity = @qty WHERE CoffreId = @Plate AND ItemId = @ItemId", {["@Plate"] = plate, ["@ItemId"] = id, ["@qty"] = qty})
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", {["@id"] = id}, function(result)
         DataVehicle[plate].nbItems = DataVehicle[plate].nbItems + qty
+        print("Coffre_voiture : Add item "..id)
         DataVehicle[plate].inventaire[id] = {["libelle"] = result[1].libelle, ["quantity"] = qty, ["itemId"] = id, ["poid"] = result[1].poid}
         MySQL.Async.execute("INSERT INTO coffres_voiture_contenu (`CoffreId`, `ItemId`, `Quantity`) VALUES (@plate, @id, @qty)", {["@plate"] = plate, ["@id"] = id, ["@qty"] = qty})
       end)

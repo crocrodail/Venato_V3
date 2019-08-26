@@ -52,7 +52,6 @@ end
 
 function OpenVehicleCoffre()
   open = true
-  Menu.open()
   SetVehicleDoorOpen(CloseVehicle, 5, false, false)
   local plate = GetVehicleNumberPlateText(CloseVehicle)
   local class = GetVehicleClass(CloseVehicle)
@@ -77,6 +76,7 @@ end)
 RegisterNetEvent("VehicleCoffre:CallData:cb")
 AddEventHandler("VehicleCoffre:CallData:cb", function(data, user)
   VehicleData = data
+  print(Venato.dump(VehicleData))
   DataUser = user
   OpenMenuCv()
 end)
@@ -102,6 +102,8 @@ function OpenMenuCv()
   for k,v in pairs(VehicleData.inventaire) do
     Menu.addItemButton(""..v.libelle.." : </span><span class='red--text'>"..v.quantity.."</span>", v.picture, "OptionItemsCv", k)
   end
+  Menu.CreateMenu()
+  Menu.open()
 end
 
 function WeaponCoffreVehicle()
@@ -120,7 +122,7 @@ function DropItemCv()
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
   for k,v in pairs(DataUser.Inventaire) do
     if v.quantity ~= 0 then
-      Menu.addItemButton(v.libelle.." : <span class='red--text'>"..v.quantity.."</span>", v.picture, "ConfDropItemCv", k)
+      Menu.addItemButton(v.libelle.." : <span class='red--text'>"..v.quantity.."</span>", v.picture, "ConfDropItemCv", v.id)
     end
   end
 end
@@ -128,6 +130,7 @@ end
 function ConfDropItemCv(index)
   local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à déposer")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
+  print("ConfDropItemCV - index : "..index.." qte : ".. qty .. " plate : " .. plate)
   if qty ~= nil and qty ~= 0 then
     TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
     OpenMenuCv()

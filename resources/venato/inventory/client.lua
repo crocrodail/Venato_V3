@@ -7,7 +7,7 @@ local dropItem = "prop_cs_box_clothes"
 local PapierOpen = 0
 
 local defaultNotification = {
-  name = "Inventaire",
+  title = "Inventaire",
   type = "alert",
   logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
 }

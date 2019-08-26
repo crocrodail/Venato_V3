@@ -140,7 +140,6 @@ function accessGranded(SteamId, source , balek)
         ControlVisa(SteamId, source)
         print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo.." - ".. DataPlayers[source].NameJob ..")^7")
         print(SteamId)
-        print(source)
         TriggerEvent("police:checkIsCop", source)
       end)
     end
