@@ -55,6 +55,15 @@
 		brasseur_blipsTemp = brasseur_blips
 	end)
 
+	RegisterNetEvent('job:deleteBlips')
+	AddEventHandler('job:deleteBlips', function ()
+		Brasseur_markerBool = false
+		for k, item in pairs(BlipsJobs) do
+			RemoveBlip(k)
+			print("remove "..k)
+		end
+	end)
+
 	RegisterNetEvent('Job:startBrasseur')
 	AddEventHandler('Job:startBrasseur', function (boolean)
 		Brasseur_markerBool = boolean

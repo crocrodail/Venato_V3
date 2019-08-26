@@ -69,24 +69,24 @@ AddEventHandler('brasseur:serverRequest', function (typeRequest)
 	local player = DataPlayers[mysource].SteamId
 
 	if typeRequest == "GetOrge" then
-		MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id= 24 AND identifier=@identifier", {['@identifier'] = player},
+		MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id="..brasseur_ressourceBase.." AND identifier=@identifier", {['@identifier'] = player},
 			function(qte)
 				TriggerClientEvent('brasseur:drawGetOrge', mysource, qte)
 			end)
 
 	elseif typeRequest == "GetBiere" then
-		MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id= 24 AND identifier=@identifier", {['@identifier'] = player},
-			function(resultBois)
-				MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id=25 AND identifier=@identifier", {['@identifier'] = player},
-					function(resultPlanche)
-						TriggerClientEvent('brasseur:drawGetBiere',mysource, resultBois, resultPlanche)
+		MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id="..brasseur_ressourceBase.." AND identifier=@identifier", {['@identifier'] = player},
+			function(resultOrge)
+				MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id="..brasseur_ressourceTraite.." AND identifier=@identifier", {['@identifier'] = player},
+					function(resultBiere)
+						TriggerClientEvent('brasseur:drawGetBiere',mysource, resultOrge, resultBiere)
 					end)
 			end)
 
 	elseif typeRequest == "SellBiere" then
-		MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id=25 AND identifier=@identifier", {['@identifier'] = player},
-			function(resultBois)
-				TriggerClientEvent('brasseur:drawSellBiere', mysource, resultBois)
+		MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id="..brasseur_ressourceTraite.." AND identifier=@identifier", {['@identifier'] = player},
+			function(resultOrge)
+				TriggerClientEvent('brasseur:drawSellBiere', mysource, resultOrge)
 			end)
 	else
 		print('DEBUG : Une erreur de type de requête à été détectée')

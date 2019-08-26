@@ -55,6 +55,8 @@ server_script {
   '/server/global.lua',
   '/server/savePos.lua',
   '/server/shop.lua',
+  '@jobs/brasseur/brasseur_config.lua',
+  '@jobs/vigneron/vigneron_config.lua',
   '/server/jobs.lua',
   '/inventory/server.lua',
   '/coffre_voiture/server.lua',

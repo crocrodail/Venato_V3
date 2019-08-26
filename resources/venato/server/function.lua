@@ -34,7 +34,7 @@ AddEventHandler("Venato:SwitchJob", function(id)
     DataPlayers[source].NameJob = result[1].job_name
     local defaultNotification = {
       type = "alert",
-      title ="PoleEmploie",
+      title ="PoleEmploi",
       logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
       message = "Vous etes maintenant "..DataPlayers[source].NameJob
     }

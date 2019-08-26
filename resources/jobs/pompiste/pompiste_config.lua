@@ -1,6 +1,6 @@
 pompiste_platesuffix="Po"
-pompiste_pourcentage=20
-pompiste_coffreid="20"
+pompiste_ressourceBase = "201" --identifiant ressource récolté du metier
+pompiste_ressourceTraite = "202" --identifiant ressource traité du metier
 
 pompiste_car = {
 	id=22,
@@ -18,7 +18,7 @@ pompiste_car2 = {
 
 pompiste_pay = {
 	minimum = 70,
-	maximum = 70
+	maximum = 120
 }
 
 pompiste_blips = {
@@ -27,18 +27,18 @@ pompiste_blips = {
 		x=914.63372802734,
 		y=-1273.931640625,
 		z=25.9,
-		distanceBetweenCoords=55,
-		distanceMarker=5,
-		defaultTime=10
+		distanceBetweenCoords=25,
+		distanceMarker=45,
+		defaultTime=2000
 	},
 	["Garage"] = {
 		id=18,
 		x=911.7138671875,
 		y=-1264.1192382813,
 		z=24.5,
-		distanceBetweenCoords=55,
-		distanceMarker=3,
-		defaultTime=10
+		distanceBetweenCoords = 25,
+		distanceMarker = 45,
+		defaultTime = 2000
 	},
 	["Station de pompage"] = {
 		id=19,

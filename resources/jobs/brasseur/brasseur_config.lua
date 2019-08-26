@@ -21,7 +21,7 @@ brasseur_blips = {
 		y = 4953.197265625,
 		z = 44.3096466064453,
 		distanceBetweenCoords = 25,
-		distanceMarker = 25,
+		distanceMarker = 45,
 		defaultTime = 2000
 	},
 	["Garage"] = {
@@ -30,7 +30,7 @@ brasseur_blips = {
 		y = 5011.7705078125,
 		z = 46.0099250793457,
 		distanceBetweenCoords = 25,
-		distanceMarker = 25,
+		distanceMarker = 45,
 		defaultTime = 2000
 	},
 	["Champ"] = {
