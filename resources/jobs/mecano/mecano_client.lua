@@ -392,7 +392,7 @@ function spawnDepanneuse(coords, type)
         end
     end
     -- Citizen.Trace('impossible')
-    notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
+    notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
     -- local myPed = GetPlayerPed(-1)
     -- local player = PlayerId()
     -- RequestModel(VehicleModelKeyTowTruck)
@@ -1194,13 +1194,13 @@ end
 RegisterNetEvent("mecano:PersonnelMessage")
 AddEventHandler("mecano:PersonnelMessage",function(message)
     if inService then
-        notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano Info", false, message)
+        notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano Info", false, message)
     end
 end)
 
 RegisterNetEvent("mecano:ClientMessage")
 AddEventHandler("mecano:ClientMessage",function(message)
-    notifIconMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, message)
+    notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, message)
 end)
 
 

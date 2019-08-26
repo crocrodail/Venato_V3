@@ -50,7 +50,7 @@ TokoVoipConfig = {
 AddEventHandler("onClientResourceStart", function(resource)
 	if (resource == GetCurrentResourceName()) then	--	Initialize the script when this resource is started
 		Citizen.CreateThread(function()
-			TokoVoipConfig.plugin_data.localName = escape(GetPlayerName(PlayerId())); -- Set the local name
+			TokoVoipConfig.plugin_data.localName = "#############"; -- Set the local name
 		end);
 		TriggerEvent("initializeVoip"); -- Trigger this event whenever you want to start the voip
 	end
