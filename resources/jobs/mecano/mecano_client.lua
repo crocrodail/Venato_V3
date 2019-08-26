@@ -1205,7 +1205,8 @@ end)
 
 
 --=== restart depanneur
-function acceptMission(data)
+function acceptMissionMeca(data)
+  print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee TAMER")
     local mission = data.mission
 
     -- currentMissions = mission
@@ -1239,7 +1240,7 @@ function updateMenuMissionMeca()
         local item = {
             Title = 'Mission ' .. m.id .. ' [' .. m.type .. ']',
             mission = m,
-            Function = "acceptMission"
+            Function = "acceptMissionMeca"
         }
         if #m.acceptBy ~= 0 then
             item.Title = item.Title .. ' (En cours)'
