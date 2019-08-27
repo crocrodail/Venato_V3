@@ -58,12 +58,16 @@ function openVenatoadmin()
 end
 end
 
-function AdminInvisible()
-  visible = not visible
-  if visible then
-    SetEntityVisible(Venato.GetPlayerPed(), true, nil)
+function AdminInvisible(value)
+  if value ~= nil then
+    SetEntityVisible(Venato.GetPlayerPed(), value, nil)
   else
-    SetEntityVisible(Venato.GetPlayerPed(), false, nil)
+    visible = not visible
+    if visible then
+      SetEntityVisible(Venato.GetPlayerPed(), true, nil)
+    else
+      SetEntityVisible(Venato.GetPlayerPed(), false, nil)
+    end
   end
 end
 
@@ -111,6 +115,7 @@ end)
 function respawntest()
   local coord = GetEntityCoords(Venato.GetPlayerPed(), false)
   local heading = GetEntityHeading(Venato.GetPlayerPed())
+  FreezeEntityPosition(Venato.GetPlayerPed(), false)
   NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
   ClearPedTasksImmediately(Venato.GetPlayerPed())
   Venato.resurect()
@@ -428,10 +433,12 @@ function AdminSpectate()
       SetCamActive(cam,  true)
       RenderScriptCams(true,  false,  0,  true,  true)
       InSpectatorMode = true
+      AdminInvisible(true)
     end)
   else
     InSpectatorMode = false
       TargetSpectate  = nil
+      AdminInvisible(false)
       local playerPed = Venato.GetPlayerPed()
       SetCamActive(cam,  false)
       RenderScriptCams(false,  false,  0,  true,  true)

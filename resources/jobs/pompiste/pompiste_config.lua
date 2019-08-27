@@ -17,8 +17,8 @@ pompiste_car2 = {
 }
 
 pompiste_pay = {
-	minimum = 70,
-	maximum = 120
+	minimum = 30,
+	maximum = 35
 }
 
 pompiste_blips = {

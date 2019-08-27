@@ -138,7 +138,7 @@ function Venato.CreateObject(objet, x, y, z)
   RequestModel(model)
   while not HasModelLoaded(model) do
     Citizen.Wait(100)
-  end      
+  end
   local objet = CreateObject(model, x, y, z, true, false, false)
 
   local id = NetworkGetNetworkIdFromEntity(objet)
@@ -170,6 +170,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		SetVehicleNeedsToBeHotwired(vehicle, false)
 		SetModelAsNoLongerNeeded(model)
 		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
+    SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 		while not HasCollisionLoadedAroundEntity(vehicle) do
 			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
 			Citizen.Wait(100)

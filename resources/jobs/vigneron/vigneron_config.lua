@@ -10,8 +10,8 @@ vigneron_car = {
 }
 
 vigneron_pay = {
-	minimum = 70,
-	maximum = 90
+	minimum = 35,
+	maximum = 35
 }
 
 

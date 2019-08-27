@@ -1,5 +1,5 @@
 ingame = 0
-local whitelistUp = true
+local whitelistUp = false
 MysqlAsyncLoad = false
 
 MySQL.ready(function()
@@ -45,7 +45,7 @@ AddEventHandler('playerDropped', function(reason)
 	if DataPlayers[source] ~= nil then
 		player = DataPlayers[source].SteamId
   	print('^3playerDropped('..reason..'): ' .. player.."^7")
-  	MySQL.Async.execute("UPDATE user_vehicle SET foufou=1 WHERE owner=@owner AND type =1", {['@owner'] = player})
+  	MySQL.Async.execute("UPDATE user_vehicle SET foufou=1 WHERE owner=@owner", {['@owner'] = player})
   	MySQL.Async.execute("UPDATE users SET source=@source WHERE identifier=@identifier", {['@identifier'] =  player, ['@source'] = "disconnect"})
 	else
 		print('^3Deconnection ('..reason.."): Non Enregistre : "..player.." ^7^7")

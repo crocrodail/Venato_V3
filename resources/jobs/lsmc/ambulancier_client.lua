@@ -349,6 +349,7 @@ function leaveserv()
   TriggerServerEvent('ambulancier:endService')
   Menu.close()
   toogleServiceAmbulancier()
+  TriggerEvent("Venato:LoadClothes")
 end
 
 local function gestionServiceAmbulancier()
@@ -630,7 +631,6 @@ RegisterNetEvent('job:deleteBlips')
 AddEventHandler('job:deleteBlips', function ()
     isAmbulancier = false
 	TriggerServerEvent('ambulancier:endService')
-    TriggerServerEvent("skin_customization:SpawnPlayer")
     removeBlipAmbulancier()
 end)
 

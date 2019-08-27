@@ -67,10 +67,10 @@ RegisterServerEvent('Inventory:DataItem')
 AddEventHandler('Inventory:DataItem', function(id, qty)
   local source = source
   local table = {}
+  TriggerEvent("Inventory:SetItem", qty - 1, id, source)
   MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
     if result[1] ~= nil then
       if tonumber(result[1].consomable) == 1 then
-        TriggerEvent("Inventory:SetItem", qty - 1, id, source)
         table = { water = result[1].water, food = result[1].food, sool = result[1].sool, drug = result[1].drug }
         DataPlayers[source].Food = DataPlayers[source].Food - table.food
         DataPlayers[source].Water = DataPlayers[source].Water - table.water

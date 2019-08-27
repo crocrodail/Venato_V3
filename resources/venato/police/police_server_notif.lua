@@ -4,7 +4,7 @@ function closures_police_server()
     local acceptMulti = true
     local preFixEventName = 'police'
 
-    local CALL_INFO_WAIT = 2 
+    local CALL_INFO_WAIT = 2
     local CALL_INFO_OK = 1
     local CALL_INFO_NONE = 0
 
@@ -70,7 +70,7 @@ function closures_police_server()
 
     function POLICE_closeMission(source, missionId)
         if listMissions[missionId] ~= nil then
-            for _, v in pairs(listMissions[missionId].acceptBy) do 
+            for _, v in pairs(listMissions[missionId].acceptBy) do
                 if v ~= source then
                     POLICE_notifyPersonnel(v, 'MISSION_ANNULE')
                     notifyMissionCancel(v)
@@ -89,7 +89,7 @@ function closures_police_server()
         local sMission = listMissions[missionId]
         if sMission == nil then
             POLICE_notifyPersonnel(source,'MISSION_INCONNU')
-        elseif #sMission.acceptBy ~= 0  and not acceptMulti then 
+        elseif #sMission.acceptBy ~= 0  and not acceptMulti then
             POLICE_notifyPersonnel(source, 'MISSION_EN_COURS')
         else
             POLICE_removePersonel(source)
@@ -114,8 +114,8 @@ function closures_police_server()
     end
 
     function POLICE_removePersonel(personnelId)
-        for _, mission in pairs(listMissions) do 
-            for k, v in pairs(mission.acceptBy) do 
+        for _, mission in pairs(listMissions) do
+            for k, v in pairs(mission.acceptBy) do
                 if v == personnelId then
                     table.remove(mission.acceptBy, k)
                     if #mission.acceptBy == 0 then
@@ -134,7 +134,9 @@ function closures_police_server()
 
     function POLICE_removeClient(clientId)
         if listMissions[clientId] ~= nil then
-            for _, v in pairs(listMissions[clientId].acceptBy) do 
+          print("aqui2")
+            for _, v in pairs(listMissions[clientId].acceptBy) do
+              print(v)
                 POLICE_notifyPersonnel(v, 'MISSION_ANNULE')
                 notifyMissionCancel(v)
                 POLICE_setInactivePersonnel(v)
@@ -154,14 +156,14 @@ function closures_police_server()
     function POLICE_addPersonelService(source)
         listPersonnelActive[source] = false
     end
-    
+
     function POLICE_removePersonelService(source)
         listPersonnelActive[source] = nil
     end
 
     function POLICE_setActivePersonnel(source)
         listPersonnelActive[source] = true
-        
+
     end
 
     function POLICE_setInactivePersonnel(source)
@@ -170,7 +172,7 @@ function closures_police_server()
 
     function POLICE_getNbPerosnnelActive()
         local dispo = 0
-        for _, v in pairs(listPersonnelActive) do 
+        for _, v in pairs(listPersonnelActive) do
             if v ~= nil then
                 dispo = dispo + 1
             end
@@ -180,7 +182,7 @@ function closures_police_server()
 
     function POLICE_getNbPerosnnelDispo()
         local dispo = 0
-        for _, v in pairs(listPersonnelActive) do 
+        for _, v in pairs(listPersonnelActive) do
             if v == false then
                 dispo = dispo + 1
             end
@@ -190,7 +192,7 @@ function closures_police_server()
 
     function POLICE_getNbPerosnnelBusy()
         local dispo = 0
-        for _, v in pairs(listPersonnelActive) do 
+        for _, v in pairs(listPersonnelActive) do
             if v == true then
                 dispo = dispo + 1
             end
@@ -225,6 +227,10 @@ function closures_police_server()
         local source = source
         POLICE_notifyPersonnelChange(source)
     end)
+
+    function notifyMissionCancel(source)
+        TriggerClientEvent(preFixEventName .. ':MissionCancel', source)
+    end
 
     RegisterServerEvent(preFixEventName .. ':Call')
     AddEventHandler(preFixEventName .. ':Call', function (posX,posY,posZ,type)

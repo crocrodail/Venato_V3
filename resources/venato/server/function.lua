@@ -107,7 +107,7 @@ function accessGranded(SteamId, source , balek)
         PermisVoiture = DataUser[1].permisVoiture,
         PermisCamion = DataUser[1].permisCamion,
         Point = DataUser[1].point,
-        Citoyen = 0,
+        Citoyen = 1,
         Url = DataUser[1].url,
         Speedometer = DataUser[1].speedometer,
         Clothes = json.decode(DataUser[1].clothes),
@@ -130,17 +130,17 @@ function accessGranded(SteamId, source , balek)
           lipstick_color = DataUser[1].lipstick_color
         }
       }
-      MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = getSteamID(source),  ["@pseudo"] = GetPlayerName(source)}, function()
-
+      local steamIdl = getSteamID(source)
+      MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = steamIdl,  ["@pseudo"] = GetPlayerName(source)}, function()
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
         TriggerClientEvent("Venato:Connection", source)
         TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
         ControlVisa(SteamId, source)
-        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo.." - ".. DataPlayers[source].NameJob ..")^7")
-        print(SteamId)
         TriggerEvent("police:checkIsCop", source)
+        MySQL.Async.execute("UPDATE user_vehicle SET prenom=@prenom, nom=@nom, foufou = 2 WHERE owner=@owner", {['@owner'] = steamIdl, ['@prenom'] = DataUser[1].prenom, ['@nom'] = DataUser[1].nom})
+        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo.." - ".. DataPlayers[source].NameJob ..")^7")
       end)
     end
   end)
@@ -155,7 +155,9 @@ function ControlVisa(SteamId, source)
   MySQL.Async.fetchAll("SELECT * FROM whitelist WHERE identifier = @identifier", { ["@identifier"] = SteamId },
     function(result)
       if not result[1] then
-        return
+        return-- nique :)
+      else
+        return-- nique :)
       end
       local num = result[1].listed
       local start = result[1].visadebut
@@ -287,9 +289,9 @@ end
 function Venato.CheckItem(itemId, source)
   print(Venato.dump(DataPlayers[source].Inventaire))
   print(Venato.dump(DataPlayers[source].Inventaire[itemId]))
-  if not DataPlayers[source] or not DataPlayers[source].Inventaire[itemId] then    
+  if not DataPlayers[source] or not DataPlayers[source].Inventaire[itemId] then
     return 0
-  end  
+  end
   return DataPlayers[source].Inventaire[itemId].quantity
 end
 

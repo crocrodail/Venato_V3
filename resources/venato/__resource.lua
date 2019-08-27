@@ -44,6 +44,8 @@ client_script {
   '/police/police_Menu.lua',
   '/interaction/client.lua',
   '/interaction/menu.lua',
+  '/VNT_fourriere/client0.lua',
+  '/barbershop/client.lua',
   '/illegal/config.lua',
   '/illegal/client.lua'
 }
@@ -78,6 +80,8 @@ server_script {
   '/police/police_server_cuffs.lua',
 	'/police/police_server.lua',
   '/police/police_server_notif.lua',
+  '/VNT_fourriere/server0.lua',
+  '/barbershop/server.lua',
   '/illegal/config.lua',
   '/illegal/server.lua'
 }

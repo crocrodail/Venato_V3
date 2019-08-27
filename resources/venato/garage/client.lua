@@ -162,6 +162,7 @@ function SortirVoiture(vhll)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     if not DoesEntityExist(CarOnPoint) then
       local car = tonumber(vhll.model)
+      print(vhll.model)
       Venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
         if health ~= nil then
           if (health[1] ~= nil and health[1] > 0 and health[1] < 1000) or health[2] ~= nil then

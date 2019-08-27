@@ -10,8 +10,8 @@ brasseur_car = {
 }
 
 brasseur_pay = {
-	minimum = 60,
-	maximum = 110
+	minimum = 35,
+	maximum = 35
 }
 
 brasseur_blips = {
