@@ -146,7 +146,7 @@ function getScouteur()
 end
 
 function Openpoleemploie()
-  Menu.setSubtitle("Emote")
+  TriggerEvent('Menu:Init', "", "Choisissez votre nouveau métier", "#90CAF999", "https://www.afar-fiction.com/IMG/arton1890.png?201901021826")
   Menu.clearMenu()
   Menu.addButton2("Pompiste", "sitchJob", 22, nil, nil)
   Menu.addButton2("Vigneron", "sitchJob", 13, nil, nil)

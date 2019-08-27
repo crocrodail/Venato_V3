@@ -34,7 +34,7 @@ AddEventHandler("Venato:SwitchJob", function(id)
     DataPlayers[source].NameJob = result[1].job_name
     local defaultNotification = {
       type = "alert",
-      title ="PoleEmploie",
+      title ="PoleEmploi",
       logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
       message = "Vous etes maintenant "..DataPlayers[source].NameJob
     }
@@ -284,6 +284,15 @@ function Venato.notify(source, notif)
     logo = notif.logo,
     title = notif.title
   })
+end
+
+function Venato.CheckItem(itemId, source)
+  print(Venato.dump(DataPlayers[source].Inventaire))
+  print(Venato.dump(DataPlayers[source].Inventaire[itemId]))
+  if not DataPlayers[source] or not DataPlayers[source].Inventaire[itemId] then
+    return 0
+  end
+  return DataPlayers[source].Inventaire[itemId].quantity
 end
 
 RegisterServerEvent('vnt:chestaddmonney')

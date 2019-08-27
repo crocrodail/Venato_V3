@@ -4,12 +4,12 @@ local vitesseRegu = 0
 local defaultStyle = 0
 local defaultNotification = {
     title = "Info. Véhicule",
-    logo = "https://i.ibb.co/R466dWy/icons8-sedan-96px.png"
+    logo = "https://i.ibb.co/b2jMYxp/icons8-sedan-96px-1.png"
 }
 
 local cruiseNotification = {
     title = "Info. Véhicule",
-    logo = "https://i.ibb.co/5c5Rcj9/icons8-speedometer-96px.png"
+    logo = "https://i.ibb.co/P9VLmNZ/icons8-speedometer-96px.png"
 }
 
 Citizen.CreateThread(

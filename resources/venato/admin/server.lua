@@ -1,5 +1,6 @@
 RegisterNetEvent("Admin:CallDataUsers")
 AddEventHandler("Admin:CallDataUsers", function()
+	print("OpenAdminMenu")
 	local source = source
 	TriggerClientEvent("Admin:CallDataUsers:cb", source, DataPlayers, source)
 end)

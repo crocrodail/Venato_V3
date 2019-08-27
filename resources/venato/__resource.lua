@@ -23,7 +23,6 @@ client_script {
   '/garage/table.lua',
   '/carMenu/client.lua',
   '/lockVehicule/client.lua',
-  '/debug/client.lua',
   '/life/client.lua',
   '/admin/client.lua',
   '/clothingShop/client.lua',
@@ -47,6 +46,8 @@ client_script {
   '/interaction/menu.lua',
   '/VNT_fourriere/client0.lua',
   '/barbershop/client.lua',
+  '/illegal/config.lua',
+  '/illegal/client.lua'
 }
 
 server_script {
@@ -56,6 +57,8 @@ server_script {
   '/server/global.lua',
   '/server/savePos.lua',
   '/server/shop.lua',
+  '@jobs/brasseur/brasseur_config.lua',
+  '@jobs/vigneron/vigneron_config.lua',
   '/server/jobs.lua',
   '/inventory/server.lua',
   '/coffre_voiture/server.lua',
@@ -79,6 +82,8 @@ server_script {
   '/police/police_server_notif.lua',
   '/VNT_fourriere/server0.lua',
   '/barbershop/server.lua',
+  '/illegal/config.lua',
+  '/illegal/server.lua'
 }
 
 files {

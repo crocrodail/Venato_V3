@@ -6,7 +6,7 @@ local id = 0
 local defaultNotification = {
   type = "alert",
   title ="Véhicule",
-  logo = "https://i.ibb.co/tmqZqty/icons8-key-96px.png"
+  logo = "https://i.ibb.co/zhF8r06/icons8-key-2-96px.png"
 }
 
 RegisterNetEvent("lock:refresh")

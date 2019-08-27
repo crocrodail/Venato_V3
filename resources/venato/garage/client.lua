@@ -23,7 +23,7 @@ local garage = {
 local defaultNotification = {
   title = "Garage",
   type = "alert",
-  logo = "https://i.ibb.co/dpsQ3B9/icons8-parking-96px.png"
+  logo = "https://i.ibb.co/wpxH8B1/icons8-parking-96px.png"
 }
 
 

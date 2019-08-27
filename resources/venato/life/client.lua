@@ -57,7 +57,7 @@ Citizen.CreateThread(
                     local defaultNotification = {
                         title ="Info. Véhicule",
                         type = "danger",
-                        logo = "https://i.ibb.co/CBxPS3F/icons8-gas-station-96px-1.png",
+                        logo = "https://i.ibb.co/61pT4gN/icons8-gas-station-96px.png",
                         message = "Vous êtes dans la résèrve",
                         timeout = "5000"
                     }

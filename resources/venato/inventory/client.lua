@@ -7,7 +7,7 @@ local dropItem = "prop_cs_box_clothes"
 local PapierOpen = 0
 
 local defaultNotification = {
-  name = "Inventaire",
+  title = "Inventaire",
   type = "alert",
   logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
 }
@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." "..v.libelle.." .")
+							Venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
@@ -90,7 +90,7 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." € .")
+							Venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." € .")
 						end
 					end
 				elseif dis < 10 then
@@ -120,7 +120,7 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.libelle.." .")
+							Venato.notifyError("Vous n'avez pas assez de place pour "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
@@ -599,7 +599,7 @@ AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, 
       TriggerServerEvent("Inventory:SetItem", table[1] - nb, table[2])
       TriggerServerEvent("Inventory:SetItem", qty + nb, table[2], ClosePlayer)
     else
-      Venato.notifyError("La personne est trop lourde pour ces items.")
+      Venato.notifyError("L'inventaire de la personne est plein pour ces items.")
     end
   else
     Venato.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")
