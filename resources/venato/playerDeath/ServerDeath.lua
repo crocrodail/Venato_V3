@@ -30,10 +30,10 @@ end)
 RegisterServerEvent('Death:health')
 AddEventHandler('Death:health', function(bool, health)
   local source = source
-  local health = health or 100
+  local health = health or 200
   if bool == true then
     health = 0
   end
-  DataPlayers[source].Health = health
+  DataPlayers[source].Health = health --- eroor sometime
   MySQL.Async.execute("UPDATE users SET health = @health WHERE identifier = @steamId", {["health"] = health, ["steamId"] = DataPlayers[source].SteamId })
 end)

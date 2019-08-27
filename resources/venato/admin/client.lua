@@ -22,6 +22,7 @@ local noclip = false
 local noclip_pos
 local heading = 0
 local visible = true
+local DataAdmin = nil
 
 function ResetDefaultNotification()
   defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
@@ -30,15 +31,15 @@ end
 function openVenatoadmin()
   Menu.clearMenu()
   AdminShowPlayerInfo = nil
-  print("DataUser.Group : "..DataUser.Group)
-  if DataUser.Group == "Admin" or DataUser.Group == "Modo" then
+  print("DataUser.Group : "..AdminDataPlayers[ClientSource].Group)
+  if AdminDataPlayers[ClientSource].Group == "Admin" or AdminDataPlayers[ClientSource].Group == "Modo" then
   Menu.setTitle("Venato Admin Menu")
   Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
   Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
   Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
   Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
   end
-  if DataUser.Group == "Admin" then
+  if AdminDataPlayers[ClientSource].Group == "Admin" then
   Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
   Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
   Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
@@ -581,10 +582,10 @@ Citizen.CreateThread(function()
     end
     if IsControlPressed(1, Keys["5"]) and IsControlPressed(1,
       Keys["G"]) and GetLastInputMethod(2) and open == false then
-      open = true      
+      open = true
       if Menu.hidden == true then
         print("openMenu")
-        TriggerServerEvent("Admin:CallDataUsers")        
+        TriggerServerEvent("Admin:CallDataUsers")
       else
         Menu.close()
       end

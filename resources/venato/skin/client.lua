@@ -395,10 +395,14 @@ function Venato.LoadSkin(DataUser)
         RequestModel(model)
         Citizen.Wait(0)
     end
-    SetPlayerModel(PlayerId(), model)
-    SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(Venato.GetPlayerPed())
-    SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
+    if GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
+      none()
+    else
+      SetPlayerModel(PlayerId(), model)
+      SetModelAsNoLongerNeeded(model)
+      SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+      SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
+    end
     if skin then
       local playerPed = Venato.GetPlayerPed()
         local Sexemodel = GetHashKey("mp_m_freemode_01")
