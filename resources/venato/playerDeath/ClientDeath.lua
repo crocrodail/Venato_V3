@@ -21,10 +21,6 @@ end
 
 Citizen.CreateThread(function()
   Citizen.Wait(5000)
-  RequestAnimDict("mini@cpr@char_b@cpr_def")
-  while not HasAnimDictLoaded("mini@cpr@char_b@cpr_def") do
-  Citizen.Wait(0)
-  end
   while true do
     Citizen.Wait(0)
 		playerPed = GetPlayerPed(-1)
