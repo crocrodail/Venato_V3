@@ -5,13 +5,13 @@
 --
 
 --------- CREATE SKIN OBJECT ---------
-skinChooser =  {}
-skinChooser.__index = skinChooser
-function skinChooser:create()
+BarberShopskinChooser =  {}
+BarberShopskinChooser.__index = BarberShopskinChooser
+function BarberShopskinChooser:create()
     -- our new object
     local self = {}
     -- make Account handle lookup
-    setmetatable(self,skinChooser)
+    setmetatable(self,BarberShopskinChooser)
 
     self.hair                       = 0
     self.hair_color                 = 0
@@ -48,7 +48,7 @@ local lipstick_price        = 250
 local lipstick_color_price  = 150
 
 --------------- VARS -----------------
-local new_skin      = skinChooser:create()
+local new_skin      = BarberShopskinChooser:create()
 local spacebetween  = "        "
 local barbersStores = {
     { ['x'] = 1210.57580566406, ['y'] = -473.20849609375, ['z'] = 66.2178421020508, ['markerWidth'] = 6.0001,  ['activationDist'] = 5.5},
@@ -63,7 +63,7 @@ local barbersStores = {
 ----------------------------------------------------- HELPERS ----------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 
-function freeze(freeze)
+function Barberfreeze(freeze)
     local player = PlayerId()
     local ped = GetPlayerPed(player)
     if not freeze then
@@ -80,12 +80,12 @@ function freeze(freeze)
     end
 end
 
-function DrawMarkers(d, markerType, markerColorRed, markerColorGreen, markerColorBlue, markerAlpha)
+function BarberDrawMarkers(d, markerType, markerColorRed, markerColorGreen, markerColorBlue, markerAlpha)
     -- drawMarker(type, posX, posY, posZ, dirX, dirY, dirZ, rotX, rotY, rotZ, scaleX, scaleY, scaleZ, colorR, colorG, colorB, alpha, bobUpAndDown, faceCamera, p19, rotate, textureDict, textureName, drawOnEnts);
     DrawMarker(markerType, d.x, d.y, d.z - 1, 0, 0, 0, 0, 0, 0, d.markerWidth, d.markerWidth, d.markerWidth, 1.5001, markerColorRed, markerColorGreen, markerColorBlue,markerAlpha, 0,0, 0,0)
 end
 
-function setMapMarkers(stores, blipIcon, blipColor, blipName)
+function BarbersetMapMarkers(stores, blipIcon, blipColor, blipName)
     for k,v in ipairs(stores)do
         local blip = AddBlipForCoord(v.x, v.y, v.z)
         SetBlipSprite(blip, blipIcon)
@@ -98,7 +98,7 @@ function setMapMarkers(stores, blipIcon, blipColor, blipName)
     end
 end
 
-function ShowNotification(text)
+function BarberShowNotification(text)
   local notif = {
     title= "Hair' Max",
     type = "info", --  danger, error, alert, info, success, warning
@@ -127,24 +127,24 @@ end)
 
 RegisterNetEvent('barber:closeMenu')
 AddEventHandler('barber:closeMenu', function(status)
-    freeze(false)
+    Barberfreeze(false)
     Menu.hidden = true
     if status.transaction then
-        ShowNotification(' Vous avez payé '..status.price..'€')
+        BarberShowNotification(' Vous avez payé '..status.price..'€')
     else
-        ShowNotification(" Vous n'avez pas assez d'argent !")
+        BarberShowNotification(" Vous n'avez pas assez d'argent !")
     end
     TriggerServerEvent('skin:loadSkinAndPosition')
 end)
 
 Citizen.CreateThread(function()
-    setMapMarkers(barbersStores, 71, 21, "Hair' Max - Coiffure / Barbe")
+    BarbersetMapMarkers(barbersStores, 71, 21, "Hair' Max - Coiffure / Barbe")
     while true do
         Citizen.Wait(0)
         local pos = GetEntityCoords(GetPlayerPed(-1), false)
         for _,d in ipairs( barbersStores )do
             if Vdist(d.x, d.y, d.z, pos.x, pos.y, pos.z) < 20.0 then
-                DrawMarkers(d, 71, 255, 255, 0, 155)
+                BarberDrawMarkers(d, 71, 255, 255, 0, 155)
             end
             if(Vdist(d.x, d.y, d.z, pos.x, pos.y, pos.z) < d.activationDist ) then
                 SetTextComponentFormat("STRING")
@@ -153,9 +153,9 @@ Citizen.CreateThread(function()
             end
             if(IsControlJustPressed(1, 51) and Vdist(d.x, d.y, d.z, pos.x, pos.y, pos.z) <  d.activationDist ) then
                 TriggerServerEvent('barber:getOldSkin', source)
-                clearAllProperties()
+                BarberclearAllProperties()
 
-                new_skin = skinChooser:create()
+                new_skin = BarberShopskinChooser:create()
                 BarberShopMenu() -- Menu to draw
                 Menu.toggle()
             end
@@ -183,11 +183,11 @@ function BarberShopMenu()
             + new_skin.lipstick_color_price_selected
 
     Menu.clearMenu()
-    Menu.addButton("Coupe de cheveux       - prix : ".. hair_price+hair_color_price.." €", "hairCutMenu", nil)
-    Menu.addButton("Coupe des sourcils     - prix : ".. eyebrows_price+eyebrows_color_price.." €", "eyebrowsMenu", nil)
-    Menu.addButton("Coupe de la barbe      - prix : ".. beard_price+beard_color_price.." €", "beardCutMenu", nil)
-    Menu.addButton("Maquillage             - prix : ".. makeup_price+makeup_opacity_price.." €", "makeupMenu", nil)
-    Menu.addButton("Rouge à lèvres         - prix : ".. lipstick_price+lipstick_color_price.." €", "lipstickMenu", nil)
+    Menu.addButton("Coupe de cheveux       - prix : ".. hair_price+hair_color_price.." €", "BarberhairCutMenu", nil)
+    Menu.addButton("Coupe des sourcils     - prix : ".. eyebrows_price+eyebrows_color_price.." €", "BarbereyebrowsMenu", nil)
+    Menu.addButton("Coupe de la barbe      - prix : ".. beard_price+beard_color_price.." €", "BarberbeardCutMenu", nil)
+    Menu.addButton("Maquillage             - prix : ".. makeup_price+makeup_opacity_price.." €", "BarbermakeupMenu", nil)
+    Menu.addButton("Rouge à lèvres         - prix : ".. lipstick_price+lipstick_color_price.." €", "BarberlipstickMenu", nil)
     Menu.addButton("Payer"..spacebetween..""..tostring(price).." €", "barberPayMenu", price)
 end
 
@@ -195,47 +195,47 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 ------------ HAIRCUT ---------
-function hairCutMenu()
+function BarberhairCutMenu()
     Menu.setSubtitle("Coupe")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, GetNumberOfPedDrawableVariations(GetPlayerPed(-1), 2) -1 do
         if i ~= new_skin.hair then
-            Menu.addButton("Coupe n°"..i.."     - prix : ".. hair_price.." €", "hairCutMenuAction", {id = i, price = hair_price}, "hairCutMenuSelected")
+            Menu.addButton("Coupe n°"..i.."     - prix : ".. hair_price.." €", "BarberhairCutMenuAction", {id = i, price = hair_price}, "BarberhairCutMenuSelected")
         else
-            Menu.addButton("Coupe n°"..i..spacebetween.." ACTUEL", "hairCutMenuAction", {id = i, price = 0}, "hairCutMenuSelected")
+            Menu.addButton("Coupe n°"..i..spacebetween.." ACTUEL", "BarberhairCutMenuAction", {id = i, price = 0}, "BarberhairCutMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function hairCutMenuSelected(item)
+function BarberhairCutMenuSelected(item)
     SetPedComponentVariation(GetPlayerPed(-1), 2, item.id, 0, 0)
 end
-function hairCutMenuAction(item)
+function BarberhairCutMenuAction(item)
     new_skin.hair = item.id
     new_skin.hair_price_selected = item.price
-    hairColorMenu()
+    BarberhairColorMenu()
 end
 
 ----------- HAIR COLOR ----------
-function hairColorMenu()
+function BarberhairColorMenu()
 
     Menu.setSubtitle("Couleur")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0,  GetNumHairColors() do
         if i ~= new_skin.hair_color then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. hair_color_price.." €", "hairColorMenuAction", {id = i, price = hair_color_price}, "hairColorMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. hair_color_price.." €", "BarberhairColorMenuAction", {id = i, price = hair_color_price}, "BarberhairColorMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "hairColorMenuAction", {id = i, price = 0}, "hairColorMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarberhairColorMenuAction", {id = i, price = 0}, "BarberhairColorMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function hairColorMenuSelected(item)
+function BarberhairColorMenuSelected(item)
     SetPedHairColor(GetPlayerPed(-1), item.id,4)
 end
-function hairColorMenuAction(item)
+function BarberhairColorMenuAction(item)
     SetPedHairColor(GetPlayerPed(-1), item.id,4)
     new_skin.hair_color = item.id
     new_skin.hair_color_price_selected = item.price
@@ -246,48 +246,48 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 ------------ HAIRCUT ---------
-function eyebrowsMenu()
+function BarbereyebrowsMenu()
     Menu.setSubtitle("Sourcils")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, GetNumHeadOverlayValues(2) do
         if i ~= new_skin.eyebrows then
-            Menu.addButton("Forme n°"..i.."     - prix : ".. eyebrows_price.." €", "eyeBrowsMenuAction", {id = i, price = eyebrows_price}, "eyeBrowsMenuSelected")
+            Menu.addButton("Forme n°"..i.."     - prix : ".. eyebrows_price.." €", "BarbereyeBrowsMenuAction", {id = i, price = eyebrows_price}, "BarbereyeBrowsMenuSelected")
         else
-            Menu.addButton("Forme n°"..i..spacebetween.." ACTUEL", "eyeBrowsMenuAction", {id = i, price = 0}, "eyeBrowsMenuSelected")
+            Menu.addButton("Forme n°"..i..spacebetween.." ACTUEL", "BarbereyeBrowsMenuAction", {id = i, price = 0}, "BarbereyeBrowsMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function eyeBrowsMenuSelected(item)
+function BarbereyeBrowsMenuSelected(item)
     SetPedHeadOverlay(GetPlayerPed(-1),  2,  item.id, 1.0)
 end
-function eyeBrowsMenuAction(item)
+function BarbereyeBrowsMenuAction(item)
     new_skin.eyebrows = item.id
     new_skin.eyebrows_price_selected = item.price
-    eyebrowsColorMenu()
+    BarbereyebrowsColorMenu()
 end
 
 ----------- HAIR COLOR ----------
-function eyebrowsColorMenu()
+function BarbereyebrowsColorMenu()
 
     Menu.setSubtitle("Couleur des sourcils")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0,  GetNumHairColors() do
         if i ~= new_skin.eyebrows_color then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. eyebrows_color_price.." €", "eyeBrowsColorMenuAction", {id = i, price = eyebrows_color_price}, "eyeBrowsColorMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. eyebrows_color_price.." €", "BarbereyeBrowsColorMenuAction", {id = i, price = eyebrows_color_price}, "BarbereyeBrowsColorMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "eyeBrowsColorMenuAction", {id = i, price = 0}, "eyeBrowsColorMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarbereyeBrowsColorMenuAction", {id = i, price = 0}, "BarbereyeBrowsColorMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function eyeBrowsColorMenuSelected(item)
+function BarbereyeBrowsColorMenuSelected(item)
     SetPedHeadOverlay(GetPlayerPed(-1),  2,  new_skin.eyebrows, 1.0)
     SetPedHeadOverlayColor(GetPlayerPed(-1),  2, 1,item.id, 1.0 )
 end
-function eyeBrowsColorMenuAction(item)
+function BarbereyeBrowsColorMenuAction(item)
     new_skin.eyebrows_color = item.id
     new_skin.eyebrows_color_price_selected = item.price
     BarberShopMenu()
@@ -297,49 +297,49 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 ---------- CUT -----------
-function beardCutMenu()
+function BarberbeardCutMenu()
 
     Menu.setSubtitle("Barbe")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, GetNumHeadOverlayValues(1) do
         if i ~= new_skin.beard then
-            Menu.addButton("Coupe n°"..i.."     - prix : ".. beard_price.." €", "beardCutMenuAction", {id = i, price = beard_price}, "beardCutMenuSelected" )
+            Menu.addButton("Coupe n°"..i.."     - prix : ".. beard_price.." €", "BarberbeardCutMenuAction", {id = i, price = beard_price}, "BarberbeardCutMenuSelected" )
         else
-            Menu.addButton("Coupe n°"..i..spacebetween.." ACTUEL", "beardCutMenuAction", {id = i, price = 0}, "beardCutMenuSelected")
+            Menu.addButton("Coupe n°"..i..spacebetween.." ACTUEL", "BarberbeardCutMenuAction", {id = i, price = 0}, "BarberbeardCutMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function beardCutMenuSelected(item)
+function BarberbeardCutMenuSelected(item)
     SetPedHeadOverlay(GetPlayerPed(-1),  1,  item.id,  (item.id / 10) + 0.0)
     SetPedHeadOverlayColor(GetPlayerPed(-1),  1,  1,  1, 1)
 end
-function beardCutMenuAction(item)
+function BarberbeardCutMenuAction(item)
     new_skin.beard = item.id
     new_skin.beard_price_selected = item.price
-    beardColorMenu()
+    BarberbeardColorMenu()
 end
 
 ------- BEARD COLOR -------
-function beardColorMenu()
+function BarberbeardColorMenu()
     Menu.setSubtitle("Couleur de la barbe")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, GetNumHairColors() do
         if i ~= new_skin.beard_color then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. beard_color_price.." €", "beardColorMenuAction", {id = i, price = beard_color_price}, "beardColorMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. beard_color_price.." €", "BarberbeardColorMenuAction", {id = i, price = beard_color_price}, "BarberbeardColorMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "beardColorMenuAction", {id = i, price = 0}, "beardColorMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarberbeardColorMenuAction", {id = i, price = 0}, "BarberbeardColorMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function beardColorMenuSelected(item)
+function BarberbeardColorMenuSelected(item)
     SetPedHeadOverlay(GetPlayerPed(-1),  1,  new_skin.beard ,  (new_skin.beard  / 10) + 0.0)
     SetPedHeadOverlayColor(GetPlayerPed(-1),  1,  1,  item.id, 1.0)
 end
-function beardColorMenuAction(item)
+function BarberbeardColorMenuAction(item)
     new_skin.beard_color = item.id
     new_skin.beard_color_price_selected = item.price
     BarberShopMenu()
@@ -349,47 +349,47 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 ------- MAKEUP  -------
-function makeupMenu()
+function BarbermakeupMenu()
     Menu.setSubtitle("Maquillage")
      Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, GetNumHairColors() do
         if i ~= new_skin.makeup then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. makeup_price.." €", "makeupMenuAction", {id = i, price = makeup_price}, "makeupMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. makeup_price.." €", "BarbermakeupMenuAction", {id = i, price = makeup_price}, "BarbermakeupMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "makeupMenuAction", {id = i, price = 0}, "makeupMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarbermakeupMenuAction", {id = i, price = 0}, "BarbermakeupMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function makeupMenuSelected(item)
+function BarbermakeupMenuSelected(item)
     SetPedHeadOverlay(GetPlayerPed(-1), 4, item.id, 1.0)
 end
-function makeupMenuAction(item)
+function BarbermakeupMenuAction(item)
     new_skin.makeup = item.id
     new_skin.makeup_price_selected = item.price
-    makeupOpacityMenu()
+    BarbermakeupOpacityMenu()
 end
 
 ---------- MAKEUP OPACITY -----------
-function makeupOpacityMenu()
+function BarbermakeupOpacityMenu()
     Menu.setSubtitle("Opacite du Maquillage")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, 10 do
         if i ~= new_skin.makeup_opacity then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. makeup_opacity_price.." €", "makeupOpacityMenuAction", {id = i, price = makeup_opacity_price}, "makeupOpacityMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. makeup_opacity_price.." €", "BarbermakeupOpacityMenuAction", {id = i, price = makeup_opacity_price}, "BarbermakeupOpacityMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "makeupOpacityMenuAction", {id = i, price = 0}, "makeupOpacityMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarbermakeupOpacityMenuAction", {id = i, price = 0}, "BarbermakeupOpacityMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function makeupOpacityMenuSelected(item)
+function BarbermakeupOpacityMenuSelected(item)
 
     SetPedHeadOverlay(GetPlayerPed(-1), 4, new_skin.makeup, item.id / 10)
 end
-function makeupOpacityMenuAction(item)
+function BarbermakeupOpacityMenuAction(item)
     new_skin.makeup_opacity = item.id
     new_skin.makeup_opacity_price_selected = item.price
     BarberShopMenu()
@@ -399,46 +399,46 @@ end
 ------------------------------------------------------------------------------------------------------------------------
 
 ------- LIPSTICK  -------
-function lipstickMenu()
+function BarberlipstickMenu()
     Menu.setSubtitle("Rouge à lèvres")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0, GetNumHairColors() do
         if i ~= new_skin.lipstick then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. lipstick_price.." €", "lipstickMenuAction", {id = i, price = lipstick_price}, "lipstickMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. lipstick_price.." €", "BarberlipstickMenuAction", {id = i, price = lipstick_price}, "BarberlipstickMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "lipstickMenuAction", {id = i, price = 0}, "lipstickMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarberlipstickMenuAction", {id = i, price = 0}, "BarberlipstickMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function lipstickMenuSelected(item)
+function BarberlipstickMenuSelected(item)
     SetPedHeadOverlay(GetPlayerPed(-1), 8, item.id, 1.0)
 end
-function lipstickMenuAction(item)
+function BarberlipstickMenuAction(item)
     new_skin.lipstick = item.id
     new_skin.lipstick_price_selected = item.price
-    lipstickColorMenu()
+    BarberlipstickColorMenu()
 end
 
 ---------- LIPSTICK COLOR -----------
-function lipstickColorMenu()
+function BarberlipstickColorMenu()
     Menu.setSubtitle("Couleur rouge à lèvres")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
     for i = 0,  GetNumHairColors() do
         if i ~= new_skin.makeup_opacity then
-            Menu.addButton("Couleur n°"..i.."     - prix : ".. lipstick_color_price.." €", "lipstickColorMenuAction", {id = i, price = lipstick_color_price}, "lipstickColorMenuSelected")
+            Menu.addButton("Couleur n°"..i.."     - prix : ".. lipstick_color_price.." €", "BarberlipstickColorMenuAction", {id = i, price = lipstick_color_price}, "BarberlipstickColorMenuSelected")
         else
-            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "lipstickColorMenuAction", {id = i, price = 0}, "lipstickColorMenuSelected")
+            Menu.addButton("Couleur n°"..i..spacebetween.." ACTUEL", "BarberlipstickColorMenuAction", {id = i, price = 0}, "BarberlipstickColorMenuSelected")
         end
     end
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
-function lipstickColorMenuSelected(item)
+function BarberlipstickColorMenuSelected(item)
     SetPedHeadOverlayColor(GetPlayerPed(-1), 8, 1, item.id, 1.0)
 end
-function lipstickColorMenuAction(item)
+function BarberlipstickColorMenuAction(item)
     new_skin.lipstick_color = item.id
     new_skin.lipstick_color_price_selected = item.price
     BarberShopMenu()
@@ -452,7 +452,7 @@ function barberPayMenu(price)
     Menu.toggle()
 end
 
-function clearAllProperties()
+function BarberclearAllProperties()
     ClearPedProp(GetPlayerPed(-1),0)
     ClearPedProp(GetPlayerPed(-1),1)
     ClearPedProp(GetPlayerPed(-1),2)

@@ -77,11 +77,11 @@ Citizen.CreateThread(
             end
             if not FreezeNeed then
                 if food > 0 then
-                  food = food - 0.05
+                  food = food - 0.02
                 end
 
                 if water > 0 then
-                  water = water - 0.06
+                  water = water - 0.03
                 end
 
                 if alcool > 0 then
