@@ -10,7 +10,7 @@
 
 isCopInService = false
 controlWeapon = true
-local rank = "inconnu"
+rank = "inconnu"
 local checkpoints = {}
 local existingVeh = nil
 local isAlreadyDead = false

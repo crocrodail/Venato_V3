@@ -270,7 +270,12 @@ Citizen.CreateThread( function()
 					end
 				elseif ( IsDisabledControlJustPressed(0, proneKey) and not crouched and not IsPedInAnyVehicle(ped, true) and not IsPedFalling(ped) and not IsPedDiving(ped) and not IsPedInCover(ped, false) and not IsPedInParachuteFreeFall(ped) and (GetPedParachuteState(ped) == 0 or GetPedParachuteState(ped) == -1) ) then
 					if proned then
-						ClearPedTasksImmediately(ped)
+						ClearPedTasks(ped)
+						StopAnimTask(ped,"move_crawl","onfront_fwd", 1.0)
+						Venato.playAnim({lib = "get_up@standard", anim = "front", useLib = true})
+						Citizen.Wait(3000)
+						ClearPedTasks(ped)
+						StopAnimTask(ped,"move_crawl","onfront_fwd", 1.0)
 						proned = false
 					elseif not proned then
 						RequestAnimSet( "move_crawl" )
@@ -297,8 +302,8 @@ end)
 
 function SetProned()
 	ped = PlayerPedId()
-	ClearPedTasksImmediately(ped)
-	TaskPlayAnimAdvanced(ped, "move_crawl", "onfront_fwd", GetEntityCoords(ped), 0.0, 0.0, GetEntityHeading(ped), 1.0, 1.0, 1.0, 46, 1.0, 0, 0)
+	--ClearPedTasksImmediately(ped)
+	TaskPlayAnimAdvanced(ped, "move_crawl", "onfront_bwd", GetEntityCoords(ped), 0.0, 0.0, GetEntityHeading(ped), 1.0, 1.0, 1.0, 46, 1.0, 0, 0)
 end
 
 

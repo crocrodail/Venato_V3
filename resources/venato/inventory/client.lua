@@ -147,7 +147,10 @@ function debuge()
   TriggerServerEvent("debuge")
 end
 
-function OpenInventory()
+function OpenInventory(wait)
+  if wait ~= nil then
+    Citizen.Wait(wait)
+  end
   TriggerEvent('Menu:Init', "00 / 20 Kg", "Inventaire", '#01579B99',
     "https://www.expertpublic.fr/wp-content/uploads/2019/01/se-faire-argent-de-poche.jpg")
   TriggerServerEvent("Inventory:ShowMe")
@@ -412,7 +415,7 @@ function ShowIdCard(data)
         "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
-        "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
+        --"&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
         "&url=" .. Venato.ConvertUrl(data.Url)
     })
   else
@@ -567,7 +570,7 @@ function UseItem(table)
   if table[1] - 1 >= 0 then
     TriggerServerEvent("Inventory:DataItem", table[2], table[1])
     Menu.clearMenu()
-    Citizen.Wait(1000)
+    --Citizen.Wait(1000)
     OpenInventory()
   else
     Venato.notifyError("Error !")
