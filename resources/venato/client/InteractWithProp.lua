@@ -39,11 +39,13 @@ Citizen.CreateThread(function()
 					if PropData[NextTo].anim ~= false then
 						Venato.playAnim({lib = PropData[NextTo].anim.lib, anim = PropData[NextTo].anim.anim, useLib = true, flag = PropData[NextTo].anim.flag})
 						AttachOnProp = true
+						FreezeEntityPosition(GetPlayerPed(-1), true)
 					end
 				else
 					AttachOnProp = false
 					DetachEntity(Venato.GetPlayerPed())
 					ClearPedTasks(GetPlayerPed(-1))
+					FreezeEntityPosition(GetPlayerPed(-1), false)
 				end
 			end
 		end

@@ -16,7 +16,7 @@ end)
 
 RegisterNetEvent("four:GetIsMeca:cb")
 AddEventHandler("four:GetIsMeca:cb", function(nb)
-    mecano_nbMecanoInService = bn
+    mecano_nbMecanoInService = nb
 end)
 
 RegisterNetEvent("four:GetIsMeca:cb")

@@ -49,7 +49,7 @@ AddEventHandler('four:GetIsMeca', function()
       nb = nb + 1
     end
   end
-  TriggerClientEvent('mecano:endService:cb', source, nb)
+  TriggerClientEvent('four:GetIsMeca:cb', source, nb)
 end)
 
 

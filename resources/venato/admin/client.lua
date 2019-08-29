@@ -30,32 +30,32 @@ end
 
 function openVenatoadmin()
   Menu.clearMenu()
+  Menu.open()
   AdminShowPlayerInfo = nil
-  print("DataUser.Group : "..AdminDataPlayers[ClientSource].Group)
+  print(AdminDataPlayers[ClientSource].Group)
   if AdminDataPlayers[ClientSource].Group == "Admin" or AdminDataPlayers[ClientSource].Group == "Modo" then
-  Menu.setTitle("Venato Admin Menu")
-  Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
-  Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
-  Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
-  Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
+    Menu.setTitle("Venato Admin Menu")
+    Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
+    Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
+    Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
+    Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
   end
   if AdminDataPlayers[ClientSource].Group == "Admin" then
-  Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
-  Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
-  Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
-  Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
-  Menu.addButton("Jesus Christ", "respawntest", nil) --  non attribuer (revive)
-  Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
-  Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
-  Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
-  Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
-  --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
+    Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
+    Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
+    Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
+    Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
+    Menu.addButton("Jesus Christ", "respawntest", nil)
+    Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
+    Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
+    Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
+    Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
+    --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
   if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
     Menu.addButton("noClip", "AdminNoClip", nil)
     Menu.addButton("invisible", 'AdminInvisible' , nil)
   end
-  Menu.open()
 end
 end
 
