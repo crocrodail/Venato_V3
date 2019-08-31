@@ -106,7 +106,7 @@ function ItemMenumy(itemId)
 end
 
 function sortir(item)
-	TriggerServerEvent("garagesmeca:getvehicle",ITEMS[item].name, ITEMS[item].plate, ITEMS[item].id, ITEMS[item].idveh)
+	TriggerServerEvent("garagesmeca:getvehicle",ITEMS[item])
   Menu.toggle()
 end
 
