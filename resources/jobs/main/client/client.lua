@@ -20,7 +20,7 @@ function Jobs.init(job)
   CreateThread(function()
 
     serviceLocation = _G[job.Class].getServiceLocation()
-    JobTools.addBlip(serviceLocation, "Entreprise", 475, 2, false)
+    JobTools.addBlip(serviceLocation, "Entreprise", 408, 2, false)
 
     _G[job.Class].init()
   end)

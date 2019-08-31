@@ -45,6 +45,9 @@ function JobTools._CreateVehicle(modelName, coordX, coordY, coordZ, heading, cb)
 end
 
 function JobTools.addBlip(position, name, blipId, blipColor, drawRoute)
+  print(name .. " - x : " .. (position.x or position.posX))
+  print(name .. " - y : " .. (position.y or position.posY))
+  print(name .. " - z : " .. (position.z or position.posZ))
   local blip = AddBlipForCoord(position.x or position.posX, position.y or position.posY, position.z or position.posZ)
   SetBlipSprite(blip, blipId)
   SetBlipColour(blip, blipColor)
@@ -71,6 +74,7 @@ end
 
 local deathscale = nil
 local locksound = false
+
 function JobTools.showServiceMessage(jobName, isInService)
   if not locksound then
     deathscale = JobTools.RequestDeathScaleform()
@@ -93,20 +97,8 @@ function JobTools.showServiceMessage(jobName, isInService)
   DrawScaleformMovieFullscreen(deathscale, 255, 255, 255, 255, 0)
   return deathscale
 end
+
 function JobTools.hideServiceMessage()
   locksound = false
   SetScaleformMovieAsNoLongerNeeded(deathscale)
-end
-
-function JobTools.CreateObject(objet, x, y, z)
-  local model = GetHashKey(objet)
-  RequestModel(model)
-  while not HasModelLoaded(model) do
-    Citizen.Wait(100)
-  end
-  local objet = CreateObject(model, x, y, z, true, false, false)
-  SetNetworkIdCanMigrate(objet, true)
-  SetEntityAsMissionEntity(objet, true, false)
-  SetModelAsNoLongerNeeded(model)
-  return objet
 end
