@@ -395,21 +395,35 @@ doorList = {
     [4] = { ["objName"] = "v_ilev_ph_cellgate", ["x"]= 462.381, ["y"]= -993.651,["z"]= 24.9149,["locked"]= true},
     [5] = { ["objName"] = "v_ilev_ph_cellgate", ["x"]= 462.331, ["y"]= -998.152,["z"]= 24.9149,["locked"]= true},
     [6] = { ["objName"] = "v_ilev_ph_cellgate", ["x"]= 462.704, ["y"]= -1001.92,["z"]= 24.9149,["locked"]= true},
-    [7] = { ["objName"] = "v_ilev_gtdoor", ["x"]= 464.1342, ["y"]= -1003.5145,["z"]= 24.9148,["locked"]= false},
+    [7] = { ["objName"] = "v_ilev_gtdoor", ["x"]= 464.1342, ["y"]= -1003.5145,["z"]= 24.9148,["locked"]= true},
     [8] = { ["objName"] = "v_ilev_gtdoor02", ["x"]= 464.3087, ["y"]= -983.9446,["z"]= 43.6918,["locked"]= true},
-		[9] = { ["objName"] = "v_ilev_arm_secdoor", ["x"]= 452.61877441406, ["y"]= -982.7021484375,["z"]= 30.689598083496,["locked"]= true},
+		[9] = { ["objName"] = "-1033001619", ["x"]= 452.61877441406, ["y"]= -982.7021484375,["z"]= 30.689598083496,["locked"]= true},
     --[10] = { ["objName"] = "v_ilev_rc_door2", ["x"]= 451.98, ["y"]= -987.266,["z"]= 30.69,["locked"]= true},
     [10] = { ["objName"] = "v_ilev_rc_door2", ["x"]= 468.1539, ["y"]= -1014.6710,["z"]= 26.3864,["locked"]= true},
 		[11] = { ["objName"] = "v_ilev_rc_door2", ["x"]= 469.3743, ["y"]= -1014.5759,["z"]= 26.3864,["locked"]= true},
-		--[16] = { ["objName"] = "v_ilev_ph_door01", ["x"]= 435.3226, ["y"]= -982.5680,["z"]= 30.6896,["locked"]= false},
-		--[17] = { ["objName"] = "v_ilev_ph_door02", ["x"]= 435.4028, ["y"]= -980.8831,["z"]= 30.6896,["locked"]= false},
+		[12] = { ["objName"] = "1557126584", ["x"]= 449.554, ["y"]= -986.5680,["z"]= 30.6896,["locked"]= true},
+		[13] = { ["objName"] = "-1033001619", ["x"]= 447.22, ["y"]= -999.00,["z"]= 30.79,["locked"]= true},
+    [14] = { ["objName"] = "-1033001619", ["x"]= 444.63, ["y"]= -999.00,["z"]= 30.79,["locked"]= true},
+    [15] = { ["objName"] = "-1033001619", ["x"]= 468.63, ["y"]= -1003.00,["z"]= 25.01,["locked"]= true},
+    [16] = { ["objName"] = "-1033001619", ["x"]= 471.63, ["y"]= -1003.00,["z"]= 25.01,["locked"]= true},
+    [17] = { ["objName"] = "-1033001619", ["x"]= 477.63, ["y"]= -1003.00,["z"]= 25.01,["locked"]= true},
+    [18] = { ["objName"] = "-1033001619", ["x"]= 480.63, ["y"]= -1003.00,["z"]= 25.01,["locked"]= true},
+    [19] = { ["objName"] = "-1033001619", ["x"]= 480.63, ["y"]= -996.00,["z"]= 25.01,["locked"]= true},
+    [20] = { ["objName"] = "-1033001619", ["x"]= 477.63, ["y"]= -996.00,["z"]= 25.01,["locked"]= true},
+    [21] = { ["objName"] = "-1033001619", ["x"]= 471.63, ["y"]= -996.00,["z"]= 25.01,["locked"]= true},
+    [22] = { ["objName"] = "-1033001619", ["x"]= 468.63, ["y"]= -996.00,["z"]= 25.01,["locked"]= true},
+    [23] = { ["objName"] = "507213820", ["x"]= 464.63, ["y"]= -1011.00,["z"]= 33.01,["locked"]= true},
 }
 
 RegisterNetEvent('door:state')
 AddEventHandler('door:state', function(id, isLocked)
     if type(doorList[id]) ~= nil then -- Check if door exists
         doorList[id]["locked"] = isLocked -- Change state of door
-        local closeDoor = GetClosestObjectOfType(doorList[id]["x"], doorList[id]["y"], doorList[id]["z"], 1.0, GetHashKey(doorList[id]["objName"]), false, false, false)
+        local obj = doorList[i]["objName"]
+        if tonumber(obj) == nil then
+          obj = GetHashKey(doorList[i]["objName"])
+        end
+        local closeDoor = GetClosestObjectOfType(doorList[id]["x"], doorList[id]["y"], doorList[id]["z"], 5.0, tonumber(obj), false, false, false)
         FreezeEntityPosition(closeDoor, doorList[id]["locked"])
     end
 
@@ -421,8 +435,12 @@ Citizen.CreateThread(function()
       Citizen.Wait(10)
  --if (isCop) then
         for i = 1, #doorList do
+            local obj = doorList[i]["objName"]
+            if tonumber(obj) == nil then
+              obj = GetHashKey(doorList[i]["objName"])
+            end
             local playerCoords = GetEntityCoords( GetPlayerPed(-1) )
-            local closeDoor = GetClosestObjectOfType(doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], 1.0, GetHashKey(doorList[i]["objName"]), false, false, false)
+            local closeDoor = GetClosestObjectOfType(doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], 5.0, tonumber(obj), false, false, false)
 
             local objectCoordsDraw = GetEntityCoords( closeDoor )
             local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)

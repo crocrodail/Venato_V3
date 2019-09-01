@@ -46,7 +46,7 @@ function openVenatoadmin()
     Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
     Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
     Menu.addButton("Jesus Christ", "respawntest", nil)
-    Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
+    Menu.addButton("Revive joueur ~r~(Non attribuer)", "getentity", nil) -- non attribuer
     Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
     Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
@@ -57,6 +57,11 @@ function openVenatoadmin()
     Menu.addButton("invisible", 'AdminInvisible' , nil)
   end
 end
+end
+
+function getentity()
+  print(GetEntityModel(1476610))
+  print(GetEntityModel(1476354))
 end
 
 function AdminInvisible(value)
