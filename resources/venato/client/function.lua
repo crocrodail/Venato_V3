@@ -17,7 +17,9 @@ function Venato.playAnim(data)
             TaskPlayAnim(ped,data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
         end
     elseif not data.useLib then
-        TaskStartScenarioInPlace(ped, data.anim.anim, 0, false)
+      print("lib")
+      print(data.anim)
+        TaskStartScenarioInPlace(ped, data.anim, 0, false)
     end
 end
 
