@@ -202,6 +202,25 @@ AddEventHandler("Death:Reanimation", function(who, coord, heading)
   end
 end)
 
+RegisterNetEvent("vnt:heal:cb")
+AddEventHandler("vnt:heal:cb", function()
+  SetEntityMaxHealth(Venato.GetPlayerPed(), true)
+end)
+
+RegisterNetEvent("vnt:resurect:cb")
+AddEventHandler("vnt:resurect:cb", function()
+  local coord = GetEntityCoords(Venato.GetPlayerPed(), false)
+  local heading = GetEntityHeading(Venato.GetPlayerPed())
+  FreezeEntityPosition(Venato.GetPlayerPed(), false)
+  NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
+  ClearPedTasksImmediately(Venato.GetPlayerPed())
+  Venato.resurect()
+  TriggerServerEvent("Death:health", false)
+  LiveFreezeNeed(false)
+  fCanCancelOrStartAnim(true)
+  SetEntityMaxHealth(Venato.GetPlayerPed(), true)
+end)
+
 function Reanim(char, coord, heading)
   Citizen.CreateThread(function()
     if char == "a" then

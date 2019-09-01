@@ -46,7 +46,8 @@ function openVenatoadmin()
     Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
     Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
     Menu.addButton("Jesus Christ", "respawntest", nil)
-    Menu.addButton("Revive joueur ~r~(Non attribuer)", "getentity", nil) -- non attribuer
+    Menu.addButton("Revive joueur", "revivevnt", nil) -- non attribuer
+    Menu.addButton("heal joueur", "healvnt", nil)
     Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
     Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
@@ -59,9 +60,22 @@ function openVenatoadmin()
 end
 end
 
-function getentity()
-  print(GetEntityModel(1476610))
-  print(GetEntityModel(1476354))
+function revivevnt()
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("vnt:resurect", ClosePlayer)
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
+end
+
+function healvnt()
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("vnt:heal", ClosePlayer)
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
 end
 
 function AdminInvisible(value)
