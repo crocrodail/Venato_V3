@@ -204,7 +204,7 @@ end)
 
 RegisterNetEvent("vnt:heal:cb")
 AddEventHandler("vnt:heal:cb", function()
-  SetEntityMaxHealth(Venato.GetPlayerPed(), true)
+  SetEntityHealth(Venato.GetPlayerPed(), GetEntityMaxHealth(Venato.GetPlayerPed()))
 end)
 
 RegisterNetEvent("vnt:resurect:cb")
@@ -218,7 +218,7 @@ AddEventHandler("vnt:resurect:cb", function()
   TriggerServerEvent("Death:health", false)
   LiveFreezeNeed(false)
   fCanCancelOrStartAnim(true)
-  SetEntityMaxHealth(Venato.GetPlayerPed(), true)
+  SetEntityHealth(Venato.GetPlayerPed(), GetEntityMaxHealth(Venato.GetPlayerPed()))
 end)
 
 function Reanim(char, coord, heading)
