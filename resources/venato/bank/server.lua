@@ -15,7 +15,7 @@ AddEventHandler('Bank:GetDataMoneyForATM', function()
   if godDamn then
     TriggerClientEvent("Bank:GetDataMoneyForATM:cb", source, DataPlayers[source])
   else
-    defaultNotification.message = "Vous n'avez pas de carte banquaire."
+    defaultNotification.message = "Vous n'avez pas de carte bancaire."
     TriggerClientEvent('Venato:notify', source, defaultNotification)
   end
 end)
@@ -131,27 +131,28 @@ end)
 
 RegisterNetEvent("Bank:DepotCheque")
 AddEventHandler("Bank:DepotCheque", function(index)
-	local source = source
-  if DataPlayers[source].Documents[index].numeroDeCompte == "Entreprise" then
-    TriggerEvent("Bank:AddBankMoney", DataPlayers[source].Documents[index].montant, source)
-    MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
-    defaultNotification.message = "Vous avez bien déposé un chèque de "..DataPlayers[source].Documents[index].montant.." € sur votre compte banquaire."
-    TriggerClientEvent('Venato:notify', source, defaultNotification)
-    DataPlayers[source].Documents[index] = nil
+  local source = source
+  local cheque = DataPlayers[source].Documents[tonumber(index)]
+  if cheque.numeroDeCompte == "Entreprise" then
+    TriggerEvent("Bank:AddBankMoney", cheque.montant, source)    
+    MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })    
+    defaultNotification.message = "Vous avez bien déposé un chèque de "..cheque.montant.." € sur votre compte bancaire."    
+    TriggerClientEvent('Venato:notify', source, defaultNotification)    
+    DataPlayers[source].Documents[tonumber(index)] = nil
   else
-    MySQL.Async.fetchAll("SELECT * FROM users WHERE account = @account",{["@account"]=DataPlayers[source].Documents[index].numeroDeCompte}, function(result)
+    MySQL.Async.fetchAll("SELECT * FROM users WHERE account = @account",{["@account"]=cheque.numeroDeCompte}, function(result)
       if result[1] ~= nil then
-        if result[1].bank >= DataPlayers[source].Documents[index].montant then
+        if result[1].bank >= cheque.montant then
           if result[1].source ~= 'disconnect' then
-            TriggerEvent("Bank:RemoveBankMoney", DataPlayers[source].Documents[index].montant, result[1].source)
+            TriggerEvent("Bank:RemoveBankMoney", cheque.montant, result[1].source)
           else
-            MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = result[1].identifier, ["@Money"] = result[1].bank-DataPlayers[source].Documents[index].montant})
+            MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = result[1].identifier, ["@Money"] = result[1].bank-cheque.montant})
           end
-          TriggerEvent("Bank:AddBankMoney", DataPlayers[source].Documents[index].montant, source)
+          TriggerEvent("Bank:AddBankMoney", cheque.montant, source)
           MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
-          defaultNotification.message = "Vous avez bien déposé un chèque de "..DataPlayers[source].Documents[index].montant.." € sur votre compte banquaire."
+          defaultNotification.message = "Vous avez bien déposé un chèque de "..cheque.montant.." € sur votre compte bancaire."
           TriggerClientEvent('Venato:notify', source, defaultNotification)
-          DataPlayers[source].Documents[index] = nil
+          DataPlayers[source].Documents[tonumber(index)] = nil
         else
           TriggerClientEvent('Venato:notifyError', source, "Il s'emblerait que ce soit un chèque en bois, le transfère a été refusé pour solde insuffisant.")
         end

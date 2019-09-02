@@ -25,7 +25,7 @@ $('#senderAcc').val(getUrlParameter('account'));
 $('#takeAcc').val(getUrlParameter('account'));
 $('.firstname').val(getUrlParameter('firstname'));
 $('.lastname').val(getUrlParameter('lastname'));
-$('.saldo').text('Solde Banquaire: ' + bank);
+$('.saldo').text('Solde bancaire: ' + bank);
 $('.saldoo').text('Solde en poche: ' + cash);
 
 // Fleeca Banking
@@ -78,8 +78,8 @@ $('#deposit').click(function() {
       bank = parseInt(bank) + parseInt(cash);
       cash = parseInt(cash) - parseInt(cash);
 
-      $('.saldo').text('Solde Banquaire: ' + bank.toString());
-      $('.saldoo').text('Solde Banquaire: ' + cash.toString());
+      $('.saldo').text('Solde bancaire: ' + bank.toString());
+      $('.saldoo').text('Solde bancaire: ' + cash.toString());
     } else if ( amount > 0 && amount != null && amount != ' ' && cash > 0 ) {
       if ( parseInt(cash) >= parseInt(amount) ) {
         $.post('http://venato/insert', JSON.stringify({ money : amount }));
@@ -87,7 +87,7 @@ $('#deposit').click(function() {
         cash = parseInt(cash) - parseInt(amount);
         bank = parseInt(bank) + parseInt(amount);
 
-        $('.saldo').text('Solde Banquaire: ' + bank.toString());
+        $('.saldo').text('Solde bancaire: ' + bank.toString());
         $('.saldoo').text('Solde en poche: ' + cash.toString());
       }
     }
@@ -110,7 +110,7 @@ $('#withdraw').click(function() {
       bank = parseInt(bank) + parseInt(cash);
       cash = parseInt(cash) - parseInt(cash);
 
-      $('.saldo').text('Solde Banquaire: ' + bank.toString());
+      $('.saldo').text('Solde bancaire: ' + bank.toString());
       $('.saldoo').text('Solde en poche: ' + cash.toString());
     } else if ( amount > 0 && amount != null && amount != ' ' && bank > 0 ) {
       if ( parseInt(bank) >= parseInt(amount) ) {
@@ -119,7 +119,7 @@ $('#withdraw').click(function() {
         cash = parseInt(cash) + parseInt(amount);
         bank = parseInt(bank) - parseInt(amount);
 
-        $('.saldo').text('Solde Banquaire: ' + bank.toString());
+        $('.saldo').text('Solde bancaire: ' + bank.toString());
         $('.saldoo').text('Solde en poche: ' + cash.toString());
       }
     }
@@ -144,7 +144,7 @@ $('#transfer').click(function() {
 
         bank = parseInt(bank) - parseInt(amount);
 
-        $('.saldo').text('Solde Banquaire: ' + bank);
+        $('.saldo').text('Solde bancaire: ' + bank);
         $('.saldoo').text('Solde en poche: ' + cash);
       }
     }
