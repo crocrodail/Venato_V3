@@ -1,3 +1,12 @@
+local notif = {
+  action = "notify",
+  type = "alert",
+  message = "",
+  timeout = 3500,
+  logo = "https://i.ibb.co/DzbFdwn/icons8-paint-sprayer-96px.png",
+  title = "LS Customs",
+}
+
 RegisterServerEvent('customs:buy')
 AddEventHandler('customs:buy', function(data)
     local UserData = exports.venato:GetDataPlayers()
@@ -6,7 +15,8 @@ AddEventHandler('customs:buy', function(data)
     local currentSource = source
     local model = tostring(datas.model)
     local plate = string.gsub(datas.plate, "^%s*(.-)%s*$", "%1")
-    if exports.venato:ExportPaymentCB(source, datas.price) then
+    local paymentCB = exports.venato:ExportPaymentCB(source, datas.price)
+    if paymentCB.status then
       MySQL.Async.fetchAll("SELECT * FROM user_vehicle WHERE owner=@owner AND model=@model AND plate=@plate ORDER BY name ASC LIMIT 1", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate }, function(vehicle)
         if vehicle[1] then
           vehicle[1].customs = json.decode(vehicle[1].customs)
@@ -31,46 +41,22 @@ AddEventHandler('customs:buy', function(data)
             ['@mods']   = vehicle[1].customs
           }, function(result)
               if result == 1 then
-                TriggerClientEvent("Hud:Update",currentSource, {
-                  action = "notify",
-                  message = "Ok merci pour tes "..datas.price.."€  t'as besoin d'autre chose ?",
-                  type = "success", --  danger, error, alert, info, success, warning,
-                  timeout = 3500,
-                  logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-                  title = "Custom"
-                })
+                notif.message = "Ok merci pour tes "..datas.price.."€  t'as besoin d'autre chose ?"
+                TriggerClientEvent("Hud:Update",currentSource, notif)
                 TriggerClientEvent('customs:playsound', currentSource, 'ROBBERY_MONEY_TOTAL', 'HUD_FRONTEND_CUSTOM_SOUNDSET')
               else
-                TriggerClientEvent("Hud:Update", currentSource, {
-                  action = "notify",
-                  message = "Vous possedez déjà cet addons",
-                  timeout = 3500,
-                  logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-              		type = "error",
-              		title = "Erreur",
-                })
+                notif.message = "Tu possèdes déjà cet addon"
+                TriggerClientEvent("Hud:Update",currentSource, notif)                
               end
             end)
         else
-          TriggerClientEvent("Hud:Update",currentSource, {
-            action = "notify",
-            message = "Véhicule non trouvé dans la base du gouvernement !",
-            timeout = 3500,
-            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-            type = "error",
-            title = "Erreur",
-          })
+          notif.message = "Véhicule non trouvé dans la base du gouvernement."
+          TriggerClientEvent("Hud:Update",currentSource, notif)          
         end
       end)
     else
-      TriggerClientEvent("Hud:Update", currentSource,{
-        action = "notify",
-        message = "Une érreur s'est produite lors du payement !",
-        timeout = 3500,
-        logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-        type = "error",
-        title = "Erreur",
-      })
+      notif.message = paymentCB.message
+      TriggerClientEvent("Hud:Update",currentSource, notif)
     end
   end)
 

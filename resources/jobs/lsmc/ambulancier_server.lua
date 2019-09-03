@@ -298,7 +298,7 @@
         title= "LSMC",
         type = "info", --  danger, error, alert, info, success, warning
         logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
-        message = "Vous venez d'etre soigné.",
+        message = "Vous venez d'être soigné.",
       }
       TriggerClientEvent("Venato:notify", idToHeal, notif)
     end)
@@ -309,20 +309,20 @@
       local source = source
       local target = target
       local notif = {
-        title= "Blessure",
-        type = "info", --  danger, error, alert, info, success, warning
+        title= "LSMC",
         logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
-        message = "Vous venez d'être facturé du montant de "..price.." aux profit du LSMC",
-      }
-      if exports.venato:ExportPaymentCB(target, price) then
+        message = "Vous venez d'être facturé du montant de "..price.." au profit du LSMC",
+      }      
+      local paymentCB = exports.venato:ExportPaymentCB(target, price)
+      if paymentCB.status then
         TriggerClientEvent("Venato:notify", target, notif)
-        notif.message = "Le client à bien payer ça facture !"
-        notif.type = "success"
+        notif.message = "Le client a bien payé sa facture !"
         TriggerClientEvent("Venato:notify", source, notif)
       else
         notif.type = "danger"
-        notif.message = "Le client n'est pas en messure de payer ça facture !"
+        notif.message = "Le client n'est pas en mesure de payer sa facture : ".. paymentCB.message
         TriggerClientEvent("Venato:notify", source, notif)
-        notif.message = "Vous n'avez pas les moyene de réglé la facture de ".. price .." € !"
+        notif.message = paymentCB.message
+        TriggerClientEvent("Venato:notify", target, notif)
       end
     end)

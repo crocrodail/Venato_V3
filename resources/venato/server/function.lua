@@ -211,13 +211,16 @@ function Venato.Round(num, numDecimalPlaces)
 end
 
 function Venato.paymentCB(source, amount)
-  if DataPlayers[source].IsBankAccountBlocked == 1 or DataPlayers[source].Bank <= tonumber(amount) then
-    return false
+  if DataPlayers[source].IsBankAccountBlocked == 1 then
+    return {status = false, message = "Votre compte est bloqué, rendez vous au LSPD pour régulariser votre situation."}
+  end
+  if DataPlayers[source].Bank <= tonumber(amount) then
+    return {status = false, message = "Votre solde est insuffisant."}
   else
     DataPlayers[source].Bank = DataPlayers[source].Bank - amount
     MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier",
       { ["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].Bank })
-    return true
+    return {status = true}
   end
 end
 

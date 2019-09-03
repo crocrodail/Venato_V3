@@ -37,7 +37,7 @@ AddEventHandler("CarShop:BuyVP", function(vehicle)
     AddVehicleToUser(source, vehicle)
     TriggerClientEvent("CarShop:PaiementOk:response", source, vehicle)
   else
-    TriggerClientEvent("CarShop:PaiementKo:response", source)
+    TriggerClientEvent("CarShop:PaiementKo:response", source, "Votre solde VP est insuffisant.")
   end
 end)
 
@@ -45,12 +45,13 @@ RegisterServerEvent("CarShop:Buy")
 AddEventHandler("CarShop:Buy", function(vehicle)
   local source = source  
   local car = getVehicleById(vehicle.id)
-  if Venato.paymentCB(source, car.price) then
+  local paymentCB = Venato.paymentCB(source, car.price)
+  if paymentCB.status then
     vehicle["price"] = car.price
     AddVehicleToUser(source,vehicle)
     TriggerClientEvent("CarShop:PaiementOk:response", source, vehicle)
   else
-    TriggerClientEvent("CarShop:PaiementKo:response", source)
+    TriggerClientEvent("CarShop:PaiementKo:response", source, paymentCB.message)
   end
 end)
 

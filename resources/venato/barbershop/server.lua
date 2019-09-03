@@ -9,6 +9,12 @@ end
 ------------------------------------------------------ LISTENERS -------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------
 
+local notif = {
+    title= "Coiffeur",
+    logo = "https://i.ibb.co/mTQr11C/icons8-barbershop-96px.png",
+    message = "",
+} 
+
 RegisterServerEvent("barber:getOldSkin")
 AddEventHandler("barber:getOldSkin", function()
 	trigger = source
@@ -26,7 +32,8 @@ end)
 RegisterServerEvent('barber:pay')
 AddEventHandler('barber:pay', function(price, newSkin)
 	trigger = source
-        if ExportPaymentCB(trigger, price) then
+    local paymentCB = exports.venato:ExportPaymentCB(trigger, price)
+        if paymentCB.status then
             TriggerClientEvent('barber:closeMenu', trigger, {transaction = true, price = price})
             TriggerEvent('barber:saveHeadSkin', getPlayerID(trigger), {
                 hair = newSkin.hair or nil,
@@ -40,7 +47,11 @@ AddEventHandler('barber:pay', function(price, newSkin)
                 makeup = newSkin.makeup or nil,
                 makeup_opacity = newSkin.makeup_opacity or nil
             })
-        else
+            notif.message = "Vous avez payé <span class='green--text'>"..price.."€</span> au coiffeur."
+            TriggerClientEvent("Venato:notify", source, notif)   
+        else  
+            notif.message = paymentCB.status
+            TriggerClientEvent("Venato:notify", source, notif)          
             TriggerClientEvent('barber:closeMenu', trigger, {transaction = false, price = price})
         end
 end)

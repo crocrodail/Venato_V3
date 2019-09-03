@@ -369,7 +369,8 @@ end)
 
 RegisterNetEvent('CarShop:PaiementKo:response')
 AddEventHandler('CarShop:PaiementKo:response', function(data)
-  defaultNotification.message = "Erreur de paiement. Verifiez votre solde.";
+  print(data)
+  defaultNotification.message = data;
   defaultNotification.type = "error"
   Venato.notify(defaultNotification)
   TriggerEvent("Menu:Open")
