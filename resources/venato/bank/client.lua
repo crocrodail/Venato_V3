@@ -1,10 +1,11 @@
 local open = false
 local type = 'fleeca'
 local defaultNotification = {
-  type = "info",
   title ="Banque",
   logo = "https://img.icons8.com/officel/16/000000/bank-euro.png"
 }
+local accountIsBlocked = false
+local message_block = "Votre compte est bloqué pour mouvements suspicieux.<br/><br/><span class='red--text'> Rendez-vous au LSPD pour régulariser votre situation.</span>"
 
 Citizen.CreateThread(function()
   SetNuiFocus(false, false)
@@ -54,6 +55,12 @@ end)
 RegisterNetEvent('Bank:GetDataMoneyForBank:cb')
 AddEventHandler('Bank:GetDataMoneyForBank:cb', function(data)
   menuBank(data)
+end)
+
+RegisterNetEvent('Bank:AccountIsBlocked:Set')
+AddEventHandler('Bank:AccountIsBlocked:Set', function(value)
+  print("AccountIsBlocked : ".. value)
+  accountIsBlocked = value == 1
 end)
 
 function menuBank(data)
@@ -179,13 +186,26 @@ Citizen.CreateThread(function()
 			SetNuiFocus(false, false)
 			open = false
 		end
-		if IsControlJustReleased(0, 38) and inMarker and GetLastInputMethod(2) then
-			TriggerServerEvent("Bank:GetDataMoneyForATM")
+    if IsControlJustReleased(0, 38) and inMarker and GetLastInputMethod(2) then
+      if accountIsBlocked then
+        defaultNotification.message = message_block
+        defaultNotification.timeout = 5000
+        Venato.notify(defaultNotification)        
+      else
+        TriggerServerEvent("Bank:GetDataMoneyForATM")
+      end
 		end
-		if IsControlJustReleased(0, 38) and inBankMarker and GetLastInputMethod(2) then
-			TriggerServerEvent("Bank:GetDataMoneyForBank")
+    if IsControlJustReleased(0, 38) and inBankMarker and GetLastInputMethod(2) then
+      if accountIsBlocked then
+        defaultNotification.message = message_block
+        defaultNotification.timeout = 5000
+        Venato.notify(defaultNotification)
+      else
+        TriggerServerEvent("Bank:GetDataMoneyForBank")
+      end
 		end
     if open then
+      defaultNotification.timeout = 5000
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack
