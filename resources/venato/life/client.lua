@@ -57,7 +57,7 @@ Citizen.CreateThread(
                     local defaultNotification = {
                         title ="Info. Véhicule",
                         type = "danger",
-                        logo = "https://i.ibb.co/CBxPS3F/icons8-gas-station-96px-1.png",
+                        logo = "https://i.ibb.co/61pT4gN/icons8-gas-station-96px.png",
                         message = "Vous êtes dans la résèrve",
                         timeout = "5000"
                     }
@@ -77,11 +77,11 @@ Citizen.CreateThread(
             end
             if not FreezeNeed then
                 if food > 0 then
-                  food = food - 0.05
+                  food = food - 0.02
                 end
 
                 if water > 0 then
-                  water = water - 0.06
+                  water = water - 0.03
                 end
 
                 if alcool > 0 then

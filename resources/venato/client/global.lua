@@ -58,7 +58,7 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
     LoadBlips()
     Venato.LoadSkin(DataPlayers[source])
     Venato.LoadClothes()
-    SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[source].Health))
+    if tonumber(DataPlayers[source].Health) < 100 then SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[source].Health)) end
     TriggerServerEvent("GcPhone:Load")
   end
 end)
@@ -93,6 +93,11 @@ local DiscordAppId = tonumber(GetConvar("RichAppId", "510934092821430282"))
 local DiscordAppAsset = GetConvar("RichAssetId", "discordicon")
 
 Citizen.CreateThread(function()
+  SetVehicleDensityMultiplierThisFrame(0.5)
+	SetPedDensityMultiplierThisFrame(0.5)
+	SetRandomVehicleDensityMultiplierThisFrame(0.5)
+	SetParkedVehicleDensityMultiplierThisFrame(0.5)
+	SetScenarioPedDensityMultiplierThisFrame(0.5, 0.5)
 	while true do
   	  SetDiscordAppId(DiscordAppId)
   	  SetDiscordRichPresenceAsset(DiscordAppAsset)
@@ -141,7 +146,7 @@ function getScouteur()
 end
 
 function Openpoleemploie()
-  Menu.setSubtitle("Emote")
+  TriggerEvent('Menu:Init', "", "Choisissez votre nouveau métier", "#90CAF999", "https://www.afar-fiction.com/IMG/arton1890.png?201901021826")
   Menu.clearMenu()
   Menu.addButton2("Pompiste", "sitchJob", 22, nil, nil)
   Menu.addButton2("Vigneron", "sitchJob", 13, nil, nil)

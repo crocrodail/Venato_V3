@@ -17,7 +17,9 @@ function Venato.playAnim(data)
             TaskPlayAnim(ped,data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
         end
     elseif not data.useLib then
-        TaskStartScenarioInPlace(ped, data.anim.anim, 0, false)
+      print("lib")
+      print(data.anim)
+        TaskStartScenarioInPlace(ped, data.anim, 0, false)
     end
 end
 
@@ -138,7 +140,7 @@ function Venato.CreateObject(objet, x, y, z)
   RequestModel(model)
   while not HasModelLoaded(model) do
     Citizen.Wait(100)
-  end      
+  end
   local objet = CreateObject(model, x, y, z, true, false, false)
 
   local id = NetworkGetNetworkIdFromEntity(objet)
@@ -170,6 +172,7 @@ function Venato.CreateVehicle(modelName, coords, heading, cb)
 		SetVehicleNeedsToBeHotwired(vehicle, false)
 		SetModelAsNoLongerNeeded(model)
 		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
+    SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 		while not HasCollisionLoadedAroundEntity(vehicle) do
 			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
 			Citizen.Wait(100)

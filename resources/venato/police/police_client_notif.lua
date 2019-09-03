@@ -39,7 +39,7 @@ local POLICE_TEXT = {
     CALL_INFO_OK = '~g~Une unité va arriver sur les lieux de l\'appel...',
 
     CALL_RECU = 'Confirmation\nVotre appel a été enregistré.',
-    CALL_ACCEPT_P_P = 'Votre appel a été accepté, un Polcier est en route...',
+    CALL_ACCEPT_P = 'Votre appel a été accepté, un Polcier est en route...',
     CALL_CANCEL = 'Le policer vient d\'abandonné votre appel.',
     CALL_FINI = 'Votre appel a été résolu.',
     CALL_EN_COURS = 'Vous avez déjà une demande en cours...',
@@ -271,6 +271,7 @@ end)
 function acceptMissionPolice(data)
     local mission = data.mission
     TriggerServerEvent('police:AcceptMission', mission.id)
+    openMenuPoliceGeneral()
 end
 
 function finishCurrentMissionPolice()
@@ -278,12 +279,14 @@ function finishCurrentMissionPolice()
     POLICE_currentMissions = nil
     if POLICE_currentBlip ~= nil then
         RemoveBlip(POLICE_currentBlip)
+        openMenuPoliceGeneral()
     end
 end
 
 function updateMenuMissionPolice()
   local items = {
   }
+  local POLICE_currentMissionnotnil
     for _,m in pairs(POLICE_listMissions) do
         local item = {
             Title = '' .. m.id .. ' - ' .. m.type,
@@ -295,13 +298,13 @@ function updateMenuMissionPolice()
         end
         items[m] = item
     end
-
     if POLICE_currentMissions ~= nil then
-        POLICE_currentMissions = true
+        POLICE_currentMissionnotnil = true
       else
-        POLICE_currentMissions = false
+        POLICE_currentMissionnotnil = false
     end
-    updateMenuMissionPoliceeee(items,POLICE_currentMissions)
+    print(POLICE_currentMissionnotnil)
+    updateMenuMissionPoliceeee(items,POLICE_currentMissionnotnil)
 end
 
 function callPolice(type)
@@ -406,6 +409,7 @@ end)
 
 RegisterNetEvent('police:cancelCall')
 AddEventHandler('police:cancelCall',function(data)
+    print("cancel")
     TriggerServerEvent('police:cancelCall')
 end)
 

@@ -10,8 +10,8 @@ vigneron_car = {
 }
 
 vigneron_pay = {
-	minimum = 70,
-	maximum = 70
+	minimum = 35,
+	maximum = 35
 }
 
 
@@ -22,7 +22,7 @@ vigneron_blips = {
 		y=2049.232421875,
 		z=140.179965209961,
 		distanceBetweenCoords=25,
-		distanceMarker=5,
+		distanceMarker=45,
 		defaultTime=2000
 	},
 	["Garage"] = {
@@ -31,7 +31,7 @@ vigneron_blips = {
 		y=2026.55590820313,
 		z=140.000173339844,
 		distanceBetweenCoords=25,
-		distanceMarker=5,
+		distanceMarker=45,
 		defaultTime=2000
 	},
 	["Vigne"] = {

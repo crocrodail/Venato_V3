@@ -16,12 +16,12 @@ local defaultNotification = {
 	logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
   }
 
-	function updateMenuMissionPoliceeee(newUrgenceMenu)
+	function updateMenuMissionPoliceeee(newUrgenceMenu, bool)
 		missionP = newUrgenceMenu
     alreadyTakeMission = bool
 end
 
-function openMenuPoliceGeneral(rank)
+function openMenuPoliceGeneral()
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', "Police", "<small>"..rank.."</small>", '#1565C099', "https://www.lunel.com/sites/default/files/styles/tetiere/public/tetiere/menu_icon_2939.jpg?itok=q2gesIzz")
 
@@ -43,7 +43,7 @@ function openMenuPoliceGeneral(rank)
     TriggerEvent('Menu:Open')
 end
 
-function policeGetMissionMenu(rank)
+function policeGetMissionMenu()
   Menu.clearMenu()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "openMenuPoliceGeneral", rank, '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   for k,v in pairs(missionP) do

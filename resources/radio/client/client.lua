@@ -18,7 +18,7 @@ end
 
 function enableRadio(enable)
 
-  --SetNuiFocus(true, true)
+  SetNuiFocus(true, true)
   radioMenu = enable
 
   SendNUIMessage({
@@ -64,12 +64,13 @@ RegisterNUICallback('joinRadio', function(data, cb)
 
     if tonumber(data.channel) ~= tonumber(getPlayerRadioChannel) then
         if tonumber(data.channel) <= Config.RestrictedChannels then
-          if(DataUser.NameJob == 'police' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
+          print(DataUser.NameJob)
+          if(DataUser.NameJob == 'Policier' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
             exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
             exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(data.channel), true);
             exports.tokovoip_script:addPlayerToRadio(tonumber(data.channel))
             VenatoNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
-          elseif not (DataUser.NameJob == 'police' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
+          elseif not (DataUser.NameJob == 'Policier' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
             --- info że nie możesz dołączyć bo nie jesteś policjantem
             VenatoErrorNotify(Config.messages['restricted_channel_error'])
           end
@@ -114,7 +115,7 @@ end)
 RegisterNUICallback('escape', function(data, cb)
 
     enableRadio(false)
-    --SetNuiFocus(false, false)
+    SetNuiFocus(false, false)
 
 
     cb('ok')
@@ -166,8 +167,7 @@ Citizen.CreateThread(function()
               if radioMenu then
                 enableRadio(false)
               else
-                TriggerEvent("ls-radio:use")
-                print("use")
+                TriggerServerEvent("Radio:CallData")
               end
             end
         Citizen.Wait(0)
@@ -178,9 +178,7 @@ end)
 RegisterNetEvent('Radio:CallData:cb')
 AddEventHandler('Radio:CallData:cb', function(data)
   DataUser = data
-  SendNUIMessage({
-      type = "click"
-  })
+  TriggerEvent("ls-radio:use")
 end)
 
 function VenatoNotify(text)

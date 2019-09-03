@@ -21,10 +21,6 @@ end
 
 Citizen.CreateThread(function()
   Citizen.Wait(5000)
-  RequestAnimDict("mini@cpr@char_b@cpr_def")
-  while not HasAnimDictLoaded("mini@cpr@char_b@cpr_def") do
-  Citizen.Wait(0)
-  end
   while true do
     Citizen.Wait(0)
 		playerPed = GetPlayerPed(-1)
@@ -38,11 +34,13 @@ Citizen.CreateThread(function()
       local coordPed = GetEntityCoords(playerPed, true)
       NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
       Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
+      FreezeEntityPosition(playerPed, true)
       ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
       SetEntityHealth(playerPed, 100)
     end
     if dead then
       DisableControlAction(0, Keys['F2'], true)
+      --Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 2})
     end
   end
 end)
@@ -100,6 +98,7 @@ Citizen.CreateThread(function()
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
       dead = false
+      FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(true)
       TriggerServerEvent("Death:health", false)
@@ -141,6 +140,7 @@ end
 function RespawnHospital()
   dead = false
   TriggerServerEvent("Death:health", false)
+  FreezeEntityPosition(GetPlayerPed(-1), false)
   LiveFreezeNeed(false)
   fCanCancelOrStartAnim(true)
   NetworkResurrectLocalPlayer(CoordHospital.x, CoordHospital.y, CoordHospital.z, 0, false, false, false)
@@ -202,6 +202,26 @@ AddEventHandler("Death:Reanimation", function(who, coord, heading)
   end
 end)
 
+RegisterNetEvent("vnt:heal:cb")
+AddEventHandler("vnt:heal:cb", function()
+  SetEntityHealth(Venato.GetPlayerPed(), 200.0)
+  TriggerServerEvent("Death:health", false)
+end)
+
+RegisterNetEvent("vnt:resurect:cb")
+AddEventHandler("vnt:resurect:cb", function()
+  local coord = GetEntityCoords(Venato.GetPlayerPed(), false)
+  local heading = GetEntityHeading(Venato.GetPlayerPed())
+  FreezeEntityPosition(Venato.GetPlayerPed(), false)
+  NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
+  ClearPedTasksImmediately(Venato.GetPlayerPed())
+  Venato.resurect()
+  TriggerServerEvent("Death:health", false)
+  LiveFreezeNeed(false)
+  fCanCancelOrStartAnim(true)
+  SetEntityHealth(Venato.GetPlayerPed(), 200.0)
+end)
+
 function Reanim(char, coord, heading)
   Citizen.CreateThread(function()
     if char == "a" then
@@ -209,6 +229,7 @@ function Reanim(char, coord, heading)
       SetEntityHeading(GetPlayerPed(-1), heading-90)
     else
       dead = false
+      FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(true)
       TriggerServerEvent("Death:health", false)

@@ -19,3 +19,13 @@ AddEventHandler("Admin:ActionOnPlayer", function(action, target, msg)
 		MySQL.Async.execute("INSER INTO ban (`banned`, `banner`, `reason`, `ip`) VALUES (@banned, @banner, @reason, @ip)", {["@banned"] = DataPlayers[target].SteamId, ["@banner"] = DataPlayers[source].SteamId, ["@reason"] = msg, ["@ip"] = DataPlayers[target].Ip})
 	end
 end)
+
+RegisterNetEvent("vnt:heal")
+AddEventHandler("vnt:heal", function(target)
+	TriggerClientEvent("vnt:heal:cb", target)
+end)
+
+RegisterNetEvent("vnt:resurect")
+AddEventHandler("vnt:resurect", function(target)
+	TriggerClientEvent("vnt:resurect:cb", target)
+end)

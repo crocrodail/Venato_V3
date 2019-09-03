@@ -162,6 +162,12 @@ AddEventHandler('police:getAllCopsInService', function()
 	TriggerClientEvent("police:resultAllCopsInService", source, inServiceCops)
 end)
 
+RegisterServerEvent('police:getAllCopsInServiceNb')
+AddEventHandler('police:getAllCopsInServiceNb', function()
+	local mysource = source
+	TriggerClientEvent('illegal:setcop', mysource, #inServiceCops)
+end)
+
 RegisterServerEvent('police:checkingPlate')
 AddEventHandler('police:checkingPlate', function(plate, model)
 	local mysource = source

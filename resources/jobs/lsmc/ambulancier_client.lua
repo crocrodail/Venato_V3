@@ -1,4 +1,5 @@
 ambulancierIsInService = false
+myVehiculeEntity = nil
 local AdminCheatIsOn = false
 local TimeToRespawn = 0
 
@@ -49,26 +50,26 @@ local TEXTAMBUL = {
 -- restart ambu
 ambulancier_platesuffix="Ambul" --Suffix de la plaque d'imat
 ambulancier_car = {
-	x=-488.4365,
-	y=-342.8523,
+	x=1144.423,
+	y=-1611.502,
 	z=34.3645,
-	h=261.860,
+	h=3.860,
 OverPowered=15.0,
 }
 
 ambulancier_emer = { --sotir voiture
-	x=-54.4365,
-	y=-1107.8929,
-	z=26.3611,
-    h=262.1448,
+	x=1141.451,
+	y=-1607.536,
+	z=34.693,
+    h=260.1448,
     OverPowered=1.0,
 }
 
 ambulancier_helico = {
-x=-450.8135,
-y=-305.3313,
-z=78.1682,
-h=20.0718,
+  x=1128.2455,
+  y=-1613.4538,
+  z=34.1681,
+  h=260.0718,
 OverPowered=1.0,
 }
 
@@ -84,18 +85,18 @@ distanceMarker=1,
 
 ["Garage d\'entreprise"] = {
 id=50,
-	x=-496.3586,
-	y=-336.0274,
-	z=33.5016,
+x=1141.423,
+y=-1598.502,
+z=33.9,
 distanceBetweenCoords=2,
 distanceMarker=1
 },
 
 ["Heliport"] = {
 id=43,
-x=-439.2455,
-y=-321.4538,
-z=77.1681,
+x=1128.2455,
+y=-1613.4538,
+z=34.1681,
 distanceBetweenCoords=2,
 distanceMarker=1
 }
@@ -130,13 +131,9 @@ end
 end
 
 function spawnVehicule(pos, type)
-  deleteVehicle()
-  RequestModel(type)
-  while not HasModelLoaded(type) do
-    Wait(100)
-  end
   local plate = math.random(1000, 9000)
-  Venato.CreateVehicle(string.upper(type), {pos.x, pos.y, pos.z}, pos.h, function(vehicle)
+  AmbuldeleteVehicle()
+  Venato.CreateVehicle(string.upper(type), {x=tonumber(pos.x), y=tonumber(pos.y), z=tonumber(pos.z)}, tonumber(pos.h), function(vehicle)
     myVehiculeEntity = vehicle
 		if type == "polmav" then
 			SetVehicleLivery(myVehiculeEntity, 1)
@@ -147,6 +144,7 @@ function spawnVehicule(pos, type)
 		end
     SetVehicleNumberPlateText(myVehiculeEntity, "Amb"..plate)
     SetVehicleOnGroundProperly(myVehiculeEntity)
+    SetPedIntoVehicle(GetPlayerPed(-1), myVehiculeEntity, -1)
 		plate = GetVehicleNumberPlateText(myVehiculeEntity)
     TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(myVehiculeEntity)))
 
@@ -169,7 +167,7 @@ function invokeVehicle(data)
   elseif data.type == 7 then
         spawnVehicule(ambulancier_emer, "rsb_mbsprinter")
   elseif data.type == -1 then
-        deleteVehicle()
+        AmbuldeleteVehicle()
     end
 end
 
@@ -349,6 +347,7 @@ function leaveserv()
   TriggerServerEvent('ambulancier:endService')
   Menu.close()
   toogleServiceAmbulancier()
+  TriggerEvent("Venato:LoadClothes")
 end
 
 local function gestionServiceAmbulancier()
@@ -379,9 +378,9 @@ local function gestionServiceAmbulancier()
           DrawMarker(1, ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
             ClearPrints()
             SetTextEntry_2("STRING")
-            AddTextComponentString("Appuyez sur ~g~ENTREE~s~ pour faire sortir/ranger votre ~b~vehicule")
+            AddTextComponentString("Appuyez sur ~g~E~s~ pour faire sortir/ranger votre ~b~vehicule")
             DrawSubtitleTimed(2000, 1)
-            if IsControlJustPressed(1, KEY_ENTER) then
+            if IsControlJustPressed(1, 38) then
                 openMenuChoixVehicleAmbulancier()
             end
         end
@@ -392,9 +391,9 @@ local function gestionServiceAmbulancier()
           DrawMarker(1, ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
             ClearPrints()
             SetTextEntry_2("STRING")
-            AddTextComponentString("Appuyez sur ~g~ENTREE~s~ pour faire appairaitre/ranger votre ~b~vehicule")
+            AddTextComponentString("Appuyez sur ~g~E~s~ pour faire appairaitre/ranger votre ~b~vehicule")
             DrawSubtitleTimed(2000, 1)
-            if IsControlJustPressed(1, KEY_ENTER) then
+            if IsControlJustPressed(1, 38) then
                 openMenuChoixHelicoAmbulancier()
             end
         end
@@ -570,12 +569,10 @@ function showInfoJobsAmbulancier()
     DrawText(offsetX - 0.065, offsetY -0.002)
 end
 
-function deleteVehicle()
-    if myVehiculeEntity ~= nil then
-        local plateOfVehicule = GetVehicleNumberPlateText(myVehiculeEntity)
-        DeleteVehicle(myVehiculeEntity)
-        myVehiculeEntity = nil
-    end
+function AmbuldeleteVehicle()
+  if myVehiculeEntity ~= nil then
+    Venato.DeleteCar(myVehiculeEntity)
+  end
 end
 
 Citizen.CreateThread(function()
@@ -630,7 +627,6 @@ RegisterNetEvent('job:deleteBlips')
 AddEventHandler('job:deleteBlips', function ()
     isAmbulancier = false
 	TriggerServerEvent('ambulancier:endService')
-    TriggerServerEvent("skin_customization:SpawnPlayer")
     removeBlipAmbulancier()
 end)
 
@@ -781,7 +777,7 @@ function()
           TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
           Citizen.Wait(8000)
           ClearPedTasks(GetPlayerPed(-1));
-          TriggerServerEvent('ambulancier:healHim',GetPlayerServerId(ClosePlayer))
+          TriggerServerEvent('ambulancier:healHim',GetPlayerServerId(a))
         else
           Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
@@ -791,8 +787,9 @@ RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',
 function()
         local closestPlayer, closestDistance, a = Venato.ClosePlayer()
+          TriggerServerEvent('ambulance:getInfoReanim')
         if closestDistance < 2.0 and closestDistance ~= -1 then
-          TriggerServerEvent('ambulance:getInfoReanim', GetPlayerServerId(ClosePlayer))
+          TriggerServerEvent('ambulance:getInfoReanim', GetPlayerServerId(a))
 
         else
             Venato.notifyError(TEXTAMBUL.NoPatientFound)
@@ -819,11 +816,11 @@ end)
 
 RegisterNetEvent('ambulancier:MakePay')
 AddEventHandler('ambulancier:MakePay', function()
-        local closestPlayer, closestDistance = Venato.ClosePlayer()
+        local closestPlayer, closestDistance, a= Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             local montant = Venato.OpenKeyboard('', '0', 10,"Montant du paiement")
             if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
-        			TriggerServerEvent("ambulancier:Makepayement", GetPlayerServerId(ClosePlayer), montant)
+        			TriggerServerEvent("ambulancier:Makepayement", GetPlayerServerId(a), montant)
         		else
         			Venato.notifyError("Le montant indiqué est erroné.")
         		end

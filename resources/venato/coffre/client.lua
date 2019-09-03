@@ -139,7 +139,7 @@ function CoffreTakeWeapon(row)
   if DataCoffre[row[1]].weapon[row[2]].poid + DataUser.Poid <= DataUser.PoidMax then    
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
-    Venato.notifyError("Vous etes trop lourd pour prendre l'arme.")
+    Venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
   end
   OpenCoffre(row[1])
 end

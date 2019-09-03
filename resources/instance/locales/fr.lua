@@ -1,3 +1,4 @@
+Locales = {}
 Locales['fr'] = {
   ['left_instance'] = 'vous avez quitté l\'instance',
   ['invite_expired'] = 'invitation expirée',

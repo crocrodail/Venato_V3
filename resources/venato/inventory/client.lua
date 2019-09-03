@@ -7,7 +7,7 @@ local dropItem = "prop_cs_box_clothes"
 local PapierOpen = 0
 
 local defaultNotification = {
-  name = "Inventaire",
+  title = "Inventaire",
   type = "alert",
   logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
 }
@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." "..v.libelle.." .")
+							Venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
@@ -90,7 +90,7 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.qty.." € .")
+							Venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." € .")
 						end
 					end
 				elseif dis < 10 then
@@ -120,7 +120,7 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							Venato.notifyError("Vous etes trop lourd pour ramasser "..v.libelle.." .")
+							Venato.notifyError("Vous n'avez pas assez de place pour "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
@@ -147,7 +147,10 @@ function debuge()
   TriggerServerEvent("debuge")
 end
 
-function OpenInventory()
+function OpenInventory(wait)
+  if wait ~= nil then
+    Citizen.Wait(wait)
+  end
   TriggerEvent('Menu:Init', "00 / 20 Kg", "Inventaire", '#01579B99',
     "https://www.expertpublic.fr/wp-content/uploads/2019/01/se-faire-argent-de-poche.jpg")
   TriggerServerEvent("Inventory:ShowMe")
@@ -412,7 +415,7 @@ function ShowIdCard(data)
         "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
-        "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
+        --"&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
         "&url=" .. Venato.ConvertUrl(data.Url)
     })
   else
@@ -567,7 +570,7 @@ function UseItem(table)
   if table[1] - 1 >= 0 then
     TriggerServerEvent("Inventory:DataItem", table[2], table[1])
     Menu.clearMenu()
-    Citizen.Wait(1000)
+    --Citizen.Wait(1000)
     OpenInventory()
   else
     Venato.notifyError("Error !")
@@ -596,7 +599,7 @@ AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, 
       TriggerServerEvent("Inventory:SetItem", table[1] - nb, table[2])
       TriggerServerEvent("Inventory:SetItem", qty + nb, table[2], ClosePlayer)
     else
-      Venato.notifyError("La personne est trop lourde pour ces items.")
+      Venato.notifyError("L'inventaire de la personne est plein pour ces items.")
     end
   else
     Venato.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")

@@ -81,19 +81,19 @@ end
 function DeliveryJob.mainLoop()
   if DeliveryJob.isEnabled() then
     local player = GetPlayerPed(-1)
+    local dropPoint = DeliveryJobConfig.trunkDrops['box']
+    
     while true do
       Wait(0)
 
       interactTxt = false
 
       if JobsConfig.inService then
-        local playerPos = GetEntityCoords(player)
-        local dropPoint = DeliveryJobConfig.trunkDrops['box']
-
-        distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
-
-        if distance < 20 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player, false)) ==
-          GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then
+        local playerPos = GetEntityCoords(GetPlayerPed(-1))
+        local distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
+        
+        if distance < 45 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player, false)) ==
+          GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then          
           DrawMarker(27, dropPoint.x, dropPoint.y, dropPoint.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
             174, 0, 0, 0, 0)
         end
@@ -105,7 +105,6 @@ function DeliveryJob.mainLoop()
         elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
           DeliveryJobConfig.onTrunkDrop = nil
         end
-
         if DeliveryJobConfig.boxCoord ~= {} and (not DeliveryJobConfig.boxOnForklift or DeliveryJobConfig.boxOnTrunk) then
           for i, v in ipairs(DeliveryJobConfig.boxCoord) do
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, playerPos["x"], playerPos["y"], playerPos["z"],
@@ -127,7 +126,7 @@ function DeliveryJob.mainLoop()
           for i, v in ipairs(DeliveryJobConfig.boxCoord) do
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z + 0.9,
               playerPos["x"], playerPos["y"], playerPos["z"],
-              true)
+              true)              
             if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
               Venato.InteractTxt(PUT_BOX_ON_GROUND_ACTION_MSG)
@@ -143,7 +142,7 @@ function DeliveryJob.mainLoop()
           local distance = GetDistanceBetweenCoords(
             DeliveryJobConfig.trunkCoord.x, DeliveryJobConfig.trunkCoord.y, DeliveryJobConfig.trunkCoord.z + 0.9,
             playerPos["x"], playerPos["y"], playerPos["z"],
-            true)
+            true)            
           if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
             false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
             Venato.InteractTxt(PUT_BOX_ON_TRUNK_ACTION_MSG)
@@ -163,7 +162,7 @@ function DeliveryJob.mainLoop()
           DrawRect(0.1, 0.3, 0.2, 0.4, 0, 0, 0, 150)
           printTxt("~y~Commande :", 0.1, 0.1, true, 0.8)
           local y_ = 0.15
-          DeliveryJobConfig.orderComplete = false
+          DeliveryJobConfig.orderComplete = true
           for _, item in pairs(DeliveryJobConfig.order) do
             local alreadyTaken = DeliveryJobConfig.itemsTrunk[item.id] or 0
             local checkBox = item.quantity - alreadyTaken > 0 and "~r~[ ]~b~" or "~g~[x]~b~"
@@ -184,7 +183,7 @@ function DeliveryJob.mainLoop()
 
         if DeliveryJobConfig.mission and DeliveryJobConfig.orderComplete and DeliveryJobConfig.currentStep == 3 then
           local destination = DeliveryJobConfig.destination
-          distance = GetDistanceBetweenCoords(playerPos, destination.x, destination.y, destination.z, true)
+          local distance = GetDistanceBetweenCoords(playerPos, destination.x, destination.y, destination.z, true)
           local boxCoord = GetEntityCoords(DeliveryJobConfig.globalBox)
           local destPos = vector3(destination.x, destination.y, destination.z)
           local boxOnDestination = GetDistanceBetweenCoords(destPos, boxCoord.x, boxCoord.y, boxCoord.z, true)
@@ -257,7 +256,7 @@ function DeliveryJob.checkLoop()
     Wait(1000)
 
     if JobsConfig.inService then
-      local playerPos = GetEntityCoords(player)
+      local playerPos = GetEntityCoords(GetPlayerPed(-1))
       local obj = GetClosestObjectOfType(playerPos.x, playerPos.y, playerPos.z,
         DeliveryJobConfig.inWarehouse and 1. or 4.0,
         GetHashKey(DeliveryJobConfig.BOX_KEY), false, true, true)
@@ -293,13 +292,13 @@ function DeliveryJob.checkLoop()
       local playerPos = GetEntityCoords(player)
       if playerPos.z <= -38 and playerPos.x >= 992.29 and playerPos.x <= 1027.76 and playerPos.y >= -3113.05 and playerPos .y <= -3090.70 then
         showBigWarehouseBoxes()
-        DeliveryJobConfig.inWarehouse = "Misc"
+        DeliveryJobConfig.inWarehouse = "Autre"
       elseif playerPos.z <= -38 and playerPos.x >= 1048.35 and playerPos.x <= 1073.10 and playerPos.y >= -3110.9 and playerPos .y <= -3094.4 then
         showMiddleWarehouseBoxes()
-        DeliveryJobConfig.inWarehouse = "Foods"
+        DeliveryJobConfig.inWarehouse = "Nourriture"
       elseif playerPos.z <= -38 and playerPos.x >= 1088.27 and playerPos.x <= 1105.1 and playerPos.y >= -3103.0 and playerPos .y <= -3095.5 then
         showLittleWarehouseBoxes()
-        DeliveryJobConfig.inWarehouse = "Juice"
+        DeliveryJobConfig.inWarehouse = "Boisson"
       else
         hideWarehouseBoxes()
         DeliveryJobConfig.inWarehouse = nil
@@ -359,7 +358,7 @@ end
 
 function addWarehousesBlip(name, point)
   if not DeliveryJobConfig.blips[name] then
-    local blip = JobTools.addBlip(point, name .. " Entrepot", 478, 2, false)
+    local blip = JobTools.addBlip(point,"Entrepot "..name, 408, 2, false)
     DeliveryJobConfig.blips[name] = blip
   end
 end
@@ -579,9 +578,6 @@ function hideWarehouseBoxes()
 end
 
 function showWarehouseItemButtons()
-  print(Venato.dump(DeliveryJobConfig.warehouses))
-  print(Venato.dump(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse]))
-  print(Venato.dump(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse].items))
   for _, item in pairs(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse]["items"]) do
     Menu.addButton2(item.libelle, "takeItem", item, '', item.Picture)
   end
@@ -609,7 +605,7 @@ function putItemInTrunk(item)
     DeliveryJobConfig.itemsTrunk[id] = _qty
   end
   DeliveryJobConfig.itemsTaken = {}
-  JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchendises dans le camion</span"
+  JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchandises dans le camion</span"
   Venato.notify(JobsConfig.jobsNotification)
 end
 

@@ -22,6 +22,7 @@ local noclip = false
 local noclip_pos
 local heading = 0
 local visible = true
+local DataAdmin = nil
 
 function ResetDefaultNotification()
   defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
@@ -29,25 +30,28 @@ end
 
 function openVenatoadmin()
   Menu.clearMenu()
+  Menu.open()
   AdminShowPlayerInfo = nil
-  if DataUser.Group == "Admin" or DataUser.Group == "Modo" then
-  Menu.setTitle("Venato Admin Menu")
-  Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
-  Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
-  Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
-  Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
+  print(AdminDataPlayers[ClientSource].Group)
+  if AdminDataPlayers[ClientSource].Group == "Admin" or AdminDataPlayers[ClientSource].Group == "Modo" then
+    Menu.setTitle("Venato Admin Menu")
+    Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
+    Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
+    Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
+    Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
   end
-  if DataUser.Group == "Admin" then
-  Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
-  Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
-  Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
-  Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
-  Menu.addButton("Jesus Christ", "respawntest", nil) --  non attribuer (revive)
-  Menu.addButton("Revive joueur ~r~(Non attribuer)", "none", nil) -- non attribuer
-  Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
-  Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
-  Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
-  --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
+  if AdminDataPlayers[ClientSource].Group == "Admin" then
+    Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
+    Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
+    Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
+    Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
+    Menu.addButton("Jesus Christ", "respawntest", nil)
+    Menu.addButton("Revive joueur", "revivevnt", nil) -- non attribuer
+    Menu.addButton("heal joueur", "healvnt", nil)
+    Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
+    Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
+    Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
+    --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
   if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
     Menu.addButton("noClip", "AdminNoClip", nil)
@@ -56,12 +60,34 @@ function openVenatoadmin()
 end
 end
 
-function AdminInvisible()
-  visible = not visible
-  if visible then
-    SetEntityVisible(Venato.GetPlayerPed(), true, nil)
+function revivevnt()
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("vnt:resurect", ClosePlayer)
   else
-    SetEntityVisible(Venato.GetPlayerPed(), false, nil)
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
+end
+
+function healvnt()
+  local ClosePlayer, distance = Venato.ClosePlayer()
+  if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
+    TriggerServerEvent("vnt:heal", ClosePlayer)
+  else
+    Venato.notifyError("Il n'y a personne à proximité.")
+  end
+end
+
+function AdminInvisible(value)
+  if value ~= nil then
+    SetEntityVisible(Venato.GetPlayerPed(), value, nil)
+  else
+    visible = not visible
+    if visible then
+      SetEntityVisible(Venato.GetPlayerPed(), true, nil)
+    else
+      SetEntityVisible(Venato.GetPlayerPed(), false, nil)
+    end
   end
 end
 
@@ -109,6 +135,7 @@ end)
 function respawntest()
   local coord = GetEntityCoords(Venato.GetPlayerPed(), false)
   local heading = GetEntityHeading(Venato.GetPlayerPed())
+  FreezeEntityPosition(Venato.GetPlayerPed(), false)
   NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
   ClearPedTasksImmediately(Venato.GetPlayerPed())
   Venato.resurect()
@@ -298,6 +325,7 @@ end
 RegisterNetEvent("Admin:CallDataUsers:cb")
 AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
   Menu.clearMenu()
+  DataUser = dataPlayers[1]
   AdminDataPlayers = dataPlayers
   ClientSource = DataSource
   openVenatoadmin()
@@ -425,10 +453,12 @@ function AdminSpectate()
       SetCamActive(cam,  true)
       RenderScriptCams(true,  false,  0,  true,  true)
       InSpectatorMode = true
+      AdminInvisible(true)
     end)
   else
     InSpectatorMode = false
       TargetSpectate  = nil
+      AdminInvisible(false)
       local playerPed = Venato.GetPlayerPed()
       SetCamActive(cam,  false)
       RenderScriptCams(false,  false,  0,  true,  true)
@@ -573,8 +603,8 @@ Citizen.CreateThread(function()
       Keys["G"]) and GetLastInputMethod(2) and open == false then
       open = true
       if Menu.hidden == true then
+        print("openMenu")
         TriggerServerEvent("Admin:CallDataUsers")
-        Menu.open()
       else
         Menu.close()
       end

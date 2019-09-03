@@ -39,6 +39,11 @@ local TeleportFromTo = {
     positionTo = { ['x'] = 1146.779, ['y'] = -1560.052, ['z'] = 4.945, nom = "Sortir - Hôpital" },
   },
 
+  ["Hôpital garage - Entrer - sortir"] = {
+    positionFrom = { ['x'] = 1132.591, ['y'] = -1597.225, ['z'] = 34.733, nom = "Entrer - Hôpital" },
+    positionTo = { ['x'] = 1136.334, ['y'] = -1594.335, ['z'] = 4.945, nom = "Sortir arrière Hôpital" },
+  },
+
   ["Life invader - Réunion"] = {
     positionFrom = { ['x'] = -1048.93, ['y'] = -238.589, ['z'] = 44.0211, nom = "Entrer - Salle de réunion" },
     positionTo = { ['x'] = -1046.62, ['y'] = -237.523, ['z'] = 44.0211, nom = "Sortir - Salle de réunion" },

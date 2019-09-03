@@ -52,7 +52,6 @@ end
 
 function OpenVehicleCoffre()
   open = true
-  Menu.open()
   SetVehicleDoorOpen(CloseVehicle, 5, false, false)
   local plate = GetVehicleNumberPlateText(CloseVehicle)
   local class = GetVehicleClass(CloseVehicle)
@@ -77,6 +76,7 @@ end)
 RegisterNetEvent("VehicleCoffre:CallData:cb")
 AddEventHandler("VehicleCoffre:CallData:cb", function(data, user)
   VehicleData = data
+  print(Venato.dump(VehicleData))
   DataUser = user
   OpenMenuCv()
 end)
@@ -88,14 +88,13 @@ end)
 
 function OpenMenuCv()
   Menu.clearMenu()
-  local color = ""
+  local color = "<span>"
   if VehicleData.nbItems > VehicleData.itemcapacite - (VehicleData.itemcapacite*10/100) then
-    color = "<span class='green--red'>"
+    color = "<span class='red--text'>"
   elseif VehicleData.nbItems > VehicleData.itemcapacite - (VehicleData.itemcapacite*25/100) then
-    color = "<span class='green--orange'>"
+    color = "<span class='orange--text'>"
   end
-  Menu.setTitle( color..""..VehicleData.nbItems.."</span> / "..VehicleData.itemcapacite)
-  Menu.setSubtitle( "Coffre")
+  TriggerEvent('Menu:Init', color..""..VehicleData.nbItems.."</span> / "..VehicleData.itemcapacite, "Coffre", '#2E7D3299', "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYDjg60jfde2J-ii7xbyTuU8K8FC1vjK2ebUNTrchvqbTIGI68Xg")
   Menu.addItemButton("<span class='red--text'>Fermer le coffre</span>", "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CloseVehicleCoffre", nil)
   Menu.addItemButton("Armes", "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png", "WeaponCoffreVehicle", nil)
   Menu.addItemButton("----------------------- items -----------------------",nil, "none", nil)
@@ -103,6 +102,8 @@ function OpenMenuCv()
   for k,v in pairs(VehicleData.inventaire) do
     Menu.addItemButton(""..v.libelle.." : </span><span class='red--text'>"..v.quantity.."</span>", v.picture, "OptionItemsCv", k)
   end
+  Menu.CreateMenu()
+  Menu.open()
 end
 
 function WeaponCoffreVehicle()
@@ -117,18 +118,19 @@ end
 
 function DropItemCv()
   Menu.clearMenu()
-  Menu.setTitle( "mon inventaire")
+  Menu.setTitle( "Mon inventaire")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
   for k,v in pairs(DataUser.Inventaire) do
     if v.quantity ~= 0 then
-      Menu.addItemButton(v.libelle.." : <span class='red--text'>"..v.quantity.."</span>", v.picture, "ConfDropItemCv", k)
+      Menu.addItemButton(v.libelle.." : <span class='red--text'>"..v.quantity.."</span>", v.picture, "ConfDropItemCv", v.id)
     end
   end
 end
 
 function ConfDropItemCv(index)
-  local qty =  tonumber(Venato.OpenKeyboard('', '0', 10,"Nombre à déposer"))
+  local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à déposer")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
+  print("ConfDropItemCV - index : "..index.." qte : ".. qty .. " plate : " .. plate)
   if qty ~= nil and qty ~= 0 then
     TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
     OpenMenuCv()
@@ -139,12 +141,12 @@ end
 
 function OptionItemsCv(index)
   Menu.clearMenu()
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "WeaponCoffreVehicle", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenMenuCv", nil)
   Menu.addButton("Prendre", "GetItemCv", index)
 end
 
 function GetItemCv(index)
-  local qty =  Venato.OpenKeyboard('', '0', 10,"Nombre à prendre")
+  local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à prendre")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("VehicleCoffre:TakeItems",index, qty, plate)
@@ -175,7 +177,7 @@ end
 function DropConfirmWeaponCv(index)
   if VehicleData.nbWeapon + 1 <= VehicleData.maxWeapon then
     Menu.clearMenu()
-    Menu.setTitle( "Confirmation")
+    Menu.setTitle("Confirmation")
     Menu.setSubtitle( "Voulez vous vraiment déposer l'arme ?")
     Menu.addButton("<span class='red--text'>Non</span>", "DropWeaponCv", nil)
     Menu.addButton("<span class='green--text'>Déposer l'arme dans le coffre</span>", "CoffreVehicleDropWp", index)

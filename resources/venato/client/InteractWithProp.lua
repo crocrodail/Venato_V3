@@ -4,6 +4,7 @@ local Prop = nil
 local PropData = {
 	["v_med_emptybed"] = {text = "Pour s'allonger", x = 0.0, y = -0.25, z = 1.2, h = 90.0, anim = {lib = "timetable@tracy@sleep@", anim = "idle_c", flag = 1}},
 	["V_Med_bed2"] = {text = "Pour s'allonger", x = 0.0, y = 0.2, z = 1.4, h = -90.0, anim = {lib = "timetable@tracy@sleep@", anim = "idle_c", flag = 1}},
+	["V_ilev_chair02_ped"] = {text = "Pour s'assoire", x = 0.0, y = 0.0, z = 0.0, h = 180.0, anim = {lib = "nil", anim = "PROP_HUMAN_SEAT_CHAIR_UPRIGHT", flag = 1}},
 }
 --V_Med_fabricchair1
 --xm_lab_chairarm_24
@@ -37,13 +38,19 @@ Citizen.CreateThread(function()
 				if not AttachOnProp then
 					AttachEntityToEntity(Venato.GetPlayerPed(), Prop, nil, PropData[NextTo].x, PropData[NextTo].y, PropData[NextTo].z, 0.0, 0.0, PropData[NextTo].h, false, false, false, false, 2, true)
 					if PropData[NextTo].anim ~= false then
-						Venato.playAnim({lib = PropData[NextTo].anim.lib, anim = PropData[NextTo].anim.anim, useLib = true, flag = PropData[NextTo].anim.flag})
+						local Libb = true
+						if PropData[NextTo].anim.lib == 'nil' then
+							Libb = false
+						end
+						Venato.playAnim({lib = PropData[NextTo].anim.lib, anim = PropData[NextTo].anim.anim, useLib = Libb, flag = PropData[NextTo].anim.flag})
 						AttachOnProp = true
+						FreezeEntityPosition(GetPlayerPed(-1), true)
 					end
 				else
 					AttachOnProp = false
 					DetachEntity(Venato.GetPlayerPed())
 					ClearPedTasks(GetPlayerPed(-1))
+					FreezeEntityPosition(GetPlayerPed(-1), false)
 				end
 			end
 		end

@@ -59,10 +59,11 @@ function AmbulancierPlaceObjet()
 end
 
 function openMenuChoixVehicleAmbulancier()
+  Menu.open()
   Menu.clearMenu()
   Menu.setTitle('Ambulancier - Choix du véhicule')
   TriggerEvent('Menu:AddButton2',"Ambulance", "invokeVehicle", {type = 1}, '', "")
-  TriggerEvent('Menu:AddButton2',"Vehicule de médecin", "invokeVehicle", {type = 3}, '', "")
+--  TriggerEvent('Menu:AddButton2',"Vehicule de médecin", "invokeVehicle", {type = 3}, '', "")
   TriggerEvent('Menu:AddButton2',"Quad Emergency", "invokeVehicle", {type = 4}, '', "")
   TriggerEvent('Menu:AddButton2',"Corbillard", "invokeVehicle", {type = 5}, '', "")
   TriggerEvent('Menu:AddButton2',"Ranger le vehicule", "invokeVehicle", {type = -1}, '', "")
@@ -70,7 +71,8 @@ function openMenuChoixVehicleAmbulancier()
 end
 
 function openMenuChoixHelicoAmbulancier()
-  Menu.clearmenu()
+  Menu.open()
+  Menu.clearMenu()
   Menu.setTitle('Ambulancier - Choix du véhicule')
   TriggerEvent('Menu:AddButton2',"Helico", "invokeVehicle", {type = 2}, '', "")
   TriggerEvent('Menu:AddButton2',"Ranger le vehicule", "invokeVehicle", {type = -1}, '', "")

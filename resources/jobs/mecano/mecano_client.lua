@@ -447,9 +447,11 @@ local function toogleService()
 		end)
         --TriggerServerEvent('mecano:takeService')
         TriggerServerEvent('mecano:requestMission')
+        TriggerServerEvent("venato:setService", "mecano", true)
         mecano_showHelp = false
     else
         -- Restaure Ped
+        TriggerServerEvent("venato:setService", "mecano", false)
         TriggerServerEvent('mecano:endService')
         TriggerEvent("Venato:LoadClothes")
     end
@@ -1206,7 +1208,6 @@ end)
 
 --=== restart depanneur
 function acceptMissionMeca(data)
-  print("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee TAMER")
     local mission = data.mission
 
     -- currentMissions = mission

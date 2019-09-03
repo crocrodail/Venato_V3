@@ -15,24 +15,25 @@ RegisterServerEvent('Death:ComaOrNot')
 AddEventHandler('Death:ComaOrNot', function(killer, causeOfDeath)
   local source = source
   Cause[source] = causeOfDeath
-  if killer ~= nil then
-	  if shooting[killer] == false then
-		  TriggerClientEvent("Death:ComaOrNot:cb", source, true)
-	  else
-		  TriggerClientEvent("Death:ComaOrNot:cb", source, false)
-    end
-  else
+  print(killer)
+  if killer == 0 then
     TriggerClientEvent("Death:ComaOrNot:cb", source, false)
+  else
+	  if shooting[killer] == true then
+		  TriggerClientEvent("Death:ComaOrNot:cb", source, false)
+	  else
+	    TriggerClientEvent("Death:ComaOrNot:cb", source, true)
+    end
   end
 end)
 
 RegisterServerEvent('Death:health')
 AddEventHandler('Death:health', function(bool, health)
   local source = source
-  local health = health or 100
+  local health = health or 200
   if bool == true then
     health = 0
   end
-  DataPlayers[source].Health = health
+  DataPlayers[source].Health = health --- eroor sometime
   MySQL.Async.execute("UPDATE users SET health = @health WHERE identifier = @steamId", {["health"] = health, ["steamId"] = DataPlayers[source].SteamId })
 end)

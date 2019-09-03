@@ -63,12 +63,12 @@ function menuBank(data)
   Menu.setSubtitle("Options")
   Menu.clearMenu()
   if data.Account == 'aucun' then
-    Menu.addButton("Créer un compte banquaire pour ~g~1 000 €", "CreatAcount", data)
+    Menu.addItemButton("Créer un compte bancaire pour <span class='green--text'>1 000 €</span>", "https://i.ibb.co/6t5n3yP/icons8-merchant-account-96px.png", "CreatAcount", data)
   else
-    Menu.addButton("Mon compte", "myAcount", data)
-    Menu.addButton("Déposer un chèque", "depoCheque", data)
-    Menu.addButton("Acheter une carte ~g~1 000 €", "buyCard", data)
-    Menu.addButton("Acheter un chequier ~g~1 000 €", "buyCheque", data)
+    Menu.addItemButton("Mon compte", "https://i.ibb.co/LPxNL9M/icons8-atm-96px.png", "myAcount", data)
+    Menu.addItemButton("Déposer un chèque", "https://i.ibb.co/99492rt/drop-Cheque.png", "depoCheque", data)
+    Menu.addItemButton("Acheter une carte <span class='green--text'>1 000 €</span>", "https://i.ibb.co/3kWgbbN/icons8-mastercard-credit-card-96px.png", "buyCard", data)
+    Menu.addItemButton("Acheter un chequier <span class='green--text'>1 000 €</span>", "https://i.ibb.co/vs3ptjz/icons8-paycheque-96px-2.png", "buyCheque", data)
   end
 end
 
@@ -80,16 +80,17 @@ function depoCheque(data)
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "menuBank", data)
   for k, v in pairs(data.Documents) do
     if v.type == "cheque" then
-      Menu.addButton("Cheque de ~g~" .. v.montant .. " €", "selecChequedepot", { data, k })
+      Menu.addItemButton("Cheque de <span class='green--text'>" .. v.montant .. "</span> €", 'https://i.ibb.co/ZXZgqSF/icons8-paycheque-96px.png', "selecChequedepot", { data, k })
     end
   end
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "menuBank", data)
 end
 
 function selecChequedepot(row)
   Menu.clearMenu()
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "depoCheque", row[1])
-  Menu.addButton("Encaissé", "encaise", row)
-  Menu.addButton("~r~Annuler ce cheque", "cancelChequetest", row)
+  Menu.addItemButton("Encaisser le chèque", "https://i.ibb.co/Y3fwFnQ/icons8-request-money-96px-1.png","encaise", row)
+  Menu.addItemButton("<span class='red--text'>Annuler ce chèque</span>", "https://i.ibb.co/YXNSF7R/cancel-Check.png", "cancelChequetest", row)
 end
 
 function encaise(row)
@@ -99,10 +100,10 @@ end
 
 function cancelChequetest(row)
   Menu.clearMenu()
-  Menu.setTitle("~r~Confirmer l'annulation")
+  Menu.setTitle("<span class='red--text'>Confirmer l'annulation</span>")
   Menu.setSubtitle("Etes vous sur de vouloir annuler ce chèque ?")
-  Menu.addButton("~r~Annuler l'annulation", "selecChequedepot", row)
-  Menu.addButton("~b~Confirmer l'annulation", "cancelCheque", row)
+  Menu.addItemButton("<span class='red--text'>Annuler l'annulation</span>", "https://i.ibb.co/gg9x451/icons8-close-window-96px.png", "selecChequedepot", row)
+  Menu.addItemButton("<span class='blue--text'>Confirmer l'annulation</span>", "https://i.ibb.co/sgQMTLR/icons8-checked-96px-1.png", "cancelCheque", row)
 end
 
 function cancelCheque(row)
@@ -122,7 +123,7 @@ function buyCheque(data)
       TriggerServerEvent("Bank:createCheque")
       TriggerServerEvent("Inventory:RemoveMoney", 1000)
     else
-      Venato.notifyError("~r~Vous possèdez déjà un chèquier.")
+      Venato.notifyError("Vous possèdez déjà un chèquier.")
     end
   else
     Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter un chequier.")
@@ -134,7 +135,7 @@ function buyCard(data)
     TriggerServerEvent("Bank:createCard")
     TriggerServerEvent("Inventory:RemoveMoney", 1000)
   else
-    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte banquaire.")
+    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte bancaire.")
   end
 end
 

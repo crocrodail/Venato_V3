@@ -208,7 +208,6 @@
         return dispo
     end
 
-
     RegisterServerEvent(preFixEventName .. ':takeService')
     AddEventHandler(preFixEventName .. ':takeService', function ()
         addPersonelService(source)
