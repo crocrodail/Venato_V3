@@ -2,7 +2,7 @@ local AdminDataPlayers = {}
 local ListPlayer = false
 local open = false
 local ClientSource = nil
-local defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
+local defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://i.ibb.co/mJSFL6z/icons8-error-96px.png" }
 local cheatmode = "Off"
 local wp = false
 local xtppers = "0.0"
@@ -24,39 +24,33 @@ local heading = 0
 local visible = true
 local DataAdmin = nil
 
-function ResetDefaultNotification()
-  defaultNotification = { type = "alert", title = "Staff Venato", logo = "https://img.icons8.com/dusk/64/000000/for-beginner.png" }
-end
-
 function openVenatoadmin()
   Menu.clearMenu()
   Menu.open()
   AdminShowPlayerInfo = nil
-  print(AdminDataPlayers[ClientSource].Group)
+  TriggerEvent('Menu:Init', "", "La vitamine c mais ne dira rien", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
   if AdminDataPlayers[ClientSource].Group == "Admin" or AdminDataPlayers[ClientSource].Group == "Modo" then
-    Menu.setTitle("Venato Admin Menu")
-    Menu.setSubtitle("~b~La vitamine c mais ne dira rien ")
-    Menu.addButton("~r~Fermer", "AdminCloseMenu", nil)
+    Menu.addButton("<span class='red--text'>Fermer</span>", "AdminCloseMenu", nil)
     Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
     Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
   end
   if AdminDataPlayers[ClientSource].Group == "Admin" then
     Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
     Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
-    Menu.addButton("Récupérer les clef du vehicule", "AdminGetClef", nil)
+    Menu.addButton("Récupérer les clés du vehicule", "AdminGetClef", nil)
     Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
     Menu.addButton("Jesus Christ", "respawntest", nil)
-    Menu.addButton("Revive joueur", "revivevnt", nil) -- non attribuer
-    Menu.addButton("heal joueur", "healvnt", nil)
-    Menu.addButton("Teleporte sur markeur", "AdminTpMarkeur", nil)
-    Menu.addButton("Teleporte sur Coordonées", "AdminCustomTP", nil)
+    Menu.addButton("Revive joueur", "revivevnt", nil)
+    Menu.addButton("Soigner joueur", "healvnt", nil)
+    Menu.addButton("Teleporter sur markeur", "AdminTpMarkeur", nil)
+    Menu.addButton("Teleporter sur coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
     --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
   if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
-    Menu.addButton("noClip", "AdminNoClip", nil)
-    Menu.addButton("invisible", 'AdminInvisible' , nil)
-    Menu.addButton("create Veh", 'createVeh' , nil)
+    Menu.addButton("NoClip", "AdminNoClip", nil)
+    Menu.addButton("Invisible", 'AdminInvisible' , nil)
+    Menu.addButton("Créer véhicule", 'createVeh' , nil)
   end
 end
 end
@@ -82,11 +76,15 @@ end
 function AdminInvisible(value)
   if value ~= nil then
     SetEntityVisible(Venato.GetPlayerPed(), value, nil)
+    NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), value)
   else
     visible = not visible
     if visible then
+      NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), true)
       SetEntityVisible(Venato.GetPlayerPed(), true, nil)
     else
+      
+    NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), false)
       SetEntityVisible(Venato.GetPlayerPed(), false, nil)
     end
   end
@@ -194,13 +192,10 @@ function AdminBlipsOption()
 end
 
 function AdminCustomTP()
-  Menu.setTitle("Venato Admin Menu")
-  Menu.setSubtitle("~b~La vitamine c mais ne dira rien")
   Menu.clearMenu()
-  Menu.addButton("~r~Retour", "openVenatoadmin", nil)
-  Menu.addButton("Modifier les Coordonées", "coordtp", nil)
-  Menu.addButton("Teleporte sur ~g~" .. tonumber(xtppers) .. " ~s~|~g~ " .. tonumber(ytppers) .. " ~s~|~g~ " .. tonumber(ztppers),
-    "AdminTpCustomCoord", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
+  Menu.addButton("Modifier les coordonées", "coordtp", nil)
+  Menu.addButton("Teleporte sur <span class='green--text'>" .. tonumber(xtppers) .. "</span>|<span class='green--text'> " .. tonumber(ytppers) .. " </span>|<span class='green--text'> " .. tonumber(ztppers),"AdminTpCustomCoord", nil)
 end
 
 function AdminTpCustomCoord()
@@ -326,16 +321,14 @@ end
 function AdminSendMsg()
   local msg = Venato.OpenKeyboard('', '', 1000, "Message à Envoyer")
   if msg == nil or msg == '' or msg == ' ' then
-    defaultNotification.message = "Le message est éroné !"
+    defaultNotification.message = "Le message est erroné !"
     defaultNotification.type = "error"
     Venato.notify(defaultNotification)
-    ResetDefaultNotification()
   else
     defaultNotification.message = msg
     defaultNotification.timeout = 20000
     defaultNotification.type = "warning"
     TriggerServerEvent("AdminVnT:sendMsG", defaultNotification)
-    ResetDefaultNotification()
   end
 end
 
@@ -353,17 +346,15 @@ function AdminListPlayer()
   ListPlayer = true
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
   for k, v in pairs(AdminDataPlayers) do
-    Menu.addButton("[~r~" .. k .. "~s~] " .. v.Prenom .. " " .. v.Nom .. " (~y~" .. v.Pseudo .. "~s~)",
-      "AdminPlayerOption", k, "AdminShowPlayerInfoo")
+    Menu.addButton("[<span class='red--text'>" .. k .. "</span>] " .. v.Prenom .. " " .. v.Nom .. " (<span class='yellow--text'>" .. v.Pseudo .. "</span>)","AdminPlayerOption", k, "AdminShowPlayerInfoo")
   end
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
 end
 
 function AdminPlayerOption(index)
   indexToShow = index
-  Menu.setTitle("Venato Admin Menu Player")
   Menu.clearMenu()
-  Menu.addButton("Retour", "AdminListPlayer", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "AdminListPlayer", nil)
   Menu.addButton("Spectate (Voyeur :3)", "AdminSpectate", nil)
   Menu.addButton("Kick (Pour le lol)", "AdminActionOnPlayer", "kick")
   Menu.addButton("Ban (Parceque c'est cool)", "AdminActionOnPlayer", "ban")
