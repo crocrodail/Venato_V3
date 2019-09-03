@@ -56,10 +56,13 @@ function DeliveryJob.commands()
 end
 
 function takeMission()
-  TriggerServerEvent("DeliveryJob:TakeMission")
+  TriggerServerEvent("DeliveryJob:takeMission")
 end
 
 function abortMission()
+  if DeliveryJobConfig.mission.shop ~= nil then
+    TriggerServerEvent("DeliveryJob:abortMission", DeliveryJobConfig.mission.orderId)
+  end
   DeliveryJobConfig.currentStep = nil
   DeliveryJobConfig.itemsTaken = {}
   DeliveryJobConfig.itemsTrunk = {}
@@ -362,7 +365,7 @@ end
 
 function addWarehousesBlip(name, point)
   if not DeliveryJobConfig.blips[name] then
-    local blip = JobTools.addBlip(point,"Entrepot "..name, 408, 2, false)
+    local blip = JobTools.addBlip(point, "Entrepot " .. name, 408, 2, false)
     DeliveryJobConfig.blips[name] = blip
   end
 end

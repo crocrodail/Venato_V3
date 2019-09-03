@@ -45,9 +45,6 @@ function JobTools._CreateVehicle(modelName, coordX, coordY, coordZ, heading, cb)
 end
 
 function JobTools.addBlip(position, name, blipId, blipColor, drawRoute)
-  print(name .. " - x : " .. (position.x or position.posX))
-  print(name .. " - y : " .. (position.y or position.posY))
-  print(name .. " - z : " .. (position.z or position.posZ))
   local blip = AddBlipForCoord(position.x or position.posX, position.y or position.posY, position.z or position.posZ)
   SetBlipSprite(blip, blipId)
   SetBlipColour(blip, blipColor)

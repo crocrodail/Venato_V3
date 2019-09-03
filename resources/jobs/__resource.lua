@@ -27,6 +27,7 @@ client_script {
 server_script {
   '@mysql-async/lib/MySQL.lua',
   '/main/config.lua',
+  '/delivery/config.lua',
   '/main/server/server.lua',
   '/main/server/events.lua',
   '/main/server/db.lua',
