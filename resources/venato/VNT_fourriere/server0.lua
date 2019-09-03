@@ -59,7 +59,7 @@ AddEventHandler('garagesmeca:getvehicle', function(name, plate, id , idveh)
     local currentSource = source
     local model = tostring(name)
 	  local idveh = idveh
-    local plate = string.gsub(plate, "^%s*(.-)%s*$", "%1")
+    local plate = plate
     TriggerClientEvent('garagesmeca:spawnvehicle', currentSource, model,plate, idveh)
     MySQL.Async.execute("UPDATE user_vehicle SET state=1 WHERE owner=@owner AND name like @model AND plate like @plate", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate})
 end)

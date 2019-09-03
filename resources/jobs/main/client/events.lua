@@ -56,11 +56,11 @@ AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob
   end
   notification.logo = JobsConfig.jobsNotification.logo
 
-  if primeCo > 0 then
-    notification.message = notification.message .. "<br />Prime de temps de connexion : <span class='green--text'>" .. primeCo .. " €</span>"
+  if (primeCo + salary + primeJob) > 0 and bonus > 0 then
+    notification.message = notification.message .. "<br />Bonus <span class='green--text'>x" .. bonus .. "</span>"
   end
-  if salaryCheck > 0 then
-    notification.message = notification.message .. "<br />Chèque reçu : <span class='green--text'>" .. salaryCheck .. " €</span>"
+  if primeCo > 0 then
+    notification.message = notification.message .. "<br />Prime de temps de service : <span class='green--text'>" .. primeCo .. " €</span>"
   end
   if salary > 0 then
     notification.message = notification.message .. "<br />Salaire reçu : <span class='green--text'>" .. salary .. " €</span>"
@@ -70,8 +70,8 @@ AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob
   else
     notification.message = notification.message .. "<br /><span class='orange--text'>Pas de salaire</span>"
   end
-  if (primeCo + salary + primeJob) > 0 and bonus > 0 then
-    notification.message = notification.message .. "<br />avec Bonus <span class='green--text'>" .. bonus .. " €</span>"
+  if salaryCheck > 0 then
+    notification.message = notification.message .. "<br />Gain des missions : <span class='green--text'>" .. salaryCheck .. " €</span>"
   end
   TriggerEvent("Venato:notify", notification)
 end)

@@ -56,6 +56,7 @@ function openVenatoadmin()
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
     Menu.addButton("noClip", "AdminNoClip", nil)
     Menu.addButton("invisible", 'AdminInvisible' , nil)
+    Menu.addButton("create Veh", 'createVeh' , nil)
   end
 end
 end
@@ -131,6 +132,22 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+function createVeh()
+	local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+	if DoesEntityExist(current) then
+		local model = GetEntityModel(current)
+  	local plate = GetVehicleNumberPlateText(current)
+		local name = GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(current)))
+		local currentVhl = {}
+		currentVhl.primary_red, currentVhl.primary_green, currentVhl.primary_blue   = GetVehicleCustomPrimaryColour(current);
+		currentVhl.secondary_red, currentVhl.secondary_green, currentVhl.secondary_blue = GetVehicleCustomSecondaryColour(current);
+		currentVhl.primary_type = GetVehicleModColor_1(current,0,0)
+		currentVhl.secondary_type = GetVehicleModColor_2(current,0,0)
+		currentVhl.extra ,currentVhl.wheelcolor = GetVehicleExtraColours(current);
+		TriggerServerEvent('dev:CreateVehiculeInDB',model,plate,name,currentVhl)
+	end
+end
 
 function respawntest()
   local coord = GetEntityCoords(Venato.GetPlayerPed(), false)
@@ -603,7 +620,6 @@ Citizen.CreateThread(function()
       Keys["G"]) and GetLastInputMethod(2) and open == false then
       open = true
       if Menu.hidden == true then
-        print("openMenu")
         TriggerServerEvent("Admin:CallDataUsers")
       else
         Menu.close()
