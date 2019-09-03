@@ -4,6 +4,9 @@ local defaultNotification = {
   logo = "https://img.icons8.com/officel/80/000000/bank-euro.png"
 }
 
+local plafondDepot = 15000
+local plafondRetrait = 10000
+
 RegisterServerEvent('Bank:GetDataMoneyForATM')
 AddEventHandler('Bank:GetDataMoneyForATM', function()
   local godDamn = false
@@ -29,14 +32,17 @@ end)
 RegisterServerEvent('Bank:insert')
 AddEventHandler('Bank:insert', function(amount)
 	local source = source
-	amount = tonumber(amount)
-	if amount > DataPlayers[source].Money then
+	amount = round(tonumber(amount),0)
+	if amount <= 0 or amount > DataPlayers[source].Money then
 		print("Bank: ERROR")
 	else
     TriggerEvent("Bank:AddBankMoney", amount, source)
     TriggerEvent("Inventory:RemoveMoney", amount, source)
     defaultNotification.message = 'Vous avez déposé <span class="green--text">' .. amount .. ' €</span>'
-		TriggerClientEvent('Venato:notify', source, defaultNotification)
+    TriggerClientEvent('Venato:notify', source, defaultNotification)
+    MySQL.Async.execute('INSERT INTO bank_transactions(identifier,isDepot,montant) VALUES (@SteamId,1,@amount)', {["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function()
+        CheckPlafondDepot(source)
+    end)
 	end
 end)
 
@@ -44,22 +50,31 @@ end)
 RegisterServerEvent('Bank:take')
 AddEventHandler('Bank:take', function(amount)
 	local source = source
-	amount = tonumber(amount)
+	amount = round(tonumber(amount),0)
 	local accountMoney = 0
 	accountMoney = DataPlayers[source].Bank
-	if amount > accountMoney then
+	if amount <= 0 or amount > accountMoney then
 		print("Bank: ERROR")
-	else
-    TriggerEvent("Bank:RemoveBankMoney", amount, source)
-    TriggerEvent("Inventory:AddMoney", amount, source)
-    defaultNotification.message = 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> '
-		TriggerClientEvent('Venato:notify', source, defaultNotification)
+  else
+    if CheckPlafondRetrait(source, amount) then
+      TriggerEvent("Bank:RemoveBankMoney", amount, source)
+      TriggerEvent("Inventory:AddMoney", amount, source)
+      defaultNotification.message = 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> '
+      TriggerClientEvent('Venato:notify', source, defaultNotification)
+    else
+      defaultNotification.message = "Vous avez dépassé votre plafond vous ne pouvez pas retirer d'argent pour le moment."
+      TriggerClientEvent('Venato:notify', source, defaultNotification)
+    end
 	end
 end)
 
 RegisterServerEvent('Bank:transfer')
 AddEventHandler('Bank:transfer', function(amount, receiver)
   local source = source
+  if amount <= 0 then
+    print("Bank: ERROR")
+    return    
+  end
   MySQL.Async.fetchAll('SELECT * FROM users WHERE account = @account', {['@account'] = receiver}, function (result)
     if (result[1] ~= nil) then
       local recPlayer    = result[1].source
@@ -181,7 +196,7 @@ AddEventHandler("Bank:AddBankMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Bank + qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
-	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+  MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})  
 end)
 
 RegisterNetEvent("Bank:RemoveBankMoney")
@@ -194,7 +209,7 @@ AddEventHandler("Bank:RemoveBankMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Bank - qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
-	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})  
 end)
 
 RegisterNetEvent("Bank:SetBankMoney")
@@ -209,3 +224,38 @@ AddEventHandler("Bank:SetBankMoney", function(qty, NewSource)
   TriggerClientEvent("gcphone:updateBank", source, new)
 	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
+
+function CheckPlafondDepot(source)
+    MySQL.Async.fetchAll("SELECT SUM(montant) as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 1 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId}, function(result)
+      if result[1] ~= nil then
+        if result[1].montant >= plafondDepot then
+          BlockAccount(source)
+          return false
+        end
+        return true
+      end
+      return true
+    end)
+end
+
+function CheckPlafondRetrait(source, amount)
+  MySQL.Async.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 1 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function(result)
+    if result[1] ~= nil then
+      if result[1].montant >= plafondDepot then
+        return false
+      end
+      return true
+    end
+    return true
+  end)
+end
+
+function BlockAccount(source)
+  defaultNotification.message = "Votre compte est bloqué pour mouvement de fonds suspicieux. Rendez-vous au LSPD pour justifier ces mouvements et faire débloquer votre compte."
+  defaultNotification.timeout = 5000
+  TriggerClientEvent('Venato:notify', source, defaultNotification)
+  MySQL.Async.execute('UPDATE users SET isBankAccountBlocked = 1 WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId})
+  DataPlayers[source].IsBankAccountBlocked = true
+  TriggerClientEvent("Bank:AccountIsBlocked:Set", source, true)
+
+end

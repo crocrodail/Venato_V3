@@ -215,16 +215,17 @@ AddEventHandler('police:finesGranted', function(t, amount, reason)
 
 	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour " .. reason
 	defaultNotification.timeout = 5000
-	Venato.notify(source, defaultNotification)
-
-	Venato.paymentCB(t, amount)
-	TriggerClientEvent('police:payFines', t, amount, reason)
-	TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))
-	-- TriggerEvent('es:getPlayerFromId', source, function(police)
-	-- 	TriggerEvent('es:getPlayerFromId', t, function (user)
-	-- 		TriggerEvent("logserver", police.getIdentifier()..' Donne Amende à ' .. user.getIdentifier() .. ' de ' .. amount .. ' pour ' .. reason)
-	-- 	end)
-	-- end)
+	local paymentCB = Venato.paymentCB(t, amount)
+	if paymentCB.status then
+		TriggerClientEvent('police:payFines', t, amount, reason)
+		TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))		
+		Venato.notify(source, defaultNotification)
+	else
+		defaultNotification.message = paymentCB.message
+		Venato.notify(t, defaultNotification)
+		defaultNotification.message = "Une erreur est survenue lors du paiement : "..paymentCB.message
+		Venato.notify(source, defaultNotification)
+	end
 end)
 
 RegisterServerEvent('police:cuffGranted')
