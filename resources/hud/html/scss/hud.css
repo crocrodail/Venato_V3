@@ -89,12 +89,17 @@ html body #app .fullscreen {
 
 .noty_layout .noty_type__error,
 .noty_layout .noty_type__danger {
-  background-color: rgba(183, 28, 28, 0.459);
+  background-color: rgba(183, 28, 28, 0.5);
   color: white;
 }
 
 .noty_layout .noty_type__success {
-  background-color: rgba(5, 63, 8, 0.502);
+  background-color: rgba(5, 63, 8, 0.5);
+  color: white;
+}
+
+.noty_layout .noty_type__warning {
+  background-color: #bf360c;
   color: white;
 }
 

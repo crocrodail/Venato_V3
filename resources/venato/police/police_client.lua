@@ -419,9 +419,9 @@ RegisterNetEvent('door:state')
 AddEventHandler('door:state', function(id, isLocked)
     if type(doorList[id]) ~= nil then -- Check if door exists
         doorList[id]["locked"] = isLocked -- Change state of door
-        local obj = doorList[i]["objName"]
+        local obj = doorList[id]["objName"]
         if tonumber(obj) == nil then
-          obj = GetHashKey(doorList[i]["objName"])
+          obj = GetHashKey(doorList[id]["objName"])
         end
         local closeDoor = GetClosestObjectOfType(doorList[id]["x"], doorList[id]["y"], doorList[id]["z"], 5.0, tonumber(obj), false, false, false)
         FreezeEntityPosition(closeDoor, doorList[id]["locked"])

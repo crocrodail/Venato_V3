@@ -81,12 +81,9 @@ end
 
 function POLICE_SpanwVehicleCar(data)
     Citizen.Trace('POLICE_SpanwVehicleCar' .. data.model)
-    
-        local ped = GetPlayerPed(-1)
-        local plyCoords = GetEntityCoords(ped, 0)
-        local hash = GetHashKey(data.model)
-		RequestModel(hash)
-		
+    	
+		local hash = GetHashKey(data.model)
+		RequestModel(hash)		
         while not HasModelLoaded(hash) do
             Citizen.Wait(0)
 		end
@@ -95,21 +92,14 @@ function POLICE_SpanwVehicleCar(data)
 		local plyCoordsPolice = GetEntityCoords(plyPolice, 0)
 		local distance = GetDistanceBetweenCoords(stationGarage[1].x, stationGarage[1].y, stationGarage[1].z, plyCoordsPolice["x"], plyCoordsPolice["y"], plyCoordsPolice["z"], true)
 		
-		local pos = distance < 30 and policeveh[data.model] or plyCoords
-		local veh = CreateVehicle(hash,pos.x,pos.y,pos.z,pos.h,true,true)
-
+		local pos = distance < 30 and policeveh[data.model] or plyCoordsPolice
+		Venato.CreateVehicle(hash, {x=pos.x,y=pos.y,z=pos.z}, pos.h, function(veh)
+		
 		SetModelAsNoLongerNeeded(hash)
-		SetEntityVisible(veh, false, 0)
-		Citizen.Wait(250)
-		AttachEntityToEntity(veh, GetVehiclePedIsIn(GetPlayerPed(-1), false), -1, AttachX, AttachY, AttachZ, 0.0, 0.0, 0.0, true, true, true, true, 1, true)
-		SetVehicleExplodesOnHighExplosionDamage(veh, false)
-		SetEntityVisible(veh, true, 0)
-		SetPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-		SetVehicleFixed(veh)
-		SetVehicleDirtLevel(veh, 0.0)
-		SetVehicleLights(veh, 0)
-		SetVehicleBurnout(veh, false)
-		Citizen.InvokeNative(0x1FD09E7390A74D54, veh, 0)
+		
+		SetVehicleDirtLevel(veh, 0.0)		
+		SetVehicleLightsMode(veh, 0)	
+		SetVehicleOnGroundProperly(veh)	
 
 		local plate = math.random(100, 900)
 		if data.model == "xls2" then
@@ -121,11 +111,15 @@ function POLICE_SpanwVehicleCar(data)
 		else
 			SetVehicleNumberPlateText(veh, "LSPD "..plate)
 		end
-
+		
 		SetEntityAsMissionEntity(veh, true, true)
+
 		plate = GetVehicleNumberPlateText(veh)
+
 		TriggerServerEvent("ls:refreshid",plate,veh)
+
 		TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(veh)))
+
 		TriggerServerEvent("vnt:saveVeh", veh)
 
 		SetVehicleMod(veh,11,3)
@@ -148,5 +142,7 @@ function POLICE_SpanwVehicleCar(data)
 
 		fakecar = { model = data.model, car = veh}	
 		
+        SetPedIntoVehicle(Venato.GetPlayerPed(), veh, -1)
 		TriggerEvent('Menu:Close')
+	end)
 end
