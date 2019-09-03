@@ -55,13 +55,7 @@ function DeliveryJob.commands()
 end
 
 function takeMission()
-  DeliveryJobConfig.mission = DeliveryJobConfig.defaultMissions[1]
-  DeliveryJobConfig.order = DeliveryJobConfig.defaultOrders[DeliveryJobConfig.mission.orderId]
-  DeliveryJobConfig.destination = DeliveryJobConfig.defaultDropLocations[DeliveryJobConfig.mission.targetId]
-
-  DeliveryJobConfig.currentStep = 1
-  Menu.close()
-  JobsConfig.isMenuOpen = false
+  TriggerServerEvent("DeliveryJob:TakeMission")
 end
 
 function abortMission()
