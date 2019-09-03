@@ -25,8 +25,15 @@ AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
     Menu.setTitle( DataCoffre[coffre_index].nom)
     Menu.setSubtitle( "Coffre :")
     TriggerEvent('Menu:AddButton2', "Parametres","CoffreParametre", coffre_index, '', "https://i.ibb.co/cQmJ84r/icons8-administrative-tools-96px.png")
+    
+    if DataCoffre[coffre_index].argentcapacite ~= 0 then
     TriggerEvent('Menu:AddButton2', Venato.FormatMoney(DataCoffre[coffre_index].argent,2).."€ / "..Venato.FormatMoney(DataCoffre[coffre_index].argentcapacite,2).."€", "CoffreMenuMoney", coffre_index, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
+    end
+
+    if DataCoffre[coffre_index].maxWeapon ~= 0 then
     TriggerEvent('Menu:AddButton2', "Armes", "CoffreWeapon", coffre_index, '', "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png")
+    end
+
     TriggerEvent('Menu:AddButton2', "Déposer des objets", "CoffreAddItem", coffre_index, '', "https://i.ibb.co/CQjDCTX/icons8-safe-in-96px-1.png")
     for k,v in pairs(DataCoffre[coffre_index].inventaire) do
       if v.quantity ~= 0 then

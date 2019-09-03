@@ -15,6 +15,7 @@ local PUT_BOX_ON_TRUNK_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour 
 local OPEN_ITEMS_MENU_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour récupérer des marchandises."
 local PUT_ITEMS_IN_BOX_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour mettre vos marchandises dans la caisse"
 local GET_FORKLIFT_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour récupérer un forklift"
+local CANT_PUT_ITEMS_IN_BOX_MSG = "La caisse doit être déchargé du camion pour mettre vos marchandise."
 
 -- OTHERS message
 local LOAD_TRUNK_MSG = "Veuillez charger le camion avec la caisse pour commencer."
@@ -82,7 +83,7 @@ function DeliveryJob.mainLoop()
   if DeliveryJob.isEnabled() then
     local player = GetPlayerPed(-1)
     local dropPoint = DeliveryJobConfig.trunkDrops['box']
-    
+
     while true do
       Wait(0)
 
@@ -91,9 +92,9 @@ function DeliveryJob.mainLoop()
       if JobsConfig.inService then
         local playerPos = GetEntityCoords(GetPlayerPed(-1))
         local distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
-        
+
         if distance < 45 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player, false)) ==
-          GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then          
+          GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then
           DrawMarker(27, dropPoint.x, dropPoint.y, dropPoint.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,
             174, 0, 0, 0, 0)
         end
@@ -126,7 +127,7 @@ function DeliveryJob.mainLoop()
           for i, v in ipairs(DeliveryJobConfig.boxCoord) do
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z + 0.9,
               playerPos["x"], playerPos["y"], playerPos["z"],
-              true)              
+              true)
             if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
               Venato.InteractTxt(PUT_BOX_ON_GROUND_ACTION_MSG)
@@ -142,7 +143,7 @@ function DeliveryJob.mainLoop()
           local distance = GetDistanceBetweenCoords(
             DeliveryJobConfig.trunkCoord.x, DeliveryJobConfig.trunkCoord.y, DeliveryJobConfig.trunkCoord.z + 0.9,
             playerPos["x"], playerPos["y"], playerPos["z"],
-            true)            
+            true)
           if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
             false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
             Venato.InteractTxt(PUT_BOX_ON_TRUNK_ACTION_MSG)
@@ -215,9 +216,13 @@ function DeliveryJob.mainLoop()
           elseif DeliveryJobConfig.currentStep == 2 then
             if not DeliveryJobConfig.inWarehouse then
               if DeliveryJobConfig.globalBox ~= nil and next(DeliveryJobConfig.itemsTaken) ~= nil then
-                Venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
-                if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-                  putItemInTrunk()
+                if not DeliveryJobConfig.boxOnTrunk and not DeliveryJobConfig.boxOnForklift then
+                  Venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
+                  if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                    putItemInTrunk()
+                  end
+                else
+                  Venato.InteractTxt(CANT_PUT_ITEMS_IN_BOX_MSG)
                 end
               else
                 Venato.InteractTxt(LOAD_BOX_MSG)
@@ -313,7 +318,6 @@ end
 
 function manageBlip()
   local warehouses = DeliveryJobConfig.warehouses
-
   if DeliveryJobConfig.currentStep == 2 then
     for warehouseName, warehouse in pairs(warehouses) do
       if DeliveryJobConfig.blips[warehouseName] then

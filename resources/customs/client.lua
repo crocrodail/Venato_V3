@@ -33,9 +33,17 @@ local currentUiState = false
 
 local locations = {
 	{ name= 'lscustoms', x = -212.784408569336, y= -1324.52233886719, z= 29.89040184021, activationDist=12.5, markerWidth = 25.05001, markerType= 72, markerColor= 0 },
-
 	--{ name= 'lscustoms', x = -1287.50622558594, y= -2137.49926757813, z= 13.4786577224731, activationDist=12.5, markerWidth = 25.05001, markerType= 72, markerColor= 5 }, -- position aeroport test piste
   }
+
+local notif = {
+    action = "notify",
+    type = "alert",
+    message = "",
+    timeout = 3500,
+    logo = "https://i.ibb.co/DzbFdwn/icons8-paint-sprayer-96px.png",
+    title = "LS Customs",
+}
 
 function msginf(msg, duree)
     duree = duree or 500
@@ -201,14 +209,8 @@ end)
 RegisterNetEvent('customs:checkifowner_fromdb')
 AddEventHandler('customs:checkifowner_fromdb', function(check, customs)
     if not check then
-      TriggerEvent("Hud:Update", {
-        action = "notify",
-        message = "Tu me prends pour un con va t'acheter une caisse pauvre type !",
-        timeout = 3500,
-        logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-        type = "error",
-        title = "LS Customs",
-      })
+        notif.message = "Tu me prends pour un con va t'acheter une caisse pauvre type !"
+        TriggerEvent("Hud:Update", notif)
         closeGui()
     else
       ActualCustoms = customs
@@ -262,55 +264,23 @@ RegisterNUICallback('init', function(data, cb)
 
     if GetVehicleDirtLevel(currentVhl.vehicleId) > 0.50 then
         SetVehicleDirtLevel(currentVhl.vehicleId)
-        TriggerEvent("Hud:Update", {
-          action = "notify",
-          message = "La prochaine fois va laver ta caisse avant, ici c'est pas la zone !",
-          timeout = 3500,
-          logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-          type = "error",
-          title = "LS Customs",
-        })
+        notif.message = "La prochaine fois va laver ta caisse avant, ici c'est pas la zone !"
+        TriggerEvent("Hud:Update", notif)       
     end
     -- SetVehicleModKit(currentVhl.vehicleId, 0 )
     if GetVehicleBodyHealth(currentVhl.vehicleId) < 990 then
         local easterEgg = math.random(1,4)
-        if easterEgg == 1 then
-          TriggerEvent("Hud:Update", {
-            action = "notify",
-            message = "Tu te crois où ? Va réparer ton véhicule je suis pas ta boniche !",
-            timeout = 3500,
-            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-            type = "error",
-            title = "LS Customs",
-          })
+        
+        if easterEgg == 1 then          
+            notif.message = "Tu te crois où ? Va réparer ton véhicule je suis pas ta boniche !"
         elseif easterEgg == 2 then
-          TriggerEvent("Hud:Update", {
-            action = "notify",
-            message = "Tu te fous de ma gueule ? C'est quoi ce taudis vas réparer ça !",
-            timeout = 3500,
-            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-            type = "error",
-            title = "LS Customs",
-          })
+            notif.message = "Tu te fous de ma gueule ? C'est quoi ce taudis vas réparer ça !"
         elseif easterEgg == 3 then
-          TriggerEvent("Hud:Update", {
-            action = "notify",
-            message = "T'es serieux ? Va réparer ta ~y~poubelle roulante !",
-            timeout = 3500,
-            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-            type = "error",
-            title = "LS Customs",
-          })
+            notif.message = "T'es serieux ? Va réparer ta <span class='yellow--text'>poubelle</span> roulante !"
         else
-          TriggerEvent("Hud:Update", {
-            action = "notify",
-            message = "OK ... tu veut que je fasse quoi avec ta merde répare moi ça !",
-            timeout = 3500,
-            logo = "https://img.icons8.com/nolan/96/000000/paint-brush.png",
-            type = "error",
-            title = "LS Customs",
-          })
+            notif.message = "OK ... tu veut que je fasse quoi avec ta merde répare moi ça !"
         end
+        TriggerEvent("Hud:Update", notif)
         closeGui()
     end
 

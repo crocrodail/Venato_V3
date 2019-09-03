@@ -128,8 +128,10 @@ function accessGranded(SteamId, source , balek)
           makeup_opacity = DataUser[1].makeup_opacity,
           lipstick = DataUser[1].lipstick,
           lipstick_color = DataUser[1].lipstick_color
-        }
+        },
+        IsBankAccountBlocked = DataUser[1].isBankAccountBlocked
       }
+      TriggerClientEvent("Bank:AccountIsBlocked:Set", source, DataUser[1].isBankAccountBlocked)
       local steamIdl = getSteamID(source)
       MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = steamIdl,  ["@pseudo"] = GetPlayerName(source)}, function()
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
@@ -209,13 +211,16 @@ function Venato.Round(num, numDecimalPlaces)
 end
 
 function Venato.paymentCB(source, amount)
+  if DataPlayers[source].IsBankAccountBlocked == 1 then
+    return {status = false, message = "Votre compte est bloqué, rendez vous au LSPD pour régulariser votre situation."}
+  end
   if DataPlayers[source].Bank <= tonumber(amount) then
-    return false
+    return {status = false, message = "Votre solde est insuffisant."}
   else
     DataPlayers[source].Bank = DataPlayers[source].Bank - amount
     MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier",
       { ["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].Bank })
-    return true
+    return {status = true}
   end
 end
 

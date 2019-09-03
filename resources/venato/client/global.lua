@@ -19,7 +19,7 @@ Citizen.CreateThread(function()
     --TriggerServerEvent("Venato:SyncData")
   --end
   while true do
-    Citizen.Wait(10)
+    Citizen.Wait(50)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
 
@@ -99,9 +99,12 @@ Citizen.CreateThread(function()
 	SetParkedVehicleDensityMultiplierThisFrame(0.5)
 	SetScenarioPedDensityMultiplierThisFrame(0.5, 0.5)
 	while true do
+    local cheatNb = 0
+    if ingame > 30 then cheatNb = 15 elseif ingame > 20 then cheatNb = 10 elseif ingame > 15 then cheatNb = 7 --- CHEAT NB JOUEURS
+    elseif ingame > 10 then cheatNb = 5 elseif ingame > 5 then cheatNb = 2 end                                --- CHEAT NB JOUEURS
   	  SetDiscordAppId(DiscordAppId)
   	  SetDiscordRichPresenceAsset(DiscordAppAsset)
-		  SetRichPresence(--[[]VNT_ScriptCoreVenato:getPrenom().." "..exports.VNT_ScriptCoreVenato:getNom()..--[]]" "..ingame.." joueurs connectés")
+		  SetRichPresence(ingame+cheatNb.." joueurs connectés")
 		  Citizen.Wait(10000)
 	end
 end)

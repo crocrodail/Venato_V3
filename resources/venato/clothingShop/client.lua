@@ -335,7 +335,7 @@ end
 
 RegisterNetEvent("ClothingShop:SaveClothes:response")
 AddEventHandler("ClothingShop:SaveClothes:response", function(response)
-  if response then
+  if response.status then
    buyAnything = true
    Menu.close()
    Venato.LoadClothes()
@@ -347,7 +347,7 @@ AddEventHandler("ClothingShop:SaveClothes:response", function(response)
    }
    Venato.notify(defaultNotification)
   else
-    Venato.notifyError("il y a une erreur de payement !")
+    Venato.notifyError(response.message)
     Menu.close()
     Venato.LoadClothes()
   end
