@@ -26,6 +26,7 @@ DeliveryJobRequests.newMissionCheck = "UPDATE users SET salaryCheck = salaryChec
 
 DeliveryJobRequests.startOrder = "UPDATE shop_orders SET Started = 1, DeliveryManId=@DeliveryManId WHERE Id=@OrderId"
 DeliveryJobRequests.abortOrder = "UPDATE shop_orders SET Started = 0, DeliveryManId=null WHERE Id=@OrderId"
+DeliveryJobRequests.finishOrder = "UPDATE shop_orders SET DeliveryManId=null WHERE Id=@OrderId"
 
 DeliveryJobRequests.getPlayerId = "SELECT id FROM users WHERE identifier=@Id"
 
@@ -109,4 +110,7 @@ function DeliveryJobDbFunctions.startOrder(source, orderId)
 end
 function DeliveryJobDbFunctions.abortOrder(orderId)
   MySQL.Sync.execute(DeliveryJobRequests.abortOrder, { ["@OrderId"] = orderId })
+end
+function DeliveryJobDbFunctions.finishOrder(orderId)
+  MySQL.Sync.execute(DeliveryJobRequests.finishOrder, { ["@OrderId"] = orderId })
 end

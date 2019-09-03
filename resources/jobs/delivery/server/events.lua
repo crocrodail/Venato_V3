@@ -20,8 +20,11 @@ AddEventHandler("DeliveryJob:getWarehouses", function(newSource)
   TriggerClientEvent("DeliveryJob:getWarehouses:cb", source, DeliveryJobDbFunctions.getWarehouses())
 end)
 
-AddEventHandler("DeliveryJob:finishMission", function(newSource)
+AddEventHandler("DeliveryJob:finishMission", function(newSource, orderId, shop)
   local source = getSource(source, newSource)
+  if shop then
+    DeliveryJobDbFunctions.finishOrder(orderId)
+  end
   TriggerClientEvent("DeliveryJob:finishMission:cb", source, DeliveryJobDbFunctions.newMissionCheck(source))
 end)
 

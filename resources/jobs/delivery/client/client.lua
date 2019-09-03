@@ -624,7 +624,9 @@ function ValidateMission()
   DeliveryJobConfig.order = nil
   DeliveryJobConfig.destination = nil
 
-  TriggerServerEvent("DeliveryJob:finishMission")
+  TriggerServerEvent("DeliveryJob:finishMission",
+    DeliveryJobConfig.mission.orderId,
+    DeliveryJobConfig.mission.shop ~= nil)
 end
 
 function printTxt(text, x, y, center, police)
