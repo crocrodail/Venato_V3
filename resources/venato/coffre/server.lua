@@ -2,9 +2,11 @@ DataCoffre = {}
 
 function reloadDataCoffre()
   Citizen.CreateThread(function()
+    local start_time = os.clock()
     local Cof = {}
-    local inCof = {}
-    MySQL.Async.fetchAll("SELECT * FROM coffre_pack JOIN coffres ON coffres.Pack = coffre_pack.Id ORDER BY coffres.Id", {}, function(result)
+    local inCof = {}   
+    
+    MySQL.Async.fetchAll("SELECT coffres.*, coffre_pack.Capacite, coffre_pack.ArgentMax, coffre_pack.QtyWeapon FROM coffres JOIN coffre_pack ON coffres.Pack = coffre_pack.Id", {}, function(result)
       if result[1] ~= nil then
         for k,v in pairs(result) do
         --  print(v.Id.."  =  " .. v.Nom)
@@ -15,6 +17,7 @@ function reloadDataCoffre()
             ["x"] = v.PositionX,
             ["y"] = v.PositionY,
             ["z"] = v.PositionZ,
+            ["h"] = v.PositionH,
             ["pack"] = v.Pack,
             ["argent"] = v.Argent,
             ["red"] = v.CouleurRouge,
@@ -26,30 +29,30 @@ function reloadDataCoffre()
             ["itemcapacite"] = v.Capacite,
             ["argentcapacite"] = v.ArgentMax,
             ["maxWeapon"] = v.QtyWeapon,
+            ["props"] = v.props,
             ["inventaire"] = {nil},
             ["weapon"] = {nil},
             ["whitelist"] = {nil}
           }
-          DataCoffre[v.Id] = Cof
-          Citizen.Wait(50)
-          MySQL.Async.fetchAll("SELECT * FROM coffres_contenu JOIN items ON coffres_contenu.ItemId = items.id WHERE CoffreId = @CoffreId", {["@CoffreId"] = v.Id}, function(resultContenu)
-            if resultContenu[1] ~= nil then
-              for k2,v2 in pairs(resultContenu) do
-                inCof = {
-                  ["coffreId"] = v2.CoffreId,
-                  ["itemsId"] = v2.ItemId,
-                  ["libelle"] = v2.libelle,
-                  ["quantity"] = math.floor(v2.Quantity),
-                  ["uPoid"] = v2.poid,
-                  ["picture"] = v2.picture
-                }
-                DataCoffre[v.Id].nbItems =  DataCoffre[v.Id].nbItems + v2.Quantity
-                DataCoffre[v.Id].inventaire[v2.ItemId] = inCof
-              end
-            end
-          end)
-          Citizen.Wait(100)
-          MySQL.Async.fetchAll("SELECT * FROM coffres_weapons JOIN weapon_model ON coffres_weapons.Weapon = weapon_model.weapond WHERE CoffreId = @CoffreId", {["@CoffreId"] = v.Id}, function(resultweapon)
+          DataCoffre[v.Id] = Cof          
+        end
+
+        MySQL.Async.fetchAll("SELECT * FROM coffres_contenu JOIN items ON coffres_contenu.ItemId = items.id", {}, function(resultContenu)          
+          if resultContenu[1] ~= nil then
+            for k2,v2 in pairs(resultContenu) do
+              inCof = {            
+                ["coffreId"] = v2.CoffreId,
+                ["itemsId"] = v2.ItemId,
+                ["libelle"] = v2.libelle,
+                ["quantity"] = math.floor(v2.Quantity),
+                ["uPoid"] = v2.poid,
+                ["picture"] = v2.picture
+              }      
+              DataCoffre[v2.CoffreId].inventaire[v2.ItemId] = inCof
+              DataCoffre[v2.CoffreId].nbItems = DataCoffre[v2.CoffreId].nbItems + math.floor(v2.Quantity)
+            end            
+          end
+          MySQL.Async.fetchAll("SELECT * FROM coffres_weapons JOIN weapon_model ON coffres_weapons.Weapon = weapon_model.weapond", {}, function(resultweapon)
             if resultweapon[1] ~= nil then
               local qtyWp = 0
               for k3,v3 in pairs(resultweapon) do
@@ -59,30 +62,16 @@ function reloadDataCoffre()
                   ["balles"] = math.floor(v3.balles),
                   ["poid"] = v3.poid
                 }
-                qtyWp = qtyWp + 1
-                DataCoffre[v.Id].weapon[v3.Id] = CofWp
-              end
-              DataCoffre[v.Id].nbWeapon = qtyWp
-            end
+                DataCoffre[v3.CoffreId].weapon[v3.Id] = CofWp
+                DataCoffre[v3.CoffreId].nbWeapon = Cof[v3.CoffreId].nbWeapon + 1
+              end 
+            end          
+            local end_time = os.clock()    
+            print("^2Coffre Loaded :^7 "..round((end_time-start_time),2).."ms")
+            TriggerClientEvent('Coffre:CallData:cb', -1, DataCoffre)
           end)
-          Citizen.Wait(100)
-          MySQL.Async.fetchAll("SELECT * FROM coffres_whitelist JOIN users ON coffres_whitelist.UserId = users.identifier WHERE CoffreId = @coffreId", {["@coffreId"] = v.Id}, function(resultwhhtelist)
-            if resultwhhtelist[1] ~= nil then
-              for k4,v4 in pairs(resultwhhtelist) do
-                CofWl = {
-                  ["nom"] = v4.nom,
-                  ["prenom"] = v4.prenom,
-                  ["identifier"] = v4.identifier
-                }
-                DataCoffre[v.Id].whitelist[v4.identifier] = CofWl
-              end
-            end
-          end)
-          Citizen.Wait(50)
-        end
-      end
-      TriggerClientEvent('Coffre:CallData:cb', -1, DataCoffre)
-      print("^2Coffres Loaded !^7")
+        end)
+      end      
     end)
   end)
 end
@@ -156,6 +145,8 @@ AddEventHandler("Coffre:DropItem", function(qty, row)
     TriggerClientEvent("Venato:notify", source, "~r~Une erreur est survenue.")
   end
 end)
+
+
 
 RegisterServerEvent("Coffre:TakeItems")
 AddEventHandler("Coffre:TakeItems", function(qty, row)
@@ -256,13 +247,42 @@ AddEventHandler("Coffre:CoffreWhitelistPlayer", function(row)
   local source = source
   local index = row[1]
   local user = row[2]
-  DataCoffre[index].whitelist[DataPlayers[user].SteamId] = {["nom"] = DataPlayers[user].Nom, ["prenom"] = DataPlayers[user].Prenom, ["identifier"] = DataPlayers[user].SteamId}
+  MySQL.Async.execute("INSERT INTO coffres_whitelist(CoffreId, UserId) VALUES (@coffreId, @userId)", {["@userId"] = DataPlayers[user].SteamId, ["@coffreId"] = index})
 end)
 
 RegisterServerEvent("Coffre:UnWhitelist")
 AddEventHandler("Coffre:UnWhitelist", function(row)
   local source = source
-  local index = row[1]
+  local coffreId = row[1]
   local userId = row[2]
-  DataCoffre[index].whitelist[userId] = nil
+  print(coffreId)
+  print(userId)
+  MySQL.Async.execute("DELETE FROM coffres_whitelist WHERE CoffreId = @coffreId AND UserId = @userId", {["@userId"] = userId, ["@coffreId"] = coffreId})  
+end)
+
+RegisterServerEvent("Coffre:CheckWhitelist")
+AddEventHandler("Coffre:CheckWhitelist", function(coffreId)
+  local source = source
+  MySQL.Async.fetchAll("SELECT * FROM coffres_whitelist WHERE UserId = @steamId AND CoffreId = @coffreId", {["@steamId"] = getSteamID(source), ["@coffreId"] = coffreId}, function(result)
+    TriggerClientEvent("Coffre:CheckWhitelist:cb", source, {status = (result[1] ~= nil)})
+  end)
+end)
+
+RegisterServerEvent("Coffre:GetCoffreWhitelistPlayer")
+AddEventHandler("Coffre:GetCoffreWhitelistPlayer", function(coffreId)
+  local source = source
+  local whitelist = {}
+  MySQL.Async.fetchAll("SELECT CW.*, U.nom, U.prenom FROM coffres_whitelist CW INNER JOIN users U ON CW.UserId = U.identifier  WHERE CW.CoffreId = @coffreId", {["@coffreId"] = coffreId}, function(result)
+    if result[1] ~= nil then
+      for k,v in pairs(result) do
+        whitelist[v.Id] = {
+          ["nom"] = v.nom,
+          ["prenom"] = v.prenom,
+          ["id"] = v.UserId,
+          ["coffreId"] = v.CoffreId
+        }
+      end
+    end
+    TriggerClientEvent("Coffre:GetCoffreWhitelistPlayer:cb", source, {whitelist = whitelist})
+  end)
 end)
