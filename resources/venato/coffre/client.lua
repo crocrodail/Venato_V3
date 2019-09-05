@@ -1,7 +1,7 @@
 local DataCoffre = {}
 local DataUser = {}
 
-local coffre_index = 0
+local coffre_index = -1
 
 local defaultNotification = {
   title = 'Coffre',
@@ -18,8 +18,8 @@ RegisterNetEvent("Coffre:CallData:cb")
 AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
   DataCoffre = Coffre
   DataUser = user or {}  
-  print(coffre_index)
-  if coffre_index ~= 0 then
+  print("Coffre:CallData:cb")
+  if coffre_index > 0 then
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', DataCoffre[coffre_index].nom, "Coffre", 'rgba('..DataCoffre[coffre_index].red..','..DataCoffre[coffre_index].green..','..DataCoffre[coffre_index].blue..', 0.75)', "https://cap.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcap.2F2017.2F05.2F09.2F1c21c36a-b809-4662-bf09-1068218410b9.2Ejpeg/750x375/background-color/ffffff/quality/70/fichet-bauche-la-success-story-du-roi-du-coffre-fort-1123519.jpg" )
     Menu.setTitle( DataCoffre[coffre_index].nom)
@@ -43,25 +43,53 @@ AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
     TriggerEvent('Menu:CreateMenu')
     TriggerEvent('Menu:Open')
   end
+  if coffre_index == -1 then
+    coffre_index = 0
+    for k,v in pairs(DataCoffre) do
+      if v.props ~= nil then   
 
+        RequestModel(v.props)
+        while not HasModelLoaded(v.props) do
+          Wait(1)
+        end
+        
+        local coffre = CreateObject(GetHashKey(v.props), v.x, v.y, v.z, false, false, false)
+        SetEntityHeading(coffre, v.h)
+        PlaceObjectOnGroundProperly(coffre)
+        SetEntityAsMissionEntity(coffre, true, true)
+        FreezeEntityPosition(coffre, true)
+        SetModelAsNoLongerNeeded(v.props)
+      end
+  end
+end
 end)
 
 Citizen.CreateThread(function()
+  TriggerServerEvent("Coffre:CallData")  
   while true do
     Citizen.Wait(0)
     local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-    for k,v in pairs(DataCoffre) do
+    for k,v in pairs(DataCoffre) do     
       if Vdist(x, y, z, v.x, v.y, v.z) < 1 then
-        Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour ouvrir le coffre.')
+        Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..v.nom..'.')
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-          OpenCoffre(k)
-          Menu.toggle()
+          TriggerServerEvent("Coffre:CheckWhitelist", k)
+          coffre_index = k
         end
       end
-      if  Vdist(x, y, z, v.x, v.y, v.z) < 20 then
-        DrawMarker(27,v.x,v.y,v.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,v.red,v.green,v.blue,200,0,0,0,0)
-      end
     end
+  end
+end)
+
+RegisterNetEvent("Coffre:CheckWhitelist:cb")
+AddEventHandler("Coffre:CheckWhitelist:cb", function(result)
+  if result.status then
+    OpenCoffre(coffre_index)
+    Menu.toggle()
+  else
+    defaultNotification.message = "Vous ne connaissez pas le code de "..DataCoffre[coffre_index].nom
+    Venato.notify(defaultNotification)
+    --TODO Notif pas le code
   end
 end)
 
@@ -155,8 +183,8 @@ function CoffreParametre(index)
   Menu.clearMenu()
   Menu.setTitle( "Parametres")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenCoffre", index)
-  Menu.addButton("Liste des personnes avec l'acces", "CoffreListWhitelist", index)
-  Menu.addButton("Donner l'acces à une personne", "CoffreAddWhitelist", index)
+  Menu.addButton("Liste des personnes avec l'accès", "CoffreListWhitelist", index)
+  Menu.addButton("Donner l'accès à une personne", "CoffreAddWhitelist", index)
 end
 
 function CoffreAddWhitelist(index)
@@ -176,34 +204,40 @@ AddEventHandler("Coffre:CallDataClosePlayer:cb", function(Coffre, index, user)
   DataCoffre = Coffre
   local DataUserClose = user
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
-  Menu.addButton("Whitelister "..DataUserClose.Prenom.." "..DataUserClose, "CoffreWhitelistPlayer", {index, user})
+  Menu.addButton("Donner accès à "..DataUserClose.Prenom.." "..DataUserClose, "CoffreWhitelistPlayer", {index, user})
 end)
 
 function CoffreWhitelistPlayer(row)
   TriggerServerEvent("Coffre:CoffreWhitelistPlayer", row)
-  Menu.close()  
-  OpenCoffre(row[1])
+  Menu.close() 
 end
 
 function CoffreListWhitelist(index)
+  print(index)
   Menu.clearMenu()
-  Menu.setTitle( "Whitelist")
+  Menu.setTitle( "Accès")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
-  for k,v in pairs(DataCoffre[index].whitelist) do
-    Menu.addButton(v.prenom.." "..v.nom, "unwhitelist", {index, v.identifier, v.nom, v.prenom})
-  end
+  TriggerServerEvent("Coffre:GetCoffreWhitelistPlayer", index)  
 end
+
+RegisterNetEvent("Coffre:GetCoffreWhitelistPlayer:cb")
+AddEventHandler("Coffre:GetCoffreWhitelistPlayer:cb", function(data)
+  print(Venato.dump(data))
+  for k,v in pairs(data.whitelist) do
+    Menu.addButton(v.prenom.." "..v.nom, "unwhitelist", {v.coffreId, v.id, v.nom, v.prenom})
+  end
+end)
 
 function unwhitelist(row)
   Menu.clearMenu()
-  Menu.setTitle( "Voulez déwhitlister "..row[4].." "..row[3])
+  Menu.setTitle( "Confirmer")
   Menu.addButton("Non", "CoffreListWhitelist", row[1])
-  Menu.addButton("Déwhitelist "..row[4].." "..row[3], "confirmUnWhitelist", row)
+  Menu.addButton("Confirmer suppression accès de "..row[4].." "..row[3], "confirmUnWhitelist", row)
 end
 
 function confirmUnWhitelist(row)
   TriggerServerEvent("Coffre:UnWhitelist", row)  
-  OpenCoffre(row[1])
+  Menu.close()
 end
 
 function CoffreMenuMoney(index)
