@@ -124,9 +124,10 @@ end
 
 RegisterNetEvent('illegal:setcop')
 AddEventHandler("illegal:setcop", function(nbPolicier)
+    print("illegal:SetCop: "..nbPolicier)
     old_nbPolice = nbPolice
-    nbPolice = 1
-    if old_nbPolice == 0 --and nbPolice > 0
+    nbPolice = nbPolicier
+    if old_nbPolice == 0 and nbPolice > 0
     then
         for _, item in ipairs(drugs) do
             if item.farm then
