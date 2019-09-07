@@ -16,10 +16,11 @@ local OPEN_ITEMS_MENU_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour r
 local PUT_ITEMS_IN_BOX_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour mettre vos marchandises dans la caisse"
 local GET_FORKLIFT_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour récupérer un forklift"
 local CANT_PUT_ITEMS_IN_BOX_MSG = "La caisse doit être déchargé du camion pour mettre vos marchandise."
+local NO_BOX_ON_HAND = "Vous n'avez aucune marchandise dans les mains."
 
 -- OTHERS message
 local LOAD_TRUNK_MSG = "Veuillez charger le camion avec la caisse pour commencer."
-local LOAD_BOX_MSG = "Veuillez remplir la caisse avec les marchandises dans les entrepots ~BLIP_478~"
+local LOAD_BOX_MSG = "Veuillez remplir la caisse avec les marchandises dans les entrepots ~BLIP_408~"
 local TAKE_IN_BOX_MSG = "Veuillez prendre les items dans les caisses"
 local DELIVERY_MSG = "veuillez livrer votre chargement à destination ~BLIP_119~"
 
@@ -69,6 +70,7 @@ function abortMission()
   DeliveryJobConfig.mission = nil
   DeliveryJobConfig.order = nil
   DeliveryJobConfig.destination = nil
+  DropInTheBiggestBoxForitemsTaken()
 
   Menu.close()
   JobsConfig.isMenuOpen = false
@@ -220,9 +222,13 @@ function DeliveryJob.mainLoop()
             if not DeliveryJobConfig.inWarehouse then
               if DeliveryJobConfig.globalBox ~= nil and next(DeliveryJobConfig.itemsTaken) ~= nil then
                 if not DeliveryJobConfig.boxOnTrunk and not DeliveryJobConfig.boxOnForklift then
-                  Venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
-                  if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-                    putItemInTrunk()
+                  if DeliveryJobConfig.carryBoxWithHand then
+                    Venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
+                    if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                      putItemInTrunk()
+                    end
+                  else
+                    Venato.InteractTxt(NO_BOX_ON_HAND)
                   end
                 else
                   Venato.InteractTxt(CANT_PUT_ITEMS_IN_BOX_MSG)
@@ -595,14 +601,35 @@ function takeItem(item)
   local nb = Venato.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     qty = DeliveryJobConfig.itemsTaken[item.id] or 0
-    qty = qty + tonumber(nb)
-    DeliveryJobConfig.itemsTaken[item.id] = qty
-    JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez maintenant " .. qty .. " " .. item .libelle .. "</span"
-    Venato.notify(JobsConfig.jobsNotification)
+    if qty ~= 0 then
+      CreateBoxForitemsTaken(qty, item.libelle)
+      qty = qty + tonumber(nb)
+      DeliveryJobConfig.itemsTaken[item.id] = qty
+      JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez maintenant " .. qty .. " " .. item.libelle .. "</span"
+      Venato.notify(JobsConfig.jobsNotification)
+    else
+      JobsConfig.jobsNotification.message = "<span class='red--text'>Vous pouvez prendre qu'un type de marchandise à la fois</span>"
+      Venato.notify(JobsConfig.jobsNotification)
+    end
   else
     JobsConfig.jobsNotification.message = "<span class='red--text'>Une erreur dans le nombre saisi</span>"
     Venato.notify(JobsConfig.jobsNotification)
   end
+end
+
+function CreateBoxForitemsTaken(qty, libelle)
+  local pedCoords = GetEntityCoords(PlayerPedId())
+  DeliveryJobConfig.carryBoxWithHand = true
+	DeliveryJobConfig.handbox = Venato.CreateObject(DeliveryJobConfig.TAKENBOX_KEY, pedCoords.x, pedCoords.y, pedCoords.z)
+  Venato.playAnim({lib = "anim@heists@box_carry@", anim = "idle", useLib = true, flag = 50})
+  AttachEntityToEntity(DeliveryJobConfig.handbox , PlayerPedId(), GetPedBoneIndex(PlayerPedId(),  28422), 0.00, -0.4, 0.0, 195.0, 180.0, 180.0, 180.0, false, false, true, false, 1, false)
+end
+
+function DropInTheBiggestBoxForitemsTaken()
+  DeliveryJobConfig.carryBoxWithHand = false
+  DetachEntity(DeliveryJobConfig.handbox)
+  DeliveryJobConfig.handbox = nil
+  ClearPedTasksImmediately(PlayerPedId())
 end
 
 function putItemInTrunk(item)
@@ -612,6 +639,7 @@ function putItemInTrunk(item)
     DeliveryJobConfig.itemsTrunk[id] = _qty
   end
   DeliveryJobConfig.itemsTaken = {}
+  DropInTheBiggestBoxForitemsTaken()
   JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchandises dans le camion</span"
   Venato.notify(JobsConfig.jobsNotification)
 end
