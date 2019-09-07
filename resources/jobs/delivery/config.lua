@@ -18,19 +18,16 @@ DeliveryJobConfig.boxes = {}
 
 DeliveryJobConfig.BOX_KEY = "prop_box_wood05a"
 DeliveryJobConfig.MINI_BOX_KEY = "prop_apple_box_01"
-DeliveryJobConfig.TAKENBOX_KEY = "prop_cs_rub_box_02"
 DeliveryJobConfig.TRUNK_KEY = "mule"
 DeliveryJobConfig.FORKLIFT_KEY = "forklift"
 
 DeliveryJobConfig.trunk = nil
 DeliveryJobConfig.forklift = nil
 DeliveryJobConfig.box = nil
-DeliveryJobConfig.handbox = nil
 DeliveryJobConfig.AllObject = {}
 
 DeliveryJobConfig.boxOnForklift = false
 DeliveryJobConfig.boxOnTrunk = false
-DeliveryJobConfig.carryBoxWithHand = false
 DeliveryJobConfig.boxCoord = {}
 DeliveryJobConfig.globalBox = nil
 DeliveryJobConfig.trunkCoord = {}

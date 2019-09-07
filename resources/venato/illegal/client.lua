@@ -8,34 +8,15 @@ local old_nbPolice = 0
 local is_on_farm_zone = false
 local is_on_transform_zone = false
 local is_on_sell_zone = false
-local defaultNotification = {
-  title = 'Illégal',
-  type = "alert",
-  logo = "https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png"
-}
 
 Citizen.CreateThread(function()
-
-  for _, item in ipairs(drugs) do
-      if item.farm then
-          item.farm.npc = GenerateNpc(item.farm)
-      end
-
-      if item.transform then
-          item.transform.npc = GenerateNpc(item.transform)
-      end
-
-      if item.sell then
-          item.sell.npc = GenerateNpc(item.sell)
-      end
-  end
 
     while true do
         Wait(0)
         for i=1, #drugs, 1 do
             if drugs[i].farm then
                 distance = GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), drugs[i].farm.x, drugs[i].farm.y, drugs[i].farm.z, true)
-                if distance < 2 then --and nbPolice > 0 then
+                if distance < 2 and nbPolice > 0 then
                     is_on_farm_zone = true
                     if not farmInProgress then
                         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour récupérer de '.. drugs[i].title)
@@ -45,12 +26,12 @@ Citizen.CreateThread(function()
                     if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                         farmInProgress = true
                         drugInProgress = drugs[i]
-                    end
-                end
+                    end                    
+                end 
             end
             if drugs[i].transform then
                 distance = GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), drugs[i].transform.x, drugs[i].transform.y, drugs[i].transform.z, true)
-                if distance < 2 then --and nbPolice > 0 then
+                if distance < 2 and nbPolice > 0 then
                     is_on_transform_zone = true
                     if not transformInProgress then
                         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour transformer '.. drugs[i].title)
@@ -61,11 +42,11 @@ Citizen.CreateThread(function()
                         transformInProgress = true
                         drugInProgress = drugs[i]
                     end
-                end
+                end 
             end
             if drugs[i].sell then
                 distance = GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), drugs[i].sell.x, drugs[i].sell.y, drugs[i].sell.z, true)
-                if distance < 2 then --and nbPolice > 0 then
+                if distance < 2 and nbPolice > 0 then
                     is_on_sell_zone = true
                     if not sellInProgress then
                         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour vendre '.. drugs[i].title)
@@ -73,18 +54,13 @@ Citizen.CreateThread(function()
                         Venato.InteractTxt('Vente de '.. drugInProgress.title .. ' en cours ...')
                     end
                     if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-                      if nbPolice > 0 then
                         sellInProgress = true
                         drugInProgress = drugs[i]
-                      else
-                        defaultNotification.message = "Il n'y a pas assez d'agent en service pour vendre"
-                        Venato.notify(defaultNotification)
-                      end
                     end
-                end
+                end 
             end
-        end
-
+        end 
+        
         if not is_on_farm_zone then
             farmInProgress = false
         end
@@ -101,12 +77,12 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
+Citizen.CreateThread(function()    
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(0)               
         if farmInProgress or transformInProgress or sellInProgress then
-            Citizen.Wait(5000)
-            if farmInProgress and drugInProgress then
+            Citizen.Wait(5000)                        
+            if farmInProgress and drugInProgress then 
                 TaskPlayAnim(drugInProgress.farm.npc,"mp_common", "givetake2_b" ,8.0, -8.0, -1, flag, 0, false, false, false )
                 TriggerServerEvent("illegal:farm", drugInProgress.id)
             end
@@ -121,9 +97,9 @@ Citizen.CreateThread(function()
             if(farmInProgress or transformInProgress or sellInProgress) then
                 Venato.playAnim({lib = "mp_common", anim = "givetake2_a", useLib = true})
             end
-
+            
         end
-    end
+    end    
 end)
 
 function GenerateNpc(item)
@@ -137,7 +113,7 @@ function GenerateNpc(item)
     item.x, item.y, item.z, item.h,
     false, true
     )
-
+    
     SetEntityHeading(npc, item.h)
     FreezeEntityPosition(npc, true)
     SetEntityInvincible(npc, true)
@@ -151,45 +127,45 @@ AddEventHandler("illegal:setcop", function(nbPolicier)
     print("illegal:SetCop: "..nbPolicier)
     old_nbPolice = nbPolice
     nbPolice = nbPolicier
-    -- if old_nbPolice == 0 and nbPolice > 0
-    -- then
-    --     for _, item in ipairs(drugs) do
-    --         if item.farm then
-    --             item.farm.npc = GenerateNpc(item.farm)
-    --         end
-    --
-    --         if item.transform then
-    --             item.transform.npc = GenerateNpc(item.transform)
-    --         end
-    --
-    --         if item.sell then
-    --             item.sell.npc = GenerateNpc(item.sell)
-    --         end
-    --     end
-    -- end
+    if old_nbPolice == 0 and nbPolice > 0
+    then
+        for _, item in ipairs(drugs) do
+            if item.farm then
+                item.farm.npc = GenerateNpc(item.farm)
+            end
+    
+            if item.transform then
+                item.transform.npc = GenerateNpc(item.transform)
+            end
+    
+            if item.sell then
+                item.sell.npc = GenerateNpc(item.sell)
+            end
+        end        
+    end
 
-    -- if old_nbPolice > 0 and nbPolice == 0
-    -- then
-    --     for _, item in ipairs(drugs) do
-    --         if item.farm then
-    --             DeleteEntity(item.farm.npc)
-    --         end
-    --
-    --         if item.transform then
-    --             DeleteEntity(item.transform.npc)
-    --         end
-    --
-    --         if item.sell then
-    --             DeleteEntity(item.sell.npc)
-    --         end
-    --     end
-    -- end
+    if old_nbPolice > 0 and nbPolice == 0 
+    then    
+        for _, item in ipairs(drugs) do
+            if item.farm then
+                DeleteEntity(item.farm.npc)
+            end
+    
+            if item.transform then
+                DeleteEntity(item.transform.npc)
+            end
+    
+            if item.sell then
+                DeleteEntity(item.sell.npc)
+            end
+        end
+    end
 end)
 
 
 Citizen.CreateThread(function()
 	while true do
         TriggerServerEvent('police:getAllCopsInServiceNb')
-        Citizen.Wait(60000)
+        Citizen.Wait(60000)        
 	end
 end)

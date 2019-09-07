@@ -56,17 +56,15 @@ AddEventHandler('Bank:take', function(amount)
 	if amount <= 0 or amount > accountMoney then
 		print("Bank: ERROR")
   else
-    MySQL.Async.execute('INSERT INTO bank_transactions(identifier,isDepot,montant) VALUES (@SteamId,0,@amount)', {["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function()
-      if CheckPlafondRetrait(source, amount) then
-        TriggerEvent("Bank:RemoveBankMoney", amount, source)
-        TriggerEvent("Inventory:AddMoney", amount, source)
-        defaultNotification.message = 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> '
-        TriggerClientEvent('Venato:notify', source, defaultNotification)
-      else
-        defaultNotification.message = "Vous avez dépassé votre plafond vous ne pouvez pas retirer d'argent pour le moment."
-        TriggerClientEvent('Venato:notify', source, defaultNotification)
-      end
-    end)
+    if CheckPlafondRetrait(source, amount) then
+      TriggerEvent("Bank:RemoveBankMoney", amount, source)
+      TriggerEvent("Inventory:AddMoney", amount, source)
+      defaultNotification.message = 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> '
+      TriggerClientEvent('Venato:notify', source, defaultNotification)
+    else
+      defaultNotification.message = "Vous avez dépassé votre plafond vous ne pouvez pas retirer d'argent pour le moment."
+      TriggerClientEvent('Venato:notify', source, defaultNotification)
+    end
 	end
 end)
 
@@ -75,7 +73,7 @@ AddEventHandler('Bank:transfer', function(amount, receiver)
   local source = source
   if amount <= 0 then
     print("Bank: ERROR")
-    return
+    return    
   end
   MySQL.Async.fetchAll('SELECT * FROM users WHERE account = @account', {['@account'] = receiver}, function (result)
     if (result[1] ~= nil) then
@@ -151,10 +149,10 @@ AddEventHandler("Bank:DepotCheque", function(index)
   local source = source
   local cheque = DataPlayers[source].Documents[tonumber(index)]
   if cheque.numeroDeCompte == "Entreprise" then
-    TriggerEvent("Bank:AddBankMoney", cheque.montant, source)
-    MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })
-    defaultNotification.message = "Vous avez bien déposé un chèque de "..cheque.montant.." € sur votre compte bancaire."
-    TriggerClientEvent('Venato:notify', source, defaultNotification)
+    TriggerEvent("Bank:AddBankMoney", cheque.montant, source)    
+    MySQL.Async.execute("DELETE FROM user_document WHERE identifier = @SteamId AND id = @id", {['@SteamId'] = DataPlayers[source].SteamId , ['@id'] = index })    
+    defaultNotification.message = "Vous avez bien déposé un chèque de "..cheque.montant.." € sur votre compte bancaire."    
+    TriggerClientEvent('Venato:notify', source, defaultNotification)    
     DataPlayers[source].Documents[tonumber(index)] = nil
   else
     MySQL.Async.fetchAll("SELECT * FROM users WHERE account = @account",{["@account"]=cheque.numeroDeCompte}, function(result)
@@ -198,7 +196,7 @@ AddEventHandler("Bank:AddBankMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Bank + qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
-  MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+  MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})  
 end)
 
 RegisterNetEvent("Bank:RemoveBankMoney")
@@ -211,7 +209,7 @@ AddEventHandler("Bank:RemoveBankMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Bank - qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
-	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
+	MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})  
 end)
 
 RegisterNetEvent("Bank:SetBankMoney")
@@ -241,7 +239,7 @@ function CheckPlafondDepot(source)
 end
 
 function CheckPlafondRetrait(source, amount)
-  MySQL.Async.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function(result)
+  MySQL.Async.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 1 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function(result)
     if result[1] ~= nil then
       if result[1].montant >= plafondDepot then
         return false
