@@ -15,7 +15,7 @@ JobsRequests.getPlayerJob = "SELECT job FROM users WHERE identifier = @identifie
 JobsRequests.getPlayerJobName = "SELECT job_name FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
 JobsRequests.getPlayerSalary = "SELECT salary FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
 JobsRequests.getPlayerSalaryCheck = "SELECT salaryCheck FROM users WHERE identifier = @identifier"
-JobsRequests.getPlayerPoliceRank = "SELECT rank FROM police WHERE identifier = @identifier"
+JobsRequests.getPlayerPoliceRank = "SELECT `rank` FROM police WHERE identifier = @identifier"
 JobsRequests.getSalaryCount = "SELECT salaryCount FROM users WHERE identifier = @identifier"
 
 JobsRequests.newSalary = "UPDATE users SET salaryCount = salaryCount+1 WHERE identifier = @identifier"
