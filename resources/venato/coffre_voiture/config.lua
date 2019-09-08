@@ -23,11 +23,10 @@ maxCapacityCv = {
     [21] = { ["size"] = 0 , ["MaxWeapon"] = 3}, --Trains
 }
 
-PlateExeption = { --max = 8
+PlateExeption = { --maxinplate = 8
   { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
-  { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
-  { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
-  { plate = "PONPISTE", size = 0 , MaxWeapon = 0},
+  { plate = "PONPISTE", size = 0   , MaxWeapon = 0},
+  { plate = "FORKLIFT", size = 0   , MaxWeapon = 0},
 }
 
 StingPlateExeption = {

@@ -15,8 +15,8 @@ RegisterNetEvent("Jobs:salary:cb")
 RegisterNetEvent("Jobs:askSalary:cb")
 
 AddEventHandler("Jobs:checkPlayerJob:cb", function(jobId)
+  local jobId = 14
   JobsConfig.jobId = jobId
-
   local job = JobsConfig.jobs[jobId]
   if job == nil then return end
   if not _G[job.Class].isEnabled() then return end
@@ -57,7 +57,7 @@ AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob
   notification.logo = JobsConfig.jobsNotification.logo
 
   if (primeCo + salary + primeJob) > 0 and bonus > 0 then
-    notification.message = notification.message .. "<br />Bonus <span class='green--text'>x" .. bonus .. "</span>"
+    notification.message = notification.message .. "<br /><br />Bonus multiplicateur <span class='green--text'>x" .. bonus .. "</span>"
   end
   if primeCo > 0 then
     notification.message = notification.message .. "<br />Prime de temps de service : <span class='green--text'>" .. primeCo .. " €</span>"

@@ -391,11 +391,13 @@ RegisterNetEvent("gcPhone:acceptCall")
 AddEventHandler("gcPhone:acceptCall", function(infoCall, initiator)
   if inCall == false and USE_RTC == false then
     inCall = true
-    local playerName = GetPlayerName(PlayerId())
-    getPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
-    exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
-    exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber((infoCall.id + 1)*100000), true);
-    exports.tokovoip_script:addPlayerToRadio(tonumber((infoCall.id + 1)*100000))
+    NetworkSetVoiceChannel(infoCall.id + 1)
+    NetworkSetTalkerProximity(0.0)
+    -- local playerName = GetPlayerName(PlayerId())
+    -- getPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
+    -- exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
+    -- exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber((infoCall.id + 1)*100000), true);
+    -- exports.tokovoip_script:addPlayerToRadio(tonumber((infoCall.id + 1)*100000))
   end
   if menuIsOpen == false then
     TooglePhone()
@@ -408,11 +410,13 @@ RegisterNetEvent("gcPhone:rejectCall")
 AddEventHandler("gcPhone:rejectCall", function(infoCall)
   if inCall == true then
     inCall = false
-    local playerName = GetPlayerName(PlayerId())
-    local callgetPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
-    exports.tokovoip_script:removePlayerFromRadio(callgetPlayerRadioChannel)
-    exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(getPlayerRadioChannel), true);
-    exports.tokovoip_script:addPlayerToRadio(tonumber(getPlayerRadioChannel))
+    Citizen.InvokeNative(0xE036A705F989E049)
+    NetworkSetTalkerProximity(2.5)
+    -- local playerName = GetPlayerName(PlayerId())
+    -- local callgetPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
+    -- exports.tokovoip_script:removePlayerFromRadio(callgetPlayerRadioChannel)
+    -- exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(getPlayerRadioChannel), true);
+    -- exports.tokovoip_script:addPlayerToRadio(tonumber(getPlayerRadioChannel))
   end
   PhonePlayText()
   SendNUIMessage({event = 'rejectCall', infoCall = infoCall})
@@ -481,11 +485,13 @@ RegisterNUICallback('notififyUseRTC', function (use, cb)
   USE_RTC = use
   if USE_RTC == true and inCall == true then
     inCall = false
-    local playerName = GetPlayerName(PlayerId())
-    local callgetPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
-    exports.tokovoip_script:removePlayerFromRadio(callgetPlayerRadioChannel)
-    exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(getPlayerRadioChannel), true);
-    exports.tokovoip_script:addPlayerToRadio(tonumber(getPlayerRadioChannel))
+    Citizen.InvokeNative(0xE036A705F989E049)
+    NetworkSetTalkerProximity(2.5)
+    -- local playerName = GetPlayerName(PlayerId())
+    -- local callgetPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
+    -- exports.tokovoip_script:removePlayerFromRadio(callgetPlayerRadioChannel)
+    -- exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(getPlayerRadioChannel), true);
+    -- exports.tokovoip_script:addPlayerToRadio(tonumber(getPlayerRadioChannel))
   end
   cb()
 end)

@@ -484,14 +484,6 @@ function loadPlayer(data)
 	local PosZ = data.Position[3]
   local PosH = data.Position[4]
   freezePlayer(PlayerId(), true)
-  local ped = Venato.GetPlayerPed()
-  if GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(Venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
-    RequestCollisionAtCoord(PosX, PosY, PosZ)
-    SetEntityCoordsNoOffset(ped, PosX, PosY, PosZ, false, false, false, true)
-    NetworkResurrectLocalPlayer(PosX, PosY, PosZ, PosH, true, true, false)
-    ClearPedTasksImmediately(ped)
-    ClearPlayerWantedLevel(PlayerId())
-  end
   if data.Skin.model then
     RequestModel(data.Skin.model)
     while not HasModelLoaded(data.Skin.model) do
@@ -504,6 +496,12 @@ function loadPlayer(data)
     SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
     Venato.LoadClothes()
   end
+  RequestCollisionAtCoord(PosX, PosY, PosZ)
+  local ped = GetPlayerPed(-1)
+  SetEntityCoordsNoOffset(ped, PosX, PosY, PosZ, false, false, false, true)
+  NetworkResurrectLocalPlayer(PosX, PosY, PosZ, PosH, true, true, false)
+  ClearPedTasksImmediately(ped)
+  ClearPlayerWantedLevel(PlayerId())
   while not HasCollisionLoadedAroundEntity(ped) do
       Citizen.Wait(0)
   end

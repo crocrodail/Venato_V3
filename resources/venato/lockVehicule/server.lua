@@ -1,4 +1,5 @@
-LockedVehicle =  { ["LAMA"] = { ["plate"] = "LAMA" , ["locked"] = 2 } }
+LockedVehicle = {}
+LockedVehicle["FORKLIFT"] = { ["plate"] = "FORKLIFT", ["locked"] = 1 }
 local id = 0
 
 

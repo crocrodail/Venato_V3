@@ -19,6 +19,7 @@ function toogleServiceAmbulancier()
     Menu.addButton("Tenue Docteur", "Docteur", nil)
     Menu.addButton("Equiper un stethoscope", "stethoscope", nil)
   	Menu.addButton("Equiper une casquet", "casquet", nil)
+    Menu.addButton("Récupérer sa paie", "takeSalary")
     TriggerServerEvent('ambulancier:takeService')
     TriggerServerEvent('ambulancier:requestMission')
   end

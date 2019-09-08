@@ -15,21 +15,6 @@ local defaultNotification = {
 }
 
 Citizen.CreateThread(function()
-
-  for _, item in ipairs(drugs) do
-      if item.farm then
-          item.farm.npc = GenerateNpc(item.farm)
-      end
-
-      if item.transform then
-          item.transform.npc = GenerateNpc(item.transform)
-      end
-
-      if item.sell then
-          item.sell.npc = GenerateNpc(item.sell)
-      end
-  end
-
     while true do
         Wait(0)
         for i=1, #drugs, 1 do
@@ -188,6 +173,20 @@ end)
 
 
 Citizen.CreateThread(function()
+  Citizen.Wait(10000)
+  for _, item in ipairs(drugs) do
+      if item.farm then
+          item.farm.npc = GenerateNpc(item.farm)
+      end
+
+      if item.transform then
+          item.transform.npc = GenerateNpc(item.transform)
+      end
+
+      if item.sell then
+          item.sell.npc = GenerateNpc(item.sell)
+      end
+  end
 	while true do
         TriggerServerEvent('police:getAllCopsInServiceNb')
         Citizen.Wait(60000)

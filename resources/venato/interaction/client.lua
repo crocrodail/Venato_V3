@@ -2,6 +2,7 @@ local mp_pointing = false
 local keyPressed = false
 local pressButton1 = 0
 local pressButton2 = 0
+local hiddenHUD = false
 
 Citizen.CreateThread(function()
 	while true do
@@ -9,6 +10,11 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(0, Keys["F1"]) then
 			OpenMenuInteraction()
 			Menu.toggle()
+		end
+		if hiddenHUD == false then
+			DisplayRadar(true)
+		else
+			DisplayRadar(false)
 		end
 		if IsControlJustPressed(0, 21) then
           pressButton1 = 1
@@ -44,6 +50,16 @@ function ClearAnim()
             ClearPedTasksImmediately(lPed)
         end)
     end
+	end
+end
+
+function maskHUD()
+	if hiddenHUD == false then
+		hiddenHUD = true
+		TriggerEvent("Hud:Update",{action = "showHUD"})
+	else
+		hiddenHUD = false
+		TriggerEvent("Hud:Update",{action = "hideHUD"})
 	end
 end
 

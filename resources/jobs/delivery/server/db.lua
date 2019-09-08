@@ -80,7 +80,7 @@ function DeliveryJobDbFunctions.getWarehouses()
 end
 
 function DeliveryJobDbFunctions.newMissionCheck(source)
-  local newCheck = 500
+  local newCheck = 8000
   MySQL.Sync.execute(DeliveryJobRequests.newMissionCheck, { ["@newCheck"] = newCheck, ["@Id"] = getSteamID(source) })
   return newCheck
 end

@@ -11,6 +11,7 @@ client_script {
   '/client/teleport.lua',
   '/client/savePos.lua',
   '/client/InteractWithProp.lua',
+  '/client/vocal.lua',
   '/inventory/client.lua',
   '/coffre_voiture/client.lua',
   '/bank/config.lua',

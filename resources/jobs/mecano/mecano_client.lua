@@ -2,6 +2,7 @@ local myVehiculeEntity = nil
 local otherVehicle = nil
 local inService = false
 local alarmValue = 0
+local Mecano = {}
 local alarmVehicle = 0
 local alarmDelay = 500
 local ShowLineGrueHelp = true
@@ -160,6 +161,15 @@ local coords = {
 --====================================================================================
 --  Utils function
 --====================================================================================
+JobsConfig.jobs[16] = {
+  ["name"] = "Mecano",
+  ["Class"] = "Mecano"
+}
+
+function Mecano.isEnabled()
+  return true
+end
+
 local function showMessageInformation(message, duree)
   local notif = {
     title= "Mécano",

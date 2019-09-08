@@ -20,7 +20,7 @@ function Jobs.init(job)
   CreateThread(function()
 
     serviceLocation = _G[job.Class].getServiceLocation()
-    JobTools.addBlip(serviceLocation, "Entreprise", 408, 2, false)
+    JobTools.addBlip(serviceLocation, "PostOP", 408, 2, false)
 
     _G[job.Class].init()
   end)
@@ -45,7 +45,7 @@ function Jobs.Commands(job)
           Menu.clearMenu()
           Menu.open()
           Menu.setTitle(job.name)
-          Menu.setSubtitle("¿ Vas y KesTuVeFaire ?")
+          Menu.setSubtitle("Metier")
           _G[job.Class].showMenu()
         end
       end
@@ -58,6 +58,7 @@ function Jobs.Commands(job)
         else
           Menu.clearMenu()
           Menu.open()
+          TriggerEvent('Menu:Init', "ob.name", "Que puis-je pour vous ?", "#B4823A99", "https://www.gvmp.de/images/proxy/29/29c09d16a4908fb10b4c9a0bbe4b9ed104395fdd.jpg")
           Menu.setTitle(job.name)
           Menu.setSubtitle("Que puis-je pour vous ?")
           Menu.addButton(JobsConfig.inService and "Quitter le service" or "Prendre le service", "toggleService", job)

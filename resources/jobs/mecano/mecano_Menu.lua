@@ -33,6 +33,7 @@ function openMenuGeneralMecano()
   Menu.addButton("Nettoyer le Vehicule", "MECANO_wash", nil)
   Menu.addButton("Supprimer le Vehicule", "MECANO_deleteVehicle", nil)
   Menu.addButton("Afficher / Cacher aide", "toogleHelperLine", nil)
+  Menu.addButton("Récupérer sa paie", "takeSalary")
 end
 
 function MecanoGetMissionMenu()

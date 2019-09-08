@@ -56,17 +56,19 @@ AddEventHandler('Bank:take', function(amount)
 	if amount <= 0 or amount > accountMoney then
 		print("Bank: ERROR")
   else
-    MySQL.Async.execute('INSERT INTO bank_transactions(identifier,isDepot,montant) VALUES (@SteamId,0,@amount)', {["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function()
-      if CheckPlafondRetrait(source, amount) then
-        TriggerEvent("Bank:RemoveBankMoney", amount, source)
-        TriggerEvent("Inventory:AddMoney", amount, source)
-        defaultNotification.message = 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> '
-        TriggerClientEvent('Venato:notify', source, defaultNotification)
+      if CheckPlafondRetrait(source, amount) == true then
+        print("passe")
+        MySQL.Async.execute('INSERT INTO bank_transactions(identifier,isDepot,montant) VALUES (@SteamId,0,@amount)', {["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function()
+          TriggerEvent("Bank:RemoveBankMoney", amount, source)
+          TriggerEvent("Inventory:AddMoney", amount, source)
+          defaultNotification.message = 'Vous avez retiré <span class="green--text">' .. amount .. ' €</span> '
+          TriggerClientEvent('Venato:notify', source, defaultNotification)
+        end)
       else
+        print("passepas")
         defaultNotification.message = "Vous avez dépassé votre plafond vous ne pouvez pas retirer d'argent pour le moment."
         TriggerClientEvent('Venato:notify', source, defaultNotification)
       end
-    end)
 	end
 end)
 
@@ -241,15 +243,14 @@ function CheckPlafondDepot(source)
 end
 
 function CheckPlafondRetrait(source, amount)
-  MySQL.Async.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function(result)
-    if result[1] ~= nil then
-      if result[1].montant >= plafondDepot then
-        return false
-      end
+  local result = MySQL.Sync.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount})
+  if result[1] ~= nil then
+    if result[1].montant <= plafondRetrait then
       return true
     end
-    return true
-  end)
+    return false
+  end
+  return false
 end
 
 function BlockAccount(source)

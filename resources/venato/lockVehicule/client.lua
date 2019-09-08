@@ -1,6 +1,6 @@
 local VehicleList = { ["0"] =  {["plate"]  = "LAMA    ",  ["name"]  = "inconnu"} }  -- clef or not
 local VehicleListadd = {}
-local VehicleListLock = {["LAMA"] = { ["plate"] = "LAMA" , ["locked"] = 1 }} -- open or close
+local VehicleListLock = {} -- open or close
 local plaque = {}
 local id = 0
 local defaultNotification = {

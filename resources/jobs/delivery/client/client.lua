@@ -6,6 +6,11 @@
   @version 1.0
 --]]
 DeliveryJob = {}
+local ClosetOfMissionPoint = false
+local ClosetOfBoxSpawnPoint = false
+local ClosetOfSpawnForkliftPoint = false
+local indexSpawnFroklift = nil
+local UserIsInService = false
 
 -- ACTIONS message
 local TAKE_TRUNK_ACTION_MSG = "Appuyez sur ~INPUT_CONTEXT~ pour récupérer ta camionnette"
@@ -17,10 +22,13 @@ local PUT_ITEMS_IN_BOX_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour 
 local GET_FORKLIFT_ACTION_MSG = "Appuyez sur la touche ~INPUT_CONTEXT~ pour récupérer un forklift"
 local CANT_PUT_ITEMS_IN_BOX_MSG = "La caisse doit être déchargé du camion pour mettre vos marchandise."
 local NO_BOX_ON_HAND = "Vous n'avez aucune marchandise dans les mains."
+local OPEN_CHOSE_MISSION = "Appuyez sur ~INPUT_CONTEXT~ pour choisir une mission."
+local SPAWN_BOX = "Appuyez sur ~INPUT_CONTEXT~ pour récupérer une caisse."
 
 -- OTHERS message
-local LOAD_TRUNK_MSG = "Veuillez charger le camion avec la caisse pour commencer."
-local LOAD_BOX_MSG = "Veuillez remplir la caisse avec les marchandises dans les entrepots ~BLIP_408~"
+local LOAD_TRUNK_MSG = "Prenez votre camion et aller chercher votre caisse de marchandise."
+local LOAD_BOX_ON_TRUCK = "Utiliser le forklift pour mettre la caisse dans votre camion, les portes arrière doivent etre ouvert."
+local LOAD_BOX_MSG = "Rejoingner les entrepots adapté à votre livraision (~BLIP_408~ sur la carte) "
 local TAKE_IN_BOX_MSG = "Veuillez prendre les items dans les caisses"
 local DELIVERY_MSG = "veuillez livrer votre chargement à destination ~BLIP_119~"
 
@@ -60,11 +68,23 @@ function takeMission()
   TriggerServerEvent("DeliveryJob:takeMission")
 end
 
+function takeMissionPrecise(nb)
+  TriggerServerEvent("DeliveryJob:takeMissionPrecise", nb)
+  RemoveBlip(DeliveryJobConfig.gpsroute["Choix des livraisons"])
+  DeliveryJobConfig.gpsroute["Choix des livraisons"] = nil
+  local name = "Caisse de transport"
+  if not DeliveryJobConfig.gpsroute[name] then
+    local blip = JobTools.addBlip(DeliveryJobConfig.takebox, name, 478, 2, true)
+    DeliveryJobConfig.gpsroute[name] = blip
+  end
+  spawnTrunk()
+end
+
 function abortMission()
   if DeliveryJobConfig.mission.shop ~= nil then
     TriggerServerEvent("DeliveryJob:abortMission", DeliveryJobConfig.mission.orderId)
   end
-  DeliveryJobConfig.currentStep = nil
+  DeliveryJobConfig.currentStep = 0
   DeliveryJobConfig.itemsTaken = {}
   DeliveryJobConfig.itemsTrunk = {}
   DeliveryJobConfig.mission = nil
@@ -77,8 +97,112 @@ function abortMission()
 end
 
 function DeliveryJob.showMenu()
-  if DeliveryJobConfig.currentStep == nil then
-    Menu.addButton("Effectuer la livraison", "takeMission")
+  if DeliveryJobConfig.currentStep == 0 then
+  --  Menu.addButton("Effectuer la livraison", "takeMission")
+  else
+    Menu.addButton("Abandonner la livraison", "abortMission")
+  end
+end
+
+function UserTakingServiceLivery()
+  DeliveryJobConfig.currentStep = 0
+  local name = "Choix des livraisons"
+  if not DeliveryJobConfig.gpsroute[name] then
+    local blip = JobTools.addBlip(DeliveryJobConfig.chosemission, name, 515, 2, true)
+    DeliveryJobConfig.gpsroute[name] = blip
+  end
+  local ped = GetPlayerPed(-1)
+  local props = {}
+  local components ={}
+  --{"tshirt_1":59,"torso_1":89,"arms":31,"pants_1":36,"glasses_1":19,"decals_2":0,"hair_color_2":0,"helmet_2":0,"hair_color_1":0,"face":2,"glasses_2":0,"torso_2":1,"shoes":35,"hair_1":0,"skin":0,"sex":0,"glasses_1":19,"pants_2":0,"hair_2":0,"decals_1":0,"tshirt_2":0,"helmet_1":5} --------------{"tshirt_1":36,"torso_1":0,"arms":68,"pants_1":30,"glasses_1":15,"decals_2":0,"hair_color_2":0,"helmet_2":0,"hair_color_1":0,"face":27,"glasses_2":0,"torso_2":11,"shoes":26,"hair_1":5,"skin":0,"sex":1,"glasses_1":15,"pants_2":2,"hair_2":0,"decals_1":0,"tshirt_2":0,"helmet_1":19}
+
+  if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
+     props = {
+      { 0, -1, 0 }, -- casque
+      { 1, -1, 0 }, -- lunette
+      { 2, 0, 0 }, -- ecouteur
+      { 3, 3, 0 } -- montre
+    }
+    components = {
+      { 1, 11, 2 }, -- masque
+      { 3, 0, 0 }, -- gant/bras
+      { 4, 36, 0 }, -- pantalon
+      { 5, 0, 0 }, -- parachute
+      { 6, 35, 0 }, --chaussure
+      { 7, 0, 0 }, --acssessoir
+      { 8, 59, 5 }, -- ceinture/t-shirt
+      { 9, 0, 0 }, -- armur
+      { 10, 0, 0 }, -- emblème
+      { 11, 1, 0 } -- chemise/pull/veste
+    }
+  else -- femme
+    props = {
+      { 0, -1, 0 }, -- casque
+      { 1, -1, 0 }, -- lunette
+      { 2, 0, 0 }, -- ecouteur
+      { 3, 3, 0 } -- montre
+    }
+    components = {
+      { 1, 11, 2 }, -- masque
+      { 3, 0, 1 }, -- gant/bras
+      { 4, 30, 2 }, -- pantalon
+      { 5, 0, 0 }, -- parachute
+      { 6, 26, 0 }, --chaussure
+      { 7, 0, 0 }, --acssessoir
+      { 8, 36, 0 }, -- ceinture/t-shirt
+      { 9, 0, 0 }, -- armur
+      { 10, 0, 0 }, -- emblème
+      { 11, 0, 1 } -- chemise/pull/veste
+    }
+
+  end
+
+  for _, comp in ipairs(components) do
+     SetPedComponentVariation(ped, comp[1], comp[2], comp[3], 0)
+  end
+
+  for _, comp in ipairs(props) do
+      if comp[2] == -1 then
+          ClearPedProp(ped, comp[1])
+      else
+          SetPedPropIndex(ped, comp[1], comp[2] , comp[3] , true)
+      end
+  end
+end
+
+function spawnBoxFromMission()
+  local boxx = GetClosestObjectOfType(DeliveryJobConfig.trunkDrops.box.x,DeliveryJobConfig.trunkDrops.box.y,DeliveryJobConfig.trunkDrops.box.z, 3.0, GetHashKey(DeliveryJobConfig.BOX_KEY), false)
+  if boxx == 0 then
+    spawnBox()
+    DeliveryJobConfig.currentStep = 1.1
+  else
+    JobsConfig.jobsNotification.message = "<span class='red--text'>un élément block le spawn de caisse.</span>"
+    Venato.notify(JobsConfig.jobsNotification)
+  end
+end
+
+function openMenuSpawnBox()
+  Menu.clearMenu()
+  Menu.open()
+  Menu.setTitle("livraison")
+  Menu.addButton("Récupérer une caisse", "spawnBoxFromMission")
+  Menu.addButton("Récupérer un Forklift", "spawnForkliftfunction")
+end
+
+function spawnForkliftfunction()
+  local playerPos = GetEntityCoords(GetPlayerPed(-1))
+  spawnForklift({x=playerPos.x, y=playerPos.y, z=playerPos.z})
+end
+
+function openChoseMission()
+  Menu.clearMenu()
+  Menu.open()
+  Menu.setTitle("Choix de la livraison")
+  if DeliveryJobConfig.currentStep == 0 then
+    Menu.addButton("livraison pour le Taquila-la", "takeMissionPrecise", 1)
+    Menu.addButton("livraison pour l'hospital'", "takeMissionPrecise", 2)
+    Menu.addButton("livraison pour la LSPD", "takeMissionPrecise", 3)
+    --Menu.addButton("livraison test", "takeMissionPrecise", 4)
   else
     Menu.addButton("Abandonner la livraison", "abortMission")
   end
@@ -86,13 +210,50 @@ end
 
 function DeliveryJob.mainLoop()
   if DeliveryJob.isEnabled() then
-    local player = GetPlayerPed(-1)
     local dropPoint = DeliveryJobConfig.trunkDrops['box']
 
     while true do
+      local player = GetPlayerPed(-1)
       Wait(0)
 
       interactTxt = false
+
+      if ClosetOfMissionPoint ~= false and DeliveryJobConfig.currentStep ~= nil then
+        if ClosetOfMissionPoint < 20 then
+          DrawMarker(27, DeliveryJobConfig.chosemission.x, DeliveryJobConfig.chosemission.y, DeliveryJobConfig.chosemission.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,174, 0, 0, 0, 0)
+        end
+        if ClosetOfMissionPoint < 2 then
+          Venato.InteractTxt(OPEN_CHOSE_MISSION)
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            openChoseMission()
+          end
+        end
+      end
+
+      if ClosetOfBoxSpawnPoint ~= false and DeliveryJobConfig.currentStep ~= nil then
+        if ClosetOfBoxSpawnPoint < 20 then
+          DrawMarker(27, DeliveryJobConfig.takebox.x, DeliveryJobConfig.takebox.y, DeliveryJobConfig.takebox.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,174, 0, 0, 0, 0)
+        end
+        if ClosetOfBoxSpawnPoint < 2 then
+          Venato.InteractTxt(SPAWN_BOX)
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            openMenuSpawnBox()
+          end
+        end
+      end
+
+      if ClosetOfSpawnForkliftPoint ~= false and indexSpawnFroklift ~= nil and DeliveryJobConfig.currentStep ~= nil then
+        if ClosetOfSpawnForkliftPoint < 20 then
+          DrawMarker(27, DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].x, DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].y, DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,174, 0, 0, 0, 0)
+        end
+        if ClosetOfSpawnForkliftPoint < 2 then
+          Venato.InteractTxt(SPAWN_BOX)
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            local playerPos = GetEntityCoords(GetPlayerPed(-1))
+            spawnForklift({x=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].x, y=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].y, z=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].z , heading=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].heading})
+          end
+        end
+      end
 
       if JobsConfig.inService then
         local playerPos = GetEntityCoords(GetPlayerPed(-1))
@@ -115,7 +276,8 @@ function DeliveryJob.mainLoop()
           for i, v in ipairs(DeliveryJobConfig.boxCoord) do
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, playerPos["x"], playerPos["y"], playerPos["z"],
               true)
-            if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
+              print(distance)
+            if distance < 0.6 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY)
             then
               Venato.InteractTxt(LOAD_BOXE_IN_TRUNK_ACTION_MSG)
@@ -157,8 +319,10 @@ function DeliveryJob.mainLoop()
               loadOnTrunk()
               DeliveryJobConfig.boxOnForklift = false
               DeliveryJobConfig.boxOnTrunk = true
-              if DeliveryJobConfig.currentStep == 1 then
+              if DeliveryJobConfig.currentStep == 1.1 then
                 DeliveryJobConfig.currentStep = 2
+                RemoveBlip(DeliveryJobConfig.gpsroute["Caisse de transport"])
+                DeliveryJobConfig.gpsroute["Caisse de transport"] = nil
               end
             end
           end
@@ -218,9 +382,11 @@ function DeliveryJob.mainLoop()
         if not interactTxt then
           if DeliveryJobConfig.currentStep == 1 then
             Venato.InteractTxt(LOAD_TRUNK_MSG)
+          elseif DeliveryJobConfig.currentStep == 1.1 then
+            Venato.InteractTxt(LOAD_BOX_ON_TRUCK)
           elseif DeliveryJobConfig.currentStep == 2 then
             if not DeliveryJobConfig.inWarehouse then
-              if DeliveryJobConfig.globalBox ~= nil and next(DeliveryJobConfig.itemsTaken) ~= nil then
+              if DeliveryJobConfig.globalBox == DeliveryJobConfig.box and next(DeliveryJobConfig.itemsTaken) ~= nil then
                 if not DeliveryJobConfig.boxOnTrunk and not DeliveryJobConfig.boxOnForklift then
                   if DeliveryJobConfig.carryBoxWithHand then
                     Venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
@@ -240,15 +406,20 @@ function DeliveryJob.mainLoop()
               if DeliveryJobConfig.globalBox ~= nil then
                 Venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
                 if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-                  JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
-                  if not JobsConfig.isMenuOpen then
-                    Menu.close()
+                  if not DeliveryJobConfig.carryBoxWithHand then
+                    JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
+                    if not JobsConfig.isMenuOpen then
+                      Menu.close()
+                    else
+                      Menu.clearMenu()
+                      Menu.open()
+                      Menu.setTitle("Marchandises")
+                      Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
+                      showWarehouseItemButtons()
+                    end
                   else
-                    Menu.clearMenu()
-                    Menu.open()
-                    Menu.setTitle("Marchandises")
-                    Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
-                    showWarehouseItemButtons()
+                    JobsConfig.jobsNotification.message = "<span class='red--text'>Vous pouvez prendre qu'un type de marchandise à la fois</span>"
+                    Venato.notify(JobsConfig.jobsNotification)
                   end
                 end
               else
@@ -270,9 +441,13 @@ function DeliveryJob.checkLoop()
     Wait(1000)
 
     if JobsConfig.inService then
+      if UserIsInService == false then
+        UserIsInService = true
+        UserTakingServiceLivery()
+      end
       local playerPos = GetEntityCoords(GetPlayerPed(-1))
       local obj = GetClosestObjectOfType(playerPos.x, playerPos.y, playerPos.z,
-        DeliveryJobConfig.inWarehouse and 1. or 4.0,
+        DeliveryJobConfig.inWarehouse and 1. or 2.0,
         GetHashKey(DeliveryJobConfig.BOX_KEY), false, true, true)
       local veh = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 10.0,
         GetHashKey(DeliveryJobConfig.TRUNK_KEY),
@@ -318,6 +493,12 @@ function DeliveryJob.checkLoop()
         DeliveryJobConfig.inWarehouse = nil
       end
 
+    else
+      if UserIsInService == true then
+        UserIsInService = false
+        DeliveryJobConfig.currentStep = nil
+        TriggerEvent("Venato:LoadClothes")
+      end
     end
 
     manageBlip()
@@ -346,12 +527,15 @@ function manageBlip()
   end
 
   if DeliveryJobConfig.currentStep ~= nil then
-    addTrunkDropsBlip(DeliveryJobConfig.trunkDrops['box'])
+    addSpawnForkliftBlip()
   else
-    RemoveBlip(DeliveryJobConfig.blips["Camionnette"])
-    DeliveryJobConfig.blips["Camionnette"] = nil
+    for i,v in ipairs(DeliveryJobConfig.trunkDrops.forklift) do
+      if DeliveryJobConfig.blips["Forklift"] ~= nil then
+        RemoveBlip(DeliveryJobConfig.blips["Forklift"][i])
+        DeliveryJobConfig.blips["Forklift"][i] = nil
+      end
+    end
   end
-
   if DeliveryJobConfig.mission and DeliveryJobConfig.orderComplete and DeliveryJobConfig.currentStep == 3 then
     addDestinationBlip(DeliveryJobConfig.destination)
   elseif DeliveryJobConfig.mission then
@@ -361,11 +545,18 @@ function manageBlip()
   end
 end
 
-function addTrunkDropsBlip(point)
-  local name = "Camionnette"
-  if not DeliveryJobConfig.blips[name] then
-    local blip = JobTools.addBlip(point, name, 85, 2, false)
-    DeliveryJobConfig.blips[name] = blip
+function addSpawnForkliftBlip()
+  local name = "Forklift"
+  for i,v in ipairs(DeliveryJobConfig.trunkDrops["forklift"]) do
+    local index = i
+    local point = {x=v.x,y=v.y,z=v.z}
+    if not DeliveryJobConfig.blips[name] then
+      local blip = JobTools.addBlip(point, name, 85, 2, false)
+      if DeliveryJobConfig.blips[name] == nil then
+        DeliveryJobConfig.blips[name] = {}
+      end
+      DeliveryJobConfig.blips[name][index] = blip
+    end
   end
 end
 
@@ -394,6 +585,7 @@ function spawnTrunk()
       { ["x"] = coords.x, ["y"] = coords.y, ["z"] = coords.z }, coords.heading,
       function(vehicle)
         DeliveryJobConfig.trunk = vehicle
+        SetVehicleLivery(vehicle, 1)
         SetVehicleNumberPlateText(vehicle, "Trunk_" .. math.random(100, 999))
         SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
         TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
@@ -412,9 +604,9 @@ function spawnForklift(coords)
       { ["x"] = coords.x, ["y"] = coords.y, ["z"] = coords.z }, coords.heading,
       function(vehicle)
         DeliveryJobConfig.forklift = vehicle
-        SetVehicleNumberPlateText(vehicle, "DeliveryForklift_" .. math.random(100, 999))
-        TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
-          GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
+        SetVehicleNumberPlateText(vehicle, "FORKLIFT")
+      --  TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
+      --    GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
       end)
   end
 end
@@ -601,16 +793,12 @@ function takeItem(item)
   local nb = Venato.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     qty = DeliveryJobConfig.itemsTaken[item.id] or 0
-    if qty ~= 0 then
-      CreateBoxForitemsTaken(qty, item.libelle)
-      qty = qty + tonumber(nb)
-      DeliveryJobConfig.itemsTaken[item.id] = qty
-      JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez maintenant " .. qty .. " " .. item.libelle .. "</span"
-      Venato.notify(JobsConfig.jobsNotification)
-    else
-      JobsConfig.jobsNotification.message = "<span class='red--text'>Vous pouvez prendre qu'un type de marchandise à la fois</span>"
-      Venato.notify(JobsConfig.jobsNotification)
-    end
+    CreateBoxForitemsTaken(qty, item.libelle)
+    qty = qty + tonumber(nb)
+    DeliveryJobConfig.itemsTaken[item.id] = qty
+    JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez maintenant " .. qty .. " " .. item.libelle .. "</span"
+    Venato.notify(JobsConfig.jobsNotification)
+    Menu.close()
   else
     JobsConfig.jobsNotification.message = "<span class='red--text'>Une erreur dans le nombre saisi</span>"
     Venato.notify(JobsConfig.jobsNotification)
@@ -628,6 +816,7 @@ end
 function DropInTheBiggestBoxForitemsTaken()
   DeliveryJobConfig.carryBoxWithHand = false
   DetachEntity(DeliveryJobConfig.handbox)
+  DeleteEntity(DeliveryJobConfig.handbox)
   DeliveryJobConfig.handbox = nil
   ClearPedTasksImmediately(PlayerPedId())
 end
@@ -640,21 +829,18 @@ function putItemInTrunk(item)
   end
   DeliveryJobConfig.itemsTaken = {}
   DropInTheBiggestBoxForitemsTaken()
-  JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchandises dans le camion</span"
+  JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchandises dans la caisse</span"
   Venato.notify(JobsConfig.jobsNotification)
 end
 
 function ValidateMission()
-  DeliveryJobConfig.currentStep = nil
+  TriggerServerEvent("DeliveryJob:finishMission",DeliveryJobConfig.mission.orderId,  DeliveryJobConfig.mission.shop ~= nil)
+  DeliveryJobConfig.currentStep = 0
   DeliveryJobConfig.itemsTaken = {}
   DeliveryJobConfig.itemsTrunk = {}
   DeliveryJobConfig.mission = nil
   DeliveryJobConfig.order = nil
   DeliveryJobConfig.destination = nil
-
-  TriggerServerEvent("DeliveryJob:finishMission",
-    DeliveryJobConfig.mission.orderId,
-    DeliveryJobConfig.mission.shop ~= nil)
 end
 
 function printTxt(text, x, y, center, police)
@@ -670,3 +856,39 @@ function printTxt(text, x, y, center, police)
   AddTextComponentString(text)
   DrawText(x, y)
 end
+
+Citizen.CreateThread(function()
+  local await = 1000
+  while true do
+    Citizen.Wait(await)
+    local pos = GetEntityCoords(GetPlayerPed(-1))
+    local disA = Vdist(pos.x, pos.y, pos.z, DeliveryJobConfig.chosemission.x, DeliveryJobConfig.chosemission.y, DeliveryJobConfig.chosemission.z)
+    local disB = Vdist(pos.x, pos.y, pos.z, DeliveryJobConfig.takebox.x, DeliveryJobConfig.takebox.y, DeliveryJobConfig.takebox.z)
+    for k,v in pairs(DeliveryJobConfig.trunkDrops["forklift"]) do
+      local disC = Vdist(pos.x, pos.y, pos.z, v.x, v.y, v.z)
+      if disC < 20 then
+        ClosetOfSpawnForkliftPoint = disC
+        indexSpawnFroklift = k
+        break
+      else
+        ClosetOfSpawnForkliftPoint = false
+      end
+    end
+
+    if disA < 20 then
+      ClosetOfMissionPoint = disA
+    else
+      ClosetOfMissionPoint = false
+    end
+
+    if disB < 20 then
+      ClosetOfBoxSpawnPoint = disB
+    else
+      ClosetOfBoxSpawnPoint = false
+    end
+
+    if DeliveryJobConfig.carryBoxWithHand then
+      Venato.playAnim({lib = "anim@heists@box_carry@", anim = "idle", useLib = true, flag = 50})
+    end
+  end
+end)

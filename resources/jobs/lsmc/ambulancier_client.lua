@@ -2,7 +2,7 @@ ambulancierIsInService = false
 myVehiculeEntity = nil
 local AdminCheatIsOn = false
 local TimeToRespawn = 0
-
+local Ambulancier = {}
 local spawnAmbulancierVehicleChoix = {}
 local KEY_ENTER = 18
 local KEY_UP = 96 -- N+
@@ -128,6 +128,15 @@ local function removeBlipAmbulancier()
 			RemoveBlip(item.blip)
 	end
 end
+end
+
+JobsConfig.jobs[15] = {
+  ["name"] = "Ambulancier",
+  ["Class"] = "Ambulancier"
+}
+
+function Ambulancier.isEnabled()
+  return true
 end
 
 function spawnVehicule(pos, type)

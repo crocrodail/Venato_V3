@@ -7,7 +7,7 @@ new Vue({
         water: 50,
         fuel: 50,
         carDamage: 50,
-        alcool: 0,        
+        alcool: 0,
         window: {
           width: 0,
           height: 0
@@ -33,14 +33,14 @@ new Vue({
           },
           timeout: 3000
       });
-      Noty.setMaxVisible(5); 
+      Noty.setMaxVisible(5);
     },
     destroyed() {
       window.removeEventListener('resize', this.handleResize)
       window.removeEventListener('message', this.handleMessage)
     },
     mounted () {
-      google.load('visualization', '1', {packages: ['gauge']}); 
+      google.load('visualization', '1', {packages: ['gauge']});
       google.setOnLoadCallback(this.drawChart);
     },
     methods: {
@@ -54,6 +54,12 @@ new Vue({
         }
         else if(event.data.action === "leaveCar"){
           this.playerIsInVehicule = false;
+        }
+        else if(event.data.action === "hideHUD"){
+          document.getElementById('app').style.display='block';
+        }
+        else if(event.data.action === "showHUD"){
+          document.getElementById('app').style.display='none';
         }
         else if(event.data.action === "vehiculeStatus"){
           this.fuel = event.data.fuel;
@@ -81,7 +87,7 @@ new Vue({
             logo : event.data.logo,
             text     : event.data.message,
             timeout : event.data.timeout
-          }); 
+          });
 
           if(event.data.logo){
             n.on('onTemplate',(a) => {
@@ -91,7 +97,7 @@ new Vue({
             n.on('onTemplate',(a) => {
               n.barDom.innerHTML = '<div id="notifVenato" class="noty_bar noty_type__'+n.options.type+' noty_theme__sunset noty_close_with_click noty_has_progressbar"></div><div class="noty_title">'+n.options.title+'</div><div class="noty_body">'+n.options.text+'</div><div class="noty_progressbar"></div></div>';
             })
-          } 
+          }
           n.show();
         }
       },
@@ -103,7 +109,7 @@ new Vue({
         ]);
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-        
+
         var options = {
           animation: {
             duration: 0, easing: "linear"
@@ -128,5 +134,5 @@ new Vue({
       progressWidth: function() {
         return this.window.width/256;
       },
-    }    
+    }
   })

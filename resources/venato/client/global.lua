@@ -154,7 +154,19 @@ function Openpoleemploie()
   Menu.addButton2("Pompiste", "sitchJob", 22, nil, nil)
   Menu.addButton2("Vigneron", "sitchJob", 13, nil, nil)
   Menu.addButton2("Brasseur", "sitchJob", 12, nil, nil)
+  Menu.addButton2("Liveur PostOp (Beta v1.0)", "PostOp", nil, nil, nil)
   Menu.CreateMenu()
+end
+
+function PostOp()
+  AddPointToGpsCustomRoute(-423.96, -2789.39 ,6.0)
+  local defaultNotification = {
+    type = "alert",
+    title ="PoleEmploi",
+    logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
+    message = "PostOP est une entreprise libre vous pouvez y travailler sans avec l'emploi 'PostOP'. les coordonées de l'entreprise on été ajouté à votre GPS."
+  }
+  Venato.notify(defaultNotification)
 end
 
 function sitchJob(id)

@@ -19,8 +19,10 @@ AddEventHandler("DeliveryJob:getWarehouses:cb", function(warehouses)
 end)
 
 AddEventHandler("DeliveryJob:finishMission:cb", function(newCheck)
+  JobsConfig.jobsNotification.timeout = 15000
   JobsConfig.jobsNotification.message = "<span class='green--text'>Livraison réussi, votre chèque de " .. newCheck .. " vous attends à l'entreprise</span"
   Venato.notify(JobsConfig.jobsNotification)
+  JobsConfig.jobsNotification.timeout = 3000
 end)
 
 AddEventHandler("DeliveryJob:takeMission:cb", function(mission, order, destination)
