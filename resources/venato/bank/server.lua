@@ -57,7 +57,6 @@ AddEventHandler('Bank:take', function(amount)
 		print("Bank: ERROR")
   else
       if CheckPlafondRetrait(source, amount) == true then
-        print("passe")
         MySQL.Async.execute('INSERT INTO bank_transactions(identifier,isDepot,montant) VALUES (@SteamId,0,@amount)', {["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount}, function()
           TriggerEvent("Bank:RemoveBankMoney", amount, source)
           TriggerEvent("Inventory:AddMoney", amount, source)
@@ -65,7 +64,6 @@ AddEventHandler('Bank:take', function(amount)
           TriggerClientEvent('Venato:notify', source, defaultNotification)
         end)
       else
-        print("passepas")
         defaultNotification.message = "Vous avez dépassé votre plafond vous ne pouvez pas retirer d'argent pour le moment."
         TriggerClientEvent('Venato:notify', source, defaultNotification)
       end
@@ -87,7 +85,7 @@ AddEventHandler('Bank:transfer', function(amount, receiver)
     	local accountMoney = DataPlayers[source].Bank
 
     	if amount >= accountMoney then
-    		print("JSFOUR-ATM: ERROR")
+    		print("BANK: ERROR")
     	else
         TriggerEvent("Bank:RemoveBankMoney", amount, source)
         if DataPlayers[recPlayer] ~= nil then
@@ -244,11 +242,13 @@ end
 
 function CheckPlafondRetrait(source, amount)
   local result = MySQL.Sync.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount})
-  if result[1] ~= nil then
+  if result[1].montant ~= nil then
     if result[1].montant <= plafondRetrait then
       return true
     end
     return false
+  else
+    return true
   end
   return false
 end
