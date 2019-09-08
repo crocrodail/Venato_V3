@@ -140,10 +140,6 @@ function Venato.CreateObject(objet, x, y, z)
     Citizen.Wait(100)
   end
   local objet = CreateObject(model, x, y, z, true, false, false)
-
-  local id = NetworkGetNetworkIdFromEntity(objet)
-  SetNetworkIdExistsOnAllMachines(id, true)
-  SetNetworkIdCanMigrate(id, true)
   SetEntityAsMissionEntity(objet, true, false)
   SetModelAsNoLongerNeeded(model)
   return objet

@@ -276,7 +276,6 @@ function DeliveryJob.mainLoop()
           for i, v in ipairs(DeliveryJobConfig.boxCoord) do
             local distance = GetDistanceBetweenCoords(v.x, v.y, v.z, playerPos["x"], playerPos["y"], playerPos["z"],
               true)
-              print(distance)
             if distance < 0.6 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY)
             then
@@ -694,13 +693,14 @@ function showBoxes(startX, startY, startZ,
     local x = startX + (index % surfaceCount) / yCount * deltaX
     local y = startY + (index % yCount) * deltaY
     local z = startZ + (index / surfaceCount) * deltaZ - zFix
-
-    local object = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, x, y, z)
-    --PlaceObjectOnGroundProperly(object)
-    SetEntityHeading(object, heading)
-    FreezeEntityPosition(object, true)
-    SetEntityCoords(object, x, y, z, 0, 0, 0, true)
-    table.insert(DeliveryJobConfig.boxes, object)
+    Citizen.CreateThread(function()
+      local object = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, x, y, z)
+      --PlaceObjectOnGroundProperly(object)
+      SetEntityHeading(object, heading)
+      FreezeEntityPosition(object, true)
+      SetEntityCoords(object, x, y, z, 0, 0, 0, true)
+      table.insert(DeliveryJobConfig.boxes, object)
+    end)
   end
 
 end

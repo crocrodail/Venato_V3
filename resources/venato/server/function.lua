@@ -87,7 +87,7 @@ function accessGranded(SteamId, source , balek)
         Sexe = sexe,
         Taille = DataUser[1].taille,
         Age = os.date("%x", DataUser[1].dateNaissance / 1000),
-        Health = DataUser[1].health,
+        Health = DataUser[1].health or 200,
         Food = DataUser[1].food,
         Water = DataUser[1].water,
         Need = DataUser[1].needs,
