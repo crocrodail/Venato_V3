@@ -23,6 +23,50 @@ local noclip_pos
 local heading = 0
 local visible = true
 local DataAdmin = nil
+local Skins = {
+  { skin = "csb_burgerdrug", libelle = "Burger Man"},
+  { skin = "ig_lifeinvad_01", libelle = "Geek"},
+  { skin = "s_m_y_prismuscl_01", libelle = "Prisonier"},
+  { skin = "ig_old_man2", libelle = "Fermier"},
+  { skin = "ig_oneil", libelle = "O Neil"},
+  { skin = "ig_ramp_hipster", libelle = "Hipster"},
+  { skin = "s_m_m_gaffer_01", libelle = "Ouvrier"},
+  { skin = "u_m_m_spyactor", libelle = "James Bond"},
+  { skin = "s_m_m_movprem_01", libelle = "Riche"},
+  { skin = "s_m_m_highsec_01", libelle = "Hitman"},
+  { skin = "ig_ramp_hic", libelle = "Junkies"},
+  { skin = "ig_ramp_gang", libelle = "Vagos"},
+  { skin = "ig_ramp_gang", libelle = "Vagos"},
+  { skin = "ig_ramp_mex", libelle = "Gang Mexicain"},
+  { skin = "	ig_roccopelosi", libelle = "Gang Italien"},
+  { skin = "ig_beverly", libelle = "Paparazzi"},
+  { skin = "g_m_m_chicold_01", libelle = "Cagoule"},
+  { skin = "g_m_y_ballaorig_01", libelle = "Vagos"},
+  { skin = "csb_porndudes", libelle = "Acteur Porno"},
+  { skin = "csb_cletus", libelle = "Clétus"},
+  { skin = "a_m_y_runner_01", libelle = "Sportif"},
+  { skin = "a_m_y_breakdance_01", libelle = "Break Dancer"},
+  { skin = "a_m_y_acult_02", libelle = "Le Fou en slip"},
+  { skin = "a_m_m_tranvest_02", libelle = "Travesti"},
+  { skin = "a_m_m_fatlatin_01", libelle = "Le Gros"},
+  { skin = "a_m_y_juggalo_01", libelle = "Le Fou"},
+  { skin = "a_m_y_surfer_01", libelle = "Surfer"},
+  { skin = "u_m_m_jesus_01", libelle = "Jésus"},
+  { skin = "ig_tanisha", libelle = "Tanisha (F)"},
+  { skin = "ig_kerrymcintosh", libelle = "Kerry McIntosh (F)"},
+  { skin = "csb_anita", libelle = "Anita (F)"},
+  { skin = "csb_maude", libelle = "La grosse Maude (F)"},
+  { skin = "csb_anita", libelle = "Anita (F)"},
+  { skin = "ig_mrs_thornhill", libelle = "Vielle Thornill (F)"},
+  { skin = "s_f_m_maid_01", libelle = "Femme de ménage (F)"},
+  { skin = "ig_maryann", libelle = "Sportive (F)"},
+  { skin = "g_f_y_vagos_01", libelle = "Vagos (F)"},
+  { skin = "g_f_y_ballas_01", libelle = "Ballas (F)"},
+  { skin = "a_f_y_bevhills_02", libelle = "Riche (F)"},
+  { skin = "a_f_y_fitness_01", libelle = "Yoga (F)"},
+  { skin = "a_f_y_tourist_01", libelle = "Touriste (F)"},
+  { skin = "a_f_m_fatcult_01", libelle = "Folle (F)"},
+}
 
 function openVenatoadmin()
   Menu.clearMenu()
@@ -46,11 +90,12 @@ function openVenatoadmin()
     Menu.addButton("Teleporter sur coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
     --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
-  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
+  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
   	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
     Menu.addButton("NoClip", "AdminNoClip", nil)
     Menu.addButton("Invisible", 'AdminInvisible' , nil)
     Menu.addButton("Créer véhicule", 'createVeh' , nil)
+    Menu.addButton("Changer de skin", "SkinMenu", nil)
   end
 end
 end
@@ -349,6 +394,29 @@ function AdminListPlayer()
     Menu.addButton("[<span class='red--text'>" .. k .. "</span>] " .. v.Prenom .. " " .. v.Nom .. " (<span class='yellow--text'>" .. v.Pseudo .. "</span>)","AdminPlayerOption", k, "AdminShowPlayerInfoo")
   end
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
+end
+
+function SkinMenu()
+  Menu.clearMenu()
+  ListPlayer = true
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
+  for k, v in pairs(Skins) do
+    Menu.addButton("" .. v.libelle .. "","ChangeSkin", v.skin, nil)
+  end
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
+end
+
+function ChangeSkin(skin)  
+  RequestModel(skin)
+  while not HasModelLoaded(skin) do
+      RequestModel(skin)
+      Wait(0)
+  end
+  SetPlayerModel(PlayerId(), skin)
+  SetModelAsNoLongerNeeded(skin)
+  -- SetPedHeadBlendData(playerPed, 0, 0, skin, 0, 0, skin, 1.0, 1.0, 1.0, true)
+  SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+  SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
 end
 
 function AdminPlayerOption(index)
