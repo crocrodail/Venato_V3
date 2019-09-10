@@ -18,7 +18,6 @@ RegisterNetEvent("Coffre:CallData:cb")
 AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
   DataCoffre = Coffre
   DataUser = user or {}  
-  print("Coffre:CallData:cb")
   if coffre_index > 0 then
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', DataCoffre[coffre_index].nom, "Coffre", 'rgba('..DataCoffre[coffre_index].red..','..DataCoffre[coffre_index].green..','..DataCoffre[coffre_index].blue..', 0.75)', "https://cap.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcap.2F2017.2F05.2F09.2F1c21c36a-b809-4662-bf09-1068218410b9.2Ejpeg/750x375/background-color/ffffff/quality/70/fichet-bauche-la-success-story-du-roi-du-coffre-fort-1123519.jpg" )
@@ -43,25 +42,26 @@ AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
     TriggerEvent('Menu:CreateMenu')
     TriggerEvent('Menu:Open')
   end
-  if coffre_index == -1 then
-    coffre_index = 0
-    for k,v in pairs(DataCoffre) do
-      if v.props ~= nil then   
+end)
 
-        RequestModel(v.props)
-        while not HasModelLoaded(v.props) do
-          Wait(1)
-        end
-        
-        local coffre = CreateObject(GetHashKey(v.props), v.x, v.y, v.z, false, false, false)
-        SetEntityHeading(coffre, v.h)
-        PlaceObjectOnGroundProperly(coffre)
-        SetEntityAsMissionEntity(coffre, true, true)
-        FreezeEntityPosition(coffre, true)
-        SetModelAsNoLongerNeeded(v.props)
+RegisterNetEvent("Coffre:CallData:init")
+AddEventHandler("Coffre:CallData:init", function(Coffre)
+  DataCoffre = Coffre
+  for k,v in pairs(DataCoffre) do
+    if v.props ~= nil then   
+      RequestModel(v.props)
+      while not HasModelLoaded(v.props) do
+        Wait(1)
       end
-  end
-end
+      
+      local coffre = CreateObject(GetHashKey(v.props), v.x, v.y, v.z, false, false, false)
+      SetEntityHeading(coffre, v.h)
+      PlaceObjectOnGroundProperly(coffre)
+      SetEntityAsMissionEntity(coffre, true, true)
+      FreezeEntityPosition(coffre, true)
+      SetModelAsNoLongerNeeded(v.props)
+    end
+  end  
 end)
 
 Citizen.CreateThread(function()
@@ -160,7 +160,6 @@ end
 function CoffreDropWp(row)
   Menu.close()
   TriggerServerEvent("Coffre:DropWeapon", row)  
-  OpenCoffre(row[1])
 end
 
 
@@ -175,8 +174,8 @@ function CoffreTakeWeapon(row)
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
     Venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
-  end
-  OpenCoffre(row[1])
+  end  
+  Menu.close()
 end
 
 function CoffreParametre(index)
@@ -254,7 +253,7 @@ function CoffreTakeItem(row)
   else
     Venato.notifyError("Une erreur est survenue.")
   end
-  OpenCoffre(row[1])
+  Menu.close()
 end
 
 function CoffreTakeMoney(index)
@@ -264,7 +263,7 @@ function CoffreTakeMoney(index)
   else
     Venato.notifyError("Une erreur est survenue.")
   end
-  OpenCoffre(row[1])
+  Menu.close()
 end
 
 function CoffreDropMoney(index)
@@ -274,5 +273,5 @@ function CoffreDropMoney(index)
   else
     Venato.notifyError("Une erreur est survenue.")
   end
-  OpenCoffre(row[1])
+  Menu.close()
 end

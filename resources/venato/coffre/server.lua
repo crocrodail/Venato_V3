@@ -2,6 +2,7 @@ DataCoffre = {}
 
 function reloadDataCoffre()
   Citizen.CreateThread(function()
+    DataCoffre = {}
     local start_time = os.clock()
     local Cof = {}
     local inCof = {}   
@@ -63,12 +64,12 @@ function reloadDataCoffre()
                   ["poid"] = v3.poid
                 }
                 DataCoffre[v3.CoffreId].weapon[v3.Id] = CofWp
-                DataCoffre[v3.CoffreId].nbWeapon = Cof[v3.CoffreId].nbWeapon + 1
+                DataCoffre[v3.CoffreId].nbWeapon = DataCoffre[v3.CoffreId].nbWeapon + 1
               end 
             end          
             local end_time = os.clock()    
             print("^2Coffre Loaded :^7 "..round((end_time-start_time),2).."ms")
-            TriggerClientEvent('Coffre:CallData:cb', -1, DataCoffre)
+            TriggerClientEvent('Coffre:CallData:init', -1, DataCoffre)
           end)
         end)
       end      
@@ -76,10 +77,17 @@ function reloadDataCoffre()
   end)
 end
 
+
+
 RegisterServerEvent("Coffre:CallData")
 AddEventHandler("Coffre:CallData", function()
   source = source
   TriggerClientEvent("Coffre:CallData:cb",source, DataCoffre, DataPlayers[source])
+end)
+
+RegisterServerEvent("Coffre:ReloadCoffre")
+AddEventHandler("Coffre:ReloadCoffre", function()
+  reloadDataCoffre()
 end)
 
 RegisterServerEvent("Coffre:CallDataClosePlayer")
@@ -94,6 +102,7 @@ AddEventHandler("Coffre:TakeWeapon", function(row)
   if DataCoffre[row[1]].weapon[row[2]].poid + DataPlayers[source].Poid <= DataPlayers[source].PoidMax then
     local indexCoffre = row[1]
     local indexWeapon = row[2]
+    print("TakeWeapon : "..indexCoffre)
     MySQL.Async.execute("DELETE FROM coffres_weapons WHERE Id = @indexWeapon", {["@idCoffre"] = indexCoffre})
     TriggerEvent("Inventory:AddWeapon", DataCoffre[indexCoffre].weapon[indexWeapon].weaponId,  DataCoffre[indexCoffre].weapon[indexWeapon].balles, DataCoffre[indexCoffre].weapon[indexWeapon].poid, DataCoffre[indexCoffre].weapon[indexWeapon].libelle, source)
     DataCoffre[indexCoffre].weapon[indexWeapon] = nil
@@ -105,6 +114,7 @@ end)
 
 RegisterServerEvent("Coffre:DropWeapon")
 AddEventHandler("Coffre:DropWeapon", function(row)
+  print(row)
   if DataCoffre[row[1]].nbWeapon + 1 <= DataCoffre[row[1]].maxWeapon then
     local source = source
     local indexCoffre = row[1]
@@ -116,7 +126,7 @@ AddEventHandler("Coffre:DropWeapon", function(row)
       DataCoffre[indexCoffre].nbWeapon = DataCoffre[indexCoffre].nbWeapon + 1
     end)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Il n'y a pas de place pour cette arme.")
+    TriggerClientEvent("Venato:notify", source, "Il n'y a pas de place pour cette arme.")
   end
 end)
 

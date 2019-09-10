@@ -85,7 +85,8 @@ function openVenatoadmin()
     Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
     Menu.addButton("Jesus Christ", "respawntest", nil)
     Menu.addButton("Revive joueur", "revivevnt", nil)
-    Menu.addButton("Soigner joueur", "healvnt", nil)
+    Menu.addButton("Soigner joueur", "healvnt", nil)    
+    Menu.addButton("Recharger les coffres", "ReloadCoffre", nil)
     Menu.addButton("Teleporter sur markeur", "AdminTpMarkeur", nil)
     Menu.addButton("Teleporter sur coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
@@ -435,6 +436,10 @@ function AdminPlayerOption(index)
   Menu.addButton("Set dans la poche", "AdminSetPoche", nil)
   Menu.addButton("Set en bank", "AdminSetBank", nil)
 end
+end
+
+function ReloadCoffre()  
+  TriggerServerEvent("Coffre:ReloadCoffre") 
 end
 
 function AdminActionOnPlayer(action)
