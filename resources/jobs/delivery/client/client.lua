@@ -479,13 +479,10 @@ function DeliveryJob.checkLoop()
       -- Manage warehouses content
       local playerPos = GetEntityCoords(player)
       if playerPos.z <= -38 and playerPos.x >= 992.29 and playerPos.x <= 1027.76 and playerPos.y >= -3113.05 and playerPos .y <= -3090.70 then
-        showBigWarehouseBoxes()
         DeliveryJobConfig.inWarehouse = "Autre"
       elseif playerPos.z <= -38 and playerPos.x >= 1048.35 and playerPos.x <= 1073.10 and playerPos.y >= -3110.9 and playerPos .y <= -3094.4 then
-        showMiddleWarehouseBoxes()
         DeliveryJobConfig.inWarehouse = "Nourriture"
       elseif playerPos.z <= -38 and playerPos.x >= 1088.27 and playerPos.x <= 1105.1 and playerPos.y >= -3103.0 and playerPos .y <= -3095.5 then
-        showLittleWarehouseBoxes()
         DeliveryJobConfig.inWarehouse = "Boisson"
       else
         hideWarehouseBoxes()
@@ -612,9 +609,7 @@ end
 
 function spawnBox()
   despawnBox()
-
   local coords = DeliveryJobConfig.trunkDrops.box
-
   local object = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[object] = object
   local box1 = Venato.CreateObject(DeliveryJobConfig.MINI_BOX_KEY, coords.x, coords.y, coords.z)
@@ -674,112 +669,6 @@ function dropBoxInForklift(player)
   SetEntityCoords(DeliveryJobConfig.globalBox, coords["x"], coords["y"], coords["z"] + 0.12, 0, 0, 0, true)
   FreezeEntityPosition(DeliveryJobConfig.globalBox, true)
   SetEntityCollision(DeliveryJobConfig.globalBox, true, true)
-end
-
-function showBoxes(startX, startY, startZ,
-                   deltaX, deltaY, deltaZ,
-                   xCount, yCount, zCount,
-                   heading)
-  local surfaceCount = yCount * xCount
-  local totalCount = surfaceCount * zCount
-
-  for index = 0, totalCount, 1 do
-
-    local zFix = 0.0
-    if (index / surfaceCount) > 1.0 then
-      zFix = ((index / surfaceCount) - 1) * .2
-    end
-
-    local x = startX + (index % surfaceCount) / yCount * deltaX
-    local y = startY + (index % yCount) * deltaY
-    local z = startZ + (index / surfaceCount) * deltaZ - zFix
-    Citizen.CreateThread(function()
-      local object = Venato.CreateObject(DeliveryJobConfig.BOX_KEY, x, y, z)
-      --PlaceObjectOnGroundProperly(object)
-      SetEntityHeading(object, heading)
-      FreezeEntityPosition(object, true)
-      SetEntityCoords(object, x, y, z, 0, 0, 0, true)
-      table.insert(DeliveryJobConfig.boxes, object)
-    end)
-  end
-
-end
-
-function showBigWarehouseBoxes()
-  if #DeliveryJobConfig.boxes > 0 then
-    return
-  end
-
-  showBoxes(
-    993.09, -3111.49, -39.9,
-    0, 2.4, 2.2,
-    1, 3, 4,
-    90.0
-  )
-  showBoxes(
-    1027.13, -3096.52, -39.9,
-    7.15, 2.4, 2.2,
-    1, 3, 4,
-    90.0
-  )
-  showBoxes(
-    1026.75, -3111.22, -39.9,
-    0, 2.4, 2.2,
-    1, 3, 4,
-    90.0
-  )
-
-  showBoxes(
-    1003.63, -3108.68, -39.9,
-    2.4, 5.81, 2.2,
-    7, 4, 4,
-    180.0
-  )
-end
-
-function showMiddleWarehouseBoxes()
-  if #DeliveryJobConfig.boxes > 0 then
-    return
-  end
-
-  showBoxes(
-    1053.0, -3109.9, -39.9,
-    2.4, 7.15, 2.2,
-    7, 3, 2,
-    180.0
-  )
-end
-
-function showLittleWarehouseBoxes()
-  if #DeliveryJobConfig.boxes > 0 then
-    return
-  end
-
-  showBoxes(
-    1088.74, -3096.6, -39.9,
-    2.4, 7.15, 2.2,
-    2, 1, 2,
-    180.0
-  )
-  showBoxes(
-    1095.20, -3096.6, -39.9,
-    2.4, 7.15, 2.2,
-    2, 1, 2,
-    180.0
-  )
-  showBoxes(
-    1101.21, -3096.6, -39.9,
-    2.4, 7.15, 2.2,
-    2, 1, 2,
-    180.0
-  )
-end
-
-function hideWarehouseBoxes()
-  for _, box in pairs(DeliveryJobConfig.boxes) do
-    DeleteEntity(box)
-  end
-  DeliveryJobConfig.boxes = {}
 end
 
 function showWarehouseItemButtons()
