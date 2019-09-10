@@ -485,7 +485,6 @@ function DeliveryJob.checkLoop()
       elseif playerPos.z <= -38 and playerPos.x >= 1088.27 and playerPos.x <= 1105.1 and playerPos.y >= -3103.0 and playerPos .y <= -3095.5 then
         DeliveryJobConfig.inWarehouse = "Boisson"
       else
-        hideWarehouseBoxes()
         DeliveryJobConfig.inWarehouse = nil
       end
 
