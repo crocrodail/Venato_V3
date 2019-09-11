@@ -93,11 +93,11 @@ local DiscordAppId = tonumber(GetConvar("RichAppId", "510934092821430282"))
 local DiscordAppAsset = GetConvar("RichAssetId", "discordicon")
 
 Citizen.CreateThread(function()
-  SetVehicleDensityMultiplierThisFrame(0.5)
-	SetPedDensityMultiplierThisFrame(0.5)
-	SetRandomVehicleDensityMultiplierThisFrame(0.5)
-	SetParkedVehicleDensityMultiplierThisFrame(0.5)
-	SetScenarioPedDensityMultiplierThisFrame(0.5, 0.5)
+  SetVehicleDensityMultiplierThisFrame(0.2)
+	SetPedDensityMultiplierThisFrame(0.2)
+	SetRandomVehicleDensityMultiplierThisFrame(0.2)
+	SetParkedVehicleDensityMultiplierThisFrame(0.2)
+	SetScenarioPedDensityMultiplierThisFrame(0.2, 0.2)
 	while true do
     local cheatNb = 0
     if ingame > 30 then cheatNb = 15 elseif ingame > 20 then cheatNb = 10 elseif ingame > 15 then cheatNb = 7 --- CHEAT NB JOUEURS
