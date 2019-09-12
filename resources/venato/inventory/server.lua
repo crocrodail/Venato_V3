@@ -111,6 +111,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
           DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
           defaultNotification.message = "Vous avez trop d'objets en poche."
           Venato.notify(source, defaultNotification)
+          TriggerEvent('inventory:full')
           return false
         end
         MySQL.Async.execute("UPDATE user_inventory SET quantity = @qty WHERE identifier = @SteamId AND item_id = @id",
@@ -132,6 +133,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
             DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
+            TriggerEvent('inventory:full')
             return false
           end
           MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
@@ -185,6 +187,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
           message = "Vous avez trop d'objet en poche pour ça.",
         }
         TriggerClientEvent('Venato:notify', source, Notification)
+        TriggerClientEvent('inventory:full', source)
       end
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
@@ -193,6 +196,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
             DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
+            TriggerClientEvent('inventory:full', source)
             return false
           end
           DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }

@@ -2,12 +2,16 @@
 	local Brasseur_markerBool = false
 	local existingVeh = nil
 	local isInServiceBrasseur = false
+	local recolt = false
+	local transform = false
+	local sell = false
+
 
 	local defaultNotification = {
 		title = "Brasseur",
 		type = "alert",
 		logo = "https://i.ibb.co/BKmPbdw/icons8-beer-96px.png",
-		timeout = 1800
+		timeout = 1000
 	}
 
 	Citizen.CreateThread(function()
@@ -15,17 +19,61 @@
 			Wait(0)
 			if Brasseur_markerBool == true then
 				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceBetweenCoords then
-					TriggerServerEvent('brasseur:serverRequest', "GetOrge")
-					Citizen.Wait(brasseur_blips["Champ"].defaultTime)
+					if(not recolt) then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter de l'~b~orge~s~.")						
+					else
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter de l'~b~orge~s~.")
+					end
+
+					if IsControlJustPressed(1, Keys["E"]) then
+						recolt = not recolt
+					end
+				else
+					recolt = false
 				end
 				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceBetweenCoords then
-					TriggerServerEvent('brasseur:serverRequest', "GetBiere")
-					Citizen.Wait(brasseur_blips["Brasserie"].defaultTime)
+					if(not transform) then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer l'~b~orge~s~.")						
+					else
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer l'~b~orge~s~.")
+					end
+
+					if IsControlJustPressed(1, Keys["E"]) then
+						transform = not transform
+					end
+				else
+					transform = false
 				end
 				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceBetweenCoords then
-					TriggerServerEvent('brasseur:serverRequest', "SellBiere")
-					Citizen.Wait(brasseur_blips["Point de vente"].defaultTime)
+					if(not sell) then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de la ~b~bière~s~.")						
+					else
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de la ~b~bière~s~.")
+					end
+
+					if IsControlJustPressed(1, Keys["E"]) then
+						sell = not sell
+					end
+				else
 				end
+			end
+		end
+	end)
+
+	Citizen.CreateThread(function ()
+		while true do
+			Citizen.Wait(1)
+			if recolt then
+				TriggerServerEvent('brasseur:serverRequest', "GetOrge")
+					Citizen.Wait(brasseur_blips["Champ"].defaultTime)
+			end
+			if transform then
+				TriggerServerEvent('brasseur:serverRequest', "GetBiere")
+					Citizen.Wait(brasseur_blips["Brasserie"].defaultTime)
+			end
+			if sell then
+				TriggerServerEvent('brasseur:serverRequest', "SellBiere")
+					Citizen.Wait(brasseur_blips["Point de vente"].defaultTime)
 			end
 		end
 	end)
@@ -60,7 +108,6 @@
 		Brasseur_markerBool = false
 		for k, item in pairs(BlipsJobs) do
 			RemoveBlip(k)
-			print("remove "..k)
 		end
 	end)
 
@@ -114,20 +161,27 @@ Citizen.CreateThread(function ()
 					DrawMarker(1,brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceMarker then
-					DrawMarker(1,brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceMarker + 30 then
+					DrawMarker(1,brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceMarker then
-					DrawMarker(1,brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceMarker + 30 then
+					DrawMarker(1,brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceMarker then
-					DrawMarker(1,brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceMarker + 30 then
+					DrawMarker(1,brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 			end
 		end
 	end
+end)
+
+RegisterNetEvent('inventory:full')
+AddEventHandler('inventory:full', function ()
+	recolt = false
+	transform = false
+	sell = false
 end)
 
 function GetServiceBrasseur()
@@ -194,6 +248,7 @@ AddEventHandler('brasseur:drawGetOrge', function (qteBase)
 		defaultNotification.message = "Vous avez récolté de l'orge."
 		Venato.notify(defaultNotification)
 	else
+		recolt = false
 		defaultNotification.message = "Vous ne pouvez plus récolter."
 		Venato.notify(defaultNotification)
 	end
@@ -215,6 +270,7 @@ AddEventHandler('brasseur:drawGetBiere', function(qteBase, qteTraite)
 		defaultNotification.message = "+1 bière brassée."
 		Venato.notify(defaultNotification)
 	else
+		transform = false
 		defaultNotification.message = "Vous ne pouvez plus brasser."
 		Venato.notify(defaultNotification)
 	end
@@ -233,6 +289,7 @@ AddEventHandler('brasseur:drawSellBiere', function (qte)
 		defaultNotification.message = "Bières vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
 		Venato.notify(defaultNotification)
 	else
+		sell = false
 		defaultNotification.message = "Vous n'avez plus de bières à vendre."
 		Venato.notify(defaultNotification)
 	end

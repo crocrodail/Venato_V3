@@ -37,9 +37,9 @@ AddEventHandler('pompiste:serverRequest', function (typeRequest)
 		if typeRequest == "GetPetrol" then
 
 			MySQL.Async.fetchScalar("SELECT quantity FROM user_inventory WHERE item_id=201 AND identifier=@identifier", {['@identifier'] = player},
-				function(qte)
-					TriggerClientEvent('pompiste:drawGetPetrol', mysource, qte)
-				end)
+			function(qte)
+				TriggerClientEvent('pompiste:drawGetPetrol', mysource, qte)
+			end)
 
 		elseif typeRequest == "GetEssence" then
 

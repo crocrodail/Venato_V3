@@ -42,13 +42,14 @@ function Venato.notify(notif)
   if not notif.timeout then
     notif.timeout = 3500
   end
+  
   TriggerEvent("Hud:Update", {
     action = "notify",
     message = notif.message,
     type = notif.type,
     timeout = notif.timeout,
     logo = notif.logo,
-    title = notif.title
+    title = notif.title,
   })
 end
 

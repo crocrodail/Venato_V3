@@ -120,7 +120,7 @@ Citizen.CreateThread(function()
     local disScouteur = Vdist(x, y, z, Scouteur.x, Scouteur.y, Scouteur.z)
     if disPole <= 1 then
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour ouvrir PoleEmploie')
+      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour choisir votre nouveau métier')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         Openpoleemploie()
         Menu.toggle()
@@ -129,7 +129,7 @@ Citizen.CreateThread(function()
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
     elseif disScouteur <= 1 then
       DrawMarker(27,Scouteur.x,Scouteur.y,Scouteur.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour louer un scouteur')
+      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour louer un scooter')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         getScouteur()
       end
@@ -171,4 +171,5 @@ end
 
 function sitchJob(id)
   TriggerServerEvent("Venato:SwitchJob", id)
+  Menu.close()
 end

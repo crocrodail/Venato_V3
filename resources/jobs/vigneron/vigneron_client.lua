@@ -2,12 +2,15 @@
 	local Vigneron_markerBool = false
 	local existingVeh = nil
 	local isInServiceVigneron = false
+	local recolt = false
+	local transform = false
+	local sell = false
 
 	local defaultNotification = {
 		title = "Vigneron",
 		type = "alert",
 		logo = "https://i.ibb.co/0JVF4cJ/icons8-grapes-96px.png",
-		timeout = 1800
+		timeout = 1000
 	}
 
 	Citizen.CreateThread(function()
@@ -15,21 +18,72 @@
 			Wait(0)
 			if Vigneron_markerBool == true then
 				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceBetweenCoords then
-					TriggerServerEvent('vigneron:serverRequest', "GetRaisin")
-					Citizen.Wait(vigneron_blips["Vigne"].defaultTime)
+					if(not recolt) then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~raisin~s~.")						
+					else
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter du ~b~raisin~s~.")
+					end
+
+					if IsControlJustPressed(1, Keys["E"]) then
+						recolt = not recolt
+					end				
+				else
+					recolt = false
 				end
 				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceBetweenCoords then
-					TriggerServerEvent('vigneron:serverRequest', "GetVin")
-					Citizen.Wait(vigneron_blips["Cave"].defaultTime)
+					if(not transform) then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~raisin~s~.")						
+					else
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer le ~b~raisin~s~.")
+					end
+
+					if IsControlJustPressed(1, Keys["E"]) then
+						transform = not transform
+					end
+				else
+					transform = false
 				end
 				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceBetweenCoords then
-					TriggerServerEvent('vigneron:serverRequest', "SellVin")
-					Citizen.Wait(vigneron_blips["Point de vente"].defaultTime)
+					if(not sell) then
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de les ~b~bouteilles de vin~s~.")						
+					else
+						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de les ~b~bouteilles de vin~s~.")
+					end
+
+					if IsControlJustPressed(1, Keys["E"]) then
+						sell = not sell
+					end
+				else
+					sell = false
 				end
 			end
 		end
 	end)
 
+	RegisterNetEvent('inventory:full')
+	AddEventHandler('inventory:full', function ()
+		recolt = false
+		transform = false
+		sell = false
+	end)
+
+	Citizen.CreateThread(function ()
+		while true do
+			Citizen.Wait(1)
+			if recolt then
+				TriggerServerEvent('vigneron:serverRequest', "GetRaisin")
+				Citizen.Wait(vigneron_blips["Vigne"].defaultTime)
+			end
+			if transform then					
+				TriggerServerEvent('vigneron:serverRequest', "GetVin")
+				Citizen.Wait(vigneron_blips["Cave"].defaultTime)
+			end
+			if sell then					
+				TriggerServerEvent('vigneron:serverRequest', "SellVin")
+				Citizen.Wait(vigneron_blips["Point de vente"].defaultTime)
+			end
+		end
+	end)
 
 	function Vigneron_callSE(evt)
 		TriggerServerEvent(evt)
@@ -61,7 +115,6 @@
 		Vigneron_markerBool = false
 		for k, item in pairs(BlipsJobs) do
 			RemoveBlip(k)
-			print("remove "..k)
 		end
 	end)
 
@@ -110,16 +163,16 @@
 							end
 						end
 					end
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceMarker then
-						DrawMarker(1,vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceMarker + 30then
+						DrawMarker(1,vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, 0, 0, 0, 0, 0, 0, 5.001, 5.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceMarker then
-						DrawMarker(1,vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceMarker + 30 then
+						DrawMarker(1,vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, 0, 0, 0, 0, 0, 0, 10.001, 10.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceMarker then
-						DrawMarker(1,vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
+					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceMarker + 30 then
+						DrawMarker(1,vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 10.001, 10.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 				end
 			end
@@ -194,6 +247,7 @@ end)
 			defaultNotification.message = "Chargement de raisin en cours."
 			Venato.notify(defaultNotification)
 		else
+			recolt = false
 			defaultNotification.message = "Vous ne pouvez plus charger."
 			Venato.notify(defaultNotification)
 		end
@@ -215,6 +269,7 @@ end)
 			defaultNotification.message = "Récupération des bouteilles de vins."
 			Venato.notify(defaultNotification)
 		else
+			transform = false
 			defaultNotification.message = "Vous ne possédez plus de raisin."
 			Venato.notify(defaultNotification)
 		end
@@ -233,6 +288,7 @@ end)
 			defaultNotification.message = "Bouteilles de vin vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
 			Venato.notify(defaultNotification)
 		else
+			sell = false
 			defaultNotification.message = "Vous n'avez plus de vin à vendre."
 			Venato.notify(defaultNotification)
 		end
