@@ -11,7 +11,7 @@
 		title = "Pompiste",
 		type= "alert",
 		logo = "https://i.ibb.co/61pT4gN/icons8-gas-station-96px.png",
-		timeout = 1000
+		timeout = 800
 	}
 
 	Citizen.CreateThread(function()
