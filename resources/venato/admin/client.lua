@@ -23,6 +23,7 @@ local noclip_pos
 local heading = 0
 local visible = true
 local DataAdmin = nil
+local state = false
 local Skins = {
   { skin = "csb_burgerdrug", libelle = "Burger Man"},
   { skin = "ig_lifeinvad_01", libelle = "Geek"},
@@ -85,16 +86,19 @@ function openVenatoadmin()
     Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
     Menu.addButton("Jesus Christ", "respawntest", nil)
     Menu.addButton("Revive joueur", "revivevnt", nil)
-    Menu.addButton("Soigner joueur", "healvnt", nil)    
+    Menu.addButton("Soigner joueur", "healvnt", nil)
     Menu.addButton("Recharger les coffres", "ReloadCoffre", nil)
     Menu.addButton("Teleporter sur markeur", "AdminTpMarkeur", nil)
     Menu.addButton("Teleporter sur coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
     --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
-  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
-  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+    Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
     Menu.addButton("NoClip", "AdminNoClip", nil)
     Menu.addButton("Invisible", 'AdminInvisible' , nil)
+  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
+  	--Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+    --Menu.addButton("NoClip", "AdminNoClip", nil)
+    --Menu.addButton("Invisible", 'AdminInvisible' , nil)
     Menu.addButton("Créer véhicule", 'createVeh' , nil)
     Menu.addButton("Changer de skin", "SkinMenu", nil)
   end
@@ -129,7 +133,7 @@ function AdminInvisible(value)
       NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), true)
       SetEntityVisible(Venato.GetPlayerPed(), true, nil)
     else
-      
+
     NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), false)
       SetEntityVisible(Venato.GetPlayerPed(), false, nil)
     end
@@ -407,7 +411,7 @@ function SkinMenu()
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
 end
 
-function ChangeSkin(skin)  
+function ChangeSkin(skin)
   RequestModel(skin)
   while not HasModelLoaded(skin) do
       RequestModel(skin)
@@ -431,15 +435,15 @@ function AdminPlayerOption(index)
   Menu.addButton("Toi --> elle", "Admintptoelle", nil)
   Menu.addButton("Toi <-- elle", "Admintptome", nil)
   if DataUser.Group == "Admin" then
-  Menu.addButton("Give dans la poche", "AdminGivePoche", nil)
-  Menu.addButton("Give en bank", "AdminGiveBank", nil)
-  Menu.addButton("Set dans la poche", "AdminSetPoche", nil)
-  Menu.addButton("Set en bank", "AdminSetBank", nil)
+  -- Menu.addButton("Give dans la poche", "none", nil)
+  -- Menu.addButton("Give en bank", "none", nil)
+  -- Menu.addButton("Set dans la poche", "none", nil)
+  -- Menu.addButton("Set en bank", "none", nil)
 end
 end
 
-function ReloadCoffre()  
-  TriggerServerEvent("Coffre:ReloadCoffre") 
+function ReloadCoffre()
+  TriggerServerEvent("Coffre:ReloadCoffre")
 end
 
 function AdminActionOnPlayer(action)
@@ -487,40 +491,47 @@ function AdminGivePoche()
   end
 end
 
-function Admintptome()
-  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
-  local ped = Venato.GetPlayerPed()
-  local Coord = GetEntityCoords(ped)
-  SetEntityCoords(Targetped, Coord.x, Coord.y, Coord.z)
+function Admintptoelle()
+	TriggerServerEvent("Admin:tptoelle", indexToShow)
 end
 
-function Admintptoelle()
-  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
-  local ped = Venato.GetPlayerPed()
-  local TargetCoord = GetEntityCoords(Targetped)
-  SetEntityCoords(ped, TargetCoord.x, TargetCoord.y, TargetCoord.z)
+function Admintptome()
+	TriggerServerEvent("Admin:tptome", indexToShow)
 end
+
+RegisterNetEvent('Admin:teleportUser')
+AddEventHandler('Admin:teleportUser', function(coords)
+	SetEntityCoords(GetPlayerPed(-1), coords[1], coords[2], coords[3])
+end)
 
 function AdminFreeze()
-  FreezeEntityPosition(GetPlayerPed(AdminDataPlayers[indexToShow].PlayerIdClient), true)
-  -- if state == true then
-  --   if not IsEntityVisible(ped) then
-  --     SetEntityVisible(ped, true)
-  --   end
-  --   if not IsPedInAnyVehicle(ped) then
-  --     SetEntityCollision(ped, true)
-  --   end
-  --   FreezeEntityPosition(ped, false)
-  --   state = false
-  -- else
-  --   SetEntityCollision(ped, false)
-  --   FreezeEntityPosition(ped, true)
-  --   state = true
-  --   if not IsPedFatallyInjured(ped) then
-  --     ClearPedTasksImmediately(ped)
-  --   end
-  -- end
+  TriggerServerEvent("Admin:freeze", indexToShow)
 end
+
+RegisterNetEvent('Admin:freezePlayer')
+AddEventHandler("Admin:freezePlayer", function()
+	local player = PlayerId()
+	local ped = GetPlayerPed(-1)
+	if state == true then
+		if not IsEntityVisible(ped) then
+			SetEntityVisible(ped, true)
+		end
+		if not IsPedInAnyVehicle(ped) then
+			SetEntityCollision(ped, true)
+		end
+		FreezeEntityPosition(ped, false)
+		SetPlayerInvincible(player, false)
+		state = false
+	else
+		SetEntityCollision(ped, false)
+		FreezeEntityPosition(ped, true)
+		SetPlayerInvincible(player, true)
+		state = true
+		if not IsPedFatallyInjured(ped) then
+			ClearPedTasksImmediately(ped)
+		end
+	end
+end)
 
 function AdminSpectate()
   if InSpectatorMode == false then
@@ -534,12 +545,12 @@ function AdminSpectate()
       SetCamActive(cam,  true)
       RenderScriptCams(true,  false,  0,  true,  true)
       InSpectatorMode = true
-      AdminInvisible(true)
+      AdminInvisible(false)
     end)
   else
     InSpectatorMode = false
       TargetSpectate  = nil
-      AdminInvisible(false)
+      AdminInvisible(true)
       local playerPed = Venato.GetPlayerPed()
       SetCamActive(cam,  false)
       RenderScriptCams(false,  false,  0,  true,  true)

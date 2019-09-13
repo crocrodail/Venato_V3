@@ -173,3 +173,10 @@ function sitchJob(id)
   TriggerServerEvent("Venato:SwitchJob", id)
   Menu.close()
 end
+
+RegisterCommand(
+    "retour",
+    function(source, args, rawCommand)
+        SetEntityCoords(Venato.GetPlayerPed(), -2317.391, -553.92, 12.426, 0, 0, 0, true)
+    end
+)
