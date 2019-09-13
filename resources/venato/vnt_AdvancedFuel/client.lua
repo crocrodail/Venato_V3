@@ -6,6 +6,7 @@ local vehiclesUsed = {}
 local currentCans = 0
 
 local done = true
+local addFuelValue = 1
 
 
 Citizen.CreateThread(function()
@@ -31,20 +32,20 @@ Citizen.CreateThread(function()
 
 						TaskPlayAnim(GetPlayerPed(-1),"weapon@w_sp_jerrycan","fire", 8.0, -8, -1, 49, 0, 0, 0, 0)
 						local done = false
-						local amountToEssence = 20;
+						local amountToEssence = 50;
 						print(amountToEssence)
 						while done == false do
 							Wait(0)
 							local _essence = GetVehicleFuelLevel(veh)
 							print("fuel : ".._essence)
-							if(amountToEssence-0.5 > 0) then
-								amountToEssence = amountToEssence-0.5
+							if(amountToEssence-addFuelValue > 0) then
+								amountToEssence = amountToEssence-addFuelValue
 								if(GetVehicleFuelLevel(veh) >= 100) then
 									done = true
 								end
 								SetVehicleUndriveable(veh, true)
 								SetVehicleEngineOn(veh, false, false, false)
-								SetVehicleFuelLevel(veh,GetVehicleFuelLevel(veh) + 0.5)
+								SetVehicleFuelLevel(veh,GetVehicleFuelLevel(veh) + addFuelValue)
 								Wait(100)
 							else
 								done = true
@@ -364,14 +365,14 @@ AddEventHandler("essence:refuel:ok", function(amountToEssence)
 			TriggerEvent('InteractSound_CL:PlayOnOne', "gas_inprogress", 1.0)
 			local _essence = GetVehicleFuelLevel(veh)
 			print("fuel : ".._essence)
-			if(amountToEssence-0.5 > 0) then
-				amountToEssence = amountToEssence-0.5
+			if(amountToEssence-addFuelValue > 0) then
+				amountToEssence = amountToEssence-addFuelValue
 				if(GetVehicleFuelLevel(veh) >= 100) then
 					done = true
 				end
 				SetVehicleUndriveable(veh, true)
 				SetVehicleEngineOn(veh, false, false, false)
-				SetVehicleFuelLevel(veh,GetVehicleFuelLevel(veh) + 0.5)
+				SetVehicleFuelLevel(veh,GetVehicleFuelLevel(veh) + addFuelValue)
 				Wait(300)
 			else
 				done = true
