@@ -10,7 +10,7 @@
 		title = "Vigneron",
 		type = "alert",
 		logo = "https://i.ibb.co/0JVF4cJ/icons8-grapes-96px.png",
-		timeout = 1000
+		timeout = 800
 	}
 
 	Citizen.CreateThread(function()

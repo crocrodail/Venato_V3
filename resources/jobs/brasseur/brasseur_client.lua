@@ -11,7 +11,7 @@
 		title = "Brasseur",
 		type = "alert",
 		logo = "https://i.ibb.co/BKmPbdw/icons8-beer-96px.png",
-		timeout = 1000
+		timeout = 900
 	}
 
 	Citizen.CreateThread(function()
