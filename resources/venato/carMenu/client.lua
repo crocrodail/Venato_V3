@@ -132,8 +132,10 @@ function openRegulMenu(car)
 
     Menu.addButton("30 km/h", "activRegu", {car = car, vitesse = 30})
     Menu.addButton("50 km/h", "activRegu", {car = car, vitesse = 50})
+    Menu.addButton("70 km/h", "activRegu", {car = car, vitesse = 70})
     Menu.addButton("90 km/h", "activRegu", {car = car, vitesse = 90})
     Menu.addButton("130 km/h", "activRegu", {car = car, vitesse = 130})
+    Menu.addButton("140 km/h", "activRegu", {car = car, vitesse = 140})
 
     if setRegu then
         Menu.addButton("Désactiver", "activRegu", {car = car, vitesse = -1})

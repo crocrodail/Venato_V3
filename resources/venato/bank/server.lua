@@ -241,7 +241,7 @@ function CheckPlafondDepot(source)
 end
 
 function CheckPlafondRetrait(source, amount)
-  local result = MySQL.Sync.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount})
+  local result = MySQL.Sync.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and isDepot = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 DAY) AND DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount})
   if result[1].montant ~= nil then
     if result[1].montant <= plafondRetrait then
       return true
