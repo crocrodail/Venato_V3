@@ -15,7 +15,7 @@ AddEventHandler("Admin:ActionOnPlayer", function(action, target, msg)
 	if action == "kick" then
 		DropPlayer(target, "Vous avez été kick : "..msg)
 	else
-		MySQL.Async.execute("INSER INTO ban (`banned`, `banner`, `reason`, `ip`) VALUES (@banned, @banner, @reason, @ip)", {["@banned"] = DataPlayers[target].SteamId, ["@banner"] = DataPlayers[source].SteamId, ["@reason"] = msg, ["@ip"] = DataPlayers[target].Ip}, function()
+		MySQL.Async.execute("INSERT INTO bans (`banned`, `banner`, `reason`, `ip`) VALUES (@banned, @banner, @reason, @ip)", {["@banned"] = DataPlayers[target].SteamId, ["@banner"] = DataPlayers[source].SteamId, ["@reason"] = msg, ["@ip"] = DataPlayers[target].Ip}, function()
 			DropPlayer(target, "Vous avez été ban : "..msg)
 		end)
 	end
