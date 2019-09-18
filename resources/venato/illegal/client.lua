@@ -133,42 +133,8 @@ end
 
 RegisterNetEvent('illegal:setcop')
 AddEventHandler("illegal:setcop", function(nbPolicier)
-    print("illegal:SetCop: "..nbPolicier)
     old_nbPolice = nbPolice
-    nbPolice = nbPolicier
-    -- if old_nbPolice == 0 and nbPolice > 0
-    -- then
-    --     for _, item in ipairs(drugs) do
-    --         if item.farm then
-    --             item.farm.npc = GenerateNpc(item.farm)
-    --         end
-    --
-    --         if item.transform then
-    --             item.transform.npc = GenerateNpc(item.transform)
-    --         end
-    --
-    --         if item.sell then
-    --             item.sell.npc = GenerateNpc(item.sell)
-    --         end
-    --     end
-    -- end
-
-    -- if old_nbPolice > 0 and nbPolice == 0
-    -- then
-    --     for _, item in ipairs(drugs) do
-    --         if item.farm then
-    --             DeleteEntity(item.farm.npc)
-    --         end
-    --
-    --         if item.transform then
-    --             DeleteEntity(item.transform.npc)
-    --         end
-    --
-    --         if item.sell then
-    --             DeleteEntity(item.sell.npc)
-    --         end
-    --     end
-    -- end
+    nbPolice = nbPolicier    
 end)
 
 

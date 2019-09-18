@@ -1,4 +1,5 @@
 local inServiceCops = {}
+local nbCops = 0
 local defaultNotification = {
 	type = "alert",
 	title ="LSPD",
@@ -125,6 +126,7 @@ end)
 
 RegisterServerEvent('police:takeService')
 AddEventHandler('police:takeService', function()
+	nbCops = nbCops + 1
 	if(not inServiceCops[source]) then
 		inServiceCops[source] = GetPlayerName(source)
 
@@ -136,6 +138,7 @@ end)
 
 RegisterServerEvent('police:breakService')
 AddEventHandler('police:breakService', function()
+	nbCops = nbCops -1
 	if(inServiceCops[source]) then
 		inServiceCops[source] = nil
 
@@ -165,7 +168,7 @@ end)
 RegisterServerEvent('police:getAllCopsInServiceNb')
 AddEventHandler('police:getAllCopsInServiceNb', function()
 	local mysource = source
-	TriggerClientEvent('illegal:setcop', mysource, #inServiceCops)
+	TriggerClientEvent('illegal:setcop', mysource, nbCops)
 end)
 
 RegisterServerEvent('police:checkingPlate')
