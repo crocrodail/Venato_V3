@@ -185,7 +185,7 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
     if v.quantity > 0 then
       Menu.addItemButton(v.libelle .. " : " .. v.quantity .. " <span class='orange--text'>(" .. v.poid .. " kg)</span>",
         v.picture,
-        "OptionItem", { v.quantity, v.id, v.libelle, v.uPoid, Data.Poid, v.picture })
+        "OptionItem", { v.quantity, v.id, v.libelle, v.uPoid, Data.Poid, v.picture, v.consomable})
     end
   end
   Menu.addItemButton("Clefs", "https://i.ibb.co/VwgB5xz/icons8-key-2-96px.png", "Myclef", Data)
@@ -263,10 +263,10 @@ function MyDoc(data)
 	end
 	if data.PermisVoiture ~= "non aquis" or data.PermisVoiture ~= "non aquis" then
 		Menu.addItemButton("Permis de conduire", "https://i.ibb.co/D8PPnXK/icons8-driver-license-card-96px-1.png", "optionPermis", data)
-	end
+  end
 	for k,v in pairs(data.Documents) do
 		if v.type == "chequier" then
-			Menu.addItemButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "https://i.ibb.co/vs3ptjz/icons8-paycheque-96px-2.png", "CreateCheque", {data,k})
+			Menu.addItemButton("Chéquier <span class='orange--text'>("..Venato.FormatMoney(v.montant,2).." restant)</span>", "https://i.ibb.co/vs3ptjz/icons8-paycheque-96px-2.png", "CreateCheque", data)
 		end
 		if v.type == "cheque" then
 			Menu.addItemButton("Cheque de <span class='green--text'>"..Venato.FormatMoney(v.montant,2).."</span> €", "https://i.ibb.co/ZXZgqSF/icons8-paycheque-96px.png", "showCheque", {data,k})
@@ -561,7 +561,9 @@ function OptionItem(table)
   Menu.clearMenu()
   Menu.setSubtitle(table[3])
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenInventory", nil)
-  Menu.addButton("Utiliser", "UseItem", { table[1], table[2] })
+  if(table[7] == 1) then
+    Menu.addButton("Utiliser", "UseItem", { table[1], table[2] })
+  end
   Menu.addButton("Donner", "GiveItem", { table[1], table[2], table[4] })
   Menu.addButton("Jeter", "DropItem", { table[1], table[2], table[3], table[4], table[5], table[6] })
 end

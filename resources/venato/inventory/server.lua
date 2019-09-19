@@ -25,7 +25,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
     { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
       if result[1] ~= nil then
         for i, v in ipairs(result) do
-          Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture }
+          Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture, ["consomable"] = v.consomable }
           inventaire[v.item_id] = Inv
           poid = poid + tonumber(v.poid) * v.quantity
         end
@@ -150,6 +150,7 @@ end)
 
 RegisterServerEvent('Inventory:AddItem')
 AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
+  print("AddItem : "..id)
   local source = source
   local qty = qty
   local qtyadd = qty

@@ -285,7 +285,7 @@ AddEventHandler('brasseur:drawSellBiere', function (qte)
 	if qte > 0 then
 		TriggerServerEvent("Inventory:RemoveItem", 1, tonumber(brasseur_ressourceTraite))
 		local salaire = math.random(brasseur_pay.minimum, brasseur_pay.maximum)
-		TriggerServerEvent('Bank:AddBankMoney', salaire)
+		TriggerServerEvent("Bank:Salaire", salaire, "brasseur")
 		defaultNotification.message = "Bières vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
 		Venato.notify(defaultNotification)
 	else
