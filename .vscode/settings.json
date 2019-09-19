@@ -1,0 +1,19 @@
+{
+    "tslint.autoFixOnSave": false,
+    "tslint.enable": true,
+    "tslint.run": "onType",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#ff9900",
+        "activityBar.foreground": "#000000",
+        "activityBar.inactiveForeground": "#22222299",
+        "activityBarBadge.background": "#3002fc",
+        "activityBarBadge.foreground": "#ffffff",
+        "titleBar.activeBackground": "#0456d1",
+        "titleBar.inactiveBackground": "#0456d199",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#92003b",
+    "peacock.affectStatusBar": false
+  }
+  
