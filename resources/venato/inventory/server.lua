@@ -199,7 +199,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
             TriggerClientEvent('inventory:full', source)
             return false
           end
-          DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }
+          DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture, ['consomable'] = result[1].consomable }
           DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
           MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
           { ['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
