@@ -150,7 +150,6 @@ end)
 
 RegisterServerEvent('Inventory:AddItem')
 AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
-  print("AddItem : "..id)
   local source = source
   local qty = qty
   local qtyadd = qty
