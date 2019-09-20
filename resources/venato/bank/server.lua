@@ -289,7 +289,7 @@ AddEventHandler("Bank:AddBankMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Bank + qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
-  
+  print('AddBankMoney : '.. new )
   MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
 
@@ -310,7 +310,7 @@ AddEventHandler("Bank:RemoveBankMoney", function(qty, NewSource)
 	local new = DataPlayers[source].Bank - qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)	  
-  
+  print('RemoveBankMoney :'.. new)
   MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
 
