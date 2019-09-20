@@ -282,13 +282,14 @@ end)
 RegisterNetEvent("Bank:AddBankMoney")
 AddEventHandler("Bank:AddBankMoney", function(qty, NewSource)
 	local source = source
-	local qty = qty
+	local qty = tonumber(qty)
 	if NewSource ~= nil then
 		source = NewSource
 	end
 	local new = DataPlayers[source].Bank + qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)
+  print('AddBankMoney : '.. new )
   MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
 
@@ -302,13 +303,14 @@ end)
 RegisterNetEvent("Bank:RemoveBankMoney")
 AddEventHandler("Bank:RemoveBankMoney", function(qty, NewSource)
 	local source = source
-	local qty = qty
+	local qty = tonumber(qty)
 	if NewSource ~= nil then
 		source = NewSource
 	end
 	local new = DataPlayers[source].Bank - qty
 	DataPlayers[source].Bank = new
   TriggerClientEvent("gcphone:updateBank", source, new)	  
+  print('RemoveBankMoney :'.. new)
   MySQL.Async.execute('UPDATE users SET bank = @Money WHERE identifier = @SteamId', {["@SteamId"] = DataPlayers[source].SteamId, ["@Money"] = new})
 end)
 
