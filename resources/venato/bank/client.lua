@@ -100,7 +100,7 @@ function selecChequedepot(row)
   Menu.addItemButton("<span class='red--text'>Annuler ce chèque</span>", "https://i.ibb.co/YXNSF7R/cancel-Check.png", "cancelChequetest", row)
 end
 
-function encaise(row)
+function encaise(row)  
   TriggerServerEvent("Bank:DepotCheque", row[2])
   Menu.close()
 end
@@ -118,42 +118,31 @@ function cancelCheque(row)
   Menu.close()
 end
 
-function buyCheque(data)
-  if data.Money >= 1000 then
-    local alereadyAChequier = false
-    for k, v in pairs(data.Documents) do
-      if v.type == "chequier" then
-        alereadyAChequier = true
-      end
-    end
-    if alereadyAChequier == false then
-      TriggerServerEvent("Bank:createCheque")
-      TriggerServerEvent("Inventory:RemoveMoney", 1000)
-    else
-      Venato.notifyError("Vous possèdez déjà un chèquier.")
-    end
-  else
-    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter un chequier.")
-  end
+function buyCheque()
+  TriggerServerEvent("Bank:createCheque") 
 end
 
 function buyCard(data)
-  if data.Money >= 1000 then
-    TriggerServerEvent("Bank:createCard")
-    TriggerServerEvent("Inventory:RemoveMoney", 1000)
-  else
-    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour acheter une carte bancaire.")
+  print(Venato.dump(data))
+  local alereadyACard = false
+  for k, v in pairs(data.Inventaire) do
+    if v.id == 41 then
+      alereadyACard = true
+    end
   end
+  if alereadyACard == false then
+    TriggerServerEvent("Bank:createCard")
+    Menu.close()
+  else
+    Venato.notifyError("Vous possèdez déjà une carte de crédit.")
+  end
+
+
 end
 
 function CreatAcount(data)
-  Menu.close()
-  if data.Money >= 1000 then
-    TriggerServerEvent("Bank:createAccount")
-    TriggerServerEvent("Inventory:RemoveMoney", 1000)
-  else
-    Venato.notifyError("Vous n'avez pas les 1 000 € nécessaire pour ouvrir un compte.")
-  end
+  TriggerServerEvent("Bank:createAccount")
+  Menu.close()  
 end
 
 RegisterNetEvent('Bank:ActuSoldeErrone')

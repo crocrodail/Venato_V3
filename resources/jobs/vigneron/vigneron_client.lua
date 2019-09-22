@@ -284,7 +284,7 @@ end)
 		if qte > 0 then
 			TriggerServerEvent("Inventory:RemoveItem",1, tonumber(vigneron_ressourceTraite))
 			local salaire = math.random(vigneron_pay.minimum, vigneron_pay.maximum)
-			TriggerServerEvent('Bank:AddBankMoney', salaire)
+			TriggerServerEvent("Bank:Salaire", salaire, "vigneron")
 			defaultNotification.message = "Bouteilles de vin vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
 			Venato.notify(defaultNotification)
 		else

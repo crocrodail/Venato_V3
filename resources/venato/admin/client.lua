@@ -477,7 +477,7 @@ end
 function AdminGiveBank()
   local result = Venato.OpenKeyboard('', "", 10, "Nombre")
   if result ~= "" and result ~= nil then
-    TriggerServerEvent('Bank:AddBankMoney', result)
+    TriggerServerEvent('Bank:Salaire', result, 'Admin')
   else
     Venato.notifyError("Il y a un problème sur la somme renseigné")
   end

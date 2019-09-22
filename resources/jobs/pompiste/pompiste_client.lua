@@ -318,7 +318,7 @@ end)
 		TriggerServerEvent('Inventory:RemoveItem',1, tonumber(pompiste_ressourceTraite))
 		
 		local salaire = math.random(pompiste_pay.minimum, pompiste_pay.maximum)
-		TriggerServerEvent('Bank:AddBankMoney', salaire)
+		TriggerServerEvent("Bank:Salaire", salaire, 'pompiste')
 		defaultNotification.message = "Essence vendue. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
 		Venato.notify(defaultNotification)
 	else

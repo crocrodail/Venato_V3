@@ -25,7 +25,7 @@ maxCapacityCv = {
 
 PlateExeption = { --maxinplate = 8
   { plate = "CROCRODA", size = 300 , MaxWeapon = 3},
-  { plate = "PONPISTE", size = 0   , MaxWeapon = 0},
+  { plate = "POMPISTE", size = 0   , MaxWeapon = 0},
   { plate = "FORKLIFT", size = 0   , MaxWeapon = 0},
 }
 
