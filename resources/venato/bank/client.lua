@@ -102,7 +102,6 @@ end
 
 function encaise(row)  
   TriggerServerEvent("Bank:DepotCheque", row[2])
-  --row[1].Documents[row[2]] = nil
   Menu.close()
 end
 
