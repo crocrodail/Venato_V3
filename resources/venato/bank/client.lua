@@ -100,8 +100,9 @@ function selecChequedepot(row)
   Menu.addItemButton("<span class='red--text'>Annuler ce chèque</span>", "https://i.ibb.co/YXNSF7R/cancel-Check.png", "cancelChequetest", row)
 end
 
-function encaise(row)
+function encaise(row)  
   TriggerServerEvent("Bank:DepotCheque", row[2])
+  --row[1].Documents[row[2]] = nil
   Menu.close()
 end
 

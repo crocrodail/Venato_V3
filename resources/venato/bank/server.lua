@@ -235,7 +235,7 @@ AddEventHandler("Bank:DepotCheque", function(index)
         if tonumber(result[1].bank) >= tonumber(cheque.montant) then
           if result[1].source ~= 'disconnect' then
             TriggerEvent("Bank:RemoveBankMoney", cheque.montant, result[1].source)
-            defaultNotification.message = "Votre chèque de "..cheque.montant.." € a été encaissé par "..DataPlayers[source].prenom .. " " .. DataPlayers[source].nom
+            defaultNotification.message = "Votre chèque de "..cheque.montant.." € a été encaissé par "..DataPlayers[source].Prenom .. " " .. DataPlayers[source].Nom
             TriggerClientEvent('Venato:notify', result[1].source, defaultNotification)
           else            
             MySQL.Async.execute('UPDATE users SET bank= @Money WHERE identifier = @SteamId', {["@SteamId"] = result[1].identifier, ["@Money"] = tonumber(result[1].bank)-tonumber(cheque.montant)})
@@ -246,16 +246,16 @@ AddEventHandler("Bank:DepotCheque", function(index)
           TriggerClientEvent('Venato:notify', source, defaultNotification)
           
           MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = DataPlayers[source].SteamId, ["@transactionType"] = transactionType.encaisseCheque,["@amount"] = cheque.montant, ["@description"] = "Chèque venant de  "..result[1].prenom .. " " .. result[1].nom..": encaissé."})
-          MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = DataPlayers[source].SteamId, ["@transactionType"] = transactionType.emitCheque,["@amount"] = cheque.montant, ["@description"] = "Chèque à destination de  "..DataPlayers[source].prenom .. " " .. DataPlayers[source].nom..": encaissé."})
+          MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = result[1].identifier, ["@transactionType"] = transactionType.emitCheque,["@amount"] = cheque.montant, ["@description"] = "Chèque à destination de  "..DataPlayers[source].Prenom .. " " .. DataPlayers[source].Nom..": encaissé."})
           
         else
           TriggerClientEvent('Venato:notifyError', source, "Il semblerait que ce soit un chèque en bois, le transfert a été refusé pour solde insuffisant.")          
           MySQL.Async.execute('UPDATE users SET isBankAccountBlocked = 1 WHERE identifier = @SteamId', {["@SteamId"] = result[1].identifier, ["@Money"] = tonumber(result[1].bank)-tonumber(cheque.montant)})
-          MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = result[1].identifier, ["@transactionType"] = transactionType.emitChequeBois,["@amount"] = cheque.montant, ["@description"] = "Chèque pour "..DataPlayers[source].prenom .. " " .. DataPlayers[source].nom..": refusé pour solde insufisant."})
+          MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = result[1].identifier, ["@transactionType"] = transactionType.emitChequeBois,["@amount"] = cheque.montant, ["@description"] = "Chèque pour "..DataPlayers[source].Prenom .. " " .. DataPlayers[source].Nom..": refusé pour solde insufisant."})
           MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = result[1].identifier, ["@transactionType"] = transactionType.blockAccount,["@amount"] = 0, ["@description"] = "Blocage du compte pour chèque en bois."})
-          MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = DataPlayers[source].SteamId, ["@transactionType"] = transactionType.encaisseChequeBois,["@amount"] = cheque.montant, ["@description"] = "Chèque venant de  "..result[1].prenom .. " " .. result[1].nom..": refusé pour solde insufisant."})
+          MySQL.Async.execute('INSERT INTO bank_transactions(identifier,transactionType,montant, description) VALUES (@SteamId,@transactionType,@amount, @description)', {["@SteamId"] = DataPlayers[source].SteamId, ["@transactionType"] = transactionType.encaisseChequeBois,["@amount"] = cheque.montant, ["@description"] = "Chèque venant de  "..result[1].prenom .. " " ..result[1].nom ..": refusé pour solde insufisant."})
           if result[1].source ~= 'disconnect' then
-            defaultNotification.message = "Votre chèque de "..cheque.montant.." € pour "..DataPlayers[source].prenom .. " " .. DataPlayers[source].nom .. "n'a pas pu être encaissé pour cause de solde insufisant.<br/> Votre compte est donc <span class='red--text'>bloqué</span>. Rendez vous au <class='yellow--text'>LSPD</span> pour régulariser votre situation."
+            defaultNotification.message = "Votre chèque de "..cheque.montant.." € pour "..DataPlayers[source].Prenom .. " " .. DataPlayers[source].Nom .. "n'a pas pu être encaissé pour cause de solde insufisant.<br/> Votre compte est donc <span class='red--text'>bloqué</span>. Rendez vous au <class='yellow--text'>LSPD</span> pour régulariser votre situation."
             TriggerClientEvent('Venato:notify', result[1].source, defaultNotification)
           end
         end
@@ -328,7 +328,7 @@ AddEventHandler("Bank:SetBankMoney", function(qty, NewSource)
 end)
 
 function CheckPlafondDepot(source)
-    MySQL.Async.fetchAll("SELECT SUM(montant) as montant FROM bank_transactions WHERE identifier = @SteamId and transactionType = 1 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -1 MONTH) AND DATE_ADD(CURRENT_DATE, INTERVAL 1 MONTH)",{["@SteamId"] = DataPlayers[source].SteamId}, function(result)
+    MySQL.Async.fetchAll("SELECT SUM(montant) as montant FROM bank_transactions WHERE identifier = @SteamId and transactionType = 1 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 DAY) AND DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY)",{["@SteamId"] = DataPlayers[source].SteamId}, function(result)
       if result[1] ~= nil then
         if result[1].montant >= plafondDepot then
           BlockAccount(source)
@@ -341,16 +341,15 @@ function CheckPlafondDepot(source)
 end
 
 function CheckPlafondRetrait(source, amount)
-  local result = MySQL.Sync.fetchAll("SELECT SUM(montant) + @amount as montant FROM bank_transactions WHERE identifier = @SteamId and transactionType = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 DAY) AND DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY)",{["@SteamId"] = DataPlayers[source].SteamId, ["@amount"] = amount})
+  local result = MySQL.Sync.fetchAll("SELECT SUM(montant) as montant FROM bank_transactions WHERE identifier = @SteamId and transactionType = 0 AND date BETWEEN DATE_ADD(CURRENT_DATE, INTERVAL -3 DAY) AND DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY)",{["@SteamId"] = DataPlayers[source].SteamId })
   if result[1].montant ~= nil then
-    if result[1].montant <= plafondRetrait then
+    if result[1].montant + amount <= plafondRetrait then
       return true
     end
+    BlockAccount(source)
     return false
-  else
-    return true
   end
-  return false
+  return true
 end
 
 function BlockAccount(source)
