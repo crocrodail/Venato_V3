@@ -16,6 +16,7 @@ local garage = {
     {name= 'Dodgers', xpoint = 1374.890, ypoint= -1520.119, zpoint= 57.376,  xspawn = 1373.639, yspawn= -1523.067, zspawn= 56.022, hspawn =  201.380, hidden = true}, -- Dodgers
     {name= 'Maître Johnson', xpoint = -2670.29, ypoint= 1309.7, zpoint= 147.11,  xspawn = -2670.29, yspawn= 1309.7, zspawn= 147.11, hspawn =  262.398, hidden = true}, -- villa
     {name= 'Hangar a avion perso', xpoint = 1705.92, ypoint= 3251.25, zpoint= 40.01,  xspawn = 1705.92, yspawn= 3251.25, zspawn= 40.01, hspawn =  105.1460, hidden = true}, -- ta
+    {name= 'Garage Families', xpoint = -56.229, ypoint= -1492.541, zpoint= 31.753,  xspawn = -56.229, yspawn= -1492.541, zspawn= 31.753, hspawn =  142.52, hidden = true}, -- ta
   --  {name= 'GarageDebug', xpoint = -63.96244430542, ypoint = -1088.9659423828, zpoint = 26.723899841309, xspawn = -63.96244430542, yspawn = -1088.9659423828, zspawn = 26.723899841309, hspawn =  105.1460, hidden = false}, -- ta
 }
 
