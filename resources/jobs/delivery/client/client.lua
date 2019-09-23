@@ -28,7 +28,7 @@ local SPAWN_BOX = "Appuyez sur ~INPUT_CONTEXT~ pour récupérer une caisse."
 -- OTHERS message
 local LOAD_TRUNK_MSG = "Prenez votre camion et aller chercher votre caisse de marchandise."
 local LOAD_BOX_ON_TRUCK = "Utiliser le forklift pour mettre la caisse dans votre camion, les portes arrière doivent etre ouvert."
-local LOAD_BOX_MSG = "Rejoingner les entrepots adapté à votre livraision (~BLIP_408~ sur la carte) "
+local LOAD_BOX_MSG = "Rejoingnez les entrepots adapté à votre livraison (~BLIP_408~ sur la carte) "
 local TAKE_IN_BOX_MSG = "Veuillez prendre les items dans les caisses"
 local DELIVERY_MSG = "veuillez livrer votre chargement à destination ~BLIP_119~"
 
