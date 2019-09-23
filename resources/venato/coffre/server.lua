@@ -257,7 +257,13 @@ AddEventHandler("Coffre:CoffreWhitelistPlayer", function(row)
   local source = source
   local index = row[1]
   local user = row[2]
-  MySQL.Async.execute("INSERT INTO coffres_whitelist(CoffreId, UserId) VALUES (@coffreId, @userId)", {["@userId"] = DataPlayers[user].SteamId, ["@coffreId"] = index})
+  
+  print(index)
+  print(user)
+  print(DataPlayers[user].SteamId)
+  if (DataPlayers[user] ~= undefined and DataPlayers[user].SteamId ~= undefined and DataPlayers[user].SteamId ~= '') then
+    MySQL.Async.execute("INSERT INTO coffres_whitelist(CoffreId, UserId) VALUES (@coffreId, @userId)", {["@coffreId"] = index, ["@userId"] = DataPlayers[user].SteamId })
+  end
 end)
 
 RegisterServerEvent("Coffre:UnWhitelist")

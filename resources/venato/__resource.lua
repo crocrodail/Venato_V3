@@ -48,7 +48,9 @@ client_script {
   '/VNT_fourriere/client0.lua',
   '/barbershop/client.lua',
   '/illegal/config.lua',
-  '/illegal/client.lua'
+  '/illegal/client.lua',
+  '/vanilla/client.lua',
+  '/doors/client.lua'
 }
 
 server_script {
@@ -84,7 +86,9 @@ server_script {
   '/VNT_fourriere/server0.lua',
   '/barbershop/server.lua',
   '/illegal/config.lua',
-  '/illegal/server.lua'
+  '/illegal/server.lua',
+  '/vanilla/server.lua',
+  '/doors/server.lua'
 }
 
 files {

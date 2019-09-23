@@ -2,21 +2,19 @@ local TeleportFromTo = {
   ["Maze Bank Building"] = {
     positionFrom = { ['x'] = -68.7212, ['y'] = -801.0262, ['z'] = 44.2273, nom = "Toit - Maze Bank Building" },
     positionTo = { ['x'] = -67.6794, ['y'] = -821.6484, ['z'] = 321.2873, nom = "Decendre - Maze Bank Building" },
+    whitelist = false,
   },
 
   ["Humane Labs"] = {
     positionFrom = { ['x'] = 3541.7028, ['y'] = 3674.2761, ['z'] = 28.1211, nom = "Descendre - Humane labs" },
     positionTo = { ['x'] = 3541.7314, ['y'] = 3674.2619, ['z'] = 20.9917, nom = "Monter - Humane labs" },
-  },
-
-  ["Bahama Mamas"] = {
-    positionFrom = { ['x'] = -1388.6527, ['y'] = -586.1796, ['z'] = 30.2184, nom = "Intérieur - Bahama Mamas" },
-    positionTo = { ['x'] = -1387.61, ['y'] = -588.068, ['z'] = 30.3195, nom = "Sortir - Bahama Mamas" },
+    whitelist = false,
   },
 
   ["Arcadius Buisiness"] = {
     positionFrom = { ['x'] = -117.2135, ['y'] = -604.5497, ['z'] = 36.2807, nom = "Monter - Arcadius Buisiness" },
     positionTo = { ['x'] = -134.0843, ['y'] = -584.5471, ['z'] = 201.7355, nom = "Descendre - Arcadius Buisiness" },
+    whitelist = false,
   },
 
   --["Oneway Police"] = {
@@ -32,26 +30,31 @@ local TeleportFromTo = {
   ["Bureau du FIB"] = {
     positionFrom = { ['x'] = 136.0994, ['y'] = -761.8452, ['z'] = 45.7520, nom = "Monter - Bureau de MerryWeather" },
     positionTo = { ['x'] = 136.7892, ['y'] = -761.4996, ['z'] = 242.1518, nom = "Descendre - Bureau de MerryWeather" },
+    whitelist = false,
   },
 
   ["Hôpital - Entrer - sortir"] = {
     positionFrom = { ['x'] = 1151.024, ['y'] = -1529.941, ['z'] = 35.373, nom = "Entrer - Hôpital" },
     positionTo = { ['x'] = 1146.779, ['y'] = -1560.052, ['z'] = 4.945, nom = "Sortir - Hôpital" },
+    whitelist = false,
   },
 
   ["Hôpital garage - Entrer - sortir"] = {
     positionFrom = { ['x'] = 1132.591, ['y'] = -1597.225, ['z'] = 34.733, nom = "Entrer - Hôpital" },
     positionTo = { ['x'] = 1136.334, ['y'] = -1594.335, ['z'] = 4.945, nom = "Sortir arrière Hôpital" },
+    whitelist = false,
   },
 
   ["Life invader - Réunion"] = {
     positionFrom = { ['x'] = -1048.93, ['y'] = -238.589, ['z'] = 44.0211, nom = "Entrer - Salle de réunion" },
     positionTo = { ['x'] = -1046.62, ['y'] = -237.523, ['z'] = 44.0211, nom = "Sortir - Salle de réunion" },
+    whitelist = false,
   },
 
   ["Life invader - Brainstorming"] = {
     positionFrom = { ['x'] = -1056.73, ['y'] = -237.844, ['z'] = 44.0212, nom = "Entrer - Salle de brainstorming" },
     positionTo = { ['x'] = -1057.85, ['y'] = -235.752, ['z'] = 44.0212, nom = "Sortir - Salle de brainstorming" },
+    whitelist = false,
   },
 
   --	["Poste de police - Armurie"] = {
@@ -62,35 +65,43 @@ local TeleportFromTo = {
   ["Agence H2BA - Bureau"] = {
     positionFrom = { ['x'] = -1011.65, ['y'] = -480.061, ['z'] = 39.9706, nom = "Entrer - Agence H2BA" },
     positionTo = { ['x'] = -1002.81, ['y'] = -477.794, ['z'] = 50.0273, nom = "Sortir - Agence H2BA" },
+    whitelist = false,
   },
 
   ["Gouvernement"] = {
     positionFrom = { ['x'] = -429.32, ['y'] = 1110.22, ['z'] = 327.68, nom = "Entrer - Gouvernement" },
     positionTo = { ['x'] = -141.25, ['y'] = -613.84, ['z'] = 168.82, nom = "Sortir - Gouvernement" },
+    whitelist = false,
   },
 
   ["Labo"] = {
     positionFrom = { ['x'] = 3514.0, ['y'] = 3755.0, ['z'] = 30.0, nom = "Entrer - Labo" },
     positionTo = { ['x'] = 3527.0, ['y'] = 3674.0, ['z'] = 28.5, nom = "Sortir - Labo" },
+    whitelist = false,
   },
 
   ["AlphaCorp - Bureau"] = {
     positionFrom = { ['x'] = -1581.423706, ['y'] = -558.146667, ['z'] = 34.953056, nom = "Entrer - Bureau AlphaCorp" },
     positionTo = { ['x'] = -1581.293823, ['y'] = -562.1727905, ['z'] = 108.5229339, nom = "Sortir - Rue" },
+    whitelist = false,
   },
 
   ["AlphaCorp - Parking"] = {
     positionFrom = { ['x'] = -1536.5893554, ['y'] = -579.018127, ['z'] = 25.7077922, nom = "Entrer - Bureau AlphaCorp" },
     positionTo = { ['x'] = -1579.411376, ['y'] = -564.9171142, ['z'] = 108.5229339, nom = "Sortir - Parking" },
+    whitelist = false,
   },
 
   ["Bureau mecano"] = {
     positionFrom = { ['x'] = -355.2135, ['y'] = -143.5497, ['z'] = 42.2807, nom = "Entrer - Bureau mecano" },
     positionTo = { ['x'] = -774.0843, ['y'] = 332.5471, ['z'] = 208.0, nom = "Sorti - Bureau mecano" },
+    whitelist = false,
   },
+
   ["Chambre Franklin2"] = {
     positionFrom = { ['x'] = -9.726, ['y'] = 531.298, ['z'] = 170.617, nom = "Entrer - Chambre" },
     positionTo = { ['x'] = -6.200, ['y'] = 526.925, ['z'] = 170.626, nom = "Sorti - Chambre" },
+    whitelist = false,
   },
 
   --["Biker"] = {
@@ -112,26 +123,31 @@ local TeleportFromTo = {
   ["sorti teki"] = {
     positionFrom = { ['x'] = -568.53, ['y'] = 291.247, ['z'] = 79.176, nom = "" },
     positionTo = { ['x'] = -493.283, ['y'] = 225.878, ['z'] = 24.10, nom = "" },
+    whitelist = false,
   },
 
   ["Tribunal"] = {
     positionFrom = { ['x'] = 269.837, ['y'] = -433.134, ['z'] = 45.255, nom = "Entrer" },
     positionTo = { ['x'] = 264.554, ['y'] = -431.548, ['z'] = 21.238, nom = "Sorti" },
+    whitelist = false,
   },
 
   ["Taxi"] = {
     positionFrom = { ['x'] = 895.616, ['y'] = -179.429, ['z'] = 74.700, nom = "Entrer - Bureau Taxi" },
     positionTo = { ['x'] = -1388.507, ['y'] = -483.361, ['z'] = 78.200, nom = "Sorti - Parking Taxi" },
+    whitelist = false,
   },
 
   ["lsNews"] = {
     positionFrom = { ['x'] = -317.92, ['y'] = -610.21, ['z'] = 33.558, nom = "Entrer bureaux" },
     positionTo = { ['x'] = -78.514, ['y'] = -832.07, ['z'] = 243.385, nom = "Sortir des bureaux" },
+    whitelist = false,
   },
 
   ["Shadow"] = {
     positionFrom = { ['x'] = -97.749, ['y'] = 988.562, ['z'] = 235.756, nom = "Entrer Maison" },
     positionTo = { ['x'] = -664.845, ['y'] = -980.995, ['z'] = -39.800, nom = "Sortir de la Maison" },
+    whitelist = false,
   },
 
   --["Bloods"] = {
@@ -147,11 +163,34 @@ local TeleportFromTo = {
   ["Event Horloge"] = {
     positionFrom = { ['x'] = -1237.066, ['y'] = -828.687, ['z'] = 25.128, nom = "Entrer" },
     positionTo = { ['x'] = -1253.681, ['y'] = -842.833, ['z'] = 65.331, nom = "Sortir" },
+    whitelist = false,
   },
 
   ["Night Club"] = {
     positionFrom = { ['x'] = 757.997009, ['y'] = -1332.661865, ['z'] = 27.275236, nom = "Entrer du NightClub" },
     positionTo = { ['x'] = -1569.412109, ['y'] = -3017.339843, ['z'] = -74.4061508, nom = "Sortir du NightClub" },
+    whitelist = false,
+  },
+
+  ["Unicorn"] = {
+    positionFrom = { ['x'] = 138.402, ['y'] = -1292.915, ['z'] = 29.233, nom = "Bar"},
+    positionTo = { ['x'] = 124.762, ['y'] = -1279.882, ['z'] = 29.27, nom = "Dehors" },
+    whitelist = true,
+    jobId = 34
+  },
+
+  ["Bahama Mamas Bar 1"] = {
+    positionFrom = { ['x'] = -1389.297, ['y'] = -592.065, ['z'] = 30.32, nom = "Entrée Bar 1"},
+    positionTo = { ['x'] = -1390.226, ['y'] = -600.315, ['z'] = 30.32, nom = "Sortir" },
+    whitelist = true,
+    jobId = 35
+  },
+
+  ["Bahama Mamas Bar 2"] = {
+    positionFrom = { ['x'] = -1386.12, ['y'] = -627.629, ['z'] = 30.82, nom = "Entrée Bar 2"},
+    positionTo = { ['x'] = -1371.232, ['y'] = -625.838, ['z'] = 30.32, nom = "Sortir" },
+    whitelist = true,
+    jobId = 35
   },
 
 }
@@ -216,13 +255,13 @@ Citizen.CreateThread(function()
     for k, j in pairs(TeleportFromTo) do
 
       --msginf(k .. " " .. tostring(j.positionFrom.x), 15000)
-      if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) then
+      if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and j.jobId == DataUser.IdJob))  then
         DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
           255, 255, 255, 255, 0, 0, 0, 0)
         if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 5.0) then
           Drawing.draw3DText(j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1.100, j.positionFrom.nom, 1, 0.2,
             0.1, 255, 255, 255, 215)
-          if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 2.0) then
+          if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 2.0 ) then
             ClearPrints()
             SetTextEntry_2("STRING")
             AddTextComponentString("Appuyez sur la touche ~r~E~w~ pour " .. j.positionFrom.nom)
@@ -233,7 +272,7 @@ Citizen.CreateThread(function()
               FreezeEntityPosition(Venato.GetPlayerPed(), true)
               SetEntityCoords(Venato.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
               if j.insideModer then
-
+              
               end
               Citizen.Wait(2000)
               DoScreenFadeIn(1000)

@@ -33,10 +33,12 @@ AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
     TriggerEvent('Menu:AddButton2', "Armes", "CoffreWeapon", coffre_index, '', "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png")
     end
 
-    TriggerEvent('Menu:AddButton2', "Déposer des objets", "CoffreAddItem", coffre_index, '', "https://i.ibb.co/CQjDCTX/icons8-safe-in-96px-1.png")
-    for k,v in pairs(DataCoffre[coffre_index].inventaire) do
-      if v.quantity ~= 0 then
-        TriggerEvent('Menu:AddShopButton', v.libelle, "CoffreTakeItem", {coffre_index, k}, v.picture, v.quantity, '', true)
+    if DataCoffre[coffre_index].itemcapacite ~= 0 then
+      TriggerEvent('Menu:AddButton2', "Déposer des objets", "CoffreAddItem", coffre_index, '', "https://i.ibb.co/CQjDCTX/icons8-safe-in-96px-1.png")
+      for k,v in pairs(DataCoffre[coffre_index].inventaire) do
+        if v.quantity ~= 0 then
+          TriggerEvent('Menu:AddShopButton', v.libelle, "CoffreTakeItem", {coffre_index, k}, v.picture, v.quantity, '', true)
+        end
       end
     end
     TriggerEvent('Menu:CreateMenu')
@@ -202,7 +204,7 @@ RegisterNetEvent("Coffre:CallDataClosePlayer:cb")
 AddEventHandler("Coffre:CallDataClosePlayer:cb", function(Coffre, index, user)
   DataCoffre = Coffre
   local DataUserClose = user
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)  
   Menu.addButton("Donner accès à "..DataUserClose.Prenom.." "..DataUserClose.Nom, "CoffreWhitelistPlayer", {index, user})
 end)
 
