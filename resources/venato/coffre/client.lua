@@ -203,7 +203,7 @@ AddEventHandler("Coffre:CallDataClosePlayer:cb", function(Coffre, index, user)
   DataCoffre = Coffre
   local DataUserClose = user
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
-  Menu.addButton("Donner accès à "..DataUserClose.Prenom.." "..DataUserClose, "CoffreWhitelistPlayer", {index, user})
+  Menu.addButton("Donner accès à "..DataUserClose.Prenom.." "..DataUserClose.Nom, "CoffreWhitelistPlayer", {index, user})
 end)
 
 function CoffreWhitelistPlayer(row)
