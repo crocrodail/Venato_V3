@@ -31,6 +31,16 @@ local doorList = {
     [30] = { ["objName"] = "-131296141", ["x"]= -1387.03, ["y"]= -586.61,["z"]= 30.50,["locked"]= true, ['jobId'] = 35},  
     [31] = { ["objName"] = "-1884701657", ["x"]= 471.34, ["y"]= -985.45,["z"]= 26.83,["locked"]= true, ['jobId'] = 2},
     [31] = { ["objName"] = "-340230128", ["x"]= 464.36, ["y"]= -984.68,["z"]= 43.83,["locked"]= true, ['jobId'] = 2},
+    [32] = { ["objName"] = "1695461688", ["x"]= -1583.46, ["y"]= -3004.98,["z"]= -75.84,["locked"]= true, ['jobId'] = 41},
+    [33] = { ["objName"] = "1695461688", ["x"]= -1581.91, ["y"]= -3010.06,["z"]= -75.84,["locked"]= true, ['jobId'] = 41},
+    [34] = { ["objName"] = "-1555108147", ["x"]= -1608.23, ["y"]= -3005.63,["z"]= -75.21, ['distance']= 1.5, ["locked"]= true, ['jobId'] = 41},
+    [35] = { ["objName"] = "402916948", ["x"]= -1614.41, ["y"]= -3008.48,["z"]= -76.21,["locked"]= true, ['jobId'] = 41},
+    [36] = { ["objName"] = "-1119680854", ["x"]= -1621.28, ["y"]= -3015.79,["z"]= -75.21,["locked"]= true, ['jobId'] = 41},
+    [37] = { ["objName"] = "993120320", ["x"]= -561.29, ["y"]= 293.50,["z"]= 87.78,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
+    [38] = { ["objName"] = "993120320", ["x"]= -565.17, ["y"]= 276.63,["z"]= 83.29,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
+    [39] = { ["objName"] = "-626684119", ["x"]= -569.80, ["y"]= 293.77,["z"]= 79.33,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
+    [40] = { ["objName"] = "-626684119", ["x"]= -560.24, ["y"]= 293.01,["z"]= 82.33,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
+    [41] = { ["objName"] = "1289778077", ["x"]= -568.88, ["y"]= 281.11,["z"]= 83.13,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
 }
 
 RegisterNetEvent('door:state')
@@ -64,7 +74,7 @@ Citizen.CreateThread(function()
             
             local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)
 
-            if(playerDistance < 1 and DataUser.IdJob == doorList[i]["jobId"]) then
+            if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and DataUser.IdJob == doorList[i]["jobId"]) then
 
                 if doorList[i]["locked"] == true then
                     DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~b~ouvrir la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)
@@ -73,6 +83,16 @@ Citizen.CreateThread(function()
                 end
                 -- Press E key
                 if IsControlJustPressed(1,51) then
+                    
+                    Venato.disableAction(true)
+                    Venato.playAnim({
+                        useLib = true,
+                        lib = "missheistfbisetup1",
+                        anim = "unlock_enter_janitor",
+                        timeout = 2500
+                    })
+                    Venato.disableAction(false)
+                    
                     if doorList[i]["locked"] == true then
                         TriggerServerEvent("door:update", i, false)
                     else

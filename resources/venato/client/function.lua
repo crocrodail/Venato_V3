@@ -1,24 +1,27 @@
 Venato = {}
 PedPlayer = nil
 
+
 function none()
   local a = ""
 end
 
 function Venato.playAnim(data)
-  local flag = data.flag or 0
+  local flag = data.flag or 48
   local ped = data.ped or GetPlayerPed(-1)
-    if data.useLib then
-        RequestAnimDict(data.lib)
-        while not HasAnimDictLoaded(data.lib) do
-        Citizen.Wait(0)
-        end
-        if HasAnimDictLoaded(data.lib) then
-            TaskPlayAnim(ped,data.lib, data.anim ,8.0, -8.0, -1, flag, 0, false, false, false )
-        end
-    elseif not data.useLib then
-        TaskStartScenarioInPlace(ped, data.anim, 0, false)
-    end
+  local timeout = data.timeout or 0
+  if data.useLib then
+      RequestAnimDict(data.lib)
+      while not HasAnimDictLoaded(data.lib) do
+      Citizen.Wait(0)
+      end
+      
+      TaskPlayAnim(ped,data.lib, data.anim ,8.0, 8.0, -1, flag, 1, false, false, false )
+      
+  elseif not data.useLib then
+      TaskStartScenarioInPlace(ped, data.anim, 0, false)
+  end
+  Citizen.Wait(timeout)
 end
 
 
@@ -30,6 +33,11 @@ function Venato.notifyError(msg)
 		message = msg,
 	}
 	Venato.notify(data)
+end
+
+
+function Venato.disableAction(disabled)
+  FreezeEntityPosition(GetPlayerPed(-1), disabled)
 end
 
 function Venato.notify(notif)

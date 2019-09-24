@@ -1,5 +1,6 @@
 local DataCoffre = {}
 local DataUser = {}
+local isInit = false
 
 local coffre_index = -1
 
@@ -18,7 +19,7 @@ RegisterNetEvent("Coffre:CallData:cb")
 AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
   DataCoffre = Coffre
   DataUser = user or {}  
-  if coffre_index > 0 then
+  if coffre_index > 0 then    
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', DataCoffre[coffre_index].nom, "Coffre", 'rgba('..DataCoffre[coffre_index].red..','..DataCoffre[coffre_index].green..','..DataCoffre[coffre_index].blue..', 0.75)', "https://cap.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcap.2F2017.2F05.2F09.2F1c21c36a-b809-4662-bf09-1068218410b9.2Ejpeg/750x375/background-color/ffffff/quality/70/fichet-bauche-la-success-story-du-roi-du-coffre-fort-1123519.jpg" )
     Menu.setTitle( DataCoffre[coffre_index].nom)
@@ -66,15 +67,16 @@ AddEventHandler("Coffre:CallData:init", function(Coffre)
   end  
 end)
 
-Citizen.CreateThread(function()
-  TriggerServerEvent("Coffre:CallData")  
-  while true do
-    Citizen.Wait(0)
+Citizen.CreateThread(function()   
+  TriggerServerEvent("Coffre:CallData")
+  TriggerServerEvent("Coffre:ReloadCoffre")
+  while true do     
+    Citizen.Wait(0)    
     local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
     for k,v in pairs(DataCoffre) do     
-      if Vdist(x, y, z, v.x, v.y, v.z) < 1 then
+      if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) then
         Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..v.nom..'.')
-        if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+        if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then          
           TriggerServerEvent("Coffre:CheckWhitelist", k)
           coffre_index = k
         end
@@ -86,16 +88,21 @@ end)
 RegisterNetEvent("Coffre:CheckWhitelist:cb")
 AddEventHandler("Coffre:CheckWhitelist:cb", function(result)
   if result.status then
+    Venato.playAnim({
+      useLib = true,
+      lib = "missheistfbisetup1",
+      anim = "unlock_enter_janitor",
+      timeout = 3333
+    })
     OpenCoffre(coffre_index)
     Menu.toggle()
   else
     defaultNotification.message = "Vous ne connaissez pas le code de "..DataCoffre[coffre_index].nom
     Venato.notify(defaultNotification)
-    --TODO Notif pas le code
   end
 end)
 
-function OpenCoffre(index)
+function OpenCoffre(index)  
   TriggerEvent('Menu:Close')
   Menu.clearMenu()
   coffre_index = index  

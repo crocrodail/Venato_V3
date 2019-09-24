@@ -120,11 +120,11 @@ local TeleportFromTo = {
   --},
 
 
-  ["sorti teki"] = {
-    positionFrom = { ['x'] = -568.53, ['y'] = 291.247, ['z'] = 79.176, nom = "" },
-    positionTo = { ['x'] = -493.283, ['y'] = 225.878, ['z'] = 24.10, nom = "" },
-    whitelist = false,
-  },
+  -- ["sorti teki"] = {
+  --   positionFrom = { ['x'] = -568.53, ['y'] = 291.247, ['z'] = 79.176, nom = "" },
+  --   positionTo = { ['x'] = -493.283, ['y'] = 225.878, ['z'] = 24.10, nom = "" },
+  --   whitelist = false,
+  -- },
 
   ["Tribunal"] = {
     positionFrom = { ['x'] = 269.837, ['y'] = -433.134, ['z'] = 45.255, nom = "Entrer" },
@@ -193,8 +193,33 @@ local TeleportFromTo = {
     jobId = 35
   },
 
+  ["Garage Palace Entree"] = {
+    positionFrom = { ['x'] = 732.28, ['y'] = -1291.37, ['z'] = 25.28, nom = "Parking Palace"},
+    positionTo = { ['x'] = -1641.64, ['y'] = -2989.70, ['z'] = -77.45, ['h'] = 268.86, nom = "Sortir" },
+    acceptVehicle = true,    
+    hideTo = true,
+    distance = 5
+  },
+
+  ["Garage Palace Sortie"] = {
+    positionFrom = { ['x'] = -1641.29, ['y'] = -3012.52, ['z'] = -78.54, nom = "Sortie"},
+    positionTo = { ['x'] = 730.25, ['y'] = -1284.72, ['z'] = 25.89, ['h'] = 93.42, nom = "Parking Palace"},
+    acceptVehicle = true,
+    hideTo = true,
+    distance = 5
+  },
+
+  ["Tequilala"] = {
+    positionFrom = { ['x'] = -561.61, ['y'] = 289.80, ['z'] = 82.18, nom = "Entrée bar VIP"},
+    positionTo = { ['x'] = -564.85, ['y'] = 284.65, ['z'] = 85.38, nom = "Sortir" },
+    whitelist = true,
+    jobId = 23,
+    distance = 0.5
+  },
+
 }
 
+local entities = {}
 Drawing = setmetatable({}, Drawing)
 Drawing.__index = Drawing
 
@@ -251,6 +276,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     local pos = GetEntityCoords(Venato.GetPlayerPed(), true)
+    local canGoIn = false
 
     for k, j in pairs(TeleportFromTo) do
 
@@ -261,34 +287,58 @@ Citizen.CreateThread(function()
         if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 5.0) then
           Drawing.draw3DText(j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1.100, j.positionFrom.nom, 1, 0.2,
             0.1, 255, 255, 255, 215)
-          if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 2.0 ) then
+          if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < (j.distance ~= nil and j.distance or 2.0) ) then
             ClearPrints()
             SetTextEntry_2("STRING")
             AddTextComponentString("Appuyez sur la touche ~r~E~w~ pour " .. j.positionFrom.nom)
             DrawSubtitleTimed(2000, 1)
             if IsControlJustPressed(1, 38) then
-              DoScreenFadeOut(1000)
-              Citizen.Wait(1000)
-              FreezeEntityPosition(Venato.GetPlayerPed(), true)
-              SetEntityCoords(Venato.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
-              if j.insideModer then
-              
+              canGoIn = true
+              local curVehicule = GetVehiclePedIsIn(Venato.GetPlayerPed(), false)
+              if curVehicule ~= 0 then
+                if not j.acceptVehicle then
+                  Venato.notifyError("Vous ne pouvez pas rentrer avec votre véhicule")        
+                  canGoIn = false          
+                end
               end
-              Citizen.Wait(2000)
-              DoScreenFadeIn(1000)
-              FreezeEntityPosition(Venato.GetPlayerPed(), false)
+              if canGoIn then
+                DoScreenFadeOut(500)
+                Citizen.Wait(1000)
+                FreezeEntityPosition(Venato.GetPlayerPed(), true)
+                SetEntityCoords(Venato.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
+                if curVehicule ~= 0 then
+                  entities = {}
+                  for i = 0, GetVehicleMaxNumberOfPassengers(vehicle) do
+                    entities[i] = GetPedInVehicleSeat(curVehicule, i)
+                  end
+                  SetEntityCoords(curVehicule, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
+                  SetPedIntoVehicle(Venato.GetPlayerPed(), curVehicule, -1)
+                  SetEntityHeading(curVehicule, j.positionTo.h)
+                  for i = 0, GetVehicleMaxNumberOfPassengers(vehicle) do
+                    if entities[i] then
+                      SetPedIntoVehicle(entities[i], curVehicule, i)
+                    end
+                  end
+                end
+                if j.insideModer then
+                
+                end
+                Citizen.Wait(500)
+                DoScreenFadeIn(1000)
+                FreezeEntityPosition(Venato.GetPlayerPed(), false)
+              end
             end
           end
         end
       end
 
-      if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0) then
+      if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0 and not j.hideTo) then
         DrawMarker(1, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101, 255,
           255, 255, 255, 0, 0, 0, 0)
         if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 5.0) then
           Drawing.draw3DText(j.positionTo.x, j.positionTo.y, j.positionTo.z - 1.100, j.positionTo.nom, 1, 0.2, 0.1, 255,
             255, 255, 215)
-          if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 2.0) then
+          if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < (j.distance ~= nil and j.distance or 2.0)) then
             ClearPrints()
             SetTextEntry_2("STRING")
             AddTextComponentString("Appuyez sur la touche ~r~E~w~ pour " .. j.positionTo.nom)

@@ -386,7 +386,6 @@ end
 RegisterNetEvent("Admin:CallDataUsers:cb")
 AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
   Menu.clearMenu()
-  DataUser = dataPlayers[1]
   AdminDataPlayers = dataPlayers
   ClientSource = DataSource
   openVenatoadmin()
