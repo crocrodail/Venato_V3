@@ -1,4 +1,5 @@
 local ingame = 0
+local mask = false
 DataUser = {}
 CanCancelOrStartAnim = true
 
@@ -156,6 +157,27 @@ function Openpoleemploie()
   Menu.addButton2("Brasseur", "sitchJob", 12, nil, nil)
   Menu.addButton2("Liveur PostOp (Beta v1.0)", "PostOp", nil, nil, nil)
   Menu.CreateMenu()
+end
+
+function toggleMask()
+  if mask then
+    Venato.playAnim({
+      useLib = true,
+      lib = "missfbi4",
+      anim = "takeoff_mask",
+      timeout = 1666
+    })
+    SetPedComponentVariation(Venato.GetPlayerPed(), 1, 0, 0, 1)
+  else
+    Venato.playAnim({
+      useLib = true,
+      lib = "mp_masks@low_car@ds@",
+      anim = "put_on_mask",
+      timeout = 1000
+    })
+    SetPedComponentVariation(Venato.GetPlayerPed(), 1, DataUser.Clothes.ComponentVariation.Mask.id, DataUser.Clothes.ComponentVariation.Mask.color, 1)
+  end
+  mask = not mask
 end
 
 function PostOp()

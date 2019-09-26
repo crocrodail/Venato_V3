@@ -53,6 +53,10 @@ BlackListBrasMale = { -- (bras) male
 	97,98,164,166,167,168
 }
 
+BlackListMaskMale = { -- (bras) male
+	73, 120, 148
+}
+
 BlackListBrasFemale = { -- (bras) femelle
 	-1
 }

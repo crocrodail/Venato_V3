@@ -64,16 +64,19 @@ local debug = false
 local noColor = false
 local nothing = true
 local tatalPrice = 0
+local buymask = false
 local buytop = false
 local buypantalong = false
 local buychaussure = false
 local coordUI_Y = 0.15
+local coordmask = nil
 local coordtop = nil
 local coordpantalong = nil
 local coordchaussure = nil
 local buyAnything = false
 
 
+local priceMask = 600
 local priceTop = 200
 local priceLegs = 200
 local priceShoes = 200
@@ -85,7 +88,10 @@ end
 RegisterNetEvent("ClothingShop:CallData:cb")
 AddEventHandler("ClothingShop:CallData:cb", function(data)
   Clothes = data.Clothes
+  print('ClothingShop')
   if canSetClothes then
+    print('canSetClothe')
+    SetPedComponentVariation(Venato.GetPlayerPed(), 1, 0, 0, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 5, Clothes.ComponentVariation.parachute.id, Clothes.ComponentVariation.parachute.color, 1)
@@ -96,6 +102,7 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
     SetPedComponentVariation(Venato.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
   else
+    print('not canSetClothe')
     canSetClothes = true
     CSsendMask()
   end
@@ -115,6 +122,7 @@ Citizen.CreateThread(function()
         nothing = true
         tatalPrice = 0
         buytop = false
+        buymask = false
         buypantalong = false
         buychaussure = false
         coordUI_Y = 0.15
@@ -130,6 +138,9 @@ Citizen.CreateThread(function()
         printTxt("~r~Total :                                           "..tatalPrice.." €",0.4, 0.41, true)
         if nothing then
           printTxt("~g~Aucun panier.",0.32, 0.2, false)
+        end
+        if buymask then
+          printTxt("~g~Masque :                                           ~r~"..priceMask.." €",0.4, coordmask, true)
         end
         if buytop then
           printTxt("~g~Haut :                                           ~r~"..priceTop.." €",0.4, coordtop, true)
@@ -266,6 +277,7 @@ function OpenClothingShop()
   Menu.clearMenu()
   TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
   if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
+  TriggerEvent('Menu:AddButton2',"Masque", "CMask", '', '', "https://i.ibb.co/fqMn3sv/icons8-anonymous-mask-96px.png")
   TriggerEvent('Menu:AddButton2',"Haut", "ClothesShopMenuTop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
 	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
   TriggerEvent('Menu:AddButton2',"Chaussures", "CSchausure", '', '', "https://i.ibb.co/0ZDJsZ4/icons8-trainers-96px.png")
@@ -304,7 +316,7 @@ function BuyClothe()
   local ped = Venato.GetPlayerPed()
   tablee = {
     ComponentVariation = {
-      Mask = {id = 0, color = 0},
+      Mask = {id = GetPedDrawableVariation(ped, 1), color = GetPedTextureVariation(ped, 1)},
       torso = {id = GetPedDrawableVariation(ped, 3), color = GetPedTextureVariation(ped, 3)},
       leg = {id = GetPedDrawableVariation(ped, 4), color = GetPedTextureVariation(ped, 4)},
       parachute = {id = GetPedDrawableVariation(ped, 5), color = GetPedTextureVariation(ped, 5)},
@@ -386,7 +398,7 @@ end
 function CSAccessoire()
   noColor = true
   Vtop = false
-  componentId = 7-- Parachute / bag
+  componentId = 0-- Parachute / bag
   Menu.clearMenu()
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
@@ -553,6 +565,46 @@ function buytopcs()
 end
 
 
+function CMask()
+  noColor = true
+  Vtop = false
+  componentId = 1 -- Mask
+  Menu.clearMenu()
+  SetCamCoord(cam,  x,  y-1.0,  z+0.5)
+	PointCamAtCoord(cam,x,y,z+0.8)
+	local id = 1
+	local ped = Venato.GetPlayerPed()
+	Menu.addButton2("Retour", "OpenClothingShop", nil)
+	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
+    local dont = false		
+    if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
+			for k,v in pairs(BlackListMaskMale) do
+				if i == v then
+					dont = true
+					break
+				end
+			end
+		else
+			for k,v in pairs(BlackListMaskFemale) do
+				if i == v then
+					dont = true
+					break
+				end
+			end
+		end
+		if dont == false then
+      local number = id
+      if debug then
+        number = i
+      end
+			Menu.addButton2("Masque #"..number, "buyMasks", i, "ChangeDomponentId")
+			id = id + 1
+		end
+	end
+  Menu.CreateMenu()
+end
+
+
 function CSchausure()
   noColor = true
   Vtop = false
@@ -590,6 +642,20 @@ function CSchausure()
 		end
 	end
   Menu.CreateMenu()
+end
+
+
+function buyMasks()
+  if buymask == false then
+    nothing = false
+    buymask = true
+    tatalPrice = tatalPrice + priceMask
+    coordUI_Y = coordUI_Y +0.05
+    coordmask = coordUI_Y
+    OpenClothingShop()
+  else
+    OpenClothingShop()
+  end
 end
 
 function buyShoescs()
