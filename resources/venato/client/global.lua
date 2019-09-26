@@ -98,8 +98,8 @@ Citizen.CreateThread(function()
 	SetPedDensityMultiplierThisFrame(0.2)
 	SetRandomVehicleDensityMultiplierThisFrame(0.2)
 	SetParkedVehicleDensityMultiplierThisFrame(0.2)
-	SetScenarioPedDensityMultiplierThisFrame(0.2, 0.2)
-	while true do
+  SetScenarioPedDensityMultiplierThisFrame(0.2, 0.2)
+  while true do    
     local cheatNb = 0
     if ingame > 30 then cheatNb = 15 elseif ingame > 20 then cheatNb = 10 elseif ingame > 15 then cheatNb = 7 --- CHEAT NB JOUEURS
     elseif ingame > 10 then cheatNb = 5 elseif ingame > 5 then cheatNb = 2 end                                --- CHEAT NB JOUEURS
@@ -129,14 +129,18 @@ Citizen.CreateThread(function()
     elseif disPole < 20 then
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
     elseif disScouteur <= 1 then
-      DrawMarker(27,Scouteur.x,Scouteur.y,Scouteur.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
+      DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
       Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour louer un scooter')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         getScouteur()
       end
     elseif disScouteur < 20 then
-      DrawMarker(27,Scouteur.x,Scouteur.y,Scouteur.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
-    end
+      DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
+    end    
+    RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
+    RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
+    RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
+    
 	end
 end)
 

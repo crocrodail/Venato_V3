@@ -90,7 +90,6 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
   Clothes = data.Clothes
   print('ClothingShop')
   if canSetClothes then
-    print('canSetClothe')
     SetPedComponentVariation(Venato.GetPlayerPed(), 1, 0, 0, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
@@ -102,7 +101,6 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
     SetPedComponentVariation(Venato.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
   else
-    print('not canSetClothe')
     canSetClothes = true
     CSsendMask()
   end
@@ -314,6 +312,8 @@ end
 
 function BuyClothe()
   local ped = Venato.GetPlayerPed()
+  DataUser.Clothes.ComponentVariation.Mask.id = GetPedDrawableVariation(ped, 1)
+  DataUser.Clothes.ComponentVariation.Mask.color = GetPedTextureVariation(ped, 1)
   tablee = {
     ComponentVariation = {
       Mask = {id = GetPedDrawableVariation(ped, 1), color = GetPedTextureVariation(ped, 1)},
@@ -353,7 +353,6 @@ AddEventHandler("ClothingShop:SaveClothes:response", function(response)
    Venato.LoadClothes()
    local defaultNotification = {
     title= "Magasin de vêtements",
-    type = "success", --  danger, error, alert, info, success, warning
     logo = "https://img.icons8.com/nolan/64/000000/clothes.png",
     message = "La transaction s'est bien passé ! Ces vêtements sont à vous.",
    }

@@ -17,6 +17,29 @@ local isAlreadyDead = false
 local allServiceCops = {}
 local blipsCops = {}
 
+local blacklistedWeapons = {
+	"WEAPON_UNARMED",
+	"WEAPON_STUNGUN",
+	"WEAPON_KNIFE",
+	"WEAPON_KNUCKLE",
+	"WEAPON_NIGHTSTICK",
+	"WEAPON_HAMMER",
+	"WEAPON_BAT",
+	"WEAPON_GOLFCLUB",
+	"WEAPON_CROWBAR",
+	"WEAPON_BOTTLE",
+	"WEAPON_DAGGER",
+	"WEAPON_HATCHET",
+	"WEAPON_MACHETE",
+	"WEAPON_FLASHLIGHT",
+	"WEAPON_SWITCHBLADE",
+	"WEAPON_FIREEXTINGUISHER",
+	"WEAPON_PETROLCAN",
+	"WEAPON_SNOWBALL",
+	"WEAPON_FLARE",
+	"WEAPON_BALL"
+}
+
 local function sendnotif(message)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(message)
@@ -105,7 +128,6 @@ RegisterNetEvent('police:forcedEnteringVeh')
 AddEventHandler('police:forcedEnteringVeh', function()
   local pos = GetEntityCoords(GetPlayerPed(-1))
   local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
-
   local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
   local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
   SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 1)
@@ -624,6 +646,31 @@ nopee = true
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
+
+        --if(not isCop) then
+          if IsPedShooting(Venato.GetPlayerPed()) then      
+            for i,v in ipairs(blacklistedWeapons) do
+        			if GetSelectedPedWeapon(Venato.GetPlayerPed()) == v then
+        				isBlacklistedWeapon = true
+        			end
+    			  end
+            local random = math.random(1,10)
+            if(random == 5) then
+              local isBlacklistedWeapon = false
+              for i,v in ipairs(blacklistedWeapons) do
+                if GetSelectedPedWeapon(Venato.GetPlayerPed()) == v then
+                  isBlacklistedWeapon = true
+                end
+              end
+              
+              if not isBlacklistedWeapon then
+                local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(),true))
+                TriggerServerEvent("police:shootfired", {x, y, z})
+              end
+              isBlacklistedWeapon = false
+            end
+          end
+        --end
         if(isCop) then
           if(isNearArmurie()) then
     				DisplayHelpText("Appuyer sur ~INPUT_CONTEXT~ pour ouvrir l'armurerie",0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
@@ -701,7 +748,7 @@ Citizen.CreateThread(function()
                 end
               end
             end
-          end
+        end
     end
   end
 end)
@@ -771,7 +818,6 @@ RegisterNetEvent('police:changeControlspawnwp')
 AddEventHandler('police:changeControlspawnwp', function(a)
 	controlWeapon = a
 end)
-
 
 Citizen.CreateThread(function()
 	for i = 1, 12 do

@@ -33,19 +33,26 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
         DataPlayers[source].Inventaire = inventaire
       end
     end)
-  MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId",
-    { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
-      if result[1] ~= nil then
-        for i, v in ipairs(result) do
-          Wp = { ["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles) }
-          Weapon[v.id] = Wp
-          poid = poid + tonumber(v.poid)
-          TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
-        end
-        DataPlayers[source].Poid = poid
-        DataPlayers[source].Weapon = Weapon
+  MySQL.Async.fetchAll("SELECT * FROM weapon_model",{}, function(results)     
+    if results[1] ~= nil then 
+      for i, v in ipairs(results) do
+        TriggerClientEvent("Inventory:RemoveWeaponClient", source, v.weapond)
       end
-    end)
+      MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId",
+      { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+        if result[1] ~= nil then
+          for i, v in ipairs(result) do
+            Wp = { ["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles) }
+            Weapon[v.id] = Wp
+            poid = poid + tonumber(v.poid)
+            TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
+          end
+          DataPlayers[source].Poid = poid
+          DataPlayers[source].Weapon = Weapon
+        end
+      end)
+    end
+  end)  
   MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId",
     { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
       if result[1] ~= nil then

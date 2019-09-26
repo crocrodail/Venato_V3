@@ -14,16 +14,6 @@ function remCop(identifier)
 	MySQL.Async.execute("DELETE FROM police WHERE identifier = @identifier", { ['@identifier'] = identifier})
 end
 
-RegisterServerEvent('police:failmsg')
-AddEventHandler('police:failmsg', function()
-  TriggerClientEvent("es_freeroam:notify", source, "CHAR_CALL911", 1, "LSPD", false, "message error")
-end)
-
-RegisterServerEvent('police:msggranded')
-AddEventHandler('police:msggranded', function(msg)
-  TriggerClientEvent("es_freeroam:notify", -1, "CHAR_CALL911", 1, "LSPD", false, ""..msg.."")
-end)
-
 RegisterServerEvent('police:removeCop')
 AddEventHandler('police:removeCop', function()
 	local source = source
@@ -90,13 +80,6 @@ AddEventHandler('playerDropped', function()
 		for i, c in pairs(inServiceCops) do
 			TriggerClientEvent("police:resultAllCopsInService", i, inServiceCops)
 		end
-	end
-end)
-
-AddEventHandler('es:playerDropped', function(player)
-	local isCop = s_checkIsCop(player.identifier)
-	if(isCop ~= "nil") then
-		--TriggerEvent("jobssystem:disconnectReset", player, 7)
 	end
 end)
 
@@ -259,3 +242,10 @@ AddEventHandler('CheckPoliceVeh', function(vehicle)
 	--end)
 end)
 
+RegisterServerEvent("police:shootfired")
+AddEventHandler("police:shootfired", function(data)
+	print("Server: Shootfired")
+	for i, c in pairs(inServiceCops) do
+		TriggerClientEvent("police:shootfired", i, data)
+	end
+end)

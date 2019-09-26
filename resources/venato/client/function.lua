@@ -24,6 +24,14 @@ function Venato.playAnim(data)
   Citizen.Wait(timeout)
 end
 
+function Venato.addBlip(x, y, z, timeout, blip, color)
+  local currentBlip= AddBlipForCoord(x, y, z)
+  SetBlipSprite(currentBlip, blip)
+  SetBlipColour(currentBlip, color)
+  SetBlipAsShortRange(currentBlip, false)
+  Citizen.Wait(timeout)
+  RemoveBlip(currentBlip)
+end
 
 function Venato.notifyError(msg)
 	local data = {

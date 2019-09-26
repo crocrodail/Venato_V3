@@ -197,25 +197,27 @@ end
 
 function CoffreAddWhitelist(index)
   Menu.clearMenu()
-  Menu.setTitle( "Personne à proximité")
-  player, dist = Venato.ClosePlayer()
-  if player ~= 0 and player ~= nil and dist < 10 then
-    TriggerServerEvent("Coffre:CallDataClosePlayer", index, player)
+  local name =  Venato.OpenKeyboard('', '', 250,"Nom de la personne à whitelist")
+  if name ~= '' then
+    TriggerServerEvent("Coffre:CallWhitelistPlayer", index , name)
   else
-    Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
-    Menu.addButton("Aucune personne à proximité", "CoffreParametre", index)
+    Venato.notifyError("Une erreur est survenue.")
   end
 end
 
-RegisterNetEvent("Coffre:CallDataClosePlayer:cb")
-AddEventHandler("Coffre:CallDataClosePlayer:cb", function(Coffre, index, user)
-  DataCoffre = Coffre
-  local DataUserClose = user
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)  
-  Menu.addButton("Donner accès à "..DataUserClose.Prenom.." "..DataUserClose.Nom, "CoffreWhitelistPlayer", {index, user})
+RegisterNetEvent("Coffre:CallWhitelistPlayer:cb")
+AddEventHandler("Coffre:CallWhitelistPlayer:cb", function(data)
+  if data.users ~= nil then
+    for k,v in pairs(data.users) do
+      Menu.addButton("Donner accès à "..v.prenom.." "..v.nom, "CoffreWhitelistPlayer", {data.index, v.identifier})
+    end 
+  end  
 end)
 
+
+
 function CoffreWhitelistPlayer(row)
+  print(Venato.dump(row))
   TriggerServerEvent("Coffre:CoffreWhitelistPlayer", row)
   Menu.close() 
 end
