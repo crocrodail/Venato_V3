@@ -474,7 +474,7 @@ function menuPoliceVestiaire()
     TriggerEvent('Menu:AddButton2', "Equiper / Retirer un gillet pare-balle", "gillets", "", "", "https://i.ibb.co/jv1v2ty/bullet-proof-jacket.png")
 
 
-    if power >= 2 then --Agent
+    if power >= 1 then --Agent
       TriggerEvent('Menu:AddButton2', "Equiper / Retirer une ceinture", "ceintures", "", "", "https://i.ibb.co/hFspMWG/icons8-mens-belt-96px.png")
       TriggerEvent('Menu:AddButton2', "Equiper / Retirer un képi", "kepis", "", "", "https://i.ibb.co/1n2X8rb/icons8-air-pilot-hat-96px-1.png")
 
