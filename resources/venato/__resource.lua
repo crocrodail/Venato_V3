@@ -50,7 +50,9 @@ client_script {
   '/illegal/config.lua',
   '/illegal/client.lua',
   '/vanilla/client.lua',
-  '/doors/client.lua'
+  '/doors/client.lua',
+  '/entreprise/config.lua',
+  '/entreprise/client.lua',
 }
 
 server_script {
@@ -88,7 +90,9 @@ server_script {
   '/illegal/config.lua',
   '/illegal/server.lua',
   '/vanilla/server.lua',
-  '/doors/server.lua'
+  '/doors/server.lua',
+  '/entreprise/config.lua',
+  '/entreprise/server.lua',
 }
 
 files {

@@ -21,15 +21,17 @@ end)
 
 AddEventHandler("Jobs:salary", function(newSource)
   local source = getSource(source, newSource)
-  local jobName = JobsDbFunctions.getPlayerJobName(source)
-  JobsDbFunctions.newSalary(source)
-  TriggerClientEvent("Jobs:salary:cb", source, jobName)
+  local salary = JobsDbFunctions.getPlayersSalaryBase(source)
+  
+  if salary > 0 then
+    JobsDbFunctions.newSalary(source)
+    TriggerClientEvent("Jobs:salary:cb", source)
+  end
 end)
 
 AddEventHandler("Jobs:askSalary", function(newSource)
   local source = getSource(source, newSource)
   local primeConn = JobsConfig.PrimeConnection
-  local jobName = JobsDbFunctions.getPlayerJobName(source)
   local salaryCount = tonumber(JobsDbFunctions.getSalaryCount(source))
   local salary, primeJob, salaryCheck = JobsDbFunctions.getPlayerSalary(source)
   JobsDbFunctions.resetSalaryCount(source)
@@ -47,5 +49,5 @@ AddEventHandler("Jobs:askSalary", function(newSource)
   if (primeConn + salary + primeJob) * bonus + salaryCheck > 0 then
     TriggerEvent("Inventory:CreateJobCheck", source, (primeConn + salary + primeJob) * bonus + salaryCheck)
   end
-  TriggerClientEvent("Jobs:askSalary:cb", source, jobName, primeConn, salary, primeJob, salaryCheck, bonus)
+  TriggerClientEvent("Jobs:askSalary:cb", source, primeConn, salary, primeJob, salaryCheck, bonus)
 end)

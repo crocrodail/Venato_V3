@@ -783,7 +783,7 @@ function ShowInfoClient(index)
   printTxt("Argent : ~g~" .. AdminDataPlayers[index].Money, 0.77, 0.57)
   printTxt("Banque : ~g~" .. AdminDataPlayers[index].Bank, 0.77, 0.60)
   printTxt("Venato Point : ~o~" .. AdminDataPlayers[index].VenatoPoint, 0.77, 0.63)
-  printTxt("Metier : ~g~" .. AdminDataPlayers[index].NameJob, 0.77, 0.66)
+  
 end
 
 function printTxt(text, x, y, center)

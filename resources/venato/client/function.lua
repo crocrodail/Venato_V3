@@ -24,6 +24,10 @@ function Venato.playAnim(data)
   Citizen.Wait(timeout)
 end
 
+function Venato.HasJob(jobId)
+  return DataUser ~= nil and DataUser.Jobs ~= nil and DataUser.Jobs[jobId] ~= nil;
+end
+
 function Venato.addBlip(x, y, z, timeout, blip, color)
   local currentBlip= AddBlipForCoord(x, y, z)
   SetBlipSprite(currentBlip, blip)

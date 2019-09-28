@@ -279,9 +279,8 @@ Citizen.CreateThread(function()
     local canGoIn = false
 
     for k, j in pairs(TeleportFromTo) do
-
-      --msginf(k .. " " .. tostring(j.positionFrom.x), 15000)
-      if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and j.jobId == DataUser.IdJob))  then
+     
+      if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and Venato.HasJob(j.jobId)))  then
         DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
           255, 255, 255, 255, 0, 0, 0, 0)
         if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 5.0) then

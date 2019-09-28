@@ -74,7 +74,7 @@ Citizen.CreateThread(function()
             
             local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)
 
-            if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and DataUser.IdJob == doorList[i]["jobId"]) then
+            if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and Venato.HasJob(doorList[i]["jobId"])) then
 
                 if doorList[i]["locked"] == true then
                     DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~b~ouvrir la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)

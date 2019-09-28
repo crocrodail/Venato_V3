@@ -60,7 +60,7 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
     Venato.LoadSkin(DataPlayers[source])
     Venato.LoadClothes()
     if tonumber(DataPlayers[source].Health) < 100 then SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[source].Health)) end
-    TriggerServerEvent("GcPhone:Load")
+    TriggerServerEvent("GcPhone:Load")    
   end
 end)
 
@@ -160,6 +160,7 @@ function Openpoleemploie()
   Menu.addButton2("Vigneron", "sitchJob", 13, nil, nil)
   Menu.addButton2("Brasseur", "sitchJob", 12, nil, nil)
   Menu.addButton2("Liveur PostOp (Beta v1.0)", "PostOp", nil, nil, nil)
+  Menu.addButton2("Démissioner (Pompiste, Vigneron, Brasseur)", "quitJob", nil, nil, nil)
   Menu.CreateMenu()
 end
 
@@ -197,6 +198,18 @@ end
 
 function sitchJob(id)
   TriggerServerEvent("Venato:SwitchJob", id)
+  Menu.close()
+end
+
+function quitJob(id)
+  TriggerServerEvent("Venato:QuitJob")
+  local defaultNotification = {
+    type = "alert",
+    title ="PoleEmploi",
+    logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
+    message = "Vous avez démissionné de votre travail."
+  }
+  Venato.notify(defaultNotification)
   Menu.close()
 end
 

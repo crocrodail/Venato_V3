@@ -394,7 +394,7 @@ function ShowPermis(data)
     SendNUIMessage({
       action = 'showIdentity',
       string = "type=permis&nom=" .. data.Nom .. "&prenom=" .. data.Prenom ..
-        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
+        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. --"&job=" .. data.NameJob ..
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
         "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
@@ -412,7 +412,7 @@ function ShowIdCard(data)
     SendNUIMessage({
       action = 'showIdentity',
       string = "type=identity&nom=" .. data.Nom .. "&prenom=" .. data.Prenom ..
-        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
+        "&age=" .. data.Age .. "&sex=" .. data.Sexe ..-- "&job=" .. data.NameJob ..
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
         --"&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
@@ -430,7 +430,7 @@ function ShowVisa(data)
     SendNUIMessage({
       action = 'showIdentity',
       string = "type=visa&nom=" .. data.Nom .. "&prenom=" .. data.Prenom ..
-        "&age=" .. data.Age .. "&sex=" .. data.Sexe .. "&job=" .. data.NameJob ..
+        "&age=" .. data.Age .. "&sex=" .. data.Sexe ..-- "&job=" .. data.NameJob ..
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
         "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
