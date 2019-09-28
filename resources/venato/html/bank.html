@@ -1,287 +1,340 @@
 <html>
-    <head>
-    	<meta charset="utf-8">
-    	<meta name="viewport" content="width=device-width">
-        <link href="assets/css/bank.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.core.min.js"></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-        <style>
-			 #depositUI, #withdrawUI, #transferUI, #general, #topbar
-			 {display: none;}
-		</style>
-	</head>
-    <body>
-    	<div class="container">
-    		<div id="result"></div>
-    		<div class="topbar" id="topbar">
-    			<div class="cont-p-1">
-    				<div class="parale-1 "></div>
-    			</div>
-    			<div class="cont-p-2">
-    				<div class="parale-2"></div>
-    			</div>
-    			<div class="cont-p-3">
-    				<div class="parale-3"></div>
-    			</div>
-    			<nav>
-    				<div class="logo-topbar"></div>
-    			</nav>
-    		</div>
-<!-- ########### GENERAL ###########  -->
-    		<div class="cont-content" id="general">
-    			<div class="flex">
-    				<div class="balance box-shadow">
-	    				<p>Bienvenue<br>
-	    					<span class="name"><span class="username1"></span></span><br>
-	    					Solde :<br>
-	    					<span class="money"><span class="euro">€</span><span class="curbalance"></span></span>
-	    				</p>
-		    		</div>
-		    		<div class="list-btn">
-		    			<button class="btn btn-blue" id="deposit">
-		    				<i class="far fa-money-bill-alt"></i>
-		    				<span class="far fa-money-bill-alt icon"></span>
-		    				<p>Dépot<br>
-		    				<span>Effectuer un dépot</span></p>
-		    			</button>
-			    		<button class="btn btn-violet" id="withdraw">
-			    			<i class="far fa-credit-card"></i>
-		    				<span class="far fa-credit-card icon"></span>
-		    				<p>Retrait<br>
-		    				<span>Effectuer un Retrait</span></p>
-			    		</button>
-			    		<button class="btn btn-orange" id="transfer">
-			    			<i class="fas fa-exchange-alt"></i>
-		    				<span class="fas fa-exchange-alt icon"></span>
-		    				<p>Virement bancaire<br>
-		    				<span>Effectuer un virement</span></p>
-			    		</button>
-		    		</div>
-    			</div>
-    			<div class="flex">
-    				<div class="pub box-shadow confiance">
-    					<p>
-    						<span>Votre numéro de compte:</span><br><br>
-    						<B style = "color: #F00" class="account"></B>
-    					</p>
-    				</div>
-    			</div>
-	    	</div>
-<!-- ########### DEPOSIT ###########  -->
-	    	<div class="cont-content" id="depositUI">
-    			<div class="flex">
-    				<div class="btn btn-blue banniere">
-    					<p>Dépot d'argent<br>
-		    			</p>
-    				</div>
-    				<button class="btn btn-grey back">
-    					<i class="fas fa-bars"></i>
-	    				<span class="fas fa-arrow-left icon"></span>
-	    				<p>Retour<br>
-	    				<span>Au menu principal</span></p>
-    				</button>
-    			</div>
-    			<form id="deposit1">
-    				<div class="input-cont box-shadow">
-    					<label>Indiquez le montant du dépot</label>
-    					<input id="amount" type="number" placeholder="0€">
-    				</div>
-    				<button class="btn btn-green" type="submit">
-    					<i class="fas fa-check"></i>
-	    				<span class="fas fa-check icon"></span>
-	    				<p>Validé<br>
-	    				<span>votre dépot</span></p>
-    				</button>
-				</form>
-	    	</div>
-<!-- ########### WITHDRAW ###########  -->
-	    	<div class="cont-content" id="withdrawUI">
-    			<div class="flex">
-    				<div class="btn btn-violet banniere">
-    					<p>Retrait d'argent<br>
-		    			<span>de votre compte</span></p>
-    				</div>
-    				<button class="btn btn-grey back">
-    					<i class="fas fa-bars"></i>
-	    				<span class="fas fa-arrow-left icon"></span>
-	    				<p>Retour<br>
-	    				<span>Au menu principal</span></p>
-    				</button>
-    			</div>
-    			<form id="withdraw1">
-    				<div class="input-cont box-shadow">
-    					<label>Indiquez le montant du retrait</label>
-    					<input id="amountw" type="number" placeholder="0€">
-    				</div>
-    				<button class="btn btn-green" type="submit">
-    					<i class="fas fa-check"></i>
-	    				<span class="fas fa-check icon"></span>
-	    				<p>Validé<br>
-	    				<span>votre retrait</span></p>
-    				</button>
-				</form>
-	    	</div>
-<!-- ########### TRANSFER ###########  -->
-	    	<div class="cont-content" id="transferUI">
-    			<div class="flex">
-    				<div class="btn btn-orange banniere">
-    					<p>Effectué un virement<br>
-		    			<span>sur un autre compte</span></p>
-    				</div>
-    				<button class="btn btn-grey back">
-    					<i class="fas fa-bars"></i>
-	    				<span class="fas fa-arrow-left icon"></span>
-	    				<p>Retour<br>
-	    				<span>Au menu principal</span></p>
-    				</button>
-    			</div>
-    			<form id="transfer1">
-    				<div class="double-input">
-    					<div class="input-cont box-shadow">
-	    					<label>Indiquez le montant du virement</label>
-	    					<input id="amountt" type="number" placeholder="0€">
-	    				</div>
-	    				<div class="input-cont box-shadow">
-	    					<label>Indiquez le numero de compte bénéficiaire</label>
-	    					<input id="to" type="text" placeholder="00-VnT-000">
-	    				</div>
-    				</div>
-    				<button class="btn btn-green" type="submit">
-    					<i class="fas fa-check"></i>
-	    				<span class="fas fa-check icon"></span>
-	    				<p>Validé<br>
-	    				<span>votre virement</span></p>
-    				</button>
-				</form>
-	    	</div>
-    	</div>
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    	<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
-      <script src="assets/js/init.js" type="text/javascript"></script>
-    	<script type="text/javascript">
-      $('body').addClass("active");
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="assets/css/bank.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.core.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
+      integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg"
+      crossorigin="anonymous"
+    />
+    <style>
+      #depositUI,
+      #withdrawUI,
+      #transferUI,
+      #general,
+      #topbar {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="result"></div>
+      <div class="topbar" id="topbar">
+        <div class="cont-p-1">
+          <div class="parale-1 "></div>
+        </div>
+        <div class="cont-p-2">
+          <div class="parale-2"></div>
+        </div>
+        <div class="cont-p-3">
+          <div class="parale-3"></div>
+        </div>
+        <nav>
+          <div class="logo-topbar"></div>
+        </nav>
+      </div>
+      <!-- ########### GENERAL ###########  -->
+      <div class="cont-content" id="general">
+        <div class="flex">
+          <div class="balance box-shadow">
+            <p>
+              Bienvenue<br />
+              <span class="name"><span class="username1"></span></span><br />
+              Solde :<br />
+              <span class="money"
+                ><span class="euro">€</span><span class="curbalance"></span
+              ></span>
+            </p>
+          </div>
+          <div class="list-btn">
+            <button class="btn btn-blue" id="deposit">
+              <i class="far fa-money-bill-alt"></i>
+              <span class="far fa-money-bill-alt icon"></span>
+              <p>
+                Dépot<br />
+                <span>Effectuer un dépot</span>
+              </p>
+            </button>
+            <button class="btn btn-violet" id="withdraw">
+              <i class="far fa-credit-card"></i>
+              <span class="far fa-credit-card icon"></span>
+              <p>
+                Retrait<br />
+                <span>Effectuer un Retrait</span>
+              </p>
+            </button>
+            <button class="btn btn-orange" id="transfer">
+              <i class="fas fa-exchange-alt"></i>
+              <span class="fas fa-exchange-alt icon"></span>
+              <p>
+                Virement bancaire<br />
+                <span>Effectuer un virement</span>
+              </p>
+            </button>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="pub box-shadow confiance">
+            <p>
+              <span>Votre numéro de compte:</span><br /><br />
+              <B style="color: #F00" class="account"></B>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- ########### DEPOSIT ###########  -->
+      <div class="cont-content" id="depositUI">
+        <div class="flex">
+          <div class="btn btn-blue banniere">
+            <p>Dépot d'argent<br /></p>
+          </div>
+          <button class="btn btn-grey back">
+            <i class="fas fa-bars"></i>
+            <span class="fas fa-arrow-left icon"></span>
+            <p>
+              Retour<br />
+              <span>Au menu principal</span>
+            </p>
+          </button>
+        </div>
+        <form id="deposit1">
+          <div class="input-cont box-shadow">
+            <label>Indiquez le montant du dépot</label>
+            <input id="amount" type="number" placeholder="0€" />
+          </div>
+          <button class="btn btn-green" type="submit">
+            <i class="fas fa-check"></i>
+            <span class="fas fa-check icon"></span>
+            <p>
+              Validé<br />
+              <span>votre dépot</span>
+            </p>
+          </button>
+        </form>
+      </div>
+      <!-- ########### WITHDRAW ###########  -->
+      <div class="cont-content" id="withdrawUI">
+        <div class="flex">
+          <div class="btn btn-violet banniere">
+            <p>
+              Retrait d'argent<br />
+              <span>de votre compte</span>
+            </p>
+          </div>
+          <button class="btn btn-grey back">
+            <i class="fas fa-bars"></i>
+            <span class="fas fa-arrow-left icon"></span>
+            <p>
+              Retour<br />
+              <span>Au menu principal</span>
+            </p>
+          </button>
+        </div>
+        <form id="withdraw1">
+          <div class="input-cont box-shadow">
+            <label>Indiquez le montant du retrait</label>
+            <input id="amountw" type="number" placeholder="0€" />
+          </div>
+          <button class="btn btn-green" type="submit">
+            <i class="fas fa-check"></i>
+            <span class="fas fa-check icon"></span>
+            <p>
+              Validé<br />
+              <span>votre retrait</span>
+            </p>
+          </button>
+        </form>
+      </div>
+      <!-- ########### TRANSFER ###########  -->
+      <div class="cont-content" id="transferUI">
+        <div class="flex">
+          <div class="btn btn-orange banniere">
+            <p>
+              Effectué un virement<br />
+              <span>sur un autre compte</span>
+            </p>
+          </div>
+          <button class="btn btn-grey back">
+            <i class="fas fa-bars"></i>
+            <span class="fas fa-arrow-left icon"></span>
+            <p>
+              Retour<br />
+              <span>Au menu principal</span>
+            </p>
+          </button>
+        </div>
+        <form id="transfer1">
+          <div class="double-input">
+            <div class="input-cont box-shadow">
+              <label>Indiquez le montant du virement</label>
+              <input id="amountt" type="number" placeholder="0€" />
+            </div>
+            <div class="input-cont box-shadow">
+              <label>Indiquez le numero de compte bénéficiaire</label>
+              <input id="to" type="text" placeholder="00-VnT-000" />
+            </div>
+          </div>
+          <button class="btn btn-green" type="submit">
+            <i class="fas fa-check"></i>
+            <span class="fas fa-check icon"></span>
+            <p>
+              Validé<br />
+              <span>votre virement</span>
+            </p>
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+    <script src="assets/js/init.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $("body").addClass("active");
 
       var getUrlParameter = function getUrlParameter(sParam) {
         var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-          sURLVariables = sPageURL.split('&'),
+          sURLVariables = sPageURL.split("&"),
           sParameterName,
           i;
 
         for (i = 0; i < sURLVariables.length; i++) {
-          sParameterName = sURLVariables[i].split('=');
+          sParameterName = sURLVariables[i].split("=");
 
           if (sParameterName[0] === sParam) {
-              return sParameterName[1] === undefined ? true : sParameterName[1];
+            return sParameterName[1] === undefined ? true : sParameterName[1];
           }
         }
       };
 
-      var cash = getUrlParameter('cash');
-      var bank = getUrlParameter('bank');
-      var name = getUrlParameter('firstname')+ " " + getUrlParameter('lastname');
-      var acount = getUrlParameter('account');
-      $('.username1').html(name);
-      $('.curbalance').html(bank);
-      $('.account').html(acount);
-      $('body').addClass("active");
-      $('#general').show();
-      $('#topbar').show();
+      var cash = getUrlParameter("cash");
+      var bank = getUrlParameter("bank");
+      var name =
+        getUrlParameter("firstname") + " " + getUrlParameter("lastname");
+      var acount = getUrlParameter("account");
+      $(".username1").html(name);
+      $(".curbalance").html(bank);
+      $(".account").html(acount);
+      $("body").addClass("active");
+      $("#general").show();
+      $("#topbar").show();
 
-	        $('.back').click(function(){
-	            $('#depositUI, #withdrawUI, #transferUI').hide();
-	            $('#general').show();
-	        })
-	        $('#deposit').click(function(){
-	            $('#general').hide();
-	            $('#depositUI').show();
-	        })
-	        $('#withdraw').click(function(){
-	            $('#general').hide();
-	            $('#withdrawUI').show();
-	        })
-	        $('#transfer').click(function(){
-	            $('#general').hide();
-	            $('#transferUI').show();
-	        })
-	        $("#deposit1").submit(function(e) {
-		        e.preventDefault(); // Prevent form from submitting
-            var lastbank = bank
-            var lastcash = cash
-            bank = Number(bank) + Number($("#amount").val())
-            cash = Number(cash) - Number($("#amount").val())
-            if (bank < 0 || cash < 0) {
-                $.post('http://venato/errorbank')
-                bank = lastbank
-                cash = lastcash
-                $('#depositUI').hide();
-    			    	$('#general').show();
-    			    	$("#amount").val('');
-              } else {
-		        $.post('http://venato/insert', JSON.stringify({
-		            money: $("#amount").val()
-		        }));
-            $('.curbalance').html(bank);
-			    	$('#depositUI').hide();
-			    	$('#general').show();
-			    	$("#amount").val('');
-        }
-			});
-			$("#transfer1").submit(function(e) {
-		        e.preventDefault(); // Prevent form from submitting
-            var lastbank = bank
-            var lastcash = cash
-            bank = Number(bank) - Number( $("#amountt").val())
-            cash = Number(cash) + Number( $("#amountt").val())
-            if (bank < 0 || cash < 0) {
-                $.post('http://venato/errorbank')
-                bank = lastbank
-                cash = lastcash
-                $('#transferUI').hide();
-  			      	$('#general').show();
-  				      $("#amountt").val('');
-            } else {
-		        $.post('http://venato/transfer', JSON.stringify({
-				      	account : $("#to").val(),
-		            money   : $("#amountt").val()
-		        }));
-              $('.curbalance').html(bank);
-			      	$('#transferUI').hide();
-			      	$('#general').show();
-				      $("#amountt").val('');
-            }
-		  	});
-			$("#withdraw1").submit(function(e) {
-				e.preventDefault(); // Prevent form from submitting
-        var lastbank = bank
-        var lastcash = cash
-        bank = Number(bank) - Number( $("#amountw").val())
-        cash = Number(cash) + Number( $("#amountw").val())
+      $(".back").click(function() {
+        $("#depositUI, #withdrawUI, #transferUI").hide();
+        $("#general").show();
+      });
+      $("#deposit").click(function() {
+        $("#general").hide();
+        $("#depositUI").show();
+      });
+      $("#withdraw").click(function() {
+        $("#general").hide();
+        $("#withdrawUI").show();
+      });
+      $("#transfer").click(function() {
+        $("#general").hide();
+        $("#transferUI").show();
+      });
+      $("#deposit1").submit(function(e) {
+		if(Number($("#amount").val() <= 0)){
+			$("#amount").val(0);
+		}
+        e.preventDefault(); // Prevent form from submitting
+        var lastbank = bank;
+        var lastcash = cash;
+        bank = Number(bank) + Number($("#amount").val());
+        cash = Number(cash) - Number($("#amount").val());
         if (bank < 0 || cash < 0) {
-            $.post('http://venato/errorbank')
-            bank = lastbank
-            cash = lastcash
-            $('#withdrawUI').hide();
-    				$('#general').show();
-    				$("#amountw").val('');
+          $.post("http://venato/errorbank");
+          bank = lastbank;
+          cash = lastcash;
+          $("#depositUI").hide();
+          $("#general").show();
+          $("#amount").val("");
         } else {
-		        $.post('http://venato/take', JSON.stringify({
-		            money : $("#amountw").val()
-		        }));
-            $('.curbalance').html(bank);
-				$('#withdrawUI').hide();
-				$('#general').show();
-				$("#amountw").val('');
+          $.post(
+            "http://venato/insert",
+            JSON.stringify({
+              money: $("#amount").val()
+            })
+          );
+          $(".curbalance").html(bank);
+          $("#depositUI").hide();
+          $("#general").show();
+          $("#amount").val("");
+        }
+      });
+      $("#transfer1").submit(function(e) {
+		if(Number($("#amountt").val() <= 0)){
+			$("#amountt").val(0);
+		}
+		e.preventDefault(); // Prevent form from submitting
+        var lastbank = bank;
+        var lastcash = cash;
+        bank = Number(bank) - Number($("#amountt").val());
+        cash = Number(cash) + Number($("#amountt").val());
+        if (bank < 0 || cash < 0) {
+          $.post("http://venato/errorbank");
+          bank = lastbank;
+          cash = lastcash;
+          $("#transferUI").hide();
+          $("#general").show();
+          $("#amountt").val("");
+        } else {
+          $.post(
+            "http://venato/transfer",
+            JSON.stringify({
+              account: $("#to").val(),
+              money: $("#amountt").val()
+            })
+          );
+          $(".curbalance").html(bank);
+          $("#transferUI").hide();
+          $("#general").show();
+          $("#amountt").val("");
+        }
+      });
+      $("#withdraw1").submit(function(e) {
+		if(Number($("#amountw").val() <= 0)){
+			$("#amountw").val(0);
+		}
+        e.preventDefault(); // Prevent form from submitting
+        var lastbank = bank;
+        var lastcash = cash;
+        bank = Number(bank) - Number($("#amountw").val());
+        cash = Number(cash) + Number($("#amountw").val());
+        if (bank < 0 || cash < 0) {
+          $.post("http://venato/errorbank");
+          bank = lastbank;
+          cash = lastcash;
+          $("#withdrawUI").hide();
+          $("#general").show();
+          $("#amountw").val("");
+        } else {
+          $.post(
+            "http://venato/take",
+            JSON.stringify({
+              money: $("#amountw").val()
+            })
+          );
+          $(".curbalance").html(bank);
+          $("#withdrawUI").hide();
+          $("#general").show();
+          $("#amountw").val("");
+        }
+      });
+      document.onkeyup = function(data) {
+        var key = data.which;
+        if (key == 27) {
+          $("#general, #transferUI, #withdrawUI, #depositUI, #topbar").hide();
+          $("body").removeClass("active");
+          $.post("http://venato/closeBank", JSON.stringify({}));
+          window.location.href = "index.html";
+        }
       };
-			});
-			document.onkeyup = function(data){
-        var key = data.which
-		        if (key == 27) {
-		            $('#general, #transferUI, #withdrawUI, #depositUI, #topbar').hide();
-		            $('body').removeClass("active");
-		            $.post('http://venato/closeBank', JSON.stringify({}));
-                window.location.href = 'index.html'
-		        }
-		    }
-    	</script>
-    </body>
-  </html>
+    </script>
+  </body>
+</html>

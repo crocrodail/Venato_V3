@@ -126,7 +126,7 @@ local blips = {
    {name="Entrepot Divers", id=478, x=2703.99, y=3457.46, z=55.55},
 	 --{name="Société de transport | PostOp", id=78, x=1197.204, y=-3253.551, z=6.095},
 	 --{name="Société de pompiste", id=436, x=893.155, y=-1243.698, z=31.1764},
-	 {name="Station de taxis", id=198, x=895.18, y=-179.198, z=74.70},
+	 {name="Station de taxi", id=198, x=895.18, y=-179.198, z=74.70},
 	 --{name="Société de journalistes | Ls News", id=135, x=-317.92, y=-610.21, z=33.558},
 --	{name="H2BA | Ogarnisation d'évenement", id=89, x=-1013.18, y=-481.198, z=40.70},
   --   {name="Globale Corp & Co | Transporteur aérien", id=79, x=1715.18, y=3251.198, z=42.70},
@@ -140,7 +140,7 @@ local blips = {
 --	{name="MerryWeather", id=280, x=101.95953369, y=-744.2132568, z=45.754753},
 --    {name="420Time", id=147, x=-1392.2396, y=-1004.0689, z=23.1565},
 --    {name="Lipton", id=273, x=-754.2769, y=5579.2250, z=35.7096},
-  {name="Pole Emploie", id=407, x=-1055.0, y=-242.371, z=44.021},
+  {name="Pôle emploi", id=407, x=-1055.0, y=-242.371, z=44.021},
 
 
    --[[ {name="Départ GerminusRun #3", id=17, x=-1511.18, y=1493.198, z=169.70},

@@ -23,6 +23,51 @@ local noclip_pos
 local heading = 0
 local visible = true
 local DataAdmin = nil
+local state = false
+local Skins = {
+  { skin = "csb_burgerdrug", libelle = "Burger Man"},
+  { skin = "ig_lifeinvad_01", libelle = "Geek"},
+  { skin = "s_m_y_prismuscl_01", libelle = "Prisonier"},
+  { skin = "ig_old_man2", libelle = "Fermier"},
+  { skin = "ig_oneil", libelle = "O Neil"},
+  { skin = "ig_ramp_hipster", libelle = "Hipster"},
+  { skin = "s_m_m_gaffer_01", libelle = "Ouvrier"},
+  { skin = "u_m_m_spyactor", libelle = "James Bond"},
+  { skin = "s_m_m_movprem_01", libelle = "Riche"},
+  { skin = "s_m_m_highsec_01", libelle = "Hitman"},
+  { skin = "ig_ramp_hic", libelle = "Junkies"},
+  { skin = "ig_ramp_gang", libelle = "Vagos"},
+  { skin = "ig_ramp_gang", libelle = "Vagos"},
+  { skin = "ig_ramp_mex", libelle = "Gang Mexicain"},
+  { skin = "	ig_roccopelosi", libelle = "Gang Italien"},
+  { skin = "ig_beverly", libelle = "Paparazzi"},
+  { skin = "g_m_m_chicold_01", libelle = "Cagoule"},
+  { skin = "g_m_y_ballaorig_01", libelle = "Vagos"},
+  { skin = "csb_porndudes", libelle = "Acteur Porno"},
+  { skin = "csb_cletus", libelle = "Clétus"},
+  { skin = "a_m_y_runner_01", libelle = "Sportif"},
+  { skin = "a_m_y_breakdance_01", libelle = "Break Dancer"},
+  { skin = "a_m_y_acult_02", libelle = "Le Fou en slip"},
+  { skin = "a_m_m_tranvest_02", libelle = "Travesti"},
+  { skin = "a_m_m_fatlatin_01", libelle = "Le Gros"},
+  { skin = "a_m_y_juggalo_01", libelle = "Le Fou"},
+  { skin = "a_m_y_surfer_01", libelle = "Surfer"},
+  { skin = "u_m_m_jesus_01", libelle = "Jésus"},
+  { skin = "ig_tanisha", libelle = "Tanisha (F)"},
+  { skin = "ig_kerrymcintosh", libelle = "Kerry McIntosh (F)"},
+  { skin = "csb_anita", libelle = "Anita (F)"},
+  { skin = "csb_maude", libelle = "La grosse Maude (F)"},
+  { skin = "csb_anita", libelle = "Anita (F)"},
+  { skin = "ig_mrs_thornhill", libelle = "Vielle Thornill (F)"},
+  { skin = "s_f_m_maid_01", libelle = "Femme de ménage (F)"},
+  { skin = "ig_maryann", libelle = "Sportive (F)"},
+  { skin = "g_f_y_vagos_01", libelle = "Vagos (F)"},
+  { skin = "g_f_y_ballas_01", libelle = "Ballas (F)"},
+  { skin = "a_f_y_bevhills_02", libelle = "Riche (F)"},
+  { skin = "a_f_y_fitness_01", libelle = "Yoga (F)"},
+  { skin = "a_f_y_tourist_01", libelle = "Touriste (F)"},
+  { skin = "a_f_m_fatcult_01", libelle = "Folle (F)"},
+}
 
 function openVenatoadmin()
   Menu.clearMenu()
@@ -42,15 +87,21 @@ function openVenatoadmin()
     Menu.addButton("Jesus Christ", "respawntest", nil)
     Menu.addButton("Revive joueur", "revivevnt", nil)
     Menu.addButton("Soigner joueur", "healvnt", nil)
+    Menu.addButton("Recharger les coffres", "ReloadCoffre", nil)
     Menu.addButton("Teleporter sur markeur", "AdminTpMarkeur", nil)
     Menu.addButton("Teleporter sur coordonées", "AdminCustomTP", nil)
     Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
     --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
-  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' then
-  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
     Menu.addButton("NoClip", "AdminNoClip", nil)
     Menu.addButton("Invisible", 'AdminInvisible' , nil)
+    Menu.addButton("Ne pas Utiliser pls !!!!! Créer véhicule  !!!!!!!!!!", 'createVeh' , nil)
+    Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
+  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+    --Menu.addButton("NoClip", "AdminNoClip", nil)
+    --Menu.addButton("Invisible", 'AdminInvisible' , nil)
     Menu.addButton("Créer véhicule", 'createVeh' , nil)
+    Menu.addButton("Changer de skin", "SkinMenu", nil)
   end
 end
 end
@@ -83,7 +134,7 @@ function AdminInvisible(value)
       NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), true)
       SetEntityVisible(Venato.GetPlayerPed(), true, nil)
     else
-      
+
     NetworkSetEntityInvisibleToNetwork(Venato.GetPlayerPed(), false)
       SetEntityVisible(Venato.GetPlayerPed(), false, nil)
     end
@@ -335,7 +386,6 @@ end
 RegisterNetEvent("Admin:CallDataUsers:cb")
 AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
   Menu.clearMenu()
-  DataUser = dataPlayers[1]
   AdminDataPlayers = dataPlayers
   ClientSource = DataSource
   openVenatoadmin()
@@ -351,6 +401,29 @@ function AdminListPlayer()
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
 end
 
+function SkinMenu()
+  Menu.clearMenu()
+  ListPlayer = true
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
+  for k, v in pairs(Skins) do
+    Menu.addButton("" .. v.libelle .. "","ChangeSkin", v.skin, nil)
+  end
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openVenatoadmin", nil)
+end
+
+function ChangeSkin(skin)
+  RequestModel(skin)
+  while not HasModelLoaded(skin) do
+      RequestModel(skin)
+      Wait(0)
+  end
+  SetPlayerModel(PlayerId(), skin)
+  SetModelAsNoLongerNeeded(skin)
+  -- SetPedHeadBlendData(playerPed, 0, 0, skin, 0, 0, skin, 1.0, 1.0, 1.0, true)
+  SetPedDefaultComponentVariation(Venato.GetPlayerPed())
+  SetPedComponentVariation(Venato.GetPlayerPed(), 2, 0, 0, 0)
+end
+
 function AdminPlayerOption(index)
   indexToShow = index
   Menu.clearMenu()
@@ -362,11 +435,15 @@ function AdminPlayerOption(index)
   Menu.addButton("Toi --> elle", "Admintptoelle", nil)
   Menu.addButton("Toi <-- elle", "Admintptome", nil)
   if DataUser.Group == "Admin" then
-  Menu.addButton("Give dans la poche", "AdminGivePoche", nil)
-  Menu.addButton("Give en bank", "AdminGiveBank", nil)
-  Menu.addButton("Set dans la poche", "AdminSetPoche", nil)
-  Menu.addButton("Set en bank", "AdminSetBank", nil)
+  -- Menu.addButton("Give dans la poche", "none", nil)
+  -- Menu.addButton("Give en bank", "none", nil)
+  -- Menu.addButton("Set dans la poche", "none", nil)
+  -- Menu.addButton("Set en bank", "none", nil)
 end
+end
+
+function ReloadCoffre()
+  TriggerServerEvent("Coffre:ReloadCoffre")
 end
 
 function AdminActionOnPlayer(action)
@@ -399,7 +476,7 @@ end
 function AdminGiveBank()
   local result = Venato.OpenKeyboard('', "", 10, "Nombre")
   if result ~= "" and result ~= nil then
-    TriggerServerEvent('Bank:AddBankMoney', result)
+    TriggerServerEvent('Bank:Salaire', result, 'Admin')
   else
     Venato.notifyError("Il y a un problème sur la somme renseigné")
   end
@@ -414,40 +491,47 @@ function AdminGivePoche()
   end
 end
 
-function Admintptome()
-  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
-  local ped = Venato.GetPlayerPed()
-  local Coord = GetEntityCoords(ped)
-  SetEntityCoords(Targetped, Coord.x, Coord.y, Coord.z)
+function Admintptoelle()
+	TriggerServerEvent("Admin:tptoelle", indexToShow)
 end
 
-function Admintptoelle()
-  local targetPed = GetPlayerPed(GetPlayerFromServerId(indexToShow))
-  local ped = Venato.GetPlayerPed()
-  local TargetCoord = GetEntityCoords(Targetped)
-  SetEntityCoords(ped, TargetCoord.x, TargetCoord.y, TargetCoord.z)
+function Admintptome()
+	TriggerServerEvent("Admin:tptome", indexToShow)
 end
+
+RegisterNetEvent('Admin:teleportUser')
+AddEventHandler('Admin:teleportUser', function(coords)
+	SetEntityCoords(GetPlayerPed(-1), coords[1], coords[2], coords[3])
+end)
 
 function AdminFreeze()
-  FreezeEntityPosition(GetPlayerPed(AdminDataPlayers[indexToShow].PlayerIdClient), true)
-  -- if state == true then
-  --   if not IsEntityVisible(ped) then
-  --     SetEntityVisible(ped, true)
-  --   end
-  --   if not IsPedInAnyVehicle(ped) then
-  --     SetEntityCollision(ped, true)
-  --   end
-  --   FreezeEntityPosition(ped, false)
-  --   state = false
-  -- else
-  --   SetEntityCollision(ped, false)
-  --   FreezeEntityPosition(ped, true)
-  --   state = true
-  --   if not IsPedFatallyInjured(ped) then
-  --     ClearPedTasksImmediately(ped)
-  --   end
-  -- end
+  TriggerServerEvent("Admin:freeze", indexToShow)
 end
+
+RegisterNetEvent('Admin:freezePlayer')
+AddEventHandler("Admin:freezePlayer", function()
+	local player = PlayerId()
+	local ped = GetPlayerPed(-1)
+	if state == true then
+		if not IsEntityVisible(ped) then
+			SetEntityVisible(ped, true)
+		end
+		if not IsPedInAnyVehicle(ped) then
+			SetEntityCollision(ped, true)
+		end
+		FreezeEntityPosition(ped, false)
+		SetPlayerInvincible(player, false)
+		state = false
+	else
+		SetEntityCollision(ped, false)
+		FreezeEntityPosition(ped, true)
+		SetPlayerInvincible(player, true)
+		state = true
+		if not IsPedFatallyInjured(ped) then
+			ClearPedTasksImmediately(ped)
+		end
+	end
+end)
 
 function AdminSpectate()
   if InSpectatorMode == false then
@@ -461,12 +545,12 @@ function AdminSpectate()
       SetCamActive(cam,  true)
       RenderScriptCams(true,  false,  0,  true,  true)
       InSpectatorMode = true
-      AdminInvisible(true)
+      AdminInvisible(false)
     end)
   else
     InSpectatorMode = false
       TargetSpectate  = nil
-      AdminInvisible(false)
+      AdminInvisible(true)
       local playerPed = Venato.GetPlayerPed()
       SetCamActive(cam,  false)
       RenderScriptCams(false,  false,  0,  true,  true)
@@ -699,7 +783,7 @@ function ShowInfoClient(index)
   printTxt("Argent : ~g~" .. AdminDataPlayers[index].Money, 0.77, 0.57)
   printTxt("Banque : ~g~" .. AdminDataPlayers[index].Bank, 0.77, 0.60)
   printTxt("Venato Point : ~o~" .. AdminDataPlayers[index].VenatoPoint, 0.77, 0.63)
-  printTxt("Metier : ~g~" .. AdminDataPlayers[index].NameJob, 0.77, 0.66)
+  
 end
 
 function printTxt(text, x, y, center)

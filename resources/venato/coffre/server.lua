@@ -2,6 +2,7 @@ DataCoffre = {}
 
 function reloadDataCoffre()
   Citizen.CreateThread(function()
+    DataCoffre = {}
     local start_time = os.clock()
     local Cof = {}
     local inCof = {}   
@@ -63,12 +64,12 @@ function reloadDataCoffre()
                   ["poid"] = v3.poid
                 }
                 DataCoffre[v3.CoffreId].weapon[v3.Id] = CofWp
-                DataCoffre[v3.CoffreId].nbWeapon = Cof[v3.CoffreId].nbWeapon + 1
+                DataCoffre[v3.CoffreId].nbWeapon = DataCoffre[v3.CoffreId].nbWeapon + 1
               end 
             end          
             local end_time = os.clock()    
             print("^2Coffre Loaded :^7 "..round((end_time-start_time),2).."ms")
-            TriggerClientEvent('Coffre:CallData:cb', -1, DataCoffre)
+            TriggerClientEvent('Coffre:CallData:init', -1, DataCoffre)
           end)
         end)
       end      
@@ -76,16 +77,36 @@ function reloadDataCoffre()
   end)
 end
 
+
+
 RegisterServerEvent("Coffre:CallData")
 AddEventHandler("Coffre:CallData", function()
   source = source
   TriggerClientEvent("Coffre:CallData:cb",source, DataCoffre, DataPlayers[source])
 end)
 
-RegisterServerEvent("Coffre:CallDataClosePlayer")
-AddEventHandler("Coffre:CallDataClosePlayer", function(index, player)
-  source = source
-  TriggerClientEvent("Coffre:CallDataClosePlayer:cb",source, DataCoffre, index, DataPlayers[player])
+RegisterServerEvent("Coffre:ReloadCoffre")
+AddEventHandler("Coffre:ReloadCoffre", function()
+  reloadDataCoffre()
+end)
+
+RegisterServerEvent("Coffre:CallWhitelistPlayer")
+AddEventHandler("Coffre:CallWhitelistPlayer", function(index, name)
+  local source = source
+  local users = {}
+  MySQL.Async.fetchAll("SELECT * FROM users  WHERE CONCAT(nom,prenom) LIKE '%"..name.."%' AND identifier NOT IN (SELECT UserId FROM coffres_whitelist WHERE CoffreId = "..index..")", {}, function(result)
+    if result ~= nil then
+      for k,v in pairs(result) do
+        users[v.identifier] = {
+          ["identifier"] = v.identifier,
+          ["nom"] = v.nom,
+          ["prenom"] = v.prenom
+        }
+      end
+      TriggerClientEvent("Coffre:CallWhitelistPlayer:cb", source, {index= index, users = users})
+    end  
+  end)
+  
 end)
 
 RegisterServerEvent("Coffre:TakeWeapon")
@@ -105,6 +126,7 @@ end)
 
 RegisterServerEvent("Coffre:DropWeapon")
 AddEventHandler("Coffre:DropWeapon", function(row)
+  print(row)
   if DataCoffre[row[1]].nbWeapon + 1 <= DataCoffre[row[1]].maxWeapon then
     local source = source
     local indexCoffre = row[1]
@@ -116,7 +138,7 @@ AddEventHandler("Coffre:DropWeapon", function(row)
       DataCoffre[indexCoffre].nbWeapon = DataCoffre[indexCoffre].nbWeapon + 1
     end)
   else
-    TriggerClientEvent("Venato:notify", source, "~r~Il n'y a pas de place pour cette arme.")
+    TriggerClientEvent("Venato:notify", source, "Il n'y a pas de place pour cette arme.")
   end
 end)
 
@@ -194,7 +216,7 @@ AddEventHandler("Coffre:SetItem", function(idCoffre, idItem, qty, NewSource)
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @itemId", {["@itemId"] = idItem}, function(result)
         if result[1] ~= nil then
           DataCoffre[idCoffre].nbItems = DataCoffre[idCoffre].nbItems + qty
-          DataCoffre[idCoffre].inventaire[idItem] = {["coffreId"] = idCoffre, ["itemId"] = idItem, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["uPoid"] = result[1].poid, ["picture"] = result[1].picture }
+          DataCoffre[idCoffre].inventaire[idItem] = {["coffreId"] = idCoffre, ["itemId"] = idItem, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["uPoid"] = result[1].poid, ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable  }
           MySQL.Async.execute("INSERT INTO coffres_contenu (`CoffreId`, `ItemId`, `Quantity`) VALUES (@coffreId, @itemId, @qty)", {["@coffreId"] = idCoffre, ["itemId"] = idItem, ["qty"] = qty})
         end
       end)
@@ -247,7 +269,9 @@ AddEventHandler("Coffre:CoffreWhitelistPlayer", function(row)
   local source = source
   local index = row[1]
   local user = row[2]
-  MySQL.Async.execute("INSERT INTO coffres_whitelist(CoffreId, UserId) VALUES (@coffreId, @userId)", {["@userId"] = DataPlayers[user].SteamId, ["@coffreId"] = index})
+  
+  MySQL.Async.execute("INSERT INTO coffres_whitelist(CoffreId, UserId) VALUES (@coffreId, @userId)", {["@coffreId"] = index, ["@userId"] = user })
+  
 end)
 
 RegisterServerEvent("Coffre:UnWhitelist")

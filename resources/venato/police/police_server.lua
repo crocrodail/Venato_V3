@@ -1,4 +1,5 @@
 local inServiceCops = {}
+local nbCops = 0
 local defaultNotification = {
 	type = "alert",
 	title ="LSPD",
@@ -12,16 +13,6 @@ end
 function remCop(identifier)
 	MySQL.Async.execute("DELETE FROM police WHERE identifier = @identifier", { ['@identifier'] = identifier})
 end
-
-RegisterServerEvent('police:failmsg')
-AddEventHandler('police:failmsg', function()
-  TriggerClientEvent("es_freeroam:notify", source, "CHAR_CALL911", 1, "LSPD", false, "message error")
-end)
-
-RegisterServerEvent('police:msggranded')
-AddEventHandler('police:msggranded', function(msg)
-  TriggerClientEvent("es_freeroam:notify", -1, "CHAR_CALL911", 1, "LSPD", false, ""..msg.."")
-end)
 
 RegisterServerEvent('police:removeCop')
 AddEventHandler('police:removeCop', function()
@@ -64,22 +55,11 @@ end
 
 function checkInventory(source, target)
 	local strResult = "Possede : <br/>"
-	-- local dirtyMoney = MySQL.Sync.fetchScalar("SELECT dirtymoney FROM users WHERE identifier = @identifier", { ['@identifier'] = target})
-	-- if (dirtyMoney) then
-	-- 	strResult = strResult .. dirtyMoney .. "€ d'argent sale , "
-	-- 		MySQL.Async.execute("UPDATE users SET dirtymoney=@newvaleur WHERE identifier=@identifier", {['@newvaleur'] = 0, ['@identifier'] = target})
-	-- 	TriggerEvent('vnt:chestaddmonney', 20, math.floor(dirtyMoney/5))
-	-- 	TriggerEvent("logserver", 'Prime réquisition argent sale : +' .. math.floor(dirtyMoney/5) ..'$')
-	-- end
   	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_inventory` JOIN items ON items.id = user_inventory.item_id WHERE identifier = @username", {['@username'] = target})
 	  if (result) then
 		  for _, v in ipairs(result) do
 			  if(v.quantity ~= 0) then
 			  	strResult = strResult .. v.quantity .. " de " .. v.libelle .. ", <br/>"
-			  	-- if tonumber(v.isIllegal) == 1 then
-				--   	TriggerClientEvent('police:dropIllegalItem', target, v.item_id, v.quantity)
-				--   	print("isIllegal")
-			  	-- end
 		  	end
 		end
 	end
@@ -89,7 +69,6 @@ function checkInventory(source, target)
 		for _, v in ipairs(result) do
 			strResult = strResult .. v.weapon_model .. ", <br/>"
 		end
-		--TriggerEvent("weaponshop:RemoveWeaponsToPlayerFouille",target)
 	end
 	return strResult
 end
@@ -101,13 +80,6 @@ AddEventHandler('playerDropped', function()
 		for i, c in pairs(inServiceCops) do
 			TriggerClientEvent("police:resultAllCopsInService", i, inServiceCops)
 		end
-	end
-end)
-
-AddEventHandler('es:playerDropped', function(player)
-	local isCop = s_checkIsCop(player.identifier)
-	if(isCop ~= "nil") then
-		--TriggerEvent("jobssystem:disconnectReset", player, 7)
 	end
 end)
 
@@ -125,6 +97,7 @@ end)
 
 RegisterServerEvent('police:takeService')
 AddEventHandler('police:takeService', function()
+	nbCops = nbCops + 1
 	if(not inServiceCops[source]) then
 		inServiceCops[source] = GetPlayerName(source)
 
@@ -136,6 +109,7 @@ end)
 
 RegisterServerEvent('police:breakService')
 AddEventHandler('police:breakService', function()
+	nbCops = nbCops -1
 	if(inServiceCops[source]) then
 		inServiceCops[source] = nil
 
@@ -165,7 +139,7 @@ end)
 RegisterServerEvent('police:getAllCopsInServiceNb')
 AddEventHandler('police:getAllCopsInServiceNb', function()
 	local mysource = source
-	TriggerClientEvent('illegal:setcop', mysource, #inServiceCops)
+	TriggerClientEvent('illegal:setcop', mysource, nbCops)
 end)
 
 RegisterServerEvent('police:checkingPlate')
@@ -268,84 +242,10 @@ AddEventHandler('CheckPoliceVeh', function(vehicle)
 	--end)
 end)
 
------------------------------------------------------------------------
----------------------COMMANDE ADMIN AJOUT / SUPP COP-------------------
------------------------------------------------------------------------
-TriggerEvent('es:addGroupCommand', 'copadd', "admin", function(source, args, user)
-	if(not args[2]) then
-		TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Usage : /copadd [ID]")
-	else
-		if(GetPlayerName(tonumber(args[2])) ~= nil)then
-			local player = tonumber(args[2])
-			TriggerEvent("es:getPlayerFromId", player, function(target)
-				addCop(target.getIdentifier())
-				TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "bien compris !")
-				TriggerClientEvent("es_freeroam:notify", player, "CHAR_ANDREAS", 1, "GOUVERNEMENT", false, "félicitation vous êtes maintenant Policier~w~.")
-				TriggerClientEvent('police:nowCop', player)
-			end)
-		else
-			TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Pas de joueur avec cette ID")
-		end
+RegisterServerEvent("police:shootfired")
+AddEventHandler("police:shootfired", function(data)
+	print("Server: Shootfired")
+	for i, c in pairs(inServiceCops) do
+		TriggerClientEvent("police:shootfired", i, data)
 	end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Permissions refusées")
-end)
-
-TriggerEvent('es:addGroupCommand', 'coprem', "admin", function(source, args, user)
-	if(not args[2]) then
-		TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Usage : /coprem [ID]")
-	else
-		if(GetPlayerName(tonumber(args[2])) ~= nil)then
-			local player = tonumber(args[2])
-			TriggerEvent("es:getPlayerFromId", player, function(target)
-				remCop(target.getIdentifier())
-				TriggerClientEvent("es_freeroam:notify", player, "CHAR_ANDREAS", 1, "GOUVERNEMENT", false, "Vous n'êtes plus Policier~w~.")
-				TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Roger that !")
-				--TriggerClientEvent('chatMessage', player, 'GOUVERNEMENT', {255, 0, 0}, "You're no longer a cop !")
-				TriggerClientEvent('police:noLongerCop', player)
-			end)
-		else
-			TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Pas de joueur avec cette ID")
-		end
-	end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Permissions refusées")
-end)
-
-RegisterServerEvent('police:setService')
-AddEventHandler('police:setService', function (inService)
-	TriggerEvent('es:getPlayerFromId', source , function (Player)
-		Player.setSessionVar('policeInService', inService)
-	end)
-end)
------------------------------------------------------------------------
----------------------COMMANDE ADMIN PROCUREUR-------------------
------------------------------------------------------------------------
-
------------------------------------------------------------------------
----------------------COMMANDE ADMIN PROCUREUR-------------------
------------------------------------------------------------------------
-TriggerEvent('es:addGroupCommand', 'procureur', "admin", function(source, args, user)
-	if(not args[2]) then
-		TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Usage : /procureur [ID]")
-	else
-		if(GetPlayerName(tonumber(args[2])) ~= nil)then
-			local player = tonumber(args[2])
-			TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "bien compris !")
-			TriggerClientEvent("es_freeroam:notify", player, "CHAR_ANDREAS", 1, "GOUVERNEMENT", false, "felicitation vous etes maintenant Procureur~w~.")
-			TriggerClientEvent('police:Procureur', player)
-		else
-			TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Pas de joueur avec cette ID")
-		end
-	end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, 'GOUVERNEMENT', {255, 0, 0}, "Permissions refusees")
-end)
-
-
-RegisterServerEvent('door:update')
-AddEventHandler('door:update', function(id, isLocked)
-    if (id ~= nil and isLocked ~= nil) then -- Make sure values got sent
-    TriggerClientEvent('door:state', -1, id, isLocked)
-    end
 end)

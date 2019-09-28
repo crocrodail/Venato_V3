@@ -15,7 +15,7 @@ AddEventHandler("Admin:ActionOnPlayer", function(action, target, msg)
 	if action == "kick" then
 		DropPlayer(target, "Vous avez été kick : "..msg)
 	else
-		MySQL.Async.execute("INSER INTO ban (`banned`, `banner`, `reason`, `ip`) VALUES (@banned, @banner, @reason, @ip)", {["@banned"] = DataPlayers[target].SteamId, ["@banner"] = DataPlayers[source].SteamId, ["@reason"] = msg, ["@ip"] = DataPlayers[target].Ip}, function()
+		MySQL.Async.execute("INSERT INTO bans (`banned`, `banner`, `reason`, `ip`) VALUES (@banned, @banner, @reason, @ip)", {["@banned"] = DataPlayers[target].SteamId, ["@banner"] = DataPlayers[source].SteamId, ["@reason"] = msg, ["@ip"] = DataPlayers[target].Ip}, function()
 			DropPlayer(target, "Vous avez été ban : "..msg)
 		end)
 	end
@@ -52,4 +52,25 @@ AddEventHandler('dev:CreateVehiculeInDB', function(model,plate,name,currentVhl)
   }
   MySQL.Async.execute("INSERT INTO user_vehicle (`owner`, `name`, `model`, `price`, `plate`, `state`, `type`, `customs`, `nom`, `prenom`) VALUES (@username, @name, @vehicle, @price, @plate, @state, @type, @customs, @nom, @prenom)",
       {['@username'] = player, ['@name'] = name, ['@vehicle'] = model, ['@price'] = 100000, ['@plate'] = plate, ['@state'] = 0, ['@type'] = 1, ['@customs'] = json.encode(customs), ['@nom'] = "", ['@prenom'] = "" })
+end)
+
+RegisterServerEvent('Admin:tptoelle')
+AddEventHandler('Admin:tptoelle', function(id)
+  local source = source
+  local id = id
+	local coord = DataPlayers[id].Position
+  TriggerClientEvent('Admin:teleportUser', source, coord)
+end)
+
+RegisterServerEvent('Admin:tptome')
+AddEventHandler('Admin:tptome', function(id)
+  local source = source
+  local id = id
+  local coord = DataPlayers[id].Position
+  TriggerClientEvent('Admin:teleportUser', id, coord)
+end)
+
+RegisterServerEvent('Admin:freeze')
+AddEventHandler('Admin:freeze', function(id)
+  TriggerClientEvent("Admin:freezePlayer", id)
 end)

@@ -1,4 +1,4 @@
-petrolCanPrice = 5
+petrolCanPrice = 125
 
 lang = "fr"
 -- lang = "fr"
@@ -58,4 +58,4 @@ text_y = 0.975
 electricityPrice = 1 -- NOT RANOMED !!
 
 randomPrice = false --Random the price of each stations
-price = 5 --If random price is on False, set the price here for 1 liter
+price = 2.5 --If random price is on False, set the price here for 1 liter

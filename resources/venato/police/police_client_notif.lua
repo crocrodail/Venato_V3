@@ -118,6 +118,13 @@ end
 	end)
 
 
+    
+RegisterNetEvent("police:shootfired")
+AddEventHandler("police:shootfired", function(data)
+    defaultNotification.message = "Coups de feu entendu !"
+    Venato.notify(defaultNotification)
+    Venato.addBlip(data[1],data[2],data[3],60000,433,1)
+end)
 
 
 

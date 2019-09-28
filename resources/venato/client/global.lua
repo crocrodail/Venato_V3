@@ -1,4 +1,5 @@
 local ingame = 0
+local mask = false
 DataUser = {}
 CanCancelOrStartAnim = true
 
@@ -59,7 +60,7 @@ AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
     Venato.LoadSkin(DataPlayers[source])
     Venato.LoadClothes()
     if tonumber(DataPlayers[source].Health) < 100 then SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[source].Health)) end
-    TriggerServerEvent("GcPhone:Load")
+    TriggerServerEvent("GcPhone:Load")    
   end
 end)
 
@@ -93,12 +94,12 @@ local DiscordAppId = tonumber(GetConvar("RichAppId", "510934092821430282"))
 local DiscordAppAsset = GetConvar("RichAssetId", "discordicon")
 
 Citizen.CreateThread(function()
-  SetVehicleDensityMultiplierThisFrame(0.5)
-	SetPedDensityMultiplierThisFrame(0.5)
-	SetRandomVehicleDensityMultiplierThisFrame(0.5)
-	SetParkedVehicleDensityMultiplierThisFrame(0.5)
-	SetScenarioPedDensityMultiplierThisFrame(0.5, 0.5)
-	while true do
+  SetVehicleDensityMultiplierThisFrame(0.2)
+	SetPedDensityMultiplierThisFrame(0.2)
+	SetRandomVehicleDensityMultiplierThisFrame(0.2)
+	SetParkedVehicleDensityMultiplierThisFrame(0.2)
+  SetScenarioPedDensityMultiplierThisFrame(0.2, 0.2)
+  while true do    
     local cheatNb = 0
     if ingame > 30 then cheatNb = 15 elseif ingame > 20 then cheatNb = 10 elseif ingame > 15 then cheatNb = 7 --- CHEAT NB JOUEURS
     elseif ingame > 10 then cheatNb = 5 elseif ingame > 5 then cheatNb = 2 end                                --- CHEAT NB JOUEURS
@@ -120,7 +121,7 @@ Citizen.CreateThread(function()
     local disScouteur = Vdist(x, y, z, Scouteur.x, Scouteur.y, Scouteur.z)
     if disPole <= 1 then
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour ouvrir PoleEmploie')
+      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour choisir votre nouveau métier')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         Openpoleemploie()
         Menu.toggle()
@@ -128,14 +129,18 @@ Citizen.CreateThread(function()
     elseif disPole < 20 then
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
     elseif disScouteur <= 1 then
-      DrawMarker(27,Scouteur.x,Scouteur.y,Scouteur.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour louer un scouteur')
+      DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
+      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour louer un scooter')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         getScouteur()
       end
     elseif disScouteur < 20 then
-      DrawMarker(27,Scouteur.x,Scouteur.y,Scouteur.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
-    end
+      DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
+    end    
+    RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
+    RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
+    RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
+    
 	end
 end)
 
@@ -155,7 +160,29 @@ function Openpoleemploie()
   Menu.addButton2("Vigneron", "sitchJob", 13, nil, nil)
   Menu.addButton2("Brasseur", "sitchJob", 12, nil, nil)
   Menu.addButton2("Liveur PostOp (Beta v1.0)", "PostOp", nil, nil, nil)
+  Menu.addButton2("Démissioner (Pompiste, Vigneron, Brasseur)", "quitJob", nil, nil, nil)
   Menu.CreateMenu()
+end
+
+function toggleMask()
+  if mask then
+    Venato.playAnim({
+      useLib = true,
+      lib = "missfbi4",
+      anim = "takeoff_mask",
+      timeout = 1666
+    })
+    SetPedComponentVariation(Venato.GetPlayerPed(), 1, 0, 0, 1)
+  else
+    Venato.playAnim({
+      useLib = true,
+      lib = "mp_masks@low_car@ds@",
+      anim = "put_on_mask",
+      timeout = 1000
+    })
+    SetPedComponentVariation(Venato.GetPlayerPed(), 1, DataUser.Clothes.ComponentVariation.Mask.id, DataUser.Clothes.ComponentVariation.Mask.color, 1)
+  end
+  mask = not mask
 end
 
 function PostOp()
@@ -171,4 +198,24 @@ end
 
 function sitchJob(id)
   TriggerServerEvent("Venato:SwitchJob", id)
+  Menu.close()
 end
+
+function quitJob(id)
+  TriggerServerEvent("Venato:QuitJob")
+  local defaultNotification = {
+    type = "alert",
+    title ="PoleEmploi",
+    logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
+    message = "Vous avez démissionné de votre travail."
+  }
+  Venato.notify(defaultNotification)
+  Menu.close()
+end
+
+RegisterCommand(
+    "retour",
+    function(source, args, rawCommand)
+        SetEntityCoords(Venato.GetPlayerPed(), -2317.391, -553.92, 12.426, 0, 0, 0, true)
+    end
+)

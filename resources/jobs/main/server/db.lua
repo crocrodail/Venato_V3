@@ -13,7 +13,7 @@ JobsRequests = {}
 
 JobsRequests.getPlayerJob = "SELECT job FROM users WHERE identifier = @identifier"
 JobsRequests.getPlayerJobName = "SELECT job_name FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
-JobsRequests.getPlayerSalary = "SELECT salary FROM users INNER JOIN jobs ON users.job = jobs.job_id WHERE identifier = @identifier"
+JobsRequests.getPlayerSalary = "SELECT SUM(salary) FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId =  @identifier"
 JobsRequests.getPlayerSalaryCheck = "SELECT salaryCheck FROM users WHERE identifier = @identifier"
 JobsRequests.getPlayerPoliceRank = "SELECT `rank` FROM police WHERE identifier = @identifier"
 JobsRequests.getSalaryCount = "SELECT salaryCount FROM users WHERE identifier = @identifier"
@@ -59,6 +59,11 @@ end
 
 function JobsDbFunctions.resetSalaryCount(source)
   return MySQL.Sync.fetchScalar(JobsRequests.resetSalaryCount, { ['@identifier'] = getSteamID(source) })
+end
+
+function JobsDbFunctions.getPlayersSalaryBase(source)
+  local salary = MySQL.Sync.fetchScalar(JobsRequests.getPlayerSalary, { ['@identifier'] = getSteamID(source) })
+  return tonumber(salary)
 end
 
 function JobsDbFunctions.getPlayerSalary(source)

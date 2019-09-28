@@ -16,7 +16,7 @@
       <Hash>-784954167</Hash>
       <Dynamic>false</Dynamic>
       <Quaternion>
-        <X>-0</X>
+        <X>0</X>
         <Y>0</Y>
         <Z>0.9170581</Z>
         <W>-0.398753583</W>
@@ -38,10 +38,10 @@
       <Hash>-784954167</Hash>
       <Dynamic>false</Dynamic>
       <Quaternion>
-        <X>-0</X>
+        <X>0</X>
         <Y>0</Y>
-        <Z>0.9238776</Z>
-        <W>-0.382688165</W>
+        <Z>0.923877537</Z>
+        <W>-0.382688135</W>
       </Quaternion>
       <Door>false</Door>
     </MapObject>
@@ -63,7 +63,7 @@
         <X>0</X>
         <Y>0</Y>
         <Z>0.923877537</Z>
-        <W>-0.382688135</W>
+        <W>-0.3826881</W>
       </Quaternion>
       <Door>false</Door>
     </MapObject>
@@ -327,7 +327,7 @@
         <X>0</X>
         <Y>0</Y>
         <Z>0.923877537</Z>
-        <W>-0.382688135</W>
+        <W>-0.3826881</W>
       </Quaternion>
       <Door>false</Door>
     </MapObject>
@@ -636,6 +636,152 @@
         <Y>0</Y>
         <Z>0.923877537</Z>
         <W>-0.3826881</W>
+      </Quaternion>
+      <Door>false</Door>
+    </MapObject>
+
+
+
+    <MapObject>
+      <Type>Prop</Type>
+      <Position>
+        <X>1018.185</X>
+        <Y>-3102.895</Y>
+        <Z>-39.90000</Z>
+      </Position>
+      <Rotation>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>90</Z>
+      </Rotation>
+      <Hash>-1513883840</Hash>
+      <Dynamic>false</Dynamic>
+      <Quaternion>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <W>1</W>
+      </Quaternion>
+      <Door>false</Door>
+    </MapObject>
+
+    <MapObject>
+      <Type>Prop</Type>
+      <Position>
+        <X>1015.785</X>
+        <Y>-3102.895</Y>
+        <Z>-39.90000</Z>
+      </Position>
+      <Rotation>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>90</Z>
+      </Rotation>
+      <Hash>-1513883840</Hash>
+      <Dynamic>false</Dynamic>
+      <Quaternion>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <W>1</W>
+      </Quaternion>
+      <Door>false</Door>
+    </MapObject>
+
+
+
+
+    <MapObject>
+      <Type>Prop</Type>
+      <Position>
+        <X>1067.665</X>
+        <Y>-3102.895</Y>
+        <Z>-39.90000</Z>
+      </Position>
+      <Rotation>
+        <X>0</X>
+        <Y>-0</Y>
+        <Z>90</Z>
+      </Rotation>
+      <Hash>-1513883840</Hash>
+      <Dynamic>false</Dynamic>
+      <Quaternion>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <W>1</W>
+      </Quaternion>
+      <Door>false</Door>
+    </MapObject>
+
+    <MapObject>
+      <Type>Prop</Type>
+      <Position>
+        <X>1065.165</X>
+        <Y>-3102.895</Y>
+        <Z>-39.90000</Z>
+      </Position>
+      <Rotation>
+        <X>0</X>
+        <Y>-0</Y>
+        <Z>90</Z>
+      </Rotation>
+      <Hash>-1513883840</Hash>
+      <Dynamic>false</Dynamic>
+      <Quaternion>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <W>1</W>
+      </Quaternion>
+      <Door>false</Door>
+    </MapObject>
+
+
+
+
+    <MapObject>
+      <Type>Prop</Type>
+      <Position>
+        <X>1097.668</X>
+        <Y>-3096.623</Y>
+        <Z>-39.9</Z>
+      </Position>
+      <Rotation>
+        <X>0</X>
+        <Y>-0</Y>
+        <Z>90</Z>
+      </Rotation>
+      <Hash>-1513883840</Hash>
+      <Dynamic>false</Dynamic>
+      <Quaternion>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <W>1</W>
+      </Quaternion>
+      <Door>false</Door>
+    </MapObject>
+
+    <MapObject>
+      <Type>Prop</Type>
+      <Position>
+        <X>1095.168</X>
+        <Y>-3096.623</Y>
+        <Z>-39.9</Z>
+      </Position>
+      <Rotation>
+        <X>0</X>
+        <Y>-0</Y>
+        <Z>90</Z>
+      </Rotation>
+      <Hash>-1513883840</Hash>
+      <Dynamic>false</Dynamic>
+      <Quaternion>
+        <X>0</X>
+        <Y>0</Y>
+        <Z>0</Z>
+        <W>1</W>
       </Quaternion>
       <Door>false</Door>
     </MapObject>

@@ -8,7 +8,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(5000)
+		Citizen.Wait(20000)
 		local Query = GetQueryPos()
 		if Query ~= false then
 			MySQL.Async.execute(Query)

@@ -124,6 +124,12 @@ function lockVeh()
     end
     if isvehiclefoundlock then
       local lock = GetVehicleDoorLockStatus(clostestvehicle)
+      Venato.playAnim({
+        useLib = true,
+        lib = "anim@mp_player_intmenu@key_fob@",
+        anim = "fob_click_fp",
+        timeout = 500
+      })
       if lock == 1 then
         SetVehicleDoorsLocked(clostestvehicle, 2)
         TriggerServerEvent("lock:lockveh", plateVehic)

@@ -36,17 +36,17 @@ AddEventHandler("Jobs:checkPlayerJob:cb", function(jobId)
   Jobs.SalaryLoop()
 end)
 
-AddEventHandler("Jobs:salary:cb", function(jobName)
+AddEventHandler("Jobs:salary:cb", function()
   local notification = {}
-  notification.title = jobName
+  notification.title = "Salaire"
   notification.logo = JobsConfig.jobsNotification.logo
   notification.message = "<span class='green--text'>Votre nouveau chèque vous attend</span>"
   TriggerEvent("Venato:notify", notification)
 end)
 
-AddEventHandler("Jobs:askSalary:cb", function(jobName, primeCo, salary, primeJob, salaryCheck, bonus)
+AddEventHandler("Jobs:askSalary:cb", function(primeCo, salary, primeJob, salaryCheck, bonus)
   local notification = {}
-  notification.title = jobName
+  notification.title = "Salaire"
   if (primeCo + salary + primeJob + salaryCheck) > 0 then
     notification.title = notification.title .. " (<span class='green--text'>" ..
       (primeCo + salary + primeJob) * bonus + salaryCheck .. " €</span>)"

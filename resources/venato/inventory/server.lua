@@ -25,7 +25,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
     { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
       if result[1] ~= nil then
         for i, v in ipairs(result) do
-          Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture }
+          Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture, ["consomable"] = v.consomable }
           inventaire[v.item_id] = Inv
           poid = poid + tonumber(v.poid) * v.quantity
         end
@@ -33,19 +33,26 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
         DataPlayers[source].Inventaire = inventaire
       end
     end)
-  MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId",
-    { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
-      if result[1] ~= nil then
-        for i, v in ipairs(result) do
-          Wp = { ["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles) }
-          Weapon[v.id] = Wp
-          poid = poid + tonumber(v.poid)
-          TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
-        end
-        DataPlayers[source].Poid = poid
-        DataPlayers[source].Weapon = Weapon
+  MySQL.Async.fetchAll("SELECT * FROM weapon_model",{}, function(results)     
+    if results[1] ~= nil then 
+      for i, v in ipairs(results) do
+        TriggerClientEvent("Inventory:RemoveWeaponClient", source, v.weapond)
       end
-    end)
+      MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId",
+      { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
+        if result[1] ~= nil then
+          for i, v in ipairs(result) do
+            Wp = { ["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles) }
+            Weapon[v.id] = Wp
+            poid = poid + tonumber(v.poid)
+            TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
+          end
+          DataPlayers[source].Poid = poid
+          DataPlayers[source].Weapon = Weapon
+        end
+      end)
+    end
+  end)  
   MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId",
     { ['@SteamId'] = DataPlayers[source].SteamId }, function(result)
       if result[1] ~= nil then
@@ -111,6 +118,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
           DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
           defaultNotification.message = "Vous avez trop d'objets en poche."
           Venato.notify(source, defaultNotification)
+          TriggerEvent('inventory:full')
           return false
         end
         MySQL.Async.execute("UPDATE user_inventory SET quantity = @qty WHERE identifier = @SteamId AND item_id = @id",
@@ -126,12 +134,13 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
         if result[1] ~= nil then
-          DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }
+          DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable  }
           DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
           if DataPlayers[source].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[source].PoidMax then
             DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
+            TriggerEvent('inventory:full')
             return false
           end
           MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
@@ -185,6 +194,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
           message = "Vous avez trop d'objet en poche pour ça.",
         }
         TriggerClientEvent('Venato:notify', source, Notification)
+        TriggerClientEvent('inventory:full', source)
       end
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
@@ -193,9 +203,10 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
             DataPlayers[source].Poid = DataPlayers[source].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
+            TriggerClientEvent('inventory:full', source)
             return false
           end
-          DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture }
+          DataPlayers[source].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture, ['consomable'] = result[1].consomable }
           DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
           MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
           { ['@player'] = DataPlayers[source].SteamId, ['@item'] = id, ['@qty'] = qty })
@@ -239,7 +250,7 @@ AddEventHandler('Inventory:RemoveItem', function(qty, id, NewSource)
 		else
 			MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
 				if result[1] ~= nil then
-					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture}
+					DataPlayers[source].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable }
 					DataPlayers[source].Poid = DataPlayers[source].Poid + DataPlayers[source].Inventaire[id].poid
 				else
 					print("GROS Probleme !!")

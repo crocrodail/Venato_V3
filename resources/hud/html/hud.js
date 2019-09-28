@@ -28,12 +28,12 @@ new Vue({
           theme    : 'sunset',
           id: 'notifVenato',
           animation: {
-              open : 'animated fadeInRight',
-              close: 'animated fadeOutRight'
+              open : 'animated fadeIn faster',
+              close: 'animated fadeOut faster'
           },
           timeout: 3000
       });
-      Noty.setMaxVisible(5);
+      Noty.setMaxVisible(2);
     },
     destroyed() {
       window.removeEventListener('resize', this.handleResize)

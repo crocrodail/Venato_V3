@@ -28,27 +28,87 @@ AddEventHandler("Venato:SwitchJob", function(id)
   local id = id
   local source = source
   TriggerClientEvent("job:deleteBlips", source)
-  TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, false)
-  MySQL.Async.fetchAll("SELECT * FROM jobs WHERE job_id =@id", {["@id"] = id},function(result)
-    DataPlayers[source].IdJob = id
-    DataPlayers[source].NameJob = result[1].job_name
-    local defaultNotification = {
-      type = "alert",
-      title ="PoleEmploi",
-      logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
-      message = "Vous etes maintenant "..DataPlayers[source].NameJob
-    }
-    Venato.notify(source, defaultNotification)
-    MySQL.Async.execute("UPDATE users SET job = @id WHERE identifier = @identifier",{["@id"] = id, ["@identifier"] = getSteamID(source)})
-    TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
+  MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm", { ["@identifier"] = getSteamID(source) }, function(result)
+    
+    if result[1] then
+      TriggerClientEvent("job:deleteBlips", source)
+      TriggerClientEvent("Job:start"..result[1].job_name, source, false)  
+      DataPlayers[source].Jobs[result[1].JobId] = nil 
+      MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)}, function()
+        newJob(source,id)
+      end)      
+    else
+      newJob(source,id)
+    end
+  end)  
+end)
+
+RegisterNetEvent("Venato:AddJob")
+AddEventHandler("Venato:AddJob", function(id, identifier)
+  MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=identifier}, function(result)
+    if result[1] ~= nil then
+      if result[1].source ~= 'disconnect' then
+        newJob(result[1].source, id)
+      else            
+        newJobIdentifier(result[1].identifier, id)
+      end
+    end
   end)
 end)
+
+RegisterNetEvent("Venato:RemoveJob")
+AddEventHandler("Venato:RemoveJob", function(data)
+  MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier", {['@identifier'] = data[2]})
+  MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=data[2]}, function(result)
+    if result[1] ~= nil then
+        if result[1].source ~= 'disconnect' then
+          DataPlayers[result[1].source].Jobs[data[1]] = nil           
+        end
+    end
+  end)
+end)
+
+RegisterNetEvent("Venato:QuitJob")
+AddEventHandler("Venato:QuitJob", function(id)
+  local id = id
+  local source = source
+  TriggerClientEvent("job:deleteBlips", source)
+  MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm", { ["@identifier"] = getSteamID(source) }, function(result)    
+    if result[1] then
+      TriggerClientEvent("job:deleteBlips", source)
+      TriggerClientEvent("Job:start"..result[1].job_name, source, false)  
+      DataPlayers[source].Jobs[result[1].JobId] = nil 
+      MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)})      
+    end
+  end)  
+end)
+
+
+function newJob(source, id)
+  MySQL.Async.execute("INSERT INTO user_job(UserId, JobId) VALUES (@identifier, @jobId)", {['@identifier'] = getSteamID(source), ['@jobId'] = id })
+  MySQL.Async.fetchAll("SELECT * FROM jobs WHERE job_id = @jobId", { ["@jobId"] = id }, function(result)
+    if result[1] then
+      DataPlayers[source].Jobs[id] = result[1].job_name
+      TriggerClientEvent("Job:start"..result[1].job_name, source, true)
+      local defaultNotification = {
+        type = "alert",
+        title ="PoleEmploi",
+        logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
+        message = "Vous etes maintenant "..result[1].job_name
+      }
+      Venato.notify(source, defaultNotification)
+    end         
+  end)
+end
+
+function newJobIdentifier(identifier, id)
+  MySQL.Async.execute("INSERT INTO user_job(UserId, JobId) VALUES (@identifier, @jobId)", {['@identifier'] = identifier, ['@jobId'] = id })  
+end
 
 DataPlayers = {}
 
 function accessGranded(SteamId, source , balek)
   MySQL.Async.fetchAll("SELECT * FROM users "..
-   "LEFT JOIN jobs ON `users`.`job` = `jobs`.`job_id` "..
    "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
    "WHERE users.identifier = @SteamId", {['@SteamId'] = getSteamID(source)}, function(DataUser)
     if DataUser[1] == nil then
@@ -75,8 +135,8 @@ function accessGranded(SteamId, source , balek)
         Group = DataUser[1].group,
         Nom = DataUser[1].nom,
         Prenom = DataUser[1].prenom,
-        IdJob = DataUser[1].job,
-        NameJob = DataUser[1].job_name,
+        -- IdJob = DataUser[1].job,
+        -- NameJob = DataUser[1].job_name,
         IsInService = {"none", false},
         Bank = DataUser[1].bank,
         Money = DataUser[1].money,
@@ -98,6 +158,7 @@ function accessGranded(SteamId, source , balek)
         Inventaire = { nil },
         Weapon = { nil },
         Documents = { nil },
+        Jobs = { nil },
         PoidMax = 20,
         Index = 0,
         VisaStart = nil,
@@ -138,12 +199,20 @@ function accessGranded(SteamId, source , balek)
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
-        TriggerClientEvent("Venato:Connection", source)
-        TriggerClientEvent("Job:start"..DataPlayers[source].NameJob, source, true)
+        MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = jobs.job_id WHERE UserId = @identifier ", { ["@identifier"] = steamIdl }, function(result)
+          if not result[1] then
+            return
+          end
+          for k, v in pairs(result) do
+            DataPlayers[source].Jobs[v.job_id] = v.job_name   
+            TriggerClientEvent("Job:start"..v.job_name, source, true)         
+          end          
+          TriggerClientEvent("Venato:Connection", source)
+        end)
         ControlVisa(SteamId, source)
         TriggerEvent("police:checkIsCop", source)
         MySQL.Async.execute("UPDATE user_vehicle SET prenom=@prenom, nom=@nom, foufou = 2 WHERE owner=@owner", {['@owner'] = steamIdl, ['@prenom'] = DataUser[1].prenom, ['@nom'] = DataUser[1].nom})
-        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo.." - ".. DataPlayers[source].NameJob ..")^7")
+        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
       end)
     end
   end)

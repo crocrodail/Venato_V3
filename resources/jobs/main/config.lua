@@ -17,5 +17,5 @@ JobsConfig.jobsNotification = {
   title = "Boulot",
   logo = "https://img.icons8.com/nolan/96/000000/briefcase.png"
 }
-JobsConfig.SalaryInterval = 24 * 60 * 1000 -- 15min
+JobsConfig.SalaryInterval = 24 * 60 * 1000 -- 24min
 JobsConfig.PrimeConnection = 50
