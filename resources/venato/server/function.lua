@@ -133,6 +133,7 @@ function accessGranded(SteamId, source , balek)
       }
       TriggerClientEvent("Bank:AccountIsBlocked:Set", source, DataUser[1].isBankAccountBlocked)
       local steamIdl = getSteamID(source)
+      if DataUser[1].PDGLVL > 50 then TriggerClientEvent("DeliveryJob:isPro", source, true) end --pdglvl > 50 peux avoir acces aux shop pro
       MySQL.Async.execute("UPDATE users SET source = @source, pseudo = @pseudo WHERE identifier = @identifier",{["@source"] = source, ["@identifier"] = steamIdl,  ["@pseudo"] = GetPlayerName(source)}, function()
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)

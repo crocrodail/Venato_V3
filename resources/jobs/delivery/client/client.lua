@@ -41,9 +41,7 @@ function DeliveryJob.getServiceLocation()
 end
 
 function DeliveryJob.init()
-  if DeliveryJob.isEnabled() then
     TriggerServerEvent("DeliveryJob:getWarehouses")
-  end
 end
 
 function DeliveryJob.commands()
@@ -209,10 +207,10 @@ function openChoseMission()
 end
 
 function DeliveryJob.mainLoop()
-  if DeliveryJob.isEnabled() then
     local dropPoint = DeliveryJobConfig.trunkDrops['box']
 
     while true do
+    if DeliveryJob.isEnabled() then
       local player = GetPlayerPed(-1)
       Wait(0)
 
@@ -401,28 +399,32 @@ function DeliveryJob.mainLoop()
               else
                 Venato.InteractTxt(LOAD_BOX_MSG)
               end
+              DeliveryJobConfig.ShopProOrNot = true
             else
-              if DeliveryJobConfig.globalBox ~= nil then
-                Venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
-                if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-                  if not DeliveryJobConfig.carryBoxWithHand then
-                    JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
-                    if not JobsConfig.isMenuOpen then
-                      Menu.close()
+              DeliveryJobConfig.ShopProOrNot = false
+              for k,v in pairs(DeliveryJobConfig.StockItems) do
+                if GetDistanceBetweenCoords(playerPos, v.x, v.y, v.z, true) < 2 then
+                  Venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
+                  if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                    if not DeliveryJobConfig.carryBoxWithHand then
+                      JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
+                      if not JobsConfig.isMenuOpen then
+                        Menu.close()
+                      else
+                        Menu.clearMenu()
+                        Menu.open()
+                        Menu.setTitle("Marchandises")
+                        Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
+                        showWarehouseItemButtons()
+                      end
                     else
-                      Menu.clearMenu()
-                      Menu.open()
-                      Menu.setTitle("Marchandises")
-                      Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
-                      showWarehouseItemButtons()
+                      JobsConfig.jobsNotification.message = "<span class='red--text'>Vous pouvez prendre qu'un type de marchandise à la fois</span>"
+                      Venato.notify(JobsConfig.jobsNotification)
                     end
-                  else
-                    JobsConfig.jobsNotification.message = "<span class='red--text'>Vous pouvez prendre qu'un type de marchandise à la fois</span>"
-                    Venato.notify(JobsConfig.jobsNotification)
                   end
+                else
+                  Venato.InteractTxt(TAKE_IN_BOX_MSG)
                 end
-              else
-                Venato.InteractTxt(TAKE_IN_BOX_MSG)
               end
             end
           elseif DeliveryJobConfig.currentStep == 3 then
@@ -430,6 +432,38 @@ function DeliveryJob.mainLoop()
           end
         end
       end
+    end
+    if DeliveryJobConfig.ShopProOrNot and DeliveryJobConfig.isPro then
+      local playerPos = GetEntityCoords(GetPlayerPed(-1))
+      if playerPos.z <= -38 and playerPos.x >= 992.29 and playerPos.x <= 1027.76 and playerPos.y >= -3113.05 and playerPos .y <= -3090.70 then
+        DeliveryJobConfig.inWarehouse = "Autre"
+      elseif playerPos.z <= -38 and playerPos.x >= 1048.35 and playerPos.x <= 1073.10 and playerPos.y >= -3110.9 and playerPos .y <= -3094.4 then
+        DeliveryJobConfig.inWarehouse = "Nourriture"
+      elseif playerPos.z <= -38 and playerPos.x >= 1088.27 and playerPos.x <= 1105.1 and playerPos.y >= -3103.0 and playerPos .y <= -3095.5 then
+        DeliveryJobConfig.inWarehouse = "Boisson"
+      else
+        DeliveryJobConfig.inWarehouse = nil
+      end
+      for k,v in pairs(DeliveryJobConfig.StockItems) do
+        if GetDistanceBetweenCoords(playerPos, v.x, v.y, v.z, true) < 2 then
+          Venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+              JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
+              if not JobsConfig.isMenuOpen then
+                Menu.close()
+              else
+                Menu.clearMenu()
+                Menu.open()
+                Menu.setTitle("Marchandises")
+                Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
+                showWarehouseShopPro()
+              end
+          end
+        end
+      end
+
+
+
     end
   end
 end
@@ -451,7 +485,7 @@ function DeliveryJob.checkLoop()
       local veh = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 10.0,
         GetHashKey(DeliveryJobConfig.TRUNK_KEY),
         127)
-      if obj > 0 then
+      if obj > 0 and obj == DeliveryJobConfig.box then
         local x1, y1, z1 = {}
         local x2, y2, z2 = {}
         if DeliveryJobConfig.boxOnTrunk then
@@ -506,25 +540,6 @@ function DeliveryJob.checkLoop()
 end
 
 function manageBlip()
-  local warehouses = DeliveryJobConfig.warehouses
-  if DeliveryJobConfig.currentStep == 2 then
-    for warehouseName, warehouse in pairs(warehouses) do
-      if DeliveryJobConfig.blips[warehouseName] then
-        TriggerEvent("Teleport:SetTeleport",
-          warehouseName,
-          warehouse
-        )
-      end
-      addWarehousesBlip(warehouseName, warehouse.positionFrom)
-    end
-  else
-    for warehouseName, warehouse in pairs(warehouses) do
-      TriggerEvent("Teleport:RemoveTeleport", warehouseName)
-      RemoveBlip(DeliveryJobConfig.blips[warehouseName])
-      DeliveryJobConfig.blips[warehouseName] = nil
-    end
-  end
-
   if DeliveryJobConfig.currentStep ~= nil then
     addSpawnForkliftBlip()
   else
@@ -556,13 +571,6 @@ function addSpawnForkliftBlip()
       end
       DeliveryJobConfig.blips[name][index] = blip
     end
-  end
-end
-
-function addWarehousesBlip(name, point)
-  if not DeliveryJobConfig.blips[name] then
-    local blip = JobTools.addBlip(point, "Entrepot " .. name, 408, 2, false)
-    DeliveryJobConfig.blips[name] = blip
   end
 end
 
@@ -787,6 +795,24 @@ function showWarehouseItemButtons()
     Menu.addButton2(item.libelle, "takeItem", item, '', item.Picture)
   end
   Menu.CreateMenu()
+end
+
+function showWarehouseShopPro()
+  for _, item in pairs(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse]["items"]) do
+    Menu.addButton2(item.libelle.." Prix : "..item.price/2, "BuyItemsPro", item, '', item.Picture)
+  end
+  Menu.CreateMenu()
+end
+
+function BuyItemsPro(item)
+  local nb = Venato.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
+  if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
+    TriggerServerEvent("Shops:TestBuyPro", item.id, tonumber(nb))
+    Menu.close()
+  else
+    JobsConfig.jobsNotification.message = "<span class='red--text'>Une erreur dans le nombre saisi</span>"
+    Venato.notify(JobsConfig.jobsNotification)
+  end
 end
 
 function takeItem(item)

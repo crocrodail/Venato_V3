@@ -28,6 +28,18 @@ local TeleportFromTo = {
   --positionFrom = { ['x'] = -2008.059, ['y'] = 3184.345, ['z'] = -36.262, nom = "Entrer - Oneway Police Suspect"},
   --positionTo = { ['x'] = 465.123, ['y'] = -990.162, ['z'] = 24.945, nom = "Sortir - Oneway Police Suspect"},
   --},
+  ["Entrepot Boisson"] = {
+    positionFrom = { ['x'] = -1546.95, ['y'] = -560.99, ['z'] = 33.72, nom = "Intérieur - Entrepot Boisson" },
+    positionTo = { ['x'] = 1105.11, ['y'] = -3099.35, ['z'] = -39.1, nom = "Sortir - Entrepot" },
+  },
+  ["Entrepot Nourriture"] = {
+    positionFrom = { ['x'] = 496.17, ['y'] = -638.62, ['z'] = 25.03, nom = "Intérieur - Entrepot Nourriture" },
+    positionTo = { ['x'] = 1072.94, ['y'] = -3102.6, ['z'] = -39.1, nom = "Sortir - Entrepot" },
+  },
+  ["Entrepot Divers"] = {
+    positionFrom = { ['x'] = 2703.99, ['y'] = 3457.46, ['z'] = 55.55, nom = "Intérieur - Entrepot Divers" },
+    positionTo = { ['x'] = 1026.86, ['y'] = -3101.61, ['z'] = -39.1, nom = "Sortir - Entrepot" },
+  },
 
   ["Bureau du FIB"] = {
     positionFrom = { ['x'] = 136.0994, ['y'] = -761.8452, ['z'] = 45.7520, nom = "Monter - Bureau de MerryWeather" },

@@ -13,6 +13,7 @@
 RegisterNetEvent("DeliveryJob:getWarehouses:cb")
 RegisterNetEvent("DeliveryJob:finishMission:cb")
 RegisterNetEvent("DeliveryJob:takeMission:cb")
+RegisterNetEvent("DeliveryJob:isPro")
 
 AddEventHandler("DeliveryJob:getWarehouses:cb", function(warehouses)
   DeliveryJobConfig.warehouses = warehouses
@@ -33,4 +34,9 @@ AddEventHandler("DeliveryJob:takeMission:cb", function(mission, order, destinati
   DeliveryJobConfig.currentStep = 1
   Menu.close()
   JobsConfig.isMenuOpen = false
+end)
+
+
+AddEventHandler("DeliveryJob:isPro", function(bool)
+  DeliveryJobConfig.isPro = bool
 end)

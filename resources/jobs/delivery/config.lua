@@ -18,6 +18,11 @@ DeliveryJobConfig.takebox = { ["x"] = -319.96, ["y"] = -2426.39, ["z"] = 6.0 -0.
 DeliveryJobConfig.blips = {}
 DeliveryJobConfig.gpsroute = {}
 DeliveryJobConfig.boxes = {}
+DeliveryJobConfig.StockItems = {
+  {["x"] = 1018.185, ["y"] = -3102.895, ["z"] = -39.9},
+  {["x"] = 1067.665, ["y"] = -3102.895, ["z"] = -39.9},
+  {["x"] = 1097.668, ["y"] = -3096.623, ["z"] = -39.9}
+}
 
 DeliveryJobConfig.BOX_KEY = "prop_box_wood05a"
 DeliveryJobConfig.MINI_BOX_KEY = "prop_apple_box_01"
@@ -31,7 +36,9 @@ DeliveryJobConfig.box = nil
 DeliveryJobConfig.handbox = nil
 DeliveryJobConfig.AllObject = {}
 
+DeliveryJobConfig.ShopProOrNot = true
 DeliveryJobConfig.boxOnForklift = false
+DeliveryJobConfig.isPro = false
 DeliveryJobConfig.boxOnTrunk = false
 DeliveryJobConfig.carryBoxWithHand = false
 DeliveryJobConfig.boxCoord = {}

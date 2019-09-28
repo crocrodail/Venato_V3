@@ -140,20 +140,20 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
           print("GROS Probleme !!")
         end
       end)
-      
+
     end
   end
   return false
 end)
 
 RegisterServerEvent('Inventory:AddItem')
-AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
+AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
   local source = source
   local qty = qty
   local qtyadd = qty
   local AlreadyExist = false
-  if NewSource ~= nil then
-    source = NewSource
+  if NewSourcee ~= nil then
+    source = NewSourcee
   end
   if DataPlayers[source].Inventaire ~= nil then
     for k, v in pairs(DataPlayers[source].Inventaire) do
@@ -203,7 +203,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSource)
           print("GROS Probleme !!")
         end
       end)
-     
+
     end
   end
   return false
