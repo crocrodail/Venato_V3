@@ -7,7 +7,7 @@ function none()
 end
 
 function Venato.playAnim(data)
-  local flag = data.flag or 48
+  local flag = data.flag or 0
   local ped = data.ped or GetPlayerPed(-1)
   local timeout = data.timeout or 0
   if data.useLib then
@@ -15,9 +15,9 @@ function Venato.playAnim(data)
       while not HasAnimDictLoaded(data.lib) do
       Citizen.Wait(0)
       end
-      
+
       TaskPlayAnim(ped,data.lib, data.anim ,8.0, 8.0, -1, flag, 1, false, false, false )
-      
+
   elseif not data.useLib then
       TaskStartScenarioInPlace(ped, data.anim, 0, false)
   end
@@ -62,7 +62,7 @@ function Venato.notify(notif)
   if not notif.timeout then
     notif.timeout = 3500
   end
-  
+
   TriggerEvent("Hud:Update", {
     action = "notify",
     message = notif.message,
