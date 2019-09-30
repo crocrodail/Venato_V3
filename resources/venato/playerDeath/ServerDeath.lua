@@ -34,6 +34,6 @@ AddEventHandler('Death:health', function(bool, health)
   if bool == true then
     health = 0
   end
-  DataPlayers[source].Health = health --- eroor sometime
-  MySQL.Async.execute("UPDATE users SET health = @health WHERE identifier = @steamId", {["health"] = health, ["steamId"] = DataPlayers[source].SteamId })
+  DataPlayers[tonumber(source)].Health = health --- eroor sometime
+  MySQL.Async.execute("UPDATE users SET health = @health WHERE identifier = @steamId", {["health"] = health, ["steamId"] = DataPlayers[tonumber(source)].SteamId })
 end)

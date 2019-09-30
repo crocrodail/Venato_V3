@@ -8,8 +8,8 @@ RegisterServerEvent("Shops:TestBuy")
 AddEventHandler("Shops:TestBuy", function(ContentId, shopId, quantity, newSource)
   local source = source or newSource
   local _quantity = quantity or 1
-	local currentPlayerMoney = DataPlayers[source].Money
-  local steamId = DataPlayers[source].SteamId
+	local currentPlayerMoney = DataPlayers[tonumber(source)].Money
+  local steamId = DataPlayers[tonumber(source)].SteamId
   local DataUsers = DataPlayers
   MySQL.Async.fetchAll(RequetgetContentItem, { ["@Id"] = ContentId }, function(content)
 		local totalPrice = _quantity * content[1].Price
@@ -41,8 +41,8 @@ AddEventHandler("Shops:TestBuyPro", function(ContentId, quantity, newSource)
     source = newSource
   end
   local _quantity = quantity
-	local currentPlayerMoney = DataPlayers[source].Money
-  local steamId = DataPlayers[source].SteamId
+	local currentPlayerMoney = DataPlayers[tonumber(source)].Money
+  local steamId = DataPlayers[tonumber(source)].SteamId
   local DataUsers = DataPlayers
   MySQL.Async.fetchAll(RequetgetContentItemPro, { ["@ID"] = ContentId }, function(content)
 		local totalPrice = _quantity * content[1].price

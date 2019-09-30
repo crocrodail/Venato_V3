@@ -23,6 +23,14 @@ AddEventHandler("Entreprise:CallHirePlayer", function(idEntreprise, name)
   
 end)
 
+RegisterServerEvent("Entreprise:NewGrade")
+AddEventHandler("Entreprise:NewGrade", function(identifier, grade)
+  MySQL.Async.execute("UPDATE police SET `rank` = @grade WHERE identifier = @identifier", {    
+    ["@grade"] = grade,
+    ["@identifier"] = identifier,
+  })
+end)
+
 
 RegisterServerEvent("Entreprise:ListEmployee")
 AddEventHandler("Entreprise:ListEmployee", function(idEntreprise, name)
@@ -47,6 +55,11 @@ end)
 RegisterServerEvent("Entreprise:HirePlayer")
 AddEventHandler("Entreprise:HirePlayer", function(idEntreprise, identifier)  
   local source = source
+  if not ConfigEnterprise[idEntreprise].Gang then
+    if Venato.CheckChomage(identifier) then
+      Venato.RemoveChomage(identifier)
+    end  
+  end
   TriggerEvent("Venato:AddJob", idEntreprise, identifier)
   TriggerClientEvent("Entreprise:HirePlayer:cb", source, idEntreprise)
 end)
@@ -54,6 +67,11 @@ end)
 RegisterServerEvent("Entreprise:FirePlayer")
 AddEventHandler("Entreprise:FirePlayer", function(data)  
   local source = source
+  if not ConfigEnterprise[data[1]].Gang then  
+    if Venato.NbJob(data[2]) <= 1 then
+      Venato.AddChomage(data[2])
+    end  
+  end
   TriggerEvent("Venato:RemoveJob", data)
   TriggerClientEvent("Entreprise:FirePlayer:cb", source, data[1])
 end)

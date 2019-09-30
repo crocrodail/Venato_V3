@@ -8,6 +8,9 @@ function setIdentity(identifier, data, source)
   if data.sexe == "f" then
     clotheToSet = clothesFemale
   end
+    MySQL.Async.execute("INSERT INTO user_job (UserId, JobId) VALUES (@identifier, 1)", {
+      ['@identifier'] = identifier,
+    })
     MySQL.Async.execute("UPDATE users SET nom = @nom, prenom = @prenom, dateNaissance = @dateNaissance, sexe = @sexe, taille = @taille, clothes = @clothes WHERE identifier = @identifier", {
         ['@nom'] = data.nom,
         ['@prenom'] = data.prenom,

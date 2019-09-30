@@ -33,7 +33,7 @@ AddEventHandler("Venato:SwitchJob", function(id)
     if result[1] then
       TriggerClientEvent("job:deleteBlips", source)
       TriggerClientEvent("Job:start"..result[1].job_name, source, false)  
-      DataPlayers[source].Jobs[result[1].JobId] = nil 
+      DataPlayers[tonumber(source)].Jobs[result[1].JobId] = nil 
       MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)}, function()
         newJob(source,id)
       end)      
@@ -44,7 +44,7 @@ AddEventHandler("Venato:SwitchJob", function(id)
 end)
 
 RegisterNetEvent("Venato:AddJob")
-AddEventHandler("Venato:AddJob", function(id, identifier)
+AddEventHandler("Venato:AddJob", function(id, identifier)  
   MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=identifier}, function(result)
     if result[1] ~= nil then
       if result[1].source ~= 'disconnect' then
@@ -58,11 +58,16 @@ end)
 
 RegisterNetEvent("Venato:RemoveJob")
 AddEventHandler("Venato:RemoveJob", function(data)
-  MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier", {['@identifier'] = data[2]})
+  MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier and JobId = @jobId", {['@identifier'] = data[2], ['@jobId'] = data[1]})
   MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=data[2]}, function(result)
     if result[1] ~= nil then
         if result[1].source ~= 'disconnect' then
-          DataPlayers[result[1].source].Jobs[data[1]] = nil           
+          local sourceId = result[1].source
+          local jobId = data[1]
+          print(sourceId)
+          print(jobId)
+          print(Venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
+          DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)] = nil           
         end
     end
   end)
@@ -77,7 +82,7 @@ AddEventHandler("Venato:QuitJob", function(id)
     if result[1] then
       TriggerClientEvent("job:deleteBlips", source)
       TriggerClientEvent("Job:start"..result[1].job_name, source, false)  
-      DataPlayers[source].Jobs[result[1].JobId] = nil 
+      DataPlayers[tonumber(source)].Jobs[result[1].JobId] = nil 
       MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)})      
     end
   end)  
@@ -88,12 +93,12 @@ function newJob(source, id)
   MySQL.Async.execute("INSERT INTO user_job(UserId, JobId) VALUES (@identifier, @jobId)", {['@identifier'] = getSteamID(source), ['@jobId'] = id })
   MySQL.Async.fetchAll("SELECT * FROM jobs WHERE job_id = @jobId", { ["@jobId"] = id }, function(result)
     if result[1] then
-      DataPlayers[source].Jobs[id] = result[1].job_name
+      DataPlayers[tonumber(source)].Jobs[tonumber(id)] = result[1].job_name
       TriggerClientEvent("Job:start"..result[1].job_name, source, true)
       local defaultNotification = {
         type = "alert",
         title ="PoleEmploi",
-        logo = "https://www.pngfactory.net/_png/_thumb/29520-Caetano-Paleemploi.png",
+        logo = "https://i.ibb.co/CMFQmq2/icons8-briefcase-96px.png",
         message = "Vous etes maintenant "..result[1].job_name
       }
       Venato.notify(source, defaultNotification)
@@ -127,7 +132,7 @@ function accessGranded(SteamId, source , balek)
       if DataUser[1].sexe == "f" then
         sexe = "femme"
       end
-      DataPlayers[source] = {
+      DataPlayers[tonumber(source)] = {
         Ip = GetPlayerEP(source),
         SteamId = SteamId,
         Source = source,
@@ -204,7 +209,7 @@ function accessGranded(SteamId, source , balek)
             return
           end
           for k, v in pairs(result) do
-            DataPlayers[source].Jobs[v.job_id] = v.job_name   
+            DataPlayers[tonumber(source)].Jobs[v.job_id] = v.job_name   
             TriggerClientEvent("Job:start"..v.job_name, source, true)         
           end          
           TriggerClientEvent("Venato:Connection", source)
@@ -212,7 +217,7 @@ function accessGranded(SteamId, source , balek)
         ControlVisa(SteamId, source)
         TriggerEvent("police:checkIsCop", source)
         MySQL.Async.execute("UPDATE user_vehicle SET prenom=@prenom, nom=@nom, foufou = 2 WHERE owner=@owner", {['@owner'] = steamIdl, ['@prenom'] = DataUser[1].prenom, ['@nom'] = DataUser[1].nom})
-        print("^3SyncData for : "..DataPlayers[source].Prenom.." "..DataPlayers[source].Nom.." ("..DataPlayers[source].Pseudo..")^7")
+        print("^3SyncData for : "..DataPlayers[tonumber(source)].Prenom.." "..DataPlayers[tonumber(source)].Nom.." ("..DataPlayers[tonumber(source)].Pseudo..")^7")
       end)
     end
   end)
@@ -235,42 +240,42 @@ function ControlVisa(SteamId, source)
       local start = result[1].visadebut
       local endv = result[1].visafin
       if tonumber(num) == 2 then
-        DataPlayers[source].CanBeACitoyen = true
-        DataPlayers[source].VisaStart = start
-        DataPlayers[source].VisaEnd = endv
+        DataPlayers[tonumber(source)].CanBeACitoyen = true
+        DataPlayers[tonumber(source)].VisaStart = start
+        DataPlayers[tonumber(source)].VisaEnd = endv
       elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) == 0 then
         local ts = os.time()
         local tsEnd = ts + 14 * 24 * 60 * 60
-        DataPlayers[source].VisaStart = os.date('%d-%m-%Y', ts)
-        DataPlayers[source].VisaEnd = os.date('%d-%m-%Y', tsEnd)
+        DataPlayers[tonumber(source)].VisaStart = os.date('%d-%m-%Y', ts)
+        DataPlayers[tonumber(source)].VisaEnd = os.date('%d-%m-%Y', tsEnd)
         MySQL.Async.execute("UPDATE whitelist SET visadebut=@ts, visafin=@tsEnd WHERE identifier=@identifier",
-          { ["@ts"] = DataPlayers[source].VisaStart, ["@tsEnd"] = DataPlayers[source].VisaEnd, ["identifier"] = SteamId })
+          { ["@ts"] = DataPlayers[tonumber(source)].VisaStart, ["@tsEnd"] = DataPlayers[tonumber(source)].VisaEnd, ["identifier"] = SteamId })
       elseif (tonumber(num) == 1 or tonumber(num) == 2) and tonumber(start) ~= 0 then
         local ts = os.time()
         local d, m, y = endv:match '(%d+)-(%d+)-(%d+)'
         local tsStart = os.time { year = y, month = m, day = d, }
         local testTS = tsStart
-        DataPlayers[source].VisaStart = start
-        DataPlayers[source].VisaEnd = endv
+        DataPlayers[tonumber(source)].VisaStart = start
+        DataPlayers[tonumber(source)].VisaEnd = endv
         if ts > testTS then
           MySQL.Async.execute("UPDATE whitelist SET listed=0 WHERE identifier=@identifier",
             { ["identifier"] = SteamId })
           DropPlayer(source, "Il semblerait que votre visa à exepiré. Date d'expiration : (" .. os.date('%d-%m-%Y', testTS) .. ")")
         elseif ts > tsStart - 7 * 24 * 60 * 60 then
-          DataPlayers[source].VisaCanBeReload = true
+          DataPlayers[tonumber(source)].VisaCanBeReload = true
         end
       else
-        DataPlayers[source].Citoyen = 1
-        DataPlayers[source].VisaStart = start
-        DataPlayers[source].VisaEnd = endv
+        DataPlayers[tonumber(source)].Citoyen = 1
+        DataPlayers[tonumber(source)].VisaStart = start
+        DataPlayers[tonumber(source)].VisaEnd = endv
       end
     end)
 end
 
 function PlayerLeaving(SteamID)
   if DataPlayers ~= nil then
-    if DataPlayers[source] ~= nil then
-      DataPlayers[source] = nil
+    if DataPlayers[tonumber(source)] ~= nil then
+      DataPlayers[tonumber(source)] = nil
     end
   end
 end
@@ -281,15 +286,15 @@ function Venato.Round(num, numDecimalPlaces)
 end
 
 function Venato.paymentCB(source, amount)
-  if DataPlayers[source].IsBankAccountBlocked == 1 then
+  if DataPlayers[tonumber(source)].IsBankAccountBlocked == 1 then
     return {status = false, message = "Votre compte est bloqué, rendez vous au LSPD pour régulariser votre situation."}
   end
-  if DataPlayers[source].Bank <= tonumber(amount) then
+  if DataPlayers[tonumber(source)].Bank <= tonumber(amount) then
     return {status = false, message = "Votre solde est insuffisant."}
   else
-    DataPlayers[source].Bank = DataPlayers[source].Bank - amount
+    DataPlayers[tonumber(source)].Bank = DataPlayers[tonumber(source)].Bank - amount
     MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier",
-      { ["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].Bank })
+      { ["identifier"] = DataPlayers[tonumber(source)].SteamId, ["money"] = DataPlayers[tonumber(source)].Bank })
     return {status = true}
   end
 end
@@ -299,13 +304,13 @@ function ExportPaymentCB(source, amount)
 end
 
 function Venato.paymentVP(source, amount)
-  print(DataPlayers[source].VenatoPoint)
-  if DataPlayers[source].VenatoPoint <= tonumber(amount) then
+  print(DataPlayers[tonumber(source)].VenatoPoint)
+  if DataPlayers[tonumber(source)].VenatoPoint <= tonumber(amount) then
     return false
   else
-    DataPlayers[source].VenatoPoint = DataPlayers[source].VenatoPoint - amount
+    DataPlayers[tonumber(source)].VenatoPoint = DataPlayers[tonumber(source)].VenatoPoint - amount
     MySQL.Async.execute("UPDATE users SET venato_point=@money WHERE identifier=@identifier",
-      { ["identifier"] = DataPlayers[source].SteamId, ["money"] = DataPlayers[source].VenatoPoint })
+      { ["identifier"] = DataPlayers[tonumber(source)].SteamId, ["money"] = DataPlayers[tonumber(source)].VenatoPoint })
     return true
   end
 end
@@ -362,12 +367,10 @@ function Venato.notify(source, notif)
 end
 
 function Venato.CheckItem(itemId, source)
-  print(Venato.dump(DataPlayers[source].Inventaire))
-  print(Venato.dump(DataPlayers[source].Inventaire[itemId]))
-  if not DataPlayers[source] or not DataPlayers[source].Inventaire[itemId] then
+  if not DataPlayers[tonumber(source)] or not DataPlayers[tonumber(source)].Inventaire[itemId] then
     return 0
   end
-  return DataPlayers[source].Inventaire[itemId].quantity
+  return DataPlayers[tonumber(source)].Inventaire[itemId].quantity
 end
 
 RegisterServerEvent('vnt:chestaddmonney')
@@ -401,3 +404,21 @@ AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
     end
   end)
 end)
+
+function Venato.CheckChomage(identifier)
+  local result =  MySQL.Sync.fetchAll("SELECT COUNT(*) as chomage FROM user_job WHERE UserId=@identifier AND JobId = 1", {['@identifier'] = identifier})
+  return result[1].chomage == 1
+end
+
+function Venato.NbJob(identifier)
+  local result =  MySQL.Sync.fetchAll("SELECT COUNT(*) as nbJob FROM user_job WHERE UserId=@identifier", {['@identifier'] = identifier})
+  return result[1].nbJob
+end
+
+function Venato.AddChomage(identifier)
+  TriggerEvent("Venato:AddJob", 1, identifier)
+end
+
+function Venato.RemoveChomage(identifier)
+  TriggerEvent("Venato:RemoveJob", {1, identifier})
+end

@@ -60,7 +60,7 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
         ["inventaire"] = Inventaire,
         ["weapon"] = {},
       }
-      TriggerClientEvent("VehicleCoffre:CallData:cb",source, DataVehicle[plate], DataPlayers[source])
+      TriggerClientEvent("VehicleCoffre:CallData:cb",source, DataVehicle[plate], DataPlayers[tonumber(source)])
       MySQL.Async.fetchAll("SELECT * FROM coffres_voiture_weapons JOIN weapon_model ON coffres_voiture_weapons.Weapon = weapon_model.weapond WHERE CoffreId = @id", {["@id"] = plate}, function(resultWp)
         if resultWp ~= nil then
           for k,v in pairs(resultWp) do
@@ -74,7 +74,7 @@ AddEventHandler('VehicleCoffre:CallData', function(plate, class)
       end)
     end)
   else
-    TriggerClientEvent("VehicleCoffre:CallData:cb", source,  DataVehicle[plate], DataPlayers[source])
+    TriggerClientEvent("VehicleCoffre:CallData:cb", source,  DataVehicle[plate], DataPlayers[tonumber(source)])
   end
 end)
 
@@ -82,8 +82,8 @@ RegisterServerEvent('VehicleCoffre:DropItem')
 AddEventHandler('VehicleCoffre:DropItem', function(qty, plate, index)
   local source = source
   local qty = tonumber(qty)
-  if qty <= DataPlayers[source].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite and qty > 0 then
-    TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[index].quantity - qty, index, source)    
+  if qty <= DataPlayers[tonumber(source)].Inventaire[index].quantity and DataVehicle[plate].nbItems+qty <= DataVehicle[plate].itemcapacite and qty > 0 then
+    TriggerEvent("Inventory:SetItem", DataPlayers[tonumber(source)].Inventaire[index].quantity - qty, index, source)    
     if DataVehicle[plate].inventaire[index] ~= nil then
       
       TriggerEvent("VehicleCoffre:SetItems", DataVehicle[plate].inventaire[index].quantity + qty, index, plate )
@@ -100,7 +100,7 @@ RegisterServerEvent('VehicleCoffre:TakeItems')
 AddEventHandler('VehicleCoffre:TakeItems', function(index, qty, plate)
   local source = source
   local qty = tonumber(qty)
-  if qty <= DataVehicle[plate].inventaire[index].quantity and DataPlayers[source].Poid+DataVehicle[plate].inventaire[index].poid*qty <= DataPlayers[source].PoidMax and qty > 0 then
+  if qty <= DataVehicle[plate].inventaire[index].quantity and DataPlayers[tonumber(source)].Poid+DataVehicle[plate].inventaire[index].poid*qty <= DataPlayers[tonumber(source)].PoidMax and qty > 0 then
     TriggerEvent('Inventory:AddItem', qty, index, source)
     TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity - qty, index, plate )
     TriggerClientEvent("VehicleCoffre:Close", source)
@@ -139,7 +139,7 @@ end)
 RegisterServerEvent('VehicleCoffre:TakeWpCv')
 AddEventHandler('VehicleCoffre:TakeWpCv', function(index, plate)
   local source = source
-  if DataPlayers[source].Poid + DataVehicle[plate].weapon[index].poid <= DataPlayers[source].PoidMax then
+  if DataPlayers[tonumber(source)].Poid + DataVehicle[plate].weapon[index].poid <= DataPlayers[tonumber(source)].PoidMax then
     TriggerEvent("Inventory:AddWeapon", DataVehicle[plate].weapon[index].weapon, DataVehicle[plate].weapon[index].balles,  DataVehicle[plate].weapon[index].poid,  DataVehicle[plate].weapon[index].libelle, source)
     DataVehicle[plate].weapon[index] = nil
     MySQL.Async.execute("DELETE FROM coffres_voiture_weapons WHERE Id = @index", {["@index"] = index})
@@ -154,10 +154,10 @@ RegisterServerEvent('VehicleCoffre:DropWpCv')
 AddEventHandler('VehicleCoffre:DropWpCv', function(index, plate)
   local source = source
   if DataVehicle[plate].nbWeapon + 1  <= DataVehicle[plate].maxWeapon then
-    MySQL.Async.execute("INSERT INTO coffres_voiture_weapons (`Weapon`, `CoffreId`, `balles`) VALUES (@weapon, @plate, @balles)", {["@weapon"] =  DataPlayers[source].Weapon[index].id, ["@plate"] = plate, ["@balles"] =  DataPlayers[source].Weapon[index].ammo}, function()
-      MySQL.Async.fetchScalar("SELECT Id FROM coffres_voiture_weapons WHERE CoffreId = @plate AND Weapon = @weapon ORDER BY id DESC", {["@weapon"] =  DataPlayers[source].Weapon[index].id, ["@plate"] = plate}, function(resultId)
-        DataVehicle[plate].weapon[resultId] = {["libelle"] = DataPlayers[source].Weapon[index].libelle, ["weapon"] = DataPlayers[source].Weapon[index].id, ["balles"] = DataPlayers[source].Weapon[index].ammo}
-        TriggerEvent("Inventory:RemoveWeapon", DataPlayers[source].Weapon[index].id, index, DataPlayers[source].Weapon[index].poid, source)
+    MySQL.Async.execute("INSERT INTO coffres_voiture_weapons (`Weapon`, `CoffreId`, `balles`) VALUES (@weapon, @plate, @balles)", {["@weapon"] =  DataPlayers[tonumber(source)].Weapon[index].id, ["@plate"] = plate, ["@balles"] =  DataPlayers[tonumber(source)].Weapon[index].ammo}, function()
+      MySQL.Async.fetchScalar("SELECT Id FROM coffres_voiture_weapons WHERE CoffreId = @plate AND Weapon = @weapon ORDER BY id DESC", {["@weapon"] =  DataPlayers[tonumber(source)].Weapon[index].id, ["@plate"] = plate}, function(resultId)
+        DataVehicle[plate].weapon[resultId] = {["libelle"] = DataPlayers[tonumber(source)].Weapon[index].libelle, ["weapon"] = DataPlayers[tonumber(source)].Weapon[index].id, ["balles"] = DataPlayers[tonumber(source)].Weapon[index].ammo}
+        TriggerEvent("Inventory:RemoveWeapon", DataPlayers[tonumber(source)].Weapon[index].id, index, DataPlayers[tonumber(source)].Weapon[index].poid, source)
         DataVehicle[plate].nbWeapon = DataVehicle[plate].nbWeapon + 1
       end)
     end)

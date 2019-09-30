@@ -383,7 +383,7 @@ end)
 
 RegisterNetEvent('police:callPoliceCustom')
 AddEventHandler('police:callPoliceCustom',function()
-    local raison = Venato.OpenKeyboard('', '', 100,"Raison de l'appelle")
+    local raison = Venato.OpenKeyboard('', '', 100,"Raison de l'appel")
     if raison ~= nil and raison ~= '' then
         callPolice(raison)
     end

@@ -1,8 +1,8 @@
 RegisterNetEvent("Coords:UpdatePos")
 AddEventHandler("Coords:UpdatePos", function(update)
 	local source = source
-	if update ~= nil and DataPlayers[source] ~= nil then
-		DataPlayers[source].Position = update
+	if update ~= nil and DataPlayers[tonumber(source)] ~= nil then
+		DataPlayers[tonumber(source)].Position = update
 	end
 end)
 

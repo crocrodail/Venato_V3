@@ -8,8 +8,7 @@ end
 
 function toogleServiceAmbulancier()
   Menu.open()
-  Menu.setTitle("LSMC")
-  Menu.setSubtitle("Choix des tenues  ")
+  TriggerEvent('Menu:Init', "LSMC", "Choix des tenues", "#EEB67A99", "https://resize-europe1.lanmedia.fr/r/622,311,forcex,center-middle/img/var/europe1/storage/images/europe1/economie/manifestation-des-ambulanciers-quelles-sont-les-raisons-de-la-grogne-3793862/50848889-1-fre-FR/Manifestation-des-ambulanciers-quelles-sont-les-raisons-de-la-grogne.jpg")
   Menu.clearMenu()
   if not ambulancierIsInService then
     Menu.addButton("Prendre son service", "AmbuOnService", nil)
@@ -28,7 +27,7 @@ end
 function openMenuGeneralAmbulancier()
   Menu.clearMenu()
   Menu.open()
-  Menu.setTitle('Ambulancier')
+  TriggerEvent('Menu:Init', "Ambulancier", "Options", "#EEB67A99", "https://resize-europe1.lanmedia.fr/r/622,311,forcex,center-middle/img/var/europe1/storage/images/europe1/economie/manifestation-des-ambulanciers-quelles-sont-les-raisons-de-la-grogne-3793862/50848889-1-fre-FR/Manifestation-des-ambulanciers-quelles-sont-les-raisons-de-la-grogne.jpg")
   TriggerEvent('Menu:AddButton2',"Missions en cours", "AmbulancierGetMissionMenu", '', '')
   TriggerEvent('Menu:AddButton2',"Soins", "MenuSendEvent", 'ambulancier:Heal', '')
   TriggerEvent('Menu:AddButton2',"Réanimer", "MenuSendEvent", 'ambulancier:Heal2', '')

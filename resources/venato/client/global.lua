@@ -54,12 +54,12 @@ end)
 
 RegisterNetEvent("Venato:SpawnInit")
 AddEventHandler("Venato:SpawnInit", function(DataPlayers, source)
-  if DataPlayers[source] ~= nil then
-    DataUser = DataPlayers[source]
+  if DataPlayers[tonumber(source)] ~= nil then
+    DataUser = DataPlayers[tonumber(source)]
     LoadBlips()
-    Venato.LoadSkin(DataPlayers[source])
+    Venato.LoadSkin(DataPlayers[tonumber(source)])
     Venato.LoadClothes()
-    if tonumber(DataPlayers[source].Health) < 100 then SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[source].Health)) end
+    if tonumber(DataPlayers[tonumber(source)].Health) < 100 then SetEntityHealth(Venato.GetPlayerPed(), tonumber(DataPlayers[tonumber(source)].Health)) end
     TriggerServerEvent("GcPhone:Load")    
   end
 end)

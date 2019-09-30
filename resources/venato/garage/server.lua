@@ -14,7 +14,7 @@ end)
 
 function GetAllCar(source,garage)
   local source = source
-  local identifier = DataPlayers[source].SteamId
+  local identifier = DataPlayers[tonumber(source)].SteamId
   result = MySQL.Sync.fetchAll("SELECT * FROM user_vehicle WHERE owner=@username AND (namegarage IS NULL OR namegarage=@namegarage) ORDER BY name ASC ", { ['@username'] = identifier, ["@namegarage"]= garage.name})
   return result
 end

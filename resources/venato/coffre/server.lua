@@ -82,7 +82,7 @@ end
 RegisterServerEvent("Coffre:CallData")
 AddEventHandler("Coffre:CallData", function()
   source = source
-  TriggerClientEvent("Coffre:CallData:cb",source, DataCoffre, DataPlayers[source])
+  TriggerClientEvent("Coffre:CallData:cb",source, DataCoffre, DataPlayers[tonumber(source)])
 end)
 
 RegisterServerEvent("Coffre:ReloadCoffre")
@@ -112,7 +112,7 @@ end)
 RegisterServerEvent("Coffre:TakeWeapon")
 AddEventHandler("Coffre:TakeWeapon", function(row)
   local source = source
-  if DataCoffre[row[1]].weapon[row[2]].poid + DataPlayers[source].Poid <= DataPlayers[source].PoidMax then
+  if DataCoffre[row[1]].weapon[row[2]].poid + DataPlayers[tonumber(source)].Poid <= DataPlayers[tonumber(source)].PoidMax then
     local indexCoffre = row[1]
     local indexWeapon = row[2]
     MySQL.Async.execute("DELETE FROM coffres_weapons WHERE Id = @indexWeapon", {["@idCoffre"] = indexCoffre})
@@ -131,10 +131,10 @@ AddEventHandler("Coffre:DropWeapon", function(row)
     local source = source
     local indexCoffre = row[1]
     local indexWeapon = row[2]
-    MySQL.Async.execute("INSERT INTO coffres_weapons (`Weapon`, `CoffreId`, `balles`) VALUES (@weapon, @coffreId, @balles)", {["@weapon"] = DataPlayers[source].Weapon[indexWeapon].id, ["@coffreId"] = indexCoffre, ["@balles"] =  DataPlayers[source].Weapon[indexWeapon].ammo})
-    MySQL.Async.fetchAll("SELECT * FROM coffres_weapons join weapon_model ON coffres_weapons.Weapon = weapon_model.weapond WHERE Weapon = @weapon AND CoffreId = @coffreId", {["@weapon"] = DataPlayers[source].Weapon[indexWeapon].id, ["@coffreId"] = indexCoffre}, function(result)
-      DataCoffre[indexCoffre].weapon[result[1].Id] = {["weaponId"] = DataPlayers[source].Weapon[indexWeapon].id, ["libelle"] = result[1].libelle, ["balles"] = DataPlayers[source].Weapon[indexWeapon].ammo or 0, ["poid"] = result[1].poid}
-      TriggerEvent("Inventory:RemoveWeapon", DataPlayers[source].Weapon[indexWeapon].id, indexWeapon, result[1].poid, source)
+    MySQL.Async.execute("INSERT INTO coffres_weapons (`Weapon`, `CoffreId`, `balles`) VALUES (@weapon, @coffreId, @balles)", {["@weapon"] = DataPlayers[tonumber(source)].Weapon[indexWeapon].id, ["@coffreId"] = indexCoffre, ["@balles"] =  DataPlayers[tonumber(source)].Weapon[indexWeapon].ammo})
+    MySQL.Async.fetchAll("SELECT * FROM coffres_weapons join weapon_model ON coffres_weapons.Weapon = weapon_model.weapond WHERE Weapon = @weapon AND CoffreId = @coffreId", {["@weapon"] = DataPlayers[tonumber(source)].Weapon[indexWeapon].id, ["@coffreId"] = indexCoffre}, function(result)
+      DataCoffre[indexCoffre].weapon[result[1].Id] = {["weaponId"] = DataPlayers[tonumber(source)].Weapon[indexWeapon].id, ["libelle"] = result[1].libelle, ["balles"] = DataPlayers[tonumber(source)].Weapon[indexWeapon].ammo or 0, ["poid"] = result[1].poid}
+      TriggerEvent("Inventory:RemoveWeapon", DataPlayers[tonumber(source)].Weapon[indexWeapon].id, indexWeapon, result[1].poid, source)
       DataCoffre[indexCoffre].nbWeapon = DataCoffre[indexCoffre].nbWeapon + 1
     end)
   else
@@ -144,7 +144,7 @@ end)
 
 RegisterServerEvent("Coffre:DropItem")
 AddEventHandler("Coffre:DropItem", function(qty, row)
-  if tonumber(qty) <= DataPlayers[source].Inventaire[row[2]].quantity and DataCoffre[row[1]].nbItems+qty <= DataCoffre[row[1]].itemcapacite then
+  if tonumber(qty) <= DataPlayers[tonumber(source)].Inventaire[row[2]].quantity and DataCoffre[row[1]].nbItems+qty <= DataCoffre[row[1]].itemcapacite then
     local source = source
     local indexCoffre = row[1]
     local indexItem = row[2]
@@ -156,12 +156,12 @@ AddEventHandler("Coffre:DropItem", function(qty, row)
     defaultNotification = {
       title = 'Coffre',
       type = "alert",
-      logo = DataPlayers[source].Inventaire[row[2]].picture,
-      message = "Vous avez déposé "..qty.." "..DataPlayers[source].Inventaire[row[2]].libelle.." dans le coffre."
+      logo = DataPlayers[tonumber(source)].Inventaire[row[2]].picture,
+      message = "Vous avez déposé "..qty.." "..DataPlayers[tonumber(source)].Inventaire[row[2]].libelle.." dans le coffre."
     }
     TriggerClientEvent("Venato:notify", source, defaultNotification)
 
-    TriggerEvent("Inventory:SetItem", DataPlayers[source].Inventaire[indexItem].quantity - qty, indexItem, source)
+    TriggerEvent("Inventory:SetItem", DataPlayers[tonumber(source)].Inventaire[indexItem].quantity - qty, indexItem, source)
     TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre + qty, source)
   else
     TriggerClientEvent("Venato:notify", source, "~r~Une erreur est survenue.")
@@ -172,15 +172,15 @@ end)
 
 RegisterServerEvent("Coffre:TakeItems")
 AddEventHandler("Coffre:TakeItems", function(qty, row)
-  if tonumber(qty) <= DataCoffre[row[1]].inventaire[row[2]].quantity and DataCoffre[row[1]].inventaire[row[2]].uPoid * qty <= DataPlayers[source].PoidMax then
+  if tonumber(qty) <= DataCoffre[row[1]].inventaire[row[2]].quantity and DataCoffre[row[1]].inventaire[row[2]].uPoid * qty <= DataPlayers[tonumber(source)].PoidMax then
     local source = source
     local indexCoffre = row[1]
     local indexItem = row[2]
     local qtyInCoffre = DataCoffre[indexCoffre].inventaire[indexItem].quantity or 0
     -- Si l'objet n'existe pas le prendre
     local qtyOnPlayer = 0
-    if DataPlayers[source].Inventaire[indexItem] then
-      qtyOnPlayer = DataPlayers[source].Inventaire[indexItem].quantity
+    if DataPlayers[tonumber(source)].Inventaire[indexItem] then
+      qtyOnPlayer = DataPlayers[tonumber(source)].Inventaire[indexItem].quantity
     end
 
     defaultNotification = {
@@ -242,7 +242,7 @@ end)
 
 RegisterServerEvent("Coffre:TakeMoney")
 AddEventHandler("Coffre:TakeMoney", function(qty, index)
-  if tonumber(qty) <= DataCoffre[index].argent and Venato.MoneyToPoid(qty) + DataPlayers[source].Poid <= DataPlayers[source].PoidMax then
+  if tonumber(qty) <= DataCoffre[index].argent and Venato.MoneyToPoid(qty) + DataPlayers[tonumber(source)].Poid <= DataPlayers[tonumber(source)].PoidMax then
     local source = source
     TriggerEvent("Inventory:AddMoney", qty, source)
     TriggerEvent("Coffre:SetMoney", DataCoffre[index].argent - qty , index, source)
@@ -279,8 +279,6 @@ AddEventHandler("Coffre:UnWhitelist", function(row)
   local source = source
   local coffreId = row[1]
   local userId = row[2]
-  print(coffreId)
-  print(userId)
   MySQL.Async.execute("DELETE FROM coffres_whitelist WHERE CoffreId = @coffreId AND UserId = @userId", {["@userId"] = userId, ["@coffreId"] = coffreId})  
 end)
 

@@ -70,6 +70,10 @@ function Venato.notify(notif)
     timeout = notif.timeout,
     logo = notif.logo,
     title = notif.title,
+    event = notif.event,
+    titleFont = notif.titleFont,
+    descriptionFont = notif.descriptionFont,
+    color= notif.color
   })
 end
 

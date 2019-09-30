@@ -3,9 +3,9 @@ AddEventHandler(
     "Life:Init",
     function()
         local needs = {
-            food = DataPlayers[source].Food,
-            water = DataPlayers[source].Water,
-            alcool = DataPlayers[source].Sool
+            food = DataPlayers[tonumber(source)].Food,
+            water = DataPlayers[tonumber(source)].Water,
+            alcool = DataPlayers[tonumber(source)].Sool
         }
 
         TriggerClientEvent("Life:InitStatus", source, needs)
@@ -24,10 +24,10 @@ AddEventHandler(
     "Life:Update",
     function(needs)
         local source = source
-        if(DataPlayers[source] ~= nil) then
-            DataPlayers[source].Food = needs.food
-            DataPlayers[source].Water = needs.water
-            DataPlayers[source].Sool = needs.alcool
+        if(DataPlayers[tonumber(source)] ~= nil) then
+            DataPlayers[tonumber(source)].Food = needs.food
+            DataPlayers[tonumber(source)].Water = needs.water
+            DataPlayers[tonumber(source)].Sool = needs.alcool
         end
     end
 )
@@ -45,12 +45,12 @@ RegisterNetEvent("Life:Eat")
 AddEventHandler(
     "Life:Eat",
     function(qte)
-        DataPlayers[source].Food = DataPlayers[source].Food + qte
+        DataPlayers[tonumber(source)].Food = DataPlayers[tonumber(source)].Food + qte
         local source = source
         local needs = {
-            water = DataPlayers[source].Water,
-            food = DataPlayers[source].Food,
-            alcool = DataPlayers[source].Sool
+            water = DataPlayers[tonumber(source)].Water,
+            food = DataPlayers[tonumber(source)].Food,
+            alcool = DataPlayers[tonumber(source)].Sool
         }
         UpdateDb(source, needs)
         TriggerClientEvent("Life:UpdateState", source, needs)
@@ -61,12 +61,12 @@ RegisterNetEvent("Life:Drink")
 AddEventHandler(
     "Life:Drink",
     function(qte)
-        DataPlayers[source].Water = DataPlayers[source].Water + qte
+        DataPlayers[tonumber(source)].Water = DataPlayers[tonumber(source)].Water + qte
         local source = source
         local needs = {
-            water = DataPlayers[source].Water,
-            food = DataPlayers[source].Food,
-            alcool = DataPlayers[source].Sool
+            water = DataPlayers[tonumber(source)].Water,
+            food = DataPlayers[tonumber(source)].Food,
+            alcool = DataPlayers[tonumber(source)].Sool
         }
         UpdateDb(source, needs)
         TriggerClientEvent("Life:UpdateState", source, needs)
@@ -81,7 +81,7 @@ function UpdateDb(source, needs)
                 ["@food"] = needs.food,
                 ["@water"] = needs.water,
                 ["@alcool"] = needs.alcool,
-                ["@identifier"] = DataPlayers[source].SteamId
+                ["@identifier"] = DataPlayers[tonumber(source)].SteamId
             }
         )
     end

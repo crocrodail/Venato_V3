@@ -2,27 +2,27 @@
 
 Doc :
 
-DataPlayers[source].SteamId           #return SteamId
-DataPlayers[source].Source						#return Source
-DataPlayers[source].Group							#return Group
-DataPlayers[source].Nom								#return Nom
-DataPlayers[source].Prenom
-DataPlayers[source].Job
-DataPlayers[source].Bank
-DataPlayers[source].Money
-DataPlayers[source].Position
-DataPlayers[source].Sexe
-DataPlayers[source].Taille
-DataPlayers[source].Health
-DataPlayers[source].Food
-DataPlayers[source].Water
-DataPlayers[source].Need
-DataPlayers[source].Sool
-DataPlayers[source].PhoneNumber
-DataPlayers[source].Pseudo
-DataPlayers[source].Poid
-DataPlayers[source].Inventaire
-DataPlayers[source].PoidMax
+DataPlayers[tonumber(source)].SteamId           #return SteamId
+DataPlayers[tonumber(source)].Source						#return Source
+DataPlayers[tonumber(source)].Group							#return Group
+DataPlayers[tonumber(source)].Nom								#return Nom
+DataPlayers[tonumber(source)].Prenom
+DataPlayers[tonumber(source)].Job
+DataPlayers[tonumber(source)].Bank
+DataPlayers[tonumber(source)].Money
+DataPlayers[tonumber(source)].Position
+DataPlayers[tonumber(source)].Sexe
+DataPlayers[tonumber(source)].Taille
+DataPlayers[tonumber(source)].Health
+DataPlayers[tonumber(source)].Food
+DataPlayers[tonumber(source)].Water
+DataPlayers[tonumber(source)].Need
+DataPlayers[tonumber(source)].Sool
+DataPlayers[tonumber(source)].PhoneNumber
+DataPlayers[tonumber(source)].Pseudo
+DataPlayers[tonumber(source)].Poid
+DataPlayers[tonumber(source)].Inventaire
+DataPlayers[tonumber(source)].PoidMax
 
 
 ### INVENTORY ###

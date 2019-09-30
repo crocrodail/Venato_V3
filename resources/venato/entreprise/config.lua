@@ -1,8 +1,17 @@
-pdgs = {43,44,45}
+pdgs = {43, 44, 45, 46, 19, 47, 49, 50, 51, 53, 55, 57, 58}
 employes = {}
 employes[23] = 'Tequilala'
 employes[34] = 'Vanilla Unicorn'
 employes[35] = 'Bahama Mamas'
+employes[2]  = 'LSPD'
+employes[15]  = 'LSMC'
+employes[16]  = 'Mécano'
+employes[48]  = 'Green Kebab'
+employes[50]  = 'Gang Families'
+employes[52]  = 'Gang Shelby'
+employes[54]  = 'Gang La French'
+employes[56]  = 'Gang LOST'
+employes[41]  = 'Palace'
 
 ConfigEnterprise = {}
 
@@ -10,17 +19,149 @@ ConfigEnterprise[23] = {
     PDG = 44,
     Color = "#00FFB499",
     Title = "Tequilala",
-    Background = "https://vignette.wikia.nocookie.net/gta/images/0/02/Tequi-la-la-GTAV.png/revision/latest?cb=20151026160927&path-prefix=fr"
+    Background = "",    
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {1200, 1198, 1201, 1199}
 }
 ConfigEnterprise[34] = {
     PDG = 43,
     Color = "#E77DFC",
     Title = "Vanilla Unicorn",
-    Background = "https://i.ibb.co/19BQ1GK/3278766430-1-8-eq7h-LIk-D.jpg"
+    Background = "",
+    NotifBackground = "https://i.ibb.co/gvH47S7/vanilla-annonce.png",
+    Open = "https://cdn.discordapp.com/attachments/617794386050154501/617794565465833509/VANILLA__8.png",
+    Close = "https://cdn.discordapp.com/attachments/617794386050154501/617794559140823127/VANILLA__Closed.png",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {1186, 1185}
+
 }
 ConfigEnterprise[35] = {
     PDG = 45,
     Color = "#6BCBDB",
     Title = "Bahama Mamas",
-    Background = "https://assets.change.org/photos/6/zk/mw/QizkMWQRskaHaVV-800x450-noPad.jpg?1524540980"
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {1188, 1191, 1190, 1189}
+}
+ConfigEnterprise[2] = {
+    PDG = 46,
+    Color = "#255AEC",
+    Title = "LSPD",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Grade=true,
+    Coffres = {21}
+}
+ConfigEnterprise[15] = {
+    PDG = 19,
+    Color = "#F65151",
+    Title = "LSMC",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {1179}
+}
+ConfigEnterprise[16] = {
+    PDG = 47,
+    Color = "#80520A",
+    Title = "Mécano",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {}
+}
+ConfigEnterprise[48] = {
+    PDG = 49,
+    Color = "#85CD00",
+    Title = "Green Kebab",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {}
+}
+ConfigEnterprise[50] = {
+    PDG = 51,
+    Color = "#318745",
+    Title = "Gang Families",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Gang = true,
+    Coffres = {1181}
+}
+ConfigEnterprise[52] = {
+    PDG = 53,
+    Color = "#9D845E",
+    Title = "Gang Shelby",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Gang = true,
+    Coffres = {}
+}
+ConfigEnterprise[54] = {
+    PDG = 55,
+    Color = "#196BED",
+    Title = "Gang LaFrench",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Gang = true,
+    Coffres = {}
+}
+ConfigEnterprise[56] = {
+    PDG = 57,
+    Color = "#212222",
+    Title = "Gang LOST",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Gang = true,
+    Coffres = {1182}
+}
+ConfigEnterprise[41] = {
+    PDG = 58,
+    Color = "#9F62F7",
+    Title = "Palace",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Coffres = {1196, 1192, 1197, 1193}
 }

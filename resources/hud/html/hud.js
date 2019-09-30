@@ -89,13 +89,17 @@ new Vue({
             timeout : event.data.timeout
           });
 
-          if(event.data.logo){
+          if(event.data.event){
             n.on('onTemplate',(a) => {
+              n.barDom.innerHTML = '<div id="notifVenato" style="background-image:url(\''+n.options.logo+'\')" class="noty_bar evenement noty_type__'+n.options.type+' noty_theme__sunset noty_close_with_click noty_has_progressbar"><div class="noty_container"><div class="noty_title" style="font-family:\''+event.data.titleFont+'\'; color: '+event.data.color+'">'+n.options.title+'</div><div class="noty_body" style="font-family:\''+event.data.descriptionFont+'\'; color: '+event.data.color+'">'+n.options.text+'</div><div class="noty_progressbar"></div></div></div>';
+            })
+          }else if(event.data.logo){
+            n.on('onTemplate',(a) => {              
               n.barDom.innerHTML = '<div id="notifVenato" class="noty_bar noty_type__'+n.options.type+' noty_theme__sunset noty_close_with_click noty_has_progressbar"><div class="noty_logo"><img width="50px" src="'+n.options.logo+'"></v-img></div><div class="noty_title">'+n.options.title+'</div><div class="noty_body">'+n.options.text+'</div><div class="noty_progressbar"></div></div>';
             })
           }else if(event.data.title){
             n.on('onTemplate',(a) => {
-              n.barDom.innerHTML = '<div id="notifVenato" class="noty_bar noty_type__'+n.options.type+' noty_theme__sunset noty_close_with_click noty_has_progressbar"></div><div class="noty_title">'+n.options.title+'</div><div class="noty_body">'+n.options.text+'</div><div class="noty_progressbar"></div></div>';
+              n.barDom.innerHTML = '<div id="notifVenato" class="noty_bar noty_type__'+n.options.type+' noty_theme__sunset noty_close_with_click noty_has_progressbar"><div class="noty_title">'+n.options.title+'</div><div class="noty_body">'+n.options.text+'</div><div class="noty_progressbar"></div></div>';
             })
           }
           n.show();

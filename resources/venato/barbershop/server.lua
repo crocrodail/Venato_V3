@@ -2,7 +2,7 @@
 ------------------------------------------------------------------------------------------------------------------------
 
 function getPlayerID(source)
-    return DataPlayers[source].SteamId
+    return DataPlayers[tonumber(source)].SteamId
 end
 
 
