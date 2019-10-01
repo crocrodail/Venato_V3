@@ -1,5 +1,6 @@
 local Vehicule = {}
 local resend = false
+local plyCoords
 
 local garage = {
     {name = "Garage Central", xpoint = 256.2339,  ypoint = -780.7506,  zpoint = 29.58, xspawn = 258.3808,  yspawn = -773.3583,  zspawn = 29.682, hspawn = 110.7102, hidden = false },
@@ -49,12 +50,19 @@ AddEventHandler('onClientMapStart', function()
 end)
 
 Citizen.CreateThread(function()
+  while true do
+    local ply = Venato.GetPlayerPed()
+    plyCoords = GetEntityCoords(ply, 0)
+    Citizen.Wait(1000)
+  end
+end)
+
+Citizen.CreateThread(function()
   setMapMarker()
   while true do
       Citizen.Wait(0)
-      local ply = Venato.GetPlayerPed()
-      local plyCoords = GetEntityCoords(ply, 0)
       for _, item in pairs(garage) do
+        Citizen.Wait(0)
         local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
         if distance < 50 then
           DrawMarker(27,item.xpoint, item.ypoint, item.zpoint,0,0,0,0,0,0,1.9,1.9,1.9,0,150,255,200,0,0,0,0)

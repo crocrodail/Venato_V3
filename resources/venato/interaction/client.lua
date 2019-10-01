@@ -256,7 +256,7 @@ proneKey = 36
 
 Citizen.CreateThread( function()
 	while true do
-		Citizen.Wait( 1 )
+		Citizen.Wait( 0 )
 		local ped = GetPlayerPed( -1 )
 		if CanCancelOrStartAnim then
 		if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then

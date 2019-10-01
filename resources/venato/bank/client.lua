@@ -1,4 +1,5 @@
 local open = false
+local posBank
 local type = 'fleeca'
 local defaultNotification = {
   title ="Banque",
@@ -6,6 +7,13 @@ local defaultNotification = {
 }
 local accountIsBlocked = false
 local message_block = "Votre compte est bloqué pour mouvements suspicieux.<br/><br/><span class='red--text'> Rendez-vous au LSPD pour régulariser votre situation.</span>"
+
+Citizen.CreateThread(function()
+  while true do
+    posBank = GetEntityCoords(Venato.GetPlayerPed())
+    Citizen.Wait(1000)
+  end
+end)
 
 Citizen.CreateThread(function()
   SetNuiFocus(false, false)
@@ -16,12 +24,13 @@ Citizen.CreateThread(function()
     inBankMarker = false
 
     for i = 1, #Config.ATMS, 1 do
-      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y,
+      Citizen.Wait(0)
+      if GetDistanceBetweenCoords(posBank, Config.ATMS[i].x, Config.ATMS[i].y,
         Config.ATMS[i].z, true) < 20 and (Config.ATMS[i].b ~= nil) then
         DrawMarker(27, Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z + 0.1, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,
           150, 255, 200, 0, 0, 0, 0)
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y,
+      if GetDistanceBetweenCoords(posBank, Config.ATMS[i].x, Config.ATMS[i].y,
         Config.ATMS[i].z, true) < 2 then
         time = 0
         if (Config.ATMS[i].b == nil) then
@@ -32,7 +41,7 @@ Citizen.CreateThread(function()
           type = Config.ATMS[i].t
           Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
         end
-      elseif GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y,
+      elseif GetDistanceBetweenCoords(posBank, Config.ATMS[i].x, Config.ATMS[i].y,
         Config.ATMS[i].z, true) > 4 then
         time = 500
       end
@@ -100,7 +109,7 @@ function selecChequedepot(row)
   Menu.addItemButton("<span class='red--text'>Annuler ce chèque</span>", "https://i.ibb.co/YXNSF7R/cancel-Check.png", "cancelChequetest", row)
 end
 
-function encaise(row)  
+function encaise(row)
   TriggerServerEvent("Bank:DepotCheque", row[2])
   Menu.close()
 end
@@ -119,7 +128,7 @@ function cancelCheque(row)
 end
 
 function buyCheque()
-  TriggerServerEvent("Bank:createCheque") 
+  TriggerServerEvent("Bank:createCheque")
 end
 
 function buyCard(data)
@@ -142,7 +151,7 @@ end
 
 function CreatAcount(data)
   TriggerServerEvent("Bank:createAccount")
-  Menu.close()  
+  Menu.close()
 end
 
 RegisterNetEvent('Bank:ActuSoldeErrone')
@@ -179,7 +188,7 @@ Citizen.CreateThread(function()
       if accountIsBlocked then
         defaultNotification.message = message_block
         defaultNotification.timeout = 5000
-        Venato.notify(defaultNotification)        
+        Venato.notify(defaultNotification)
       else
         TriggerServerEvent("Bank:GetDataMoneyForATM")
       end

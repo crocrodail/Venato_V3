@@ -9,6 +9,7 @@ local currentVehicle
 local currentShop = 0
 local LastCar = nil
 local init = false
+local PosCarShop
 local defaultNotification = {
   type = "alert",
   title ="Venato CarShop",
@@ -25,6 +26,14 @@ function HideMenu()
   TriggerEvent('Menu:Close')
 end
 
+Citizen.CreateThread(function()
+  while true do
+    PosCarShop = GetEntityCoords(Venato.GetPlayerPed())
+    Citizen.Wait(1000)
+  end
+end)
+
+
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
   for i=1, #Config.CarShop, 1 do
@@ -40,7 +49,8 @@ Citizen.CreateThread(function ()
     end
 
     for i=1, #Config.CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
+      Citizen.Wait(0)
+      distance = GetDistanceBetweenCoords(PosCarShop, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
@@ -184,7 +194,7 @@ function previousVehicleSecColor()
 end
 
 function changeColor()
-  local car = GetVehiclePedIsIn( playerPed, false )    
+  local car = GetVehiclePedIsIn( playerPed, false )
   SetVehicleColours(car,color,colorSec)
 end
 
