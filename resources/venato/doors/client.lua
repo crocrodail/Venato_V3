@@ -1,4 +1,4 @@
-local doorList = {
+local doorList = {    
     [1] = { ["objName"] = "185711165", ["x"]= 443.41, ["y"]= -989.45,["z"]= 30.84,["locked"]= true, ['jobId'] = 2},
     [2] = { ["objName"] = "185711165", ["x"]= 446.01, ["y"]= -989.45,["z"]= 30.84,["locked"]= true, ['jobId'] = 2},
     [3] = { ["objName"] = "-1320876379", ["x"]= 446.57, ["y"]= -980.01,["z"]= 30.84,["locked"]= true, ['jobId'] = 2},
@@ -22,13 +22,13 @@ local doorList = {
     [21] = { ["objName"] = "-2023754432", ["x"]= 469.97, ["y"]= -1014.45,["z"]= 26.54,["locked"]= true, ['jobId'] = 2},
     [22] = { ["objName"] = "-2023754432", ["x"]= 467.37, ["y"]= -1014.45,["z"]= 26.54,["locked"]= true, ['jobId'] = 2},
     [23] = { ["objName"] = "91564889", ["x"]= 475.47, ["y"]= -987.03,["z"]= 25.23,["locked"]= true, ['jobId'] = 2},
-    [24] = { ["objName"] = "-495720969", ["x"]= 113.98, ["y"]= -1297.43,["z"]= 29.42,["locked"]= true, ['jobId'] = 34},
-    [25] = { ["objName"] = "-626684119", ["x"]= 99.08, ["y"]= -1293.70,["z"]= 29.42,["locked"]= true, ['jobId'] = 34},
-    [26] = { ["objName"] = "668467214", ["x"]= 96.09, ["y"]= -1284.85,["z"]= 29.44,["locked"]= true, ['jobId'] = 34},
-    [27] = { ["objName"] = "668467214", ["x"]= 96.09, ["y"]= -1284.85,["z"]= 29.44,["locked"]= true, ['jobId'] = 34},
-    [28] = { ["objName"] = "-1116041313", ["x"]= 127.96, ["y"]= -1298.50,["z"]= 29.42,["locked"]= true, ['jobId'] = 34},
-    [29] = { ["objName"] = "-131296141", ["x"]= -1389.21, ["y"]= -588.04,["z"]= 30.49,["locked"]= true, ['jobId'] = 35},
-    [30] = { ["objName"] = "-131296141", ["x"]= -1387.03, ["y"]= -586.61,["z"]= 30.50,["locked"]= true, ['jobId'] = 35},
+    [24] = { ["objName"] = "-495720969", ["x"]= 113.98, ["y"]= -1297.43,["z"]= 29.42,["locked"]= true, ['jobId'] = 34},    
+    [25] = { ["objName"] = "-626684119", ["x"]= 99.08, ["y"]= -1293.70,["z"]= 29.42,["locked"]= true, ['jobId'] = 34},    
+    [26] = { ["objName"] = "668467214", ["x"]= 96.09, ["y"]= -1284.85,["z"]= 29.44,["locked"]= true, ['jobId'] = 34},    
+    [27] = { ["objName"] = "668467214", ["x"]= 96.09, ["y"]= -1284.85,["z"]= 29.44,["locked"]= true, ['jobId'] = 34},    
+    [28] = { ["objName"] = "-1116041313", ["x"]= 127.96, ["y"]= -1298.50,["z"]= 29.42,["locked"]= true, ['jobId'] = 34},  
+    [29] = { ["objName"] = "-131296141", ["x"]= -1389.21, ["y"]= -588.04,["z"]= 30.49,["locked"]= true, ['jobId'] = 35},  
+    [30] = { ["objName"] = "-131296141", ["x"]= -1387.03, ["y"]= -586.61,["z"]= 30.50,["locked"]= true, ['jobId'] = 35},  
     [31] = { ["objName"] = "-1884701657", ["x"]= 471.34, ["y"]= -985.45,["z"]= 26.83,["locked"]= true, ['jobId'] = 2},
     [31] = { ["objName"] = "-340230128", ["x"]= 464.36, ["y"]= -984.68,["z"]= 43.83,["locked"]= true, ['jobId'] = 2},
     [32] = { ["objName"] = "1695461688", ["x"]= -1583.46, ["y"]= -3004.98,["z"]= -75.84,["locked"]= true, ['jobId'] = 41},
@@ -57,30 +57,21 @@ AddEventHandler('door:state', function(id, isLocked)
 
 end)
 
-local playerCoords
-
-Citizen.CreateThread(function()
-    while true do
-      playerCoords = GetEntityCoords( GetPlayerPed(-1) )
-      Citizen.Wait(1000)
-    end
-end)
-
 -- Lock Door
 Citizen.CreateThread(function()
     while true do
       Citizen.Wait(0)
+      local playerCoords = GetEntityCoords( GetPlayerPed(-1) )
         for i = 1, #doorList do
-          Citizen.Wait(0)
             local obj = doorList[i]["objName"]
-
+            
             if tonumber(obj) == nil then
             obj = GetHashKey(doorList[i]["objName"])
             end
 
             local closeDoor = GetClosestObjectOfType(doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], 5.0, tonumber(obj), false, false, false)
-
-
+                
+            
             local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)
 
             if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and Venato.HasJob(doorList[i]["jobId"])) then
@@ -92,7 +83,7 @@ Citizen.CreateThread(function()
                 end
                 -- Press E key
                 if IsControlJustPressed(1,51) then
-
+                    
                     Venato.disableAction(true)
                     Venato.playAnim({
                         useLib = true,
@@ -101,7 +92,7 @@ Citizen.CreateThread(function()
                         timeout = 2500
                     })
                     Venato.disableAction(false)
-
+                    
                     if doorList[i]["locked"] == true then
                         TriggerServerEvent("door:update", i, false)
                     else

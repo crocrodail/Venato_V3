@@ -20,14 +20,6 @@ function extOpenInventory()
   OpenInventory()
 end
 
-local x,y,z
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(1000)
-    x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-  end
-end)
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -49,6 +41,7 @@ Citizen.CreateThread(function()
 		end
 
 		if ItemsOnTheGround ~= nil then
+			local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			for k,v in pairs(ItemsOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
@@ -79,6 +72,7 @@ Citizen.CreateThread(function()
 		end
 
 		if MoneyOnTheGround ~= nil then
+			local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			for k,v in pairs(MoneyOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
@@ -106,6 +100,7 @@ Citizen.CreateThread(function()
 		end
 
 		if WeaponOnTheGround ~= nil then
+			local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 			for k,v in pairs(WeaponOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then

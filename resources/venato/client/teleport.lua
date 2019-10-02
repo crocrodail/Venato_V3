@@ -1,4 +1,3 @@
-local pos
 local TeleportFromTo = {
   ["Maze Bank Building"] = {
     positionFrom = { ['x'] = -68.7212, ['y'] = -801.0262, ['z'] = 44.2273, nom = "Toit - Maze Bank Building" },
@@ -209,7 +208,7 @@ local TeleportFromTo = {
   ["Garage Palace Entree"] = {
     positionFrom = { ['x'] = 732.28, ['y'] = -1291.37, ['z'] = 25.28, nom = "Parking Palace"},
     positionTo = { ['x'] = -1641.64, ['y'] = -2989.70, ['z'] = -77.45, ['h'] = 268.86, nom = "Sortir" },
-    acceptVehicle = true,
+    acceptVehicle = true,    
     hideTo = true,
     distance = 5
   },
@@ -287,18 +286,12 @@ end
 
 Citizen.CreateThread(function()
   while true do
-    pos = GetEntityCoords(Venato.GetPlayerPed(), true)
-    Citizen.Wait(1000)
-  end
-end)
-
-Citizen.CreateThread(function()
-  while true do
     Citizen.Wait(0)
+    local pos = GetEntityCoords(Venato.GetPlayerPed(), true)
     local canGoIn = false
 
     for k, j in pairs(TeleportFromTo) do
-      Citizen.Wait(0)
+     
       if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and Venato.HasJob(j.jobId)))  then
         DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
           255, 255, 255, 255, 0, 0, 0, 0)
@@ -315,8 +308,8 @@ Citizen.CreateThread(function()
               local curVehicule = GetVehiclePedIsIn(Venato.GetPlayerPed(), false)
               if curVehicule ~= 0 then
                 if not j.acceptVehicle then
-                  Venato.notifyError("Vous ne pouvez pas rentrer avec votre véhicule")
-                  canGoIn = false
+                  Venato.notifyError("Vous ne pouvez pas rentrer avec votre véhicule")        
+                  canGoIn = false          
                 end
               end
               if canGoIn then
@@ -339,7 +332,7 @@ Citizen.CreateThread(function()
                   end
                 end
                 if j.insideModer then
-
+                
                 end
                 Citizen.Wait(500)
                 DoScreenFadeIn(1000)
