@@ -82,6 +82,7 @@ Citizen.CreateThread(function()
     if ConfigEnterprise[idEntreprise].NotifBackground ~= "" then
     Menu.addButton("Annonce", "MakeAnnonce", idEntreprise)
     end
+    Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "OpenEntrepriseMenu", idEntreprise)
   end
 
   function MakeAnnonce(idEntreprise)    
@@ -108,7 +109,7 @@ Citizen.CreateThread(function()
     defaultNotification.titleFont = ConfigEnterprise[data[1]].TitlePolice
     defaultNotification.descriptionFont = ConfigEnterprise[data[1]].MessagePolice
     defaultNotification.color = ConfigEnterprise[data[1]].Color
-    Venato.notify(defaultNotification)    
+    TriggerServerEvent("AdminVnT:sendMsG", defaultNotification)
   end
 
   function Hire(idEntreprise)

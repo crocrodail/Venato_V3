@@ -6,7 +6,7 @@ AddEventHandler("four:getItemsVeh", function(THEITEMS, my)
     ITEMS = {}
     ITEMS = THEITEMS
     local my = my
-    TriggerEvent('Menu:Init', "Fourriere", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
+    TriggerEvent('Menu:Init', "Fourrière", "Mes véhicules", '#1E88E599', "https://i.ibb.co/mBYMkLL/image.png")
     if my == 1 then
       FourriereMenuMY()
     else
@@ -27,7 +27,7 @@ end)
 function FourriereMenu()
     Menu.setTitle("Fourriere")
     Menu.clearMenu()
-    Menu.setSubtitle("~b~Liste des vehicules en fourrière")
+    Menu.setSubtitle("Liste des vehicules en fourrière")
     for key, value in pairs(ITEMS) do
         Menu.addButton2("Model : " .. tostring(value.name) .. " /  Plaque : " .. tostring(value.plate) .. "  / Propriétaire :" .. tostring(value.nom) .. " " .. tostring(value.prenom), "ItemMenu", key)
     end
@@ -37,7 +37,7 @@ end
 function FourriereMenuMY()
   Menu.setTitle("Fourriere")
   Menu.clearMenu()
-  Menu.setSubtitle("~b~Liste des vehicules en fourrière")
+  Menu.setSubtitle("Liste de mes vehicules en fourrière")
     for key, value in pairs(ITEMS) do
         Menu.addButton2("Model : " .. tostring(value.name) .. " /  Plaque : " .. tostring(value.plate) .. "", "ItemMenumy", key)
     end
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
         else
           testok = false
         end
-        if mecano_nbMecanoInService == 0 then
+        if mecano_nbMecanoInService == 0 and not Venato.HasJob(16) then
           if dis < 15.0 then
               DrawMarker(1,397.566, -1642.656, 29.291 -1.0001, 0, 0, 0, 0, 0, 0, 1.01, 1.01, 0.3, 212, 189, 0, 105, 0, 0, 2, 0, 0, 0, 0)
 
@@ -73,15 +73,18 @@ Citizen.CreateThread(function()
                 if(IsControlJustReleased(1, 51))then
                   TriggerServerEvent("four:getmyVeh")
                       --  FourriereMenu()
-                        Menu.toggle()
+                  Menu.toggle()
                 end
               end
           end
-        elseif dis < 15.0 and ismeca then
+        end
+        
+        if dis < 15.0 and Venato.HasJob(16) then
             DrawMarker(1,397.566, -1642.656, 29.291 -1.0001, 0, 0, 0, 0, 0, 0, 1.01, 1.01, 0.3, 212, 189, 0, 105, 0, 0, 2, 0, 0, 0, 0)
             if GetDistanceBetweenCoords(GetEntityCoords(ped), 397.566, -1642.656, 29.291, true) < 1.0 then
                 DisplayHelpText("Utilise ~INPUT_CONTEXT~ pour acceder à la fourrière.")
               if(IsControlJustReleased(1, 51))then
+                print("Test")
                 TriggerServerEvent("four:getVeh")
                 Menu.toggle()
               end
