@@ -106,10 +106,10 @@ function Venato.InteractTxt(text)
   DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
-function Venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
-  local TextEntry = TextEntrynote
-  AddTextEntry('FMMC_MPM_NA', TextEntry)
-  DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", defaultText or "", "", "", "", maxlength or 20)
+function Venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)  
+  print(TextEntrynote)
+  AddTextEntry('FMMC_KEY_TIP12', TextEntrynote)
+  DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP12", "", defaultText or "", "", "", "", maxlength or 20)
   while (UpdateOnscreenKeyboard() == 0) do
     DisableAllControlActions(0);
     Wait(0);

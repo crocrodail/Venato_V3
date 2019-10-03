@@ -12,7 +12,7 @@
 DeliveryJobRequests = {}
 
 DeliveryJobRequests.getWarehouses = "SELECT * FROM warehouses"
-DeliveryJobRequests.getWarehouseItems = "SELECT id, libelle, price, Picture FROM items WHERE warehouseId=@Id"
+DeliveryJobRequests.getWarehouseItems = "SELECT id, libelle, price, pricepro, Picture FROM items WHERE warehouseId=@Id"
 DeliveryJobRequests.getOrders = "SELECT o.Id as OrderId, " ..
   "s.Id as ShopId, s.Name as ShopName, s.PositionX as ShopX, s.PositionY as ShopY, s.PositionZ as ShopZ " ..
   "FROM shop_orders o " ..

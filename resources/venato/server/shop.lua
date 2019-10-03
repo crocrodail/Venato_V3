@@ -54,7 +54,7 @@ AddEventHandler("Shops:TestBuyPro", function(ContentId, quantity, newSource)
   	else
     	TriggerEvent("Inventory:AddItem", _quantity, content[1].id, source)
     	TriggerEvent("Inventory:RemoveMoney", totalPrice, source)
-    	TriggerClientEvent("Shops:TestBuy:cb", source, content[1].libelle)
-		end
+    	TriggerClientEvent("Shops:TestBuyPro:cb", source, content[1].libelle)
+	end
   end)
 end)

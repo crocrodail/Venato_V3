@@ -147,7 +147,6 @@ function ShopPages.addItem(items)
 
   for _, item in ipairs(items) do
     local textButton = itemToString(item)
-    print(item.Picture)
     TriggerEvent('Menu:AddShopButton', item.Name, "addItemToStock", item, item.Picture, "", item.Price)
   end
   

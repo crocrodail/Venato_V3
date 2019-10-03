@@ -412,9 +412,8 @@ function DeliveryJob.mainLoop()
                         Menu.close()
                       else
                         Menu.clearMenu()
+                        TriggerEvent('Menu:Init', "Marchandise", "De quoi avez-vous besoin ?", "#002D7299", "http://space-syndicat.com/wp-content/uploads/2018/11/Makro_herstructureert_0.jpg")
                         Menu.open()
-                        Menu.setTitle("Marchandises")
-                        Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
                         showWarehouseItemButtons()
                       end
                     else
@@ -453,9 +452,8 @@ function DeliveryJob.mainLoop()
                 Menu.close()
               else
                 Menu.clearMenu()
+                TriggerEvent('Menu:Init', "PostOP Pro", "De quoi avez-vous besoin ?", "#002D7299", "http://space-syndicat.com/wp-content/uploads/2018/11/Makro_herstructureert_0.jpg")
                 Menu.open()
-                Menu.setTitle("Marchandises")
-                Menu.setSubtitle("Quelle marchandise veux-tu mon brave ?")
                 showWarehouseShopPro()
               end
           end
@@ -687,7 +685,8 @@ end
 
 function showWarehouseShopPro()
   for _, item in pairs(DeliveryJobConfig.warehouses[DeliveryJobConfig.inWarehouse]["items"]) do
-    Menu.addButton2(item.libelle.." Prix : "..item.price/2, "BuyItemsPro", item, '', item.Picture)
+    
+    TriggerEvent('Menu:AddShopButton', item.libelle, "BuyItemsPro", item, item.Picture, "", item.pricepro)
   end
   Menu.CreateMenu()
 end

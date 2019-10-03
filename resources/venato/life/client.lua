@@ -4,8 +4,10 @@ local water = 100
 local alcool = 0
 local old_water = 0
 local old_food = 0
+local old_alcool = 0
 local reserveTrigger = false
 local FreezeNeed = false
+local old_phase = 0
 
 function LiveFreezeNeed(bool)
   FreezeNeed = bool
@@ -132,6 +134,9 @@ Citizen.CreateThread(
                 old_water = water
                 TriggerServerEvent("Life:UpdateDB", needs)
             end
+
+            AlcoolEffet(old_alcool, alcool)
+            old_alcool = alcool
         end
     end
 )
@@ -152,6 +157,7 @@ Citizen.CreateThread(
                     }
                 )
             end
+
         end
     end
 )
@@ -197,3 +203,202 @@ AddEventHandler(
         old_water = water
     end
 )
+
+
+function AlcoolEffet()
+    local phase = -1
+   if(alcool <= 10) then
+    phase = 0
+   elseif(alcool <= 15) then
+    phase = 1
+   elseif(alcool <= 25) then
+    phase = 2
+   elseif(alcool <= 35) then
+    phase = 3
+   elseif(alcool <= 45) then
+    phase = 4
+   elseif(alcool <= 55) then
+    phase = 5
+   elseif(alcool <= 65) then
+    phase = 6
+   elseif(alcool <= 70) then
+    phase = 7
+   elseif(alcool <= 75) then
+    phase = 8
+   elseif(alcool <= 80) then
+    phase = 9
+   elseif(alcool <= 85) then
+    phase = 10
+   elseif(alcool <= 90) then
+    phase = 11
+   elseif(alcool <= 95) then
+    phase = 12
+   elseif(alcool >= 100) then
+    phase = 13
+   end
+
+   if(phase ~= old_phase) then
+    AlcoolEffetPhase(phase)
+    old_phase = phase
+   end
+    
+end
+
+function AlcoolEffetPhase(phase)
+    local ped = GetPlayerPed(-1)
+    if(phase == 0) then         
+        SetPedIsDrunk(ped, false)
+        ShakeGameplayCam("DRUNK_SHAKE", 0.0)
+        ResetPedMovementClipset( ped )
+        ResetPedStrafeClipset(ped)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 1) then         
+        ShakeGameplayCam("DRUNK_SHAKE", 0.5)          
+        SetPedIsDrunk(ped, false)
+        ResetPedMovementClipset( ped )
+        ResetPedStrafeClipset(ped)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 2) then              
+        ShakeGameplayCam("DRUNK_SHAKE", 0.7)          
+        SetPedIsDrunk(ped, true)
+        ResetPedMovementClipset( ped )
+        ResetPedStrafeClipset(ped)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 3) then             
+        ShakeGameplayCam("DRUNK_SHAKE", 1.0)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP") then
+            RequestAnimSet("MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP", 1.0)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 4) then            
+        ShakeGameplayCam("DRUNK_SHAKE", 1.4)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP") then
+            RequestAnimSet("MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP", 1.0)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 5) then                
+        ShakeGameplayCam("DRUNK_SHAKE", 1.7)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)        
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@MODERATEDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@MODERATEDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@MODERATEDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@MODERATEDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 6) then              
+        ShakeGameplayCam("DRUNK_SHAKE", 2.0)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true) 
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@SLIGHTLYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@SLIGHTLYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@SLIGHTLYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@SLIGHTLYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 7) then            
+        ShakeGameplayCam("DRUNK_SHAKE", 2.5)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@SLIGHTLYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@SLIGHTLYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@SLIGHTLYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@SLIGHTLYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,false)
+        -- SetPedCanRagdollFromPlayerImpact(ped,false)
+    elseif (phase == 8) then             
+        ShakeGameplayCam("DRUNK_SHAKE", 3.5)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@VERYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,true)
+        -- SetPedCanRagdollFromPlayerImpact(ped,true)
+    elseif (phase == 9) then              
+        ShakeGameplayCam("DRUNK_SHAKE", 4.5)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@VERYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,true)
+        -- SetPedCanRagdollFromPlayerImpact(ped,true)
+    elseif (phase == 10) then             
+        ShakeGameplayCam("DRUNK_SHAKE", 5.5)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 100, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@VERYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,true)
+        -- SetPedCanRagdollFromPlayerImpact(ped,true)
+    elseif (phase == 11) then             
+        ShakeGameplayCam("DRUNK_SHAKE", 6.5)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 73, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@VERYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,true)
+        -- SetPedCanRagdollFromPlayerImpact(ped,true)
+    elseif (phase == 12) then            
+        ShakeGameplayCam("DRUNK_SHAKE", 7.7)
+        SetPedIsDrunk(ped, true)
+        SetPedConfigFlag(ped, 73, true)
+        if not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") then
+            RequestAnimSet("MOVE_M@DRUNK@VERYDRUNK")
+            while not HasAnimSetLoaded("MOVE_M@DRUNK@VERYDRUNK") do
+                Citizen.Wait(0)
+            end
+        end
+        SetPedMovementClipset(ped, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
+        -- SetPedCanRagdoll(ped,true)
+        -- SetPedCanRagdollFromPlayerImpact(ped,true)
+    elseif (phase == 13) then        
+        SetEntityHealth(Venato.GetPlayerPed(), 0)
+        old_phase = -1
+    end
+end

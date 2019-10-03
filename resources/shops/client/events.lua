@@ -5,6 +5,7 @@
 RegisterNetEvent("Shops:UpdateMenu:cb")
 RegisterNetEvent("Shops:getMoney:cb")
 RegisterNetEvent("Shops:TestBuy:cb")
+RegisterNetEvent("Shops:TestBuyPro:cb")
 RegisterNetEvent("Shops:NotEnoughMoney")
 RegisterNetEvent("Shops:NotEnoughShopMoney")
 RegisterNetEvent("Shops:NotEnoughQuantity")
@@ -31,6 +32,12 @@ AddEventHandler("Shops:TestBuy:cb", function(Name)
   ConfigShop.shopsNotification.message = ConfigShop.textInColor('green', msg)
   TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
   TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
+end)
+
+AddEventHandler("Shops:TestBuyPro:cb", function(Name)
+  msg = "Vous avez bien acheté " .. Name .. "."
+  ConfigShop.shopsNotification.message = ConfigShop.textInColor('green', msg)
+  TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
 end)
 
 AddEventHandler("Shops:NotEnoughMoney", function(Name)
