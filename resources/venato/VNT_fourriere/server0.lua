@@ -60,8 +60,7 @@ AddEventHandler('garagesmeca:getvehicle', function(vhl)
     local model = tostring(vhl.name)
 	  local idveh = vhl.idveh
     local plate = vhl.plate
-    TriggerClientEvent('garagesmeca:spawnvehicle', currentSource, vhl)
-    MySQL.Async.execute("UPDATE user_vehicle SET state=1 WHERE owner=@owner AND name like @model AND plate like @plate", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate})
+    MySQL.Async.execute("UPDATE user_vehicle SET state=1, namegarage = 'Garage Fourriere' WHERE owner=@owner AND name like @model AND plate like @plate", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate})
 end)
 
 RegisterServerEvent('garagesmeca:getvehiclemy')
