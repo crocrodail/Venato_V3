@@ -295,7 +295,8 @@ end
 
 RegisterServerEvent('Inventory:CallInfoMoney')
 AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
-  if DataPlayers[ClosePlayer].Poid + Venato.MoneyToPoid(qty) >= DataPlayers[ClosePlayer].PoidMax then
+  local infoPlayer = DataPlayers[tonumber(ClosePLayer)];
+  if infoPlayer.Poid + Venato.MoneyToPoid(qty) >= infoPlayer.PoidMax then
     TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
     TriggerEvent("Inventory:RemoveMoney", qty, source)
     TriggerClientEvent("Inventory:AnimGive", source)
