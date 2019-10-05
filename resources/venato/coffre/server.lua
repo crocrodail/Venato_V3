@@ -115,7 +115,7 @@ AddEventHandler("Coffre:TakeWeapon", function(row)
   if DataCoffre[row[1]].weapon[row[2]].poid + DataPlayers[tonumber(source)].Poid <= DataPlayers[tonumber(source)].PoidMax then
     local indexCoffre = row[1]
     local indexWeapon = row[2]
-    MySQL.Async.execute("DELETE FROM coffres_weapons WHERE Id = @indexWeapon", {["@idCoffre"] = indexCoffre})
+    MySQL.Async.execute("DELETE FROM coffres_weapons WHERE Id = @indexWeapon", {["@indexWeapon"] = row[2]})
     TriggerEvent("Inventory:AddWeapon", DataCoffre[indexCoffre].weapon[indexWeapon].weaponId,  DataCoffre[indexCoffre].weapon[indexWeapon].balles, DataCoffre[indexCoffre].weapon[indexWeapon].poid, DataCoffre[indexCoffre].weapon[indexWeapon].libelle, source)
     DataCoffre[indexCoffre].weapon[indexWeapon] = nil
     DataCoffre[indexCoffre].nbWeapon =  DataCoffre[indexCoffre].nbWeapon - 1
@@ -126,7 +126,6 @@ end)
 
 RegisterServerEvent("Coffre:DropWeapon")
 AddEventHandler("Coffre:DropWeapon", function(row)
-  print(row)
   if DataCoffre[row[1]].nbWeapon + 1 <= DataCoffre[row[1]].maxWeapon then
     local source = source
     local indexCoffre = row[1]
@@ -189,7 +188,6 @@ AddEventHandler("Coffre:TakeItems", function(qty, row)
       logo = DataCoffre[indexCoffre].inventaire[indexItem].picture,
       message = "Vous avez récuperé "..qty.." "..DataCoffre[indexCoffre].inventaire[indexItem].libelle.." dans le coffre."
     }
-    print(math.floor(qtyOnPlayer + qty))
     TriggerClientEvent("Venato:notify", source, defaultNotification)
     TriggerEvent("Inventory:SetItem",math.floor(qtyOnPlayer + qty), indexItem, source)
     TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre - qty, source)
@@ -211,7 +209,7 @@ AddEventHandler("Coffre:SetItem", function(idCoffre, idItem, qty, NewSource)
     if DataCoffre[idCoffre].inventaire[idItem] ~= nil then
       DataCoffre[idCoffre].nbItems = (DataCoffre[idCoffre].nbItems - DataCoffre[idCoffre].inventaire[idItem].quantity) + qty
       DataCoffre[idCoffre].inventaire[idItem].quantity = qty
-      MySQL.Async.execute("UPDATE coffres_contenu SET Quantity = @qty WHERE CoffreId = @coffreId", {["@qty"] = qty, ["@coffreId"] = idCoffre})
+      MySQL.Async.execute("UPDATE coffres_contenu SET Quantity = @qty WHERE CoffreId = @coffreId AND ItemId = @itemId", {["@qty"] = qty, ["@coffreId"] = idCoffre, ["@itemId"] = idItem})
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @itemId", {["@itemId"] = idItem}, function(result)
         if result[1] ~= nil then

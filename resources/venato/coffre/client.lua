@@ -90,6 +90,7 @@ AddEventHandler("Coffre:CheckWhitelist:cb", function(result)
   if result.status then
     Venato.playAnim({
       useLib = true,
+      flag = 48,
       lib = "missheistfbisetup1",
       anim = "unlock_enter_janitor",
       timeout = 3333
@@ -217,13 +218,11 @@ end)
 
 
 function CoffreWhitelistPlayer(row)
-  print(Venato.dump(row))
   TriggerServerEvent("Coffre:CoffreWhitelistPlayer", row)
   Menu.close() 
 end
 
 function CoffreListWhitelist(index)
-  print(index)
   Menu.clearMenu()
   Menu.setTitle( "Accès")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
@@ -232,7 +231,6 @@ end
 
 RegisterNetEvent("Coffre:GetCoffreWhitelistPlayer:cb")
 AddEventHandler("Coffre:GetCoffreWhitelistPlayer:cb", function(data)
-  print(Venato.dump(data))
   for k,v in pairs(data.whitelist) do
     Menu.addButton(v.prenom.." "..v.nom, "unwhitelist", {v.coffreId, v.id, v.nom, v.prenom})
   end
@@ -265,6 +263,7 @@ function CoffreTakeItem(row)
     Venato.notifyError("Une erreur est survenue.")
   end
   Menu.close()
+  OpenCoffre(row[1])
 end
 
 function CoffreTakeMoney(index)
