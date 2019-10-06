@@ -126,6 +126,7 @@ function lockVeh()
       local lock = GetVehicleDoorLockStatus(clostestvehicle)
       Venato.playAnim({
         useLib = true,
+        flag = 48,
         lib = "anim@mp_player_intmenu@key_fob@",
         anim = "fob_click_fp",
         timeout = 500

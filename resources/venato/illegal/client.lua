@@ -104,7 +104,7 @@ Citizen.CreateThread(function()
                 TriggerServerEvent("illegal:sell", drugInProgress.id)
             end
             if(farmInProgress or transformInProgress or sellInProgress) then
-                Venato.playAnim({lib = "mp_common", anim = "givetake2_a", useLib = true})
+                Venato.playAnim({lib = "mp_common", flag= 48, anim = "givetake2_a", useLib = true})
             end
 
         end

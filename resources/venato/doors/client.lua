@@ -87,6 +87,7 @@ Citizen.CreateThread(function()
                     Venato.disableAction(true)
                     Venato.playAnim({
                         useLib = true,
+                        flag = 48,
                         lib = "missheistfbisetup1",
                         anim = "unlock_enter_janitor",
                         timeout = 2500

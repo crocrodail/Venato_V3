@@ -168,6 +168,7 @@ function toggleMask()
   if mask then
     Venato.playAnim({
       useLib = true,
+      flag = 48,
       lib = "missfbi4",
       anim = "takeoff_mask",
       timeout = 1666
@@ -176,6 +177,7 @@ function toggleMask()
   else
     Venato.playAnim({
       useLib = true,
+      flag = 48,
       lib = "mp_masks@low_car@ds@",
       anim = "put_on_mask",
       timeout = 1000

@@ -44,7 +44,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
           for i, v in ipairs(result) do
             Wp = { ["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles) }
             Weapon[v.id] = Wp
-            poid = poid + tonumber(v.poid)
+            poid = poid + tonumber(v.poid)            
             TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
           end
           DataPlayers[tonumber(source)].Poid = poid

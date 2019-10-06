@@ -476,7 +476,8 @@ end
 RegisterNetEvent('Inventory:AddWeaponClient')
 AddEventHandler('Inventory:AddWeaponClient', function(weapon, ammo)
 	local weaponHash = GetHashKey(weapon)
-	local ammo = tonumber(ammo)
+  local ammo = tonumber(ammo)
+  print('[Weapon] '..weapon)
 	if ammo == 0 then
 		GiveWeaponToPed(Venato.GetPlayerPed(), weaponHash, false, false)
 	else
