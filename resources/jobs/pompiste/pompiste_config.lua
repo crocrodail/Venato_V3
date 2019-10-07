@@ -17,7 +17,7 @@ pompiste_car2 = {
 }
 
 pompiste_pay = {
-	minimum = 30,
+	minimum = 25,
 	maximum = 35
 }
 
