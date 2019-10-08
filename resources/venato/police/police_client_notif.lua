@@ -310,7 +310,6 @@ function updateMenuMissionPolice()
       else
         POLICE_currentMissionnotnil = false
     end
-    print(POLICE_currentMissionnotnil)
     updateMenuMissionPoliceeee(items,POLICE_currentMissionnotnil)
 end
 
@@ -416,7 +415,6 @@ end)
 
 RegisterNetEvent('police:cancelCall')
 AddEventHandler('police:cancelCall',function(data)
-    print("cancel")
     TriggerServerEvent('police:cancelCall')
 end)
 
@@ -462,7 +460,6 @@ end)
 
 RegisterNetEvent('police:receiveIsCop')
 AddEventHandler('police:receiveIsCop', function(result)
-    print(result)
     if (result == "inconnu") then
         isCop = false
         isCopInService = false
@@ -525,8 +522,6 @@ end
 --====================================================================================
 function POLICE_Check()
     t, distance = GetClosestPlayer()
-    print(t)
-    print(GetPlayerServerId(t))
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:targetCheckInventory", GetPlayerServerId(t))
 	else
@@ -537,10 +532,7 @@ end
 
 function POLICE_Cuffed()
     t, distance = GetClosestPlayer()
-    print("Cuffed : ".. t)
-    print("Cuffed distance : ".. distance)
     if(distance ~= -1 and distance < 3) then
-        print("Cuffed call server")
 		TriggerServerEvent("police:cuff", GetPlayerServerId(t))
     else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
@@ -577,7 +569,6 @@ function POLICE_PutInVehicle()
 
     local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
     local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-    print('put in vehicle : ' .. vehicleHandle)
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), vehicleHandle)
 	else
@@ -603,7 +594,6 @@ function POLICE_CheckPlate()
 	local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
 	local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
     if(DoesEntityExist(vehicleHandle)) then
-        print("VehicleExist")
 		TriggerServerEvent("police:checkingPlate", GetVehicleNumberPlateText(vehicleHandle), GetEntityModel(vehicleHandle))
     else
         defaultNotification.message = "<span class='red--text'>Pas de véhicule proche.</span>"

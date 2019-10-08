@@ -115,8 +115,6 @@ AddEventHandler("Entreprise:PayPlayer", function(data, pay)
             if result[1].source ~= 'disconnect' then
               defaultNotification.message = "Vous avez reçu " .. pay .. " € de salaire de la part de "..enterpriseName.."."
               TriggerClientEvent('Venato:notify', source, defaultNotification)
-              print(cheque[1])
-              print(Venato.dump(cheque))
               DataPlayers[result[1].source].Documents[cheque[1]] = cheque
             end
         end

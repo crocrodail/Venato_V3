@@ -131,7 +131,6 @@ end
 
 function StoreMyCar(garage)
   local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
-  print(DoesEntityExist(current))
   if DoesEntityExist(current) then
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
     local engineHealth = GetVehicleEngineHealth(current)

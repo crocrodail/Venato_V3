@@ -76,7 +76,6 @@ end)
 RegisterNetEvent("VehicleCoffre:CallData:cb")
 AddEventHandler("VehicleCoffre:CallData:cb", function(data, user)
   VehicleData = data
-  print(Venato.dump(VehicleData))
   DataUser = user
   OpenMenuCv()
 end)
@@ -130,7 +129,6 @@ end
 function ConfDropItemCv(index)
   local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à déposer")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
-  print("ConfDropItemCV - index : "..index.." qte : ".. qty .. " plate : " .. plate)
   if qty ~= nil and qty ~= 0 then
     TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
     OpenMenuCv()

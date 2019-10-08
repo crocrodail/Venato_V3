@@ -134,9 +134,7 @@ function closures_police_server()
 
     function POLICE_removeClient(clientId)
         if listMissions[clientId] ~= nil then
-          print("aqui2")
             for _, v in pairs(listMissions[clientId].acceptBy) do
-              print(v)
                 POLICE_notifyPersonnel(v, 'MISSION_ANNULE')
                 notifyMissionCancel(v)
                 POLICE_setInactivePersonnel(v)

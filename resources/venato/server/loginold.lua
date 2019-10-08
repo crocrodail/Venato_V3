@@ -75,7 +75,6 @@ local function PlayerConnecting(name, setKickReason, deferrals)
 				end)
 			end)
 		else
-			print("ok 1")
 			if InRocade then
 				placeRocade = #InRocade + 1
 			else

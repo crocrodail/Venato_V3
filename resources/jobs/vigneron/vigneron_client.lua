@@ -224,7 +224,6 @@ AddEventHandler('vigneron:getCar', function (source)
 		local plate = math.random(1000, 9999)
 		Venato.CreateVehicle('SADLER',{x=vigneron_car.x, y=vigneron_car.y, z=vigneron_car.z},90.0, function(veh)
 			existingVeh = veh
-			print(existingVeh)
 			SetVehicleNumberPlateText(existingVeh, vigneron_platesuffix.." "..plate.." ")
 			plate = GetVehicleNumberPlateText(existingVeh)
 			TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(existingVeh)))

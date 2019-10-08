@@ -120,7 +120,6 @@ AddEventHandler('VehicleCoffre:SetItems', function(qty, id, plate)
     DataVehicle[plate].inventaire[id] = nil
     MySQL.Async.execute("DELETE FROM coffres_voiture_contenu WHERE CoffreId = @Plate AND ItemId = @ItemId", {["@Plate"] = plate, ["@ItemId"] = id})
   else
-    print(Venato.dump(DataVehicle[plate].inventaire))
     if DataVehicle[plate].inventaire[id] ~= nil then
       DataVehicle[plate].nbItems = (DataVehicle[plate].nbItems-DataVehicle[plate].inventaire[id].quantity) + qty
       DataVehicle[plate].inventaire[id].quantity = qty

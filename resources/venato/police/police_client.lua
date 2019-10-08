@@ -689,7 +689,6 @@ Citizen.CreateThread(function()
 
           if(isCopInService) then
             if IsControlJustPressed(1,166) then
-              print("openPoliceGeneral")
               openMenuPoliceGeneral(rank)
             end
           end
@@ -1183,7 +1182,6 @@ Citizen.CreateThread(function()
       if IsPedInAnyVehicle(ped, false) then
           local herse = GetClosestObjectOfType( vehCoord.x, vehCoord.y, vehCoord.z, 1.3, hashHerse, false, false, false)
           if herse ~= 0 then
-              print(herse)
               POLICE_removeOrPlaceHerse()
               SetVehicleTyreBurst(veh, 0, true, 1000.0)
               SetVehicleTyreBurst(veh, 1, true, 1000.0)

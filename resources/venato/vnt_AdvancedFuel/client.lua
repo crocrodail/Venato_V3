@@ -33,11 +33,9 @@ Citizen.CreateThread(function()
 						TaskPlayAnim(GetPlayerPed(-1),"weapon@w_sp_jerrycan","fire", 8.0, -8, -1, 49, 0, 0, 0, 0)
 						local done = false
 						local amountToEssence = 50;
-						print(amountToEssence)
 						while done == false do
 							Wait(0)
 							local _essence = GetVehicleFuelLevel(veh)
-							print("fuel : ".._essence)
 							if(amountToEssence-addFuelValue > 0) then
 								amountToEssence = amountToEssence-addFuelValue
 								if(GetVehicleFuelLevel(veh) >= 100) then
@@ -344,8 +342,6 @@ function CheckVeh()
 end
 
 function Refuel(data)
-	print(data.liter)
-	print(data.stationNumber)
 	TriggerServerEvent("essence:refuel:check", data)
 	
 	TriggerEvent('Menu:Close')
@@ -354,7 +350,6 @@ end
 
 RegisterNetEvent("essence:refuel:ok")
 AddEventHandler("essence:refuel:ok", function(amountToEssence)
-	print("Amount : "..amountToEssence)
 	TriggerEvent('InteractSound_CL:PlayOnOne', "gas_start", 1.0)
 	Wait(2000)
 	local veh = GetVehiclePedIsIn(Venato.GetPlayerPed(), 0)
@@ -364,7 +359,6 @@ AddEventHandler("essence:refuel:ok", function(amountToEssence)
 			Wait(0)
 			TriggerEvent('InteractSound_CL:PlayOnOne', "gas_inprogress", 1.0)
 			local _essence = GetVehicleFuelLevel(veh)
-			print("fuel : ".._essence)
 			if(amountToEssence-addFuelValue > 0) then
 				amountToEssence = amountToEssence-addFuelValue
 				if(GetVehicleFuelLevel(veh) >= 100) then

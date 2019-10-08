@@ -123,7 +123,6 @@ function buyCheque()
 end
 
 function buyCard(data)
-  print(Venato.dump(data))
   local alereadyACard = false
   for k, v in pairs(data.Inventaire) do
     if v.id == 41 then

@@ -88,7 +88,6 @@ end
 RegisterNetEvent("ClothingShop:CallData:cb")
 AddEventHandler("ClothingShop:CallData:cb", function(data)
   Clothes = data.Clothes
-  print('ClothingShop')
   if canSetClothes then
     SetPedComponentVariation(Venato.GetPlayerPed(), 1, 0, 0, 1)
     SetPedComponentVariation(Venato.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)

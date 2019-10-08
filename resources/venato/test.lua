@@ -10,7 +10,6 @@ local forklift = nil
 local BoxOnForklift = false
 local ClotheVehicle = false
 local BoxOnCamion = false
-	print("e")
 
 Citizen.CreateThread(function()
 	local ply = Venato.GetPlayerPed()
@@ -147,7 +146,6 @@ function DetacheBoxInForklift()
 end
 
 function OpenTestMenu()
-	print('"dsf"')
 	Menu.clearMenu()
 	Menu.setTitle("Test")
 	Menu.addButton("Spawn box", "CreateBox", nil)

@@ -77,7 +77,6 @@
 	RegisterNetEvent('pompiste:drawBlips')
 	AddEventHandler('pompiste:drawBlips', function ()
 		for key, item in pairs(pompiste_blips) do
-			print(item.blip)
 			item.blip = AddBlipForCoord(item.x, item.y, item.z)
 			SetBlipSprite(item.blip, item.id)
 			SetBlipAsShortRange(item.blip, true)

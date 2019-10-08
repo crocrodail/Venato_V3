@@ -84,7 +84,6 @@ Citizen.CreateThread(function()
             if GetDistanceBetweenCoords(GetEntityCoords(ped), 397.566, -1642.656, 29.291, true) < 1.0 then
                 DisplayHelpText("Utilise ~INPUT_CONTEXT~ pour acceder à la fourrière.")
               if(IsControlJustReleased(1, 51))then
-                print("Test")
                 TriggerServerEvent("four:getVeh")
                 Menu.toggle()
               end

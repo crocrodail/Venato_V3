@@ -175,7 +175,6 @@ RegisterServerEvent('police:targetCheckInventory')
 AddEventHandler('police:targetCheckInventory', function(t)
 	local source = source
 	local targetSI = Venato.GetSteamID(t)
-	print(targetSI)
 	
 	local info = checkInventory(source, targetSI)
 
