@@ -82,7 +82,7 @@ AddEventHandler("Entreprise:FirePlayer", function(data)
   
   if (idEntreprise == 2) then
     MySQL.Async.execute("DELETE FROM police WHERE identifier = @identifier", {    
-        ["@identifier"] = identifier,
+        ["@identifier"] = data[2],
     })
   end
   
