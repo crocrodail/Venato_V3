@@ -62,7 +62,7 @@ AddEventHandler("Entreprise:HirePlayer", function(idEntreprise, identifier)
   end
 
   if (idEntreprise == 2) then
-    MySQL.Async.execute("INSERT INTO police(identifier, rank) VALUES (@identifier, 'Cadet')", {    
+    MySQL.Async.execute("INSERT INTO police(`identifier`, `rank`) VALUES (@identifier, 'Cadet')", {    
         ["@identifier"] = identifier,
     })
   end
