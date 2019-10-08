@@ -60,6 +60,13 @@ AddEventHandler("Entreprise:HirePlayer", function(idEntreprise, identifier)
       Venato.RemoveChomage(identifier)
     end  
   end
+
+  if (idEntreprise == 2) then
+    MySQL.Async.execute("INSERT INTO police(identifier, rank) VALUES (@identifier, 'Cadet')", {    
+        ["@identifier"] = identifier,
+    })
+  end
+
   TriggerEvent("Venato:AddJob", idEntreprise, identifier)
   TriggerClientEvent("Entreprise:HirePlayer:cb", source, idEntreprise)
 end)
@@ -72,6 +79,13 @@ AddEventHandler("Entreprise:FirePlayer", function(data)
       Venato.AddChomage(data[2])
     end  
   end
+  
+  if (idEntreprise == 2) then
+    MySQL.Async.execute("DELETE FROM police WHERE identifier = @identifier", {    
+        ["@identifier"] = identifier,
+    })
+  end
+  
   TriggerEvent("Venato:RemoveJob", data)
   TriggerClientEvent("Entreprise:FirePlayer:cb", source, data[1])
 end)
