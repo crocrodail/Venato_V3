@@ -81,6 +81,9 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     Citizen.Wait(500)			
     while dead do
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
+      if assommePlayer then
+        Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
+      end
       Citizen.Wait(0)
     end
   end)
