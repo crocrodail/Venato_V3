@@ -36,6 +36,7 @@ Citizen.CreateThread(function()
       print('assommePlayer : false')
     end
     print('old_cause : '..old_cause)
+    print('TimeToRespawn : '..TimeToRespawn)
     if IsEntityDead(playerPed) then
       causeOfDeath = GetCause()
       local killer = GetKiller()
@@ -51,7 +52,7 @@ Citizen.CreateThread(function()
           Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
           FreezeEntityPosition(playerPed, true)
           ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
-          --SetEntityHealth(playerPed, 100)
+          SetEntityHealth(playerPed, 100)
       end
 
       old_cause = causeOfDeath
