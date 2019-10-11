@@ -96,7 +96,7 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     
     EndTextComponent()
     PopScaleformMovieFunctionVoid()
-    Citizen.Wait(500)
+    Citizen.Wait(1000)
 			
     while dead do
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
@@ -150,7 +150,7 @@ Citizen.CreateThread(function()
         fait2 = 0
       end
     end
-		Citizen.Wait(0)
+		Citizen.Wait(500)
 	end
 end)
 
