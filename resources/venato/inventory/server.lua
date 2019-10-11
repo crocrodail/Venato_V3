@@ -225,7 +225,6 @@ AddEventHandler('Inventory:RemoveItem', function(qty, id, NewSource)
 	local source = source
 	local qty = qty
   local AlreadyExist = false
-  print(NewSource)
 	if NewSource ~= nil then
 		source = NewSource
 	end

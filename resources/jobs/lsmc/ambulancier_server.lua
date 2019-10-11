@@ -293,7 +293,6 @@
 
     RegisterServerEvent('ambulancier:healHim')
     AddEventHandler('ambulancier:healHim', function(idToHeal)
-        print('Heal : '..idToHeal)
       TriggerClientEvent('ambulancier:HealMe',idToHeal)
       local notif = {
         title= "LSMC",

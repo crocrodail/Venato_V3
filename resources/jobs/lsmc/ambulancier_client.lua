@@ -775,7 +775,6 @@ end)
 
 RegisterNetEvent('ambulancier:HealMe')
 AddEventHandler('ambulancier:HealMe',function ()
-        print('Heal')
         SetEntityHealth(GetPlayerPed(-1), GetPedMaxHealth(GetPlayerPed(-1)))
 end)
 
@@ -814,7 +813,6 @@ end)
 
 
 function getBlassure()
-  print('GetBlassure')
         local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerServerEvent('ambulancier:GetInTableTheBlassure', GetPlayerServerId(ClosePlayer))

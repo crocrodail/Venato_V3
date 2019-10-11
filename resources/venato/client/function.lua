@@ -107,7 +107,6 @@ function Venato.InteractTxt(text)
 end
 
 function Venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)  
-  print(TextEntrynote)
   AddTextEntry('FMMC_KEY_TIP12', TextEntrynote)
   DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP12", "", defaultText or "", "", "", "", maxlength or 20)
   while (UpdateOnscreenKeyboard() == 0) do

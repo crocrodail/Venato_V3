@@ -191,7 +191,6 @@
     function getNbPerosnnelDispo()
         local dispo = 0
         for _, v in pairs(listPersonnelActive) do
-            print(v)
             if v == false then
                 dispo = dispo + 1
             end

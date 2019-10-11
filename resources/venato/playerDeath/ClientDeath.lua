@@ -45,6 +45,12 @@ Citizen.CreateThread(function()
     end
     if dead then
       DisableControlAction(0, Keys['F2'], true)
+      DisableControlAction(0, Keys['F1'], true)
+      DisableControlAction(0, Keys['F3'], true)
+      DisableControlAction(0, Keys['F8'], true)
+      DisableControlAction(0, Keys['F7'], true)
+      DisableControlAction(0, Keys['F6'], true)
+      DisableControlAction(0, Keys['F5'], true)
       DisableControlAction(0, Keys['K'], true)
       --Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 2})
     end

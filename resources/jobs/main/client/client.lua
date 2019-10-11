@@ -150,7 +150,6 @@ end
 
 function MenuSendEvent(EventName)
   TriggerEvent(EventName)
-  print(EventName)
 end
 
 Jobs.Start()

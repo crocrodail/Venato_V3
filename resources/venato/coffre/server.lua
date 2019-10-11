@@ -327,8 +327,6 @@ AddEventHandler("Coffre:GetCoffreWhitelistPlayer", function(coffreId)
         }
       end
     end
-    print(whitelist)
-    print(source)
     TriggerClientEvent("Coffre:GetCoffreWhitelistPlayer:cb", source, {whitelist = whitelist})
   end)
 end)
