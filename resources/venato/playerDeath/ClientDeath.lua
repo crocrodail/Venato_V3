@@ -24,11 +24,17 @@ Citizen.CreateThread(function()
   Citizen.Wait(5000)
   while true do
     Citizen.Wait(0)
-		playerPed = GetPlayerPed(-1)
+    playerPed = GetPlayerPed(-1)
+    print('dead : '..dead)
+    print('assommePlayer : '..assommePlayer)
+    print('old_cause : '..old_cause)
     if IsEntityDead(playerPed) then
       causeOfDeath = GetCause()
       local killer = GetKiller()
       local Weapon = GetWeapon()
+      print('killer : '..killer)
+      print('Weapon : '..Weapon)
+      print('causeOfDeath : '..causeOfDeath)
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
