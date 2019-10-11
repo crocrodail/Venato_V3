@@ -96,7 +96,7 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     
     EndTextComponent()
     PopScaleformMovieFunctionVoid()
-    Citizen.Wait(1000)			
+    Citizen.Wait(500)			
     while dead do
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
       Citizen.Wait(0)
@@ -118,14 +118,14 @@ Citizen.CreateThread(function()
           TimeToRespawn = TimeToRespawn + 300
         end
       end
-    elseif dead and TimeToRespawn == 0 and not assommePlayer then
+    elseif dead and TimeToRespawn == -1 and not assommePlayer then
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "~g~Appuyez sur ~r~X ~g~pour respawn à l'hospital.", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["X"]) and  GetLastInputMethod(2) then
         RespawnHospital()
       end
     elseif dead and TimeToRespawn > 0 and assommePlayer then
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de vous réveillez.", 255, 255, 255, 255)
-    elseif dead and TimeToRespawn == 0 and assommePlayer then
+    elseif dead and TimeToRespawn == -1 and assommePlayer then
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
       print('DEAD = FALSE')
@@ -156,7 +156,7 @@ end)
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(1000)
-    if TimeToRespawn > 0 then
+    if TimeToRespawn >= 0 then
       TimeToRespawn = TimeToRespawn - 1
     end
     if shooting > 0 then
