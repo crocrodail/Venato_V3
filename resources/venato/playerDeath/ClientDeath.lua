@@ -14,9 +14,11 @@ function Venato.resurect()
   TimeToRespawn = 0
   dead = false
   LiveFreezeNeed(false)
+  SetEntityMaxHealth(GetPlayerPed(-1), 200)
   fCanCancelOrStartAnim(true)
   Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
   TriggerServerEvent("Death:health", false)
+
   StopAllScreenEffects()
 end
 
@@ -34,6 +36,7 @@ Citizen.CreateThread(function()
           StartScreenEffect("DeathFailMPIn", 10000 , true)
           Citizen.Wait(3000)
           local coordPed = GetEntityCoords(playerPed, true)
+          DoRagdoll()
           NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
           Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
           FreezeEntityPosition(playerPed, true)
@@ -72,18 +75,15 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
       AddTextComponentString("~r~Vous êtes dans le coma.")
     else      
       TimeToRespawn = 300
-      AddTextComponentString("~r~Vous êtes dans un état grave")
+      AddTextComponentString("~r~Vous êtes dans un état grave")      
+      SetEntityHealth(GetPlayerPed(-1), 0)
     end    
     EndTextComponent()
     PopScaleformMovieFunctionVoid()
-    dead = true
-    SetEntityMaxHealth(GetPlayerPed(-1), 100)  
+    dead = true      
     Citizen.Wait(500)			
     while dead do
-      DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
-      if assommePlayer then
-        Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
-      end
+      DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)      
       Citizen.Wait(0)
     end
   end)
@@ -236,7 +236,6 @@ AddEventHandler("vnt:resurect:cb", function()
   TriggerServerEvent("Death:health", false)
   LiveFreezeNeed(false)
   fCanCancelOrStartAnim(true)
-  print('Resurect')
   SetEntityHealth(Venato.GetPlayerPed(), 200.0)
 end)
 
