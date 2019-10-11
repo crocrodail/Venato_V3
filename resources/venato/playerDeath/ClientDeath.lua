@@ -77,10 +77,10 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     end    
     EndTextComponent()
     PopScaleformMovieFunctionVoid()    
-    SetPedToRagdoll(GetPlayerPed(-1), 6000, 6000, 0, 0, 0, 0)
     dead = true      
     Citizen.Wait(500)			
     while dead do
+      SetPedToRagdoll(GetPlayerPed(-1), 6000, 6000, 0, 0, 0, 0)
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)      
       Citizen.Wait(0)
     end
