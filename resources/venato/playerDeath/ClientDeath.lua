@@ -25,28 +25,14 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     playerPed = GetPlayerPed(-1)
-    if dead then
-      print('dead : true')
-    else
-      print('dead : false')
-    end
-    if assommePlayer then
-      print('assommePlayer : true')
-    else
-      print('assommePlayer : false')
-    end
-    print('old_cause : '..old_cause)
-    print('TimeToRespawn : '..TimeToRespawn)
     if IsEntityDead(playerPed) then
       causeOfDeath = GetCause()
       local killer = GetKiller()
       local Weapon = GetWeapon()
-      print('killer : '..killer)
-      print('causeOfDeath : '..causeOfDeath)
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
-          Citizen.Wait(3000)
+          --Citizen.Wait(3000)
           local coordPed = GetEntityCoords(playerPed, true)
           NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
           Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
@@ -54,7 +40,6 @@ Citizen.CreateThread(function()
           ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
           SetEntityHealth(playerPed, 100)
       end
-
       old_cause = causeOfDeath
     end
     if dead then
@@ -82,13 +67,10 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     Venato.ScaleForm("MP_BIG_MESSAGE_FREEMODE")
     PushScaleformMovieFunction(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
     BeginTextComponent("STRING")
-    print('check TimeToRespawn')
-    if assommePlayer and (causeOfDeath == 'Cause inconnue' or causeOfDeath == 'Trace de coup')  then
-      print('TimeToRespawn : 120')
+    if assommePlayer and (causeOfDeath == 'Cause inconnue' or causeOfDeath == 'Trace de coup')  then      
       TimeToRespawn = 120
       AddTextComponentString("~r~Vous êtes dans le coma.")
-    else
-      print('TimeToRespawn: 300')
+    else      
       TimeToRespawn = 300
       AddTextComponentString("~r~Vous êtes dans un état grave")
     end    
@@ -127,7 +109,6 @@ Citizen.CreateThread(function()
     elseif dead and TimeToRespawn == 0 and assommePlayer then
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
-      print('DEAD = FALSE')
       dead = false
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)

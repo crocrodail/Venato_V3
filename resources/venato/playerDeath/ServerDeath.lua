@@ -17,15 +17,11 @@ AddEventHandler('Death:ComaOrNot', function(killer, causeOfDeath)
   Cause[source] = causeOfDeath
   print(DataPlayers[tonumber(source)].SteamId .. ' mort : '..causeOfDeath.. '(Killer : '..killer..')')
   if killer == 0 then
-    print('case 1 : coma false')
     TriggerClientEvent("Death:ComaOrNot:cb", source, false)
   else
-    print('case 2 : ')
-    if shooting[killer] == true then      
-      print('case 2.1 : coma false')
+    if shooting[killer] == true then
 		  TriggerClientEvent("Death:ComaOrNot:cb", source, false)
 	  else  
-      print('case 2.2 : coma true')
 	    TriggerClientEvent("Death:ComaOrNot:cb", source, true)
     end
   end
