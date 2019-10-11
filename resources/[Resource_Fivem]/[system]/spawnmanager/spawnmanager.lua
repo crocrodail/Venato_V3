@@ -328,7 +328,8 @@ Citizen.CreateThread(function()
   Citizen.Wait(5000)
   playAnim({anim = { lib = "veh@van@ds@enter_exit", anim = "dead_fall_out" },types="animsAction"})
   while true do
-    Citizen.Wait(0)
+    print('Test')
+    Citizen.Wait(0)    
     local playerPed = GetPlayerPed(-1)
     if IsEntityDead(playerPed) then
       print('revive')
