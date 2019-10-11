@@ -91,6 +91,7 @@ Citizen.CreateThread(function()
   local fait2 = 0
 	while true do
     if dead and TimeToRespawn > 0 and not assommePlayer then
+      SetEntityHealth(GetPlayerPed(-1),0.0)
 			drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de respawn.", 255, 255, 255, 255)
       drawTxt(0.88, 1.45, 1.0,1.0,0.4, "~r~Appuyez sur ~g~C ~r~pour appeler un médecin. (+300sec pour leur laisser le temps de venir)", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["C"]) and  GetLastInputMethod(2) then
@@ -100,16 +101,20 @@ Citizen.CreateThread(function()
         end
       end
     elseif dead and TimeToRespawn == 0 and not assommePlayer then
+      SetEntityHealth(GetPlayerPed(-1),0.0)
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "~g~Appuyez sur ~r~X ~g~pour respawn à l'hospital.", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["X"]) and  GetLastInputMethod(2) then
         RespawnHospital()
       end
     elseif dead and TimeToRespawn > 0 and assommePlayer then
+      SetEntityHealth(GetPlayerPed(-1),1.0)
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de vous réveillez.", 255, 255, 255, 255)
     elseif dead and TimeToRespawn == 0 and assommePlayer then
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
       dead = false
+      assommePlayer = false
+      SetEntityHealth(GetPlayerPed(-1),30.0)
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(true)
@@ -216,7 +221,6 @@ end)
 
 RegisterNetEvent("vnt:heal:cb")
 AddEventHandler("vnt:heal:cb", function()
-  print("Heal")
   SetEntityHealth(Venato.GetPlayerPed(), 200.0)
   TriggerServerEvent("Death:health", false)
 end)
@@ -266,7 +270,6 @@ function Reanim(char, coord, heading)
       TriggerServerEvent("Death:health", false)
       assommePlayer = false
       dead = false
-      print('reanim')
       SetEntityHealth(GetPlayerPed(-1), 200.0)
     end
   end)
