@@ -43,6 +43,7 @@ Citizen.CreateThread(function()
       print('killer : '..killer)
       print('causeOfDeath : '..causeOfDeath)
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
+          dead = true
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
           Citizen.Wait(3000)
