@@ -32,13 +32,13 @@ Citizen.CreateThread(function()
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
-          --Citizen.Wait(3000)
+          Citizen.Wait(3000)
           local coordPed = GetEntityCoords(playerPed, true)
           NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
           Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
           FreezeEntityPosition(playerPed, true)
           ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
-          SetEntityHealth(playerPed, 100)
+          SetEntityHealth(playerPed, 100.0)
       end
       old_cause = causeOfDeath
     end
