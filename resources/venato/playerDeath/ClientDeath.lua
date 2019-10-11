@@ -34,9 +34,11 @@ Citizen.CreateThread(function()
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
+          SetPedRagdollForceFall(GetPlayerPed(-1))
           Citizen.Wait(3000)
           local coordPed = GetEntityCoords(playerPed, true)
           NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
+          Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
           FreezeEntityPosition(playerPed, true)
           --SetEntityHealth(playerPed, 1.0)
       end
@@ -80,7 +82,6 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     dead = true      
     Citizen.Wait(500)			
     while dead do
-      SetPedToRagdoll(GetPlayerPed(-1), 6000, 6000, 0, 0, 0, 0)
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)      
       Citizen.Wait(0)
     end
