@@ -43,7 +43,6 @@ Citizen.CreateThread(function()
       print('killer : '..killer)
       print('causeOfDeath : '..causeOfDeath)
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
-          dead = true
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
           Citizen.Wait(3000)
@@ -52,7 +51,7 @@ Citizen.CreateThread(function()
           Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
           FreezeEntityPosition(playerPed, true)
           ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
-          SetEntityHealth(playerPed, 100)
+          --SetEntityHealth(playerPed, 100)
       end
 
       old_cause = causeOfDeath
@@ -73,7 +72,7 @@ end)
 
 RegisterNetEvent("Death:ComaOrNot:cb")
 AddEventHandler("Death:ComaOrNot:cb", function(boolean)
-  Citizen.CreateThread(function()
+  Citizen.CreateThread(function()    
     dead = true
     LiveFreezeNeed(true)
     fCanCancelOrStartAnim(false)
@@ -127,6 +126,7 @@ Citizen.CreateThread(function()
     elseif dead and TimeToRespawn == 0 and assommePlayer then
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
+      print('DEAD = FALSE')
       dead = false
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
