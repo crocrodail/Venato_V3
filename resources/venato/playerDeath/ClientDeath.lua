@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
           Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
           FreezeEntityPosition(playerPed, true)
           ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
-          SetEntityHealth(playerPed, 100.0)
+          SetEntityHealth(playerPed, 1.0)
       end
       old_cause = causeOfDeath
     end
