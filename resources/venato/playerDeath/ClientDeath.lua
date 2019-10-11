@@ -83,11 +83,13 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     Venato.ScaleForm("MP_BIG_MESSAGE_FREEMODE")
     PushScaleformMovieFunction(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
     BeginTextComponent("STRING")
-    
+    print('check TimeToRespawn')
     if assommePlayer and (causeOfDeath == 'Cause inconnue' or causeOfDeath == 'Trace de coup')  then
+      print('TimeToRespawn : 120')
       TimeToRespawn = 120
       AddTextComponentString("~r~Vous êtes dans le coma.")
     else
+      print('TimeToRespawn: 300')
       TimeToRespawn = 300
       AddTextComponentString("~r~Vous êtes dans un état grave")
     end
