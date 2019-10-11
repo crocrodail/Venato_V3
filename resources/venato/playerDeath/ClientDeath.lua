@@ -111,8 +111,7 @@ Citizen.CreateThread(function()
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
       dead = false
-      assommePlayer = false   
-      SetEntityMaxHealth(GetPlayerPed(-1), 100)   
+      assommePlayer = false     
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(false)
