@@ -77,6 +77,7 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     EndTextComponent()
     PopScaleformMovieFunctionVoid()
     dead = true
+    SetEntityMaxHealth(GetPlayerPed(-1), 1)  
     Citizen.Wait(500)			
     while dead do
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
@@ -91,7 +92,6 @@ Citizen.CreateThread(function()
   local fait2 = 0
 	while true do
     if dead and TimeToRespawn > 0 and not assommePlayer then
-      SetEntityHealth(GetPlayerPed(-1),0.0)
 			drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de respawn.", 255, 255, 255, 255)
       drawTxt(0.88, 1.45, 1.0,1.0,0.4, "~r~Appuyez sur ~g~C ~r~pour appeler un médecin. (+300sec pour leur laisser le temps de venir)", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["C"]) and  GetLastInputMethod(2) then
@@ -101,20 +101,18 @@ Citizen.CreateThread(function()
         end
       end
     elseif dead and TimeToRespawn == 0 and not assommePlayer then
-      SetEntityHealth(GetPlayerPed(-1),0.0)
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "~g~Appuyez sur ~r~X ~g~pour respawn à l'hospital.", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["X"]) and  GetLastInputMethod(2) then
         RespawnHospital()
       end
     elseif dead and TimeToRespawn > 0 and assommePlayer then
-      SetEntityHealth(GetPlayerPed(-1),1.0)
       drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de vous réveillez.", 255, 255, 255, 255)
     elseif dead and TimeToRespawn == 0 and assommePlayer then
       Venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
       StopAllScreenEffects()
       dead = false
-      assommePlayer = false
-      SetEntityHealth(GetPlayerPed(-1),30.0)
+      assommePlayer = false   
+      SetEntityMaxHealth(GetPlayerPed(-1), 100)   
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(true)
