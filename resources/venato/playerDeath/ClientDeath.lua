@@ -41,7 +41,6 @@ Citizen.CreateThread(function()
       local killer = GetKiller()
       local Weapon = GetWeapon()
       print('killer : '..killer)
-      print('Weapon : '..Weapon)
       print('causeOfDeath : '..causeOfDeath)
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
