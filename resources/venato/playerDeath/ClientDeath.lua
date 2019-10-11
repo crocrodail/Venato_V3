@@ -25,7 +25,11 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     playerPed = GetPlayerPed(-1)
-    print('dead : '..dead)
+    if dead then
+      print('dead : true')
+    else
+      print('dead : false')
+    end
     print('assommePlayer : '..assommePlayer)
     print('old_cause : '..old_cause)
     if IsEntityDead(playerPed) then
