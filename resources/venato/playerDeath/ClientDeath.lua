@@ -74,7 +74,6 @@ end)
 RegisterNetEvent("Death:ComaOrNot:cb")
 AddEventHandler("Death:ComaOrNot:cb", function(boolean)
   Citizen.CreateThread(function()    
-    dead = true
     LiveFreezeNeed(true)
     fCanCancelOrStartAnim(false)
     TriggerServerEvent("Death:health", true)
@@ -92,10 +91,10 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
       print('TimeToRespawn: 300')
       TimeToRespawn = 300
       AddTextComponentString("~r~Vous êtes dans un état grave")
-    end
-    
+    end    
     EndTextComponent()
     PopScaleformMovieFunctionVoid()
+    dead = true
     Citizen.Wait(500)			
     while dead do
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
@@ -109,7 +108,6 @@ Citizen.CreateThread(function()
   local fait = 1
   local fait2 = 0
 	while true do
-		Citizen.Wait(100)
     if dead and TimeToRespawn > 0 and not assommePlayer then
 			drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de respawn.", 255, 255, 255, 255)
       drawTxt(0.88, 1.45, 1.0,1.0,0.4, "~r~Appuyez sur ~g~C ~r~pour appeler un médecin. (+300sec pour leur laisser le temps de venir)", 255, 255, 255, 255)
@@ -150,6 +148,7 @@ Citizen.CreateThread(function()
         fait2 = 0
       end
     end
+    Citizen.Wait(0)
 	end
 end)
 
@@ -158,7 +157,6 @@ Citizen.CreateThread(function()
     Citizen.Wait(1000)
     if TimeToRespawn > 0 then
       TimeToRespawn = TimeToRespawn - 1
-      dead = true
     end
     if shooting > 0 then
       shooting = shooting -1
