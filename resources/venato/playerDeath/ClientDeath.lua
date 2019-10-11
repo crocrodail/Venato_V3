@@ -216,6 +216,7 @@ end)
 
 RegisterNetEvent("vnt:heal:cb")
 AddEventHandler("vnt:heal:cb", function()
+  print("Heal")
   SetEntityHealth(Venato.GetPlayerPed(), 200.0)
   TriggerServerEvent("Death:health", false)
 end)
@@ -231,6 +232,7 @@ AddEventHandler("vnt:resurect:cb", function()
   TriggerServerEvent("Death:health", false)
   LiveFreezeNeed(false)
   fCanCancelOrStartAnim(true)
+  print('Resurect')
   SetEntityHealth(Venato.GetPlayerPed(), 200.0)
 end)
 
@@ -264,6 +266,7 @@ function Reanim(char, coord, heading)
       TriggerServerEvent("Death:health", false)
       assommePlayer = false
       dead = false
+      print('reanim')
       SetEntityHealth(GetPlayerPed(-1), 200.0)
     end
   end)
