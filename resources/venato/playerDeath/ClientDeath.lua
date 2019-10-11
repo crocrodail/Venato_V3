@@ -30,7 +30,11 @@ Citizen.CreateThread(function()
     else
       print('dead : false')
     end
-    print('assommePlayer : '..assommePlayer)
+    if assommePlayer then
+      print('assommePlayer : true')
+    else
+      print('assommePlayer : false')
+    end
     print('old_cause : '..old_cause)
     if IsEntityDead(playerPed) then
       causeOfDeath = GetCause()
