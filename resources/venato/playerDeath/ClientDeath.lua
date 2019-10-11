@@ -77,7 +77,7 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     EndTextComponent()
     PopScaleformMovieFunctionVoid()
     dead = true
-    SetEntityMaxHealth(GetPlayerPed(-1), 1)  
+    SetEntityMaxHealth(GetPlayerPed(-1), 100)  
     Citizen.Wait(500)			
     while dead do
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
@@ -115,7 +115,7 @@ Citizen.CreateThread(function()
       SetEntityMaxHealth(GetPlayerPed(-1), 100)   
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
-      fCanCancelOrStartAnim(true)
+      fCanCancelOrStartAnim(false)
       TriggerServerEvent("Death:health", false)
     else
       if IsPedShooting(GetPlayerPed(-1)) then
