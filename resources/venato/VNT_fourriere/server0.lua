@@ -39,39 +39,24 @@ AddEventHandler("four:getVeh", function()
       end)
   end)
 
-
-RegisterServerEvent('four:GetIsMeca')
-AddEventHandler('four:GetIsMeca', function()
-  local source = source
-  local nb = 0
-  for k,v in pairs(DataPlayers) do
-    if v.IsInService[1] == "mecano" and v.IsInService[2] == true then
-      nb = nb + 1
-    end
-  end
-  TriggerClientEvent('four:GetIsMeca:cb', source, nb)
-end)
-
-
 RegisterServerEvent('garagesmeca:getvehicle')
 AddEventHandler('garagesmeca:getvehicle', function(vhl)
-	  local identifiers = id
-    local currentSource = source
+	  local identifiers = vhl.id
     local model = tostring(vhl.name)
 	  local idveh = vhl.idveh
     local plate = vhl.plate
-    MySQL.Async.execute("UPDATE user_vehicle SET state=1, namegarage = 'Garage Fourriere' WHERE owner=@owner AND name like @model AND plate like @plate", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate})
+    MySQL.Async.execute("UPDATE user_vehicle SET state=0, namegarage = 'Garage Fourriere' WHERE owner=@owner AND plate = @plate", {['@owner'] = identifiers, ['@plate'] = plate})
 end)
 
 RegisterServerEvent('garagesmeca:getvehiclemy')
 AddEventHandler('garagesmeca:getvehiclemy', function(vhl)
     local currentSource = source
-	  local paymentCB = Venato.paymentCB(currentSource, 400)
+	  local paymentCB = Venato.paymentCB(currentSource, 5000)
     if paymentCB.status then
       local notif = {
         title= "Fourière",
         logo = "https://static.thenounproject.com/png/72-200.png",
-        message = "Vous avez payé 400€.",
+        message = "Vous avez payé 5000€.",
       }
       TriggerClientEvent("Venato:notify",currentSource, notif)
       TriggerClientEvent('garagesmeca:spawnvehicle',currentSource,vhl)

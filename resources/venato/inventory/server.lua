@@ -224,7 +224,8 @@ RegisterServerEvent('Inventory:RemoveItem')
 AddEventHandler('Inventory:RemoveItem', function(qty, id, NewSource)
 	local source = source
 	local qty = qty
-	local AlreadyExist = false
+  local AlreadyExist = false
+  print(NewSource)
 	if NewSource ~= nil then
 		source = NewSource
 	end
@@ -295,16 +296,29 @@ end
 
 RegisterServerEvent('Inventory:CallInfoMoney')
 AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
-  local infoPlayer = DataPlayers[tonumber(ClosePLayer)];
-  if infoPlayer.Poid + Venato.MoneyToPoid(qty) >= infoPlayer.PoidMax then
-    TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
-    TriggerEvent("Inventory:RemoveMoney", qty, source)
+  local infoPlayer = DataPlayers[ClosePlayer]
+  local source = source
+  if infoPlayer ~= nil and infoPlayer.Poid + Venato.MoneyToPoid(qty) <= infoPlayer.PoidMax then    
     TriggerClientEvent("Inventory:AnimGive", source)
-    TriggerClientEvent("Venato:notify", source, "Vous avez donner " .. qty .. " €")
-    TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu " .. qty .. " €")
+    if(qty < 0) then
+      TriggerEvent("Inventory:RemoveMoney", -qty, ClosePlayer)
+      TriggerEvent("Inventory:AddMoney", -qty, source)
+      defaultNotification.message = "Vous avez récupéré <span class='green--text'>" .. -qty .. " €</span>"
+      TriggerClientEvent("Venato:notify", source, defaultNotification)
+      TriggerEvent("police:targetCheckInventory", ClosePlayer, source)
+    else
+      TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
+      TriggerEvent("Inventory:RemoveMoney", qty, source)
+      defaultNotification.message = "Vous avez donner <span class='red--text'>" .. qty .. " €</span>"
+      TriggerClientEvent("Venato:notify", source, defaultNotification)
+      defaultNotification.message = "Vous avez reçu <span class='green--text'>" .. qty .. " €</span>"
+      TriggerClientEvent("Venato:notify", ClosePlayer, defaultNotification)
+    end
   else
-    TriggerClientEvent("Venato:notify", source, "La personne n'a pas la place pour recevoir " .. qty .. " €")
-    TriggerClientEvent("Venato:notify", ClosePlayer, "Vous n'avez pas la place pour recevoir " .. qty .. " €")
+    defaultNotification.message = "La personne n'a pas la place pour recevoir " .. qty .. " €"
+    TriggerClientEvent("Venato:notify", source, defaultNotification)
+    defaultNotification.message = "Vous n'avez pas la place pour recevoir " .. qty .. " €"
+    TriggerClientEvent("Venato:notify", ClosePlayer, defaultNotification)
   end
 end)
 

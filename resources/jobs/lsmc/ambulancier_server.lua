@@ -293,6 +293,7 @@
 
     RegisterServerEvent('ambulancier:healHim')
     AddEventHandler('ambulancier:healHim', function(idToHeal)
+        print('Heal : '..idToHeal)
       TriggerClientEvent('ambulancier:HealMe',idToHeal)
       local notif = {
         title= "LSMC",
@@ -315,6 +316,7 @@
       }      
       local paymentCB = exports.venato:ExportPaymentCB(target, price)
       if paymentCB.status then
+        TriggerEvent("Coffre:AddMoney", price, 1178)
         TriggerClientEvent("Venato:notify", target, notif)
         notif.message = "Le client a bien payé sa facture !"
         TriggerClientEvent("Venato:notify", source, notif)

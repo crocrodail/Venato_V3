@@ -15,7 +15,6 @@ RegisterServerEvent('Death:ComaOrNot')
 AddEventHandler('Death:ComaOrNot', function(killer, causeOfDeath)
   local source = source
   Cause[source] = causeOfDeath
-  print(killer)
   if killer == 0 then
     TriggerClientEvent("Death:ComaOrNot:cb", source, false)
   else

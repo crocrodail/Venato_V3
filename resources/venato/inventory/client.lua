@@ -361,7 +361,7 @@ end
 function CreateChequeConf(data)
 	local ClosePlayer, distance = Venato.ClosePlayer()
 	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		local montant = Venato.OpenKeyboard('', '0', 10,"Montant du chèque")
+		local montant = Venato.OpenKeyboard('', '', 10,"Montant du chèque")
 		if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
 			TriggerServerEvent("Inventory:CreateCheque", ClosePlayer, montant)
 		else
@@ -517,7 +517,7 @@ end
 function GiveMoney(table)
   local ClosePlayer, distance = Venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-    local nb = Venato.OpenKeyboard('', '0', 10, "Nombre à donner")
+    local nb = Venato.OpenKeyboard('', '', 10, "Nombre à donner")
     if tonumber(nb) ~= nil and tonumber(nb) ~= 0 and tonumber(nb) > 0 and table[1] - tonumber(nb) >= 0 then
       TriggerServerEvent("Inventory:CallInfoMoney", ClosePlayer, tonumber(nb), table)
       OpenInventory()
@@ -530,7 +530,7 @@ function GiveMoney(table)
 end
 
 function DropMoney(tableau)
-	local nb = Venato.OpenKeyboard('', '0', 10,"Nombre à jeter")
+	local nb = Venato.OpenKeyboard('', '', 10,"Nombre à jeter")
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
 			local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))

@@ -1,0 +1,14 @@
+
+-- Citizen.CreateThread(function()
+--     while true do
+--         Citizen.Wait(0)        
+--         if IsControlJustPressed(1, 167) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
+--             TriggerEvent('Menu:Init', "Gang", "Gang Gang !", "#46914C99", "")
+--             Menu.clearMenu()            
+--             TriggerEvent('Menu:AddButton2', "Fouiller", "POLICE_Check",  false , "", "https://i.ibb.co/GQJWMRt/icons8-customs-officer-96px.png")
+--             TriggerEvent('Menu:AddButton2', "Menoter", "POLICE_Cuffed", false , "", "https://i.ibb.co/6D2GVzD/icons8-handcuffs-96px.png")
+--             TriggerEvent('Menu:CreateMenu')
+--             Menu.toggle()
+--         end              
+--     end
+-- end)

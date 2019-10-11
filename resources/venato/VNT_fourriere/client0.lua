@@ -14,14 +14,9 @@ AddEventHandler("four:getItemsVeh", function(THEITEMS, my)
     end
 end)
 
-RegisterNetEvent("four:GetIsMeca:cb")
-AddEventHandler("four:GetIsMeca:cb", function(nb)
-    mecano_nbMecanoInService = nb
-end)
-
-RegisterNetEvent("four:GetIsMeca:cb")
-AddEventHandler("four:GetIsMeca:cb", function(nb)
-    ismeca = true
+RegisterNetEvent('mecano:personnelChange')
+AddEventHandler('mecano:personnelChange',function(nbPersonnel, nbDispo)
+    mecano_nbMecanoInService = nbPersonnel
 end)
 
 function FourriereMenu()
@@ -56,14 +51,6 @@ Citizen.CreateThread(function()
       local ped = GetPlayerPed(-1)
       local dis = GetDistanceBetweenCoords(GetEntityCoords(ped), 397.566, -1642.656, 29.291, true)
         Citizen.Wait(0)
-        if dis < 20.0 then
-          if testok == false then
-            TriggerServerEvent("four:GetIsMeca")
-            testok = true
-          end
-        else
-          testok = false
-        end
         if mecano_nbMecanoInService == 0 and not Venato.HasJob(16) then
           if dis < 15.0 then
               DrawMarker(1,397.566, -1642.656, 29.291 -1.0001, 0, 0, 0, 0, 0, 0, 1.01, 1.01, 0.3, 212, 189, 0, 105, 0, 0, 2, 0, 0, 0, 0)
@@ -77,6 +64,10 @@ Citizen.CreateThread(function()
                 end
               end
           end
+        end
+
+        if mecano_nbMecanoInService > 0 and not Venato.HasJob(16) then
+          DisplayHelpText("Au moins un mécano est en service, contactez-le pour sortir votre véhicule de la fourrière.")
         end
         
         if dis < 15.0 and Venato.HasJob(16) then
@@ -103,7 +94,7 @@ end
 function ItemMenumy(itemId)
   Menu.clearMenu()
   Menu.setTitle("Details")
-	Menu.addButton("Payer 400€", "sortirmy", itemId)
+	Menu.addButton("Payer 5000€", "sortirmy", itemId)
   Menu.addButton("Non", "kill", nil)
 end
 

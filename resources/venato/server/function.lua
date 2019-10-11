@@ -295,6 +295,7 @@ function Venato.paymentCB(source, amount)
     DataPlayers[tonumber(source)].Bank = DataPlayers[tonumber(source)].Bank - amount
     MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier",
       { ["identifier"] = DataPlayers[tonumber(source)].SteamId, ["money"] = DataPlayers[tonumber(source)].Bank })
+      TriggerClientEvent("gcphone:updateBank", source, DataPlayers[tonumber(source)].Bank)
     return {status = true}
   end
 end

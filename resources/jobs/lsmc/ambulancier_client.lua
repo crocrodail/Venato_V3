@@ -647,8 +647,8 @@ function acceptMissionAmbulancier(data)
 end
 
 function needAmbulance(type)
-        local pos = GetEntityCoords(GetPlayerPed(-1))
-        TriggerServerEvent('ambulancier:Call', type, {x = pos.x, y = pos.y, z = pos.z})
+  local pos = GetEntityCoords(GetPlayerPed(-1))
+  TriggerServerEvent('ambulancier:Call', type, {x = pos.x, y = pos.y, z = pos.z})
 end
 
 --====================================================================================
@@ -775,6 +775,7 @@ end)
 
 RegisterNetEvent('ambulancier:HealMe')
 AddEventHandler('ambulancier:HealMe',function ()
+        print('Heal')
         SetEntityHealth(GetPlayerPed(-1), GetPedMaxHealth(GetPlayerPed(-1)))
 end)
 
@@ -786,7 +787,7 @@ function()
           TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
           Citizen.Wait(8000)
           ClearPedTasks(GetPlayerPed(-1));
-          TriggerServerEvent('ambulancier:healHim',GetPlayerServerId(a))
+          TriggerServerEvent('ambulancier:healHim',closestPlayer)
         else
           Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
@@ -795,10 +796,9 @@ end)
 RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',
 function()
-        local closestPlayer, closestDistance, a = Venato.ClosePlayer()
-          TriggerServerEvent('ambulance:getInfoReanim')
+        local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-          TriggerServerEvent('ambulance:getInfoReanim', GetPlayerServerId(a))
+          TriggerServerEvent('ambulance:getInfoReanim', closestPlayer)
 
         else
             Venato.notifyError(TEXTAMBUL.NoPatientFound)
@@ -812,22 +812,23 @@ AddEventHandler('ambulance:ClientGetInfoRea',function(ambu)
   TriggerServerEvent('ambulancier:Reanimation', ambu, GetEntityCoords(GetPlayerPed(-1), true),GetEntityHeading(GetPlayerPed(-1)))
 end)
 
-RegisterNetEvent('ambulancier:getBlassure')
-AddEventHandler('ambulancier:getBlassure',
-function()
+
+function getBlassure()
+  print('GetBlassure')
         local closestPlayer, closestDistance = Venato.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerServerEvent('ambulancier:GetInTableTheBlassure', GetPlayerServerId(ClosePlayer))
         else
             Venato.notifyError(TEXTAMBUL.NoPatientFound)
         end
-end)
+end
 
 RegisterNetEvent('ambulancier:MakePay')
 AddEventHandler('ambulancier:MakePay', function()
         local closestPlayer, closestDistance, a= Venato.ClosePlayer()
+        
         if closestDistance < 2.0 and closestDistance ~= -1 then
-            local montant = Venato.OpenKeyboard('', '0', 10,"Montant du paiement")
+            local montant = Venato.OpenKeyboard('', '', 10,"Montant du paiement")
             if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
         			TriggerServerEvent("ambulancier:Makepayement", GetPlayerServerId(a), montant)
         		else

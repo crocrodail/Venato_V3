@@ -33,7 +33,24 @@ function openMenuGeneralMecano()
   Menu.addButton("Nettoyer le Vehicule", "MECANO_wash", nil)
   Menu.addButton("Supprimer le Vehicule", "MECANO_deleteVehicle", nil)
   Menu.addButton("Afficher / Cacher aide", "toogleHelperLine", nil)
+  Menu.addButton("Faire payer", 'MakePay', nil)
   Menu.addButton("Récupérer sa paie", "takeSalary")
+end
+
+
+function MakePay()
+  local closestPlayer, closestDistance, a= Venato.ClosePlayer()
+  
+  if closestDistance < 2.0 and closestDistance ~= -1 then
+      local montant = Venato.OpenKeyboard('', '', 10,"Montant du paiement")
+      if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
+        TriggerServerEvent("mecano:Makepayement", GetPlayerServerId(a), montant)
+      else
+        Venato.notifyError("Le montant indiqué est erroné.")
+      end
+  else
+      Venato.notifyError("Pas de joueur proche!")
+  end
 end
 
 function MecanoGetMissionMenu()

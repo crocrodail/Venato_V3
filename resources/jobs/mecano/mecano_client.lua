@@ -455,9 +455,8 @@ local function toogleService()
 			SetPedComponentVariation(GetPlayerPed(-1), 8, 20, 1, 2) -- ACCESSORIE
 		end
 		end)
-        --TriggerServerEvent('mecano:takeService')
         TriggerServerEvent('mecano:requestMission')
-        TriggerServerEvent("venato:setService", "mecano", true)
+        TriggerServerEvent("mecano:takeService")
         mecano_showHelp = false
     else
         -- Restaure Ped

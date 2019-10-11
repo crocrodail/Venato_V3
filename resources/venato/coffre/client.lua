@@ -103,6 +103,12 @@ AddEventHandler("Coffre:CheckWhitelist:cb", function(result)
   end
 end)
 
+
+RegisterNetEvent("Coffre:Open")
+AddEventHandler("Coffre:Open", function(id)
+  OpenCoffre(id)
+end)
+
 function OpenCoffre(index)  
   TriggerEvent('Menu:Close')
   Menu.clearMenu()
@@ -257,18 +263,17 @@ end
 
 function CoffreTakeItem(row)
   local qty =  Venato.OpenKeyboard('', '', 3,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) <= DataCoffre[row[1]].inventaire[row[2]].quantity and DataCoffre[row[1]].inventaire[row[2]].uPoid * qty <= DataUser.PoidMax then
+  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[row[1]].inventaire[row[2]].quantity and DataCoffre[row[1]].inventaire[row[2]].uPoid * qty <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeItems", qty , row)
   else
     Venato.notifyError("Une erreur est survenue.")
   end
   Menu.close()
-  OpenCoffre(row[1])
 end
 
 function CoffreTakeMoney(index)
   local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) <= DataCoffre[index].argent and Venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
+  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and Venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeMoney", qty , index)    
   else
     Venato.notifyError("Une erreur est survenue.")
@@ -277,8 +282,8 @@ function CoffreTakeMoney(index)
 end
 
 function CoffreDropMoney(index)
-  local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) ~= 0 and tonumber(qty) + DataCoffre[index].argent <= DataCoffre[index].argentcapacite then
+  local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à poser")
+  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) + DataCoffre[index].argent <= DataCoffre[index].argentcapacite and DataUser.Money >= tonumber(qty) then
     TriggerServerEvent("Coffre:DropMoney", qty , index)
   else
     Venato.notifyError("Une erreur est survenue.")

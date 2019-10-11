@@ -53,6 +53,7 @@ client_script {
   '/doors/client.lua',
   '/entreprise/config.lua',
   '/entreprise/client.lua',
+  '/gang/client.lua',
 }
 
 server_script {
@@ -93,6 +94,7 @@ server_script {
   '/doors/server.lua',
   '/entreprise/config.lua',
   '/entreprise/server.lua',
+  '/gang/server.lua',
 }
 
 files {

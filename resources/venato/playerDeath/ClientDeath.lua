@@ -7,6 +7,7 @@ local assommePlayer = false
 local shooting = 0
 local causeOfDeath = 'Cause inconnue'
 local CoordHospital = {x = 1141.0, y= -1594.32, z = 4.979}
+local old_cause = ''
 
 function Venato.resurect()
   assommePlayer = false
@@ -28,18 +29,23 @@ Citizen.CreateThread(function()
       causeOfDeath = GetCause()
       local killer = GetKiller()
       local Weapon = GetWeapon()
-			StartScreenEffect("DeathFailMPIn", 10000 , true)
-      TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
-      Citizen.Wait(3000)
-      local coordPed = GetEntityCoords(playerPed, true)
-      NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
-      Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
-      FreezeEntityPosition(playerPed, true)
-      ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
-      SetEntityHealth(playerPed, 100)
+      if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
+          TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
+          StartScreenEffect("DeathFailMPIn", 10000 , true)
+          Citizen.Wait(3000)
+          local coordPed = GetEntityCoords(playerPed, true)
+          NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
+          Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 1})
+          FreezeEntityPosition(playerPed, true)
+          ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
+          SetEntityHealth(playerPed, 100)
+      end
+
+      old_cause = causeOfDeath
     end
     if dead then
       DisableControlAction(0, Keys['F2'], true)
+      DisableControlAction(0, Keys['K'], true)
       --Venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_pumpchest_idle", useLib = true, flag = 2})
     end
   end
@@ -53,22 +59,26 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     fCanCancelOrStartAnim(false)
     TriggerServerEvent("Death:health", true)
     assommePlayer = boolean
+    ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
+    Venato.ScaleForm("MP_BIG_MESSAGE_FREEMODE")
+    PushScaleformMovieFunction(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
+    BeginTextComponent("STRING")
+    
     if assommePlayer and (causeOfDeath == 'Cause inconnue' or causeOfDeath == 'Trace de coup')  then
       TimeToRespawn = 120
+      AddTextComponentString("~r~Vous êtes dans le coma.")
     else
       TimeToRespawn = 300
-      ShakeGameplayCam("DEATH_FAIL_IN_EFFECT_SHAKE", 1.0)
-      Venato.ScaleForm("MP_BIG_MESSAGE_FREEMODE")
-			PushScaleformMovieFunction(scaleform, "SHOW_SHARD_WASTED_MP_MESSAGE")
-			BeginTextComponent("STRING")
-			AddTextComponentString("~r~Vous êtes dans le coma =3")
-			EndTextComponent()
-			PopScaleformMovieFunctionVoid()
-      Citizen.Wait(500)
-      while dead do
-				DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
-			 	Citizen.Wait(0)
-      end
+      AddTextComponentString("~r~Vous êtes dans un état grave")
+    end
+    
+    EndTextComponent()
+    PopScaleformMovieFunctionVoid()
+    Citizen.Wait(500)
+			
+    while dead do
+      DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
+      Citizen.Wait(0)
     end
   end)
 end)
@@ -80,7 +90,7 @@ Citizen.CreateThread(function()
 	while true do
     if dead and TimeToRespawn > 0 and not assommePlayer then
 			drawTxt(0.88, 1.02, 1.0,1.0,0.4, "Attendez ~r~" .. TimeToRespawn .. "~w~ secondes avant de respawn.", 255, 255, 255, 255)
-      drawTxt(0.88, 1.45, 1.0,1.0,0.4, "~r~Appuyez sur ~g~C ~r~pour appeler un médecin.", 255, 255, 255, 255)
+      drawTxt(0.88, 1.45, 1.0,1.0,0.4, "~r~Appuyez sur ~g~C ~r~pour appeler un médecin. (+300sec pour leur laisser le temps de venir)", 255, 255, 255, 255)
       if IsControlJustPressed(1, Keys["C"]) and  GetLastInputMethod(2) then
         CallHospital()
         if TimeToRespawn < 300 then
@@ -228,11 +238,9 @@ function Reanim(char, coord, heading)
       SetEntityCoords(GetPlayerPed(-1), coord.x-0.9, coord.y-0.1, coord.z-0.0, 0, 0, 0, true)
       SetEntityHeading(GetPlayerPed(-1), heading-90)
     else
-      dead = false
       FreezeEntityPosition(GetPlayerPed(-1), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(true)
-      TriggerServerEvent("Death:health", false)
     end
     Venato.playAnim({lib = "mini@cpr@char_"..char.."@cpr_def", anim = "cpr_intro", useLib = true})
     Citizen.Wait(15000)
@@ -250,5 +258,11 @@ function Reanim(char, coord, heading)
     Citizen.Wait(26000)
     ClearPedTasks(GetPlayerPed(-1))
     StopAllScreenEffects()
+    if char == "b" then
+      TriggerServerEvent("Death:health", false)
+      assommePlayer = false
+      dead = false
+      SetEntityHealth(GetPlayerPed(-1), 200.0)
+    end
   end)
 end
