@@ -158,6 +158,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(1000)
     if TimeToRespawn >= 0 then
       TimeToRespawn = TimeToRespawn - 1
+      dead = true
     end
     if shooting > 0 then
       shooting = shooting -1
