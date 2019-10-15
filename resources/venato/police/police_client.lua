@@ -37,7 +37,9 @@ local blacklistedWeapons = {
 	"WEAPON_PETROLCAN",
 	"WEAPON_SNOWBALL",
 	"WEAPON_FLARE",
-	"WEAPON_BALL"
+  "WEAPON_BALL",
+  101631238,
+  883325847
 }
 
 local function sendnotif(message)
@@ -648,7 +650,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
 
         --if(not isCop) then
-          if IsPedShooting(Venato.GetPlayerPed()) then      
+          if IsPedShooting(Venato.GetPlayerPed()) and not Venato.HasJob(2) then      
             for i,v in ipairs(blacklistedWeapons) do
         			if GetSelectedPedWeapon(Venato.GetPlayerPed()) == v then
         				isBlacklistedWeapon = true
@@ -665,6 +667,7 @@ Citizen.CreateThread(function()
               
               if not isBlacklistedWeapon then
                 local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(),true))
+                print(GetSelectedPedWeapon(Venato.GetPlayerPed()))
                 TriggerServerEvent("police:shootfired", {x, y, z})
               end
               isBlacklistedWeapon = false

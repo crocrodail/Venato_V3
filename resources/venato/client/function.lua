@@ -24,8 +24,20 @@ function Venato.playAnim(data)
   Citizen.Wait(timeout)
 end
 
+function Venato.stopAnim(data)
+  StopAnimTask(GetPlayerPed(-1), data.lib ,data.anim, 1.0)
+end
+
 function Venato.HasJob(jobId)
   return DataUser ~= nil and DataUser.Jobs ~= nil and DataUser.Jobs[jobId] ~= nil;
+end
+
+function Venato.HasItem(itemId)
+  return DataUser ~= nil and DataUser.Inventaire ~= nil and DataUser.Inventaire[itemId] ~= nil;
+end
+
+function Venato.DisplayBool(value)
+  return value and 'true' or 'false'
 end
 
 function Venato.addBlip(x, y, z, timeout, blip, color)

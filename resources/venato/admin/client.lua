@@ -25,6 +25,10 @@ local visible = true
 local DataAdmin = nil
 local state = false
 local Skins = {
+  { skin = "u_m_m_jesus_01", libelle = "Jésus"},
+  { skin = "s_m_m_highsec_01", libelle = "Boris"},
+  { skin = "a_m_y_acult_02", libelle = "Le Boucher"},
+  { skin = "s_m_m_movprem_01", libelle = "Le Saoudien"},
   { skin = "csb_burgerdrug", libelle = "Burger Man"},
   { skin = "ig_lifeinvad_01", libelle = "Geek"},
   { skin = "s_m_y_prismuscl_01", libelle = "Prisonier"},
@@ -33,8 +37,6 @@ local Skins = {
   { skin = "ig_ramp_hipster", libelle = "Hipster"},
   { skin = "s_m_m_gaffer_01", libelle = "Ouvrier"},
   { skin = "u_m_m_spyactor", libelle = "James Bond"},
-  { skin = "s_m_m_movprem_01", libelle = "Riche"},
-  { skin = "s_m_m_highsec_01", libelle = "Hitman"},
   { skin = "ig_ramp_hic", libelle = "Junkies"},
   { skin = "ig_ramp_gang", libelle = "Vagos"},
   { skin = "ig_ramp_gang", libelle = "Vagos"},
@@ -47,12 +49,10 @@ local Skins = {
   { skin = "csb_cletus", libelle = "Clétus"},
   { skin = "a_m_y_runner_01", libelle = "Sportif"},
   { skin = "a_m_y_breakdance_01", libelle = "Break Dancer"},
-  { skin = "a_m_y_acult_02", libelle = "Le Fou en slip"},
   { skin = "a_m_m_tranvest_02", libelle = "Travesti"},
   { skin = "a_m_m_fatlatin_01", libelle = "Le Gros"},
   { skin = "a_m_y_juggalo_01", libelle = "Le Fou"},
   { skin = "a_m_y_surfer_01", libelle = "Surfer"},
-  { skin = "u_m_m_jesus_01", libelle = "Jésus"},
   { skin = "ig_tanisha", libelle = "Tanisha (F)"},
   { skin = "ig_kerrymcintosh", libelle = "Kerry McIntosh (F)"},
   { skin = "csb_anita", libelle = "Anita (F)"},
@@ -94,16 +94,17 @@ function openVenatoadmin()
     --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
     Menu.addButton("NoClip", "AdminNoClip", nil)
     Menu.addButton("Invisible", 'AdminInvisible' , nil)
-    Menu.addButton("Ne pas Utiliser pls !!!!! Créer véhicule  !!!!!!!!!!", 'createVeh' , nil)
-    Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
-  if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
-  	Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
-    --Menu.addButton("NoClip", "AdminNoClip", nil)
-    --Menu.addButton("Invisible", 'AdminInvisible' , nil)
-    Menu.addButton("Créer véhicule", 'createVeh' , nil)
-    Menu.addButton("Changer de skin", "SkinMenu", nil)
+    --Menu.addButton("Ne pas Utiliser pls !!!!! Créer véhicule  !!!!!!!!!!", 'createVeh' , nil)
+    if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
+      Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
+      Menu.addButton("Créer véhicule", 'createVeh' , nil)
+      Menu.addButton("Etat véhicule", 'vehicleState' , nil)
+      Menu.addButton("Abîmer véhicule", 'damageVeh' , nil)
+    end
+    if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' or AdminDataPlayers[ClientSource].SteamId == 'steam:110000112d6a726' then  
+      Menu.addButton("Changer de skin", "SkinMenu", nil)
+    end
   end
-end
 end
 
 function revivevnt()
@@ -112,7 +113,76 @@ function revivevnt()
     TriggerServerEvent("vnt:resurect", ClosePlayer)
   else
     Venato.notifyError("Il n'y a personne à proximité.")
+  end  
+end
+
+function vehicleState()
+  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  local vehicleNotification = {
+    title = "Garage",
+    type = "alert",
+    logo = "https://i.ibb.co/wpxH8B1/icons8-parking-96px.png",
+    timeout = 3000
+  }  
+  local nbWheel = GetVehicleNumberOfWheels(current)
+  local nbDoor = GetNumberOfVehicleDoors(current)
+
+  local message =  "AreAllVehicleWindowsIntact : "..Venato.DisplayBool(AreAllVehicleWindowsIntact(current)).."<br/>"
+  message = message.. "AreVehicleWingsIntact : "..Venato.DisplayBool(AreVehicleWingsIntact(current)).."<br/>"
+  message = message.. "GetIsLeftVehicleHeadlightDamaged : "..Venato.DisplayBool(GetIsLeftVehicleHeadlightDamaged(current)).."<br/>"
+  message = message.. "GetIsRightVehicleHeadlightDamaged : "..Venato.DisplayBool(GetIsRightVehicleHeadlightDamaged(current)).."<br/>"
+  message = message.. "GetVehicleBodyHealth : "..GetVehicleBodyHealth(current).."<br/>"
+  message = message.. "GetVehicleBodyHealth2 : "..GetVehicleBodyHealth_2(current).."<br/>"
+  message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  message = message.. "GetVehicleDeformationAtPos 0: "..GetVehicleDeformationAtPos(current,0,0,0).."<br/>"
+  message = message.. "GetVehicleDeformationAtPos 1: "..GetVehicleDeformationAtPos(current,1,1,1).."<br/>"
+  message = message.. "GetVehicleDeformationAtPos -1: "..GetVehicleDeformationAtPos(current,-1,-1,-1).."<br/>"
+  message = message.. "GetVehicleDeformationAtPos 2: "..GetVehicleDeformationAtPos(current,2,2,2).."<br/>"
+  message = message.. "GetVehicleDirtLevel : "..GetVehicleDirtLevel(current).."<br/>"
+  message = message.. "GetVehicleEngineHealth : "..GetVehicleEngineHealth(current).."<br/>"
+  for i=0, 6 do
+    message = message.. "GetVehicleWheelHealth "..i.." : "..GetVehicleWheelHealth(current, i).."<br/>"
   end
+  for i=0, 6 do
+    message = message.. "IsVehicleDoorDamaged "..i.." : "..Venato.DisplayBool(IsVehicleDoorDamaged(current, i)).."<br/>"
+  end
+  for i=0, 6 do
+    message = message.. "IsVehicleWindowIntact "..i.." : "..Venato.DisplayBool(IsVehicleWindowIntact(current, i)).."<br/>"
+  end
+  message = message.. "GetVehicleOilLevel : "..GetVehicleOilLevel(current).."<br/>"
+  
+
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
+  vehicleNotification.message = message
+  Venato.notify(vehicleNotification)
+end
+
+function damageVeh()
+  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  -- local coords = GetEntityCoords(current)
+  -- local nbWheel = GetVehicleNumberOfWheels(current)
+  -- local nbDoor = GetNumberOfVehicleDoors(current)
+  local vehicleNotification = {
+    title = "Garage",
+    type = "alert",
+    logo = "https://i.ibb.co/wpxH8B1/icons8-parking-96px.png",
+    timeout = 3000
+  }    
+  for i=0, 9 do    
+    SmashVehicleWindow(current, i)      
+  end  
+  for i=0, 9 do    
+    SetVehicleDoorBroken(current, i)      
+  end 
+  for i=0, 9 do    
+    SetVehicleTyreBurst(current, i, true, 0.0)      
+  end    
 end
 
 function healvnt()

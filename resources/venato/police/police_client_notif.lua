@@ -501,6 +501,79 @@ RegisterNetEvent('police:postAmendesCustom', function(data)
 
 end)
 
+RegisterNetEvent('police:targetCheckInventory:cb')
+AddEventHandler('police:targetCheckInventory:cb', function(data)
+    TriggerEvent('Menu:Clear')
+    TriggerEvent('Menu:Init', "Inventaire", "Voyons voir ce qu'on a là", '#46914C99', "")
+    for _, v in pairs(data) do    
+      if v.isWeapon then
+        TriggerEvent('Menu:AddButton2', v.libelle, "getWeaponFouille", v, '', "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png")
+      end
+      if v.isMoney then
+        TriggerEvent('Menu:AddButton2', v.money.." €", "getMoneyFouille", v, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
+      end
+      if v.isItem then
+        TriggerEvent('Menu:AddShopButton', v.libelle, "getItemFouille", v, v.picture, v.quantity, nil)
+      end
+    end
+
+    TriggerEvent('Menu:CreateMenu')
+    TriggerEvent('Menu:Open')
+end)
+
+function getWeaponFouille(weapon)
+    print(weapon.targetSource) 
+    
+    local notif = defaultNotification
+    notif.message = 'Information'
+    notif.logo = "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png"
+    notif.message = 'Vous vous êtes en fait saisir '..weapon.libelle  
+    TriggerServerEvent('Venato:NotifyPlayer', {weapon.targetSource, notif})    
+
+    TriggerServerEvent('police:removeWeapon', weapon)
+    TriggerServerEvent('police:addWeapon', weapon)
+    Citizen.Wait(100)
+    TriggerServerEvent("police:targetCheckInventory", weapon.targetSource)
+end
+
+function getMoneyFouille(money)
+    local qty = Venato.OpenKeyboard('', "", 100, "Argent à récupérer:")
+    if tonumber(qty) ~= nil and tonumber(qty) >= 0  and tonumber(qty) <= money.money then
+        TriggerServerEvent('Inventory:CallInfoMoney', money.target, -qty, nil)
+        print(money.targetSource)  
+
+        local notif = defaultNotification
+        notif.message = 'Information'
+        notif.logo = 'https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png'
+        notif.message = 'Vous vous êtes en fait saisir '..money.money..' €'  
+        TriggerServerEvent('Venato:NotifyPlayer', {money.targetSource, notif})
+        TriggerServerEvent("police:targetCheckInventory", money.targetSource)
+
+    else
+        Venato.notifyError("Erreur dans le nombre renseigné.")
+    end
+    Menu.close()
+end
+
+function getItemFouille(item)
+    local qty = Venato.OpenKeyboard('', "", 100, "Nombre à récupérer:")
+    if tonumber(qty) ~= nil and tonumber(qty) >= 0  and tonumber(qty) <= item.quantity then
+        local notif = defaultNotification
+        notif.title = 'Information'
+        notif.logo = item.picture
+        notif.message = 'Vous vous êtes en fait saisir '..item.quantity..' '..item.libelle     
+        TriggerServerEvent('Venato:NotifyPlayer', { item.targetSource, notif })
+
+        TriggerServerEvent('Inventory:RemoveItem',tonumber(qty), item.id, item.targetSource)
+        TriggerServerEvent('Inventory:AddItem',tonumber(qty), item.id)
+        Citizen.Wait(100)
+        TriggerServerEvent("police:targetCheckInventory", item.targetSource)
+    else
+        Venato.notifyError("Erreur dans le nombre renseigné.")
+    end
+    Menu.close()
+end
+
 AddEventHandler("playerSpawned", function(source)
     TriggerServerEvent("police:checkIsCop")
 end)
@@ -520,22 +593,68 @@ end
 --====================================================================================
 -- Action
 --====================================================================================
-function POLICE_Check()
+function POLICE_Check(isPolice)  
+    Menu.close()  
     t, distance = GetClosestPlayer()
-	if(distance ~= -1 and distance < 3) then
-		TriggerServerEvent("police:targetCheckInventory", GetPlayerServerId(t))
+    if(distance ~= -1 and distance < 3) then
+        if IsPlayerDead(t) then 
+            Venato.playAnim({
+                useLib = true,
+                flag = 1,
+                lib = "amb@medic@standing@kneel@base",
+                anim = "base",
+                timeout = 500
+            });
+        end
+        Venato.playAnim({
+            useLib = true,
+            flag = 48,
+            lib = "anim@gangops@facility@servers@bodysearch@",
+            anim = "player_search",
+            timeout = 5000
+        });  
+        
+        local notif = defaultNotification
+        notif.title = 'Fouille'
+        notif.logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
+        notif.message = 'Vous êtes en train de vous faire fouiller'
+        
+        TriggerServerEvent('Venato:NotifyPlayer', {GetPlayerServerId(t), notif})
+
+        TriggerServerEvent("police:targetCheckInventory", GetPlayerServerId(t))
+        Venato.stopAnim({
+            lib = "anim@gangops@facility@servers@bodysearch@",
+            anim = "player_search",
+        })     
+        Venato.stopAnim({
+            lib = "amb@medic@standing@kneel@base",
+            anim = "base",
+        })
 	else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
-        Venato.notify(defaultNotification)
+        if isPolice then
+            defaultNotification.title = "LSPD"
+            defaultNotification.logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png";
+        else
+            defaultNotification.title = "Gang"
+            defaultNotification.logo = "https://i.ibb.co/dp3xMML/icons8-ski-mask-96px.png";
+        end        
 	end
 end
 
-function POLICE_Cuffed()
+function POLICE_Cuffed(isPolice)
     t, distance = GetClosestPlayer()
     if(distance ~= -1 and distance < 3) then
-		TriggerServerEvent("police:cuff", GetPlayerServerId(t))
+        TriggerServerEvent("police:cuff", GetPlayerServerId(t), isPolice)       
     else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
+        if isPolice then
+            defaultNotification.title = "LSPD"
+            defaultNotification.logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png";
+        else
+            defaultNotification.title = "Gang"
+            defaultNotification.logo = "https://i.ibb.co/dp3xMML/icons8-ski-mask-96px.png";
+        end 
         Venato.notify(defaultNotification)
 	end
 end
@@ -612,21 +731,21 @@ function POLICE_FINE_CUSTOM()
     if t ~= nil and t ~= '' then
       AddTextEntry('FMMC_MPM_NA', "Tarif")
       local r = tonumber(openTextInput('','', 128))
-      if r ~= nil then
-        AddTextEntry('FMMC_MPM_NA', "Nombre de point")
-        local p = tonumber(openTextInput('','', 128))
-        if p ~= nil then
-          if r ~= nil and t ~= nil and t ~= '' and p ~= nil then
-              POLICE_Fines(r,t,p)
-          end
-        else
-          defaultNotification.message = "<span class='red--text'>Erreur dans le nombre de point de l'amende.</span>"
-          Venato.notify(defaultNotification)
-        end
-      else
+      if r ~= nil and r > 0 then
+    --     AddTextEntry('FMMC_MPM_NA', "Nombre de point")
+    --     local p = tonumber(openTextInput('','', 128))
+    --     if p ~= nil then
+    --       if r ~= nil and t ~= nil and t ~= '' and p ~= nil then
+               POLICE_Fines(r,t,p)
+    --       end
+    --     else
+    --       defaultNotification.message = "<span class='red--text'>Erreur dans le nombre de point de l'amende.</span>"
+    --       Venato.notify(defaultNotification)
+    --     end
+       else
         defaultNotification.message = "<span class='red--text'>Erreur dans le tarif de l'amende.</span>"
         Venato.notify(defaultNotification)
-      end
+       end
     else
       defaultNotification.message = "<span class='red--text'>Erreur dans le titre de l'amende.</span>"
       Venato.notify(defaultNotification)
@@ -636,16 +755,18 @@ end
 function POLICE_Fines(amount, reason, points)
     local t, distance = GetClosestPlayer()
 
-	if(distance ~= -1 and distance < 3) then
-        if points > 0 then
-            --TriggerServerEvent("dmv:removePoints", points, GetPlayerServerId(t), source)
-            TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
-        elseif points < 0 then
-            --TriggerServerEvent("dmv:removeLicence", GetPlayerServerId(t), source)
-            TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
-        elseif points == 0 then
-            TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
-        end
+
+    if(distance ~= -1 and distance < 3) then
+        TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
+        -- if points > 0 then
+        --     --TriggerServerEvent("dmv:removePoints", points, GetPlayerServerId(t), source)
+        --     TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
+        -- elseif points < 0 then
+        --     --TriggerServerEvent("dmv:removeLicence", GetPlayerServerId(t), source)
+        --     TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
+        -- elseif points == 0 then
+        --     TriggerServerEvent("police:finesGranted", GetPlayerServerId(t), amount, reason)
+        -- end
 	else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
         Venato.notify(defaultNotification)

@@ -12,6 +12,7 @@ employes[52]  = 'Gang Shelby'
 employes[54]  = 'Gang La French'
 employes[56]  = 'Gang LOST'
 employes[41]  = 'Palace'
+employes[60]  = 'Gang Vagos'
 
 ConfigEnterprise = {}
 
@@ -164,4 +165,17 @@ ConfigEnterprise[41] = {
     TitlePolice = "Lobster",
     MessagePolice = "Roboto Condensed",
     Coffres = {1196, 1192, 1197, 1193}
+}
+ConfigEnterprise[60] = {
+    PDG = 61,
+    Color = "#CE9919",
+    Title = "Gang Vagos",
+    Background = "",
+    NotifBackground = "",
+    Open = "",
+    Close = "",
+    TitlePolice = "Lobster",
+    MessagePolice = "Roboto Condensed",
+    Gang = true,
+    Coffres = {1211}
 }

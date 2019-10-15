@@ -36,12 +36,28 @@ local defaultNotification = {
     logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png"
 }
 
+RegisterNetEvent('anim:getPlayerCuffedStatus')
+AddEventHandler('anim:getPlayerCuffedStatus', function(status)
+    print(status)
+    if status then    
+        TriggerServerEvent("Inventory:RemoveItem", 1, 2020)
+    end
+end)
+
 -- Event: "anim:cuff" used to toggle between cuffed/uncuffed state.
 -- Server scripts can trigger this event.
 RegisterNetEvent('anim:cuff')
-AddEventHandler('anim:cuff', function()
+AddEventHandler('anim:cuff', function(isPolice, from)
     -- (re)set the ped variable, for some reason the one set previously doesn't always work.
     ped = PlayerPedId()
+
+    if isPolice then
+        defaultNotification.title = "LSPD"
+        defaultNotification.logo = "https://i.ibb.co/K7Cv1Sx/icons8-police-badge-96px.png";
+    else
+        defaultNotification.title = "Gang"
+        defaultNotification.logo = "https://i.ibb.co/dp3xMML/icons8-ski-mask-96px.png";
+    end 
 
     -- Load the animation dictionary.
     RequestAnimDict(dict)
@@ -109,6 +125,10 @@ AddEventHandler('anim:cuff', function()
     Venato.notify(defaultNotification)
     -- Change the cuffed state to be the inverse of the previous state.
     cuffed = not cuffed
+
+    if not isPolice then
+        TriggerServerEvent('anim:playerCuffedStatus', cuffed, from)
+    end
 
     -- Set changed to true, this is used for something that is only ran once but still needs to be in a slow loop.
     changed = true

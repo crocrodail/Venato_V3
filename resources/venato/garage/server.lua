@@ -26,12 +26,9 @@ AddEventHandler("Garage:SortiVehicule", function(plate,model)
 end)
 
 RegisterNetEvent("Garage:RangeVoiture")
-AddEventHandler("Garage:RangeVoiture", function(plate,model,engineHealth,vehicleHealth,garage,veh)
+AddEventHandler("Garage:RangeVoiture", function(plate,model,garage,veh, health)
   local source = source
-  local table = {}
-  table[1] = engineHealth
-  table[2] = vehicleHealth
-  local health = json.encode(table)
+  local health = json.encode(health)
   MySQL.Async.execute("UPDATE user_vehicle SET state=0 , Health=@health, namegarage=@garage WHERE model=@model AND plate=@plate",
   {['@model'] =  model, ['@plate'] = plate, ['@health'] = health, ['@garage'] = garage })
   TriggerClientEvent('Garage:deleteVoiture', source, veh, plate)

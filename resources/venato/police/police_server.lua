@@ -53,24 +53,37 @@ function getIdentifiant(id)
 
 end
 
-function checkInventory(source, target)
-	local strResult = "Possede : <br/>"
+function checkInventory(source, target, t)
+	local inventory = {}
   	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_inventory` JOIN items ON items.id = user_inventory.item_id WHERE identifier = @username", {['@username'] = target})
 	  if (result) then
 		  for _, v in ipairs(result) do
 			  if(v.quantity ~= 0) then
-			  	strResult = strResult .. v.quantity .. " de " .. v.libelle .. ", <br/>"
+				  inventory[v.id] = v
+				  inventory[v.id].isItem = true
+				  inventory[v.id].target = target
+				  inventory[v.id].targetSource = t
 		  	end
 		end
 	end
-	strResult = strResult .. "Armes : <br/>"
-	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_weapons` WHERE identifier = @username", { ['@username'] = target})
+	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_weapons` u INNER JOIN weapon_model wp ON wp.weapond = u.weapon_model WHERE u.identifier = @username", { ['@username'] = target})
 	if (result) then
 		for _, v in ipairs(result) do
-			strResult = strResult .. v.weapon_model .. ", <br/>"
+			inventory[v.id] = v
+			inventory[v.id].isWeapon = true
+			inventory[v.id].target = target
+			inventory[v.id].targetSource = t
 		end
 	end
-	return strResult
+	local result = MySQL.Sync.fetchAll("SELECT * FROM users WHERE identifier = @username", {['@username'] = target})
+	if (result) then
+		inventory[-1] = {}
+		inventory[-1].money = result[1].money
+		inventory[-1].isMoney = true
+		inventory[-1].target = t
+		inventory[-1].targetSource = t
+  	end
+	return inventory
 end
 
 AddEventHandler('playerDropped', function()
@@ -172,23 +185,25 @@ AddEventHandler('police:confirmUnseat', function(t)
 end)
 
 RegisterServerEvent('police:targetCheckInventory')
-AddEventHandler('police:targetCheckInventory', function(t)
+AddEventHandler('police:targetCheckInventory', function(t, newSource)
 	local source = source
-	local targetSI = Venato.GetSteamID(t)
 	
-	local info = checkInventory(source, targetSI)
+	if newSource ~= nil then
+		source = newSource
+	end
+	local targetSI = Venato.GetSteamID(t)	
 
-	defaultNotification.message = info
-	Venato.notify(source, defaultNotification)		
+	local info = checkInventory(source, targetSI, t)
+	TriggerClientEvent('police:targetCheckInventory:cb', source, info)		
 end)
 
 RegisterServerEvent('police:finesGranted')
 AddEventHandler('police:finesGranted', function(t, amount, reason)
 	local source = source
 
-	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour " .. reason
+	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour : " .. reason
 	defaultNotification.timeout = 5000
-	local paymentCB = Venato.paymentCB(t, amount)
+	local paymentCB = Venato.paymentCB(t, amount, true)
 	if paymentCB.status then
 		TriggerClientEvent('police:payFines', t, amount, reason)
 		TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))		
@@ -247,4 +262,22 @@ AddEventHandler("police:shootfired", function(data)
 	for i, c in pairs(inServiceCops) do
 		TriggerClientEvent("police:shootfired", i, data)
 	end
+end)
+
+RegisterServerEvent("police:removeWeapon")
+AddEventHandler("police:removeWeapon", function(data)
+	local idWeapon = data.id
+	local notif = defaultNotification
+	notif.message = 'Fouille'
+	notif.logo = "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png"
+	notif.message = 'Vous êtes fait saisir votre '..data.libelle
+	Venato.notify(data.targetSource, notif)
+	TriggerEvent("Inventory:RemoveWeapon", data.wepond, data.id, data.poid, data.targetSource)
+end)
+
+RegisterServerEvent("police:addWeapon")
+AddEventHandler("police:addWeapon", function(data)
+	local idWeapon = data.id
+	local source = source
+	TriggerEvent("Inventory:AddWeapon", data.weapond,  data.balles, data.poid, data.libelle, source)
 end)

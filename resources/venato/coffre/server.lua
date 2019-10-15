@@ -56,6 +56,7 @@ function reloadDataCoffre()
           MySQL.Async.fetchAll("SELECT * FROM coffres_weapons JOIN weapon_model ON coffres_weapons.Weapon = weapon_model.weapond", {}, function(resultweapon)
             if resultweapon[1] ~= nil then
               local qtyWp = 0
+              Citizen.Wait(100)
               for k3,v3 in pairs(resultweapon) do
                 CofWp = {
                   ["weaponId"] = v3.Weapon,

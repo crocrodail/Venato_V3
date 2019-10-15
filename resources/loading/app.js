@@ -1,5 +1,6 @@
 /* Need Help? Join my discord @ discord.gg/yWddFpQ */
 
+
 // And yes... I know this is __very__ messy. 
 
 /* Uncomment for PLAIN TEXT (also uncomment title in index)  document.getElementById('title').innerHTML = config.text.title;  */
@@ -8,6 +9,17 @@ var audio = `<div data-video=${config.videoID} data-autoplay="1" data-loop="1" i
 if (config.music === true) { 
  $("body").append(audio);
 } 
+
+var toCopy  = document.getElementById( 'to-copy' ),
+    btnCopy = document.getElementById( 'copy' );
+
+document.addEventListener("keydown", function(e) {
+    if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 67) {
+      e.preventDefault();
+      // Process the event here (such as click on submit button)
+      copy();
+    }
+  }, false);
 
 $(function () {
 
@@ -31,6 +43,10 @@ $(function () {
         });
     }, 2 * config.transitionInterval + config.imgInterval);
 })
+
+function copy() {
+    btnCopy.click();
+} 
 
 /* forked from https://cdn.rawgit.com/labnol/files/master/yt.js */
 function onYouTubeIframeAPIReady() {
@@ -84,4 +100,110 @@ window.addEventListener('message', function (e) {
     (handlers[e.data.eventName] || function () { })(e.data);
 });
 
+
+btnCopy.addEventListener( 'click', function(){
+    toCopy.select();
+    
+    if ( document.execCommand( 'copy' ) ) {
+        btnCopy.classList.add( 'copied' );
+      
+        var temp = setInterval( function(){
+          btnCopy.classList.remove( 'copied' );
+          clearInterval(temp);
+        }, 600 );
+      
+    } else {
+      console.info( 'document.execCommand went wrong…' )
+    }
+    
+    return false;
+  } );
+
 /////////////////////////////////////////////
+
+var progress = [
+    {
+        logo : "https://i.ibb.co/0G3KyFB/icons8-passenger-96px.png",
+        title : "Ceinture de sécurité",
+        est : "",
+        status : 3
+    },
+    {
+        logo : "https://i.ibb.co/dp3xMML/icons8-ski-mask-96px.png",
+        title : "Menu Gang",
+        est : "15/10",
+        status : 3
+    },
+    {
+        logo : "https://i.ibb.co/dmfGBDv/icons8-car-service-96px.png",
+        title : "Gestion des dégâts des véhicules",
+        est : "18/10",
+        status : 1
+    },
+    {
+        logo : "https://i.ibb.co/LYkBb04/icons8-shirt-96px-1.png",
+        title : "Garde robe",
+        est : "21/10",
+        status : 0
+    },
+    {
+        logo : "https://i.ibb.co/nw0NY3z/icons8-traffic-jam-96px-1.png",
+        title : "Concessionnaire auto pour pro",
+        est : "21/10",
+        status : 0
+    },
+    {
+        logo : "https://i.ibb.co/NyDPMnJ/venato.png",
+        title : "Mise en place des VP",
+        est : "23/10",
+        status : 0
+    },
+];
+
+progress.forEach(function(element) {
+    const li = document.createElement('li');
+    li.innerHTML = getItem(element)
+    document.getElementById('progressList').appendChild(li);
+});
+
+
+
+function getItem(item){
+    var itemElmnt = 
+        "<div class='collapsible-header'>"+
+            "<img src='"+item.logo+"'/>"+
+            "<p class='collapsible-title'>"+item.title+"<p class='collapsible-estimation'>";
+
+    if(item.est != ''){
+        itemElmnt = itemElmnt + ' Estimé le';
+    }
+
+    itemElmnt = itemElmnt + " " + item.est + "</p></p>"+
+            "<div class='collapsible-icon'><img src='"+getStatusLogo(item.status)+"' width='30px;'/></div>"+
+        "</div>";
+
+    return itemElmnt;
+}
+
+function getStatusLogo(status){
+    var logo = '';
+
+    switch (status) {
+        case 0: //planifié
+            logo = 'https://i.ibb.co/b6gZtp0/icons8-calendar-96px.png';
+            break;
+        case 1: //en cours
+            logo = 'https://i.ibb.co/0G7J1P1/icons8-computer-support-96px.png';
+            break;
+        case 2: //prochain reboot
+            logo = 'https://i.ibb.co/f8bFWbj/icons8-restart-96px.png';
+            break;
+        case 3: // disponible
+            logo = 'https://i.ibb.co/PgbD11H/icons8-checked-2-96px.png';
+            break;    
+        default:
+            break;
+    }
+
+    return logo;
+}

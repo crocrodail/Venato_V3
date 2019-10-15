@@ -41,6 +41,12 @@ local doorList = {
     [39] = { ["objName"] = "-626684119", ["x"]= -569.80, ["y"]= 293.77,["z"]= 79.33,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
     [40] = { ["objName"] = "-626684119", ["x"]= -560.24, ["y"]= 293.01,["z"]= 82.33,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
     [41] = { ["objName"] = "1289778077", ["x"]= -568.88, ["y"]= 281.11,["z"]= 83.13,["distance"]=1.5, ["locked"]= true, ['jobId'] = 23},
+    [42] = { ["objName"] = "827574885", ["x"]= 622.80, ["y"]= -2921.64,["z"]= 4.05,["distance"]=2.5, ["locked"]= true, ['jobId'] = 2},--camp d'entrainement police
+    [43] = { ["objName"] = "-768779561", ["x"]= 963.21, ["y"]= -141.85,["z"]= 74.76,["distance"]=2.5, ["locked"]= true, ['jobId'] = 56},--lost
+    [44] = { ["objName"] = "-250842784", ["x"]= -56.92, ["y"]= -1079.77,["z"]= 26.11,["distance"]=5, ["locked"]= true, ['jobId'] = 59},--carshop
+    [45] = { ["objName"] = "30769481", ["x"]= -28.80, ["y"]= -1085.92,["z"]= 28.74,["distance"]=5, ["locked"]= true, ['jobId'] = 59},-- carshop
+    [46] = { ["objName"] = "100848840", ["x"]= -24.49, ["y"]= -1086.47,["z"]= 27.18,["distance"]=5, ["locked"]= true, ['jobId'] = 59}, -- carshop
+    [47] = { ["objName"] = "-1234764774", ["x"]= 223.983, ["y"]= -2011.299,["z"]= 19.295,["distance"]=5, ["locked"]= true, ['jobId'] = 59}, -- carshop
 }
 
 RegisterNetEvent('door:state')

@@ -53,7 +53,9 @@ Citizen.CreateThread(function()
    
     TriggerEvent('Menu:Init', config.Title, "Options", config.Color, '')
     Menu.clearMenu()
-    Menu.addButton("Faire une annonce", "AnnonceMenu", idEntreprise)
+    if not ConfigEnterprise[idEntreprise].Gang then
+      Menu.addButton("Faire une annonce", "AnnonceMenu", idEntreprise)
+    end
     if Venato.HasJob(config.PDG) then
         if ConfigEnterprise[idEntreprise].Gang then
           Menu.addButton("Recruter un nouveau membre", "Hire", idEntreprise)
@@ -149,9 +151,9 @@ Citizen.CreateThread(function()
 
   function HirePlayer(data)
     TriggerServerEvent("Entreprise:HirePlayer", data[1], data[2])
-    for i=1, #ConfigEnterprise[data[1]].Coffres, 1 do
-      TriggerServerEvent("Coffre:CoffreWhitelistPlayer", {ConfigEnterprise[data[1]].Coffres[i], data[2]})
-    end
+    -- for i=1, #ConfigEnterprise[data[1]].Coffres, 1 do
+    --   TriggerServerEvent("Coffre:CoffreWhitelistPlayer", {ConfigEnterprise[data[1]].Coffres[i], data[2]})
+    -- end
     if ConfigEnterprise[data[1]].Gang then
       data[1] = 8
       TriggerServerEvent("Entreprise:HirePlayer", data[1], data[2])
@@ -203,9 +205,9 @@ Citizen.CreateThread(function()
 
   function ConfirmFire(data)
     TriggerServerEvent("Entreprise:FirePlayer", data)
-    for i=1, #ConfigEnterprise[data[1]].Coffres, 1 do
-      TriggerServerEvent("Coffre:UnWhitelist", {ConfigEnterprise[data[1]].Coffres[i], data[2]})
-    end
+    -- for i=1, #ConfigEnterprise[data[1]].Coffres, 1 do
+    --   TriggerServerEvent("Coffre:UnWhitelist", {ConfigEnterprise[data[1]].Coffres[i], data[2]})
+    -- end
     if ConfigEnterprise[data[1]].Gang then
       data[1] = 8
       TriggerServerEvent("Entreprise:FirePlayer", data)

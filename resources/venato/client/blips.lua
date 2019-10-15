@@ -160,14 +160,14 @@ local blips = {
 	{name="départ étape 6", id=22, x=2276.18, y=1093.198, z=796.70},
 	{name="arrivé étape 6", id=376, x=1562.18, y=895.198, z=86.70},--]]
     -- Hospitals
-    -- {name="Hospital", id=61, x= 1839.6, y= 3672.93, z= 34.28},
-    -- {name="Hospital", id=61, x= -247.76, y= 6331.23, z=32.43},
-     {name="Hospital", id=61, x= 1151.024, y= -1529.941, z= 35.373},
-    -- {name="Hospital", id=61, x= 357.43, y= -593.36, z= 28.79},
-    -- {name="Hospital", id=61, x= 295.83, y= -1446.94, z= 29.97},
-    -- {name="Hospital", id=61, x= -676.98, y= 310.68, z= 83.08},
-    -- {name="Hospital", id=61, x= 1151.21, y= -1529.62, z= 35.37},
-    -- {name="Hospital", id=61, x= -874.64, y= -307.71, z= 39.58},
+     {name="Hôpital", id=61, x= 1839.6, y= 3672.93, z= 34.28},
+    --  {name="Hôpital", id=61, x= -247.76, y= 6331.23, z=32.43},
+     {name="Hôpital", id=61, x= 1151.024, y= -1529.941, z= 35.373},
+    --  {name="Hôpital", id=61, x= 357.43, y= -593.36, z= 28.79},
+    --  {name="Hôpital", id=61, x= 295.83, y= -1446.94, z= 29.97},
+    --  {name="Hôpital", id=61, x= -676.98, y= 310.68, z= 83.08},
+    --  {name="Hôpital", id=61, x= 1151.21, y= -1529.62, z= 35.37},
+    --  {name="Hôpital", id=61, x= -874.64, y= -307.71, z= 39.58},
     -- Vehicle Shop (Simeon)
     -- {name="Simeon", id=120, x=-33.803, y=-1102.322, z=25.422},
     -- -- LS Customs
@@ -213,8 +213,9 @@ local blips = {
     -- {name="Race", id=316, x=2384.969, y=4277.583, z=30.379},
     -- {name="Race", id=316, x=1577.881, y=3836.107, z=30.7717},
     -- Yacht
-    {name="Yacht", id=410, x=-2045.800, y=-1031.200, z=11.900},
-    {name="Cargo", id=410, x=-90.000, y=-2365.800, z=14.300},
+    --{name="Yacht", id=410, x=-2045.800, y=-1031.200, z=11.900},
+    --{name="Cargo", id=410, x=-90.000, y=-2365.800, z=14.300},
+    {name ="Skatepark", id=376, x=-1687.966, y=-758.84, z=10.236}
   }
 
 	Citizen.CreateThread(function()

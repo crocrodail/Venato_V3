@@ -51,6 +51,12 @@ local TeleportFromTo = {
     whitelist = false,
   },
 
+  ["Hôpital - Entrer - sortir"] = {
+    positionFrom = { ['x'] = 1838.427, ['y'] = 3673.369, ['z'] = 34.277, nom = "Entrer - Hôpital" },
+    positionTo = { ['x'] = 1845.732, ['y'] = 3670.156, ['z'] = -3.282, nom = "Sortir - Hôpital" },
+    whitelist = false,
+  },
+
   ["Hôpital garage - Entrer - sortir"] = {
     positionFrom = { ['x'] = 1132.591, ['y'] = -1597.225, ['z'] = 34.733, nom = "Entrer - Hôpital" },
     positionTo = { ['x'] = 1136.334, ['y'] = -1594.335, ['z'] = 4.945, nom = "Sortir arrière Hôpital" },
@@ -74,11 +80,11 @@ local TeleportFromTo = {
   --		positionTo = { ['x'] = 454.494, ['y'] = -982.571, ['z'] = 30.6896, nom = "Sortir - Armurie"},
   --	},
 
-  ["Agence H2BA - Bureau"] = {
-    positionFrom = { ['x'] = -1011.65, ['y'] = -480.061, ['z'] = 39.9706, nom = "Entrer - Agence H2BA" },
-    positionTo = { ['x'] = -1002.81, ['y'] = -477.794, ['z'] = 50.0273, nom = "Sortir - Agence H2BA" },
-    whitelist = false,
-  },
+  -- ["Gruppe6 - Bureau"] = {
+  --   positionFrom = { ['x'] = -1011.65, ['y'] = -480.061, ['z'] = 39.9706, nom = "Entrer - Agence H2BA" },
+  --   positionTo = { ['x'] = -1002.81, ['y'] = -477.794, ['z'] = 50.0273, nom = "Sortir - Agence H2BA" },
+  --   whitelist = false,
+  -- },
 
   ["Gouvernement"] = {
     positionFrom = { ['x'] = -429.32, ['y'] = 1110.22, ['z'] = 327.68, nom = "Entrer - Gouvernement" },
@@ -93,13 +99,13 @@ local TeleportFromTo = {
   },
 
   ["AlphaCorp - Bureau"] = {
-    positionFrom = { ['x'] = -1581.423706, ['y'] = -558.146667, ['z'] = 34.953056, nom = "Entrer - Bureau AlphaCorp" },
+    positionFrom = { ['x'] = -1581.423706, ['y'] = -558.146667, ['z'] = 34.953056, nom = "Entrer - Bureau Gruppe6" },
     positionTo = { ['x'] = -1581.293823, ['y'] = -562.1727905, ['z'] = 108.5229339, nom = "Sortir - Rue" },
     whitelist = false,
   },
 
   ["AlphaCorp - Parking"] = {
-    positionFrom = { ['x'] = -1536.5893554, ['y'] = -579.018127, ['z'] = 25.7077922, nom = "Entrer - Bureau AlphaCorp" },
+    positionFrom = { ['x'] = -1536.5893554, ['y'] = -579.018127, ['z'] = 25.7077922, nom = "Entrer - Bureau Gruppe6" },
     positionTo = { ['x'] = -1579.411376, ['y'] = -564.9171142, ['z'] = 108.5229339, nom = "Sortir - Parking" },
     whitelist = false,
   },

@@ -1,39 +1,60 @@
 <!-- /* Need Help? Join my discord @ discord.gg/yWddFpQ */ -->
 <html>
- <head>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <link rel="stylesheet" href="config.css" type="text/css">
-        <link rel="stylesheet" href="stylesheet.css" type="text/css">
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link rel="stylesheet" href="config.css" type="text/css">
+		<link rel="stylesheet" href="stylesheet.css" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>      
+		<!-- Compiled and minified CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      
- </head>
- <body>
-          
-        <div class='blur' id="bg">
-  <!-- ADD your background images here (same format) and make sure to add it in __resource.lua  -->
-           
-  
-            </div>
-         
-         <div id="container">
-                
-    <!-- Uncomment for PLAIN TEXT (also uncomment title in app.js)  <h2 id="title"></h2> -->
-                    <!-- Your logo below -->
-        <img class="logo" src="imgs/logo.png">
-             <br>
-                <div class="loadbar">
-                        <div class="yeet"></div>
-                    </div>
-                </div>
-         <p id="link"></p>
-        
-       
-  </div>
-</center>
+		<!-- Compiled and minified JavaScript -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+										
+	</head>
+	<body>
+		<div class="blur" id="bg">
+		</div>
 
-    <script src="config.js"></script>
-    <script src="app.js"></script>
-    <script src="https://www.youtube.com/iframe_api"></script>
- </body>
+		<div class="loading-logo">
+			<div id="container">
+				<h3>Bienvenue sur Venato</h3>
+				<!-- Uncomment for PLAIN TEXT (also uncomment title in app.js)  <h2 id="title"></h2> -->
+				<!-- Your logo below -->
+				<img class="logo" src="imgs/logo.png">
+				<br>
+				<div class="loadbar">
+					<div class="yeet"></div>
+				</div>
+			</div>
+		</div>
+		<div class='info'>
+			<p class="password">⚠️Ce serveur est en free-access mais protégé par un mot de passe, retrouvez le dans le channel #mdp-server sur discord.</p>
+			<br/>
+			<button id="copy" type="button">Appuyez pour CTRL+C pour copier l'url du Discord dans votre presse-papier<span class="copiedtext" aria-hidden="true">Copié</span></button>
+			<br/><textarea id="to-copy" spellcheck="false">https://discord.gg/XpMvgkd</textarea>
+			<br/>
+			<h4>Développements en cours</h4>
+			<br>
+			<table class='legend'>
+				<tr>
+						<td class="legend-logo"><img src="https://i.ibb.co/b6gZtp0/icons8-calendar-96px.png"/></td><td class="legend-text">Planifié</td>
+						<td class="legend-logo"><img src="https://i.ibb.co/0G7J1P1/icons8-computer-support-96px.png"/></td><td class="legend-text">En cours</td>
+						<td class="legend-logo"><img src="https://i.ibb.co/f8bFWbj/icons8-restart-96px.png"/></td><td class="legend-text">Prochain reboot</td>
+						<td class="legend-logo"><img src="https://i.ibb.co/PgbD11H/icons8-checked-2-96px.png"/></td><td class="legend-text">Disponible</td>
+				</tr>
+			</table>
+			<div class='progress-container'>
+			<ul id="progressList" class="collapsible">					
+			</ul>
+		</div>
+		<p class='nb'>Les dates d'estimation de livraison ne sont pas contractuelles.</p>
+		</div>
+		<p id="link"></p>
+
+		<script src="config.js"></script>
+		<script src="app.js"></script>
+		<script src="https://www.youtube.com/iframe_api"></script>
+	</body>
 </html>

@@ -197,7 +197,7 @@ function PreviewVehicle(data)
         Venato.notify(defaultNotification)
         return
     end
-    Venato.CreateVehicle(data.model, GetEntityCoords(Venato.GetPlayerPed()), GetEntityHeading(playerPed), function(vehicle)
+    Venato.CreateVehicle(data.model, {x=-44.309, y= -1097.13, z= 26.422}, 114.878, function(vehicle)
       LastCar = vehicle
       SetVehicleColours(vehicle,color,colorSec)
       SetVehicleFuelLevel(vehicle, GetVehicleFuelLevel(vehicle) + 50)
@@ -356,14 +356,12 @@ RegisterNetEvent('CarShop:PaiementOk:response')
 AddEventHandler('CarShop:PaiementOk:response', function(data)
   RemoveNotification(lastNotif)
   SetNuiFocus(false, false)
-  local car = GetVehiclePedIsIn( playerPed, false )
-  SetVehicleUndriveable(car, false)
+  RemoveCurrentCar()
   TriggerEvent('Menu:HideVehicleInformation')
   HideMenu()
   defaultNotification.type = "alert"
-  defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Faites attention sur la route.";
+  defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Votre véhicule vous attends au garage du concessionnaire.";
   Venato.notify(defaultNotification)
-  TriggerEvent('lock:addVeh', data.plate, data.name)
   LastCar = nil
 end)
 

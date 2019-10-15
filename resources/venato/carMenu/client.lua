@@ -62,6 +62,12 @@ function showMenu()
 
         Menu.addButton("Moteur", "toggleEngine", car)
 
+        Menu.addButton("Baisser les vitres", "WindowsRollDown", car)
+        Menu.addButton("Monter les vitres", "WindowsRollUp", car)
+
+        Menu.addButton("Baisser la vitre", "WindowRollDown", car)
+        Menu.addButton("Monter la vitre", "WindowRollUp", car)
+
         if DoesVehicleHaveDoor(car, 0) then
             Menu.addButton("Portière avant gauche", "openDoor", {car = car, index = 0})
         end
@@ -101,6 +107,22 @@ end
 function hideMenu()
     menuIsOpen = false
     Menu.close()
+end
+
+function WindowsRollUp(car)      
+    for i=0, 9 do    
+        RollUpWindow(car, i)      
+    end 
+end
+function WindowsRollDown(car)      
+    RollDownWindows(car) 
+end
+
+function WindowRollDown(car)      
+    RollDownWindow(car,0) 
+end
+function WindowRollUp(car)      
+    RollUpWindow(car,0) 
 end
 
 function toggleEngine(car)

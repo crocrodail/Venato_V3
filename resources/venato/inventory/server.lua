@@ -137,7 +137,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
           DataPlayers[tonumber(source)].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable  }
           DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + DataPlayers[tonumber(source)].Inventaire[id].poid
           if DataPlayers[tonumber(source)].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[tonumber(source)].PoidMax then
-            DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + poidBefore
+            --DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
             Venato.notify(source, defaultNotification)
             TriggerEvent('inventory:full')
@@ -269,7 +269,7 @@ AddEventHandler('Inventory:CallInfo', function(ClosePlayer, nb, row)
   else
     qtyTarget = DataPlayers[ClosePlayer].Inventaire[row[2]].quantity
   end
-  TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[tonumber(source)].Poid, qtyTarget)
+  TriggerClientEvent("Inventory:CallInfo:cb", source, ClosePlayer, nb, row, DataPlayers[ClosePlayer].Poid, qtyTarget)
 end)
 
 ItemsOnTheGround = {}

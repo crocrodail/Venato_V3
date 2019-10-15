@@ -55,16 +55,18 @@ end)
 RegisterServerEvent("Entreprise:HirePlayer")
 AddEventHandler("Entreprise:HirePlayer", function(idEntreprise, identifier)  
   local source = source
-  if not ConfigEnterprise[idEntreprise].Gang then
-    if Venato.CheckChomage(identifier) then
-      Venato.RemoveChomage(identifier)
-    end  
-  end
+  if idEntreprise ~= 8 then
+    if not ConfigEnterprise[idEntreprise].Gang then
+      if Venato.CheckChomage(identifier) then
+        Venato.RemoveChomage(identifier)
+      end  
+    end
 
-  if (idEntreprise == 2) then
-    MySQL.Async.execute("INSERT INTO police(`identifier`, `rank`) VALUES (@identifier, 'Cadet')", {    
-        ["@identifier"] = identifier,
-    })
+    if (idEntreprise == 2) then
+      MySQL.Async.execute("INSERT INTO police(`identifier`, `rank`) VALUES (@identifier, 'Cadet')", {    
+          ["@identifier"] = identifier,
+      })
+    end
   end
 
   TriggerEvent("Venato:AddJob", idEntreprise, identifier)
@@ -74,18 +76,19 @@ end)
 RegisterServerEvent("Entreprise:FirePlayer")
 AddEventHandler("Entreprise:FirePlayer", function(data)  
   local source = source
-  if not ConfigEnterprise[data[1]].Gang then  
-    if Venato.NbJob(data[2]) <= 1 then
-      Venato.AddChomage(data[2])
-    end  
+  if data[1] ~= 8 then
+    if not ConfigEnterprise[data[1]].Gang then  
+      if Venato.NbJob(data[2]) <= 1 then
+        Venato.AddChomage(data[2])
+      end  
+    end
+    
+    if (data[1] == 2) then
+      MySQL.Async.execute("DELETE FROM police WHERE identifier = @identifier", {    
+          ["@identifier"] = data[2],
+      })
+    end
   end
-  
-  if (idEntreprise == 2) then
-    MySQL.Async.execute("DELETE FROM police WHERE identifier = @identifier", {    
-        ["@identifier"] = data[2],
-    })
-  end
-  
   TriggerEvent("Venato:RemoveJob", data)
   TriggerClientEvent("Entreprise:FirePlayer:cb", source, data[1])
 end)

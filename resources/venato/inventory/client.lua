@@ -583,9 +583,10 @@ function GiveItem(row)
   local row = row
   local ClosePlayer, distance = Venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-    local nb = Venato.OpenKeyboard('', '0', 2, "Nombre à donner")
+    local nb = Venato.OpenKeyboard('', '', 2, "Nombre à donner")
     if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
       TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), row)
+      Citizen.Wait(500)
       OpenInventory()
     end
   else
@@ -595,7 +596,13 @@ end
 
 RegisterNetEvent('Inventory:CallInfo:cb')
 AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, qty)
+  print(Venato.dump(table))
   if table[1] - nb >= 0 then
+    print(table[3])
+    print(nb)
+    print(poid)
+    print((table[3] * nb) + poid)
+    print(PoidMax)
     if table[3] * nb + poid <= PoidMax then
       TriggerServerEvent("Inventory:NotifGive", ClosePlayer, nb, table[2])
       TriggerServerEvent("Inventory:SetItem", table[1] - nb, table[2])

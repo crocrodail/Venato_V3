@@ -56,7 +56,7 @@ AddEventHandler("CarShop:Buy", function(vehicle)
 end)
 
 function AddVehicleToUser(source, vehicle)
-  MySQL.Async.execute("INSERT INTO user_vehicle (owner, name, model, price, plate, customs, type) VALUES (@identifier, @name, @model, @price, @plate, @customs, 1)", {["identifier"]=DataPlayers[tonumber(source)].SteamId, ["name"]=vehicle.name, ["model"]=vehicle.model, ["price"]=vehicle.price, ["plate"]=vehicle.plate, ["customs"]=vehicle.customs})
+  MySQL.Async.execute("INSERT INTO user_vehicle (owner, name, model, price, plate, customs, type, state, namegarage) VALUES (@identifier, @name, @model, @price, @plate, @customs, 1, 0, 'Car dealer')", {["identifier"]=DataPlayers[tonumber(source)].SteamId, ["name"]=vehicle.name, ["model"]=vehicle.model, ["price"]=vehicle.price, ["plate"]=vehicle.plate, ["customs"]=vehicle.customs})
 end
 
 function getVehicleById(vehicleId)

@@ -26,6 +26,7 @@ AddEventHandler("vnt:heal", function(target)
 	TriggerClientEvent("vnt:heal:cb", target)
 end)
 
+
 RegisterNetEvent("vnt:resurect")
 AddEventHandler("vnt:resurect", function(target)
 	TriggerClientEvent("vnt:resurect:cb", target)

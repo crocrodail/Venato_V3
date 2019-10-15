@@ -2,7 +2,7 @@ local Vehicule = {}
 local resend = false
 
 local garage = {
-    {name = "Garage Central", xpoint = 256.2339,  ypoint = -780.7506,  zpoint = 29.58, xspawn = 258.3808,  yspawn = -773.3583,  zspawn = 29.682, hspawn = 110.7102, hidden = false },
+    {name = "Garage Central", xpoint = 266.035,  ypoint = -755.52,  zpoint = 30.821, xspawn = 268.772,  yspawn = -750.705,  zspawn = 30.421, hspawn = 70.818, hidden = false },
     {name= 'Paleto Bay', xpoint = 141.5353, ypoint= 6623.5771, zpoint= 30.7387, xspawn = 139.1196, yspawn= 6634.199, zspawn= 30.648, hspawn =  225.00, hidden = false}, -- Paleto Bay
     {name= 'Marina residentiel', xpoint = -932.6918, ypoint= -1286.6127, z= 4.0308,  xspawn = -927.4479, yspawn= -1283.5045, zspawn= 4.0311, hspawn = 116.6553, hidden = false}, -- Marina residentiel
     {name= 'Freeway west', xpoint = -2001.1632, ypoint= -324.7654, zpoint= 43.1060,  xspawn = -2006.4946, yspawn= -332.5044, zspawn=  43.1060, hspawn = 324.975, hidden = false}, -- Freeway west
@@ -20,6 +20,13 @@ local garage = {
     {name= 'Garage LOST', xpoint = 975.649, ypoint= -136.506, zpoint= 74.149,  xspawn = 985.135, yspawn= -137.91, zspawn= 73.091, hspawn =  44.362, hidden = true}, -- ta
     {name= 'Garage Fourriere', xpoint = 419.591, ypoint= -1637.319, zpoint= 28.292,  xspawn = 419.591, yspawn= -1637.319, zspawn= 29.292, hspawn =  40.905, hidden = true}, -- ta
     {name= 'Garage Vizards', xpoint = -562.725, ypoint= -979.856, zpoint= 22.178,  xspawn = -562.725, yspawn= -979.856, zspawn= 22.178, hspawn =  130.362, hidden = true}, -- ta
+    {name= 'St Fiacre Hospital', xpoint = 1122.367, ypoint= -1521.092, zpoint= 34.838,  xspawn = 1117.395, yspawn= -1514.753, zspawn= 34.693, hspawn =  285.574, hidden = false}, -- ta
+    {name= 'Palace intérieur', xpoint = -1626.859, ypoint= -3006.08, zpoint= -78.541,  xspawn = -1640.226, yspawn= -2998.951, zspawn= -78.54, hspawn =  178.259, hidden = true}, -- ta
+    {name= 'Palace', xpoint = 777.44, ypoint= -1319.376, zpoint= 25.828,  xspawn = 771.832, yspawn= -1322.875, zspawn= 25.835, hspawn =  181.487, hidden = false}, -- ta
+    {name= 'Unicorn', xpoint = 145.758, ypoint= -1330.2, zpoint= 28.526,  xspawn = 137.797, yspawn= -1322.597, zspawn= 28.527, hspawn =  51.565, hidden = false}, -- ta
+    {name= 'Car dealer', xpoint = -47.84, ypoint= -1115.91, zpoint= 26.43,  xspawn = -41.46, yspawn= -1112.17, zspawn= 26.44, hspawn =  69.499, hidden = false}, -- ta
+    {name= 'SkatePark', xpoint = -1736.347, ypoint= -732.935, zpoint= 10.019,  xspawn = -1742.893, yspawn= -724.596, zspawn= 10.039, hspawn = 229.932, hidden = true}, -- ta
+    {name= 'Garage Vagos', xpoint = 218.023, ypoint= -1990.77, zpoint= 19.696,  xspawn = 226.109, yspawn= -1984.81, zspawn= 19.717, hspawn = 231.822, hidden = true}, -- ta
   --  {name= 'GarageDebug', xpoint = -63.96244430542, ypoint = -1088.9659423828, zpoint = 26.723899841309, xspawn = -63.96244430542, yspawn = -1088.9659423828, zspawn = 26.723899841309, hspawn =  105.1460, hidden = false}, -- ta
 }
 
@@ -133,10 +140,46 @@ function StoreMyCar(garage)
   local current = GetPlayersLastVehicle(Venato.GetPlayerPed(), true)
   if DoesEntityExist(current) then
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
-    local engineHealth = GetVehicleEngineHealth(current)
-  	local vehicleHealth = GetEntityHealth(current)
     local model = GetEntityModel(current)
     local plate = GetVehicleNumberPlateText(current)
+    
+    local engineHealth = GetVehicleEngineHealth(current)
+  	local vehicleHealth = GetEntityHealth(current)
+    local dirtLevel = GetVehicleDirtLevel(current)
+    local fuelLevel = GetVehicleFuelLevel(current)
+
+    local tireBurst = {}
+    for i=0, 6 do
+      tireBurst[i] = IsVehicleTyreBurst(current, i, true)
+    end
+
+    local doorBroken = {}
+    for i=0, 6 do
+      doorBroken[i] = IsVehicleDoorDamaged(current, i)
+    end
+
+    local windowsIntact = {}
+    for i=0, 7 do
+      RollUpWindow(car,i) 
+      windowsIntact[i] = IsVehicleWindowIntact(current, i)
+    end
+
+    local wheelHealth = {}    
+    for i=0, 6 do
+      wheelHealth[i] = GetVehicleWheelHealth(current, i)
+    end
+
+    local health = {
+      engineHealth,
+      vehicleHealth,
+      dirtLevel,
+      fuelLevel,
+      doorBroken,
+      windowsIntact,
+      tireBurst,
+      wheelHealth
+    }
+
     local mind = false
     if distance < 20 then
       for a, v in pairs(Vehicule) do
@@ -145,7 +188,7 @@ function StoreMyCar(garage)
         end
       end
       if mind and  model ~= nil then
-        TriggerServerEvent("Garage:RangeVoiture", plate,model,engineHealth,vehicleHealth,garage.name,current)
+        TriggerServerEvent("Garage:RangeVoiture", plate,model,garage.name,current, health)
         return
       end
     end
@@ -165,13 +208,41 @@ function SortirVoiture(vhll)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     if not DoesEntityExist(CarOnPoint) then
       local car = tonumber(vhll.model)
-      print(vhll.model)
       Venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
+        print(Venato.dump(health))
         if health ~= nil then
-          if (health[1] ~= nil and health[1] > 0 and health[1] < 1000) or health[2] ~= nil then
-            --print(health[1]..' ezfzsfdvsd')
-    		    SetVehicleEngineHealth(vhl, tonumber(health[1]))
-    	    end
+          SetVehicleEngineHealth(vhl, health[1])
+          SetEntityHealth(vhl, health[2])
+          GetVehicleDirtLevel(vhl, health[3])
+          GetVehicleFuelLevel(vhl, health[4])
+          
+          local doors = health[5]
+          for i=0, 9 do  
+            if(doors[i..""] == 1) then
+              SetVehicleDoorBroken(vhl, i)   
+            end   
+          end 
+
+          local window = health[6]
+          for i=0, 9 do  
+            if window[i..""] == false then
+              SmashVehicleWindow(vhl, i) 
+            end     
+          end 
+
+          local tyre = health[7]
+          for i=0, 9 do    
+            if tyre[i..""] == 1 then
+              SetVehicleTyreBurst(vhl, i, true, 0.0)   
+            end   
+          end  
+
+          local wheel = health[8]
+          print(Venato.dump(wheel))
+          for i, p in pairs(wheel) do
+            SetVehicleWheelHealth(vhl, i, wheel[i..""])
+          end
+
         end
         SetPedIntoVehicle(Venato.GetPlayerPed(), vhl, -1)
         SetVehicleNumberPlateText(vhl, vhll.plate)
@@ -203,35 +274,36 @@ function SortirVoiture(vhll)
             end
         end
         SetVehicleMod(vhl, 15, customs.mods["15"], false)
-        if vhl.type == 1 then
-            -- Set neons
-            if customs.neons.enabled then
-                ToggleVehicleMod(vhl, 22, false)
-                SetVehicleNeonLightEnabled(vhl, 0, customs.neons.enabled)
-                SetVehicleNeonLightEnabled(vhl, 1, customs.neons.enabled)
-                SetVehicleNeonLightEnabled(vhl, 2, customs.neons.enabled)
-                SetVehicleNeonLightEnabled(vhl, 3, customs.neons.enabled)
-                SetVehicleNeonLightsColour(vhl, customs.neons.red, customs.neons.green, customs.neons.blue)
-            end
-            -- Set windows
-            SetVehicleWindowTint(vhl, customs.windows)
-            -- Set Jantes
-            SetVehicleWheelType(vhl, tonumber(customs.wheels.type))
-            SetVehicleMod(vhl, 23, tonumber(customs.wheels.choice), false)
-            SetVehicleMod(vhl, 24, tonumber(customs.wheels.choice), false)
-            -- Set Tyreburst
-            if customs.tyreburst.enabled then
-                ToggleVehicleMod(vhl, 20, true)
-                SetVehicleTyreSmokeColor(vhl, customs.tyreburst.red, customs.tyreburst.green, customs.tyreburst.blue)
-            end
-    		if customs.xenons == 1 then
-    			ToggleVehicleMod(vhl, 22, true)
-    		else
-    			ToggleVehicleMod(vhl, 22, false)
-    		end
-    		if customs.horn ~= nil then
-    			SetVehicleMod(vhl, 14, customs.horn)
-    		end
+        if customs ~= nil then
+        --if vhl.type == 1 then
+          -- Set neons
+          if customs.neons.enabled then
+              ToggleVehicleMod(vhl, 22, false)
+              SetVehicleNeonLightEnabled(vhl, 0, customs.neons.enabled)
+              SetVehicleNeonLightEnabled(vhl, 1, customs.neons.enabled)
+              SetVehicleNeonLightEnabled(vhl, 2, customs.neons.enabled)
+              SetVehicleNeonLightEnabled(vhl, 3, customs.neons.enabled)
+              SetVehicleNeonLightsColour(vhl, customs.neons.red, customs.neons.green, customs.neons.blue)
+          end
+          -- Set windows
+          SetVehicleWindowTint(vhl, customs.windows)
+          -- Set Jantes
+          SetVehicleWheelType(vhl, tonumber(customs.wheels.type))
+          SetVehicleMod(vhl, 23, tonumber(customs.wheels.choice), false)
+          SetVehicleMod(vhl, 24, tonumber(customs.wheels.choice), false)
+          -- Set Tyreburst
+          if customs.tyreburst.enabled then
+              ToggleVehicleMod(vhl, 20, true)
+              SetVehicleTyreSmokeColor(vhl, customs.tyreburst.red, customs.tyreburst.green, customs.tyreburst.blue)
+          end
+          if customs.xenons == 1 then
+            ToggleVehicleMod(vhl, 22, true)
+          else
+            ToggleVehicleMod(vhl, 22, false)
+          end
+          if customs.horn ~= nil then
+            SetVehicleMod(vhl, 14, customs.horn)
+          end
         end
     	local debugvar = false
     	local var87 = 10000

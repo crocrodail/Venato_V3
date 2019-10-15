@@ -27,6 +27,7 @@ local mecano_nbMecanoInService = 0
 local mecano_nbMecanoDispo = 0
 local waiting2 = 0
 
+
 isMecano = false
 
 local TEXT = {
@@ -173,8 +174,8 @@ end
 local function showMessageInformation(message, duree)
   local notif = {
     title= "Mécano",
-    type = "info", --  danger, error, alert, info, success, warning
-    logo = "http://www.lrindustrie.fr/mobile/images/icon-2.png",
+    type = "alert", --  danger, error, alert, info, success, warning
+    logo = "https://i.ibb.co/rG3jnHM/icons8-mechanic-96px.png",
     message = message,
     timeout = duree or nil
   }
@@ -724,12 +725,14 @@ function fullRepareVehcile()
         TaskStartScenarioAtPosition(myPed, scenario, pos.x, pos.y, pos.z, h + 180 , 8000, 1, 0)
         local value = GetVehicleBodyHealth(vehicle)
 
+        showMessageInformation('Réparation en cours ...', (1000-value)*125)
+
         while( value < 999.9 ) do
             value = GetVehicleBodyHealth(vehicle)
-            SetVehicleBodyHealth(vehicle, value + 1.0)
-            showMessageInformation('Réparation en cours ~b~' .. math.floor(value) .. '/1000')
+            SetVehicleBodyHealth(vehicle, value + 1.0)            
             Citizen.Wait(125)
-        end
+        end   
+        showMessageInformation('Réparation terminée', 3000)     
         Citizen.Wait(250)
         ClearPedTasks(myPed)
         SetVehicleBodyHealth(vehicle, 1000.0)
@@ -1163,6 +1166,7 @@ RegisterNetEvent('Job:startMecano')
 AddEventHandler('Job:startMecano', function (boolean)
 	isMecano = boolean
     if isMecano then
+        print('showBlips')
         showBlipMecano()
     else
         removeBlipMecano()

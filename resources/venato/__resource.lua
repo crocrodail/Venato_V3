@@ -54,6 +54,9 @@ client_script {
   '/entreprise/config.lua',
   '/entreprise/client.lua',
   '/gang/client.lua',
+  '/fivem-seatbelt/config.lua',
+  '/fivem-seatbelt/client.lua',
+  '/clean-car/client.lua',
 }
 
 server_script {
@@ -95,6 +98,7 @@ server_script {
   '/entreprise/config.lua',
   '/entreprise/server.lua',
   '/gang/server.lua',
+  '/clean-car/server.lua',
 }
 
 files {

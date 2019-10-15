@@ -159,7 +159,7 @@ function Openpoleemploie()
   Menu.addButton2("Pompiste", "sitchJob", 22, nil, nil)
   Menu.addButton2("Vigneron", "sitchJob", 13, nil, nil)
   Menu.addButton2("Brasseur", "sitchJob", 12, nil, nil)
-  Menu.addButton2("Liveur PostOp (Beta v1.0)", "PostOp", nil, nil, nil)
+  --Menu.addButton2("Liveur PostOp (Beta v1.0)", "PostOp", nil, nil, nil)
   Menu.addButton2("Démissioner (Pompiste, Vigneron, Brasseur)", "quitJob", nil, nil, nil)
   Menu.CreateMenu()
 end

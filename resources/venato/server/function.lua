@@ -227,6 +227,10 @@ function startScript()
   reloadDataCoffre()
 end
 
+function Venato.DisplayBool(value)
+  return value and 'true' or 'false'
+end
+
 function ControlVisa(SteamId, source)
   local source = source
   MySQL.Async.fetchAll("SELECT * FROM whitelist WHERE identifier = @identifier", { ["@identifier"] = SteamId },
@@ -285,11 +289,14 @@ function Venato.Round(num, numDecimalPlaces)
   return math.floor(num * mult + 0.5) / mult
 end
 
-function Venato.paymentCB(source, amount)
+function Venato.paymentCB(source, amount, isPolice)
+  if isPolice == nil then
+    isPolice = false
+  end
   if DataPlayers[tonumber(source)].IsBankAccountBlocked == 1 then
     return {status = false, message = "Votre compte est bloqué, rendez vous au LSPD pour régulariser votre situation."}
   end
-  if DataPlayers[tonumber(source)].Bank <= tonumber(amount) then
+  if not isPolice and DataPlayers[tonumber(source)].Bank <= tonumber(amount) then
     return {status = false, message = "Votre solde est insuffisant."}
   else
     DataPlayers[tonumber(source)].Bank = DataPlayers[tonumber(source)].Bank - amount
@@ -366,6 +373,11 @@ function Venato.notify(source, notif)
     title = notif.title
   })
 end
+
+RegisterServerEvent('Venato:NotifyPlayer')
+AddEventHandler('Venato:NotifyPlayer', function (data)
+  Venato.notify(data[1], data[2])
+end)
 
 function Venato.CheckItem(itemId, source)
   if not DataPlayers[tonumber(source)] or not DataPlayers[tonumber(source)].Inventaire[itemId] then

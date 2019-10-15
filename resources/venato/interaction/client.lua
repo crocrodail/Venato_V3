@@ -19,6 +19,9 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(0, 21) then
           pressButton1 = 1
         end
+		if IsControlJustPressed(0, 167) then
+          extSwitDistance()
+        end
         if IsControlJustReleased(0, 21) then
           pressButton1 = 0
         end
