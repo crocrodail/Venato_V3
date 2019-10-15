@@ -138,23 +138,29 @@ var progress = [
         logo : "https://i.ibb.co/dmfGBDv/icons8-car-service-96px.png",
         title : "Gestion des dégâts des véhicules",
         est : "18/10",
+        status : 3
+    },
+    {
+        logo : "https://i.ibb.co/PxrBpGQ/icons8-pills-96px.png",
+        title : "Nouveau circuit de drogue !",
+        est : "18/10",
         status : 1
     },
     {
         logo : "https://i.ibb.co/LYkBb04/icons8-shirt-96px-1.png",
         title : "Garde robe",
         est : "21/10",
+        status : 1
+    },
+    {
+        logo : "https://i.ibb.co/NyDPMnJ/venato.png",
+        title : "Mise en place des VP",
+        est : "21/10",
         status : 0
     },
     {
         logo : "https://i.ibb.co/nw0NY3z/icons8-traffic-jam-96px-1.png",
         title : "Concessionnaire auto pour pro",
-        est : "21/10",
-        status : 0
-    },
-    {
-        logo : "https://i.ibb.co/NyDPMnJ/venato.png",
-        title : "Mise en place des VP",
         est : "23/10",
         status : 0
     },
