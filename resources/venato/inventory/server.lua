@@ -20,9 +20,9 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
   local Weapon = {}
   local doc = {}
   local Document = {}
-  local poid = Venato.MoneyToPoid(DataPlayers[tonumber(source)].Money)
+  local poid = 0
   MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId",
-    { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)
+    { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)      
       if result[1] ~= nil then
         for i, v in ipairs(result) do
           Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture, ["consomable"] = v.consomable }
@@ -37,21 +37,21 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
     if results[1] ~= nil then 
       for i, v in ipairs(results) do
         TriggerClientEvent("Inventory:RemoveWeaponClient", source, v.weapond)
-      end
-      MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId",
-      { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)
+      end      
+    end
+    MySQL.Async.fetchAll("SELECT * FROM user_weapons JOIN weapon_model ON `user_weapons`.`weapon_model` = `weapon_model`.`weapond` WHERE identifier = @SteamId",
+      { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result) 
         if result[1] ~= nil then
-          for i, v in ipairs(result) do
+          for i, v in ipairs(result) do 
             Wp = { ["id"] = v.weapon_model, ["libelle"] = v.libelle, ["poid"] = tonumber(v.poid), ["ammo"] = tonumber(v.balles) }
             Weapon[v.id] = Wp
-            poid = poid + tonumber(v.poid)            
+            poid = poid + tonumber(v.poid)      
             TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_model, tonumber(v.balles))
           end
           DataPlayers[tonumber(source)].Poid = poid
           DataPlayers[tonumber(source)].Weapon = Weapon
         end
-      end)
-    end
+    end)
   end)  
   MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId",
     { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)
@@ -297,8 +297,7 @@ RegisterServerEvent('Inventory:CallInfoMoney')
 AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
   local infoPlayer = DataPlayers[ClosePlayer]
   local source = source
-  if infoPlayer ~= nil and infoPlayer.Poid + Venato.MoneyToPoid(qty) <= infoPlayer.PoidMax then    
-    TriggerClientEvent("Inventory:AnimGive", source)
+  if infoPlayer ~= nil and infoPlayer.Poid + Venato.MoneyToPoid(qty) <= infoPlayer.PoidMax then  
     if(qty < 0) then
       TriggerEvent("Inventory:RemoveMoney", -qty, ClosePlayer)
       TriggerEvent("Inventory:AddMoney", -qty, source)
@@ -312,6 +311,8 @@ AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
       TriggerClientEvent("Venato:notify", source, defaultNotification)
       defaultNotification.message = "Vous avez reçu <span class='green--text'>" .. qty .. " €</span>"
       TriggerClientEvent("Venato:notify", ClosePlayer, defaultNotification)
+      TriggerClientEvent("Inventory:AnimReceive", ClosePlayer)
+      TriggerClientEvent("Inventory:AnimGive", source)
     end
   else
     defaultNotification.message = "La personne n'a pas la place pour recevoir " .. qty .. " €"
@@ -385,11 +386,16 @@ end
 
 RegisterServerEvent('Inventory:CallInfoWeapon')
 AddEventHandler('Inventory:CallInfoWeapon', function(ClosePlayer, table)
-  if DataPlayers[ClosePlayer].Poid + table[4] >= DataPlayers[ClosePlayer].PoidMax then
+  local source = source  
+  if DataPlayers[ClosePlayer].Poid + table[4] <= DataPlayers[ClosePlayer].PoidMax then    
     TriggerEvent("Inventory:AddWeapon", table[3], table[5], table[4], table[2], ClosePlayer)
-    TriggerEvent("Inventory:RemoveWeapon", table[3], table[1], source)
+    defaultNotification.message = "Vous avez donné "..table[2]
+    TriggerClientEvent("Venato:notify", source, defaultNotification)
+    TriggerEvent("Inventory:RemoveWeapon", table[3], table[1], table[4], source)
+    TriggerClientEvent("Inventory:AnimReceive", ClosePlayer)
     TriggerClientEvent("Inventory:AnimGive", source)
-    TriggerClientEvent("Venato:notify", ClosePlayer, "Vous avez reçu une arme.")
+    defaultNotification.message = "Vous avez reçu "..table[2]
+    TriggerClientEvent("Venato:notify", ClosePlayer, defaultNotification)
   else
     TriggerClientEvent("Venato:notify", source, "La personne n'a pas la place pour reçevoir une arme.")
     TriggerClientEvent("Venato:notify", ClosePlayer, "Vous n'avez pas la place pour reçevoir une arme.")
@@ -454,11 +460,11 @@ end)
 RegisterServerEvent('Inventory:RemoveWeapon')
 AddEventHandler('Inventory:RemoveWeapon', function(weapon, id, poid, NewSource)
 	local source = source
-	local qty = qty
+  local qty = qty
 	if NewSource ~= nil then
 		source = NewSource
 	end
-	if poid ~= nil then
+  if poid ~= nil then
 		DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid - poid
 	end
 	TriggerClientEvent("Inventory:RemoveWeaponClient", source, weapon)

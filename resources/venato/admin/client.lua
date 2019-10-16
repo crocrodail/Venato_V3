@@ -74,36 +74,36 @@ function openVenatoadmin()
   Menu.open()
   AdminShowPlayerInfo = nil
   TriggerEvent('Menu:Init', "", "La vitamine c mais ne dira rien", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
-  if AdminDataPlayers[ClientSource].Group == "Admin" or AdminDataPlayers[ClientSource].Group == "Modo" then
-    Menu.addButton("<span class='red--text'>Fermer</span>", "AdminCloseMenu", nil)
-    Menu.addButton("Liste des joueurs", "AdminListPlayer", nil)
-    Menu.addButton("Envoyer un message aux joueurs", "AdminSendMsg", nil)
+  Menu.addButton("<span class='red--text'>Fermer</span>", "AdminCloseMenu")
+  if AdminDataPlayers[ClientSource].Group == "Admin" or AdminDataPlayers[ClientSource].Group == "Modo" then    
+    Menu.addButton2("Liste des joueurs", "AdminListPlayer", nil, '', 'https://i.ibb.co/BnCn29r/icons8-groups-96px.png')
+    Menu.addButton2("Envoyer un message aux joueurs", "AdminSendMsg", nil, '', 'https://i.ibb.co/DK24L07/icons8-sms-96px-1.png')
   end
   if AdminDataPlayers[ClientSource].Group == "Admin" then
-    Menu.addButton("Spawn Voiture", "AdminSpawnVehicle", nil)
-    Menu.addButton("DeSpawn Voiture", "AdminDespawnVoiture", nil)
-    Menu.addButton("Récupérer les clés du vehicule", "AdminGetClef", nil)
-    Menu.addButton("Réparer vehicule", "AdminFixVehicle", nil)
-    Menu.addButton("Jesus Christ", "respawntest", nil)
-    Menu.addButton("Revive joueur", "revivevnt", nil)
-    Menu.addButton("Soigner joueur", "healvnt", nil)
-    Menu.addButton("Recharger les coffres", "ReloadCoffre", nil)
-    Menu.addButton("Teleporter sur markeur", "AdminTpMarkeur", nil)
-    Menu.addButton("Teleporter sur coordonées", "AdminCustomTP", nil)
-    Menu.addButton("Afficher/Masquer les coordonées", "AdminShowCoord", nil)
-    --Menu.addButton("Mode cheat : ~b~"..cheatmode, "cheatemode", nil)
-    Menu.addButton("NoClip", "AdminNoClip", nil)
-    Menu.addButton("Invisible", 'AdminInvisible' , nil)
-    --Menu.addButton("Ne pas Utiliser pls !!!!! Créer véhicule  !!!!!!!!!!", 'createVeh' , nil)
+    Menu.addButton2("Spawn Voiture", "AdminSpawnVehicle", nil, '', 'https://i.ibb.co/Gv2Wyhq/icons8-car-96px-1.png')
+    Menu.addButton2("DeSpawn Voiture", "AdminDespawnVoiture", nil, '', 'https://i.ibb.co/NjbvdGS/icons8-car-theft-96px.png')
+    Menu.addButton2("Récupérer les clés du vehicule", "AdminGetClef", nil, '', 'https://i.ibb.co/t4rx1Zh/icons8-car-rental-96px.png')
+    Menu.addButton2("Réparer vehicule", "AdminFixVehicle", nil, '', 'https://i.ibb.co/XYrgvR3/icons8-car-service-96px-1.png')
+    Menu.addButton2("Jesus Christ", "respawntest", nil, '', 'https://i.ibb.co/f14gXT7/icons8-cross-96px-1.png')
+    Menu.addButton2("Revive joueur", "revivevnt", nil, '', 'https://i.ibb.co/FxDQnns/icons8-nurse-male-96px.png')
+    Menu.addButton2("Soigner joueur", "healvnt", nil, '', 'https://i.ibb.co/XWzMcZ9/icons8-health-book-96px.png')
+    Menu.addButton2("Recharger les coffres", "ReloadCoffre", nil, '', 'https://i.ibb.co/P1r91pg/icons8-safe-96px.png')
+    Menu.addButton2("Teleporter sur markeur", "AdminTpMarkeur", nil, '', 'https://i.ibb.co/Pz7Z7XJ/icons8-define-location-96px.png')
+    Menu.addButton2("Teleporter sur coordonées", "AdminCustomTP", nil, '', 'https://i.ibb.co/hLVFmYS/icons8-map-pin-96px.png')
+    Menu.addButton2("Afficher/Masquer les coordonées", "AdminShowCoord", nil, '', 'https://i.ibb.co/NtmfJDv/icons8-compass-96px.png')
+    --Menu.addButton2("Mode cheat : ~b~"..cheatmode, "cheatemode", nil, '', '')
+    Menu.addButton2("NoClip", "AdminNoClip", nil, '', 'https://i.ibb.co/ZhdSG5H/icons8-ghost-96px.png')
+    Menu.addButton2("Invisible", 'AdminInvisible' , nil, '', 'https://i.ibb.co/LJ8sxgW/icons8-access-for-blind-96px-1.png')
+    Menu.addButton2("Show/unShow blips" , "AdminBlipsOption", nil, '', 'https://i.ibb.co/wMLT4jf/icons8-map-marker-96px.png')
+    Menu.addButton2("Ne pas Utiliser pls !!!!! Créer véhicule  !!!!!!!!!!", 'createVeh' , nil, '', 'https://i.ibb.co/jRsrTDn/icons8-weigh-station-96px.png')
     if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' then
-      Menu.addButton("Show/unShow blips" , "AdminBlipsOption", nil)
-      Menu.addButton("Créer véhicule", 'createVeh' , nil)
-      Menu.addButton("Etat véhicule", 'vehicleState' , nil)
-      Menu.addButton("Abîmer véhicule", 'damageVeh' , nil)
+      Menu.addButton2("Etat véhicule", 'vehicleState' , nil, '', 'https://i.ibb.co/d54p3zs/icons8-show-property-96px.png')
+      Menu.addButton2("Abîmer véhicule", 'damageVeh' , nil, '', 'https://i.ibb.co/4RdJS47/icons8-baseball-96px.png')
     end
     if AdminDataPlayers[ClientSource].SteamId == 'steam:110000108378030' or AdminDataPlayers[ClientSource].SteamId == 'steam:1100001034bfc93' or AdminDataPlayers[ClientSource].SteamId == 'steam:110000112d6a726' then  
-      Menu.addButton("Changer de skin", "SkinMenu", nil)
+      Menu.addButton2("Changer de skin", "SkinMenu", nil, '', 'https://i.ibb.co/MVXCCvc/icons8-anonymous-mask-96px.png')
     end
+    Menu.CreateMenu()
   end
 end
 

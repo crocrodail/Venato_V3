@@ -691,6 +691,11 @@ function repareVehicle()
                 SetVehicleEngineOn(vehicle, 0, 0, 0)
                 SetVehicleUndriveable(vehicle, false)
                 SetVehicleEngineTorqueMultiplier(vehicle, 0.6)
+
+                for i=0, 6 do
+                    SetVehicleTyreFixed(current, i)
+                end
+
                 showMessageInformation(TEXT.VehiculeReparationRapideOk)
             else
                 showMessageInformation(TEXT.VehiculeReparationRapideKo)

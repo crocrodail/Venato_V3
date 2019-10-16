@@ -467,22 +467,22 @@ function DropWeapon(tableau)
 		local x, y, z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
 		TriggerServerEvent("Inventory:DropWeapon", tableau, x,y,z-0.5)
 		TriggerServerEvent("Inventory:RemoveWeapon",tableau[3], tableau[1], tableau[4])
-		local objet = Venato.CreateObject(dropWeapon, x, y+0.5, z-1)
-    PlaceObjectOnGroundProperly(objet)
-		FreezeEntityPosition(objet, true)
-		OpenInventory()
+		local objet = Venato.CreateObject(dropWeapon, x, y+0.5, z-1) 
+    PlaceObjectOnGroundProperly(objet) 
+		FreezeEntityPosition(objet, true) 
+		OpenInventory() 
 end
 
 RegisterNetEvent('Inventory:AddWeaponClient')
 AddEventHandler('Inventory:AddWeaponClient', function(weapon, ammo)
-	local weaponHash = GetHashKey(weapon)
-  local ammo = tonumber(ammo)
-	if ammo == 0 then
-		GiveWeaponToPed(Venato.GetPlayerPed(), weaponHash, false, false)
-	else
-		GiveWeaponToPed(Venato.GetPlayerPed(), weaponHash, ammo , false, false)
-	end
-end)
+  local weaponHash = GetHashKey(weapon) 
+  local ammo = tonumber(ammo) 
+  if ammo == 0 then 
+    GiveWeaponToPed(GetPlayerPed(-1), weaponHash, false, false) 
+  else 
+    GiveWeaponToPed(GetPlayerPed(-1), weaponHash, ammo , false, false) 
+	end 
+end) 
 
 RegisterNetEvent('Inventory:RemoveWeaponAmmoClient')
 AddEventHandler('Inventory:RemoveWeaponAmmoClient', function(weapon, ammo)
@@ -642,11 +642,22 @@ end)
 
 RegisterNetEvent('Inventory:AnimGive')
 AddEventHandler('Inventory:AnimGive', function()
-	Citizen.CreateThread(function()
-		local ped = Venato.GetPlayerPed()
-		TaskStartScenarioInPlace(ped, "PROP_HUMAN_PARKING_METER", 0, false)
-		Citizen.Wait(1500)
-		ClearPedTasks(ped)
-	end)
+	Venato.playAnim({
+    useLib = true,
+    flag = 48,
+    lib = "mp_common",
+    anim = "givetake2_a",
+    timeout = 3333
+  })
+end)
+RegisterNetEvent('Inventory:AnimReceive')
+AddEventHandler('Inventory:AnimReceive', function()
+	Venato.playAnim({
+    useLib = true,
+    flag = 48,
+    lib = "mp_common",
+    anim = "givetake2_b",
+    timeout = 3333
+  })
 end)
 --############# ITEM ##################

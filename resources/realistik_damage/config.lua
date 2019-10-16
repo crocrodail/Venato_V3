@@ -110,7 +110,7 @@ cfg = {
 	sundayDriverBrakeCurve = 5.0,				-- The response curve to apply to the Brake. Range 0.0 to 10.0. Higher values enables easier braking, meaning more pressure on the throttle is required to brake hard. Does nothing for keyboard drivers
 
 	displayBlips = false,						-- Show blips for mechanics locations
-	randomTireBurstInterval = 120,
+	randomTireBurstInterval = 0,
 	classDamageMultiplier = {
 		[0] = 	1.0,		--	0: Compacts
 				1.0,		--	1: Sedans

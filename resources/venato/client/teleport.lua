@@ -51,7 +51,7 @@ local TeleportFromTo = {
     whitelist = false,
   },
 
-  ["Hôpital - Entrer - sortir"] = {
+  ["Hôpital SandyShore - Entrer - sortir"] = {
     positionFrom = { ['x'] = 1838.427, ['y'] = 3673.369, ['z'] = 34.277, nom = "Entrer - Hôpital" },
     positionTo = { ['x'] = 1845.732, ['y'] = 3670.156, ['z'] = -3.282, nom = "Sortir - Hôpital" },
     whitelist = false,

@@ -2,7 +2,7 @@
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)        
-        if IsControlJustPressed(1, 56) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
+        if IsControlJustPressed(1, 56) and GetLastInputMethod(2) and Venato.HasJob(8) then -- press action contextuel (e) pour joueur clavier uniquement
             TriggerEvent('Menu:Init', "Gang", "Gang Gang !", "#46914C99", "")
             Menu.clearMenu()            
             TriggerEvent('Menu:AddButton2', "Fouiller", "POLICE_Check",  false , "", "https://i.ibb.co/GQJWMRt/icons8-customs-officer-96px.png")
