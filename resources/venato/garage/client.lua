@@ -206,7 +206,7 @@ function SortirVoiture(vhll)
     local health = json.decode(tostring(vhll.Health))
     Citizen.Wait(300)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
-    if not DoesEntityExist(CarOnPoint) then
+    DeleteEntity(CarOnPoint)
       local car = tonumber(vhll.model)
       Venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
         print(Venato.dump(health))
@@ -367,11 +367,6 @@ function SortirVoiture(vhll)
     		end
     	end
       end)
-    else
-      defaultNotification.message = "Véhicule dans la zone"
-      defaultNotification.type = "error"
-      Venato.notify(defaultNotification)
-    end
   end)
 end
 
