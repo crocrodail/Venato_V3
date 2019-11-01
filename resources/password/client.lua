@@ -61,8 +61,12 @@ end)
 
 RegisterNetEvent('Fax:ServerPassword:PassedPassword')
 AddEventHandler('Fax:ServerPassword:PassedPassword', function()
+    local source = source
     local ped = GetPlayerPed(-1)
     FreezeEntityPosition(ped, false)
-    TriggerEvent('chatMessage', "^2Passed Password!")
+    TriggerEvent('chatMessage', "^2Bienvenue!")
+    print("CallUpdateInventory")
+    print(source)
+    TriggerServerEvent("Inventory:UpdateInventory", source)
 end)
 -- A FaxDetector Project ;)
