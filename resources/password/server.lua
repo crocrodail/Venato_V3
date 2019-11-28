@@ -4,7 +4,7 @@
 ------------------------------
 
 --- CONFIG ---
-password = "venato" -- Set server password here
+password = "platypus" -- Set server password here
 kickMessage = "Mauvais mot de passe, retrouvez-le sur le discord : discord.gg/XpMvgkd" -- The invalid password kick message. Default: Invalid Password
 timeRanOutMsg = "Vous avez mis trop de temps à saisir le mot de passe, il est sur le discord : discord.gg/XpMvgkd" --Not active yet! Dont worry about this
 timeoutMessage = "Mauvais mot de passe. Attendez %s sec avant de réessayer, si vous ne trouvez pas le mot de passe : discord.gg/XpMvgkd." -- Displayed if the user tries to attempt too many times, this locks them out of the server for x seconds

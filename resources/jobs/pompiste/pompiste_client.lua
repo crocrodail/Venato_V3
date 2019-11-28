@@ -20,9 +20,9 @@
 			if Pompiste_markerBool == true then
 				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Station de pompage"].x,pompiste_blips["Station de pompage"].y,pompiste_blips["Station de pompage"].z, true) <= pompiste_blips["Station de pompage"].distanceBetweenCoords then
 					if(not recolt) then
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~pétrole brut~s~.")						
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~pétrole brut~s~.")						
 					else
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter du ~b~pétrole brut~s~.")
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter du ~b~pétrole brut~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -33,9 +33,9 @@
 				end
 				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Transformation"].x,pompiste_blips["Transformation"].y,pompiste_blips["Transformation"].z, true) <= pompiste_blips["Transformation"].distanceBetweenCoords then
 					if(not transform) then
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~pétrole brut~s~.")						
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~pétrole brut~s~.")						
 					else
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer du ~b~pétrole brut~s~.")
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer du ~b~pétrole brut~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -46,9 +46,9 @@
 				end
 				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Point de vente"].x,pompiste_blips["Point de vente"].y,pompiste_blips["Point de vente"].z, true) <= pompiste_blips["Point de vente"].distanceBetweenCoords then
 					if(not sell) then
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de l'~b~essence~s~.")						
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de l'~b~essence~s~.")						
 					else
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de l'~b~essence~s~.")
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de l'~b~essence~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -113,9 +113,9 @@
 					DrawMarker(1, pompiste_blips["Entreprise"].x, pompiste_blips["Entreprise"].y, pompiste_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					if distance <= 5 then						
 						if isInServicePompiste then
-							Venato.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
+							platypus.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
 						else
-							Venato.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
+							platypus.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
 						end
 						if IsControlJustPressed(1, Keys["E"]) then
 							GetServicePompiste()
@@ -128,7 +128,7 @@
 					if distance2 <= pompiste_blips["Garage"].distanceMarker+5 then
 						DrawMarker(1, pompiste_blips["Garage"].x, pompiste_blips["Garage"].y, pompiste_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 						if distance2 <= 5 then							
-							Venato.InteractTxt("Appuyez sur ~g~E~s~ pour faire apparaitre/ranger votre ~b~vehicule")
+							platypus.InteractTxt("Appuyez sur ~g~E~s~ pour faire apparaitre/ranger votre ~b~vehicule")
 							if IsControlJustPressed(1, Keys["E"]) then
 								pompiste_InitMenuVehicules()
 							end
@@ -178,11 +178,11 @@ function GetServicePompiste()
 	local playerPed = GetPlayerPed(-1)
 	if isInServicePompiste then
 		defaultNotification.message = "Vous n'êtes plus en service."
-		Venato.notify(defaultNotification)
-		TriggerEvent("Venato:LoadClothes")
+		platypus.notify(defaultNotification)
+		TriggerEvent("platypus:LoadClothes")
 	else
 		defaultNotification.message = "Début de service."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 		TriggerEvent("pompiste:getSkin")
 	end
 	isInServicePompiste = not isInServicePompiste
@@ -221,7 +221,7 @@ AddEventHandler('pompiste:getCamion', function ()
 		local myPed = GetPlayerPed(-1)
 		local player = PlayerId()
 		local plate = math.random(1000, 9999)
-		Venato.CreateVehicle('packer', {x=pompiste_car2.x, y=pompiste_car2.y, z=pompiste_car2.z},34.0, function(cam)
+		platypus.CreateVehicle('packer', {x=pompiste_car2.x, y=pompiste_car2.y, z=pompiste_car2.z},34.0, function(cam)
 			camion = cam
 			SetVehicleNumberPlateText(camion, "POMPISTE")
 			SetEntityAsMissionEntity(camion, true, true)
@@ -230,7 +230,7 @@ AddEventHandler('pompiste:getCamion', function ()
 			Menu.close()
 		end)
 	else
-		Venato.notifyError("Zone encombrée.")
+		platypus.notifyError("Zone encombrée.")
 	end
 	end
 end)
@@ -248,14 +248,14 @@ AddEventHandler('pompiste:getRemorque', function ()
 		local player = PlayerId()
 		local vehicle = GetHashKey('tanker')
 		local plate = math.random(1000, 9999)
-		Venato.CreateVehicle('tanker', {x=pompiste_car.x, y=pompiste_car.y, z=pompiste_car.z},34.0,function(rem)
+		platypus.CreateVehicle('tanker', {x=pompiste_car.x, y=pompiste_car.y, z=pompiste_car.z},34.0,function(rem)
 			remorque = rem
 			SetVehicleNumberPlateText(remorque, pompiste_platesuffix.." "..plate.." ")
 			plate = GetVehicleNumberPlateText(remorque)
 			TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(remorque)))
 		end)
 	else
-		Venato.notifyError("Zone encombrée.")
+		platypus.notifyError("Zone encombrée.")
 	end
 	end
 end)
@@ -277,11 +277,11 @@ AddEventHandler('pompiste:drawGetPetrol', function (qtePetrol)
 	if qtePetrol < 100 then
 		TriggerServerEvent('Inventory:AddItem', 1, tonumber(pompiste_ressourceBase))
 		defaultNotification.message = "Pompage du pétrole."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 	else
 		recolt = false
 		defaultNotification.message = "Vous ne pouvez plus pomper."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 	end
 end)
 
@@ -299,11 +299,11 @@ AddEventHandler('pompiste:drawGetEssence', function(qtePetrol, qteEssence)
 		TriggerServerEvent('Inventory:RemoveItem',1, tonumber(pompiste_ressourceBase))
 		TriggerServerEvent('Inventory:AddItem',1, tonumber(pompiste_ressourceTraite))
 		defaultNotification.message = "Pétrole déchargé et transformé en essence."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 	else
 		transform = false
 		defaultNotification.message = "Vous ne pouvez plus transformer de pétrole."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 	end
 end)
 
@@ -319,10 +319,10 @@ end)
 		local salaire = math.random(pompiste_pay.minimum, pompiste_pay.maximum)
 		TriggerServerEvent("Bank:Salaire", salaire, 'pompiste')
 		defaultNotification.message = "Essence vendue. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 	else
 		sell = false
 		defaultNotification.message = "Vous n'avez plus d'essence à vendre."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 	end
 end)

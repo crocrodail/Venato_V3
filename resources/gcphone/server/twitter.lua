@@ -204,7 +204,7 @@ AddEventHandler('gcPhone:twitter_createAccount', function(username, password, av
   else
     TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_ERROR')
   end
-  TriggerClientEvent("Venato:TestImage", sourcePlayer)
+  TriggerClientEvent("platypus:TestImage", sourcePlayer)
   end)
 end)
 
@@ -265,7 +265,7 @@ AddEventHandler('gcPhone:twitter_setAvatarUrl', function(username, password, ava
     ['@avatarUrl'] = avatarUrl
   }, function (result)
     if (result == 1) then
-      TriggerClientEvent("Venato:TestImage", sourcePlayer)
+      TriggerClientEvent("platypus:TestImage", sourcePlayer)
       TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
       TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_AVATAR_SUCCESS')
     else

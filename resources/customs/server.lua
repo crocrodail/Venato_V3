@@ -9,13 +9,13 @@ local notif = {
 
 RegisterServerEvent('customs:buy')
 AddEventHandler('customs:buy', function(data)
-    local UserData = exports.venato:GetDataPlayers()
+    local UserData = exports.platypus:GetDataPlayers()
     local datas = json.decode(data)
     local identifiers = UserData[source].SteamId
     local currentSource = source
     local model = tostring(datas.model)
     local plate = string.gsub(datas.plate, "^%s*(.-)%s*$", "%1")
-    local paymentCB = exports.venato:ExportPaymentCB(source, datas.price)
+    local paymentCB = exports.platypus:ExportPaymentCB(source, datas.price)
     if paymentCB.status then
       MySQL.Async.fetchAll("SELECT * FROM user_vehicle WHERE owner=@owner AND model=@model AND plate=@plate ORDER BY name ASC LIMIT 1", {['@owner'] = identifiers, ['@model'] =  model, ['@plate'] = plate }, function(vehicle)
         if vehicle[1] then
@@ -62,7 +62,7 @@ AddEventHandler('customs:buy', function(data)
 
 RegisterServerEvent('customs:checkifowner')
 AddEventHandler('customs:checkifowner', function(vehicle)
-    local UserData = exports.venato:GetDataPlayers()
+    local UserData = exports.platypus:GetDataPlayers()
     local identifiers = UserData[source].SteamId
     local currentSource = source
     if vehicle.plate ~= nil then
@@ -83,7 +83,7 @@ end)
 
 RegisterServerEvent('customs:resetvhl')
 AddEventHandler('customs:resetvhl', function(vehicle)
-    local UserData = exports.venato:GetDataPlayers()
+    local UserData = exports.platypus:GetDataPlayers()
     local identifiers = UserData[source].SteamId
     local currentSource = source
     if vehicle.plate ~= nil then

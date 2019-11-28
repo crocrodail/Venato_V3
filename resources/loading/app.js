@@ -153,7 +153,7 @@ var progress = [
         status : 1
     },
     {
-        logo : "https://i.ibb.co/NyDPMnJ/venato.png",
+        logo : "https://i.ibb.co/NyDPMnJ/platypus.png",
         title : "Mise en place des VP",
         est : "21/10",
         status : 0

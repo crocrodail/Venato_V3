@@ -119,7 +119,7 @@ AddEventHandler("Tokovoip:switchdistance", function()
     logo = "https://image.winudf.com/v2/image/Y29tLnJlY29yZGVyLm11c2ljLnZvaWNlcmVjb3JkZXJfaWNvbl8xNTM2OTYzNDQ1XzAzMQ/icon.png?w=170&fakeurl=1",
     message = "Vous parlez maintenant à "..portevoix.."M .",
   }
-  TriggerEvent("Venato:notify", notif)
+  TriggerEvent("platypus:notify", notif)
 	setPlayerData(self.serverId, "voip:mode", self.mode, true);
 	self:updateTokoVoipInfo();
 end)

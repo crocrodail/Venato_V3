@@ -5,13 +5,13 @@ var config = {
     "imgInterval": 8000,
     "music": true,
     /* Insert the Youtube Video ID below */
-    "videoID": "0-c7kXpRVIQ",
+    "videoID": "PpocxtjYk38",
     /* Music Volume (0%-100%) | Lower is Quieter, Higher is Louder */
-    "musicVolume": 1,
+    "musicVolume": 50,
     "text": {
-        "title": "Venato",
-        "link": "venato.fr",
+        "title": "Platypus",
+        "link": "",
     },
     /* You dont have to include the '/imgs/' dir AND ALSO REMEMBER TO ADD THESE IMGS IN YOUR __resource.lua*/
-    "images": ['SCREEN_V_V2.png', 'SCREEN_VENATO2_3.png', 'SCREEN_VENATO2_4.png', 'SCREEN_VENATO2_5.png']
+    "images": ['screen.jpg']
 }

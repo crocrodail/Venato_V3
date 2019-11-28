@@ -179,7 +179,7 @@ local function showMessageInformation(message, duree)
     message = message,
     timeout = duree or nil
   }
-  TriggerEvent("Venato:notify", notif)
+  TriggerEvent("platypus:notify", notif)
 end
 
 local function SetTimeout(delay, func)
@@ -461,9 +461,9 @@ local function toogleService()
         mecano_showHelp = false
     else
         -- Restaure Ped
-        TriggerServerEvent("venato:setService", "mecano", false)
+        TriggerServerEvent("platypus:setService", "mecano", false)
         TriggerServerEvent('mecano:endService')
-        TriggerEvent("Venato:LoadClothes")
+        TriggerEvent("platypus:LoadClothes")
     end
 end
 
@@ -1207,7 +1207,7 @@ function notifIconMecaMeca(icon, type, sender, title, text)
       logo = "https://lashope.com/wp-content/uploads/icon-mecano.png",
       message = text,
     }
-    TriggerEvent("Venato:notify", notif)
+    TriggerEvent("platypus:notify", notif)
 	end)
 end
 

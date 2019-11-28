@@ -39,13 +39,13 @@
   "fileUploadService_Field": "files[]",
 
   "background": {
-    "Venato": "back001.jpg",
+    "platypus": "back001.jpg",
     "Destiny": "back002.jpg",
     "Stormtrooper": "back003.jpg",
     "Custom URL": "URL"
   },
   "background_default": {
-    "label": "Venato",
+    "label": "platypus",
     "value": "back001.jpg"
   },
 

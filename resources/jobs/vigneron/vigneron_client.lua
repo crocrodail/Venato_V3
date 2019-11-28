@@ -19,9 +19,9 @@
 			if Vigneron_markerBool == true then
 				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceBetweenCoords then
 					if(not recolt) then
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~raisin~s~.")						
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~raisin~s~.")						
 					else
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter du ~b~raisin~s~.")
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter du ~b~raisin~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -32,9 +32,9 @@
 				end
 				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceBetweenCoords then
 					if(not transform) then
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~raisin~s~.")						
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~raisin~s~.")						
 					else
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer le ~b~raisin~s~.")
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer le ~b~raisin~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -45,9 +45,9 @@
 				end
 				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceBetweenCoords then
 					if(not sell) then
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de les ~b~bouteilles de vin~s~.")						
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de les ~b~bouteilles de vin~s~.")						
 					else
-						Venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de les ~b~bouteilles de vin~s~.")
+						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de les ~b~bouteilles de vin~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -136,9 +136,9 @@
 					DrawMarker(1, vigneron_blips["Entreprise"].x, vigneron_blips["Entreprise"].y, vigneron_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					if distance <= 5 then
 						if isInServiceVigneron then
-							Venato.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
+							platypus.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
 						else
-							Venato.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
+							platypus.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
 						end						
 						if IsControlJustPressed(1, Keys["E"]) then
 							GetServiceVigneron()
@@ -150,7 +150,7 @@
 					if distance2 <= vigneron_blips["Garage"].distanceMarker then
 						DrawMarker(1, vigneron_blips["Garage"].x, vigneron_blips["Garage"].y, vigneron_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 						if distance2 <= 5 then
-							Venato.InteractTxt("Appuyez sur ~g~E~s~ pour faire apparaitre/ranger votre ~b~vehicule")						
+							platypus.InteractTxt("Appuyez sur ~g~E~s~ pour faire apparaitre/ranger votre ~b~vehicule")						
 							if IsControlJustPressed(1, Keys["E"]) then
 								if(existingVeh ~= nil) then
 									SetEntityAsMissionEntity(existingVeh, true, true)
@@ -183,11 +183,11 @@ function GetServiceVigneron()
 	local playerPed = GetPlayerPed(-1)
 	if isInServiceVigneron then
 		defaultNotification.message = "Vous n'êtes plus en service."
-		Venato.notify(defaultNotification)
-		TriggerEvent("Venato:LoadClothes")
+		platypus.notify(defaultNotification)
+		TriggerEvent("platypus:LoadClothes")
 	else
 		defaultNotification.message = "Début de service."
-		Venato.notify(defaultNotification)
+		platypus.notify(defaultNotification)
 		TriggerEvent("vigneron:getSkin")
 	end
 	isInServiceVigneron = not isInServiceVigneron
@@ -222,7 +222,7 @@ AddEventHandler('vigneron:getCar', function (source)
 		local player = PlayerId()
 		local vehicle = GetHashKey('sadler')
 		local plate = math.random(1000, 9999)
-		Venato.CreateVehicle('SADLER',{x=vigneron_car.x, y=vigneron_car.y, z=vigneron_car.z},90.0, function(veh)
+		platypus.CreateVehicle('SADLER',{x=vigneron_car.x, y=vigneron_car.y, z=vigneron_car.z},90.0, function(veh)
 			existingVeh = veh
 			SetVehicleNumberPlateText(existingVeh, vigneron_platesuffix.." "..plate.." ")
 			plate = GetVehicleNumberPlateText(existingVeh)
@@ -231,7 +231,7 @@ AddEventHandler('vigneron:getCar', function (source)
 		end)
 
 	else
-		Venato.notifyError("Zone encombrée.")
+		platypus.notifyError("Zone encombrée.")
 	end
 end)
 
@@ -244,11 +244,11 @@ end)
 		if qteVign < 100 then
 			TriggerServerEvent('Inventory:AddItem',1, tonumber(vigneron_ressourceBase))
 			defaultNotification.message = "Chargement de raisin en cours."
-			Venato.notify(defaultNotification)
+			platypus.notify(defaultNotification)
 		else
 			recolt = false
 			defaultNotification.message = "Vous ne pouvez plus charger."
-			Venato.notify(defaultNotification)
+			platypus.notify(defaultNotification)
 		end
 	end)
 
@@ -266,11 +266,11 @@ end)
 			TriggerServerEvent("Inventory:RemoveItem",1, tonumber(vigneron_ressourceBase))
 			TriggerServerEvent('Inventory:AddItem',1, tonumber(vigneron_ressourceTraite))
 			defaultNotification.message = "Récupération des bouteilles de vins."
-			Venato.notify(defaultNotification)
+			platypus.notify(defaultNotification)
 		else
 			transform = false
 			defaultNotification.message = "Vous ne possédez plus de raisin."
-			Venato.notify(defaultNotification)
+			platypus.notify(defaultNotification)
 		end
 	end)
 
@@ -285,10 +285,10 @@ end)
 			local salaire = math.random(vigneron_pay.minimum, vigneron_pay.maximum)
 			TriggerServerEvent("Bank:Salaire", salaire, "vigneron")
 			defaultNotification.message = "Bouteilles de vin vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
-			Venato.notify(defaultNotification)
+			platypus.notify(defaultNotification)
 		else
 			sell = false
 			defaultNotification.message = "Vous n'avez plus de vin à vendre."
-			Venato.notify(defaultNotification)
+			platypus.notify(defaultNotification)
 		end
 	end)
