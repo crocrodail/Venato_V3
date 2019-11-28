@@ -11,11 +11,6 @@ Citizen.CreateThread(function()
 			OpenMenuInteraction()
 			Menu.toggle()
 		end
-		if hiddenHUD == false then
-			DisplayRadar(true)
-		else
-			DisplayRadar(false)
-		end
 		if IsControlJustPressed(0, 21) then
           pressButton1 = 1
         end

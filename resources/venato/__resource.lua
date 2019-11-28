@@ -57,6 +57,13 @@ client_script {
   '/fivem-seatbelt/config.lua',
   '/fivem-seatbelt/client.lua',
   '/clean-car/client.lua',
+  '/ffpsshot_aim/forcefirst.lua',
+  '/damageragdollv2/client.lua',
+  '/weapons-on-back/client.lua',
+  '/weapon_switch/client.lua',
+  '/no_radar/config.lua',
+  '/no_radar/client.lua',
+  --'/respawn_vehicle/client.lua',
 }
 
 server_script {
@@ -99,6 +106,7 @@ server_script {
   '/entreprise/server.lua',
   '/gang/server.lua',
   '/clean-car/server.lua',
+  --'/respawn_vehicle/server.lua',
 }
 
 files {

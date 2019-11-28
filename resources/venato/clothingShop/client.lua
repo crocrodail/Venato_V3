@@ -263,17 +263,17 @@ function OpenClothingShop()
   AttachEntityToEntity(ped, Prop, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 180.0, false, false, false, false, 2, false)
   SetEntityVisible(Prop, false, 0)
   SetEntityVisible(ped, true, 0)
-	if not DoesCamExist(cam) then
-		cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
-	end
-	SetCamActive(cam,  true)
-	RenderScriptCams(true,  false,  0,  true,  true)
-	SetCamCoord(cam,  coords.x,  coords.y-2.0,  coords.z)
-	PointCamAtCoord(cam,x-1.0,y,z)
+	-- if not DoesCamExist(cam) then
+	-- 	cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+	-- end
+	-- SetCamActive(cam,  true)
+	-- RenderScriptCams(true,  false,  0,  true,  true)
+	-- SetCamCoord(cam,  coords.x,  coords.y-2.0,  coords.z)
+	-- PointCamAtCoord(cam,x-1.0,y,z)
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
   Menu.clearMenu()
   TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
-  if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
+  --if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
   TriggerEvent('Menu:AddButton2',"Masque", "CMask", '', '', "https://i.ibb.co/fqMn3sv/icons8-anonymous-mask-96px.png")
   TriggerEvent('Menu:AddButton2',"Haut", "ClothesShopMenuTop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
 	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
@@ -302,9 +302,9 @@ end
 function ClothesShopMenuTop()
   Menu.clearMenu()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "OpenClothingShop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
-  TriggerEvent('Menu:AddButton2',"Haut", "CStop", '', '', "https://cdn.icon-icons.com/icons2/1082/PNG/512/sweater_78110.png")
-	TriggerEvent('Menu:AddButton2',"Haut de corp", "CStopSecondary", '', '', "https://img.icons8.com/cotton/2x/t-shirt--v1.png")
-  TriggerEvent('Menu:AddButton2',"Bras/corp", "CSBras", '', '', "https://img2.freepng.fr/20180204/hhw/kisspng-arm-muscle-clip-art-arm-png-image-5a76b36707db54.1874529415177286150322.jpg")
+  TriggerEvent('Menu:AddButton2',"Haut primaire", "CStop", '', '', "https://cdn.icon-icons.com/icons2/1082/PNG/512/sweater_78110.png")
+	TriggerEvent('Menu:AddButton2',"Haut secondaire", "CStopSecondary", '', '', "https://img.icons8.com/cotton/2x/t-shirt--v1.png")
+  TriggerEvent('Menu:AddButton2',"Ajuster bras/corp", "CSBras", '', '', "https://i.ibb.co/9vMJ04x/icons8-flex-biceps-96px.png")
   TriggerEvent('Menu:AddButton2',"Valider le haut", "OpenClothingShop", '', '', "https://icon-library.net/images/validation-icon/validation-icon-10.jpg")
   TriggerEvent('Menu:CreateMenu')
 end

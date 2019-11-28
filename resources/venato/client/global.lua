@@ -30,7 +30,7 @@ Citizen.CreateThread(function()
       end
     end
     SetPlayerWantedLevel(playerId, 0 , false)
-    SetPlayerWantedLevelNow(playerId, false, false)
+    SetPlayerWantedLevelNow(playerId, false, false)    
   end
 end)
 
@@ -140,7 +140,6 @@ Citizen.CreateThread(function()
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
     RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
-    
 	end
 end)
 

@@ -459,9 +459,6 @@ function DeliveryJob.mainLoop()
           end
         end
       end
-
-
-
     end
   end
 end
