@@ -139,6 +139,7 @@ end
 function StoreMyCar(garage)
   local current = GetPlayersLastVehicle(platypus.GetPlayerPed(), true)
   if DoesEntityExist(current) then
+    TriggerServerEvent('sd:removeId', current)
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
     local model = GetEntityModel(current)
     local plate = GetVehicleNumberPlateText(current)
@@ -208,8 +209,7 @@ function SortirVoiture(vhll)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     DeleteEntity(CarOnPoint)
       local car = tonumber(vhll.model)
-      platypus.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
-        print(platypus.dump(health))
+      platypus.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)        
         if health ~= nil then
           SetVehicleEngineHealth(vhl, health[1])
           SetEntityHealth(vhl, health[2])

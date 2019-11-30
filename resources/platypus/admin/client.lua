@@ -168,12 +168,6 @@ function damageVeh()
   -- local coords = GetEntityCoords(current)
   -- local nbWheel = GetVehicleNumberOfWheels(current)
   -- local nbDoor = GetNumberOfVehicleDoors(current)
-  local vehicleNotification = {
-    title = "Garage",
-    type = "alert",
-    logo = "https://i.ibb.co/wpxH8B1/icons8-parking-96px.png",
-    timeout = 3000
-  }    
   for i=0, 9 do    
     SmashVehicleWindow(current, i)      
   end  

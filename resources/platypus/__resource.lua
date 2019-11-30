@@ -63,7 +63,8 @@ client_script {
   '/weapon_switch/client.lua',
   '/no_radar/config.lua',
   '/no_radar/client.lua',
-  --'/respawn_vehicle/client.lua',
+  '/StopDespawn/config.lua',
+  '/StopDespawn/client.lua',
 }
 
 server_script {
@@ -106,7 +107,8 @@ server_script {
   '/entreprise/server.lua',
   '/gang/server.lua',
   '/clean-car/server.lua',
-  --'/respawn_vehicle/server.lua',
+  '/StopDespawn/config.lua',
+  '/StopDespawn/server.lua',
 }
 
 files {

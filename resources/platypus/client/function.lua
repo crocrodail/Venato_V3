@@ -186,32 +186,34 @@ function platypus.CreateVehicle(modelName, coords, heading, cb)
   if tonumber(modelName) == nil then
    model = GetHashKey(modelName)
   end
-	Citizen.CreateThread(function()
-		if not HasModelLoaded(model) then
-			RequestModel(model)
-			while not HasModelLoaded(model) do
-				Citizen.Wait(100)
-			end
-		end
-		local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, true, false)
-		local id = NetworkGetNetworkIdFromEntity(vehicle)
-    SetNetworkIdExistsOnAllMachines(id, true)
-		SetNetworkIdCanMigrate(id, true)
-		SetEntityAsMissionEntity(vehicle, true, false)
-		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
-		SetVehicleNeedsToBeHotwired(vehicle, false)
-		SetModelAsNoLongerNeeded(model)
-		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-    SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
-		while not HasCollisionLoadedAroundEntity(vehicle) do
-			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-			Citizen.Wait(100)
-		end
-		SetVehRadioStation(vehicle, 'OFF')
-		if cb ~= nil then
-			cb(vehicle)
-		end
-	end)
+  
+  if not HasModelLoaded(model) then
+    RequestModel(model)
+    while not HasModelLoaded(model) do
+      Citizen.Wait(100)
+    end
+  end
+  local vehicle = CreateVehicle(model, coords.x, coords.y, coords.z, heading, true, false)
+  local id = NetworkGetNetworkIdFromEntity(vehicle)
+  SetNetworkIdExistsOnAllMachines(id, true)
+  SetNetworkIdCanMigrate(id, true)
+  SetEntityAsMissionEntity(vehicle, true, false)
+  SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+  SetVehicleNeedsToBeHotwired(vehicle, false)
+  SetModelAsNoLongerNeeded(model)
+  RequestCollisionAtCoord(coords.x, coords.y, coords.z)
+  SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
+  while not HasCollisionLoadedAroundEntity(vehicle) do
+    RequestCollisionAtCoord(coords.x, coords.y, coords.z)
+    Citizen.Wait(100)
+  end
+  SetVehRadioStation(vehicle, 'OFF')
+  
+  if cb ~= nil then
+    cb(vehicle)
+  end
+
+  return vehicle
 end
 
 function platypus.DeleteCar(entity)
