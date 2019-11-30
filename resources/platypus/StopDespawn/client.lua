@@ -170,14 +170,15 @@ Citizen.CreateThread(function()
 	local inVeh = false
 	while true do
 		dprint('Triggering save...')
-		if IsPedInAnyVehicle(ped) then
-			inVeh = true
-			vehicle = GetVehiclePedIsUsing(ped)
-			TriggerEvent('sd:save', vehicle)
-			SetVehicleHasBeenOwnedByPlayer(vehicle, true)		
+    if IsPedInAnyVehicle(ped) then      
+			--inVeh = true
+      vehicle = GetVehiclePedIsUsing(ped)
+      print(NetworkGetNetworkIdFromEntity(vehicle))
+			--TriggerEvent('sd:save', vehicle)
+      --SetVehicleHasBeenOwnedByPlayer(vehicle, true)	
 		end
 
-		Citizen.Wait(intervals.save*1000)
+		Citizen.Wait(5000)
 	end
 end)
 
