@@ -18,7 +18,7 @@ Citizen.CreateThread(function()
       if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2 and (Config.ATMS[i].b ~= nil) then
         indexLoop = i
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 10 and (Config.ATMS[i].b == nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 0.5 and (Config.ATMS[i].b == nil) then
         indexLoopATM = i
       end
       if indexLoop ~= nil then
@@ -29,7 +29,7 @@ Citizen.CreateThread(function()
         end
       end
       if indexLoopATM ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 1 then
+        if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 0.6 then
           inMarker = true
         else
           inMarker = false
