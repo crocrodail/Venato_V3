@@ -17,6 +17,16 @@ AddEventHandler('sd:removeId', function(vehiclePlate)
 	end
 end)
 
+RegisterServerEvent('sd:updateId')
+AddEventHandler('sd:updateId', function(oldId, newId)
+	for i=1,#vehicles,1 do
+		if vehicles[i].id == oldId then
+			vehicles[i].id = newId
+			dprint(oldId .. '(' .. vehicles[i].plate ..' - ' .. vehicles[i].id ..')' .. 'updated!')
+		end
+	end
+end)
+
 -- Completes the saving by inserting all the info in the table.
 function insert(index, id, model, x, y, z, heading, plate, health)
 	vehicles[index] = {
