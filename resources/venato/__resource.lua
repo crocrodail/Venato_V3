@@ -57,6 +57,8 @@ client_script {
   '/fivem-seatbelt/config.lua',
   '/fivem-seatbelt/client.lua',
   '/clean-car/client.lua',
+  '/auto-ecole/client.lua',
+  '/auto-ecole/config.lua',
 }
 
 server_script {
@@ -99,6 +101,7 @@ server_script {
   '/entreprise/server.lua',
   '/gang/server.lua',
   '/clean-car/server.lua',
+  '/auto-ecole/server.lua',
 }
 
 files {
