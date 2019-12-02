@@ -20,10 +20,6 @@ end
 
 
 Citizen.CreateThread(function()
-  Citizen.Wait(10000)
-  for _, item in ipairs(config) do
-      if item.code then
-          item.code.npc = GenerateNpc(item.code)
-      end
-  end
+    Citizen.Wait(10000) 
+    GenerateNpc(config)
 end)
