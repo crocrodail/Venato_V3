@@ -13,17 +13,19 @@ html body #app {
 
 html body #app .besoins {
   position: absolute;
-  bottom: 20%;
-  left: 1.8%;
+  top: 2.5%;
+  left: 1.5%;
 }
 
 html body #app .speedomeeter {
+  display: none;
   position: absolute;
   bottom: 8%;
   left: 17%;
 }
 
 html body #app .mini-speedomeeter {
+  display: none;
   position: absolute;
   bottom: 3.5%;
   left: 12%;

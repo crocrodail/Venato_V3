@@ -230,8 +230,6 @@ end
 
 -- Trigger despawn check (set interval in config).
 Citizen.CreateThread(function()
-	while true do
 		TriggerServerEvent('sd:retrieveTable')
 		Citizen.Wait(intervals.check*1000)
-	end
-end)
+	end)

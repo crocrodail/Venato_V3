@@ -7,17 +7,19 @@ html {
       background-color: transparent;
       .besoins {
         position: absolute;
-        bottom: 20%;
-        left: 1.8%;
+        top: 2.5%;
+        left: 1.5%;
       }
 
       .speedomeeter{
+        display: none;
         position: absolute;
         bottom: 8%;
         left: 17%;
       }
 
       .mini-speedomeeter{
+        display: none;
         position: absolute;
         bottom: 3.5%;
         left: 12%;

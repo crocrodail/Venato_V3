@@ -58,41 +58,6 @@
                 leave-active-class="animated fadeOut"
               >
                 <v-progress-circular
-                  v-if="playerIsInVehicule"
-                  :rotate="-90"
-                  :size="progressSize"
-                  :width="progressWidth"
-                  :value="fuel"
-                  :class="{'animated infinite flash': (fuel < 10)}"
-                  color="red darken-3"
-                >
-                  ⛽
-                </v-progress-circular>
-              </transition>
-
-              <transition
-                name="custom-classes-transition"
-                enter-active-class="animated fadeIn"
-                leave-active-class="animated fadeOut"
-              >
-                <v-progress-circular
-                  v-if="playerIsInVehicule"
-                  :rotate="-90"
-                  :size="progressSize"
-                  :width="progressWidth"
-                  :value="carDamage"
-                  :class="{'animated infinite flash': (carDamage < 20)}"
-                  color="blue-grey darken-3"
-                >
-                  🔧
-                </v-progress-circular>
-              </transition>
-              <transition
-                name="custom-classes-transition"
-                enter-active-class="animated fadeIn"
-                leave-active-class="animated fadeOut"
-              >
-                <v-progress-circular
                   :rotate="-90"
                   :size="progressSize"
                   :width="progressWidth"

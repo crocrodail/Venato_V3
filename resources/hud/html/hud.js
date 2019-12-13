@@ -133,7 +133,7 @@ new Vue({
     },
     computed: {
       progressSize: function() {
-        return this.window.width/47;
+        return this.window.width/45;
       },
       progressWidth: function() {
         return this.window.width/256;

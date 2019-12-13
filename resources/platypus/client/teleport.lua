@@ -235,6 +235,12 @@ local TeleportFromTo = {
     distance = 0.5
   },
 
+  ["Weed - Entrée"] = {
+    positionFrom = { ['x'] = -558.909, ['y'] = 209.16, ['z'] = 78.552, ['h'] = 269.566, nom = "entrer"},
+    positionTo = { ['x'] = -80.41, ['y'] = 70.98, ['z'] = -78.06, ['h'] = 263.016, nom = "sortir" },
+    hideFrom = true
+  },
+
 }
 
 local entities = {}
@@ -299,11 +305,15 @@ Citizen.CreateThread(function()
     for k, j in pairs(TeleportFromTo) do
      
       if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and platypus.HasJob(j.jobId)))  then
-        DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
-          255, 255, 255, 255, 0, 0, 0, 0)
+        if(not j.hideFrom) then
+          DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
+            255, 255, 255, 255, 0, 0, 0, 0)
+        end
         if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 5.0) then
+          if(not j.hideFrom) then
           Drawing.draw3DText(j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1.100, j.positionFrom.nom, 1, 0.2,
             0.1, 255, 255, 255, 215)
+          end
           if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < (j.distance ~= nil and j.distance or 2.0) ) then
             ClearPrints()
             SetTextEntry_2("STRING")
@@ -322,7 +332,8 @@ Citizen.CreateThread(function()
                 DoScreenFadeOut(500)
                 Citizen.Wait(1000)
                 FreezeEntityPosition(platypus.GetPlayerPed(), true)
-                SetEntityCoords(platypus.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
+                SetEntityCoords(platypus.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)                
+                SetEntityHeading(platypus.GetPlayerPed(), j.positionTo.h)
                 if curVehicule ~= 0 then
                   entities = {}
                   for i = 0, GetVehicleMaxNumberOfPassengers(vehicle) do
@@ -365,6 +376,7 @@ Citizen.CreateThread(function()
               Citizen.Wait(1000)
               FreezeEntityPosition(platypus.GetPlayerPed(), true)
               SetEntityCoords(platypus.GetPlayerPed(), j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1)
+              SetEntityHeading(platypus.GetPlayerPed(), j.positionFrom.h)
               Citizen.Wait(2000)
               DoScreenFadeIn(1000)
               FreezeEntityPosition(platypus.GetPlayerPed(), false)
