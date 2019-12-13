@@ -57,29 +57,52 @@ AddEventHandler('onClientMapStart', function()
     TriggerServerEvent('garages:storeallvehicles')
 end)
 
+
+local loopData = {}
 Citizen.CreateThread(function()
   setMapMarker()
   while true do
-      Citizen.Wait(0)
-      local ply = Venato.GetPlayerPed()
-      local plyCoords = GetEntityCoords(ply, 0)
-      for _, item in pairs(garage) do
-        local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-        if distance < 50 then
-          DrawMarker(27,item.xpoint, item.ypoint, item.zpoint,0,0,0,0,0,0,1.9,1.9,1.9,0,150,255,200,0,0,0,0)
-          if distance <= 2 then
-            defaultNotification.title = item.name
-            Venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
-            if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
-              openGarage(item.name, item.xspawn, item.yspawn, item.zspawn, item.hspawn)
-            end
-            if resend then
-              openGarage(item.name, item.xspawn, item.yspawn, item.zspawn, item.hspawn)
-              resend = false
-            end
+    Citizen.Wait(0)
+    local ply = Venato.GetPlayerPed()
+    local plyCoords = GetEntityCoords(ply, 0)
+    local testDistance = 999999
+    local testLoopData = {}
+    for _, item in pairs(garage) do
+      Citizen.Wait(100)
+      local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
+      if loopData.item ~= nil then
+        if item.name == loopData.item.name then
+          testLoopData = { distance = distance, item = item }
+        end
+      end
+      if distance < testDistance then
+        testDistance = distance
+        testLoopData = { distance = distance, item = item }
+      end
+    end
+    loopData = testLoopData
+  end
+end)
+
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(0)
+    if loopData.distance ~= nil then
+      if loopData.distance < 50 then
+        DrawMarker(27,loopData.item.xpoint, loopData.item.ypoint, loopData.item.zpoint+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
+        if loopData.distance <= 2 then
+          defaultNotification.title = loopData.item.name
+          Venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
+            openGarage(loopData.item.name, loopData.item.xspawn, loopData.item.yspawn, loopData.item.zspawn, loopData.item.hspawn)
+          end
+          if resend then
+            openGarage(loopData.item.name, loopData.item.xspawn, loopData.item.yspawn, loopData.item.zspawn, loopData.item.hspawn)
+            resend = false
           end
         end
       end
+    end
   end
 end)
 
@@ -142,7 +165,7 @@ function StoreMyCar(garage)
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
     local model = GetEntityModel(current)
     local plate = GetVehicleNumberPlateText(current)
-    
+
     local engineHealth = GetVehicleEngineHealth(current)
   	local vehicleHealth = GetEntityHealth(current)
     local dirtLevel = GetVehicleDirtLevel(current)
@@ -160,11 +183,11 @@ function StoreMyCar(garage)
 
     local windowsIntact = {}
     for i=0, 7 do
-      RollUpWindow(car,i) 
+      RollUpWindow(car,i)
       windowsIntact[i] = IsVehicleWindowIntact(current, i)
     end
 
-    local wheelHealth = {}    
+    local wheelHealth = {}
     for i=0, 6 do
       wheelHealth[i] = GetVehicleWheelHealth(current, i)
     end
@@ -215,27 +238,27 @@ function SortirVoiture(vhll)
           SetEntityHealth(vhl, health[2])
           GetVehicleDirtLevel(vhl, health[3])
           GetVehicleFuelLevel(vhl, health[4])
-          
+
           local doors = health[5]
-          for i=0, 9 do  
+          for i=0, 9 do
             if(doors[i..""] == 1) then
-              SetVehicleDoorBroken(vhl, i)   
-            end   
-          end 
+              SetVehicleDoorBroken(vhl, i)
+            end
+          end
 
           local window = health[6]
-          for i=0, 9 do  
+          for i=0, 9 do
             if window[i..""] == false then
-              SmashVehicleWindow(vhl, i) 
-            end     
-          end 
+              SmashVehicleWindow(vhl, i)
+            end
+          end
 
           local tyre = health[7]
-          for i=0, 9 do    
+          for i=0, 9 do
             if tyre[i..""] == 1 then
-              SetVehicleTyreBurst(vhl, i, true, 0.0)   
-            end   
-          end  
+              SetVehicleTyreBurst(vhl, i, true, 0.0)
+            end
+          end
 
           local wheel = health[8]
           print(Venato.dump(wheel))

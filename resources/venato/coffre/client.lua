@@ -18,14 +18,14 @@ end)
 RegisterNetEvent("Coffre:CallData:cb")
 AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
   DataCoffre = Coffre
-  DataUser = user or {}  
-  if coffre_index > 0 then    
+  DataUser = user or {}
+  if coffre_index > 0 then
     TriggerEvent('Menu:Clear')
     TriggerEvent('Menu:Init', DataCoffre[coffre_index].nom, "Coffre", 'rgba('..DataCoffre[coffre_index].red..','..DataCoffre[coffre_index].green..','..DataCoffre[coffre_index].blue..', 0.75)', "https://cap.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Fcap.2F2017.2F05.2F09.2F1c21c36a-b809-4662-bf09-1068218410b9.2Ejpeg/750x375/background-color/ffffff/quality/70/fichet-bauche-la-success-story-du-roi-du-coffre-fort-1123519.jpg" )
     Menu.setTitle( DataCoffre[coffre_index].nom)
     Menu.setSubtitle( "Coffre :")
     TriggerEvent('Menu:AddButton2', "Parametres","CoffreParametre", coffre_index, '', "https://i.ibb.co/cQmJ84r/icons8-administrative-tools-96px.png")
-    
+
     if DataCoffre[coffre_index].argentcapacite ~= 0 then
     TriggerEvent('Menu:AddButton2', Venato.FormatMoney(DataCoffre[coffre_index].argent,2).."€ / "..Venato.FormatMoney(DataCoffre[coffre_index].argentcapacite,2).."€", "CoffreMenuMoney", coffre_index, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
     end
@@ -51,12 +51,12 @@ RegisterNetEvent("Coffre:CallData:init")
 AddEventHandler("Coffre:CallData:init", function(Coffre)
   DataCoffre = Coffre
   for k,v in pairs(DataCoffre) do
-    if v.props ~= nil then   
+    if v.props ~= nil then
       RequestModel(v.props)
       while not HasModelLoaded(v.props) do
         Wait(1)
       end
-      
+
       local coffre = CreateObject(GetHashKey(v.props), v.x, v.y, v.z, false, false, false)
       SetEntityHeading(coffre, v.h)
       PlaceObjectOnGroundProperly(coffre)
@@ -64,22 +64,34 @@ AddEventHandler("Coffre:CallData:init", function(Coffre)
       FreezeEntityPosition(coffre, true)
       SetModelAsNoLongerNeeded(v.props)
     end
-  end  
+  end
 end)
 
-Citizen.CreateThread(function()   
+local indexLoop = nil
+Citizen.CreateThread(function()
   TriggerServerEvent("Coffre:CallData")
   TriggerServerEvent("Coffre:ReloadCoffre")
-  while true do     
-    Citizen.Wait(0)    
+  while true do
+    Citizen.Wait(0)
     local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
-    for k,v in pairs(DataCoffre) do     
+    for k,v in pairs(DataCoffre) do
       if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) then
-        Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..v.nom..'.')
-        if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then          
-          TriggerServerEvent("Coffre:CheckWhitelist", k)
-          coffre_index = k
-        end
+        indexLoop = k
+      elseif k == indexLoop then
+        indexLoop = nil
+      end
+    end
+  end
+end)
+
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(0)
+    if indexLoop ~= nil then
+      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
+      if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+        TriggerServerEvent("Coffre:CheckWhitelist", indexLoop)
+        coffre_index = indexLoop
       end
     end
   end
@@ -109,10 +121,10 @@ AddEventHandler("Coffre:Open", function(id)
   OpenCoffre(id)
 end)
 
-function OpenCoffre(index)  
+function OpenCoffre(index)
   TriggerEvent('Menu:Close')
   Menu.clearMenu()
-  coffre_index = index  
+  coffre_index = index
   TriggerServerEvent("Coffre:CallData")
   Citizen.Wait(0)
 end
@@ -137,7 +149,7 @@ function CoffreDropItem(row)
     TriggerServerEvent("Coffre:DropItem", qty , row)
   else
     Venato.notifyError("Une erreur est survenue.")
-  end  
+  end
   Menu.close()
   Citizen.Wait(500)
   OpenCoffre(row[1])
@@ -175,7 +187,7 @@ end
 
 function CoffreDropWp(row)
   Menu.close()
-  TriggerServerEvent("Coffre:DropWeapon", row)  
+  TriggerServerEvent("Coffre:DropWeapon", row)
 end
 
 
@@ -186,11 +198,11 @@ function CoffreWeaponOption(row)
 end
 
 function CoffreTakeWeapon(row)
-  if DataCoffre[row[1]].weapon[row[2]].poid + DataUser.Poid <= DataUser.PoidMax then    
+  if DataCoffre[row[1]].weapon[row[2]].poid + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
     Venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
-  end  
+  end
   Menu.close()
 end
 
@@ -217,22 +229,22 @@ AddEventHandler("Coffre:CallWhitelistPlayer:cb", function(data)
   if data.users ~= nil then
     for k,v in pairs(data.users) do
       Menu.addButton("Donner accès à "..v.prenom.." "..v.nom, "CoffreWhitelistPlayer", {data.index, v.identifier})
-    end 
-  end  
+    end
+  end
 end)
 
 
 
 function CoffreWhitelistPlayer(row)
   TriggerServerEvent("Coffre:CoffreWhitelistPlayer", row)
-  Menu.close() 
+  Menu.close()
 end
 
 function CoffreListWhitelist(index)
   Menu.clearMenu()
   Menu.setTitle( "Accès")
   Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "CoffreParametre", index)
-  TriggerServerEvent("Coffre:GetCoffreWhitelistPlayer", index)  
+  TriggerServerEvent("Coffre:GetCoffreWhitelistPlayer", index)
 end
 
 RegisterNetEvent("Coffre:GetCoffreWhitelistPlayer:cb")
@@ -250,7 +262,7 @@ function unwhitelist(row)
 end
 
 function confirmUnWhitelist(row)
-  TriggerServerEvent("Coffre:UnWhitelist", row)  
+  TriggerServerEvent("Coffre:UnWhitelist", row)
   Menu.close()
 end
 
@@ -274,7 +286,7 @@ end
 function CoffreTakeMoney(index)
   local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à prendre")
   if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and Venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
-    TriggerServerEvent("Coffre:TakeMoney", qty , index)    
+    TriggerServerEvent("Coffre:TakeMoney", qty , index)
   else
     Venato.notifyError("Une erreur est survenue.")
   end
