@@ -18,7 +18,7 @@
 		while true do
 			Wait(0)
 			if Pompiste_markerBool == true then
-				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Station de pompage"].x,pompiste_blips["Station de pompage"].y,pompiste_blips["Station de pompage"].z, true) <= pompiste_blips["Station de pompage"].distanceBetweenCoords then
+				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Station de pompage"].x,pompiste_blips["Station de pompage"].y,pompiste_blips["Station de pompage"].z, true) <= pompiste_blips["Station de pompage"].distanceBetweenCoords then
 					if(not recolt) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~pétrole brut~s~.")						
 					else
@@ -31,7 +31,7 @@
 				else
 					recolt = false
 				end
-				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Transformation"].x,pompiste_blips["Transformation"].y,pompiste_blips["Transformation"].z, true) <= pompiste_blips["Transformation"].distanceBetweenCoords then
+				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Transformation"].x,pompiste_blips["Transformation"].y,pompiste_blips["Transformation"].z, true) <= pompiste_blips["Transformation"].distanceBetweenCoords then
 					if(not transform) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~pétrole brut~s~.")						
 					else
@@ -44,7 +44,7 @@
 				else
 					transform = false
 				end
-				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Point de vente"].x,pompiste_blips["Point de vente"].y,pompiste_blips["Point de vente"].z, true) <= pompiste_blips["Point de vente"].distanceBetweenCoords then
+				if isInServicePompiste and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Point de vente"].x,pompiste_blips["Point de vente"].y,pompiste_blips["Point de vente"].z, true) <= pompiste_blips["Point de vente"].distanceBetweenCoords then
 					if(not sell) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de l'~b~essence~s~.")						
 					else
@@ -108,7 +108,7 @@
 		while true do
 			Citizen.Wait(1)
 			if Pompiste_markerBool == true then
-				local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Entreprise"].x, pompiste_blips["Entreprise"].y, pompiste_blips["Entreprise"].z, true)
+				local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Entreprise"].x, pompiste_blips["Entreprise"].y, pompiste_blips["Entreprise"].z, true)
 				if distance <= pompiste_blips["Entreprise"].distanceMarker then
 					DrawMarker(1, pompiste_blips["Entreprise"].x, pompiste_blips["Entreprise"].y, pompiste_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					if distance <= 5 then						
@@ -124,7 +124,7 @@
 				end
 
 				if isInServicePompiste then
-					local distance2 = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Garage"].x, pompiste_blips["Garage"].y, pompiste_blips["Garage"].z, true)
+					local distance2 = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Garage"].x, pompiste_blips["Garage"].y, pompiste_blips["Garage"].z, true)
 					if distance2 <= pompiste_blips["Garage"].distanceMarker+5 then
 						DrawMarker(1, pompiste_blips["Garage"].x, pompiste_blips["Garage"].y, pompiste_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 						if distance2 <= 5 then							
@@ -135,19 +135,19 @@
 						end
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker then
 						DrawMarker(1,brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Station de pompage"].x,pompiste_blips["Station de pompage"].y,pompiste_blips["Station de pompage"].z, true) <= pompiste_blips["Station de pompage"].distanceMarker + 30 then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Station de pompage"].x,pompiste_blips["Station de pompage"].y,pompiste_blips["Station de pompage"].z, true) <= pompiste_blips["Station de pompage"].distanceMarker + 30 then
 						DrawMarker(1,pompiste_blips["Station de pompage"].x,pompiste_blips["Station de pompage"].y,pompiste_blips["Station de pompage"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Transformation"].x,pompiste_blips["Transformation"].y,pompiste_blips["Transformation"].z, true) <= pompiste_blips["Transformation"].distanceMarker + 30 then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Transformation"].x,pompiste_blips["Transformation"].y,pompiste_blips["Transformation"].z, true) <= pompiste_blips["Transformation"].distanceMarker + 30 then
 						DrawMarker(1,pompiste_blips["Transformation"].x,pompiste_blips["Transformation"].y,pompiste_blips["Transformation"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pompiste_blips["Point de vente"].x,pompiste_blips["Point de vente"].y,pompiste_blips["Point de vente"].z, true) <= pompiste_blips["Point de vente"].distanceMarker + 30 then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), pompiste_blips["Point de vente"].x,pompiste_blips["Point de vente"].y,pompiste_blips["Point de vente"].z, true) <= pompiste_blips["Point de vente"].distanceMarker + 30 then
 						DrawMarker(1,pompiste_blips["Point de vente"].x,pompiste_blips["Point de vente"].y,pompiste_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 				end
@@ -175,7 +175,7 @@
 	end)
 
 function GetServicePompiste()
-	local playerPed = GetPlayerPed(-1)
+	local playerPed = PlayerPedId()
 	if isInServicePompiste then
 		defaultNotification.message = "Vous n'êtes plus en service."
 		platypus.notify(defaultNotification)
@@ -192,18 +192,18 @@ RegisterNetEvent('pompiste:getSkin')
 AddEventHandler('pompiste:getSkin', function (source)
 	local hashSkin = GetHashKey("mp_m_freemode_01")
 	Citizen.CreateThread(function()
-		if(GetEntityModel(GetPlayerPed(-1)) == hashSkin) then
-			SetPedComponentVariation(GetPlayerPed(-1), 11, 111, 3, 2)  -- Top
-			SetPedComponentVariation(GetPlayerPed(-1), 8, 59, 1, 2)   -- under coat
-			SetPedComponentVariation(GetPlayerPed(-1), 4, 49, 1, 2)   -- Pants
-			SetPedComponentVariation(GetPlayerPed(-1), 6, 55, 0, 2)   -- shoes
-			SetPedComponentVariation(GetPlayerPed(-1), 3, 42, 0, 2)   -- under skin
+		if(GetEntityModel(PlayerPedId()) == hashSkin) then
+			SetPedComponentVariation(PlayerPedId(), 11, 111, 3, 2)  -- Top
+			SetPedComponentVariation(PlayerPedId(), 8, 59, 1, 2)   -- under coat
+			SetPedComponentVariation(PlayerPedId(), 4, 49, 1, 2)   -- Pants
+			SetPedComponentVariation(PlayerPedId(), 6, 55, 0, 2)   -- shoes
+			SetPedComponentVariation(PlayerPedId(), 3, 42, 0, 2)   -- under skin
 		else
-			SetPedComponentVariation(GetPlayerPed(-1), 11, 11, 2, 2)  -- Top
-			SetPedComponentVariation(GetPlayerPed(-1), 8, 36, 0, 2)   -- under coat
-			SetPedComponentVariation(GetPlayerPed(-1), 4, 35, 0, 2)   -- Pants
-			SetPedComponentVariation(GetPlayerPed(-1), 6, 26, 0, 2)   -- shoes
-			SetPedComponentVariation(GetPlayerPed(-1), 3, 11, 0, 2)   -- under skin
+			SetPedComponentVariation(PlayerPedId(), 11, 11, 2, 2)  -- Top
+			SetPedComponentVariation(PlayerPedId(), 8, 36, 0, 2)   -- under coat
+			SetPedComponentVariation(PlayerPedId(), 4, 35, 0, 2)   -- Pants
+			SetPedComponentVariation(PlayerPedId(), 6, 26, 0, 2)   -- shoes
+			SetPedComponentVariation(PlayerPedId(), 3, 11, 0, 2)   -- under skin
 		end
 	end)
 end)
@@ -218,7 +218,7 @@ AddEventHandler('pompiste:getCamion', function ()
 	else
 	local vehiculeDetected = GetClosestVehicle(pompiste_car2.x, pompiste_car2.y, pompiste_car2.z, 6.0, 0, 70)
 	if not DoesEntityExist(vehiculeDetected) then
-		local myPed = GetPlayerPed(-1)
+		local myPed = PlayerPedId()
 		local player = PlayerId()
 		local plate = math.random(1000, 9999)
 		platypus.CreateVehicle('packer', {x=pompiste_car2.x, y=pompiste_car2.y, z=pompiste_car2.z},34.0, function(cam)
@@ -244,7 +244,7 @@ AddEventHandler('pompiste:getRemorque', function ()
 	else
 	local vehiculeDetected = GetClosestVehicle(pompiste_car.x, pompiste_car.y, pompiste_car.z, 6.0, 0, 70)
 	if not DoesEntityExist(vehiculeDetected) then
-		local myPed = GetPlayerPed(-1)
+		local myPed = PlayerPedId()
 		local player = PlayerId()
 		local vehicle = GetHashKey('tanker')
 		local plate = math.random(1000, 9999)

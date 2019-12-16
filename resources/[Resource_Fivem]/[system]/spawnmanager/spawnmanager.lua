@@ -260,8 +260,8 @@ function spawnPlayer(spawnIdx, cb)
 
                 -- release the player model
                 SetModelAsNoLongerNeeded(spawn.model)
-                SetPedDefaultComponentVariation(GetPlayerPed(-1))
-                SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+                SetPedDefaultComponentVariation(PlayerPedId())
+                SetPedComponentVariation(PlayerPedId(), 2, 0, 0, 0)
             end
 
             -- preload collisions for the spawnpoint
@@ -269,7 +269,7 @@ function spawnPlayer(spawnIdx, cb)
 
             -- spawn the player
             --ResurrectNetworkPlayer(GetPlayerId(), spawn.x, spawn.y, spawn.z, spawn.heading)
-            local ped = GetPlayerPed(-1)
+            local ped = PlayerPedId()
 
             -- V requires setting coords as well
             SetEntityCoordsNoOffset(ped, spawn.x, spawn.y, spawn.z, false, false, false, true)
@@ -330,7 +330,7 @@ Citizen.CreateThread(function()
   while true do
     print('Test')
     Citizen.Wait(0)    
-    local playerPed = GetPlayerPed(-1)
+    local playerPed = PlayerPedId()
     if IsEntityDead(playerPed) then
       print('revive')
       local ped = ClonePed(playerPed, GetEntityHeading(playerPed), 1, 1)
@@ -360,11 +360,11 @@ function playAnim(data)
         Citizen.Wait(0)
         end
         if HasAnimDictLoaded(data.anim.lib) then
-            TaskPlayAnim( GetPlayerPed(-1),data.anim.lib,data.anim.anim ,8.0, -8.0, -1, 0, 0, false, false, false )
+            TaskPlayAnim( PlayerPedId(),data.anim.lib,data.anim.anim ,8.0, -8.0, -1, 0, 0, false, false, false )
             print('anim')
         end
     elseif data.types == "animsActionScenario" then
-        TaskStartScenarioInPlace( GetPlayerPed(-1), data.anim.anim, 0, false)
+        TaskStartScenarioInPlace( PlayerPedId(), data.anim.anim, 0, false)
     end
 end
 

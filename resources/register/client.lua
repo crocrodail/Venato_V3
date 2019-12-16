@@ -10,7 +10,7 @@ Citizen.CreateThread(function()
       if IsControlJustPressed(1, KeyToucheClose) and menuIsOpen == 1 then
         closeGui()
       elseif menuIsOpen == 2 then
-        local ply = GetPlayerPed(-1)
+        local ply = PlayerPedId()
         DisableControlAction(0, 1, true)
         DisableControlAction(0, 2, true)
         DisableControlAction(0, 24, true)

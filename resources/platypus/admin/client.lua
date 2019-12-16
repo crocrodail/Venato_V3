@@ -117,7 +117,7 @@ function revivevnt()
 end
 
 function vehicleState()
-  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  local current = GetPlayersLastVehicle(PlayerPedId(), true)
   local vehicleNotification = {
     title = "Garage",
     type = "alert",
@@ -164,7 +164,7 @@ function vehicleState()
 end
 
 function damageVeh()
-  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+  local current = GetPlayersLastVehicle(PlayerPedId(), true)
   -- local coords = GetEntityCoords(current)
   -- local nbWheel = GetVehicleNumberOfWheels(current)
   -- local nbDoor = GetNumberOfVehicleDoors(current)
@@ -247,7 +247,7 @@ Citizen.CreateThread(function()
 end)
 
 function createVeh()
-	local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
+	local current = GetPlayersLastVehicle(PlayerPedId(), true)
 	if DoesEntityExist(current) then
 		local model = GetEntityModel(current)
   	local plate = GetVehicleNumberPlateText(current)
@@ -565,7 +565,7 @@ end
 
 RegisterNetEvent('Admin:teleportUser')
 AddEventHandler('Admin:teleportUser', function(coords)
-	SetEntityCoords(GetPlayerPed(-1), coords[1], coords[2], coords[3])
+	SetEntityCoords(PlayerPedId(), coords[1], coords[2], coords[3])
 end)
 
 function AdminFreeze()
@@ -575,7 +575,7 @@ end
 RegisterNetEvent('Admin:freezePlayer')
 AddEventHandler("Admin:freezePlayer", function()
 	local player = PlayerId()
-	local ped = GetPlayerPed(-1)
+	local ped = PlayerPedId()
 	if state == true then
 		if not IsEntityVisible(ped) then
 			SetEntityVisible(ped, true)

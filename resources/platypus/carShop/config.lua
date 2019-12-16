@@ -1,4 +1,4 @@
-Config.CarShop = {
+CarShop = {
   {id = 1, x = -45.22, y = -1096.37, z = 26.42, type = 36, blip = 225, vehiculeType = 1, name='Premium Delux Motosport', distanceMarker = 20, distanceMin = 5},
   -- {id = 2, x = -1058.5045166016, y = -2962.234375, z = 13.964532852173, type = 7,  blip = 307,vehiculeType = 3, name='Aéronef Shop', distanceMarker = 40, distanceMin = 15},
   -- {id = 3, x = -1146.0112304688, y = -2864.2485351563, z = 13.94603061676, type = 34, blip = 43, vehiculeType = 6, name='Hélicoptère Shop', distanceMarker = 40, distanceMin = 15},

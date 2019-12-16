@@ -7,26 +7,26 @@ local inEdit = false
 
 
 
-if (GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_m_freemode_01") or GetEntityModel(GetPlayerPed(-1)) == GetHashKey("mp_f_freemode_01")) then
+if (GetEntityModel(PlayerPedId()) == GetHashKey("mp_m_freemode_01") or GetEntityModel(PlayerPedId()) == GetHashKey("mp_f_freemode_01")) then
   loaded = true
 end
 function camspawn()
 Citizen.CreateThread(function()
   local currentItem = 0
   local distanceCam = 0.35
-  local me = GetPlayerPed(-1)
+  local me = PlayerPedId()
   local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
   local boneIndex = 65068
   SetCamActive(cam, true)
   RenderScriptCams(true, false, 0, 1, 0)
   index = 0
   value = 0.0
-  local h = GetEntityHeading(GetPlayerPed(-1))
+  local h = GetEntityHeading(PlayerPedId())
   inEdit = true
     while inEdit == true do
       Citizen.Wait(0)
       local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z
-      AttachCamToPedBone(cam, GetPlayerPed(-1), boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam ,0.05 , true)
+      AttachCamToPedBone(cam, PlayerPedId(), boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam ,0.05 , true)
       SetCamRot(cam, 0.0, 0.0, YawCam + h + 90, true)
     end
   end)
@@ -492,12 +492,12 @@ function loadPlayer(data)
     end
     SetPlayerModel(PlayerId(), data.Skin.model)
     SetModelAsNoLongerNeeded(data.Skin.model)
-    SetPedDefaultComponentVariation(GetPlayerPed(-1))
-    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(PlayerPedId())
+    SetPedComponentVariation(PlayerPedId(), 2, 0, 0, 0)
     platypus.LoadClothes()
   end
   RequestCollisionAtCoord(PosX, PosY, PosZ)
-  local ped = GetPlayerPed(-1)
+  local ped = PlayerPedId()
   SetEntityCoordsNoOffset(ped, PosX, PosY, PosZ, false, false, false, true)
   NetworkResurrectLocalPlayer(PosX, PosY, PosZ, PosH, true, true, false)
   ClearPedTasksImmediately(ped)

@@ -3,10 +3,10 @@ resource_manifest_version "05cfa83c-a124-4cfa-a768-c24a5811d8f9"
  ui_page "/html/index.html"
 
 client_script {
-  '/client/menu.lua',
-  '/client/blips.lua',
   '/client/function.lua',
   '/client/global.lua',
+  '/client/menu.lua',
+  '/client/blips.lua',
   '/client/sirenControl.js',
   '/client/teleport.lua',
   '/client/savePos.lua',
@@ -65,6 +65,8 @@ client_script {
   '/no_radar/client.lua',
   '/StopDespawn/config.lua',
   '/StopDespawn/client.lua',
+  '/crafts/client.lua',
+  '/sellToNpc/client.lua',
 }
 
 server_script {
@@ -109,6 +111,8 @@ server_script {
   '/clean-car/server.lua',
   '/StopDespawn/config.lua',
   '/StopDespawn/server.lua',
+  '/crafts/server.lua',
+  '/sellToNpc/server.lua',
 }
 
 files {

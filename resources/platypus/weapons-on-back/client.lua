@@ -47,7 +47,7 @@ local attached_weapons = {}
 
 Citizen.CreateThread(function()
   while true do
-      local me = GetPlayerPed(-1)
+      local me = PlayerPedId()
       ---------------------------------------
       -- attach if player has large weapon --
       ---------------------------------------
@@ -73,7 +73,7 @@ Citizen.CreateThread(function()
 end)
 
 function AttachWeapon(attachModel,modelHash,boneNumber,x,y,z,xR,yR,zR, isMelee)
-	local bone = GetPedBoneIndex(GetPlayerPed(-1), boneNumber)
+	local bone = GetPedBoneIndex(PlayerPedId(), boneNumber)
 	RequestModel(attachModel)
 	while not HasModelLoaded(attachModel) do
 		Wait(100)
@@ -86,7 +86,7 @@ function AttachWeapon(attachModel,modelHash,boneNumber,x,y,z,xR,yR,zR, isMelee)
 
   if isMelee then x = 0.11 y = -0.14 z = 0.0 xR = -75.0 yR = 185.0 zR = 92.0 end -- reposition for melee items
   if attachModel == "prop_ld_jerrycan_01" then x = x + 0.3 end
-	AttachEntityToEntity(attached_weapons[attachModel].handle, GetPlayerPed(-1), bone, x, y, z, xR, yR, zR, 1, 1, 0, 0, 2, 1)
+	AttachEntityToEntity(attached_weapons[attachModel].handle, PlayerPedId(), bone, x, y, z, xR, yR, zR, 1, 1, 0, 0, 2, 1)
 end
 
 function isMeleeWeapon(wep_name)

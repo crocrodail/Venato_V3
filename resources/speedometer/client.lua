@@ -2,7 +2,7 @@ local ind = {l = false, r = false}
 
 Citizen.CreateThread(function()
 	while true do
-		local Ped = GetPlayerPed(-1)
+		local Ped = PlayerPedId()
 		if(IsPedInAnyVehicle(Ped)) then
 			local PedCar = GetVehiclePedIsIn(Ped, false)
 			if PedCar and GetPedInVehicleSeat(PedCar, -1) == Ped then
@@ -40,11 +40,11 @@ Citizen.CreateThread(function()
 				local VehIndicatorLight = GetVehicleIndicatorLights(GetVehiclePedIsUsing(PlayerPedId()))
 				if IsControlJustPressed(1, 57) then -- F9 is pressed
 					ind.l = not ind.l
-					SetVehicleIndicatorLights(GetVehiclePedIsUsing(GetPlayerPed(-1)), 0, ind.l)
+					SetVehicleIndicatorLights(GetVehiclePedIsUsing(PlayerPedId()), 0, ind.l)
 				end
 				if IsControlJustPressed(1, 56) then -- F10 is pressed
 					ind.r = not ind.r
-					SetVehicleIndicatorLights(GetVehiclePedIsUsing(GetPlayerPed(-1)), 1, ind.r)
+					SetVehicleIndicatorLights(GetVehiclePedIsUsing(PlayerPedId()), 1, ind.r)
 				end
 
 				if(VehIndicatorLight == 0) then
@@ -87,7 +87,7 @@ end)
 -- Consume fuel factor
 Citizen.CreateThread(function()
 	while true do
-		local Ped = GetPlayerPed(-1)
+		local Ped = PlayerPedId()
 		if(IsPedInAnyVehicle(Ped)) then
 			local PedCar = GetVehiclePedIsIn(Ped, false)
 			if PedCar and GetPedInVehicleSeat(PedCar, -1) == Ped then

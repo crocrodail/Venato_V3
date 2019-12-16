@@ -211,7 +211,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
           MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
           { ['@player'] = DataPlayers[tonumber(source)].SteamId, ['@item'] = id, ['@qty'] = qty })
         else
-          print("GROS Probleme !!")
+          print("GROS Probleme 1!!")
         end
       end)
 
@@ -253,7 +253,7 @@ AddEventHandler('Inventory:RemoveItem', function(qty, id, NewSource)
 					DataPlayers[tonumber(source)].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable }
 					DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + DataPlayers[tonumber(source)].Inventaire[id].poid
 				else
-					print("GROS Probleme !!")
+					print("GROS Probleme 2!!")
 				end
 			end)
 			MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",{['@player'] = DataPlayers[tonumber(source)].SteamId, ['@item'] = id, ['@qty'] = qty })

@@ -375,10 +375,10 @@ function spawnDepanneuse(coords, type)
                 SetEntityVisible(myVehiculeEntity, false, 0)
           --      DetachVehicleWindscreen(myVehiculeEntity)
                 Citizen.Wait(250)
-                AttachEntityToEntity(myVehiculeEntity, GetVehiclePedIsIn(GetPlayerPed(-1), false), -1, AttachX, AttachY, AttachZ, 0.0, 0.0, 0.0, true, true, true, true, 1, true)
+                AttachEntityToEntity(myVehiculeEntity, GetVehiclePedIsIn(PlayerPedId(), false), -1, AttachX, AttachY, AttachZ, 0.0, 0.0, 0.0, true, true, true, true, 1, true)
                 SetVehicleExplodesOnHighExplosionDamage(myVehiculeEntity, false)
                 SetEntityVisible(myVehiculeEntity, true, 0)
-                SetPedIntoVehicle(GetPlayerPed(-1), myVehiculeEntity, -1)
+                SetPedIntoVehicle(PlayerPedId(), myVehiculeEntity, -1)
                 SetVehicleFixed(existingVeh)
                 SetVehicleDirtLevel(existingVeh, 0.0)
                 SetVehicleLights(existingVeh, 0)
@@ -404,14 +404,14 @@ function spawnDepanneuse(coords, type)
     end
     -- Citizen.Trace('impossible')
     notifIconMecaMeca("CHAR_BLANK_ENTRY", 1, "Mecano", false, TEXT.SpawnVehicleImpossible)
-    -- local myPed = GetPlayerPed(-1)
+    -- local myPed = PlayerPedId()
     -- local player = PlayerId()
     -- RequestModel(VehicleModelKeyTowTruck)
     -- while not HasModelLoaded(VehicleModelKeyTowTruck) do
     --     Wait(1)
     -- end
 
-    -- local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 5.0, 0)
+    -- local coords = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 5.0, 0)
     -- myVehiculeEntity = CreateVehicle(VehicleModelKeyTowTruck, coords.x, coords.y, coords.z, 0 , true, true)
     -- DecorSetInt(myVehiculeEntity, 'VehicleDepa', 1)
     -- SetVehicleNumberPlateText(myVehiculeEntity, "Depa001")
@@ -433,7 +433,7 @@ end
 local function toogleService()
     inService = not inService
     if inService then
-        local myPed = GetPlayerPed(-1)
+        local myPed = PlayerPedId()
         GiveWeaponToPed(myPed, 'WEAPON_HAMMER', 0, 0, 0)
         GiveWeaponToPed(myPed, 'WEAPON_CROWBAR', 0, 0, 0)
         GiveWeaponToPed(myPed, 'WEAPON_FLASHLIGHT', 0, 0, 0)
@@ -442,18 +442,18 @@ local function toogleService()
         -- A Configurer
 		local hashSkin = GetHashKey("mp_m_freemode_01")
 		Citizen.CreateThread(function()
-		if(GetEntityModel(GetPlayerPed(-1)) == hashSkin) then
-			SetPedComponentVariation(GetPlayerPed(-1), 3, 11, 0, 2) -- TORSO
-			SetPedComponentVariation(GetPlayerPed(-1), 11, 43, 0, 2) -- TORSO2
-			SetPedComponentVariation(GetPlayerPed(-1), 4, 41, 0, 2) -- LEGS
-			SetPedComponentVariation(GetPlayerPed(-1), 6, 25, 0, 2) -- FEET
-			SetPedComponentVariation(GetPlayerPed(-1), 8, 15, 0, 2) -- ACCESSORIE
+		if(GetEntityModel(PlayerPedId()) == hashSkin) then
+			SetPedComponentVariation(PlayerPedId(), 3, 11, 0, 2) -- TORSO
+			SetPedComponentVariation(PlayerPedId(), 11, 43, 0, 2) -- TORSO2
+			SetPedComponentVariation(PlayerPedId(), 4, 41, 0, 2) -- LEGS
+			SetPedComponentVariation(PlayerPedId(), 6, 25, 0, 2) -- FEET
+			SetPedComponentVariation(PlayerPedId(), 8, 15, 0, 2) -- ACCESSORIE
 		else
-			SetPedComponentVariation(GetPlayerPed(-1), 3, 25, 0, 2) -- TORSO
-			SetPedComponentVariation(GetPlayerPed(-1), 11, 1, 0, 2) -- TORSO2
-			SetPedComponentVariation(GetPlayerPed(-1), 4, 4, 8, 2) -- LEGS
-			SetPedComponentVariation(GetPlayerPed(-1), 6, 4, 0, 2) -- FEET
-			SetPedComponentVariation(GetPlayerPed(-1), 8, 20, 1, 2) -- ACCESSORIE
+			SetPedComponentVariation(PlayerPedId(), 3, 25, 0, 2) -- TORSO
+			SetPedComponentVariation(PlayerPedId(), 11, 1, 0, 2) -- TORSO2
+			SetPedComponentVariation(PlayerPedId(), 4, 4, 8, 2) -- LEGS
+			SetPedComponentVariation(PlayerPedId(), 6, 4, 0, 2) -- FEET
+			SetPedComponentVariation(PlayerPedId(), 8, 20, 1, 2) -- ACCESSORIE
 		end
 		end)
         TriggerServerEvent('mecano:requestMission')
@@ -468,7 +468,7 @@ local function toogleService()
 end
 
 local function gestionService()
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myPos = GetEntityCoords(myPed)
     for _, coordData in pairs(coords) do
         local pos = coordData.PriseDeService
@@ -537,7 +537,7 @@ end
 --====================================================================================
 
 local function CustomVehicleDommage()
-  --  local myPed = GetPlayerPed(-1)
+  --  local myPed = PlayerPedId()
   --  local vehicle = GetVehiclePedIsIn(myPed, 0)
   --  if vehicle ~= 0 then
   --      local engineHealth = GetVehicleEngineHealth(vehicle)
@@ -628,7 +628,7 @@ end
 --====================================================================================
 
 function getStatusVehicle()
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local vehicle = GetVehicleLookByPlayer(myPed, 3.0)
     local p = GetEntityCoords(vehicle, 0)
     local h = GetEntityHeading(vehicle)
@@ -660,7 +660,7 @@ function getStatusVehicle()
 end
 
 function repareVehicle()
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local vehicle = GetVehicleLookByPlayer(myPed, 3.0)
     if vehicle ~= 0 then
         -- local capotOpen = GetVehicleDoorAngleRatio(vehicle, 4) > 0.5
@@ -707,7 +707,7 @@ function repareVehicle()
 end
 
 function fullRepareVehcile()
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myPos = GetEntityCoords(myPed)
     local inArena = false
     for _, coordData in pairs(coords) do
@@ -757,7 +757,7 @@ function fullRepareVehcile()
 end
 -- restart depanneur
 function openVehicleDoorData(data)
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myCoord = GetEntityCoords(myPed)
     local vehicle = GetVehicleLookByPlayer(myPed, 3.0)
     if vehicle ~= 0 then
@@ -780,7 +780,7 @@ function openVehicleDoorData(data)
 end
 
 function closeVehicleDoorData(data)
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myCoord = GetEntityCoords(myPed)
     local vehicle = GetVehicleLookByPlayer(myPed, 3.0)
     if vehicle ~= 0 then
@@ -803,7 +803,7 @@ function closeVehicleDoorData(data)
 end
 
 function unlockVehiculeForAll()
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local vehicle = GetVehicleLookByPlayer(myPed, 3.0)
     if vehicle ~= 0 then
         if math.random() > -0.25 then
@@ -829,7 +829,7 @@ function jobsSystem()
         return
     end
 
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myCoord = GetEntityCoords(myPed)
     local currentVehicle = GetVehiclePedIsIn(myPed, 0)
 
@@ -1336,7 +1336,7 @@ end)
 
 
 function needMecano(type)
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myCoord = GetEntityCoords(myPed)
     TriggerServerEvent('mecano:Call', myCoord.x, myCoord.y, myCoord.z, type)
 end
@@ -1346,8 +1346,8 @@ function toogleHelperLine()
 end
 
 function MECANO_wash()
-	SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-	SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+	SetVehicleDirtLevel(GetVehiclePedIsUsing(PlayerPedId()))
+	SetVehicleUndriveable(GetVehiclePedIsUsing(PlayerPedId()), false)
 end
 
 RegisterNetEvent('mecano:callMecano')
@@ -1410,7 +1410,7 @@ RegisterNetEvent( 'deleteVehicle' )
 
 
 -- ----[[ DEBUG
--- local myPed = GetPlayerPed(-1)
+-- local myPed = PlayerPedId()
 -- local myCoord = GetEntityCoords(myPed)
 -- -- toogleService()
 -- Citizen.Trace('Pos init: ' .. myCoord.x .. ', ' .. myCoord.y .. ', ' .. myCoord.z)
@@ -1423,7 +1423,7 @@ RegisterNetEvent( 'deleteVehicle' )
 -- --]]
 -- toogleService()
 -- isMecano = true
--- local myPed = GetPlayerPed(-1)
+-- local myPed = PlayerPedId()
 -- local myCoord = GetEntityCoords(myPed)
 -- local any = nil
 -- AddRope(
@@ -1433,7 +1433,7 @@ RegisterNetEvent( 'deleteVehicle' )
 -- 0,0,0,
 -- 0,0,0,Citizen.ReturnResultAnyway())
 
--- local my= GetPlayerPed(-1)
+-- local my= PlayerPedId()
 -- local vi = GetVehicleLookByPlayer(my, 3.0)
 -- if vi ~= nil then
 --     local myCoord = GetEntityCoords(vi)
@@ -1444,7 +1444,7 @@ RegisterNetEvent( 'deleteVehicle' )
 -- Citizen.CreateThread(function()
 --     while true do
 --     Citizen.Wait(1)
---     local ped = GetPlayerPed(-1)
+--     local ped = PlayerPedId()
 --            local playerPos = GetEntityCoords( ped, 1 )
 --            local p = GetOffsetFromEntityInWorldCoords( ped, 0.0, 0.0, 0.0 )
 --         local p1 = GetOffsetFromEntityInWorldCoords( ped, 0.0, 3.0, -0.8)

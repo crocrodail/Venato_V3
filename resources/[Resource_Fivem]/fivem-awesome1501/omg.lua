@@ -4,7 +4,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 
-		local playerPed = GetPlayerPed(-1)
+		local playerPed = PlayerPedId()
 
 		if playerPed and playerPed ~= -1 then
 			--local pos = GetEntityCoords(playerPed)
@@ -24,7 +24,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(50)
 
-		local playerPed = GetPlayerPed(-1)
+		local playerPed = PlayerPedId()
 
 		if playerPed and playerPed ~= -1 then
 			if IsControlPressed(2, 18) then
@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(250)
 
-		local playerPed = GetPlayerPed(-1)
+		local playerPed = PlayerPedId()
 
 		if playerPed and playerPed ~= -1 then
 			if IsControlPressed(0, 11) then 

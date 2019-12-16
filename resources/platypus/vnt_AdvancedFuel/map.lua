@@ -483,8 +483,8 @@ end)
 
 
 function isNearStationMarker(items)
-    local ped = GetPlayerPed(-1)
-    local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+    local ped = PlayerPedId()
+    local plyCoords = GetEntityCoords(PlayerPedId(), 0)
 
     if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 250) then
         return true, GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
@@ -495,8 +495,8 @@ end
 
 
 function isNearBoatStationMarker(items)
-    local ped = GetPlayerPed(-1)
-    local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+    local ped = PlayerPedId()
+    local plyCoords = GetEntityCoords(PlayerPedId(), 0)
 
     if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 250) then
         return true, GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
@@ -507,8 +507,8 @@ end
 
 
 function isNearElectricStationMarker(items)
-    local ped = GetPlayerPed(-1)
-    local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+    local ped = PlayerPedId()
+    local plyCoords = GetEntityCoords(PlayerPedId(), 0)
 
     if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 250) then
         return true, GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)

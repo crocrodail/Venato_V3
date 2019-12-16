@@ -233,7 +233,7 @@ AddEventHandler('police:deleteBlips', function ()
 	TriggerServerEvent("police:removeCop")
 	TriggerEvent("police:finishService")
 
-	RemoveAllPedWeapons(GetPlayerPed(-1), true)
+	RemoveAllPedWeapons(PlayerPedId(), true)
 end)
 
 --====================================================================================
@@ -314,7 +314,7 @@ function updateMenuMissionPolice()
 end
 
 function callPolice(type)
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myCoord = GetEntityCoords(myPed)
     TriggerServerEvent('police:Call', myCoord.x, myCoord.y, myCoord.z, type)
 end
@@ -440,7 +440,7 @@ end)
 
 RegisterNetEvent('police:getSkin')
 AddEventHandler('police:getSkin', function (source)
-    local playerPed = GetPlayerPed(-1)
+    local playerPed = PlayerPedId()
     if (isCop and isCopInService) then
         SetPedComponentVariation(playerPed, 11, 55, 0, 2)  --Chemise Police
         SetPedComponentVariation(playerPed, 8, 58, 0, 2)   --Ceinture + matraque Police
@@ -454,7 +454,7 @@ AddEventHandler('police:getSkin', function (source)
         GiveWeaponToPed(playerPed, GetHashKey("WEAPON_PUMPSHOTGUN"), 100, true, true)
     else
         TriggerServerEvent("skin_customization:SpawnPlayer")
-        RemoveAllPedWeapons(GetPlayerPed(-1), true)
+        RemoveAllPedWeapons(PlayerPedId(), true)
     end
 end)
 
@@ -662,17 +662,17 @@ end
 
 function POLICE_Crocheter()
 	Citizen.CreateThread(function()
-        local pos = GetEntityCoords(GetPlayerPed(-1))
-        local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+        local pos = GetEntityCoords(PlayerPedId())
+        local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
 
-        local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+        local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
         local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
         if(DoesEntityExist(vehicleHandle)) then
-            TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_WELDING", 0, true)
+            TaskStartScenarioInPlace(PlayerPedId(), "WORLD_HUMAN_WELDING", 0, true)
             Citizen.Wait(20000)
             TriggerEvent("lock:addVeh", GetVehicleNumberPlateText(vehicleHandle), GetDisplayNameFromVehicleModel(GetEntityModel(vehicleHandle)))
             SetVehicleDoorsLocked(vehicleHandle, 1)
-            ClearPedTasksImmediately(GetPlayerPed(-1))
+            ClearPedTasksImmediately(PlayerPedId())
             unlockveh()
         else
             defaultNotification.message = "<span class='red--text'>Pas de véhicule proche.</span>"
@@ -683,10 +683,10 @@ end
 
 function POLICE_PutInVehicle()
 	local t, distance = GetClosestPlayer()
-    local pos = GetEntityCoords(GetPlayerPed(-1))
-    local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+    local pos = GetEntityCoords(PlayerPedId())
+    local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
 
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
     local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
 	if(distance ~= -1 and distance < 3) then
 		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), vehicleHandle)
@@ -707,10 +707,10 @@ function POLICE_UnseatVehicle()
 end
 
 function POLICE_CheckPlate()
-	local pos = GetEntityCoords(GetPlayerPed(-1))
-	local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+	local pos = GetEntityCoords(PlayerPedId())
+	local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
 
-	local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+	local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
 	local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
     if(DoesEntityExist(vehicleHandle)) then
 		TriggerServerEvent("police:checkingPlate", GetVehicleNumberPlateText(vehicleHandle), GetEntityModel(vehicleHandle))

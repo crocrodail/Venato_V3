@@ -61,7 +61,7 @@ local function EntityStats (entity, obj)
     stats.coords = GetEntityCoords(entity)
     stats.heading = GetEntityHeading(entity)
     stats.entityType = GetEntityType(entity)
-    stats.distance = GetDistanceBetween(GetEntityCoords(GetPlayerPed(-1)), stats.coords)
+    stats.distance = GetDistanceBetween(GetEntityCoords(PlayerPedId()), stats.coords)
     stats.model = GetEntityModel(entity)
     stats.health = GetEntityHealth(entity)
     stats.maxHealth = GetEntityMaxHealth(entity)
@@ -290,7 +290,7 @@ Citizen.CreateThread(function ()
     while true do
         -- FRAME RESET --------------------------------------------------------
         Citizen.Wait(0)
-        EntityStats(GetPlayerPed(-1), player)
+        EntityStats(PlayerPedId(), player)
         EntityStats(selected.entity, selected)
 
         targeted.entity = 0 -- expects int

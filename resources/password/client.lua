@@ -46,7 +46,7 @@ end
 ---------------------------------------------------------------------------------------------------------------
 AddEventHandler('onClientMapStart', function()
     Wait(1000)
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     FreezeEntityPosition(ped, true)
     TriggerServerEvent("Fax:ServerPassword:Initialize")
 end)
@@ -62,7 +62,7 @@ end)
 RegisterNetEvent('Fax:ServerPassword:PassedPassword')
 AddEventHandler('Fax:ServerPassword:PassedPassword', function()
     local source = source
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     FreezeEntityPosition(ped, false)
     TriggerEvent('chatMessage', "^2Bienvenue!")
     print("CallUpdateInventory")

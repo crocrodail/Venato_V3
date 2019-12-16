@@ -45,8 +45,8 @@ AddEventHandler('objectTeleports:handleTeleportCommand', function(command)
 		local idx = tonumber(command)
 
 		if spawns[idx] then
-			SetEntityCoords(GetPlayerPed(-1), spawns[idx].spawnPos[1], spawns[idx].spawnPos[2], spawns[idx].spawnPos[3])
-			SetEntityHeading(GetPlayerPed(-1), spawns[idx].heading)
+			SetEntityCoords(PlayerPedId(), spawns[idx].spawnPos[1], spawns[idx].spawnPos[2], spawns[idx].spawnPos[3])
+			SetEntityHeading(PlayerPedId(), spawns[idx].heading)
 
 			chatMessage('Teleported to ^3' .. spawns[idx].name)
 

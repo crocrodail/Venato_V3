@@ -44,13 +44,13 @@ Citizen.CreateThread(function()
 						end
 						platypus.playAnim({lib = PropData[NextTo].anim.lib, anim = PropData[NextTo].anim.anim, useLib = Libb, flag = PropData[NextTo].anim.flag})
 						AttachOnProp = true
-						FreezeEntityPosition(GetPlayerPed(-1), true)
+						FreezeEntityPosition(PlayerPedId(), true)
 					end
 				else
 					AttachOnProp = false
 					DetachEntity(platypus.GetPlayerPed())
-					ClearPedTasks(GetPlayerPed(-1))
-					FreezeEntityPosition(GetPlayerPed(-1), false)
+					ClearPedTasks(PlayerPedId())
+					FreezeEntityPosition(PlayerPedId(), false)
 				end
 			end
 		end

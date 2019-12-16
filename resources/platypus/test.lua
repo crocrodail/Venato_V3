@@ -185,7 +185,7 @@ end
 
 function detachebed()
 	DetachEntity(platypus.GetPlayerPed())
-	ClearPedTasks(GetPlayerPed(-1))
+	ClearPedTasks(PlayerPedId())
 end
 
 function attachbed()
@@ -247,7 +247,7 @@ function test3()
 	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_success", useLib = true})
 	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true, ped = ClonedPed})
 	Citizen.Wait(26000)
-	ClearPedTasks(GetPlayerPed(-1))
+	ClearPedTasks(PlayerPedId())
 end
 
 function stopeffect()

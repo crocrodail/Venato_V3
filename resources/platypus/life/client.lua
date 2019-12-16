@@ -245,7 +245,7 @@ function AlcoolEffet()
 end
 
 function AlcoolEffetPhase(phase)
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     if(phase == 0) then         
         SetPedIsDrunk(ped, false)
         ShakeGameplayCam("DRUNK_SHAKE", 0.0)

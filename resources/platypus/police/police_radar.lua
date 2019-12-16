@@ -106,13 +106,13 @@ function POLICE_radar()
 
     if isRadarPlaced then -- remove the previous radar if it exists, only one radar per cop
 
-        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), RadarPos.x, RadarPos.y, RadarPos.z, true) < 0.9 then -- if the player is close to his radar
+        if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), RadarPos.x, RadarPos.y, RadarPos.z, true) < 0.9 then -- if the player is close to his radar
 
             RequestAnimDict("anim@apt_trans@garage")
             while not HasAnimDictLoaded("anim@apt_trans@garage") do
                Wait(1)
             end
-            TaskPlayAnim(GetPlayerPed(-1), "anim@apt_trans@garage", "gar_open_1_left", 1.0, -1.0, 5000, 0, 1, true, true, true) -- animation
+            TaskPlayAnim(PlayerPedId(), "anim@apt_trans@garage", "gar_open_1_left", 1.0, -1.0, 5000, 0, 1, true, true, true) -- animation
 
             Citizen.Wait(2000) -- prevent spam radar + synchro spawn with animation time
 
@@ -149,8 +149,8 @@ function POLICE_radar()
         maxSpeed = radarSetSpeed("50")
 
         Citizen.Wait(200) -- wait if the player was in moving
-        RadarPos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0)
-        RadarAng = GetEntityRotation(GetPlayerPed(-1))
+        RadarPos = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 1.5, 0)
+        RadarAng = GetEntityRotation(PlayerPedId())
 
         if maxSpeed ~= nil then -- maxSpeed = nil only if the player hasn't entered a valid number
 
@@ -158,7 +158,7 @@ function POLICE_radar()
             while not HasAnimDictLoaded("anim@apt_trans@garage") do
                Wait(1)
             end
-            TaskPlayAnim(GetPlayerPed(-1), "anim@apt_trans@garage", "gar_open_1_left", 1.0, -1.0, 5000, 0, 1, true, true, true) -- animation
+            TaskPlayAnim(PlayerPedId(), "anim@apt_trans@garage", "gar_open_1_left", 1.0, -1.0, 5000, 0, 1, true, true, true) -- animation
 
             Citizen.Wait(1500) -- prevent spam radar placement + synchro spawn with animation time
 
@@ -222,7 +222,7 @@ Citizen.CreateThread(function()
 
             end
 
-            if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), RadarPos.x, RadarPos.y, RadarPos.z, true) > 300 then -- if the player is too far from his radar
+            if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), RadarPos.x, RadarPos.y, RadarPos.z, true) > 300 then -- if the player is too far from his radar
 
                 SetEntityAsMissionEntity(Radar, false, false)
                 SetEntityVisible(Radar, false)

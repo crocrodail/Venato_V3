@@ -50,7 +50,7 @@ function DeliveryJob.commands()
     (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player,
       false)) == GetHashKey(DeliveryJobConfig.TRUNK_KEY)
       or DeliveryJobConfig.trunk == nil) then
-    if IsPedInVehicle(GetPlayerPed(-1), DeliveryJobConfig.trunk) then
+    if IsPedInVehicle(PlayerPedId(), DeliveryJobConfig.trunk) then
       despawnTrunk()
       despawnForklift()
       despawnBox()
@@ -109,7 +109,7 @@ function UserTakingServiceLivery()
     local blip = JobTools.addBlip(DeliveryJobConfig.chosemission, name, 515, 2, true)
     DeliveryJobConfig.gpsroute[name] = blip
   end
-  local ped = GetPlayerPed(-1)
+  local ped = PlayerPedId()
   local props = {}
   local components ={}
   --{"tshirt_1":59,"torso_1":89,"arms":31,"pants_1":36,"glasses_1":19,"decals_2":0,"hair_color_2":0,"helmet_2":0,"hair_color_1":0,"face":2,"glasses_2":0,"torso_2":1,"shoes":35,"hair_1":0,"skin":0,"sex":0,"glasses_1":19,"pants_2":0,"hair_2":0,"decals_1":0,"tshirt_2":0,"helmet_1":5} --------------{"tshirt_1":36,"torso_1":0,"arms":68,"pants_1":30,"glasses_1":15,"decals_2":0,"hair_color_2":0,"helmet_2":0,"hair_color_1":0,"face":27,"glasses_2":0,"torso_2":11,"shoes":26,"hair_1":5,"skin":0,"sex":1,"glasses_1":15,"pants_2":2,"hair_2":0,"decals_1":0,"tshirt_2":0,"helmet_1":19}
@@ -188,7 +188,7 @@ function openMenuSpawnBox()
 end
 
 function spawnForkliftfunction()
-  local playerPos = GetEntityCoords(GetPlayerPed(-1))
+  local playerPos = GetEntityCoords(PlayerPedId())
   spawnForklift({x=playerPos.x, y=playerPos.y, z=playerPos.z})
 end
 
@@ -211,7 +211,7 @@ function DeliveryJob.mainLoop()
 
     while true do
     if DeliveryJob.isEnabled() then
-      local player = GetPlayerPed(-1)
+      local player = PlayerPedId()
       Wait(0)
 
       interactTxt = false
@@ -247,14 +247,14 @@ function DeliveryJob.mainLoop()
         if ClosetOfSpawnForkliftPoint < 2 then
           platypus.InteractTxt(SPAWN_BOX)
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-            local playerPos = GetEntityCoords(GetPlayerPed(-1))
+            local playerPos = GetEntityCoords(PlayerPedId())
             spawnForklift({x=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].x, y=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].y, z=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].z , heading=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].heading})
           end
         end
       end
 
       if JobsConfig.inService then
-        local playerPos = GetEntityCoords(GetPlayerPed(-1))
+        local playerPos = GetEntityCoords(PlayerPedId())
         local distance = GetDistanceBetweenCoords(playerPos, dropPoint.x, dropPoint.y, dropPoint.z, true)
 
         if distance < 45 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player, false)) ==
@@ -433,7 +433,7 @@ function DeliveryJob.mainLoop()
       end
     end
     if DeliveryJobConfig.ShopProOrNot and DeliveryJobConfig.isPro then
-      local playerPos = GetEntityCoords(GetPlayerPed(-1))
+      local playerPos = GetEntityCoords(PlayerPedId())
       if playerPos.z <= -38 and playerPos.x >= 992.29 and playerPos.x <= 1027.76 and playerPos.y >= -3113.05 and playerPos .y <= -3090.70 then
         DeliveryJobConfig.inWarehouse = "Autre"
       elseif playerPos.z <= -38 and playerPos.x >= 1048.35 and playerPos.x <= 1073.10 and playerPos.y >= -3110.9 and playerPos .y <= -3094.4 then
@@ -464,7 +464,7 @@ function DeliveryJob.mainLoop()
 end
 
 function DeliveryJob.checkLoop()
-  local player = GetPlayerPed(-1)
+  local player = PlayerPedId()
   while true do
     Wait(1000)
 
@@ -473,7 +473,7 @@ function DeliveryJob.checkLoop()
         UserIsInService = true
         UserTakingServiceLivery()
       end
-      local playerPos = GetEntityCoords(GetPlayerPed(-1))
+      local playerPos = GetEntityCoords(PlayerPedId())
       local obj = GetClosestObjectOfType(playerPos.x, playerPos.y, playerPos.z,
         DeliveryJobConfig.inWarehouse and 1. or 2.0,
         GetHashKey(DeliveryJobConfig.BOX_KEY), false, true, true)
@@ -771,7 +771,7 @@ Citizen.CreateThread(function()
   local await = 1000
   while true do
     Citizen.Wait(await)
-    local pos = GetEntityCoords(GetPlayerPed(-1))
+    local pos = GetEntityCoords(PlayerPedId())
     local disA = Vdist(pos.x, pos.y, pos.z, DeliveryJobConfig.chosemission.x, DeliveryJobConfig.chosemission.y, DeliveryJobConfig.chosemission.z)
     local disB = Vdist(pos.x, pos.y, pos.z, DeliveryJobConfig.takebox.x, DeliveryJobConfig.takebox.y, DeliveryJobConfig.takebox.z)
     for k,v in pairs(DeliveryJobConfig.trunkDrops["forklift"]) do

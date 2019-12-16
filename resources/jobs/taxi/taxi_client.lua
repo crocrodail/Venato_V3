@@ -108,7 +108,7 @@ local function IAgotoPlayer(type)
   IAstate = 0
   IAfoundZ = true
   IAcurrenttimeout = IAtimeout
-  local myPed = GetPlayerPed(-1)
+  local myPed = PlayerPedId()
   local myPos = GetEntityCoords(myPed)
 
   IAnbrPeople = type
@@ -219,7 +219,7 @@ local function IAactionsLoop()
     if IAblip then
       RemoveBlip(IAblip)
     end
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     local myPos = GetEntityCoords(myPed)
     local taxiPos = GetEntityCoords(IAdriver)
 
@@ -382,14 +382,14 @@ function spawnVehicle(coords, type)
   end
   -- Citizen.Trace('impossible')
   notifIcon("CHAR_BLANK_ENTRY", 1, "taxi", false, TEXT.SpawnVehicleImpossible)
-  -- local myPed = GetPlayerPed(-1)
+  -- local myPed = PlayerPedId()
   -- local player = PlayerId()
   -- RequestModel(VehicleModelKeyTowTruck)
   -- while not HasModelLoaded(VehicleModelKeyTowTruck) do
   --     Wait(1)
   -- end
 
-  -- local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 5.0, 0)
+  -- local coords = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 5.0, 0)
   -- myVehiculeEntity = CreateVehicle(VehicleModelKeyTowTruck, coords.x, coords.y, coords.z, 0 , true, false)
   -- DecorSetInt(myVehiculeEntity, 'VehicleDepa', 1)
   -- SetVehicleNumberPlateText(myVehiculeEntity, "Depa001")
@@ -423,14 +423,14 @@ function spawnVehicleUber(coords, type)
   end
   -- Citizen.Trace('impossible')
   notifIcon("CHAR_BLANK_ENTRY", 1, "taxi", false, TEXT.SpawnVehicleImpossible)
-  -- local myPed = GetPlayerPed(-1)
+  -- local myPed = PlayerPedId()
   -- local player = PlayerId()
   -- RequestModel(VehicleModelKeyTowTruck)
   -- while not HasModelLoaded(VehicleModelKeyTowTruck) do
   --     Wait(1)
   -- end
 
-  -- local coords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 5.0, 0)
+  -- local coords = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 5.0, 0)
   -- myVehiculeEntity = CreateVehicle(VehicleModelKeyTowTruck, coords.x, coords.y, coords.z, 0 , true, false)
   -- DecorSetInt(myVehiculeEntity, 'VehicleDepa', 1)
   -- SetVehicleNumberPlateText(myVehiculeEntity, "Depa001")
@@ -442,7 +442,7 @@ end
 local function toogleService()
   inService = not inService
   if inService then
-    local myPed = GetPlayerPed(-1)
+    local myPed = PlayerPedId()
     TriggerServerEvent('taxi:takeService')
     TriggerServerEvent('taxi:requestMission')
   else
@@ -453,7 +453,7 @@ local function toogleService()
 end
 
 local function gestionService()
-  local myPed = GetPlayerPed(-1)
+  local myPed = PlayerPedId()
   local myPos = GetEntityCoords(myPed)
   for _, coordData in pairs(coords) do
     local pos = coordData.PriseDeService
@@ -765,7 +765,7 @@ end)
 
 
 function callService(type)
-  local myPed = GetPlayerPed(-1)
+  local myPed = PlayerPedId()
   local myCoord = GetEntityCoords(myPed)
   TriggerServerEvent('taxi:Call', myCoord.x, myCoord.y, myCoord.z, type)
 end
@@ -841,7 +841,7 @@ TriggerServerEvent('taxi:requestPersonnel')
 
 
 -- ----[[ DEBUG
--- local myPed = GetPlayerPed(-1)
+-- local myPed = PlayerPedId()
 -- local myCoord = GetEntityCoords(myPed)
 -- -- toogleService()
 -- Citizen.Trace('Pos init: ' .. myCoord.x .. ', ' .. myCoord.y .. ', ' .. myCoord.z)
@@ -854,7 +854,7 @@ TriggerServerEvent('taxi:requestPersonnel')
 -- -- --]]
 -- toogleService()
 -- isTaxi = true
--- -- local myPed = GetPlayerPed(-1)
+-- -- local myPed = PlayerPedId()
 -- -- local myCoord = GetEntityCoords(myPed)
 -- -- local any = nil
 -- -- AddRope(
@@ -874,7 +874,7 @@ TriggerServerEvent('taxi:requestPersonnel')
 --     local inFrontOfPlayer = GetOffsetFromEntityInWorldCoords( ped, 0.0, dist, -0.8 )
 --     return GetVehicleInDirection( playerPos, inFrontOfPlayer )
 -- end
--- local my= GetPlayerPed(-1)
+-- local my= PlayerPedId()
 -- local vi = GetVehicleLookByPlayer(my, 3.0)
 -- if vi ~= nil then
 --     local myCoord = GetEntityCoords(vi)
@@ -885,7 +885,7 @@ TriggerServerEvent('taxi:requestPersonnel')
 -- Citizen.CreateThread(function()
 --     while true do
 --     Citizen.Wait(1)
---     local ped = GetPlayerPed(-1)
+--     local ped = PlayerPedId()
 --            local playerPos = GetEntityCoords( ped, 1 )
 --            local p = GetOffsetFromEntityInWorldCoords( ped, 0.0, 0.0, 0.0 )
 --         local p1 = GetOffsetFromEntityInWorldCoords( ped, 0.0, 3.0, -0.8)

@@ -138,7 +138,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if timer > 0 then
-			local posPlayer = GetEntityCoords(GetPlayerPed(-1))
+			local posPlayer = GetEntityCoords(PlayerPedId())
 			DrawMarker(1, posPlayer.x, posPlayer.y, posPlayer.z - 1, 0, 0, 0, 0, 0, 0, portevoix * 2, portevoix * 2, 0.8001, 0, 75, 255, 165, 0,0, 0,0)
 		end
 	end

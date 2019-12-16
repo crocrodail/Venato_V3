@@ -14,7 +14,7 @@ function platypus.resurect()
   TimeToRespawn = 0
   dead = false
   LiveFreezeNeed(false)
-  SetEntityMaxHealth(GetPlayerPed(-1), 200)
+  SetEntityMaxHealth(PlayerPedId(), 200)
   fCanCancelOrStartAnim(true)
   platypus.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
   TriggerServerEvent("Death:health", false)
@@ -26,7 +26,7 @@ Citizen.CreateThread(function()
   Citizen.Wait(5000)
   while true do
     Citizen.Wait(0)
-    playerPed = GetPlayerPed(-1)
+    playerPed = PlayerPedId()
     if IsEntityDead(playerPed) then
       causeOfDeath = GetCause()
       local killer = GetKiller()
@@ -34,7 +34,7 @@ Citizen.CreateThread(function()
       if not dead or (assommePlayer and causeOfDeath ~= old_cause) then      
           TriggerServerEvent("Death:ComaOrNot", killer, causeOfDeath)
           StartScreenEffect("DeathFailMPIn", 10000 , true)
-          SetPedRagdollForceFall(GetPlayerPed(-1))
+          SetPedRagdollForceFall(PlayerPedId())
           Citizen.Wait(3000)
           local coordPed = GetEntityCoords(playerPed, true)
           NetworkResurrectLocalPlayer(coordPed.x, coordPed.y, coordPed.z, 0, false, false, false)
@@ -75,14 +75,14 @@ AddEventHandler("Death:ComaOrNot:cb", function(boolean)
     else      
       TimeToRespawn = 300
       AddTextComponentString("~r~Vous êtes dans un état grave")      
-      SetEntityHealth(GetPlayerPed(-1), 0)
+      SetEntityHealth(PlayerPedId(), 0)
     end    
     EndTextComponent()
     PopScaleformMovieFunctionVoid()    
     dead = true      
     Citizen.Wait(500)			
     while dead do      
-      SetPedRagdollForceFall(GetPlayerPed(-1))
+      SetPedRagdollForceFall(PlayerPedId())
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)      
       Citizen.Wait(0)
     end
@@ -115,12 +115,12 @@ Citizen.CreateThread(function()
       StopAllScreenEffects()
       dead = false
       assommePlayer = false     
-      FreezeEntityPosition(GetPlayerPed(-1), false)
+      FreezeEntityPosition(PlayerPedId(), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(false)
       TriggerServerEvent("Death:health", false)
     else
-      if IsPedShooting(GetPlayerPed(-1)) then
+      if IsPedShooting(PlayerPedId()) then
         shooting = 2
         fait = 0
       end
@@ -157,12 +157,12 @@ end
 function RespawnHospital()
   dead = false
   TriggerServerEvent("Death:health", false)
-  FreezeEntityPosition(GetPlayerPed(-1), false)
+  FreezeEntityPosition(PlayerPedId(), false)
   LiveFreezeNeed(false)
   fCanCancelOrStartAnim(true)
   NetworkResurrectLocalPlayer(CoordHospital.x, CoordHospital.y, CoordHospital.z, 0, false, false, false)
-  SetEntityCoords(GetPlayerPed(-1), CoordHospital.x, CoordHospital.y, CoordHospital.z, 0, 0, 0, true)
-  ClearPedTasks(GetPlayerPed(-1))
+  SetEntityCoords(PlayerPedId(), CoordHospital.x, CoordHospital.y, CoordHospital.z, 0, 0, 0, true)
+  ClearPedTasks(PlayerPedId())
   StopAllScreenEffects()
 end
 
@@ -187,7 +187,7 @@ Citizen.CreateThread(function()
 	local isKo = false
   while true do
     Citizen.Wait(1)
-    local playerPed = GetPlayerPed(-1)
+    local playerPed = PlayerPedId()
     local playerID = PlayerId()
     local currentPos = GetEntityCoords(playerPed, true)
     local previousPos
@@ -242,10 +242,10 @@ end)
 function Reanim(char, coord, heading)
   Citizen.CreateThread(function()
     if char == "a" then
-      SetEntityCoords(GetPlayerPed(-1), coord.x-0.9, coord.y-0.1, coord.z-0.0, 0, 0, 0, true)
-      SetEntityHeading(GetPlayerPed(-1), heading-90)
+      SetEntityCoords(PlayerPedId(), coord.x-0.9, coord.y-0.1, coord.z-0.0, 0, 0, 0, true)
+      SetEntityHeading(PlayerPedId(), heading-90)
     else
-      FreezeEntityPosition(GetPlayerPed(-1), false)
+      FreezeEntityPosition(PlayerPedId(), false)
       LiveFreezeNeed(false)
       fCanCancelOrStartAnim(true)
     end
@@ -263,13 +263,13 @@ function Reanim(char, coord, heading)
     Citizen.Wait(5000)
     platypus.playAnim({lib = "mini@cpr@char_"..char.."@cpr_str", anim = "cpr_success", useLib = true})
     Citizen.Wait(26000)
-    ClearPedTasks(GetPlayerPed(-1))
+    ClearPedTasks(PlayerPedId())
     StopAllScreenEffects()
     if char == "b" then
       TriggerServerEvent("Death:health", false)
       assommePlayer = false
       dead = false
-      SetEntityHealth(GetPlayerPed(-1), 200.0)
+      SetEntityHealth(PlayerPedId(), 200.0)
     end
   end)
 end

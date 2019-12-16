@@ -1,7 +1,7 @@
 Citizen.CreateThread(function()
     while true do
 	Citizen.Wait(0)
-		if IsPedInAnyVehicle( GetPlayerPed(-1), false ) then -- Ajouter la vérification si l'utilisateur à un GPS
+		if IsPedInAnyVehicle( PlayerPedId(), false ) then -- Ajouter la vérification si l'utilisateur à un GPS
 			DisplayRadar(true)		
 		else
 			DisplayRadar(false)	

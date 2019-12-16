@@ -1,6 +1,7 @@
 local ingame = 0
 local mask = false
 DataUser = {}
+local Config = {}
 CanCancelOrStartAnim = true
 
 function fCanCancelOrStartAnim(bool)

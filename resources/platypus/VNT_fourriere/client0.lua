@@ -48,7 +48,7 @@ end
 Citizen.CreateThread(function()
   local testok = false
     while true do
-      local ped = GetPlayerPed(-1)
+      local ped = PlayerPedId()
       local dis = GetDistanceBetweenCoords(GetEntityCoords(ped), 397.566, -1642.656, 29.291, true)
         Citizen.Wait(0)
         if dis < 15.0 then

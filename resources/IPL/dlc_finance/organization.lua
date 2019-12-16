@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
 
     while true do
         if FinanceOrganization.Office.needToLoad then
-            interiorId = GetInteriorAtCoords(GetEntityCoords(GetPlayerPed(-1)))
+            interiorId = GetInteriorAtCoords(GetEntityCoords(PlayerPedId()))
 
             for key, id in pairs(officesInteriorIds) do
                 if interiorId == id then

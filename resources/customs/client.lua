@@ -65,14 +65,14 @@ function closeGui()
     SetNuiFocus(false)
     SendNUIMessage({ closeUI = true })
     currentVhl.plate = GetVehicleNumberPlateText(currentVhl.vehicleId)
-    currentVhl.model = GetEntityModel(GetPlayersLastVehicle(GetPlayerPed(-1), true))
+    currentVhl.model = GetEntityModel(GetPlayersLastVehicle(PlayerPedId(), true))
     TriggerServerEvent('customs:resetvhl', currentVhl)
     currentUiState = false
 end
 
 RegisterNetEvent('customs:resetvhlfromdb')
 AddEventHandler('customs:resetvhlfromdb', function(veh)
-    local vhl = GetVehiclePedIsUsing(GetPlayerPed(-1))
+    local vhl = GetVehiclePedIsUsing(PlayerPedId())
     local customs = json.decode(veh.customs)
     -- Set ModKit to changes apply
     SetVehicleModKit(vhl, 0 )
@@ -243,7 +243,7 @@ end)
 
 RegisterNUICallback('close', function(data, cb)
     closeGui()
-    SetPedIntoVehicle(GetPlayerPed(-1), currentVhl.vehicleId , -1)
+    SetPedIntoVehicle(PlayerPedId(), currentVhl.vehicleId , -1)
     cb('ok')
 end)
 RegisterNUICallback('nav', function(data, cb)
@@ -252,7 +252,7 @@ RegisterNUICallback('nav', function(data, cb)
 end)
 
 RegisterNUICallback('init', function(data, cb)
-    currentVhl.vehicleId  = GetVehiclePedIsUsing(GetPlayerPed(-1))
+    currentVhl.vehicleId  = GetVehiclePedIsUsing(PlayerPedId())
     currentVhl.primary_red, currentVhl.primary_green, currentVhl.primary_blue = GetVehicleCustomPrimaryColour(currentVhl.vehicleId );
     currentVhl.secondary_red, currentVhl.secondary_green, currentVhl.secondary_blue = GetVehicleCustomSecondaryColour(currentVhl.vehicleId );
     currentVhl.neonColorRed, currentVhl.neonColorGreen, currentVhl.neonColorBlue = GetVehicleNeonLightsColour(currentVhl.vehicleId);
@@ -479,7 +479,7 @@ RegisterNUICallback('changebodymod', function(data, cb)
 
 	SetVehicleMod(currentVhl.vehicleId ,data.mod, data.id -1, true)
     if data.mod == 14 then
-        SetPedIntoVehicle(GetPlayerPed(-1), currentVhl.vehicleId , 0)
+        SetPedIntoVehicle(PlayerPedId(), currentVhl.vehicleId , 0)
         StartVehicleHorn(currentVhl.vehicleId, 10000, GetHashKey("HELDDOWN"), true)
     end
     cb('ok')
@@ -630,7 +630,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        local pos = GetEntityCoords(GetPlayerPed(-1), false)
+        local pos = GetEntityCoords(PlayerPedId(), false)
         for _,d in ipairs( locations )do
             if Vdist(d.x, d.y, d.z, pos.x, pos.y, pos.z) < 200.0 then
                 DrawMarkers(1, d.x, d.y, d.z, d.markerWidth, 255, 215, 0, 200)

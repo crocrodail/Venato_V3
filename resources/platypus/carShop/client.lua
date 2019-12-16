@@ -27,8 +27,8 @@ end
 
 Citizen.CreateThread(function ()
   SetNuiFocus(false, false)
-  for i=1, #Config.CarShop, 1 do
-    setCarShopMapMarker(Config.CarShop[i])
+  for i=1, #CarShop, 1 do
+    setCarShopMapMarker(CarShop[i])
   end
   while true do
     playerPed = PlayerPedId()
@@ -39,10 +39,10 @@ Citizen.CreateThread(function ()
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
 
-    for i=1, #Config.CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
-      if distance < Config.CarShop[i].distanceMarker then
-        DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
+    for i=1, #CarShop, 1 do
+      distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), CarShop[i].x, CarShop[i].y, CarShop[i].z, true)
+      if distance < CarShop[i].distanceMarker then
+        DrawMarker(CarShop[i].type, CarShop[i].x, CarShop[i].y, CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
           previousVehicleColor()
         elseif IsControlJustPressed(1, Keys['RIGHT']) and menuIsOpen then
@@ -54,7 +54,7 @@ Citizen.CreateThread(function ()
           nextVehicleSecColor()
         end
       end
-      if distance < Config.CarShop[i].distanceMin  then
+      if distance < CarShop[i].distanceMin  then
         if not menuIsOpen then
         platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour voir les véhicules')
         end
@@ -64,8 +64,8 @@ Citizen.CreateThread(function ()
               defaultNotification.type = 'error'
               platypus.notify(defaultNotification)
           else
-            OpenCarMenu(Config.CarShop[i].vehiculeType)
-            currentShop = Config.CarShop[i].id
+            OpenCarMenu(CarShop[i].vehiculeType)
+            currentShop = CarShop[i].id
             scaleform = platypus.GetCarShopIntruction()
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end
@@ -75,7 +75,7 @@ Citizen.CreateThread(function ()
           RemoveCurrentCar()
         end
       else
-        if menuIsOpen and Config.CarShop[i].id == currentShop then
+        if menuIsOpen and CarShop[i].id == currentShop then
           HideMenu()
           RemoveCurrentCar()
         end

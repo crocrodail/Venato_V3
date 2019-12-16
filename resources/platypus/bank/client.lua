@@ -13,23 +13,23 @@ Citizen.CreateThread(function()
   SetNuiFocus(false, false)
   while true do
     Citizen.Wait(0)
-    for i = 1, #Config.ATMS, 1 do
+    for i = 1, #ATMS, 1 do
       Citizen.Wait(0)
-      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2 and (Config.ATMS[i].b ~= nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[i].x, ATMS[i].y, ATMS[i].z, true) < 2 and (ATMS[i].b ~= nil) then
         indexLoop = i
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 10 and (Config.ATMS[i].b == nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[i].x, ATMS[i].y, ATMS[i].z, true) < 10 and (ATMS[i].b == nil) then
         indexLoopATM = i
       end
       if indexLoop ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z, true) < 0.5 then
+        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[indexLoop].x, ATMS[indexLoop].y, ATMS[indexLoop].z, true) < 0.5 then
           inBankMarker = true
         else
           inBankMarker = false
         end
       end
       if indexLoopATM ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(Venato.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 1 then
+        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[indexLoopATM].x, ATMS[indexLoopATM].y, ATMS[indexLoopATM].z, true) < 1 then
           inMarker = true
         else
           inMarker = false
@@ -43,12 +43,12 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
-      DrawMarker(27, Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z + -0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,150, 255, 200, 0, 0, 0, 0)
+      DrawMarker(27, ATMS[indexLoop].x, ATMS[indexLoop].y, ATMS[indexLoop].z + -0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,150, 255, 200, 0, 0, 0, 0)
     end
     if inMarker == true then
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour utiliser le distributeur')
+      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour utiliser le distributeur')
     elseif inBankMarker == true then
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
+      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
     end
   end
 end)
@@ -191,7 +191,7 @@ Citizen.CreateThread(function()
       if accountIsBlocked then
         defaultNotification.message = message_block
         defaultNotification.timeout = 5000
-        Venato.notify(defaultNotification)
+        platypus.notify(defaultNotification)
       else
         TriggerServerEvent("Bank:GetDataMoneyForATM")
       end

@@ -82,11 +82,11 @@ AddEventHandler('police:noLongerCop', function()
 	isCop = true
 	isCopInService = true
 
-	local playerPed = GetPlayerPed(-1)
+	local playerPed = PlayerPedId()
 
 	TriggerServerEvent("skin_customization:SpawnPlayer")
-	SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 1, 2)
-	SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
+	SetPedComponentVariation(PlayerPedId(), 9, 0, 1, 2)
+	SetPedComponentVariation(PlayerPedId(), 10, 0, 0, 2)
 	RemoveAllPedWeapons(playerPed)
 	Citizen.Wait(2000)
 	TriggerServerEvent('weaponshop:GiveWeaponsToPlayer')
@@ -117,22 +117,22 @@ end)
 
 RegisterNetEvent('police:unseatme')
 AddEventHandler('police:unseatme', function(t)
-	local ped = GetPlayerPed(-1)
+	local ped = PlayerPedId()
 	ClearPedTasksImmediately(ped)
 	plyPos = GetEntityCoords(ped,  true)
 	local xnew = plyPos.x+2
 	local ynew = plyPos.y+2
 
-	SetEntityCoords(GetPlayerPed(-1), xnew, ynew, plyPos.z)
+	SetEntityCoords(PlayerPedId(), xnew, ynew, plyPos.z)
 end)
 
 RegisterNetEvent('police:forcedEnteringVeh')
 AddEventHandler('police:forcedEnteringVeh', function()
-  local pos = GetEntityCoords(GetPlayerPed(-1))
-  local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
-  local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, GetPlayerPed(-1), 0)
+  local pos = GetEntityCoords(PlayerPedId())
+  local entityWorld = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 20.0, 0.0)
+  local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, PlayerPedId(), 0)
   local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-  SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 1)
+  SetPedIntoVehicle(PlayerPedId(), vehicleHandle, 1)
 end)
 
 RegisterNetEvent('police:resultAllCopsInService')
@@ -165,8 +165,8 @@ function POLICE_sendmsg()
 end
 
 function POLICE_removeOrPlaceCone()
-  local mePed = GetPlayerPed(-1)
-  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0)
+  local mePed = PlayerPedId()
+  local pos = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 1.5, 0)
   local cone = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_roadcone02a"), false, false, false)
   if cone ~= 0 then
     DeleteObject(cone)
@@ -186,8 +186,8 @@ function POLICE_removeOrPlaceCone()
 end
 
 function POLICE_removeOrPlaceBarrier()
-  local mePed = GetPlayerPed(-1)
-  local pos = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, 1.5, 0)
+  local mePed = PlayerPedId()
+  local pos = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, 1.5, 0)
   local barriere = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_barrier_work05"), false, false, false)
 
   if barriere ~= 0 then
@@ -209,7 +209,7 @@ function POLICE_removeOrPlaceBarrier()
 end
 
 function POLICE_removeOrPlaceHerse()
-  local mePed = GetPlayerPed(-1)
+  local mePed = PlayerPedId()
   local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
   local hashHerse = GetHashKey("P_ld_stinger_s")
   local herse = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("p_ld_stinger_s"), false, false, false)
@@ -242,7 +242,7 @@ function enableCopBlips()
 
 	local localIdCops = {}
 	for id = 0, 64 do
-		if(NetworkIsPlayerActive(id) and GetPlayerPed(id) ~= GetPlayerPed(-1)) then
+		if(NetworkIsPlayerActive(id) and GetPlayerPed(id) ~= PlayerPedId()) then
 			for i,c in pairs(allServiceCops) do
 				if(i == GetPlayerServerId(id)) then
 					localIdCops[id] = c
@@ -304,7 +304,7 @@ function GetClosestPlayer()
 	local players = GetPlayers()
 	local closestDistance = -1
 	local closestPlayer = -1
-	local ply = GetPlayerPed(-1)
+	local ply = PlayerPedId()
 	local plyCoords = GetEntityCoords(ply, 0)
 
 	for index,value in ipairs(players) do
@@ -349,7 +349,7 @@ end
 
 function isNearTakeService()
 	for i = 1, #takingService do
-		local ply = GetPlayerPed(-1)
+		local ply = PlayerPedId()
 		local plyCoords = GetEntityCoords(ply, 0)
 		local distance = GetDistanceBetweenCoords(takingService[i].x, takingService[i].y, takingService[i].z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 		if(distance < 30) then
@@ -363,7 +363,7 @@ end
 
 function isNearArmurie()
   if (isCopInService) then
-		local ply = GetPlayerPed(-1)
+		local ply = PlayerPedId()
 		local plyCoords = GetEntityCoords(ply, 0)
 		local distance = GetDistanceBetweenCoords(459.57223510742, -979.94390869141, 30.689588546753, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 		if(distance < 30) then
@@ -377,7 +377,7 @@ end
 
 function isNearStationGarage()
 	for i = 1, #stationGarage do
-		local ply = GetPlayerPed(-1)
+		local ply = PlayerPedId()
 		local plyCoords = GetEntityCoords(ply, 0)
 		local distance = GetDistanceBetweenCoords(stationGarage[i].x, stationGarage[i].y, stationGarage[i].z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 		if(distance < 30) then
@@ -561,13 +561,13 @@ function reloadded(a)
 end
 
 function ravi(a)
-SetPedAmmo(GetPlayerPed(-1),a[1],math.ceil(a[2]+a[3]))
+SetPedAmmo(PlayerPedId(),a[1],math.ceil(a[2]+a[3]))
 --TriggerServerEvent("project:armeActu")
 end
 
 function spawnveh(namevehicul)
 	  local vehicule = namevehicul
-		local myPed = GetPlayerPed(-1)
+		local myPed = PlayerPedId()
 		local player = PlayerId()
 		local vehicle = GetHashKey(vehicule)
     if vehicle ~= nil then
@@ -576,17 +576,17 @@ function spawnveh(namevehicul)
 			Wait(1)
 		end
 		local plate = math.random(100, 900)
-    local LastPosX, LastPosY, LastPosZ = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-    local LastPosH = GetEntityHeading(GetPlayerPed(-1))
+    local LastPosX, LastPosY, LastPosZ = table.unpack(GetEntityCoords(PlayerPedId(), true))
+    local LastPosH = GetEntityHeading(PlayerPedId())
 		existingVeh = CreateVehicle(vehicle,1874.3009033203, 3690.2387695313, 33.523826599121,182.77638244629, true, false)
 		SetModelAsNoLongerNeeded(vehicle)
 		SetEntityVisible(existingVeh, false, 0)
 	--	DetachVehicleWindscreen(existingVeh)
 		Citizen.Wait(250)
-		AttachEntityToEntity(existingVeh, GetVehiclePedIsIn(GetPlayerPed(-1), false), -1, AttachX, AttachY, AttachZ, 0.0, 0.0, 0.0, true, true, true, true, 1, true)
+		AttachEntityToEntity(existingVeh, GetVehiclePedIsIn(PlayerPedId(), false), -1, AttachX, AttachY, AttachZ, 0.0, 0.0, 0.0, true, true, true, true, 1, true)
 		SetVehicleExplodesOnHighExplosionDamage(existingVeh, false)
 		SetEntityVisible(existingVeh, true, 0)
-		SetPedIntoVehicle(GetPlayerPed(-1), existingVeh, -1)
+		SetPedIntoVehicle(PlayerPedId(), existingVeh, -1)
 		SetVehicleFixed(existingVeh)
 		SetVehicleDirtLevel(existingVeh, 0.0)
 		SetVehicleLights(existingVeh, 0)
@@ -685,7 +685,7 @@ Citizen.CreateThread(function()
           if(isNearTakeService()) then
             DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le vestiaire',0,1,0.5,0.8,0.6,255,255,255,255) -- ~g~E~s~
             if IsControlJustPressed(1,51) then
-              ped = GetPlayerPed(-1)
+              ped = PlayerPedId()
               menuPoliceVestiaire()
             end
           end
@@ -698,15 +698,15 @@ Citizen.CreateThread(function()
 
           if(isCopInService) then
             if(isNearStationGarage()) then
-              if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then --existingVeh
+              if(IsPedInAnyVehicle( PlayerPedId(), false )) then --existingVeh
                 DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ranger votre vehicule',0,1,0.5,0.8,0.6,255,255,255,255)
               else
                 DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le garage de police',0,1,0.5,0.8,0.6,255,255,255,255)
               end
 
               if IsControlJustPressed(1,51) then
-                if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then
-                  policevehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+                if(IsPedInAnyVehicle( PlayerPedId(), false )) then
+                  policevehicle = GetVehiclePedIsIn(PlayerPedId(), false)
                   SetEntityAsMissionEntity(policevehicle, true, true)
                   TriggerServerEvent('ivt:deleteVeh', GetVehicleNumberPlateText(policevehicle))
                   Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(policevehicle))
@@ -777,22 +777,22 @@ Citizen.CreateThread(function()
 
 				DrawMarker(1,449.113,-981.084,42.691,0,0,0,0,0,0,2.0,2.0,2.0,0,155,255,200,0,0,0,0)
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), 449.113,-981.084,43.691, true ) < 5 then
-					if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then
+				if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), 449.113,-981.084,43.691, true ) < 5 then
+					if(IsPedInAnyVehicle( PlayerPedId(), false )) then
 						DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour ranger votre helicopter',0,1,0.5,0.8,0.6,255,255,255,255)
 					else
 						DisplayHelpText('Appuyer sur ~INPUT_CONTEXT~ pour prendre vote helicopter',0,1,0.5,0.8,0.6,255,255,255,255)
 					end
 
 					if IsControlJustPressed(1,51)  then
-						if(IsPedInAnyVehicle( GetPlayerPed(-1), false )) then
+						if(IsPedInAnyVehicle( PlayerPedId(), false )) then
 							SetEntityAsMissionEntity(existingVeh, true, true)
               TriggerServerEvent('ivt:deleteVeh', GetVehicleNumberPlateText(existingVeh))
 							Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(existingVeh))
 							existingVeh = nil
 						else
 							local car = GetHashKey("polmav")
-							local ply = GetPlayerPed(-1)
+							local ply = PlayerPedId()
 							local plyCoords = GetEntityCoords(ply, 0)
 
 							RequestModel(car)
@@ -1178,7 +1178,7 @@ end
 Citizen.CreateThread(function()
   while true do
       Citizen.Wait(0)
-      local ped = GetPlayerPed(-1)
+      local ped = PlayerPedId()
       local veh = GetVehiclePedIsIn(ped, false)
       local vehCoord = GetEntityCoords(veh)
       local hashHerse = GetHashKey("P_ld_stinger_s")

@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(100)
 
 		-- spawn objects
-		local pos = GetEntityCoords(GetPlayerPed(-1))
+		local pos = GetEntityCoords(PlayerPedId())
 
 		for k, sets in pairs(objectSets) do
 			for i, obj in ipairs(sets) do

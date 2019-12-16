@@ -101,7 +101,7 @@ function Jobs.mainLoop(job)
 
     while true do
       Wait(0)
-      local playerPos = GetEntityCoords(GetPlayerPed(-1))
+      local playerPos = GetEntityCoords(PlayerPedId())
 
       -- Service marker
       if serviceLocation ~= nil then
@@ -124,7 +124,7 @@ function Jobs.mainLoop(job)
         DisableControlAction(0, 1, true) -- LookLeftRight
         DisableControlAction(0, 2, true) -- LookUpDown
         DisableControlAction(0, 24, true) -- Attack
-        DisablePlayerFiring(GetPlayerPed(-1), true) -- Disable weapon firing
+        DisablePlayerFiring(PlayerPedId(), true) -- Disable weapon firing
         DisableControlAction(0, 142, true) -- MeleeAttackAlternate
         DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
       end

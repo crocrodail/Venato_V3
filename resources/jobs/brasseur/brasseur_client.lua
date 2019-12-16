@@ -18,7 +18,7 @@
 		while true do			
 			Wait(0)
 			if Brasseur_markerBool == true then
-				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceBetweenCoords then
+				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceBetweenCoords then
 					if(not recolt) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter de l'~b~orge~s~.")						
 					else
@@ -31,7 +31,7 @@
 				else
 					recolt = false
 				end
-				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceBetweenCoords then
+				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceBetweenCoords then
 					if(not transform) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer l'~b~orge~s~.")						
 					else
@@ -44,7 +44,7 @@
 				else
 					transform = false
 				end
-				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceBetweenCoords then
+				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceBetweenCoords then
 					if(not sell) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de la ~b~bière~s~.")						
 					else
@@ -125,7 +125,7 @@ Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(1)
 		if Brasseur_markerBool == true then
-			local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, true)
+			local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, true)
 			if distance <= brasseur_blips["Entreprise"].distanceMarker then
 				DrawMarker(1, brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				if distance <= 5 then
@@ -141,7 +141,7 @@ Citizen.CreateThread(function ()
 			end
 
 			if isInServiceBrasseur then
-				local distance2 = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, true)
+				local distance2 = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, true)
 				if distance2 <= brasseur_blips["Garage"].distanceMarker+5 then
 					DrawMarker(1, brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					if distance2 <= 5 then
@@ -157,19 +157,19 @@ Citizen.CreateThread(function ()
 						end
 					end
 				end
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker then
+				if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, true) <= brasseur_blips["Garage"].distanceMarker then
 					DrawMarker(1,brasseur_blips["Garage"].x,brasseur_blips["Garage"].y,brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceMarker + 30 then
+				if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceMarker + 30 then
 					DrawMarker(1,brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceMarker + 30 then
+				if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceMarker + 30 then
 					DrawMarker(1,brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceMarker + 30 then
+				if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceMarker + 30 then
 					DrawMarker(1,brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 30.001, 30.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				end
 			end
@@ -185,7 +185,7 @@ AddEventHandler('inventory:full', function ()
 end)
 
 function GetServiceBrasseur()
-	local playerPed = GetPlayerPed(-1)
+	local playerPed = PlayerPedId()
 	if isInServiceBrasseur then
 		defaultNotification.message = "Vous n'êtes plus en service."
 		platypus.notify(defaultNotification)
@@ -202,18 +202,18 @@ RegisterNetEvent('brasseur:getSkin')
 AddEventHandler('brasseur:getSkin', function (source)
 	local hashSkin = GetHashKey("mp_m_freemode_01")
 	Citizen.CreateThread(function()
-	if(GetEntityModel(GetPlayerPed(-1)) == hashSkin) then
-		SetPedComponentVariation(GetPlayerPed(-1), 11, 41, 0, 2)  -- Top
-		SetPedComponentVariation(GetPlayerPed(-1), 8, 59, 0, 2)   -- under coat
-		SetPedComponentVariation(GetPlayerPed(-1), 4, 7, 0, 2)   -- Pants
-		SetPedComponentVariation(GetPlayerPed(-1), 6, 25, 0, 2)   -- shoes
-		SetPedComponentVariation(GetPlayerPed(-1), 3, 66, 0, 2)   -- under skin
+	if(GetEntityModel(PlayerPedId()) == hashSkin) then
+		SetPedComponentVariation(PlayerPedId(), 11, 41, 0, 2)  -- Top
+		SetPedComponentVariation(PlayerPedId(), 8, 59, 0, 2)   -- under coat
+		SetPedComponentVariation(PlayerPedId(), 4, 7, 0, 2)   -- Pants
+		SetPedComponentVariation(PlayerPedId(), 6, 25, 0, 2)   -- shoes
+		SetPedComponentVariation(PlayerPedId(), 3, 66, 0, 2)   -- under skin
 	else
-		SetPedComponentVariation(GetPlayerPed(-1), 11, 109, 2, 2)  -- Top/jacket
-		SetPedComponentVariation(GetPlayerPed(-1), 8, 14, 0, 2)   -- under coat
-		SetPedComponentVariation(GetPlayerPed(-1), 4, 45, 1, 2)   -- Pants
-		SetPedComponentVariation(GetPlayerPed(-1), 6, 4, 0, 2)   -- shoes
-		SetPedComponentVariation(GetPlayerPed(-1), 3, 22, 0, 2)   -- under skin
+		SetPedComponentVariation(PlayerPedId(), 11, 109, 2, 2)  -- Top/jacket
+		SetPedComponentVariation(PlayerPedId(), 8, 14, 0, 2)   -- under coat
+		SetPedComponentVariation(PlayerPedId(), 4, 45, 1, 2)   -- Pants
+		SetPedComponentVariation(PlayerPedId(), 6, 4, 0, 2)   -- shoes
+		SetPedComponentVariation(PlayerPedId(), 3, 22, 0, 2)   -- under skin
 	end
 	end)
 end)
@@ -222,7 +222,7 @@ RegisterNetEvent('brasseur:getCar')
 AddEventHandler('brasseur:getCar', function (source)
 	local vehiculeDetected = GetClosestVehicle(brasseur_car.x, brasseur_car.y, brasseur_car.z, 6.0, 0, 70)
 	if not DoesEntityExist(vehiculeDetected) then
-		local myPed = GetPlayerPed(-1)
+		local myPed = PlayerPedId()
 		local player = PlayerId()
 		local plate = math.random(1000, 9000)
 		platypus.CreateVehicle('pounder',{x=brasseur_car.x, y=brasseur_car.y, z=brasseur_car.z},-50.0, function(vehicle)

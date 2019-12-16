@@ -23,7 +23,7 @@ local BONES = {
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		local ped = GetPlayerPed(-1)
+		local ped = PlayerPedId()
 			--if IsShockingEventInSphere(102, 235.497,2894.511,43.339,999999.0) then
 			if HasEntityBeenDamagedByAnyPed(ped) then
 			--if GetPedLastDamageBone(ped) = 
@@ -62,7 +62,7 @@ function Disarm (ped)
 			
 
 			boneCoords = GetWorldPositionOfEntityBone(ped, GetPedBoneIndex(ped, bone))
-			SetPedToRagdoll(GetPlayerPed(-1), 5000, 5000, 0, 0, 0, 0)
+			SetPedToRagdoll(PlayerPedId(), 5000, 5000, 0, 0, 0, 0)
 			
 
 			return true

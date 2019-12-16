@@ -153,7 +153,7 @@ function spawnVehicule(pos, type)
 		end
     SetVehicleNumberPlateText(myVehiculeEntity, "Amb"..plate)
     SetVehicleOnGroundProperly(myVehiculeEntity)
-    SetPedIntoVehicle(GetPlayerPed(-1), myVehiculeEntity, -1)
+    SetPedIntoVehicle(PlayerPedId(), myVehiculeEntity, -1)
 		plate = GetVehicleNumberPlateText(myVehiculeEntity)
     TriggerEvent('lock:addVeh', plate, GetDisplayNameFromVehicleModel(GetEntityModel(myVehiculeEntity)))
 
@@ -185,7 +185,7 @@ casquetequip = false
 helicocas = false
 
 function Docteur()
-  local ped = GetPlayerPed(-1)
+  local ped = PlayerPedId()
 	local props = {}
 	local components ={}
 	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -243,7 +243,7 @@ function Docteur()
 end
 
 function Ambulancierf()
-  local ped = GetPlayerPed(-1)
+  local ped = PlayerPedId()
 	local props = {}
 	local components ={}
 	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
@@ -301,7 +301,7 @@ function Ambulancierf()
 end
 
 function stethoscope()
-  local ped = GetPlayerPed(-1)
+  local ped = PlayerPedId()
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
     if stethoscopeequip then
         SetPedComponentVariation(ped, 7, 0, 0, 0)
@@ -322,7 +322,7 @@ function stethoscope()
 end
 
 function casquet()
-  local ped = GetPlayerPed(-1)
+  local ped = PlayerPedId()
   if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then -- homme
     if not casquetequip then
       SetPedPropIndex(ped, 0, 122 , 0 , true)
@@ -361,10 +361,10 @@ end
 
 local function gestionServiceAmbulancier()
 
-    if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker + 15 then
+    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker + 15 then
       DrawMarker(1, ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
     end
-    if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker+1 then
+    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, true) <= ambulancier_blips["Urgences"].distanceMarker+1 then
       DrawMarker(1, ambulancier_blips["Urgences"].x, ambulancier_blips["Urgences"].y, ambulancier_blips["Urgences"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
         ClearPrints()
         SetTextEntry_2("STRING")
@@ -380,10 +380,10 @@ local function gestionServiceAmbulancier()
     end
 
     if ambulancierIsInService then
-        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker + 15 then
+        if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker + 15 then
           DrawMarker(1, ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
         end
-        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker then
+        if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, true) <= ambulancier_blips["Garage d\'entreprise"].distanceMarker then
           DrawMarker(1, ambulancier_blips["Garage d\'entreprise"].x, ambulancier_blips["Garage d\'entreprise"].y, ambulancier_blips["Garage d\'entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
             ClearPrints()
             SetTextEntry_2("STRING")
@@ -393,10 +393,10 @@ local function gestionServiceAmbulancier()
                 openMenuChoixVehicleAmbulancier()
             end
         end
-        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker+15 then
+        if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker+15 then
           DrawMarker(1, ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
         end
-        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker then
+        if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, true) <= ambulancier_blips["Heliport"].distanceMarker then
           DrawMarker(1, ambulancier_blips["Heliport"].x, ambulancier_blips["Heliport"].y, ambulancier_blips["Heliport"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
             ClearPrints()
             SetTextEntry_2("STRING")
@@ -410,7 +410,7 @@ local function gestionServiceAmbulancier()
 end
 
 function Ambu_removeOrPlaceCone()
-  local mePed = GetPlayerPed(-1)
+  local mePed = PlayerPedId()
   local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
   local cone = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_roadcone02a"), false, false, false)
   if cone ~= 0 then
@@ -438,7 +438,7 @@ function Ambu_removeOrPlaceCone()
 end
 
 function Ambu_removeOrPlaceBarrier()
-  local mePed = GetPlayerPed(-1)
+  local mePed = PlayerPedId()
   local pos = GetOffsetFromEntityInWorldCoords(mePed, 0.0, 0.2, 0.0)
   local barriere = GetClosestObjectOfType( pos.x, pos.y, pos.z, 1.0, GetHashKey("prop_barrier_work05"), false, false, false)
   if barriere ~= 0 then
@@ -482,7 +482,7 @@ function jobsSystemAmbulancier()
     RemoveBlip(ambulancier_blip_currentMission)
     local patientPed = GetPlayerPed(GetPlayerFromServerId(currentMissionAmbulancier.id));
      local posPatient = currentMissionAmbulancier.positionBackUp
-    if patientPed ~= nil and patientPed~= 0 and patientPed ~= GetPlayerPed(-1) then
+    if patientPed ~= nil and patientPed~= 0 and patientPed ~= PlayerPedId() then
         posPatient = GetEntityCoords(patientPed)
     end
 
@@ -491,7 +491,7 @@ function jobsSystemAmbulancier()
 	BeginTextCommandSetBlipName("STRING")
 	AddTextComponentString("Urgence")
 	EndTextCommandSetBlipName(ambulancier_blip_currentMission)
-    local mypos = GetEntityCoords(GetPlayerPed(-1))
+    local mypos = GetEntityCoords(PlayerPedId())
     local dist = GetDistanceBetweenCoords(mypos,posPatient.x, posPatient.y, posPatient.z, false)
 	if dist < 13.0 then
         DrawMarker(1,posPatient.x, posPatient.y, 0.0 , 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 350.0, 0, 155, 255, 64, 0, 0, 0, 0)
@@ -647,7 +647,7 @@ function acceptMissionAmbulancier(data)
 end
 
 function needAmbulance(type)
-  local pos = GetEntityCoords(GetPlayerPed(-1))
+  local pos = GetEntityCoords(PlayerPedId())
   TriggerServerEvent('ambulancier:Call', type, {x = pos.x, y = pos.y, z = pos.z})
 end
 
@@ -775,7 +775,7 @@ end)
 
 RegisterNetEvent('ambulancier:HealMe')
 AddEventHandler('ambulancier:HealMe',function ()
-        SetEntityHealth(GetPlayerPed(-1), GetPedMaxHealth(GetPlayerPed(-1)))
+        SetEntityHealth(PlayerPedId(), GetPedMaxHealth(PlayerPedId()))
 end)
 
 RegisterNetEvent('ambulancier:Heal')
@@ -783,9 +783,9 @@ AddEventHandler('ambulancier:Heal',
 function()
         local closestPlayer, closestDistance = platypus.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
-          TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
+          TaskStartScenarioInPlace(PlayerPedId(), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
           Citizen.Wait(8000)
-          ClearPedTasks(GetPlayerPed(-1));
+          ClearPedTasks(PlayerPedId());
           TriggerServerEvent('ambulancier:healHim',closestPlayer)
         else
           platypus.notifyError(TEXTAMBUL.NoPatientFound)
@@ -808,7 +808,7 @@ end)
 RegisterNetEvent('ambulance:ClientGetInfoRea')
 AddEventHandler('ambulance:ClientGetInfoRea',function(ambu)
   local ambu = ambu
-  TriggerServerEvent('ambulancier:Reanimation', ambu, GetEntityCoords(GetPlayerPed(-1), true),GetEntityHeading(GetPlayerPed(-1)))
+  TriggerServerEvent('ambulancier:Reanimation', ambu, GetEntityCoords(PlayerPedId(), true),GetEntityHeading(PlayerPedId()))
 end)
 
 

@@ -478,9 +478,9 @@ AddEventHandler('Inventory:AddWeaponClient', function(weapon, ammo)
   local weaponHash = GetHashKey(weapon) 
   local ammo = tonumber(ammo) 
   if ammo == 0 then 
-    GiveWeaponToPed(GetPlayerPed(-1), weaponHash, false, false) 
+    GiveWeaponToPed(PlayerPedId(), weaponHash, false, false) 
   else 
-    GiveWeaponToPed(GetPlayerPed(-1), weaponHash, ammo , false, false) 
+    GiveWeaponToPed(PlayerPedId(), weaponHash, ammo , false, false) 
 	end 
 end) 
 

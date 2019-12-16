@@ -40,7 +40,7 @@ end
 
 RegisterNUICallback("notConnected", function(data)
 	local connected = tonumber(data.state)
-	local ped = GetPlayerPed(-1)
+	local ped = PlayerPedId()
 	if connected == 1 then
 		TeampeakConnected = true
 		SetEntityInvincible(ped, false)
@@ -204,7 +204,7 @@ AddEventHandler("initializeVoip", function()
 	refreshAllPlayerData();
 
 	-- Set targetped (used for spectator mod for admins)
-	targetPed = GetPlayerPed(-1);
+	targetPed = PlayerPedId();
 
 	voip.processFunction = clientProcessing; -- Link the processing function that will be looped
 	voip:initialize(); -- Initialize the websocket and controls

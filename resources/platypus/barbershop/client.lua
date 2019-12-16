@@ -141,7 +141,7 @@ Citizen.CreateThread(function()
     BarbersetMapMarkers(barbersStores, 71, 21, "Hair' Max - Coiffure / Barbe")
     while true do
         Citizen.Wait(0)
-        local pos = GetEntityCoords(GetPlayerPed(-1), false)
+        local pos = GetEntityCoords(PlayerPedId(), false)
         for _,d in ipairs( barbersStores )do
             if Vdist(d.x, d.y, d.z, pos.x, pos.y, pos.z) < 20.0 then
                 BarberDrawMarkers(d, 71, 255, 255, 0, 155)
@@ -199,7 +199,7 @@ function BarberhairCutMenu()
     Menu.setSubtitle("Coupe")
     Menu.clearMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
-    for i = 0, GetNumberOfPedDrawableVariations(GetPlayerPed(-1), 2) -1 do
+    for i = 0, GetNumberOfPedDrawableVariations(PlayerPedId(), 2) -1 do
         if i ~= new_skin.hair then
             Menu.addButton("Coupe n°"..i.."     - prix : ".. hair_price.." €", "BarberhairCutMenuAction", {id = i, price = hair_price}, "BarberhairCutMenuSelected")
         else
@@ -209,7 +209,7 @@ function BarberhairCutMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarberhairCutMenuSelected(item)
-    SetPedComponentVariation(GetPlayerPed(-1), 2, item.id, 0, 0)
+    SetPedComponentVariation(PlayerPedId(), 2, item.id, 0, 0)
 end
 function BarberhairCutMenuAction(item)
     new_skin.hair = item.id
@@ -233,10 +233,10 @@ function BarberhairColorMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarberhairColorMenuSelected(item)
-    SetPedHairColor(GetPlayerPed(-1), item.id,4)
+    SetPedHairColor(PlayerPedId(), item.id,4)
 end
 function BarberhairColorMenuAction(item)
-    SetPedHairColor(GetPlayerPed(-1), item.id,4)
+    SetPedHairColor(PlayerPedId(), item.id,4)
     new_skin.hair_color = item.id
     new_skin.hair_color_price_selected = item.price
     BarberShopMenu()
@@ -260,7 +260,7 @@ function BarbereyebrowsMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarbereyeBrowsMenuSelected(item)
-    SetPedHeadOverlay(GetPlayerPed(-1),  2,  item.id, 1.0)
+    SetPedHeadOverlay(PlayerPedId(),  2,  item.id, 1.0)
 end
 function BarbereyeBrowsMenuAction(item)
     new_skin.eyebrows = item.id
@@ -284,8 +284,8 @@ function BarbereyebrowsColorMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarbereyeBrowsColorMenuSelected(item)
-    SetPedHeadOverlay(GetPlayerPed(-1),  2,  new_skin.eyebrows, 1.0)
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  2, 1,item.id, 1.0 )
+    SetPedHeadOverlay(PlayerPedId(),  2,  new_skin.eyebrows, 1.0)
+    SetPedHeadOverlayColor(PlayerPedId(),  2, 1,item.id, 1.0 )
 end
 function BarbereyeBrowsColorMenuAction(item)
     new_skin.eyebrows_color = item.id
@@ -312,8 +312,8 @@ function BarberbeardCutMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarberbeardCutMenuSelected(item)
-    SetPedHeadOverlay(GetPlayerPed(-1),  1,  item.id,  (item.id / 10) + 0.0)
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  1,  1,  1, 1)
+    SetPedHeadOverlay(PlayerPedId(),  1,  item.id,  (item.id / 10) + 0.0)
+    SetPedHeadOverlayColor(PlayerPedId(),  1,  1,  1, 1)
 end
 function BarberbeardCutMenuAction(item)
     new_skin.beard = item.id
@@ -336,8 +336,8 @@ function BarberbeardColorMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarberbeardColorMenuSelected(item)
-    SetPedHeadOverlay(GetPlayerPed(-1),  1,  new_skin.beard ,  (new_skin.beard  / 10) + 0.0)
-    SetPedHeadOverlayColor(GetPlayerPed(-1),  1,  1,  item.id, 1.0)
+    SetPedHeadOverlay(PlayerPedId(),  1,  new_skin.beard ,  (new_skin.beard  / 10) + 0.0)
+    SetPedHeadOverlayColor(PlayerPedId(),  1,  1,  item.id, 1.0)
 end
 function BarberbeardColorMenuAction(item)
     new_skin.beard_color = item.id
@@ -363,7 +363,7 @@ function BarbermakeupMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarbermakeupMenuSelected(item)
-    SetPedHeadOverlay(GetPlayerPed(-1), 4, item.id, 1.0)
+    SetPedHeadOverlay(PlayerPedId(), 4, item.id, 1.0)
 end
 function BarbermakeupMenuAction(item)
     new_skin.makeup = item.id
@@ -387,7 +387,7 @@ function BarbermakeupOpacityMenu()
 end
 function BarbermakeupOpacityMenuSelected(item)
 
-    SetPedHeadOverlay(GetPlayerPed(-1), 4, new_skin.makeup, item.id / 10)
+    SetPedHeadOverlay(PlayerPedId(), 4, new_skin.makeup, item.id / 10)
 end
 function BarbermakeupOpacityMenuAction(item)
     new_skin.makeup_opacity = item.id
@@ -413,7 +413,7 @@ function BarberlipstickMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarberlipstickMenuSelected(item)
-    SetPedHeadOverlay(GetPlayerPed(-1), 8, item.id, 1.0)
+    SetPedHeadOverlay(PlayerPedId(), 8, item.id, 1.0)
 end
 function BarberlipstickMenuAction(item)
     new_skin.lipstick = item.id
@@ -436,7 +436,7 @@ function BarberlipstickColorMenu()
     Menu.addButton("Retour", "BarberShopMenu", nil)
 end
 function BarberlipstickColorMenuSelected(item)
-    SetPedHeadOverlayColor(GetPlayerPed(-1), 8, 1, item.id, 1.0)
+    SetPedHeadOverlayColor(PlayerPedId(), 8, 1, item.id, 1.0)
 end
 function BarberlipstickColorMenuAction(item)
     new_skin.lipstick_color = item.id
@@ -453,8 +453,8 @@ function barberPayMenu(price)
 end
 
 function BarberclearAllProperties()
-    ClearPedProp(GetPlayerPed(-1),0)
-    ClearPedProp(GetPlayerPed(-1),1)
-    ClearPedProp(GetPlayerPed(-1),2)
-    SetPedComponentVariation(GetPlayerPed(-1), 1, 0, 0)
+    ClearPedProp(PlayerPedId(),0)
+    ClearPedProp(PlayerPedId(),1)
+    ClearPedProp(PlayerPedId(),2)
+    SetPedComponentVariation(PlayerPedId(), 1, 0, 0)
 end

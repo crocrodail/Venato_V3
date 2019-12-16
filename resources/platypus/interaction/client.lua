@@ -27,21 +27,21 @@ Citizen.CreateThread(function()
           pressButton2 = 0
         end
         if pressButton1 == 1 and pressButton2 == 1 then
-           SetPedToRagdoll(GetPlayerPed(-1), 12000, 12000, 0, 0, 0, 0)
+           SetPedToRagdoll(PlayerPedId(), 12000, 12000, 0, 0, 0, 0)
         end
 	end
 end)
 
 function DoRagdoll()
-	SetPedToRagdoll(GetPlayerPed(-1), 12000, 12000, 0, 0, 0, 0)
+	SetPedToRagdoll(PlayerPedId(), 12000, 12000, 0, 0, 0, 0)
 end
 
 function killYourSelf()
-    SetEntityHealth(GetPlayerPed(-1), 0)
+    SetEntityHealth(PlayerPedId(), 0)
 end
 
 function ClearAnim()
-	local lPed = GetPlayerPed(-1)
+	local lPed = PlayerPedId()
 	if CanCancelOrStartAnim then
     if DoesEntityExist(lPed) then
         Citizen.CreateThread(function()
@@ -72,7 +72,7 @@ end
 function playAnim(row)
 	local	dictionaries = row[1]
 	local	clip = row[2]
-	local lPed = GetPlayerPed(-1)
+	local lPed = PlayerPedId()
 	if DoesEntityExist(lPed) then
 		Citizen.CreateThread(function()
 				RequestAnimDict(dictionaries)
@@ -90,7 +90,7 @@ function playAnim(row)
 end
 
 function playEmote(emoteNane)
-	local ped = GetPlayerPed(-1);
+	local ped = PlayerPedId();
     if ped then
         TaskStartScenarioInPlace(ped, emoteNane, 0, false)
         emotePlay = true
@@ -98,7 +98,7 @@ function playEmote(emoteNane)
 end
 
 local function startPointing()
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     RequestAnimDict("anim@mp_point")
     while not HasAnimDictLoaded("anim@mp_point") do
         Wait(0)
@@ -110,7 +110,7 @@ local function startPointing()
 end
 
 local function stopPointing()
-    local ped = GetPlayerPed(-1)
+    local ped = PlayerPedId()
     Citizen.InvokeNative(0xD01015C7316AE176, ped, "Stop")
     if not IsPedInjured(ped) then
         ClearPedSecondaryTask(ped)
@@ -167,7 +167,7 @@ Citizen.CreateThread(function()
             if not IsPedOnFoot(PlayerPedId()) then
                 stopPointing()
             else
-                local ped = GetPlayerPed(-1)
+                local ped = PlayerPedId()
                 local camPitch = GetGameplayCamRelativePitch()
                 if camPitch < -70.0 then
                     camPitch = -70.0
@@ -208,7 +208,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 				if CanCancelOrStartAnim then
-        local lPed = GetPlayerPed(-1)
+        local lPed = PlayerPedId()
         RequestAnimDict("random@mugging3")
         if not IsPedInAnyVehicle(lPed, false) and not IsPedSwimming(lPed) and not IsPedShooting(lPed) and not IsPedClimbing(lPed) and not IsPedCuffed(lPed) and not IsPedDiving(lPed) and not IsPedFalling(lPed) and not IsPedJumping(lPed) and not IsPedJumpingOutOfVehicle(lPed) and IsPedOnFoot(lPed) and not IsPedRunning(lPed) and not IsPedUsingAnyScenario(lPed) and not IsPedInParachuteFreeFall(lPed) then
             if IsControlPressed(1, 323) then
@@ -358,11 +358,11 @@ local tazer = 30000 -- in miliseconds >> 1000 ms = 1s
 
 Citizen.CreateThread(function()
 	Citizen.Wait(60000)
-	SetPedMinGroundTimeForStungun(GetPlayerPed(-1), tazer)
+	SetPedMinGroundTimeForStungun(PlayerPedId(), tazer)
 	while true do
 		Citizen.Wait(0)
-		if IsPedBeingStunned(GetPlayerPed(-1)) then
-			SetPedMinGroundTimeForStungun(GetPlayerPed(-1), tazer)
+		if IsPedBeingStunned(PlayerPedId()) then
+			SetPedMinGroundTimeForStungun(PlayerPedId(), tazer)
 			DisableAllControlActions(0);
 		end
 	end

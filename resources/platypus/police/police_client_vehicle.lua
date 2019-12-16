@@ -53,26 +53,26 @@ local boughtcar = false
 local vehicle_price = 0
 
 function POLICE_deletevehicle()
-	local plyPolice = GetPlayerPed(-1)
+	local plyPolice = PlayerPedId()
 	local plyCoordsPolice = GetEntityCoords(plyPolice, 0)
 	local distance = GetDistanceBetweenCoords(stationGarage[1].x, stationGarage[1].y, stationGarage[1].z, plyCoordsPolice["x"], plyCoordsPolice["y"], plyCoordsPolice["z"], true)
 	if(distance < 30) then
 		DrawMarker(1, stationGarage[1].x, stationGarage[1].y, stationGarage[1].z-1, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 0, 155, 255, 200, 0, 0, 2, 0, 0, 0, 0)
 	end
 	if(distance < 10) then
-		local current =  GetPlayersLastVehicle(GetPlayerPed(-1), true)
+		local current =  GetPlayersLastVehicle(PlayerPedId(), true)
 		SetEntityAsMissionEntity(current, true, true)
 		Wait(300)
 		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(current))
 	end
-	local plyPolice = GetPlayerPed(-1)
+	local plyPolice = PlayerPedId()
 	local plyCoordsPolice = GetEntityCoords(plyPolice, 0)
 	local distance2 = GetDistanceBetweenCoords(stationGarage[2].x, stationGarage[2].y, stationGarage[2].z, plyCoordsPolice["x"], plyCoordsPolice["y"], plyCoordsPolice["z"], true)
 	if(distance2 < 30) then
 		DrawMarker(1, stationGarage[2].x, stationGarage[2].y, stationGarage[2].z-1, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 0, 155, 255, 200, 0, 0, 2, 0, 0, 0, 0)
 	end
 	if(distance2 < 10) then
-		local current =  GetPlayersLastVehicle(GetPlayerPed(-1), true)
+		local current =  GetPlayersLastVehicle(PlayerPedId(), true)
 		SetEntityAsMissionEntity(current, true, true)
 		Wait(300)
 		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(current))
@@ -88,7 +88,7 @@ function POLICE_SpanwVehicleCar(data)
             Citizen.Wait(0)
 		end
 		
-		local plyPolice = GetPlayerPed(-1)
+		local plyPolice = PlayerPedId()
 		local plyCoordsPolice = GetEntityCoords(plyPolice, 0)
 		local distance = GetDistanceBetweenCoords(stationGarage[1].x, stationGarage[1].y, stationGarage[1].z, plyCoordsPolice["x"], plyCoordsPolice["y"], plyCoordsPolice["z"], true)
 		

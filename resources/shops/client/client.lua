@@ -54,7 +54,7 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
       Wait(0)
       ConfigShop.inShopMarker = false
 
-      local playerPos = GetEntityCoords(GetPlayerPed(-1))
+      local playerPos = GetEntityCoords(PlayerPedId())
       for _, item in ipairs(shops) do
         local distance = GetDistanceBetweenCoords(playerPos, item.PositionX, item.PositionY, item.PositionZ, true)
         if distance < 20 then
@@ -82,7 +82,7 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
           ConfigShop.inGarageMarker = true
           ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
           ConfigShop.currentShopId = item.Id
-          if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+          if IsPedInVehicle(PlayerPedId(), ConfigShop.forklift) then
             TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
           else
             TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
@@ -111,7 +111,7 @@ CreateThread(function()
       TriggerServerEvent("Shops:ShowInventory", ConfigShop.currentShopId)
       ConfigShop.menuOpen = true
     elseif IsControlJustReleased(1, Keys["INPUT_CONTEXT"]) and ConfigShop.inGarageMarker then
-      if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+      if IsPedInVehicle(PlayerPedId(), ConfigShop.forklift) then
         despawnForklift()
       else
         spawnForklift()
@@ -121,7 +121,7 @@ CreateThread(function()
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack
-      DisablePlayerFiring(GetPlayerPed(-1), true) -- Disable weapon firing
+      DisablePlayerFiring(PlayerPedId(), true) -- Disable weapon firing
       DisableControlAction(0, 142, true) -- MeleeAttackAlternate
       DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
     end

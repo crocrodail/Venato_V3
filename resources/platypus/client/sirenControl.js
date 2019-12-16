@@ -45,7 +45,7 @@ class SirenClass {
     }
 
     updateInterval() {
-        const ped = GetPlayerPed(-1);
+        const ped = PlayerPedId();
         this.playerVehicle = GetVehiclePedIsUsing(ped);
 
         this.checkForSilentSirens();

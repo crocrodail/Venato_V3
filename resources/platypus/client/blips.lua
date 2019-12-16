@@ -233,7 +233,7 @@ local blips = {
 
 function LoadBlips()
 	Citizen.CreateThread(function()
-		for i,v in ipairs(Config.ATMS) do
+		for i,v in ipairs(ATMS) do
 			if v.b == true then
 				local blip = AddBlipForCoord(v.x, v.y, v.z)
 				SetBlipSprite(blip, 108)

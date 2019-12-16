@@ -17,7 +17,7 @@
 		while true do			
 			Wait(0)
 			if Vigneron_markerBool == true then
-				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceBetweenCoords then
+				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceBetweenCoords then
 					if(not recolt) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter du ~b~raisin~s~.")						
 					else
@@ -30,7 +30,7 @@
 				else
 					recolt = false
 				end
-				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceBetweenCoords then
+				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceBetweenCoords then
 					if(not transform) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer le ~b~raisin~s~.")						
 					else
@@ -43,7 +43,7 @@
 				else
 					transform = false
 				end
-				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceBetweenCoords then
+				if isInServiceVigneron and GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceBetweenCoords then
 					if(not sell) then
 						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de les ~b~bouteilles de vin~s~.")						
 					else
@@ -131,7 +131,7 @@
 		while true do
 			Citizen.Wait(1)
 			if Vigneron_markerBool == true then
-				local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Entreprise"].x, vigneron_blips["Entreprise"].y, vigneron_blips["Entreprise"].z, true)
+				local distance = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Entreprise"].x, vigneron_blips["Entreprise"].y, vigneron_blips["Entreprise"].z, true)
 				if distance <= vigneron_blips["Entreprise"].distanceMarker then
 					DrawMarker(1, vigneron_blips["Entreprise"].x, vigneron_blips["Entreprise"].y, vigneron_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					if distance <= 5 then
@@ -146,7 +146,7 @@
 					end
 				end
 				if isInServiceVigneron then
-					local distance2 = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Garage"].x, vigneron_blips["Garage"].y, vigneron_blips["Garage"].z, true)
+					local distance2 = GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Garage"].x, vigneron_blips["Garage"].y, vigneron_blips["Garage"].z, true)
 					if distance2 <= vigneron_blips["Garage"].distanceMarker then
 						DrawMarker(1, vigneron_blips["Garage"].x, vigneron_blips["Garage"].y, vigneron_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 						if distance2 <= 5 then
@@ -163,15 +163,15 @@
 							end
 						end
 					end
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceMarker + 30then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, true) <= vigneron_blips["Vigne"].distanceMarker + 30then
 						DrawMarker(1,vigneron_blips["Vigne"].x,vigneron_blips["Vigne"].y,vigneron_blips["Vigne"].z, 0, 0, 0, 0, 0, 0, 5.001, 5.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceMarker + 30 then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, true) <= vigneron_blips["Cave"].distanceMarker + 30 then
 						DrawMarker(1,vigneron_blips["Cave"].x,vigneron_blips["Cave"].y,vigneron_blips["Cave"].z, 0, 0, 0, 0, 0, 0, 10.001, 10.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceMarker + 30 then
+					if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, true) <= vigneron_blips["Point de vente"].distanceMarker + 30 then
 						DrawMarker(1,vigneron_blips["Point de vente"].x,vigneron_blips["Point de vente"].y,vigneron_blips["Point de vente"].z, 0, 0, 0, 0, 0, 0, 10.001, 10.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					end
 				end
@@ -180,7 +180,7 @@
 	end)
 
 function GetServiceVigneron()
-	local playerPed = GetPlayerPed(-1)
+	local playerPed = PlayerPedId()
 	if isInServiceVigneron then
 		defaultNotification.message = "Vous n'êtes plus en service."
 		platypus.notify(defaultNotification)
@@ -197,19 +197,19 @@ RegisterNetEvent('vigneron:getSkin')
 AddEventHandler('vigneron:getSkin', function (source)
 local hashSkin = GetHashKey("mp_m_freemode_01")
 Citizen.CreateThread(function()
-	if(GetEntityModel(GetPlayerPed(-1)) == hashSkin) then
-		SetPedComponentVariation(GetPlayerPed(-1), 11, 41, 1, 2)  -- Top
-		SetPedComponentVariation(GetPlayerPed(-1), 8, 59, 0, 2)   -- under coat 73 ?
-		SetPedComponentVariation(GetPlayerPed(-1), 4, 9, 6, 2)   -- Pantalon
-		SetPedComponentVariation(GetPlayerPed(-1), 6, 12, 6, 2)   -- chaussures
-		--SetPedComponentVariation(GetPlayerPed(-1), 3, 67, 0, 2)   -- mains/gants/bras etc. ... (shirt)
-		SetPedComponentVariation(GetPlayerPed(-1), 3, 64, 0, 2)
+	if(GetEntityModel(PlayerPedId()) == hashSkin) then
+		SetPedComponentVariation(PlayerPedId(), 11, 41, 1, 2)  -- Top
+		SetPedComponentVariation(PlayerPedId(), 8, 59, 0, 2)   -- under coat 73 ?
+		SetPedComponentVariation(PlayerPedId(), 4, 9, 6, 2)   -- Pantalon
+		SetPedComponentVariation(PlayerPedId(), 6, 12, 6, 2)   -- chaussures
+		--SetPedComponentVariation(PlayerPedId(), 3, 67, 0, 2)   -- mains/gants/bras etc. ... (shirt)
+		SetPedComponentVariation(PlayerPedId(), 3, 64, 0, 2)
 	else
-		SetPedComponentVariation(GetPlayerPed(-1), 11, 86, 0, 2)  -- Top
-		SetPedComponentVariation(GetPlayerPed(-1), 8, 2, 0, 2)   -- under coat 73 ?
-		SetPedComponentVariation(GetPlayerPed(-1), 4, 25, 1, 2)   -- Pantalon
-		SetPedComponentVariation(GetPlayerPed(-1), 6, 10, 3, 2)   -- chaussures
-		SetPedComponentVariation(GetPlayerPed(-1), 3, 114, 0, 2)   -- mains/gants/bras etc. ... (shirt)
+		SetPedComponentVariation(PlayerPedId(), 11, 86, 0, 2)  -- Top
+		SetPedComponentVariation(PlayerPedId(), 8, 2, 0, 2)   -- under coat 73 ?
+		SetPedComponentVariation(PlayerPedId(), 4, 25, 1, 2)   -- Pantalon
+		SetPedComponentVariation(PlayerPedId(), 6, 10, 3, 2)   -- chaussures
+		SetPedComponentVariation(PlayerPedId(), 3, 114, 0, 2)   -- mains/gants/bras etc. ... (shirt)
 	end
 end)
 end)
@@ -218,7 +218,7 @@ RegisterNetEvent('vigneron:getCar')
 AddEventHandler('vigneron:getCar', function (source)
 	local vehiculeDetected = GetClosestVehicle(vigneron_car.x, vigneron_car.y, vigneron_car.z, 6.0, 0, 70)
 	if not DoesEntityExist(vehiculeDetected) then
-		local myPed = GetPlayerPed(-1)
+		local myPed = PlayerPedId()
 		local player = PlayerId()
 		local vehicle = GetHashKey('sadler')
 		local plate = math.random(1000, 9999)
