@@ -121,7 +121,7 @@
 	<section class="container-form">
 	<div class="column-wrapper">
 		<aside class="info-member">
-			<img class="avatar" src="https://platypus.fr/resourceGTA/discordicon.png" alt="avatar member">
+			<img class="avatar" src="https://venato.fr/resourceIMG/logo2%204000x4000.png" alt="avatar member">
 			<h1 class="title">Enregistrement du citoyen !</h1>
 			<p class="description"></p>
 		</aside>
@@ -131,22 +131,25 @@
 		<form action="">
 			<div class="form-wrapper">
 				<label class="label" for="name">Nom</label>
-				<input class="input" type="text" id="name" name="nom" required pattern="^[A-Za-z \-\']+$" autofocus>
+				<input class="input" placeholder="Nom" type="text" id="name" name="nom" required pattern="^[A-Za-z \-\']+$" autofocus>
 			</div>
 
 			<div class="form-wrapper">
 				<label class="label" for="name">Prenom</label>
-				<input class="input" type="text" id="name" name="prenom" required pattern="^[A-Za-z \-\']+$" autofocus>
+				<input class="input" placeholder="Prenom" type="text" id="name" name="prenom" required pattern="^[A-Za-z \-\']+$" autofocus>
 			</div>
 
 			<div class="form-wrapper">
 				<label class="label" for="birth">Date de Naissance</label>
-				<input class="input" type="text" name="dateNaissance" placeholder="jj/mm/aaaa" required pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[012])\/[0-9]{4}">
+				<input type="number" placeholder="jj" class="day" name="day" value="" min="1" max="31">
+				<input type="number" placeholder="mm"  class="mounth" name="mounth" value="" min="1" max="12">
+				<input type="number" placeholder="aaaa" class="year" name="year" value="" min="1900" max="2020">
+				<!-- <input class="input" type="date" name="dateNaissance" value="1990-01-01" required pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])\/(0[1-9]|1[012])\/[0-9]{4}"> -->
 			</div>
 
 			<div class="form-wrapper">
 				<label class="label" for="email">Taille (en cm)</label>
-				<input class="input" type="number" name="taille" required min="60" max="240">
+				<input class="input" placeholder="180" type="number" name="taille" required min="60" max="240">
 			</div>
 
 			<div class="form-wrapper -last">
@@ -154,11 +157,11 @@
 
 				<input class="homme" type="radio" id="classic" name="sexe" value="h" name="membership" checked>
 				<label class="category" for="classic"></label>
-				<p class="title">Homme</p>
+				<label for="classic"><p class="title"> Homme</p></label>
 
 				<input class="femme" type="radio" id="silver" name="sexe" value="f" name="membership">
 				<label class="category" for="silver"></label>
-				<p class="title">Femme</p>
+				<label for="silver"><p class="title"> Femme</p></label>
 
 			</div>
 

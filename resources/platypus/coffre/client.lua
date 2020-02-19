@@ -73,7 +73,7 @@ Citizen.CreateThread(function()
   TriggerServerEvent("Coffre:ReloadCoffre")
   while true do
     Citizen.Wait(0)
-    local x,y,z = table.unpack(GetEntityCoords(Venato.GetPlayerPed(), true))
+    local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
     for k,v in pairs(DataCoffre) do
       if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) then
         indexLoop = k
@@ -88,7 +88,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
-      Venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
+      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         TriggerServerEvent("Coffre:CheckWhitelist", indexLoop)
         coffre_index = indexLoop
@@ -148,7 +148,7 @@ function CoffreDropItem(row)
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("Coffre:DropItem", qty , row)
   else
-    Venato.notifyError("Une erreur est survenue.")
+    platypus.notifyError("Une erreur est survenue.")
   end
   Menu.close()
   Citizen.Wait(500)
@@ -201,7 +201,7 @@ function CoffreTakeWeapon(row)
   if DataCoffre[row[1]].weapon[row[2]].poid + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
-    Venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
+    platypus.notifyError("Vous n'avez plus de place pour prendre l'arme.")
   end
   Menu.close()
 end
@@ -284,8 +284,8 @@ function CoffreTakeItem(row)
 end
 
 function CoffreTakeMoney(index)
-  local qty =  Venato.OpenKeyboard('', '', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and Venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
+  local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à prendre")
+  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and platypus.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeMoney", qty , index)
   else
     platypus.notifyError("Une erreur est survenue.")
