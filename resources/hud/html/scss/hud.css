@@ -13,17 +13,19 @@ html body #app {
 
 html body #app .besoins {
   position: absolute;
-  bottom: 20%;
-  left: 1.8%;
+  top: 2.5%;
+  left: 1.5%;
 }
 
 html body #app .speedomeeter {
+  display: none;
   position: absolute;
   bottom: 8%;
   left: 17%;
 }
 
 html body #app .mini-speedomeeter {
+  display: none;
   position: absolute;
   bottom: 3.5%;
   left: 12%;
@@ -45,7 +47,7 @@ html body #app .fullscreen {
   border-radius: 100px;
 }
 
-#notifVenato .evenement {
+#notifplatypus .evenement {
   width: 500px;
   height: 281.5px;
   background-repeat: no-repeat;
@@ -53,7 +55,7 @@ html body #app .fullscreen {
   background-size: contain;
 }
 
-#notifVenato .evenement .noty_container {
+#notifplatypus .evenement .noty_container {
   position: relative;
   top: -10px;
   left: 0;
@@ -62,26 +64,26 @@ html body #app .fullscreen {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-#notifVenato .evenement .noty_container .noty_title {
+#notifplatypus .evenement .noty_container .noty_title {
   font-size: 35px;
   text-align: left;
   margin-left: 20px;
   padding-top: 15px;
 }
 
-#notifVenato .evenement .noty_container .noty_body {
+#notifplatypus .evenement .noty_container .noty_body {
   font-size: 27px;
   word-wrap: normal;
   margin: 12px 30px 5px 40px;
 }
 
-#notifVenato .noty_body {
+#notifplatypus .noty_body {
   font-size: 0.9vw;
   font-family: "Poppins";
   padding: 15px 30px;
 }
 
-#notifVenato .noty_logo {
+#notifplatypus .noty_logo {
   text-align: center;
   width: 15%;
   margin: auto;
@@ -89,14 +91,14 @@ html body #app .fullscreen {
   float: left;
 }
 
-#notifVenato .noty_logo img {
+#notifplatypus .noty_logo img {
   width: 100%;
   height: auto;
   max-height: 90%;
   max-width: 90%;
 }
 
-#notifVenato .noty_title {
+#notifplatypus .noty_title {
   font-family: "Poppins";
   font-size: 0.9vw;
   font-weight: bolder;

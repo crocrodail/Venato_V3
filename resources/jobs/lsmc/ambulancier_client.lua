@@ -142,7 +142,7 @@ end
 function spawnVehicule(pos, type)
   local plate = math.random(1000, 9000)
   AmbuldeleteVehicle()
-  Venato.CreateVehicle(string.upper(type), {x=tonumber(pos.x), y=tonumber(pos.y), z=tonumber(pos.z)}, tonumber(pos.h), function(vehicle)
+  platypus.CreateVehicle(string.upper(type), {x=tonumber(pos.x), y=tonumber(pos.y), z=tonumber(pos.z)}, tonumber(pos.h), function(vehicle)
     myVehiculeEntity = vehicle
 		if type == "polmav" then
 			SetVehicleLivery(myVehiculeEntity, 1)
@@ -356,7 +356,7 @@ function leaveserv()
   TriggerServerEvent('ambulancier:endService')
   Menu.close()
   toogleServiceAmbulancier()
-  TriggerEvent("Venato:LoadClothes")
+  TriggerEvent("platypus:LoadClothes")
 end
 
 local function gestionServiceAmbulancier()
@@ -580,7 +580,7 @@ end
 
 function AmbuldeleteVehicle()
   if myVehiculeEntity ~= nil then
-    Venato.DeleteCar(myVehiculeEntity)
+    platypus.DeleteCar(myVehiculeEntity)
   end
 end
 
@@ -605,7 +605,7 @@ Citizen.CreateThread(function()
                   TriggerServerEvent('ambulancier:requestMission')
                   openMenuGeneralAmbulancier()
               else
-                  Venato.notifyError("Vous devais etre en service pour accedez au menu")
+                  platypus.notifyError("Vous devais etre en service pour accedez au menu")
               end
         		end
         end
@@ -667,7 +667,7 @@ function notifIconAmbu(icon, type, sender, title, text)
     logo = "https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon-by-vexels.png",
     message = text,
   }
-  TriggerEvent("Venato:notify", notif)
+  TriggerEvent("platypus:notify", notif)
 end
 
 RegisterNetEvent("ambulancier:PersonnelMessage")
@@ -781,26 +781,26 @@ end)
 RegisterNetEvent('ambulancier:Heal')
 AddEventHandler('ambulancier:Heal',
 function()
-        local closestPlayer, closestDistance = Venato.ClosePlayer()
+        local closestPlayer, closestDistance = platypus.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
           TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
           Citizen.Wait(8000)
           ClearPedTasks(GetPlayerPed(-1));
           TriggerServerEvent('ambulancier:healHim',closestPlayer)
         else
-          Venato.notifyError(TEXTAMBUL.NoPatientFound)
+          platypus.notifyError(TEXTAMBUL.NoPatientFound)
         end
 end)
 
 RegisterNetEvent('ambulancier:Heal2')
 AddEventHandler('ambulancier:Heal2',
 function()
-        local closestPlayer, closestDistance = Venato.ClosePlayer()
+        local closestPlayer, closestDistance = platypus.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
           TriggerServerEvent('ambulance:getInfoReanim', closestPlayer)
 
         else
-            Venato.notifyError(TEXTAMBUL.NoPatientFound)
+            platypus.notifyError(TEXTAMBUL.NoPatientFound)
         end
 end)
 
@@ -813,27 +813,27 @@ end)
 
 
 function getBlassure()
-        local closestPlayer, closestDistance = Venato.ClosePlayer()
+        local closestPlayer, closestDistance = platypus.ClosePlayer()
         if closestDistance < 2.0 and closestDistance ~= -1 then
             TriggerServerEvent('ambulancier:GetInTableTheBlassure', GetPlayerServerId(ClosePlayer))
         else
-            Venato.notifyError(TEXTAMBUL.NoPatientFound)
+            platypus.notifyError(TEXTAMBUL.NoPatientFound)
         end
 end
 
 RegisterNetEvent('ambulancier:MakePay')
 AddEventHandler('ambulancier:MakePay', function()
-        local closestPlayer, closestDistance, a= Venato.ClosePlayer()
+        local closestPlayer, closestDistance, a= platypus.ClosePlayer()
         
         if closestDistance < 2.0 and closestDistance ~= -1 then
-            local montant = Venato.OpenKeyboard('', '', 10,"Montant du paiement")
+            local montant = platypus.OpenKeyboard('', '', 10,"Montant du paiement")
             if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
         			TriggerServerEvent("ambulancier:Makepayement", GetPlayerServerId(a), montant)
         		else
-        			Venato.notifyError("Le montant indiqué est erroné.")
+        			platypus.notifyError("Le montant indiqué est erroné.")
         		end
         else
-            Venato.notifyError("Pas de joueur proche!")
+            platypus.notifyError("Pas de joueur proche!")
         end
 end)
 --====================================================================================

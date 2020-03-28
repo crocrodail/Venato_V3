@@ -231,7 +231,7 @@ function orderItem(item)
     TriggerServerEvent("Shops:OrderItem", ConfigShop.currentOrderId, item, tonumber(nb))
   else
     ConfigShop.shopsNotification.message = ConfigShop.textInColor('red', "Une erreur dans le nombre saisi.")
-    TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
+    TriggerEvent("platypus:notify", ConfigShop.shopsNotification)
   end
 end
 
@@ -242,7 +242,7 @@ function setPrice(item)
     TriggerServerEvent("Shops:ChangePriceItem", item, tonumber(nb))
   else
     ConfigShop.shopsNotification.message = ConfigShop.textInColor('red', "Une erreur dans le nombre saisi.")
-    TriggerEvent("Venato:notify", ConfigShop.shopsNotification)
+    TriggerEvent("platypus:notify", ConfigShop.shopsNotification)
   end
 end
 

@@ -1,5 +1,5 @@
 RegisterNetEvent('Radio:CallData')
 AddEventHandler('Radio:CallData', function()
-  local DataUser = exports.venato:GetDataPlayers()
+  local DataUser = exports.platypus:GetDataPlayers()
   TriggerClientEvent("Radio:CallData:cb", source, DataUser[source])
 end)

@@ -41,7 +41,7 @@ AddEventHandler("Jobs:salary:cb", function()
   notification.title = "Salaire"
   notification.logo = JobsConfig.jobsNotification.logo
   notification.message = "<span class='green--text'>Votre nouveau chèque vous attend</span>"
-  TriggerEvent("Venato:notify", notification)
+  TriggerEvent("platypus:notify", notification)
 end)
 
 AddEventHandler("Jobs:askSalary:cb", function(primeCo, salary, primeJob, salaryCheck, bonus)
@@ -73,5 +73,5 @@ AddEventHandler("Jobs:askSalary:cb", function(primeCo, salary, primeJob, salaryC
   if salaryCheck > 0 then
     notification.message = notification.message .. "<br />Gain des missions : <span class='green--text'>" .. salaryCheck .. " €</span>"
   end
-  TriggerEvent("Venato:notify", notification)
+  TriggerEvent("platypus:notify", notification)
 end)

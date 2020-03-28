@@ -19,15 +19,15 @@ TokoVoipConfig = {
 		-- TeamSpeak channel name used by the voip
 		-- If the TSChannelWait is enabled, players who are currently in TSChannelWait will be automatically moved
 		-- to the TSChannel once everything is running
-		TSChannel = "[cspacer1]● Venato In-game ●",
-		TSPassword = "VOIPVENATO", -- TeamSpeak channel password (can be empty)
+		TSChannel = "[cspacer1]● platypus In-game ●",
+		TSPassword = "VOIPplatypus", -- TeamSpeak channel password (can be empty)
 
 		-- Optional: TeamSpeak waiting channel name, players wait in this channel and will be moved to the TSChannel automatically
 		-- If the TSChannel is public and people can join directly, you can leave this empty and not use the auto-move
-		TSChannelWait = "[cspacer]● Venato Accueil ●",
+		TSChannelWait = "[cspacer]● platypus Accueil ●",
 
 		-- Blocking screen informations
-		TSServer = "Gta.Venato.fr", -- TeamSpeak server address to be displayed on blocking screen
+		TSServer = "Gta.platypus.fr", -- TeamSpeak server address to be displayed on blocking screen
 		TSChannelSupport = "Support", -- TeamSpeak support channel name displayed on blocking screen
 		TSDownload = "http://forums.rmog.us", -- Download link displayed on blocking screen
 		TSChannelWhitelist = { -- Black screen will not be displayed when users are in those TS channels

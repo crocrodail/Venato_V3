@@ -35,7 +35,7 @@ AddEventHandler("Shops:ShowInventory", function(shopId, newSource)
   local source = getSource(source, newSource)
   TriggerClientEvent("Shops:UpdateMenu:cb", source, ShopDbFunctions.getShop(shopId, source))
 end)
---######### PARTI DANS VENATO
+--######### PARTI DANS platypus
 -- AddEventHandler("Shops:TestBuy", function(ContentId, shopId, quantity, newSource)
 --   local source = getSource(source, newSource)
 --
@@ -47,7 +47,7 @@ end)
 --   local totalPoid = _quantity * content.poid
 --
 --   local steamId = ShopsTools.getSteamID(source)
---   local DataUsers = exports.venato:GetDataPlayers()
+--   local DataUsers = exports.platypus:GetDataPlayers()
 --   currentPlayerMoney = ShopDbFunctions.getCurrentPlayerMoney(steamId)
 --   if totalPrice > currentPlayerMoney then
 --     TriggerClientEvent("Shops:NotEnoughMoney", source, content.libelle)
@@ -102,7 +102,7 @@ end)
 
 AddEventHandler("Shops:ShowItem", function(shopId, item, newSource)
   local source = getSource(source, newSource)
-  TriggerEvent('Venato:dump', { shopId, item })
+  TriggerEvent('platypus:dump', { shopId, item })
   TriggerClientEvent("Shops:UpdateMenu:cb", source, ShopDbFunctions.getOrderItem(shopId, item.ItemId))
 end)
 

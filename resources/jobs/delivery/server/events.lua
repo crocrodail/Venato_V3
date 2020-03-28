@@ -39,13 +39,13 @@ AddEventHandler("DeliveryJob:takeMission", function(newSource)
 
   local player_order = DeliveryJobDbFunctions.getPlayerOrder()
   if player_order ~= nil then
-    TriggerEvent("Venato:dump", { "Command:", player_order })
+    TriggerEvent("platypus:dump", { "Command:", player_order })
     DeliveryJobDbFunctions.startOrder(source, player_order.Id)
     mission = { ["targetId"] = player_order.ShopId, ["orderId"] = player_order.Id, ["maxDuration"] = -1, ["shop"] = true }
     order = player_order.order
     destination = player_order.destination
   else
-    TriggerEvent("Venato:dump", { "Default:", mission })
+    TriggerEvent("platypus:dump", { "Default:", mission })
   end
 
   TriggerClientEvent("DeliveryJob:takeMission:cb", source, mission, order, destination)
@@ -59,13 +59,13 @@ AddEventHandler("DeliveryJob:takeMissionPrecise", function(number, newSource)
   local destination = DeliveryJobConfig.defaultDropLocations[mission.targetId]
   local player_order = DeliveryJobDbFunctions.getPlayerOrder()
   if player_order ~= nil then
-    TriggerEvent("Venato:dump", { "Command:", player_order })
+    TriggerEvent("platypus:dump", { "Command:", player_order })
     DeliveryJobDbFunctions.startOrder(source, player_order.Id)
     mission = { ["targetId"] = player_order.ShopId, ["orderId"] = player_order.Id, ["maxDuration"] = -1, ["shop"] = true }
     order = player_order.order
     destination = player_order.destination
   else
-    TriggerEvent("Venato:dump", { "Default:", mission })
+    TriggerEvent("platypus:dump", { "Default:", mission })
   end
 
   TriggerClientEvent("DeliveryJob:takeMission:cb", source, mission, order, destination)

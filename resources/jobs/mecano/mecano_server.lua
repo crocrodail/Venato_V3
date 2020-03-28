@@ -225,18 +225,18 @@
         logo = "https://i.ibb.co/dmfGBDv/icons8-car-service-96px.png",
         message = "Vous venez d'être facturé du montant de "..price.." au profit des mécano",
       }      
-      local paymentCB = exports.venato:ExportPaymentCB(target, price)
+      local paymentCB = exports.platypus:ExportPaymentCB(target, price)
       if paymentCB.status then
         TriggerEvent("Coffre:AddMoney", price, 1209)
-        TriggerClientEvent("Venato:notify", target, notif)
+        TriggerClientEvent("platypus:notify", target, notif)
         notif.message = "Le client a bien payé sa facture !"
-        TriggerClientEvent("Venato:notify", source, notif)
+        TriggerClientEvent("platypus:notify", source, notif)
       else
         notif.type = "danger"
         notif.message = "Le client n'est pas en mesure de payer sa facture : ".. paymentCB.message
-        TriggerClientEvent("Venato:notify", source, notif)
+        TriggerClientEvent("platypus:notify", source, notif)
         notif.message = paymentCB.message
-        TriggerClientEvent("Venato:notify", target, notif)
+        TriggerClientEvent("platypus:notify", target, notif)
       end
     end)
 

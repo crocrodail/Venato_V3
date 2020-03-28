@@ -10,9 +10,5 @@ files {
     'app.js',
     'config.css',
     'imgs/logo.png',
-    'imgs/SCREEN_V_V2.png',
-    'imgs/SCREEN_V_V22.png',
-    'imgs/SCREEN_VENATO2_3.png',
-    'imgs/SCREEN_VENATO2_4.png',
-    'imgs/SCREEN_VENATO2_5.png'
+    'imgs/screen.jpg',
 }
