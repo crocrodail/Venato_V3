@@ -29,7 +29,6 @@ local inEdit = false
 local currentItem = 0
 local distanceCam = 0.35
 function startEditFace()
-  ShutdownLoadingScreen()
     Citizen.CreateThread(function()
         currentItem = 0
         inEdit = true
@@ -53,13 +52,11 @@ function startEditFace()
         value = 0.0
         local h = GetEntityHeading(me)
 
-        -- PED_FLAG_FREEZE 292
-        SetPedConfigFlag(me, 292, 1)
 
         while inEdit == true do
 
             --GET_GAMEPLAY_CAM_ROT
-            local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z
+            local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z + 75
             AttachCamToPedBone(cam, me, boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam ,0.05 , true)
             SetCamRot(cam, 0.0, 0.0, YawCam + h + 90, true)
             DrawMenu()
@@ -166,6 +163,7 @@ function saveFace()
         table.insert(data, v.currentValue)
     end
     TriggerServerEvent('face:save', data)
+    Citizen.Wait(1000)
     TriggerServerEvent("platypus:SyncData")
     DetachEntity(platypus.GetPlayerPed(), true, true)
     DeleteEntity(Prop)
@@ -173,7 +171,6 @@ function saveFace()
     Citizen.Wait(1000)
     FreezeEntityPosition(platypus.GetPlayerPed(), true)
     SetEntityCoords(platypus.GetPlayerPed(), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
-    platypus.LoadClothes()
     Citizen.Wait(2000)
     FreezeEntityPosition(platypus.GetPlayerPed(), false)
     DoScreenFadeIn(2000)

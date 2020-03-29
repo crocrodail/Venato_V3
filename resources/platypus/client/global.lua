@@ -30,7 +30,7 @@ Citizen.CreateThread(function()
       end
     end
     SetPlayerWantedLevel(playerId, 0 , false)
-    SetPlayerWantedLevelNow(playerId, false, false)    
+    SetPlayerWantedLevelNow(playerId, false, false)
   end
 end)
 
@@ -60,7 +60,7 @@ AddEventHandler("platypus:SpawnInit", function(DataPlayers, source)
     platypus.LoadSkin(DataPlayers[tonumber(source)])
     platypus.LoadClothes()
     if tonumber(DataPlayers[tonumber(source)].Health) < 100 then SetEntityHealth(platypus.GetPlayerPed(), tonumber(DataPlayers[tonumber(source)].Health)) end
-    TriggerServerEvent("GcPhone:Load")    
+    TriggerServerEvent("GcPhone:Load")
   end
 end)
 
@@ -99,7 +99,7 @@ Citizen.CreateThread(function()
 	SetRandomVehicleDensityMultiplierThisFrame(0.2)
 	SetParkedVehicleDensityMultiplierThisFrame(0.2)
   SetScenarioPedDensityMultiplierThisFrame(0.2, 0.2)
-  while true do    
+  while true do
     local cheatNb = 0
     if ingame > 30 then cheatNb = 15 elseif ingame > 20 then cheatNb = 10 elseif ingame > 15 then cheatNb = 7 --- CHEAT NB JOUEURS
     elseif ingame > 10 then cheatNb = 5 elseif ingame > 5 then cheatNb = 2 end                                --- CHEAT NB JOUEURS
@@ -136,7 +136,7 @@ Citizen.CreateThread(function()
       end
     elseif disScouteur < 20 then
       DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
-    end    
+    end
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
     RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
