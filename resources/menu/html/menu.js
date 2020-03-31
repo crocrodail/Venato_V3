@@ -75,7 +75,7 @@ new Vue({
         this.oldSelectedItem = this.selectedItem;
         this.selectedItem = 0;
       } else if (event.data.action == "addButton") {
-        this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: undefined })
+        this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: undefined})
       } else if (event.data.action == "addItemButton") {
         this.items.push({ title: event.data.name, subtitle: '', confirm: event.data.func, hover: event.data.hover, data: event.data.args, avatar: event.data.picture })
       } else if (event.data.action == "genMenu") {

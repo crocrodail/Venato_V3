@@ -26,8 +26,8 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0) -- Obligatoire pour eviter de crash
         local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true)) -- Permet de recuperer la position du joueur
-        if Vdist(x, y, z, configAutoEcole.x, configAutoEcole.y, configAutoEcole.z) < 4 then
-            Venato.InteractTxt('Appuyez sur ~INPUT_CONTEXT~ pour ouvrir le menu')
+        if Vdist(x, y, z, configAutoEcole.x, configAutoEcole.y, configAutoEcole.z) < 2 then
+            platypus.InteractTxt('Appuyez sur ~INPUT_CONTEXT~ pour ouvrir le menu')
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                 openmenuautoecole()
                 print("uhfuohf")
@@ -40,13 +40,18 @@ end)
 function openmenuautoecole()
     Menu.clearMenu()
     Menu.open()
-    TriggerEvent('Menu:Init', "", "La vitamine c mais ne dira rien", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
+    TriggerEvent('Menu:Init', "", "Bienvenue dans le menu de l'auto-école !", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
     Menu.addButton("<span class='red--text'>Fermer</span>", "closemenuautoecole")
-    Menu.addButton2("Code de la route", "openmenucode", nil, '', 'https://img.icons8.com/office/30/000000/traffic-jam.png')
+    Menu.addButton2("Code de la route", "openmenucode", nil, '', 'https://img.icons8.com/dusk/64/000000/car.png')
     Menu.CreateMenu()
 end
 
 function openmenucode()
+    Menu.clearMenu()
+    Menu.open()
+    TriggerEvent('Menu:Init', "", "Bienvenue dans le menu de l'auto-école !", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
+    Menu.addButton("<span class='red--text'>Fermer</span>", "closemenuautoecole")
+    Menu.CreateMenu()
 end
 
 function openmenupermis()
