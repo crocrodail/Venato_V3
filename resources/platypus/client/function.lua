@@ -118,7 +118,7 @@ function platypus.InteractTxt(text)
   DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
-function platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)  
+function platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
   AddTextEntry('FMMC_KEY_TIP12', TextEntrynote)
   DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP12", "", defaultText or "", "", "", "", maxlength or 20)
   while (UpdateOnscreenKeyboard() == 0) do
@@ -153,9 +153,6 @@ function platypus.ClosePlayer()
 end
 
 function platypus.GetPlayerPed()
-  if PedPlayer == nil then
-    PedPlayer = GetPlayerPed(-1)
-  end
 	return  GetPlayerPed(-1)
 end
 
@@ -186,7 +183,7 @@ function platypus.CreateVehicle(modelName, coords, heading, cb)
   if tonumber(modelName) == nil then
    model = GetHashKey(modelName)
   end
-  
+
   if not HasModelLoaded(model) then
     RequestModel(model)
     while not HasModelLoaded(model) do
@@ -208,7 +205,7 @@ function platypus.CreateVehicle(modelName, coords, heading, cb)
     Citizen.Wait(100)
   end
   SetVehRadioStation(vehicle, 'OFF')
-  
+
   if cb ~= nil then
     cb(vehicle)
   end

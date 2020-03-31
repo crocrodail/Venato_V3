@@ -184,7 +184,7 @@ function previousVehicleSecColor()
 end
 
 function changeColor()
-  local car = GetVehiclePedIsIn( playerPed, false )    
+  local car = GetVehiclePedIsIn( playerPed, false )
   SetVehicleColours(car,color,colorSec)
 end
 

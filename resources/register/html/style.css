@@ -1,7 +1,8 @@
+@import url(db.onlinewebfonts.com/c/0a6ee448d1bd65c56f6cf256a7c6f20a?family=Bahnschrift);
 body{
   margin:0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Bahnschrift', sans-serif;
   font-size: 16px;
   font-weight: 400;
 }
@@ -109,15 +110,15 @@ body{
     width: 366px;
     height: 590px;
     border-radius: 24px 0 0 24px;
-    background-color: #1250C2;
+    background-color: #41ADFF;
     letter-spacing: 0.3px;
     color: #000;
 }
 
 .info-member > .avatar {
     margin-bottom: 24px;
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
 }
 
 .info-member > .title {
@@ -166,6 +167,51 @@ body{
 		transition: all 200ms linear;
 }
 
+.form-wrapper > .day{
+  display: inline-flex;
+  width: 85px;
+  height: 40px;
+  border: 1px solid #f5f8f9;
+  border-radius: 4px;
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  background-color: #f5f8f9;
+  color: #7E7E7E;
+  padding: 12px 16px;
+  transition: all 200ms linear;
+}
+
+.form-wrapper > .mounth{
+  display: inline-flex;
+  width: 85px;
+  height: 40px;
+  border: 1px solid #f5f8f9;
+  border-radius: 4px;
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  background-color: #f5f8f9;
+  color: #7E7E7E;
+  padding: 12px 16px;
+  transition: all 200ms linear;
+}
+
+.form-wrapper > .year{
+  display: inline-flex;
+  width: 125px;
+  height: 40px;
+  border: 1px solid #f5f8f9;
+  border-radius: 4px;
+  font: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  background-color: #f5f8f9;
+  color: #7E7E7E;
+  padding: 12px 16px;
+  transition: all 200ms linear;
+}
+
 .form-wrapper > .input:focus {
     border: 1px solid #cad7dd;
     background-color: #f5f8f9;
@@ -202,12 +248,12 @@ body{
 }
 
 .form-wrapper > .femme:checked + .category {
-    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
+    background: #42db2b url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
     background-size: 80% auto;
 }
 
 .form-wrapper > .femme:hover + .category {
-    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
+    background: #6fff59 url(https://img.icons8.com/ultraviolet/40/000000/person-female.png) no-repeat center;
     background-size: 80% auto;
 }
 
@@ -223,22 +269,22 @@ body{
 }
 
 .form-wrapper > .homme:checked + .category {
-    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
+    background: #42db2b url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
     background-size: 80% auto;
 }
 
 .form-wrapper > .homme:hover + .category {
-    background: #383838 url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
+    background: #6fff59 url(https://img.icons8.com/ultraviolet/40/000000/administrator-male.png) no-repeat center;
     background-size: 80% auto;
 }
 
-.form-wrapper > .title {
+.title {
     color: #121010;
     margin-right: 16px;
     margin-left: 6px;
 }
 
-.form-wrapper > .title.-last {
+.title.-last {
     margin-right: 0;
     color: #D9EAF2;
 }
@@ -251,12 +297,12 @@ body{
 
 .button-default {
     width: 124px;
-    height: 48px;
+    height: 45px;
     border: none;
-    border-radius: 4px;
     text-transform: uppercase;
     transition: all 200ms linear;
     margin-right: 24px;
+    border: 3px solid #00477D;
 }
 
 .button-default.-cancel {
@@ -270,12 +316,12 @@ body{
 
 .button-default.-save {
     font-weight: 700;
-    background-color: #2ec39e;
+    background-color: #41ADFF;
     color: #fff;
 }
 
 .button-default.-save:hover {
-    background-color: #3ddbb4;
+    background-color: #6bbcfa;
 }
 
 .button-default.-save.-last {

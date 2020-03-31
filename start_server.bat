@@ -1,2 +1,2 @@
 @echo off
-start server_files\fxserver.exe +exec server.cfg %*
+start server_files\FXserver.exe +exec server.cfg %*
