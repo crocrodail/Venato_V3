@@ -1,4 +1,4 @@
-config = {
+configAutoEcole = {
   x= -827.849,
   y= -698.16, 
   z= 27.057, 
