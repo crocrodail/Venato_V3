@@ -56,7 +56,7 @@ end)
 --  Que faire si le joueur veut ouvrir son téléphone mais qu'il n'en a pas ?
 --====================================================================================
 function ShowNoPhoneWarning ()
-  TriggerEvent('platypus:notify', "<span class='red--text'>Vous n'avez pas de téléphone.</span>")
+  TriggerEvent('venato:notify', "<span class='red--text'>Vous n'avez pas de téléphone.</span>")
 end
 
 --[[

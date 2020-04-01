@@ -139,9 +139,9 @@ AddEventHandler('customs:resetvhlfromdb', function(veh)
 	local entitymdl = GetEntityModel(vhl)
 	local Model = GetDisplayNameFromVehicleModel(entitymdl)
 
-	blacklistedmodel = exports.platypus:GetBlacklistedList()
-	listedcar = exports.platypus:GetBalancedList()
-	classmdl = exports.platypus:GetBalancedCatList()
+	blacklistedmodel = exports.venato:GetBlacklistedList()
+	listedcar = exports.venato:GetBalancedList()
+	classmdl = exports.venato:GetBalancedCatList()
 
 	if debugvar == true then msginf("NEW CATEGORIE : " .. VehClassModel .. " " .. Model .. " Entity mdl : " .. entitymdl,10000) end
 	for k, v in pairs(listedcar) do

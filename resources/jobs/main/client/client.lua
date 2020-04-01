@@ -114,7 +114,7 @@ function Jobs.mainLoop(job)
         end
         if distance < 2 then
           JobsConfig.isOnServiceLocation = true
-          TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir le menu")
+          TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir le menu")
         elseif JobsConfig.isOnServiceLocation and distance > 2 then
           JobsConfig.isOnServiceLocation = false
         end
