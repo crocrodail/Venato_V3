@@ -19,6 +19,7 @@ platypus.Text3D(x, y, z, text, font, fontSize)
 platypus.addBlip(x, y, z, timeout, blip, color)
 platypus.playAnim(data) --data.lib, data.anim
 platypus.stopAnim(data)
+venato.groundMarker(x, y, z)
 
 ```
 

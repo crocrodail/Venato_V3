@@ -6,6 +6,11 @@ function none()
   local a = ""
 end
 
+function venato.groundMarker(x, y, z)
+  DrawMarker(27,x, y, z+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
+end
+
+
 function venato.playAnim(data)
   local flag = data.flag or 0
   local ped = data.ped or GetPlayerPed(-1)
@@ -350,7 +355,7 @@ function venato.callServer(eventName, arg)
     return response
 end
 
-function venato.GetDataPlayer()
+function venato.getDataPlayer()
     local response = nil
 
     TriggerServerEvent("venato:GetDataPlayer")

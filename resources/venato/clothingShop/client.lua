@@ -275,7 +275,7 @@ function OpenClothingShop()
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
   Menu.clearMenu()
   TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
-  --if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
+  if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
   TriggerEvent('Menu:AddButton2',"Masque", "CMask", '', '', "https://i.ibb.co/fqMn3sv/icons8-anonymous-mask-96px.png")
   TriggerEvent('Menu:AddButton2',"Haut", "ClothesShopMenuTop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
 	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
@@ -409,14 +409,14 @@ function CSAccessoire()
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListAccessoireMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListAccessoireFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -444,14 +444,14 @@ function CStop()
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListTorsoMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListTorsoFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -487,14 +487,14 @@ function CStopSecondary()
 		local dont = false
   	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
   		for k,v in pairs(BlackListTorso2Male) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
   		end
 		else
 			for k,v in pairs(BlackListTorso2Female) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
@@ -529,14 +529,14 @@ function CSBras()
 		local dont = false
   	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
   		for k,v in pairs(BlackListBrasMale) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
   		end
 		else
 			for k,v in pairs(BlackListBrasFemale) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
@@ -579,14 +579,14 @@ function CMask()
     local dont = false
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListMaskMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListMaskFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -619,14 +619,14 @@ function CSchausure()
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListShoesMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListShoesFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -685,14 +685,14 @@ function CSpantalong()
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListLegMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListLegFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end

@@ -66,6 +66,7 @@ client_script {
   '/StopDespawn/config.lua',
   '/StopDespawn/client.lua',
   '/gardeRobe/client.lua',
+  '/gardeRobe/config.lua',
 }
 
 server_script {
