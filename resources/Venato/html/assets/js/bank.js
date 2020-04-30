@@ -73,7 +73,7 @@ $('#deposit').click(function() {
     var amount = $('#take-amount').val();
 
     if ( amount.toLowerCase() == 'allt' && cash > 0) {
-      $.post('http://platypus/insert', JSON.stringify({ money : cash }));
+      $.post('http://venato/insert', JSON.stringify({ money : cash }));
 
       bank = parseInt(bank) + parseInt(cash);
       cash = parseInt(cash) - parseInt(cash);
@@ -82,7 +82,7 @@ $('#deposit').click(function() {
       $('.saldoo').text('Solde bancaire: ' + cash.toString());
     } else if ( amount > 0 && amount != null && amount != ' ' && cash > 0 ) {
       if ( parseInt(cash) >= parseInt(amount) ) {
-        $.post('http://platypus/insert', JSON.stringify({ money : amount }));
+        $.post('http://venato/insert', JSON.stringify({ money : amount }));
 
         cash = parseInt(cash) - parseInt(amount);
         bank = parseInt(bank) + parseInt(amount);
@@ -105,7 +105,7 @@ $('#withdraw').click(function() {
     var amount = $('#take-amount').val();
 
     if ( amount.toLowerCase() == 'allt' && cash > 0) {
-      $.post('http://platypus/insert', JSON.stringify({ money : cash }));
+      $.post('http://venato/insert', JSON.stringify({ money : cash }));
 
       bank = parseInt(bank) + parseInt(cash);
       cash = parseInt(cash) - parseInt(cash);
@@ -114,7 +114,7 @@ $('#withdraw').click(function() {
       $('.saldoo').text('Solde en poche: ' + cash.toString());
     } else if ( amount > 0 && amount != null && amount != ' ' && bank > 0 ) {
       if ( parseInt(bank) >= parseInt(amount) ) {
-        $.post('http://platypus/take', JSON.stringify({ money : amount }));
+        $.post('http://venato/take', JSON.stringify({ money : amount }));
 
         cash = parseInt(cash) + parseInt(amount);
         bank = parseInt(bank) - parseInt(amount);
@@ -140,7 +140,7 @@ $('#transfer').click(function() {
 
     if ( amount > 0 && amount != null && amount != ' ' && bank > 0 && anumb.length > 0 ) {
       if ( parseInt(bank) >= parseInt(amount) ) {
-        $.post('http://platypus/transfer', JSON.stringify({ money : amount, account : anumb }));
+        $.post('http://venato/transfer', JSON.stringify({ money : amount, account : anumb }));
 
         bank = parseInt(bank) - parseInt(amount);
 

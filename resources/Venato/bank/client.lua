@@ -13,23 +13,23 @@ Citizen.CreateThread(function()
   SetNuiFocus(false, false)
   while true do
     Citizen.Wait(0)
-    for i = 1, #ATMS, 1 do
+    for i = 1, #Config.ATMS, 1 do
       Citizen.Wait(0)
-      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2 and (Config.ATMS[i].b ~= nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2 and (Config.ATMS[i].b ~= nil) then
         indexLoop = i
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 10 and (Config.ATMS[i].b == nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 10 and (Config.ATMS[i].b == nil) then
         indexLoopATM = i
       end
       if indexLoop ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z, true) < 0.5 then
+        if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z, true) < 0.5 then
           inBankMarker = true
         else
           inBankMarker = false
         end
       end
       if indexLoopATM ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 1 then
+        if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 1 then
           inMarker = true
         else
           inMarker = false
@@ -43,12 +43,12 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
-      DrawMarker(27, ATMS[indexLoop].x, ATMS[indexLoop].y, ATMS[indexLoop].z + -0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,150, 255, 200, 0, 0, 0, 0)
+      DrawMarker(27, Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z + -0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,150, 255, 200, 0, 0, 0, 0)
     end
     if inMarker == true then
-      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour utiliser le distributeur')
+      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour utiliser le distributeur')
     elseif inBankMarker == true then
-      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
+      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
     end
   end
 end)
@@ -146,7 +146,7 @@ function buyCard(data)
     TriggerServerEvent("Bank:createCard")
     Menu.close()
   else
-    platypus.notifyError("Vous possèdez déjà une carte de crédit.")
+    venato.notifyError("Vous possèdez déjà une carte de crédit.")
   end
 
 
@@ -191,7 +191,7 @@ Citizen.CreateThread(function()
       if accountIsBlocked then
         defaultNotification.message = message_block
         defaultNotification.timeout = 5000
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
       else
         TriggerServerEvent("Bank:GetDataMoneyForATM")
       end
@@ -200,7 +200,7 @@ Citizen.CreateThread(function()
       if accountIsBlocked then
         defaultNotification.message = message_block
         defaultNotification.timeout = 5000
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
       else
         TriggerServerEvent("Bank:GetDataMoneyForBank")
       end
@@ -210,7 +210,7 @@ Citizen.CreateThread(function()
       DisableControlAction(0, 1, true) -- LookLeftRight
       DisableControlAction(0, 2, true) -- LookUpDown
       DisableControlAction(0, 24, true) -- Attack
-      DisablePlayerFiring(platypus.GetPlayerPed(), true) -- Disable weapon firing
+      DisablePlayerFiring(venato.GetPlayerPed(), true) -- Disable weapon firing
       DisableControlAction(0, 142, true) -- MeleeAttackAlternate
       DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
     end
@@ -248,5 +248,5 @@ end)
 
 -- Handles the error message
 RegisterNUICallback('errorbank', function(data, cb)
-  platypus.notifyError("Erreur dans le montant entré")
+  venato.notifyError("Erreur dans le montant entré")
 end)

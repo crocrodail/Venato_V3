@@ -286,7 +286,7 @@ Citizen.CreateThread( function()
 					if proned then
 						ClearPedTasks(ped)
 						StopAnimTask(ped,"move_crawl","onfront_fwd", 1.0)
-						platypus.playAnim({lib = "get_up@standard", anim = "front", useLib = true})
+						venato.playAnim({lib = "get_up@standard", anim = "front", useLib = true})
 						Citizen.Wait(3000)
 						ClearPedTasks(ped)
 						StopAnimTask(ped,"move_crawl","onfront_fwd", 1.0)

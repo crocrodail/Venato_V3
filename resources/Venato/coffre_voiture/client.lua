@@ -7,7 +7,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if IsControlJustPressed(1, Keys['L']) and GetLastInputMethod(2) then
-      CloseVehicle = platypus.CloseVehicle()
+      CloseVehicle = venato.CloseVehicle()
       if CloseVehicle ~= 0 then
         if not open then
           if (GetVehicleDoorLockStatus(CloseVehicle) < 2) then
@@ -17,20 +17,20 @@ Citizen.CreateThread(function()
               CloseVehicleCoffre()
             end
           else
-            platypus.notifyError("Vous devez ouvrir le véhicule pour ouvrir le coffre.")
+            venato.notifyError("Vous devez ouvrir le véhicule pour ouvrir le coffre.")
           end
         else
           CloseVehicleCoffre()
         end
       else
-        platypus.notifyError("Aucun véhicule à proximité.")
+        venato.notifyError("Aucun véhicule à proximité.")
       end
     end
   end
 end)
 
 function extOpenCoffreVeh()
-  CloseVehicle = platypus.CloseVehicle()
+  CloseVehicle = venato.CloseVehicle()
   if CloseVehicle ~= 0 then
     if not open then
       if (GetVehicleDoorLockStatus(CloseVehicle) < 2) then
@@ -40,13 +40,13 @@ function extOpenCoffreVeh()
           CloseVehicleCoffre()
         end
       else
-        platypus.notifyError("Vous devez ouvrir le véhicule pour ouvrir le coffre.")
+        venato.notifyError("Vous devez ouvrir le véhicule pour ouvrir le coffre.")
       end
     else
       CloseVehicleCoffre()
     end
   else
-    platypus.notifyError("Aucun véhicule à proximité.")
+    venato.notifyError("Aucun véhicule à proximité.")
   end
 end
 
@@ -58,7 +58,7 @@ function OpenVehicleCoffre()
   if plate or class ~= nil then
     TriggerServerEvent("VehicleCoffre:CallData", plate, class)
   else
-    platypus.notifyError('ERROR ?')
+    venato.notifyError('ERROR ?')
   end
 end
 
@@ -127,13 +127,13 @@ function DropItemCv()
 end
 
 function ConfDropItemCv(index)
-  local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à déposer")
+  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à déposer")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
   if qty ~= nil and qty ~= 0 then
     TriggerServerEvent("VehicleCoffre:DropItem", qty , plate, index)
     OpenMenuCv()
   else
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
   end
 end
 
@@ -144,12 +144,12 @@ function OptionItemsCv(index)
 end
 
 function GetItemCv(index)
-  local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à prendre")
+  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à prendre")
   local plate = GetVehicleNumberPlateText(CloseVehicle)
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("VehicleCoffre:TakeItems",index, qty, plate)
   else
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
   end
 end
 
@@ -180,7 +180,7 @@ function DropConfirmWeaponCv(index)
     Menu.addButton("<span class='red--text'>Non</span>", "DropWeaponCv", nil)
     Menu.addButton("<span class='green--text'>Déposer l'arme dans le coffre</span>", "CoffreVehicleDropWp", index)
   else
-    platypus.notifyError("Il n'y a pas de place pour cette arme.")
+    venato.notifyError("Il n'y a pas de place pour cette arme.")
     DropWeaponCv()
   end
 end

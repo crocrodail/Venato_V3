@@ -32,7 +32,7 @@ RegisterServerEvent("CarShop:BuyVP")
 AddEventHandler("CarShop:BuyVP", function(vehicle)  
   local source = source  
   local car = getVehicleById(vehicle.id)
-  if platypus.paymentVP(source, car.price_vp) then
+  if venato.paymentVP(source, car.price_vp) then
     vehicle["price"] = car.price_vp * 100
     AddVehicleToUser(source, vehicle)
     TriggerClientEvent("CarShop:PaiementOk:response", source, vehicle)
@@ -45,7 +45,7 @@ RegisterServerEvent("CarShop:Buy")
 AddEventHandler("CarShop:Buy", function(vehicle)
   local source = source  
   local car = getVehicleById(vehicle.id)
-  local paymentCB = platypus.paymentCB(source, car.price)
+  local paymentCB = venato.paymentCB(source, car.price)
   if paymentCB.status then
     vehicle["price"] = car.price
     AddVehicleToUser(source,vehicle)

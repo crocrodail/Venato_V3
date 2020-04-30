@@ -1,4 +1,4 @@
-platypus = {}
+venato = {}
 PedPlayer = nil
 
 KeysFunction = {
@@ -18,7 +18,12 @@ function none()
   local a = ""
 end
 
-function platypus.playAnim(data)
+function venato.groundMarker(x, y, z)
+  DrawMarker(27,x, y, z+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
+end
+
+
+function venato.playAnim(data)
   local flag = data.flag or 0
   local ped = data.ped or PlayerPedId()
   local timeout = data.timeout or 0
@@ -36,18 +41,24 @@ function platypus.playAnim(data)
   Citizen.Wait(timeout)
 end
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 function platypus.stopAnim(data)
   StopAnimTask(PlayerPedId(), data.lib ,data.anim, 1.0)
+=======
+function venato.stopAnim(data)
+  StopAnimTask(GetPlayerPed(-1), data.lib ,data.anim, 1.0)
+>>>>>>> master:resources/venato/client/function.lua
 end
 
-function platypus.HasJob(jobId)
+function venato.HasJob(jobId)
   return DataUser ~= nil and DataUser.Jobs ~= nil and DataUser.Jobs[jobId] ~= nil;
 end
 
-function platypus.HasItem(itemId)
+function venato.HasItem(itemId)
   return DataUser ~= nil and DataUser.Inventaire ~= nil and DataUser.Inventaire[itemId] ~= nil;
 end
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 function platypus.HowManyItem(itemId)
   if(DataUser == nil or DataUser.Inventaire == nil or DataUser.Inventaire[itemId] == nil) then 
     return 0;
@@ -56,10 +67,13 @@ function platypus.HowManyItem(itemId)
 end
 
 function platypus.DisplayBool(value)
+=======
+function venato.DisplayBool(value)
+>>>>>>> master:resources/venato/client/function.lua
   return value and 'true' or 'false'
 end
 
-function platypus.addBlip(x, y, z, timeout, blip, color)
+function venato.addBlip(x, y, z, timeout, blip, color)
   local currentBlip= AddBlipForCoord(x, y, z)
   SetBlipSprite(currentBlip, blip)
   SetBlipColour(currentBlip, color)
@@ -68,22 +82,27 @@ function platypus.addBlip(x, y, z, timeout, blip, color)
   RemoveBlip(currentBlip)
 end
 
-function platypus.notifyError(msg)
+function venato.notifyError(msg)
 	local data = {
 		logo = "https://img.icons8.com/color/48/000000/high-priority.png",
 		type = "error",
 		title = "Erreur",
 		message = msg,
 	}
-	platypus.notify(data)
+	venato.notify(data)
 end
 
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 function platypus.disableAction(disabled)
   FreezeEntityPosition(PlayerPedId(), disabled)
+=======
+function venato.disableAction(disabled)
+  FreezeEntityPosition(GetPlayerPed(-1), disabled)
+>>>>>>> master:resources/venato/client/function.lua
 end
 
-function platypus.notify(notif)
+function venato.notify(notif)
   if not notif.message then
     return
   end
@@ -108,7 +127,7 @@ function platypus.notify(notif)
   })
 end
 
-function platypus.Text3D(x, y, z, text, font, fontSize)
+function venato.Text3D(x, y, z, text, font, fontSize)
   if not font then
     font = 0
   end
@@ -131,13 +150,17 @@ function platypus.Text3D(x, y, z, text, font, fontSize)
   ClearDrawOrigin()
 end
 
-function platypus.InteractTxt(text)
+function venato.InteractTxt(text)
   SetTextComponentFormat("STRING")
   AddTextComponentString(text)
   DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 function platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
+=======
+function venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
+>>>>>>> master:resources/venato/client/function.lua
   AddTextEntry('FMMC_KEY_TIP12', TextEntrynote)
   DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP12", "", defaultText or "", "", "", "", maxlength or 20)
   while (UpdateOnscreenKeyboard() == 0) do
@@ -150,11 +173,11 @@ function platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
   return nil
 end
 
-function platypus.ClosePlayer()
+function venato.ClosePlayer()
   local players = GetPlayers()
   local closestDistance = -1
   local closestPlayer = -1
-  local ply = platypus.GetPlayerPed()
+  local ply = venato.GetPlayerPed()
   local plyCoords = GetEntityCoords(ply, 0)
   for index, value in ipairs(players) do
     local target = GetPlayerPed(value)
@@ -171,7 +194,11 @@ function platypus.ClosePlayer()
   return GetPlayerServerId(closestPlayer), closestDistance, closestPlayer
 end
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 function platypus.GetPlayerPed()
+=======
+function venato.GetPlayerPed()
+>>>>>>> master:resources/venato/client/function.lua
 	return  GetPlayerPed(-1)
 end
 
@@ -185,7 +212,7 @@ function GetPlayers()
   return players
 end
 
-function platypus.CreateObject(objet, x, y, z)
+function venato.CreateObject(objet, x, y, z)
   local model = GetHashKey(objet)
   RequestModel(model)
   while not HasModelLoaded(model) do
@@ -197,7 +224,7 @@ function platypus.CreateObject(objet, x, y, z)
   return objet
 end
 
-function platypus.CreateVehicle(modelName, coords, heading, cb)
+function venato.CreateVehicle(modelName, coords, heading, cb)
   local model = modelName
   if tonumber(modelName) == nil then
    model = GetHashKey(modelName)
@@ -232,18 +259,18 @@ function platypus.CreateVehicle(modelName, coords, heading, cb)
   return vehicle
 end
 
-function platypus.DeleteCar(entity)
+function venato.DeleteCar(entity)
 	Citizen.InvokeNative( 0xAE3CBE5BF394C9C9, Citizen.PointerValueIntInitialized( entity ) )
 end
 
-function platypus.ConvertUrl(url)
+function venato.ConvertUrl(url)
   local urlstep1 = string.gsub(url, "/", "_")
   local urlstep2 = string.gsub(urlstep1, ":", "ù")
   local finalUrl = string.gsub(urlstep1, "%.", "!")
   return finalUrl
 end
 
-function platypus.ChatMessage(str, source)
+function venato.ChatMessage(str, source)
   TriggerEvent("chatMessage", source or 'Message', { 0, 255, 255 }, "" .. tostring(str))
 end
 
@@ -258,7 +285,7 @@ function comma_value(amount)
   return formatted
 end
 
-function platypus.Round(val, decimal)
+function venato.Round(val, decimal)
   if (decimal) then
     return math.floor((val * 10 ^ decimal) + 0.5) / (10 ^ decimal)
   else
@@ -266,16 +293,16 @@ function platypus.Round(val, decimal)
   end
 end
 
-function platypus.FormatMoney(amount, decimal, prefix, neg_prefix)
+function venato.FormatMoney(amount, decimal, prefix, neg_prefix)
   if amount < 99 then
     return amount
   else
     local str_amount, formatted, famount, remain
     decimal = decimal or 2  -- default 2 decimal places
     neg_prefix = neg_prefix or "-" -- default negative sign
-    famount = math.abs(platypus.Round(amount, decimal))
+    famount = math.abs(venato.Round(amount, decimal))
     famount = math.floor(famount)
-    remain = platypus.Round(math.abs(amount) - famount, decimal)
+    remain = venato.Round(math.abs(amount) - famount, decimal)
     formatted = comma_value(famount)
     if (decimal > 0) then
       remain = string.sub(tostring(remain), 3)
@@ -294,21 +321,21 @@ function platypus.FormatMoney(amount, decimal, prefix, neg_prefix)
   end
 end
 
-function platypus.MoneyToPoid(money)
-  return platypus.Round(money * 0.000075, 1)
+function venato.MoneyToPoid(money)
+  return venato.Round(money * 0.000075, 1)
 end
 
-function platypus.CloseVehicle()
-  if (IsPedInAnyVehicle(platypus.GetPlayerPed(), true) == false) then
-    local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+function venato.CloseVehicle()
+  if (IsPedInAnyVehicle(venato.GetPlayerPed(), true) == false) then
+    local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
     local clostestvehicle = GetClosestVehicle(x, y, z, 4.000, 0, 127)
     if clostestvehicle ~= 0 then
       return clostestvehicle
     else
-      local pos = GetEntityCoords(platypus.GetPlayerPed())
-      local entityWorld = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, 3.0, 0.0)
+      local pos = GetEntityCoords(venato.GetPlayerPed())
+      local entityWorld = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, 3.0, 0.0)
       local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10,
-        platypus.GetPlayerPed(), 0)
+        venato.GetPlayerPed(), 0)
       local a, b, c, d, result = GetRaycastResult(rayHandle)
       return result
     end
@@ -317,7 +344,7 @@ function platypus.CloseVehicle()
   end
 end
 
-function platypus.ScaleForm(request)
+function venato.ScaleForm(request)
   scaleform = RequestScaleformMovie(request)
 
   while not HasScaleformMovieLoaded(scaleform) do
@@ -337,6 +364,7 @@ function Button(ControlButton)
   N_0xe83a3e3557a56640(ControlButton)
 end
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 function platypus.getRandomFromArray(array)  
   local randomNumber = math.random(0, #array)
   print(platypus.dump(array[randomNumber]))
@@ -344,12 +372,15 @@ function platypus.getRandomFromArray(array)
 end
 
 function platypus.dump(o)
+=======
+function venato.dump(o)
+>>>>>>> master:resources/venato/client/function.lua
   if type(o) == 'table' then
     local s = '{ '
     for k, v in pairs(o) do
       if type(k) ~= 'number' then k = '"' .. k .. '"'
       end
-      s = s .. '[' .. k .. '] = ' .. platypus.dump(v) .. ','
+      s = s .. '[' .. k .. '] = ' .. venato.dump(v) .. ','
     end
     return s .. '} '
   else
@@ -357,6 +388,7 @@ function platypus.dump(o)
   end
 end
 
+<<<<<<< HEAD:resources/Venato/client/function.lua
 controlDisabled = false
 
 function platypus.DisableAllControlActions(disable)  
@@ -421,3 +453,30 @@ function platypus.Craft(recipeItemsArray, resultItemsArray, animLib, animName, a
     message = "Recette terminée"
 	})
 end
+=======
+function venato.callServer(eventName, arg)
+  local response = nil
+  TriggerServerEvent(eventName, arg)
+  RegisterNetEvent(eventName..":cb")
+  AddEventHandler(eventName..":cb", function(cb)
+    response = cb
+  end)
+  while response == nil do
+    Citizen.Wait(10)
+  end
+  return response
+end
+
+function venato.getDataPlayer()
+  local response = nil
+  TriggerServerEvent("venato:GetDataPlayer")
+  RegisterNetEvent("venato:GetDataPlayer:cb")
+  AddEventHandler("venato:GetDataPlayer:cb", function(cb)
+    response = cb
+  end)
+  while response == nil do
+    Citizen.Wait(10)
+  end
+  return response
+end
+>>>>>>> master:resources/venato/client/function.lua

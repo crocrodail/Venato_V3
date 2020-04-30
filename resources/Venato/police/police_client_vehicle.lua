@@ -93,7 +93,7 @@ function POLICE_SpanwVehicleCar(data)
 		local distance = GetDistanceBetweenCoords(stationGarage[1].x, stationGarage[1].y, stationGarage[1].z, plyCoordsPolice["x"], plyCoordsPolice["y"], plyCoordsPolice["z"], true)
 		
 		local pos = distance < 30 and policeveh[data.model] or plyCoordsPolice
-		platypus.CreateVehicle(hash, {x=pos.x,y=pos.y,z=pos.z}, pos.h, function(veh)
+		venato.CreateVehicle(hash, {x=pos.x,y=pos.y,z=pos.z}, pos.h, function(veh)
 		
 		SetModelAsNoLongerNeeded(hash)
 		
@@ -142,7 +142,7 @@ function POLICE_SpanwVehicleCar(data)
 
 		fakecar = { model = data.model, car = veh}	
 		
-        SetPedIntoVehicle(platypus.GetPlayerPed(), veh, -1)
+        SetPedIntoVehicle(venato.GetPlayerPed(), veh, -1)
 		TriggerEvent('Menu:Close')
 	end)
 end

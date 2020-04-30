@@ -57,8 +57,8 @@ AddEventHandler("Entreprise:HirePlayer", function(idEntreprise, identifier)
   local source = source
   if idEntreprise ~= 8 then
     if not ConfigEnterprise[idEntreprise].Gang then
-      if platypus.CheckChomage(identifier) then
-        platypus.RemoveChomage(identifier)
+      if venato.CheckChomage(identifier) then
+        venato.RemoveChomage(identifier)
       end  
     end
 
@@ -69,7 +69,7 @@ AddEventHandler("Entreprise:HirePlayer", function(idEntreprise, identifier)
     end
   end
 
-  TriggerEvent("platypus:AddJob", idEntreprise, identifier)
+  TriggerEvent("venato:AddJob", idEntreprise, identifier)
   TriggerClientEvent("Entreprise:HirePlayer:cb", source, idEntreprise)
 end)
 
@@ -78,8 +78,8 @@ AddEventHandler("Entreprise:FirePlayer", function(data)
   local source = source
   if data[1] ~= 8 then
     if not ConfigEnterprise[data[1]].Gang then  
-      if platypus.NbJob(data[2]) <= 1 then
-        platypus.AddChomage(data[2])
+      if venato.NbJob(data[2]) <= 1 then
+        venato.AddChomage(data[2])
       end  
     end
     
@@ -89,7 +89,7 @@ AddEventHandler("Entreprise:FirePlayer", function(data)
       })
     end
   end
-  TriggerEvent("platypus:RemoveJob", data)
+  TriggerEvent("venato:RemoveJob", data)
   TriggerClientEvent("Entreprise:FirePlayer:cb", source, data[1])
 end)
 
@@ -111,13 +111,13 @@ AddEventHandler("Entreprise:PayPlayer", function(data, pay)
       ["@date"] = date,
     }, function(cheque)
       defaultNotification.message = "Vous avez payer " .. pay .. " € de salaire à "..data[3].."."
-      TriggerClientEvent('platypus:notify', source, defaultNotification)
+      TriggerClientEvent('venato:notify', source, defaultNotification)
       TriggerClientEvent("Entreprise:HirePlayer:cb", source, data[1])
       MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=data[2]}, function(result)
         if result[1] ~= nil then
             if result[1].source ~= 'disconnect' then
               defaultNotification.message = "Vous avez reçu " .. pay .. " € de salaire de la part de "..enterpriseName.."."
-              TriggerClientEvent('platypus:notify', source, defaultNotification)
+              TriggerClientEvent('venato:notify', source, defaultNotification)
               DataPlayers[result[1].source].Documents[cheque[1]] = cheque
             end
         end

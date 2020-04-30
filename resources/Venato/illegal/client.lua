@@ -19,13 +19,13 @@ Citizen.CreateThread(function()
         Wait(0)
         for i=1, #drugs, 1 do
             if drugs[i].farm then
-                distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), drugs[i].farm.x, drugs[i].farm.y, drugs[i].farm.z, true)
+                distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), drugs[i].farm.x, drugs[i].farm.y, drugs[i].farm.z, true)
                 if distance < 2 then --and nbPolice > 0 then
                     is_on_farm_zone = true
                     if not farmInProgress then
-                        platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour récupérer de '.. drugs[i].title)
+                        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour récupérer de '.. drugs[i].title)
                     else
-                        platypus.InteractTxt('Récupération de '.. drugInProgress.title .. ' en cours ...')
+                        venato.InteractTxt('Récupération de '.. drugInProgress.title .. ' en cours ...')
                     end
                     if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                         farmInProgress = true
@@ -34,13 +34,13 @@ Citizen.CreateThread(function()
                 end
             end
             if drugs[i].transform then
-                distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), drugs[i].transform.x, drugs[i].transform.y, drugs[i].transform.z, true)
+                distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), drugs[i].transform.x, drugs[i].transform.y, drugs[i].transform.z, true)
                 if distance < 2 then --and nbPolice > 0 then
                     is_on_transform_zone = true
                     if not transformInProgress then
-                        platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour transformer '.. drugs[i].title)
+                        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour transformer '.. drugs[i].title)
                     else
-                        platypus.InteractTxt('Transformation de '.. drugInProgress.title .. ' en cours ...')
+                        venato.InteractTxt('Transformation de '.. drugInProgress.title .. ' en cours ...')
                     end
                     if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                         transformInProgress = true
@@ -49,13 +49,13 @@ Citizen.CreateThread(function()
                 end
             end
             if drugs[i].sell then
-                distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), drugs[i].sell.x, drugs[i].sell.y, drugs[i].sell.z, true)
+                distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), drugs[i].sell.x, drugs[i].sell.y, drugs[i].sell.z, true)
                 if distance < 2 then --and nbPolice > 0 then
                     is_on_sell_zone = true
                     if not sellInProgress then
-                        platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour vendre '.. drugs[i].title)
+                        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour vendre '.. drugs[i].title)
                     else
-                        platypus.InteractTxt('Vente de '.. drugInProgress.title .. ' en cours ...')
+                        venato.InteractTxt('Vente de '.. drugInProgress.title .. ' en cours ...')
                     end
                     if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                       if nbPolice > 0 then
@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
                         drugInProgress = drugs[i]
                       else
                         defaultNotification.message = "Il n'y a pas assez d'agent en service pour vendre"
-                        platypus.notify(defaultNotification)
+                        venato.notify(defaultNotification)
                       end
                     end
                 end
@@ -104,7 +104,7 @@ Citizen.CreateThread(function()
                 TriggerServerEvent("illegal:sell", drugInProgress.id)
             end
             if(farmInProgress or transformInProgress or sellInProgress) then
-                platypus.playAnim({lib = "mp_common", flag= 48, anim = "givetake2_a", useLib = true})
+                venato.playAnim({lib = "mp_common", flag= 48, anim = "givetake2_a", useLib = true})
             end
 
         end

@@ -67,6 +67,8 @@ client_script {
   '/StopDespawn/client.lua',
   '/crafts/client.lua',
   '/sellToNpc/client.lua',
+  '/gardeRobe/client.lua',
+  '/gardeRobe/config.lua',
 }
 
 server_script {
@@ -113,6 +115,7 @@ server_script {
   '/StopDespawn/server.lua',
   '/crafts/server.lua',
   '/sellToNpc/server.lua',
+  '/gardeRobe/server.lua',
 }
 
 files {

@@ -99,7 +99,7 @@ end)
 RegisterServerEvent('police:checkIsCop')
 AddEventHandler('police:checkIsCop', function(source)
 	local source = source
-	local identifier = platypus.GetSteamID(source)
+	local identifier = venato.GetSteamID(source)
 	checkIsCop(identifier, source)
 end)
 
@@ -167,11 +167,11 @@ AddEventHandler('police:checkingPlate', function(plate, model)
 			if ( result[1]) then
 				for _, v in ipairs(result) do
 					defaultNotification.message = "Modèle : <span class='yellow--text'>"..v.name .."</span><br/> Plaque: <span class='yellow--text'>"..plate.."</span> Propriétaire : <span class='yellow--text'>" .. v.nom .. " ".. v.prenom .. "</span>"
-					platypus.notify(mysource, defaultNotification)					
+					venato.notify(mysource, defaultNotification)					
 				end
 			else				
 				defaultNotification.message = "Modèle : <span class='yellow--text'>".. model .."</span><br/> Plaque: <span class='yellow--text'>"..plate.."</span> Propriétaire : <span class='green--text'>Moldu</span>"
-				platypus.notify(mysource, defaultNotification)				
+				venato.notify(mysource, defaultNotification)				
 			end
 		end)
 end)
@@ -180,7 +180,7 @@ RegisterServerEvent('police:confirmUnseat')
 AddEventHandler('police:confirmUnseat', function(t)
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. " est sorti !"
-	platypus.notify(source, defaultNotification)
+	venato.notify(source, defaultNotification)
 	TriggerClientEvent('police:unseatme', t)
 end)
 
@@ -191,7 +191,7 @@ AddEventHandler('police:targetCheckInventory', function(t, newSource)
 	if newSource ~= nil then
 		source = newSource
 	end
-	local targetSI = platypus.GetSteamID(t)	
+	local targetSI = venato.GetSteamID(t)	
 
 	local info = checkInventory(source, targetSI, t)
 	TriggerClientEvent('police:targetCheckInventory:cb', source, info)		
@@ -203,16 +203,16 @@ AddEventHandler('police:finesGranted', function(t, amount, reason)
 
 	defaultNotification.message = GetPlayerName(t).. " a payé "..amount.."€ d'amende pour : " .. reason
 	defaultNotification.timeout = 5000
-	local paymentCB = platypus.paymentCB(t, amount, true)
+	local paymentCB = venato.paymentCB(t, amount, true)
 	if paymentCB.status then
 		TriggerClientEvent('police:payFines', t, amount, reason)
 		TriggerEvent('vnt:chestaddmonney', 20, math.floor(amount/2))		
-		platypus.notify(source, defaultNotification)
+		venato.notify(source, defaultNotification)
 	else
 		defaultNotification.message = paymentCB.message
-		platypus.notify(t, defaultNotification)
+		venato.notify(t, defaultNotification)
 		defaultNotification.message = "Une erreur est survenue lors du paiement : "..paymentCB.message
-		platypus.notify(source, defaultNotification)
+		venato.notify(source, defaultNotification)
 	end
 end)
 
@@ -220,7 +220,7 @@ RegisterServerEvent('police:cuffGranted')
 AddEventHandler('police:cuffGranted', function(t)	
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. " menotes enlevées !"
-	platypus.notify(source, defaultNotification)
+	venato.notify(source, defaultNotification)
 
 	TriggerClientEvent('police:getArrested', t)
 end)
@@ -229,7 +229,7 @@ RegisterServerEvent('police:cuffGrantedHRP')
 AddEventHandler('police:cuffGrantedHRP', function(t)	
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. " menotes enlevées !"
-	platypus.notify(source, defaultNotification)
+	venato.notify(source, defaultNotification)
 
 	TriggerClientEvent('police:getArrestedHRP', t)
 end)
@@ -238,7 +238,7 @@ RegisterServerEvent('police:forceEnterAsk')
 AddEventHandler('police:forceEnterAsk', function(t, v)
 	local source = source
 	defaultNotification.message = GetPlayerName(t).. "  entre dans la voiture"
-	platypus.notify(source, defaultNotification)
+	venato.notify(source, defaultNotification)
 	TriggerClientEvent('police:forcedEnteringVeh', t, v)
 end)
 
@@ -271,7 +271,7 @@ AddEventHandler("police:removeWeapon", function(data)
 	notif.message = 'Fouille'
 	notif.logo = "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png"
 	notif.message = 'Vous êtes fait saisir votre '..data.libelle
-	platypus.notify(data.targetSource, notif)
+	venato.notify(data.targetSource, notif)
 	TriggerEvent("Inventory:RemoveWeapon", data.wepond, data.id, data.poid, data.targetSource)
 end)
 

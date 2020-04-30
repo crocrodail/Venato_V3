@@ -110,12 +110,12 @@ function POLICE_deleteVehicle()
 
             if ( GetPedInVehicleSeat( vehicle, -1 ) == ped ) then
                 defaultNotification.message = "Véhicule supprimé"
-                platypus.notify(defaultNotification)
+                venato.notify(defaultNotification)
                 SetEntityAsMissionEntity( vehicle, true, true )
                 deleteCar( vehicle )
             else
                 defaultNotification.message = "Mettez vous à la place du conducteur"
-                platypus.notify(defaultNotification)
+                venato.notify(defaultNotification)
             end
         else
             local playerPos = GetEntityCoords( ped, 1 )
@@ -124,12 +124,12 @@ function POLICE_deleteVehicle()
 
             if ( DoesEntityExist( vehicle ) ) then
                 defaultNotification.message = "Véhicule supprimé"
-                platypus.notify(defaultNotification)
+                venato.notify(defaultNotification)
                 SetEntityAsMissionEntity( vehicle, true, true )
                 deleteCar( vehicle )
             else
                 defaultNotification.message = "Rapprocher vous d'un véhicule"
-                platypus.notify(defaultNotification)
+                venato.notify(defaultNotification)
             end
         end
     end

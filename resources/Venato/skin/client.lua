@@ -47,7 +47,11 @@ Citizen.CreateThread(function()
     while inEdit == true do
       Citizen.Wait(0)
       local alt = 0.05
+<<<<<<< HEAD:resources/Venato/skin/client.lua
       if GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
+=======
+      if GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
+>>>>>>> master:resources/venato/skin/client.lua
         alt = 0.15
       end
       local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z + 75
@@ -113,10 +117,17 @@ function OpenCreatMainMenu()
   ShutdownLoadingScreen()
   fCanCancelOrStartAnim(false)
   PersonnalisationMenu = true
+<<<<<<< HEAD:resources/Venato/skin/client.lua
   local ped = platypus.GetPlayerPed()
   SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
   Coords = GetEntityCoords(ped, true)
   Prop = platypus.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+=======
+  local ped = venato.GetPlayerPed()
+  SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
+  Coords = GetEntityCoords(ped, true)
+  Prop = venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+>>>>>>> master:resources/venato/skin/client.lua
   firstcamspawn()
   SetEntityHeading(Prop, 27.0)
   SetEntityCollision(Prop, false, true)
@@ -150,9 +161,9 @@ function skinMenu(skin)
     SetPlayerModel(PlayerId(), skin)
     SetModelAsNoLongerNeeded(skin)
     -- SetPedHeadBlendData(playerPed, 0, 0, skin, 0, 0, skin, 1.0, 1.0, 1.0, true)
-    SetPedDefaultComponentVariation(platypus.GetPlayerPed())
-    SetPedComponentVariation(platypus.GetPlayerPed(), 2, 0, 0, 0)
-    AttachEntityToEntity(platypus.GetPlayerPed(), Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
+    SetPedDefaultComponentVariation(venato.GetPlayerPed())
+    SetPedComponentVariation(venato.GetPlayerPed(), 2, 0, 0, 0)
+    AttachEntityToEntity(venato.GetPlayerPed(), Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
 end
 
 function shapeMenu(skin)
@@ -162,7 +173,7 @@ function shapeMenu(skin)
     Menu.setSubtitle("Forme du visage")
     Menu.clearMenu()
     Menu.addButton2("Retour", "modelMenu", nil, nil)
-    if GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
+    if GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
         Menu.addButton2("Visage n°1", "setShapeEnter", 21, "setShape")
         Menu.addButton2("Visage n°2", "setShapeEnter", 22, "setShape")
         Menu.addButton2("Visage n°3", "setShapeEnter", 23, "setShape")
@@ -215,8 +226,8 @@ function shapeMenu(skin)
 end
 
 function setShape(skin)
-    SetPedHeadBlendData(platypus.GetPlayerPed(), skin, skin, skin, 0, 0, 0, 1.0, 1.0, 1.0, true)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 0, skin, 0, 0)
+    SetPedHeadBlendData(venato.GetPlayerPed(), skin, skin, skin, 0, 0, 0, 1.0, 1.0, 1.0, true)
+    SetPedComponentVariation(venato.GetPlayerPed(), 0, skin, 0, 0)
 
 end
 
@@ -255,8 +266,8 @@ function bodyColor()
     Menu.CreateMenu()
 end
 function setBodyColor(skin)
-    SetPedHeadBlendData(platypus.GetPlayerPed(), current_skin.head, current_skin.head, current_skin.head, skin, skin, skin, 1.0, 1.0, 1.0, true)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 0, skin, 0, 0)
+    SetPedHeadBlendData(venato.GetPlayerPed(), current_skin.head, current_skin.head, current_skin.head, skin, skin, skin, 1.0, 1.0, 1.0, true)
+    SetPedComponentVariation(venato.GetPlayerPed(), 0, skin, 0, 0)
 end
 function setBodyColorEnter(skin)
     current_skin.body_color = skin
@@ -276,8 +287,8 @@ function eyebrowsMenu()
 end
 
 function eyebrowsSelectorMenu(id)
-    SetPedHeadOverlay(platypus.GetPlayerPed(),  2,  id,  0.9)
-    SetPedHeadOverlayColor(platypus.GetPlayerPed(),  2, 1, 1, 0)
+    SetPedHeadOverlay(venato.GetPlayerPed(),  2,  id,  0.9)
+    SetPedHeadOverlayColor(venato.GetPlayerPed(),  2, 1, 1, 0)
 end
 
 function eyebrowsSelectorMenuEnter(id)
@@ -298,8 +309,8 @@ function eyebrowsColorMenu()
 end
 
 function eyebrowsColorSelectorMenu(id)
-    SetPedHeadOverlay(platypus.GetPlayerPed(),  2,  current_skin.eyebrows,  0.9)        -- Beard Color
-    SetPedHeadOverlayColor(platypus.GetPlayerPed(),  2, 1, id, 0)  -- Beard
+    SetPedHeadOverlay(venato.GetPlayerPed(),  2,  current_skin.eyebrows,  0.9)        -- Beard Color
+    SetPedHeadOverlayColor(venato.GetPlayerPed(),  2, 1, id, 0)  -- Beard
 end
 
 function eyebrowsColorSelectorMenuEnter(id)
@@ -312,7 +323,7 @@ function hairSelectorMenu()
     Menu.clearMenu()
     Menu.addButton2("Retour", "eyebrowsColorMenu", nil)
     local id = 0
-    for i = 0, GetNumberOfPedDrawableVariations(platypus.GetPlayerPed(), 2) -1 do
+    for i = 0, GetNumberOfPedDrawableVariations(venato.GetPlayerPed(), 2) -1 do
       if i ~= 23 and i ~= 24 and i ~= 61 then
         id = id + 1
         Menu.addButton2("Coupe n°"..id, "hairSelectorSwitcherEnter", i, "hairSelectorSwitcher")
@@ -323,7 +334,7 @@ function hairSelectorMenu()
 end
 
 function hairSelectorSwitcher(id)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 2, id, 0, 0)
+    SetPedComponentVariation(venato.GetPlayerPed(), 2, id, 0, 0)
 end
 
 function hairSelectorSwitcherEnter(id)
@@ -344,13 +355,13 @@ function hairColorVariationSelectorMenu()
 end
 
 function hairColorVariationSelectorSwitcher(id)
-    SetPedHairColor(platypus.GetPlayerPed(), id,4)
+    SetPedHairColor(venato.GetPlayerPed(), id,4)
 end
 
 function hairColorVariationSelectorSwitcherEnter(id)
     current_skin.hair_color = id
     current_step = 7
-    if GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
+    if GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
         beardCutMenu()
     else
         endGenSkin()
@@ -380,8 +391,8 @@ function beardColorMenu()
 end
 
 function beardSelectorCutMenu(id)
-    SetPedHeadOverlay(platypus.GetPlayerPed(),  1,  id,  0.9)
-    SetPedHeadOverlayColor(platypus.GetPlayerPed(),  1,  1,  1, 1)
+    SetPedHeadOverlay(venato.GetPlayerPed(),  1,  id,  0.9)
+    SetPedHeadOverlayColor(venato.GetPlayerPed(),  1,  1,  1, 1)
 end
 
 function beardSelectorCutMenuEnter(id)
@@ -391,8 +402,8 @@ function beardSelectorCutMenuEnter(id)
 end
 
 function beardSelectorColorMenu(id)
-    SetPedHeadOverlay(platypus.GetPlayerPed(),  1,  current_skin.beard ,  (current_skin.beard  / 10) + 0.0)  -- Beard
-    SetPedHeadOverlayColor(platypus.GetPlayerPed(),  1,  1,  id, id)
+    SetPedHeadOverlay(venato.GetPlayerPed(),  1,  current_skin.beard ,  (current_skin.beard  / 10) + 0.0)  -- Beard
+    SetPedHeadOverlayColor(venato.GetPlayerPed(),  1,  1,  id, id)
 end
 
 function beardSelectorColorMenuEnter(id)
@@ -403,7 +414,7 @@ end
 
 function endGenSkin()
   TriggerServerEvent("ClothingShop:CallData")
-  DetachEntity(platypus.GetPlayerPed(), true, true)
+  DetachEntity(venato.GetPlayerPed(), true, true)
   DeleteEntity(Prop)
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
@@ -421,7 +432,7 @@ AddEventHandler("Skin:Create", function()
 end)
 
 
-function platypus.LoadSkin(DataUser)
+function venato.LoadSkin(DataUser)
     local skin = DataUser.Skin
     if not loaded then
       loadPlayer(DataUser)
@@ -432,18 +443,18 @@ function platypus.LoadSkin(DataUser)
         RequestModel(model)
         Citizen.Wait(0)
     end
-    if GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
+    if GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') or GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_m_freemode_01') then
       none()
     else
       SetPlayerModel(PlayerId(), model)
       SetModelAsNoLongerNeeded(model)
-      SetPedDefaultComponentVariation(platypus.GetPlayerPed())
-      SetPedComponentVariation(platypus.GetPlayerPed(), 2, 0, 0, 0)
+      SetPedDefaultComponentVariation(venato.GetPlayerPed())
+      SetPedComponentVariation(venato.GetPlayerPed(), 2, 0, 0, 0)
     end
     if skin then
-      local playerPed = platypus.GetPlayerPed()
+      local playerPed = venato.GetPlayerPed()
         local Sexemodel = GetHashKey("mp_m_freemode_01")
-        if(GetEntityModel(platypus.GetPlayerPed()) == Sexemodel) then
+        if(GetEntityModel(venato.GetPlayerPed()) == Sexemodel) then
             SetPedHeadBlendData(playerPed, skin.head, skin.head, skin.head, skin.body_color, skin.body_color, skin.body_color, 1.0, 1.0, 1.0, true)
             SetPedComponentVariation(playerPed, 0, skin.head, 0, 0)
             SetPedComponentVariation(playerPed, 2, skin.hair, 0, 0)
@@ -468,7 +479,7 @@ function platypus.LoadSkin(DataUser)
                 SetPedHeadOverlay(playerPed,  8,  -1, 0)
             end
             if skin.percing == 0 then
-                ClearPedProp(platypus.GetPlayerPed(),2)
+                ClearPedProp(venato.GetPlayerPed(),2)
             else
                 SetPedPropIndex(playerPed, 2, skin.percing,skin.percing_txt, 0)
             end
@@ -495,13 +506,13 @@ function platypus.LoadSkin(DataUser)
                 SetPedHeadOverlay(playerPed,  8,  -1, 0)
             end
             if skin.percing == 0 then
-                ClearPedProp(platypus.GetPlayerPed(),2)
+                ClearPedProp(venato.GetPlayerPed(),2)
             else
                 SetPedPropIndex(playerPed, 2, skin.percing,skin.percing_txt, 0)
             end
         end
 
-        local me = platypus.GetPlayerPed()
+        local me = venato.GetPlayerPed()
         for k, v in ipairs(skin.face) do
             local value = 1.0 * v
             SetPedFaceFeature(me, k - 1, value)
@@ -529,9 +540,15 @@ function loadPlayer(data)
     end
     SetPlayerModel(PlayerId(), data.Skin.model)
     SetModelAsNoLongerNeeded(data.Skin.model)
+<<<<<<< HEAD:resources/Venato/skin/client.lua
     SetPedDefaultComponentVariation(PlayerPedId())
     SetPedComponentVariation(PlayerPedId(), 2, 0, 0, 0)
     platypus.LoadClothes()
+=======
+    SetPedDefaultComponentVariation(GetPlayerPed(-1))
+    SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)
+    venato.LoadClothes()
+>>>>>>> master:resources/venato/skin/client.lua
   end
   RequestCollisionAtCoord(PosX, PosY, PosZ)
   local ped = PlayerPedId()

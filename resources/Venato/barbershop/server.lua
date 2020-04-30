@@ -32,7 +32,7 @@ end)
 RegisterServerEvent('barber:pay')
 AddEventHandler('barber:pay', function(price, newSkin)
 	trigger = source
-    local paymentCB = exports.platypus:ExportPaymentCB(trigger, price)
+    local paymentCB = exports.venato:ExportPaymentCB(trigger, price)
         if paymentCB.status then
             TriggerClientEvent('barber:closeMenu', trigger, {transaction = true, price = price})
             TriggerEvent('barber:saveHeadSkin', getPlayerID(trigger), {
@@ -48,10 +48,10 @@ AddEventHandler('barber:pay', function(price, newSkin)
                 makeup_opacity = newSkin.makeup_opacity or nil
             })
             notif.message = "Vous avez payé <span class='green--text'>"..price.."€</span> au coiffeur."
-            TriggerClientEvent("platypus:notify", source, notif)   
+            TriggerClientEvent("venato:notify", source, notif)   
         else  
             notif.message = paymentCB.status
-            TriggerClientEvent("platypus:notify", source, notif)          
+            TriggerClientEvent("venato:notify", source, notif)          
             TriggerClientEvent('barber:closeMenu', trigger, {transaction = false, price = price})
         end
 end)

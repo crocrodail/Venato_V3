@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
 				else 
 					defaultNotification.message = Cfg.Strings.belt_off
 				 end 
-				platypus.notify(defaultNotification)
+				venato.notify(defaultNotification)
 			end
 			
 		elseif wasInCar then

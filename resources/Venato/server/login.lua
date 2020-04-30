@@ -60,6 +60,6 @@ Citizen.CreateThread(function()
 		for k,v in pairs(DataPlayers) do
 			players = players + 1
 		end
-		TriggerClientEvent("platypus:ActuPlayer", -1, players)
+		TriggerClientEvent("venato:ActuPlayer", -1, players)
 	end
 end)

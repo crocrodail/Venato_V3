@@ -299,12 +299,12 @@ end
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    local pos = GetEntityCoords(platypus.GetPlayerPed(), true)
+    local pos = GetEntityCoords(venato.GetPlayerPed(), true)
     local canGoIn = false
 
     for k, j in pairs(TeleportFromTo) do
      
-      if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and platypus.HasJob(j.jobId)))  then
+      if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < 150.0) and (not j.whitelist or (j.whitelist and venato.HasJob(j.jobId)))  then
         if(not j.hideFrom) then
           DrawMarker(1, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101,
             255, 255, 255, 255, 0, 0, 0, 0)
@@ -321,26 +321,26 @@ Citizen.CreateThread(function()
             DrawSubtitleTimed(2000, 1)
             if IsControlJustPressed(1, 38) then
               canGoIn = true
-              local curVehicule = GetVehiclePedIsIn(platypus.GetPlayerPed(), false)
+              local curVehicule = GetVehiclePedIsIn(venato.GetPlayerPed(), false)
               if curVehicule ~= 0 then
                 if not j.acceptVehicle then
-                  platypus.notifyError("Vous ne pouvez pas rentrer avec votre véhicule")        
+                  venato.notifyError("Vous ne pouvez pas rentrer avec votre véhicule")        
                   canGoIn = false          
                 end
               end
               if canGoIn then
                 DoScreenFadeOut(500)
                 Citizen.Wait(1000)
-                FreezeEntityPosition(platypus.GetPlayerPed(), true)
-                SetEntityCoords(platypus.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)                
-                SetEntityHeading(platypus.GetPlayerPed(), j.positionTo.h)
+                FreezeEntityPosition(venato.GetPlayerPed(), true)
+                SetEntityCoords(venato.GetPlayerPed(), j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)                
+                SetEntityHeading(venato.GetPlayerPed(), j.positionTo.h)
                 if curVehicule ~= 0 then
                   entities = {}
                   for i = 0, GetVehicleMaxNumberOfPassengers(vehicle) do
                     entities[i] = GetPedInVehicleSeat(curVehicule, i)
                   end
                   SetEntityCoords(curVehicule, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1)
-                  SetPedIntoVehicle(platypus.GetPlayerPed(), curVehicule, -1)
+                  SetPedIntoVehicle(venato.GetPlayerPed(), curVehicule, -1)
                   SetEntityHeading(curVehicule, j.positionTo.h)
                   for i = 0, GetVehicleMaxNumberOfPassengers(vehicle) do
                     if entities[i] then
@@ -353,7 +353,7 @@ Citizen.CreateThread(function()
                 end
                 Citizen.Wait(500)
                 DoScreenFadeIn(1000)
-                FreezeEntityPosition(platypus.GetPlayerPed(), false)
+                FreezeEntityPosition(venato.GetPlayerPed(), false)
               end
             end
           end
@@ -374,12 +374,12 @@ Citizen.CreateThread(function()
             if IsControlJustPressed(1, 38) then
               DoScreenFadeOut(1000)
               Citizen.Wait(1000)
-              FreezeEntityPosition(platypus.GetPlayerPed(), true)
-              SetEntityCoords(platypus.GetPlayerPed(), j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1)
-              SetEntityHeading(platypus.GetPlayerPed(), j.positionFrom.h)
+              FreezeEntityPosition(venato.GetPlayerPed(), true)
+              SetEntityCoords(venato.GetPlayerPed(), j.positionFrom.x, j.positionFrom.y, j.positionFrom.z - 1)
+              SetEntityHeading(venato.GetPlayerPed(), j.positionFrom.h)
               Citizen.Wait(2000)
               DoScreenFadeIn(1000)
-              FreezeEntityPosition(platypus.GetPlayerPed(), false)
+              FreezeEntityPosition(venato.GetPlayerPed(), false)
             end
           end
         end

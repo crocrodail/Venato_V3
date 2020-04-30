@@ -81,7 +81,7 @@ local priceTop = 200
 local priceLegs = 200
 local priceShoes = 200
 
-function platypus.LoadClothes()
+function venato.LoadClothes()
   TriggerServerEvent("ClothingShop:CallData")
 end
 
@@ -90,6 +90,7 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
   if data ~= nil then
     Clothes = data.Clothes
     if canSetClothes then
+<<<<<<< HEAD:resources/Venato/clothingShop/client.lua
       SetPedComponentVariation(platypus.GetPlayerPed(), 1, 0, 0, 1)
       SetPedComponentVariation(platypus.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
       SetPedComponentVariation(platypus.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
@@ -100,6 +101,18 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
       SetPedComponentVariation(platypus.GetPlayerPed(), 9, Clothes.ComponentVariation.kevlar.id, Clothes.ComponentVariation.kevlar.color, 1)
       SetPedComponentVariation(platypus.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
       SetPedComponentVariation(platypus.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
+=======
+      SetPedComponentVariation(venato.GetPlayerPed(), 1, 0, 0, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 5, Clothes.ComponentVariation.parachute.id, Clothes.ComponentVariation.parachute.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 6, Clothes.ComponentVariation.shoes.id, Clothes.ComponentVariation.shoes.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 7, Clothes.ComponentVariation.accessory.id, Clothes.ComponentVariation.accessory.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 8, Clothes.ComponentVariation.undershirt.id, Clothes.ComponentVariation.undershirt.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 9, Clothes.ComponentVariation.kevlar.id, Clothes.ComponentVariation.kevlar.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
+      SetPedComponentVariation(venato.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
+>>>>>>> master:resources/venato/clothingShop/client.lua
     else
       canSetClothes = true
       CSsendMask()
@@ -112,7 +125,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
 		if shopOpen then
 			if Menu.hidden then
-        DetachEntity(platypus.GetPlayerPed(), true, true)
+        DetachEntity(venato.GetPlayerPed(), true, true)
         DeleteEntity(Prop)
         Vtop = false
 				shopOpen = false
@@ -129,7 +142,7 @@ Citizen.CreateThread(function()
         coordpantalong = nil
         coordchaussure = nil
         if not buyAnything then
-          platypus.LoadClothes()
+          venato.LoadClothes()
         end
       elseif noColor == false then
         DrawRect(0.4, 0.25, 0.2, 0.4, 0, 0, 0, 215)
@@ -152,14 +165,14 @@ Citizen.CreateThread(function()
         end
 			end
 		end
-    local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+    local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
     for k,v in pairs(ClothingShop) do
       if Vdist(x, y, z, v.x, v.y, v.z) < 20 then
         DrawMarker(27,v.x,v.y,v.z-0.99,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
 			end
       if Vdist(x, y, z, v.x, v.y, v.z) < 1 then
         DrawMarker(27,v.x,v.y,v.z-0.99,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
-        platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour accèder au shop.')
+        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour accèder au shop.')
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
           Menu.toggle()
           OpenClothingShop()
@@ -174,19 +187,19 @@ Citizen.CreateThread(function()
 		if ActualDomponentId ~= nil then
       if colorIndex ~= lastcolorIndex then
         lastcolorIndex = colorIndex
-        SetPedComponentVariation(platypus.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+        SetPedComponentVariation(venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
       end
 			if ActualDomponentId ~= LastArg then
 				colorIndex = 0
 			  LastArg = ActualDomponentId
-			  SetPedComponentVariation(platypus.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
+			  SetPedComponentVariation(venato.GetPlayerPed(), componentId, ActualDomponentId, colorIndex, 1)
       end
       if shopOpen and noColor then
         local scaleform = scaleformClothingShop()
         DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
-			  ShowInfoColor(GetNumberOfPedTextureVariations(platypus.GetPlayerPed(), componentId, ActualDomponentId))
+			  ShowInfoColor(GetNumberOfPedTextureVariations(venato.GetPlayerPed(), componentId, ActualDomponentId))
 			  if IsControlJustPressed(1, Keys["RIGHT"]) then
-				  if colorIndex + 1 <= GetNumberOfPedTextureVariations(platypus.GetPlayerPed(), componentId, ActualDomponentId)-1 then
+				  if colorIndex + 1 <= GetNumberOfPedTextureVariations(venato.GetPlayerPed(), componentId, ActualDomponentId)-1 then
 					  colorIndex = colorIndex + 1
 				  end
 			  end
@@ -203,13 +216,13 @@ end)
 function ChangeDomponentId(arg)
   ActualDomponentId = arg
   if componentId == 11 then
-    SetPedComponentVariation(platypus.GetPlayerPed(), 8, 15, 0, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 3, 15, 0, 1)
+    SetPedComponentVariation(venato.GetPlayerPed(), 8, 15, 0, 1)
+    SetPedComponentVariation(venato.GetPlayerPed(), 3, 15, 0, 1)
   end
 end
 
 function scaleformClothingShop()
-  local scaleform = platypus.ScaleForm("instructional_buttons")
+  local scaleform = venato.ScaleForm("instructional_buttons")
   PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
   PopScaleformMovieFunctionVoid()
   PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
@@ -231,7 +244,7 @@ end
 
 function ShowInfoColor(a)
 	DrawRect(0.5, 0.95, 0.2, 0.05, 0, 0, 0, 215)
-	printTxt("~b~Couleur : "..colorIndex.." ~s~/~b~ "..GetNumberOfPedTextureVariations(platypus.GetPlayerPed(), componentId, ActualDomponentId)-1 ,0.5, 0.933, true)
+	printTxt("~b~Couleur : "..colorIndex.." ~s~/~b~ "..GetNumberOfPedTextureVariations(venato.GetPlayerPed(), componentId, ActualDomponentId)-1 ,0.5, 0.933, true)
 end
 
 function printTxt(text, x,y, center,police)
@@ -252,7 +265,7 @@ function OpenClothingShop()
   noColor = false
   buyAnything = false
   Vtop = false
-	local ped = platypus.GetPlayerPed()
+	local ped = venato.GetPlayerPed()
   local coords = GetEntityCoords(ped)
 	x  = coords.x
 	y = coords.y
@@ -260,7 +273,7 @@ function OpenClothingShop()
 	SetEntityHeading(ped, 180)
 	shopOpen = true
   local Coords = GetEntityCoords(ped, true)
-  Prop = platypus.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+  Prop = venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
   FreezeEntityPosition(Prop, true)
   AttachEntityToEntity(ped, Prop, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 180.0, false, false, false, false, 2, false)
   SetEntityVisible(Prop, false, 0)
@@ -275,7 +288,7 @@ function OpenClothingShop()
 	SetEntityCoords(ped, coords.x+0.0, coords.y+0.0, coords.z)
   Menu.clearMenu()
   TriggerEvent('Menu:Init', "Magasin de vétements", "Ca vous va à merveille !", "#455A64BF", "https://www.pret-a-porter-femme.com/wp-content/uploads/2016/10/magasins-de-vetement.jpg" )
-  --if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
+  if debug then TriggerEvent('Menu:AddButton2',"Changer de sexe", "CSswitchsex", '', '', "https://i.ibb.co/5syzbqT/icons8-gender-symbols-96px.png") end
   TriggerEvent('Menu:AddButton2',"Masque", "CMask", '', '', "https://i.ibb.co/fqMn3sv/icons8-anonymous-mask-96px.png")
   TriggerEvent('Menu:AddButton2',"Haut", "ClothesShopMenuTop", '', '', "https://i.ibb.co/8YRG4Rt/icons8-t-shirt-96px-1.png")
 	TriggerEvent('Menu:AddButton2',"Pantalon", "CSpantalong", '', '', "https://i.ibb.co/ZJmNjMK/icons8-jeans-96px.png")
@@ -312,7 +325,7 @@ function ClothesShopMenuTop()
 end
 
 function BuyClothe()
-  local ped = platypus.GetPlayerPed()
+  local ped = venato.GetPlayerPed()
   DataUser.Clothes.ComponentVariation.Mask.id = GetPedDrawableVariation(ped, 1)
   DataUser.Clothes.ComponentVariation.Mask.color = GetPedTextureVariation(ped, 1)
   tablee = {
@@ -338,7 +351,7 @@ function BuyClothe()
   }
   canSetClothes = false
   TriggerServerEvent("ClothingShop:SaveClothes", tablee, tatalPrice)
-  platypus.LoadClothes()
+  venato.LoadClothes()
 end
 
 function CSsendMask()
@@ -351,24 +364,24 @@ AddEventHandler("ClothingShop:SaveClothes:response", function(response)
   if response.status then
    buyAnything = true
    Menu.close()
-   platypus.LoadClothes()
+   venato.LoadClothes()
    local defaultNotification = {
     title= "Magasin de vêtements",
     logo = "https://img.icons8.com/nolan/64/000000/clothes.png",
     message = "La transaction s'est bien passé ! Ces vêtements sont à vous.",
    }
-   platypus.notify(defaultNotification)
+   venato.notify(defaultNotification)
   else
-    platypus.notifyError(response.message)
+    venato.notifyError(response.message)
     Menu.close()
-    platypus.LoadClothes()
+    venato.LoadClothes()
   end
 end)
 
 function CSswitchsex()
   Citizen.CreateThread(function()
-    DetachEntity(platypus.GetPlayerPed(), true, true)
-  if(GetEntityModel(platypus.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
+    DetachEntity(venato.GetPlayerPed(), true, true)
+  if(GetEntityModel(venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) then
     local model = "mp_f_freemode_01"
     RequestModel(model)
     while not HasModelLoaded(model) do
@@ -377,8 +390,8 @@ function CSswitchsex()
     end
     SetPlayerModel(PlayerId(), model)
     SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(platypus.GetPlayerPed())
-    SetPedComponentVariation(platypus.GetPlayerPed(), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(venato.GetPlayerPed())
+    SetPedComponentVariation(venato.GetPlayerPed(), 2, 0, 0, 0)
   else
     local model = "mp_m_freemode_01"
     RequestModel(model)
@@ -388,8 +401,8 @@ function CSswitchsex()
     end
     SetPlayerModel(PlayerId(), model)
     SetModelAsNoLongerNeeded(model)
-    SetPedDefaultComponentVariation(platypus.GetPlayerPed())
-    SetPedComponentVariation(platypus.GetPlayerPed(), 2, 0, 0, 0)
+    SetPedDefaultComponentVariation(venato.GetPlayerPed())
+    SetPedComponentVariation(venato.GetPlayerPed(), 2, 0, 0, 0)
   end
 end)
 end
@@ -403,20 +416,20 @@ function CSAccessoire()
   SetCamActive(cam,  false)
   RenderScriptCams(false,  false,  0,  true,  true)
 	local id = 1
-	local ped = platypus.GetPlayerPed()
+	local ped = venato.GetPlayerPed()
 	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListAccessoireMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListAccessoireFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -438,20 +451,20 @@ function CStop()
   SetCamCoord(cam,  x,  y-1.0,  z+0.5)
 	PointCamAtCoord(cam,x,y,z)
 	local id = 1
-	local ped = platypus.GetPlayerPed()
+	local ped = venato.GetPlayerPed()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListTorsoMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListTorsoFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -480,21 +493,21 @@ function CStopSecondary()
   componentId = 8
   Menu.clearMenu()
   local id = 1
-  local ped = platypus.GetPlayerPed()
+  local ped = venato.GetPlayerPed()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   Menu.addButton2("Retour", "ClothesShopMenuTop", nil)
   for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
   	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
   		for k,v in pairs(BlackListTorso2Male) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
   		end
 		else
 			for k,v in pairs(BlackListTorso2Female) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
@@ -523,20 +536,20 @@ function CSBras()
   componentId = 3
   Menu.clearMenu()
   local id = 1
-  local ped = platypus.GetPlayerPed()
+  local ped = venato.GetPlayerPed()
   TriggerEvent('Menu:AddButton2',"<span class='red--text'>Retour</span>", "ClothesShopMenuTop", '', '', "https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png")
   for i=0,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
   	if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
   		for k,v in pairs(BlackListBrasMale) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
   		end
 		else
 			for k,v in pairs(BlackListBrasFemale) do
-  			if i == v then
+  			if i == v and not debug then
   				dont = true
   				break
   			end
@@ -573,20 +586,20 @@ function CMask()
   SetCamCoord(cam,  x,  y-1.0,  z+0.5)
 	PointCamAtCoord(cam,x,y,z+0.8)
 	local id = 1
-	local ped = platypus.GetPlayerPed()
+	local ped = venato.GetPlayerPed()
 	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
     local dont = false
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListMaskMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListMaskFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -613,20 +626,20 @@ function CSchausure()
   SetCamCoord(cam,  x,  y-1.0,  z-0.5)
 	PointCamAtCoord(cam,x,y,z-0.8)
 	local id = 1
-	local ped = platypus.GetPlayerPed()
+	local ped = venato.GetPlayerPed()
 	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListShoesMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListShoesFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
@@ -679,20 +692,20 @@ function CSpantalong()
   SetCamCoord(cam,  x,  y-1.0,  z)
 	PointCamAtCoord(cam,x,y,z-0.5)
 	local id = 1
-	local ped = platypus.GetPlayerPed()
+	local ped = venato.GetPlayerPed()
 	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
 		local dont = false
 		if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListLegMale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end
 			end
 		else
 			for k,v in pairs(BlackListLegFemale) do
-				if i == v then
+				if i == v and not debug then
 					dont = true
 					break
 				end

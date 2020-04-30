@@ -51,14 +51,14 @@ end)
 RegisterServerEvent('garagesmeca:getvehiclemy')
 AddEventHandler('garagesmeca:getvehiclemy', function(vhl)
     local currentSource = source
-	  local paymentCB = platypus.paymentCB(currentSource, 5000)
+	  local paymentCB = venato.paymentCB(currentSource, 5000)
     if paymentCB.status then
       local notif = {
         title= "Fourière",
         logo = "https://static.thenounproject.com/png/72-200.png",
         message = "Vous avez payé 5000€.",
       }
-      TriggerClientEvent("platypus:notify",currentSource, notif)
+      TriggerClientEvent("venato:notify",currentSource, notif)
       TriggerClientEvent('garagesmeca:spawnvehicle',currentSource,vhl)
       MySQL.Async.execute("UPDATE user_vehicle SET state=1 WHERE owner=@owner AND name = @model AND plate = @plate", {['@owner'] = identifiers, ['@model'] =  vhl.model, ['@plate'] = vhl.plate})
     else
@@ -68,6 +68,6 @@ AddEventHandler('garagesmeca:getvehiclemy', function(vhl)
         logo = "https://static.thenounproject.com/png/72-200.png",
         message = paymentCB.message,
       }
-      TriggerClientEvent("platypus:notify",currentSource, notif)
+      TriggerClientEvent("venato:notify",currentSource, notif)
     end
 end)

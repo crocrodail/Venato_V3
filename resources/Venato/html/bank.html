@@ -248,7 +248,7 @@
         bank = Number(bank) + Number($("#amount").val());
         cash = Number(cash) - Number($("#amount").val());
         if (bank < 0 || cash < 0) {
-          $.post("http://platypus/errorbank");
+          $.post("http://venato/errorbank");
           bank = lastbank;
           cash = lastcash;
           $("#depositUI").hide();
@@ -256,7 +256,7 @@
           $("#amount").val("");
         } else {
           $.post(
-            "http://platypus/insert",
+            "http://venato/insert",
             JSON.stringify({
               money: $("#amount").val()
             })
@@ -277,7 +277,7 @@
         bank = Number(bank) - Number($("#amountt").val());
         cash = Number(cash) + Number($("#amountt").val());
         if (bank < 0 || cash < 0) {
-          $.post("http://platypus/errorbank");
+          $.post("http://venato/errorbank");
           bank = lastbank;
           cash = lastcash;
           $("#transferUI").hide();
@@ -285,7 +285,7 @@
           $("#amountt").val("");
         } else {
           $.post(
-            "http://platypus/transfer",
+            "http://venato/transfer",
             JSON.stringify({
               account: $("#to").val(),
               money: $("#amountt").val()
@@ -307,7 +307,7 @@
         bank = Number(bank) - Number($("#amountw").val());
         cash = Number(cash) + Number($("#amountw").val());
         if (bank < 0 || cash < 0) {
-          $.post("http://platypus/errorbank");
+          $.post("http://venato/errorbank");
           bank = lastbank;
           cash = lastcash;
           $("#withdrawUI").hide();
@@ -315,7 +315,7 @@
           $("#amountw").val("");
         } else {
           $.post(
-            "http://platypus/take",
+            "http://venato/take",
             JSON.stringify({
               money: $("#amountw").val()
             })
@@ -331,7 +331,7 @@
         if (key == 27) {
           $("#general, #transferUI, #withdrawUI, #depositUI, #topbar").hide();
           $("body").removeClass("active");
-          $.post("http://platypus/closeBank", JSON.stringify({}));
+          $.post("http://venato/closeBank", JSON.stringify({}));
           window.location.href = "index.html";
         }
       };

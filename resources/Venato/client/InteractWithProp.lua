@@ -33,24 +33,30 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		if NextTo ~= nil and Prop ~= nil then
 			local coordProp = GetEntityCoords(Prop, true)
-			platypus.Text3D(coordProp.x, coordProp.y, coordProp.z, "Appuyez sur ~g~E~s~ "..PropData[NextTo].text)
+			venato.Text3D(coordProp.x, coordProp.y, coordProp.z, "Appuyez sur ~g~E~s~ "..PropData[NextTo].text)
 			if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 				if not AttachOnProp then
-					AttachEntityToEntity(platypus.GetPlayerPed(), Prop, nil, PropData[NextTo].x, PropData[NextTo].y, PropData[NextTo].z, 0.0, 0.0, PropData[NextTo].h, false, false, false, false, 2, true)
+					AttachEntityToEntity(venato.GetPlayerPed(), Prop, nil, PropData[NextTo].x, PropData[NextTo].y, PropData[NextTo].z, 0.0, 0.0, PropData[NextTo].h, false, false, false, false, 2, true)
 					if PropData[NextTo].anim ~= false then
 						local Libb = true
 						if PropData[NextTo].anim.lib == 'nil' then
 							Libb = false
 						end
-						platypus.playAnim({lib = PropData[NextTo].anim.lib, anim = PropData[NextTo].anim.anim, useLib = Libb, flag = PropData[NextTo].anim.flag})
+						venato.playAnim({lib = PropData[NextTo].anim.lib, anim = PropData[NextTo].anim.anim, useLib = Libb, flag = PropData[NextTo].anim.flag})
 						AttachOnProp = true
 						FreezeEntityPosition(PlayerPedId(), true)
 					end
 				else
 					AttachOnProp = false
+<<<<<<< HEAD:resources/Venato/client/InteractWithProp.lua
 					DetachEntity(platypus.GetPlayerPed())
 					ClearPedTasks(PlayerPedId())
 					FreezeEntityPosition(PlayerPedId(), false)
+=======
+					DetachEntity(venato.GetPlayerPed())
+					ClearPedTasks(GetPlayerPed(-1))
+					FreezeEntityPosition(GetPlayerPed(-1), false)
+>>>>>>> master:resources/venato/client/InteractWithProp.lua
 				end
 			end
 		end

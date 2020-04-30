@@ -10,8 +10,8 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Sn8gqHX/icons8-safe-96px.png"
 }
 
-RegisterNetEvent("platypusSpawn")
-AddEventHandler("platypusSpawn", function()
+RegisterNetEvent("venatoSpawn")
+AddEventHandler("venatoSpawn", function()
   TriggerServerEvent("Coffre:CallData")
 end)
 
@@ -27,7 +27,7 @@ AddEventHandler("Coffre:CallData:cb", function(Coffre, user)
     TriggerEvent('Menu:AddButton2', "Parametres","CoffreParametre", coffre_index, '', "https://i.ibb.co/cQmJ84r/icons8-administrative-tools-96px.png")
 
     if DataCoffre[coffre_index].argentcapacite ~= 0 then
-    TriggerEvent('Menu:AddButton2', platypus.FormatMoney(DataCoffre[coffre_index].argent,2).."€ / "..platypus.FormatMoney(DataCoffre[coffre_index].argentcapacite,2).."€", "CoffreMenuMoney", coffre_index, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
+    TriggerEvent('Menu:AddButton2', venato.FormatMoney(DataCoffre[coffre_index].argent,2).."€ / "..venato.FormatMoney(DataCoffre[coffre_index].argentcapacite,2).."€", "CoffreMenuMoney", coffre_index, '', "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png")
     end
 
     if DataCoffre[coffre_index].maxWeapon ~= 0 then
@@ -73,7 +73,11 @@ Citizen.CreateThread(function()
   TriggerServerEvent("Coffre:ReloadCoffre")
   while true do
     Citizen.Wait(0)
+<<<<<<< HEAD:resources/Venato/coffre/client.lua
     local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+=======
+    local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
+>>>>>>> master:resources/venato/coffre/client.lua
     for k,v in pairs(DataCoffre) do
       if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) then
         indexLoop = k
@@ -88,7 +92,11 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
+<<<<<<< HEAD:resources/Venato/coffre/client.lua
       platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
+=======
+      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
+>>>>>>> master:resources/venato/coffre/client.lua
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         TriggerServerEvent("Coffre:CheckWhitelist", indexLoop)
         coffre_index = indexLoop
@@ -100,7 +108,7 @@ end)
 RegisterNetEvent("Coffre:CheckWhitelist:cb")
 AddEventHandler("Coffre:CheckWhitelist:cb", function(result)
   if result.status then
-    platypus.playAnim({
+    venato.playAnim({
       useLib = true,
       flag = 48,
       lib = "missheistfbisetup1",
@@ -111,7 +119,7 @@ AddEventHandler("Coffre:CheckWhitelist:cb", function(result)
     Menu.toggle()
   else
     defaultNotification.message = "Vous ne connaissez pas le code de "..DataCoffre[coffre_index].nom
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
   end
 end)
 
@@ -144,11 +152,15 @@ function CoffreAddItem(index)
 end
 
 function CoffreDropItem(row)
-  local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à déposer")
+  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à déposer")
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("Coffre:DropItem", qty , row)
   else
+<<<<<<< HEAD:resources/Venato/coffre/client.lua
     platypus.notifyError("Une erreur est survenue.")
+=======
+    venato.notifyError("Une erreur est survenue.")
+>>>>>>> master:resources/venato/coffre/client.lua
   end
   Menu.close()
   Citizen.Wait(500)
@@ -181,7 +193,7 @@ function CoffreConfirmDropWeapon(row)
     Menu.addButton("Non", "CoffreDropWeapon", row[1])
     Menu.addButton("Déposer l'arme dans le coffre", "CoffreDropWp", row)
   else
-    platypus.notifyError("Il n'y a pas de place pour cette arme.")
+    venato.notifyError("Il n'y a pas de place pour cette arme.")
   end
 end
 
@@ -201,7 +213,11 @@ function CoffreTakeWeapon(row)
   if DataCoffre[row[1]].weapon[row[2]].poid + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
+<<<<<<< HEAD:resources/Venato/coffre/client.lua
     platypus.notifyError("Vous n'avez plus de place pour prendre l'arme.")
+=======
+    venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
+>>>>>>> master:resources/venato/coffre/client.lua
   end
   Menu.close()
 end
@@ -216,11 +232,11 @@ end
 
 function CoffreAddWhitelist(index)
   Menu.clearMenu()
-  local name =  platypus.OpenKeyboard('', '', 250,"Nom de la personne à whitelist")
+  local name =  venato.OpenKeyboard('', '', 250,"Nom de la personne à whitelist")
   if name ~= '' then
     TriggerServerEvent("Coffre:CallWhitelistPlayer", index , name)
   else
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
   end
 end
 
@@ -274,31 +290,36 @@ function CoffreMenuMoney(index)
 end
 
 function CoffreTakeItem(row)
-  local qty =  platypus.OpenKeyboard('', '', 3,"Nombre à prendre")
+  local qty =  venato.OpenKeyboard('', '', 3,"Nombre à prendre")
   if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[row[1]].inventaire[row[2]].quantity and DataCoffre[row[1]].inventaire[row[2]].uPoid * qty <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeItems", qty , row)
   else
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
   end
   Menu.close()
 end
 
 function CoffreTakeMoney(index)
+<<<<<<< HEAD:resources/Venato/coffre/client.lua
   local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à prendre")
   if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and platypus.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
+=======
+  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à prendre")
+  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
+>>>>>>> master:resources/venato/coffre/client.lua
     TriggerServerEvent("Coffre:TakeMoney", qty , index)
   else
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
   end
   Menu.close()
 end
 
 function CoffreDropMoney(index)
-  local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à poser")
+  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à poser")
   if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) + DataCoffre[index].argent <= DataCoffre[index].argentcapacite and DataUser.Money >= tonumber(qty) then
     TriggerServerEvent("Coffre:DropMoney", qty , index)
   else
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
   end
   Menu.close()
 end

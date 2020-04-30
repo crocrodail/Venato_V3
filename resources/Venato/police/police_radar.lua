@@ -133,13 +133,13 @@ function POLICE_radar()
             LastInfo = ""
 
             defaultNotification.message = "<span class='red--text'>Radar supprimé</span>"
-            platypus.notify(defaultNotification)
+            venato.notify(defaultNotification)
             TriggerEvent('Menu:Close')
 
         else
 
             defaultNotification.message = "<span class='yellow--text'>Vous n'êtes pas devant votre radar</span>"
-            platypus.notify(defaultNotification)
+            venato.notify(defaultNotification)
 
             Citizen.Wait(1500) -- prevent spam radar
 
@@ -186,7 +186,7 @@ function POLICE_radar()
             EndTextCommandSetBlipName(RadarBlip)
 
             defaultNotification.message = "<span class='green--text'>Radar placé</span>"
-            platypus.notify(defaultNotification)
+            venato.notify(defaultNotification)
             
             TriggerEvent('Menu:Close')
         end
@@ -244,7 +244,7 @@ Citizen.CreateThread(function()
 
                 
             defaultNotification.message = "<span class='red--text'>Vous êtes parti trop loin de votre radar, il a été supprimé.</span>"
-            platypus.notify(defaultNotification)
+            venato.notify(defaultNotification)
 
             end
 

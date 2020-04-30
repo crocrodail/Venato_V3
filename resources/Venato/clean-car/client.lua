@@ -27,7 +27,7 @@ Citizen.CreateThread(function()
     setMapMarkerCleaner()
     while true do
         Citizen.Wait(0)
-        local ply = platypus.GetPlayerPed()
+        local ply = venato.GetPlayerPed()
         local plyCoords = GetEntityCoords(ply, 0)
         for _, item in pairs(cleaner) do
           local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
@@ -35,19 +35,19 @@ Citizen.CreateThread(function()
             DrawMarker(25,item.xpoint, item.ypoint, item.zpoint,0,0,0,0,0,0,0.5,0.5,0.5,0,55,118,189,0,0,0,0)
             if distance <= 2 then
                 defaultNotification.title = item.name
-                platypus.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour nettoyer votre voiture (10€).")
+                venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour nettoyer votre voiture (10€).")
                 if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement                
-                    local current = GetPlayersLastVehicle(platypus.GetPlayerPed(), true)
+                    local current = GetPlayersLastVehicle(venato.GetPlayerPed(), true)
                     if current == nil then
                         defaultNotification.message = "Le véhicule n'est pas détecté par les capteurs, montez dedans et réessayer."
-                        platypus.notify(defaultNotification)
+                        venato.notify(defaultNotification)
                     else
                         SetVehicleDirtLevel(car, 10)
                         print(GetVehicleDirtLevel(car))
                         if(GetVehicleDirtLevel(car) <= 0.5) then
                             defaultNotification.message = 'Votre véhicule est propre'
                             defaultNotification.timeout = 3500
-                            platypus.notify(defaultNotification)
+                            venato.notify(defaultNotification)
                         else
                             TriggerServerEvent("CleanCar:Clean")
                         end
@@ -62,7 +62,7 @@ end)
 
 RegisterNetEvent("CleanCar:Clean:ok")
 AddEventHandler("CleanCar:Clean:ok", function()
-    local car = GetPlayersLastVehicle(platypus.GetPlayerPed(), true)
+    local car = GetPlayersLastVehicle(venato.GetPlayerPed(), true)
     local dirt = GetVehicleDirtLevel(car)
     local effiency = 0.5
 
@@ -71,17 +71,17 @@ AddEventHandler("CleanCar:Clean:ok", function()
     print(time)
     defaultNotification.timeout = time
     defaultNotification.message = "Nettoyage en cours..."
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
     Citizen.Wait(time)
     SetVehicleDirtLevel(car, 0)
     defaultNotification.timeout = 3500
     defaultNotification.message = "Vous pouvez récupérer votre véhicule"
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
 end)
 
 RegisterNetEvent("CleanCar:Clean:ko")
 AddEventHandler("CleanCar:Clean:ko", function(paymentCB)    
     defaultNotification.timeout = 10000
     defaultNotification.message = paymentCB.message
-    platypus.notify(defaultNotification)  
+    venato.notify(defaultNotification)  
 end)

@@ -92,7 +92,7 @@ AddEventHandler('VehicleCoffre:DropItem', function(qty, plate, index)
     end
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("platypus:notifyError", source, "Erreur dans la quantité.")
+    TriggerClientEvent("venato:notifyError", source, "Erreur dans la quantité.")
   end
 end)
 
@@ -105,7 +105,7 @@ AddEventHandler('VehicleCoffre:TakeItems', function(index, qty, plate)
     TriggerEvent("VehicleCoffre:SetItems",  DataVehicle[plate].inventaire[index].quantity - qty, index, plate )
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("platypus:notifyError", source, "~r~Erreur dans la quantité.")
+    TriggerClientEvent("venato:notifyError", source, "~r~Erreur dans la quantité.")
   end
 end)
 
@@ -145,7 +145,7 @@ AddEventHandler('VehicleCoffre:TakeWpCv', function(index, plate)
     DataVehicle[plate].nbWeapon = DataVehicle[plate].nbWeapon - 1
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("platypus:notifyError", source, "Cette arme est trop lourde pour toi.")
+    TriggerClientEvent("venato:notifyError", source, "Cette arme est trop lourde pour toi.")
   end
 end)
 
@@ -162,6 +162,6 @@ AddEventHandler('VehicleCoffre:DropWpCv', function(index, plate)
     end)
     TriggerClientEvent("VehicleCoffre:Close", source)
   else
-    TriggerClientEvent("platypus:notifyError", source, "Cette arme est trop lourde pour toi.")
+    TriggerClientEvent("venato:notifyError", source, "Cette arme est trop lourde pour toi.")
   end
 end)

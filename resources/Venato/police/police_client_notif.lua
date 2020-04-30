@@ -122,8 +122,8 @@ end
 RegisterNetEvent("police:shootfired")
 AddEventHandler("police:shootfired", function(data)
     defaultNotification.message = "Coups de feu entendu !"
-    platypus.notify(defaultNotification)
-    platypus.addBlip(data[1],data[2],data[3],60000,433,1)
+    venato.notify(defaultNotification)
+    venato.addBlip(data[1],data[2],data[3],60000,433,1)
 end)
 
 
@@ -247,7 +247,7 @@ function notifIcon(icon, type, sender, title, text)
             text = POLICE_TEXT[text]
         end
         defaultNotification.message = text
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
 	end)
 end
 
@@ -264,7 +264,7 @@ AddEventHandler("police:recepMsg",function(message)
         --notifIcon("CHAR_CALL911", 1, "Police Info", false, message)
         defaultNotification.message = message
         defaultNotification.timeout = 60000
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
         defaultNotification.timeout = 3500
     end
 end)
@@ -382,7 +382,7 @@ end)
 
 RegisterNetEvent('police:callPoliceCustom')
 AddEventHandler('police:callPoliceCustom',function()
-    local raison = platypus.OpenKeyboard('', '', 100,"Raison de l'appel")
+    local raison = venato.OpenKeyboard('', '', 100,"Raison de l'appel")
     if raison ~= nil and raison ~= '' then
         callPolice(raison)
     end
@@ -390,14 +390,14 @@ end)
 
 RegisterNetEvent('police:msg')
 AddEventHandler('police:msg',function()
-    local raison = platypus.OpenKeyboard('', '0', 256,"Message à envoyer à la police")
+    local raison = venato.OpenKeyboard('', '0', 256,"Message à envoyer à la police")
     if raison ~= nil and raison ~= '' then
         TriggerServerEvent("police:msgserv", raison)
         defaultNotification.message = "Le message a bien été envoyé !"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
     else
         defaultNotification.message = "Le message n'a pas pu etre envoyé"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
     end
 end)
 
@@ -528,7 +528,7 @@ function getWeaponFouille(weapon)
     notif.message = 'Information'
     notif.logo = "https://i.ibb.co/xfFb7R6/icons8-gun-96px.png"
     notif.message = 'Vous vous êtes en fait saisir '..weapon.libelle  
-    TriggerServerEvent('platypus:NotifyPlayer', {weapon.targetSource, notif})    
+    TriggerServerEvent('venato:NotifyPlayer', {weapon.targetSource, notif})    
 
     TriggerServerEvent('police:removeWeapon', weapon)
     TriggerServerEvent('police:addWeapon', weapon)
@@ -537,7 +537,7 @@ function getWeaponFouille(weapon)
 end
 
 function getMoneyFouille(money)
-    local qty = platypus.OpenKeyboard('', "", 100, "Argent à récupérer:")
+    local qty = venato.OpenKeyboard('', "", 100, "Argent à récupérer:")
     if tonumber(qty) ~= nil and tonumber(qty) >= 0  and tonumber(qty) <= money.money then
         TriggerServerEvent('Inventory:CallInfoMoney', money.target, -qty, nil)
         print(money.targetSource)  
@@ -546,30 +546,30 @@ function getMoneyFouille(money)
         notif.message = 'Information'
         notif.logo = 'https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png'
         notif.message = 'Vous vous êtes en fait saisir '..money.money..' €'  
-        TriggerServerEvent('platypus:NotifyPlayer', {money.targetSource, notif})
+        TriggerServerEvent('venato:NotifyPlayer', {money.targetSource, notif})
         TriggerServerEvent("police:targetCheckInventory", money.targetSource)
 
     else
-        platypus.notifyError("Erreur dans le nombre renseigné.")
+        venato.notifyError("Erreur dans le nombre renseigné.")
     end
     Menu.close()
 end
 
 function getItemFouille(item)
-    local qty = platypus.OpenKeyboard('', "", 100, "Nombre à récupérer:")
+    local qty = venato.OpenKeyboard('', "", 100, "Nombre à récupérer:")
     if tonumber(qty) ~= nil and tonumber(qty) >= 0  and tonumber(qty) <= item.quantity then
         local notif = defaultNotification
         notif.title = 'Information'
         notif.logo = item.picture
         notif.message = 'Vous vous êtes en fait saisir '..item.quantity..' '..item.libelle     
-        TriggerServerEvent('platypus:NotifyPlayer', { item.targetSource, notif })
+        TriggerServerEvent('venato:NotifyPlayer', { item.targetSource, notif })
 
         TriggerServerEvent('Inventory:RemoveItem',tonumber(qty), item.id, item.targetSource)
         TriggerServerEvent('Inventory:AddItem',tonumber(qty), item.id)
         Citizen.Wait(100)
         TriggerServerEvent("police:targetCheckInventory", item.targetSource)
     else
-        platypus.notifyError("Erreur dans le nombre renseigné.")
+        venato.notifyError("Erreur dans le nombre renseigné.")
     end
     Menu.close()
 end
@@ -598,7 +598,7 @@ function POLICE_Check(isPolice)
     t, distance = GetClosestPlayer()
     if(distance ~= -1 and distance < 3) then
         if IsPlayerDead(t) then 
-            platypus.playAnim({
+            venato.playAnim({
                 useLib = true,
                 flag = 1,
                 lib = "amb@medic@standing@kneel@base",
@@ -606,7 +606,7 @@ function POLICE_Check(isPolice)
                 timeout = 500
             });
         end
-        platypus.playAnim({
+        venato.playAnim({
             useLib = true,
             flag = 48,
             lib = "anim@gangops@facility@servers@bodysearch@",
@@ -619,14 +619,14 @@ function POLICE_Check(isPolice)
         notif.logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
         notif.message = 'Vous êtes en train de vous faire fouiller'
         
-        TriggerServerEvent('platypus:NotifyPlayer', {GetPlayerServerId(t), notif})
+        TriggerServerEvent('venato:NotifyPlayer', {GetPlayerServerId(t), notif})
 
         TriggerServerEvent("police:targetCheckInventory", GetPlayerServerId(t))
-        platypus.stopAnim({
+        venato.stopAnim({
             lib = "anim@gangops@facility@servers@bodysearch@",
             anim = "player_search",
         })     
-        platypus.stopAnim({
+        venato.stopAnim({
             lib = "amb@medic@standing@kneel@base",
             anim = "base",
         })
@@ -655,7 +655,7 @@ function POLICE_Cuffed(isPolice)
             defaultNotification.title = "Gang"
             defaultNotification.logo = "https://i.ibb.co/dp3xMML/icons8-ski-mask-96px.png";
         end 
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
 	end
 end
 
@@ -676,7 +676,7 @@ function POLICE_Crocheter()
             unlockveh()
         else
             defaultNotification.message = "<span class='red--text'>Pas de véhicule proche.</span>"
-            platypus.notify(defaultNotification)
+            venato.notify(defaultNotification)
         end
 	end)
 end
@@ -692,7 +692,7 @@ function POLICE_PutInVehicle()
 		TriggerServerEvent("police:forceEnterAsk", GetPlayerServerId(t), vehicleHandle)
 	else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
 	end
 end
 
@@ -702,7 +702,7 @@ function POLICE_UnseatVehicle()
 		TriggerServerEvent("police:confirmUnseat", GetPlayerServerId(t))
 	else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
 	end
 end
 
@@ -716,7 +716,7 @@ function POLICE_CheckPlate()
 		TriggerServerEvent("police:checkingPlate", GetVehicleNumberPlateText(vehicleHandle), GetEntityModel(vehicleHandle))
     else
         defaultNotification.message = "<span class='red--text'>Pas de véhicule proche.</span>"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
         --TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, "Pas de vehicule proche!")
 	end
 end
@@ -740,15 +740,15 @@ function POLICE_FINE_CUSTOM()
     --       end
     --     else
     --       defaultNotification.message = "<span class='red--text'>Erreur dans le nombre de point de l'amende.</span>"
-    --       platypus.notify(defaultNotification)
+    --       venato.notify(defaultNotification)
     --     end
        else
         defaultNotification.message = "<span class='red--text'>Erreur dans le tarif de l'amende.</span>"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
        end
     else
       defaultNotification.message = "<span class='red--text'>Erreur dans le titre de l'amende.</span>"
-      platypus.notify(defaultNotification)
+      venato.notify(defaultNotification)
     end
 end
 
@@ -769,7 +769,7 @@ function POLICE_Fines(amount, reason, points)
         -- end
 	else
         defaultNotification.message = "<span class='red--text'>Pas de joueur proche.</span>"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
 	end
 end
 --====================================================================================
@@ -780,7 +780,7 @@ RegisterNetEvent('police:payFines')
 AddEventHandler('police:payFines', function(amount)
     defaultNotification.message = "Vous avez payé <span class='green--text'>"..amount.."</span>€ d'amende."
     defaultNotification.timeout = 5000
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
     defaultNotification.timeout = 3500
 end)
 

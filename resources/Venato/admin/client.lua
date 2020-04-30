@@ -2,7 +2,7 @@ local AdminDataPlayers = {}
 local ListPlayer = false
 local open = false
 local ClientSource = nil
-local defaultNotification = { type = "alert", title = "Staff platypus", logo = "https://i.ibb.co/mJSFL6z/icons8-error-96px.png" }
+local defaultNotification = { type = "alert", title = "Staff venato", logo = "https://i.ibb.co/mJSFL6z/icons8-error-96px.png" }
 local cheatmode = "Off"
 local wp = false
 local xtppers = "0.0"
@@ -69,7 +69,7 @@ local Skins = {
   { skin = "a_f_m_fatcult_01", libelle = "Folle (F)"},
 }
 
-function openplatypusadmin()
+function openvenatoadmin()
   Menu.clearMenu()
   Menu.open()
   AdminShowPlayerInfo = nil
@@ -108,16 +108,16 @@ function openplatypusadmin()
 end
 
 function revivevnt()
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("vnt:resurect", ClosePlayer)
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end  
 end
 
 function vehicleState()
-  local current = GetPlayersLastVehicle(PlayerPedId(), true)
+  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
   local vehicleNotification = {
     title = "Garage",
     type = "alert",
@@ -127,10 +127,10 @@ function vehicleState()
   local nbWheel = GetVehicleNumberOfWheels(current)
   local nbDoor = GetNumberOfVehicleDoors(current)
 
-  local message =  "AreAllVehicleWindowsIntact : "..platypus.DisplayBool(AreAllVehicleWindowsIntact(current)).."<br/>"
-  message = message.. "AreVehicleWingsIntact : "..platypus.DisplayBool(AreVehicleWingsIntact(current)).."<br/>"
-  message = message.. "GetIsLeftVehicleHeadlightDamaged : "..platypus.DisplayBool(GetIsLeftVehicleHeadlightDamaged(current)).."<br/>"
-  message = message.. "GetIsRightVehicleHeadlightDamaged : "..platypus.DisplayBool(GetIsRightVehicleHeadlightDamaged(current)).."<br/>"
+  local message =  "AreAllVehicleWindowsIntact : "..venato.DisplayBool(AreAllVehicleWindowsIntact(current)).."<br/>"
+  message = message.. "AreVehicleWingsIntact : "..venato.DisplayBool(AreVehicleWingsIntact(current)).."<br/>"
+  message = message.. "GetIsLeftVehicleHeadlightDamaged : "..venato.DisplayBool(GetIsLeftVehicleHeadlightDamaged(current)).."<br/>"
+  message = message.. "GetIsRightVehicleHeadlightDamaged : "..venato.DisplayBool(GetIsRightVehicleHeadlightDamaged(current)).."<br/>"
   message = message.. "GetVehicleBodyHealth : "..GetVehicleBodyHealth(current).."<br/>"
   message = message.. "GetVehicleBodyHealth2 : "..GetVehicleBodyHealth_2(current).."<br/>"
   message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
@@ -144,10 +144,10 @@ function vehicleState()
     message = message.. "GetVehicleWheelHealth "..i.." : "..GetVehicleWheelHealth(current, i).."<br/>"
   end
   for i=0, 6 do
-    message = message.. "IsVehicleDoorDamaged "..i.." : "..platypus.DisplayBool(IsVehicleDoorDamaged(current, i)).."<br/>"
+    message = message.. "IsVehicleDoorDamaged "..i.." : "..venato.DisplayBool(IsVehicleDoorDamaged(current, i)).."<br/>"
   end
   for i=0, 6 do
-    message = message.. "IsVehicleWindowIntact "..i.." : "..platypus.DisplayBool(IsVehicleWindowIntact(current, i)).."<br/>"
+    message = message.. "IsVehicleWindowIntact "..i.." : "..venato.DisplayBool(IsVehicleWindowIntact(current, i)).."<br/>"
   end
   message = message.. "GetVehicleOilLevel : "..GetVehicleOilLevel(current).."<br/>"
   
@@ -160,11 +160,11 @@ function vehicleState()
   -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
   -- message = message.. "GetVehicleCauseOfDestruction : "..GetVehicleCauseOfDestruction(current).."<br/>"
   vehicleNotification.message = message
-  platypus.notify(vehicleNotification)
+  venato.notify(vehicleNotification)
 end
 
 function damageVeh()
-  local current = GetPlayersLastVehicle(PlayerPedId(), true)
+  local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
   -- local coords = GetEntityCoords(current)
   -- local nbWheel = GetVehicleNumberOfWheels(current)
   -- local nbDoor = GetNumberOfVehicleDoors(current)
@@ -180,33 +180,33 @@ function damageVeh()
 end
 
 function healvnt()
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("vnt:heal", ClosePlayer)
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
 function AdminInvisible(value)
   if value ~= nil then
-    SetEntityVisible(platypus.GetPlayerPed(), value, nil)
-    NetworkSetEntityInvisibleToNetwork(platypus.GetPlayerPed(), value)
+    SetEntityVisible(venato.GetPlayerPed(), value, nil)
+    NetworkSetEntityInvisibleToNetwork(venato.GetPlayerPed(), value)
   else
     visible = not visible
     if visible then
-      NetworkSetEntityInvisibleToNetwork(platypus.GetPlayerPed(), true)
-      SetEntityVisible(platypus.GetPlayerPed(), true, nil)
+      NetworkSetEntityInvisibleToNetwork(venato.GetPlayerPed(), true)
+      SetEntityVisible(venato.GetPlayerPed(), true, nil)
     else
 
-    NetworkSetEntityInvisibleToNetwork(platypus.GetPlayerPed(), false)
-      SetEntityVisible(platypus.GetPlayerPed(), false, nil)
+    NetworkSetEntityInvisibleToNetwork(venato.GetPlayerPed(), false)
+      SetEntityVisible(venato.GetPlayerPed(), false, nil)
     end
   end
 end
 
 function AdminNoClip()
-  noclip_pos = GetEntityCoords(platypus.GetPlayerPed(), false)
+  noclip_pos = GetEntityCoords(venato.GetPlayerPed(), false)
   noclip = not noclip
 end
 
@@ -214,40 +214,40 @@ Citizen.CreateThread(function()
 	 while true do
 		Citizen.Wait(0)
 		  if noclip then
-			  SetEntityCoordsNoOffset(platypus.GetPlayerPed(),  noclip_pos.x,  noclip_pos.y,  noclip_pos.z,  0, 0, 0)
+			  SetEntityCoordsNoOffset(venato.GetPlayerPed(),  noclip_pos.x,  noclip_pos.y,  noclip_pos.z,  0, 0, 0)
 			if(IsControlPressed(1,  34))then
 				heading = heading + 1.5
 				if(heading > 360)then
 					heading = 0
 				end
-				SetEntityHeading(platypus.GetPlayerPed(),  heading)
+				SetEntityHeading(venato.GetPlayerPed(),  heading)
 			end
 			if(IsControlPressed(1,  9))then
 				heading = heading - 1.5
 				if(heading < 0)then
 					heading = 360
 				end
-				SetEntityHeading(platypus.GetPlayerPed(),  heading)
+				SetEntityHeading(venato.GetPlayerPed(),  heading)
 			end
 			if(IsControlPressed(1,  8))then
-				noclip_pos = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, 1.0, 0.0)
+				noclip_pos = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, 1.0, 0.0)
 			end
 			if(IsControlPressed(1,  32))then
-				noclip_pos = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, -1.0, 0.0)
+				noclip_pos = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, -1.0, 0.0)
 			end
 
 			if(IsControlPressed(1,  27))then
-				noclip_pos = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, 0.0, 1.0)
+				noclip_pos = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, 0.0, 1.0)
 			end
 			if(IsControlPressed(1,  173))then
-				noclip_pos = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, 0.0, -1.0)
+				noclip_pos = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, 0.0, -1.0)
 			end
 		end
 	end
 end)
 
 function createVeh()
-	local current = GetPlayersLastVehicle(PlayerPedId(), true)
+	local current = GetPlayersLastVehicle(GetPlayerPed(-1), true)
 	if DoesEntityExist(current) then
 		local model = GetEntityModel(current)
   	local plate = GetVehicleNumberPlateText(current)
@@ -263,12 +263,12 @@ function createVeh()
 end
 
 function respawntest()
-  local coord = GetEntityCoords(platypus.GetPlayerPed(), false)
-  local heading = GetEntityHeading(platypus.GetPlayerPed())
-  FreezeEntityPosition(platypus.GetPlayerPed(), false)
+  local coord = GetEntityCoords(venato.GetPlayerPed(), false)
+  local heading = GetEntityHeading(venato.GetPlayerPed())
+  FreezeEntityPosition(venato.GetPlayerPed(), false)
   NetworkResurrectLocalPlayer(coord.x, coord.y, coord.z, heading, true, true, false)
-  ClearPedTasksImmediately(platypus.GetPlayerPed())
-  platypus.resurect()
+  ClearPedTasksImmediately(venato.GetPlayerPed())
+  venato.resurect()
   TriggerServerEvent("Death:health", false)
   LiveFreezeNeed(false)
   fCanCancelOrStartAnim(true)
@@ -289,7 +289,7 @@ function AdminBlipsOption()
     AdminBlipsBool = false
     for k, v in pairs(AdminDataPlayers) do
       local Player = v.PlayerIdClient
-      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= platypus.GetPlayerPed() then
+      if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= venato.GetPlayerPed() then
         local ped = GetPlayerPed(Player)
         local blip = GetBlipFromEntity(ped)
         if DoesBlipExist(blip) then
@@ -308,18 +308,18 @@ end
 
 function AdminCustomTP()
   Menu.clearMenu()
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openplatypusadmin", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openvenatoadmin", nil)
   Menu.addButton("Modifier les coordonées", "coordtp", nil)
   Menu.addButton("Teleporte sur <span class='green--text'>" .. tonumber(xtppers) .. "</span>|<span class='green--text'> " .. tonumber(ytppers) .. " </span>|<span class='green--text'> " .. tonumber(ztppers),"AdminTpCustomCoord", nil)
 end
 
 function AdminTpCustomCoord()
-  SetEntityCoords(platypus.GetPlayerPed(), tonumber(xtppers) + 0.001, tonumber(ytppers) + 0.001, tonumber(ztppers) + 0.001)
+  SetEntityCoords(venato.GetPlayerPed(), tonumber(xtppers) + 0.001, tonumber(ytppers) + 0.001, tonumber(ztppers) + 0.001)
 end
 
 function coordtp()
   local coord = xtppers .. " , " .. ytppers .. " , " .. ztppers
-  local pw = platypus.OpenKeyboard('', coord, 50, "Customs Coordonées")
+  local pw = venato.OpenKeyboard('', coord, 50, "Customs Coordonées")
   local quant = 0
   if pw ~= "0.0,0.0,0.0" and pw ~= "" and pw ~= nil then
     str, sep = pw .. ',0', ","
@@ -354,7 +354,7 @@ function failcustomcoord()
   xtppers = 0.0
   ytppers = 0.0
   ztppers = 0.0
-  platypus.notifyError("Coordonées erroné !")
+  venato.notifyError("Coordonées erroné !")
   AdminCustomTP()
 end
 
@@ -373,9 +373,9 @@ function getGroundZ(x, y, z)
 end
 
 function AdminFixVehicle()
-  local vehicle = GetVehiclePedIsUsing(platypus.GetPlayerPed())
+  local vehicle = GetVehiclePedIsUsing(venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
-    vehicle = platypus.CloseVehicle()
+    vehicle = venato.CloseVehicle()
     SetVehicleFixed(vehicle)
     SetVehicleFuelLevel(vehicle, 100.0)
     SetVehicleBodyHealth(vehicle, 1000.0)
@@ -397,9 +397,9 @@ function AdminFixVehicle()
 end
 
 function AdminGetClef()
-  local vehicle = GetVehiclePedIsUsing(platypus.GetPlayerPed())
+  local vehicle = GetVehiclePedIsUsing(venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
-    vehicle = platypus.CloseVehicle()
+    vehicle = venato.CloseVehicle()
     TriggerEvent('lock:addVeh', GetVehicleNumberPlateText(vehicle),
       GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
   else
@@ -409,19 +409,19 @@ function AdminGetClef()
 end
 
 function AdminDespawnVoiture()
-  local vehicle = GetVehiclePedIsUsing(platypus.GetPlayerPed())
+  local vehicle = GetVehiclePedIsUsing(venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
-    vehicle = platypus.CloseVehicle()
-    platypus.DeleteCar(vehicle)
+    vehicle = venato.CloseVehicle()
+    venato.DeleteCar(vehicle)
   else
-    platypus.DeleteCar(vehicle)
+    venato.DeleteCar(vehicle)
   end
 end
 
 function AdminSpawnVehicle()
-  local name = platypus.OpenKeyboard('', '', 20, "Modèle du vehicule")
+  local name = venato.OpenKeyboard('', '', 20, "Modèle du vehicule")
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
-    platypus.CreateVehicle(string.upper(name), GetEntityCoords(PlayerPedId()), GetEntityHeading(PlayerPedId()),
+    venato.CreateVehicle(string.upper(name), GetEntityCoords(PlayerPedId()), GetEntityHeading(PlayerPedId()),
       function(vehicle)
         SetVehicleNumberPlateText(vehicle, "ADMIN" .. math.random(100, 999))
         SetPedIntoVehicle(GetPlayerPed(GetPlayerFromServerId(ClientSource)), vehicle, -1)
@@ -429,16 +429,16 @@ function AdminSpawnVehicle()
           GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
       end)
   else
-    platypus.notifyError("Ce vehicule n'existe pas")
+    venato.notifyError("Ce vehicule n'existe pas")
   end
 end
 
 function AdminSendMsg()
-  local msg = platypus.OpenKeyboard('', '', 1000, "Message à Envoyer")
+  local msg = venato.OpenKeyboard('', '', 1000, "Message à Envoyer")
   if msg == nil or msg == '' or msg == ' ' then
     defaultNotification.message = "Le message est erroné !"
     defaultNotification.type = "error"
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
   else
     defaultNotification.message = msg
     defaultNotification.timeout = 20000
@@ -452,27 +452,27 @@ AddEventHandler("Admin:CallDataUsers:cb", function(dataPlayers, DataSource)
   Menu.clearMenu()
   AdminDataPlayers = dataPlayers
   ClientSource = DataSource
-  openplatypusadmin()
+  openvenatoadmin()
 end)
 
 function AdminListPlayer()
   Menu.clearMenu()
   ListPlayer = true
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openplatypusadmin", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openvenatoadmin", nil)
   for k, v in pairs(AdminDataPlayers) do
     Menu.addButton("[<span class='red--text'>" .. k .. "</span>] " .. v.Prenom .. " " .. v.Nom .. " (<span class='yellow--text'>" .. v.Pseudo .. "</span>)","AdminPlayerOption", k, "AdminShowPlayerInfoo")
   end
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openplatypusadmin", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openvenatoadmin", nil)
 end
 
 function SkinMenu()
   Menu.clearMenu()
   ListPlayer = true
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openplatypusadmin", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openvenatoadmin", nil)
   for k, v in pairs(Skins) do
     Menu.addButton("" .. v.libelle .. "","ChangeSkin", v.skin, nil)
   end
-  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openplatypusadmin", nil)
+  Menu.addItemButton("<span class='red--text'>Retour</span>","https://i.ibb.co/GsWgbRb/icons8-undo-96px-1.png", "openvenatoadmin", nil)
 end
 
 function ChangeSkin(skin)
@@ -484,8 +484,8 @@ function ChangeSkin(skin)
   SetPlayerModel(PlayerId(), skin)
   SetModelAsNoLongerNeeded(skin)
   -- SetPedHeadBlendData(playerPed, 0, 0, skin, 0, 0, skin, 1.0, 1.0, 1.0, true)
-  SetPedDefaultComponentVariation(platypus.GetPlayerPed())
-  SetPedComponentVariation(platypus.GetPlayerPed(), 2, 0, 0, 0)
+  SetPedDefaultComponentVariation(venato.GetPlayerPed())
+  SetPedComponentVariation(venato.GetPlayerPed(), 2, 0, 0, 0)
 end
 
 function AdminPlayerOption(index)
@@ -511,47 +511,47 @@ function ReloadCoffre()
 end
 
 function AdminActionOnPlayer(action)
-  local result = platypus.OpenKeyboard('', "", 100, "Raison:")
+  local result = venato.OpenKeyboard('', "", 100, "Raison:")
   if result ~= "" and result ~= nil then
     TriggerServerEvent("Admin:ActionOnPlayer", action, indexToShow, result)
   else
-    platypus.notifyError("Il y a un problème sur la Raison renseigné (le joueur n'a pas subit la sanction du coup)")
+    venato.notifyError("Il y a un problème sur la Raison renseigné (le joueur n'a pas subit la sanction du coup)")
   end
 end
 
 function AdminSetBank()
-  local result = platypus.OpenKeyboard('', "", 10, "Nombre")
+  local result = venato.OpenKeyboard('', "", 10, "Nombre")
   if result ~= "" and result ~= nil then
     TriggerServerEvent('Bank:SetBankMoney', result)
   else
-    platypus.notifyError("Il y a un problème sur la somme renseigné")
+    venato.notifyError("Il y a un problème sur la somme renseigné")
   end
 end
 
 function AdminSetPoche()
-  local result = platypus.OpenKeyboard('', "", 10, "Nombre")
+  local result = venato.OpenKeyboard('', "", 10, "Nombre")
   if result ~= "" and result ~= nil then
     TriggerServerEvent('Inventory:SetMoney', result)
   else
-    platypus.notifyError("Il y a un problème sur la somme renseigné")
+    venato.notifyError("Il y a un problème sur la somme renseigné")
   end
 end
 
 function AdminGiveBank()
-  local result = platypus.OpenKeyboard('', "", 10, "Nombre")
+  local result = venato.OpenKeyboard('', "", 10, "Nombre")
   if result ~= "" and result ~= nil then
     TriggerServerEvent('Bank:Salaire', result, 'Admin')
   else
-    platypus.notifyError("Il y a un problème sur la somme renseigné")
+    venato.notifyError("Il y a un problème sur la somme renseigné")
   end
 end
 
 function AdminGivePoche()
-  local result = platypus.OpenKeyboard('', "", 10, "Nombre")
+  local result = venato.OpenKeyboard('', "", 10, "Nombre")
   if result ~= "" and result ~= nil then
     TriggerServerEvent('Inventory:AddMoney', result)
   else
-    platypus.notifyError("Il y a un problème sur la somme renseigné")
+    venato.notifyError("Il y a un problème sur la somme renseigné")
   end
 end
 
@@ -565,7 +565,7 @@ end
 
 RegisterNetEvent('Admin:teleportUser')
 AddEventHandler('Admin:teleportUser', function(coords)
-	SetEntityCoords(PlayerPedId(), coords[1], coords[2], coords[3])
+	SetEntityCoords(GetPlayerPed(-1), coords[1], coords[2], coords[3])
 end)
 
 function AdminFreeze()
@@ -575,7 +575,7 @@ end
 RegisterNetEvent('Admin:freezePlayer')
 AddEventHandler("Admin:freezePlayer", function()
 	local player = PlayerId()
-	local ped = PlayerPedId()
+	local ped = GetPlayerPed(-1)
 	if state == true then
 		if not IsEntityVisible(ped) then
 			SetEntityVisible(ped, true)
@@ -599,7 +599,7 @@ end)
 
 function AdminSpectate()
   if InSpectatorMode == false then
-    LastCoords = GetEntityCoords(platypus.GetPlayerPed())
+    LastCoords = GetEntityCoords(venato.GetPlayerPed())
     TargetSpectate = indexToShow
     InSpectatorMode = true
     Citizen.CreateThread(function()
@@ -615,7 +615,7 @@ function AdminSpectate()
     InSpectatorMode = false
       TargetSpectate  = nil
       AdminInvisible(true)
-      local playerPed = platypus.GetPlayerPed()
+      local playerPed = venato.GetPlayerPed()
       SetCamActive(cam,  false)
       RenderScriptCams(false,  false,  0,  true,  true)
       SetEntityCollision(playerPed,  true,  true)
@@ -635,7 +635,7 @@ Citizen.CreateThread(function()
     if AdminBlipsBool then
       for k, v in pairs(AdminDataPlayers) do
         local Player = v.PlayerIdClient
-        if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= platypus.GetPlayerPed() then
+        if NetworkIsPlayerActive(Player) and GetPlayerPed(Player) ~= venato.GetPlayerPed() then
           local ped = GetPlayerPed(GetPlayerFromServerId(v.Source))
           local blip = GetBlipFromEntity(ped)
           HeadId[Player] = CreateMpGamerTag(ped, v.Prenom .. " " .. v.Nom .. " (" .. v.Pseudo .. ")", false, false, "", false)
@@ -701,7 +701,7 @@ Citizen.CreateThread(function()
             if IsPauseMenuActive() then
               SetBlipAlpha(blip, 255)
             else
-              local x1, y1 = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+              local x1, y1 = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
               local x2, y2 = table.unpack(GetEntityCoords(GetPlayerPed(Player), true))
               local distance = (math.floor(math.abs(math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) / -1)) + 900
               if distance < 0 then
@@ -727,11 +727,11 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if wp then
-      if IsPedInAnyVehicle(platypus.GetPlayerPed(), 0) and (GetPedInVehicleSeat(GetVehiclePedIsIn(platypus.GetPlayerPed(), 0),
-        -1) == platypus.GetPlayerPed()) then
-        entity = GetVehiclePedIsIn(platypus.GetPlayerPed(), 0)
+      if IsPedInAnyVehicle(venato.GetPlayerPed(), 0) and (GetPedInVehicleSeat(GetVehiclePedIsIn(venato.GetPlayerPed(), 0),
+        -1) == venato.GetPlayerPed()) then
+        entity = GetVehiclePedIsIn(venato.GetPlayerPed(), 0)
       else
-        entity = platypus.GetPlayerPed()
+        entity = venato.GetPlayerPed()
       end
       SetEntityCoords(entity, WaypointCoords.x, WaypointCoords.y, height)
       FreezeEntityPosition(entity, true)
@@ -777,7 +777,7 @@ Citizen.CreateThread(function()
     end
     if InSpectatorMode then
       local targetPlayerId = GetPlayerFromServerId(TargetSpectate)
-      local playerPed      = platypus.GetPlayerPed()
+      local playerPed      = venato.GetPlayerPed()
       local targetPed      = GetPlayerPed(targetPlayerId)
       local coords         = GetEntityCoords(targetPed)
       for k, v in pairs(AdminDataPlayers) do
@@ -833,10 +833,10 @@ function ShowInfoCoord(index)
   local playerHeading = GetEntityHeading(PlayerPedId())
   DrawRect(0.5, 0.95, 0.22, 0.05, 0, 0, 0, 215)
   printTxt(
-    "x = ~b~" .. platypus.Round(playerPos.x, 3) ..
-      "~s~, y = ~b~" .. platypus.Round(playerPos.y, 3) ..
-      "~s~, z = ~b~" .. platypus.Round(playerPos.z, 3) ..
-      "~s~, h = ~b~" .. platypus.Round(playerHeading, 3),
+    "x = ~b~" .. venato.Round(playerPos.x, 3) ..
+      "~s~, y = ~b~" .. venato.Round(playerPos.y, 3) ..
+      "~s~, z = ~b~" .. venato.Round(playerPos.z, 3) ..
+      "~s~, h = ~b~" .. venato.Round(playerHeading, 3),
     0.5, 0.933, true)
 end
 
@@ -846,7 +846,7 @@ function ShowInfoClient(index)
     0.87, 0.53, true)
   printTxt("Argent : ~g~" .. AdminDataPlayers[index].Money, 0.77, 0.57)
   printTxt("Banque : ~g~" .. AdminDataPlayers[index].Bank, 0.77, 0.60)
-  printTxt("platypus Point : ~o~" .. AdminDataPlayers[index].platypusPoint, 0.77, 0.63)
+  printTxt("venato Point : ~o~" .. AdminDataPlayers[index].venatoPoint, 0.77, 0.63)
   
 end
 

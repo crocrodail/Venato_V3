@@ -32,17 +32,17 @@ function startEditFace()
     Citizen.CreateThread(function()
         currentItem = 0
         inEdit = true
-        local ped = platypus.GetPlayerPed()
+        local ped = venato.GetPlayerPed()
         SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
         Coords = GetEntityCoords(ped, true)
-        Prop = platypus.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+        Prop = venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
         SetEntityHeading(Prop, 27.0)
         SetEntityCollision(Prop, false, true)
         FreezeEntityPosition(Prop, true)
         AttachEntityToEntity(ped, Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
         SetEntityVisible(Prop, false, 0)
         SetEntityVisible(ped, true, 0)
-        local me = platypus.GetPlayerPed()
+        local me = venato.GetPlayerPed()
         local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
         local boneIndex = 65068
 
@@ -164,6 +164,7 @@ function saveFace()
     end
     TriggerServerEvent('face:save', data)
     Citizen.Wait(1000)
+<<<<<<< HEAD:resources/Venato/skin/face_client.lua
     TriggerServerEvent("platypus:SyncData")
     DetachEntity(platypus.GetPlayerPed(), true, true)
     DeleteEntity(Prop)
@@ -171,7 +172,16 @@ function saveFace()
     Citizen.Wait(1000)
     FreezeEntityPosition(platypus.GetPlayerPed(), true)
     SetEntityCoords(platypus.GetPlayerPed(), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
+=======
+    TriggerServerEvent("venato:SyncData")
+    DetachEntity(venato.GetPlayerPed(), true, true)
+    DeleteEntity(Prop)
+    DoScreenFadeOut(1000)
+    Citizen.Wait(1000)
+    FreezeEntityPosition(venato.GetPlayerPed(), true)
+    SetEntityCoords(venato.GetPlayerPed(), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
+>>>>>>> master:resources/venato/skin/face_client.lua
     Citizen.Wait(2000)
-    FreezeEntityPosition(platypus.GetPlayerPed(), false)
+    FreezeEntityPosition(venato.GetPlayerPed(), false)
     DoScreenFadeIn(2000)
 end

@@ -171,8 +171,8 @@ function POLICE_removeOrPlaceCone()
   if cone ~= 0 then
     DeleteObject(cone)
   else
-    local object = platypus.CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z)
-    SetEntityRotation(objet, GetEntityRotation(platypus.GetPlayerPed()))
+    local object = venato.CreateObject("prop_roadcone02a", pos.x, pos.y, pos.z)
+    SetEntityRotation(objet, GetEntityRotation(venato.GetPlayerPed()))
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
     SetEntityInvincible(object , false)
@@ -193,8 +193,8 @@ function POLICE_removeOrPlaceBarrier()
   if barriere ~= 0 then
     DeleteObject(barriere)
   else
-    local object = platypus.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)
-    local rot = GetEntityRotation(platypus.GetPlayerPed())
+    local object = venato.CreateObject("prop_barrier_work05", pos.x, pos.y, pos.z)
+    local rot = GetEntityRotation(venato.GetPlayerPed())
     SetEntityRotation(objet, rot.x, rot.y, rot.z)
     PlaceObjectOnGroundProperly(object)
     SetEntityDynamic(object , true)
@@ -217,8 +217,8 @@ function POLICE_removeOrPlaceHerse()
     DeleteObject(herse)
     herse = 0
   else
-  local object = platypus.CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z)
-  local rot = GetEntityRotation(platypus.GetPlayerPed())
+  local object = venato.CreateObject("p_ld_stinger_s", pos.x, pos.y, pos.z)
+  local rot = GetEntityRotation(venato.GetPlayerPed())
   SetEntityRotation(objet, rot.x, rot.y, rot.z)
   FreezeEntityPosition(object, true)
 	PlaceObjectOnGroundProperly(object)
@@ -650,9 +650,9 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
 
         --if(not isCop) then
-          if IsPedShooting(platypus.GetPlayerPed()) and not platypus.HasJob(2) then      
+          if IsPedShooting(venato.GetPlayerPed()) and not venato.HasJob(2) then      
             for i,v in ipairs(blacklistedWeapons) do
-        			if GetSelectedPedWeapon(platypus.GetPlayerPed()) == v then
+        			if GetSelectedPedWeapon(venato.GetPlayerPed()) == v then
         				isBlacklistedWeapon = true
         			end
     			  end
@@ -660,14 +660,14 @@ Citizen.CreateThread(function()
             if(random == 5) then
               local isBlacklistedWeapon = false
               for i,v in ipairs(blacklistedWeapons) do
-                if GetSelectedPedWeapon(platypus.GetPlayerPed()) == v then
+                if GetSelectedPedWeapon(venato.GetPlayerPed()) == v then
                   isBlacklistedWeapon = true
                 end
               end
               
               if not isBlacklistedWeapon then
-                local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(),true))
-                print(GetSelectedPedWeapon(platypus.GetPlayerPed()))
+                local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(),true))
+                print(GetSelectedPedWeapon(venato.GetPlayerPed()))
                 TriggerServerEvent("police:shootfired", {x, y, z})
               end
               isBlacklistedWeapon = false
@@ -890,7 +890,7 @@ function civil()
     { 1, 0, 0 }, -- masque
   }
 
-  platypus.LoadClothes()
+  venato.LoadClothes()
 
   SetComponent(components)
   SetProps(props)

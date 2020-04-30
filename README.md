@@ -1,31 +1,40 @@
 # platypus_V3
 
-Doc :
+## function
+
+###client
+
 ```lua
-DataPlayers[tonumber(source)].SteamId --return SteamId
-DataPlayers[tonumber(source)].Source		--return Source
-DataPlayers[tonumber(source)].Group			--return Group
-DataPlayers[tonumber(source)].Nom					--return Nom
-DataPlayers[tonumber(source)].Prenom
-DataPlayers[tonumber(source)].Job
-DataPlayers[tonumber(source)].Bank
-DataPlayers[tonumber(source)].Money
-DataPlayers[tonumber(source)].Position
-DataPlayers[tonumber(source)].Sexe
-DataPlayers[tonumber(source)].Taille
-DataPlayers[tonumber(source)].Health
-DataPlayers[tonumber(source)].Food
-DataPlayers[tonumber(source)].Water
-DataPlayers[tonumber(source)].Need
-DataPlayers[tonumber(source)].Sool
-DataPlayers[tonumber(source)].PhoneNumber
-DataPlayers[tonumber(source)].Pseudo
-DataPlayers[tonumber(source)].Poid
-DataPlayers[tonumber(source)].Inventaire
-DataPlayers[tonumber(source)].PoidMax
+platypus.callServer(eventName, arg) -- need to be on thread, only one arg
+platypus.GetDataPlayer() -- return Data of player
+platypus.CloseVehicle() -- get closet vehicle 
+platypus.ChatMessage(str, source)
+platypus.DeleteCar(entity)
+platypus.CreateVehicle(modelName, coords, heading, cb) 
+platypus.CreateObject(objet, x, y, z)
+platypus.ClosePlayer()
+platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
+platypus.InteractTxt(text)
+platypus.Text3D(x, y, z, text, font, fontSize)
+platypus.addBlip(x, y, z, timeout, blip, color)
+platypus.playAnim(data) --data.lib, data.anim
+platypus.stopAnim(data)
+venato.groundMarker(x, y, z)
+
 ```
 
-# INVENTORY
+###server
+
+```lua
+GetDataPlayers()
+getSteamID(source)
+platypus.paymentCB(source, amount, isPolice)
+platypus.CheckItem(itemId, source)
+
+
+```
+
+## INVENTORY
 
 Add item :
 ```lua
@@ -49,7 +58,7 @@ Set Money :
 TriggerEvent('Inventory:SetMoney', qty, optional Source)
 ```
 
-#  MENU
+##  MENU
 
 ```lua
 Menu.setTitle("")
@@ -62,7 +71,7 @@ Menu.addButton2(string1, string2, parametre, hover)   --l'équivalent au 1 mais 
 Menu.CreateMenu()   -- Affiche les bouton "Menu.addButton2"
 ```
 
-# notif 
+## notif 
 
 ```lua
 local defaultNotification = {

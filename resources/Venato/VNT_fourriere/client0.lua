@@ -52,7 +52,7 @@ Citizen.CreateThread(function()
       local dis = GetDistanceBetweenCoords(GetEntityCoords(ped), 397.566, -1642.656, 29.291, true)
         Citizen.Wait(0)
         if dis < 15.0 then
-          if not platypus.HasJob(16) then  
+          if not venato.HasJob(16) then  
             if mecano_nbMecanoInService == 0 then        
               DrawMarker(1,397.566, -1642.656, 29.291 -1.0001, 0, 0, 0, 0, 0, 0, 1.01, 1.01, 0.3, 212, 189, 0, 105, 0, 0, 2, 0, 0, 0, 0)
               if dis < 1.0 then
@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
           end
         end
         
-        if dis < 15.0 and platypus.HasJob(16) then
+        if dis < 15.0 and venato.HasJob(16) then
             DrawMarker(1,397.566, -1642.656, 29.291 -1.0001, 0, 0, 0, 0, 0, 0, 1.01, 1.01, 0.3, 212, 189, 0, 105, 0, 0, 2, 0, 0, 0, 0)
             if GetDistanceBetweenCoords(GetEntityCoords(ped), 397.566, -1642.656, 29.291, true) < 1.0 then
                 DisplayHelpText("Utilise ~INPUT_CONTEXT~ pour acceder à la fourrière.")

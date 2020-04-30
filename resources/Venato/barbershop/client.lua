@@ -105,7 +105,7 @@ function BarberShowNotification(text)
     logo = "https://icon-library.net/images/salon-icon-png/salon-icon-png-0.jpg",
     message = text,
   }
-  TriggerEvent("platypus:notify", notif)
+  TriggerEvent("venato:notify", notif)
 end
 
 ------------------------------------------------------ LISTENERS -------------------------------------------------------

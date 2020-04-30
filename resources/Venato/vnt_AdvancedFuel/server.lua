@@ -114,12 +114,12 @@ RegisterServerEvent("essence:buyCan")
 AddEventHandler("essence:buyCan", function()
 	local _source = source
 	local toPay = petrolCanPrice	
-	local paymentCB = platypus.paymentCB(_source, toPay)
+	local paymentCB = venato.paymentCB(_source, toPay)
 	if(paymentCB.status) then
 		TriggerClientEvent("essence:buyCan", _source)
 	else
 		defaultNotification.message = paymentCB.message;
-		platypus.notify(_source, defaultNotification);
+		venato.notify(_source, defaultNotification);
 	end
 end)
 
@@ -128,14 +128,14 @@ AddEventHandler("essence:refuel:check", function(data)
 	local _source = source
 	local stationPrice = data.stationNumber == -1 and 2 or StationsPrice[data.stationNumber]
 	local toPay = round(stationPrice * data.liter,0)
-	local paymentCB = platypus.paymentCB(_source, toPay)
+	local paymentCB = venato.paymentCB(_source, toPay)
 	if paymentCB.status then
 		defaultNotification.message = "Distribution en cours ... <br/> Vous avez payé <span class='green--text'>"..toPay.."€</span>"
-		platypus.notify(_source, defaultNotification);
+		venato.notify(_source, defaultNotification);
 		TriggerClientEvent("essence:refuel:ok", _source, data.liter)
 	else
 		defaultNotification.message = paymentCB.message;
-		platypus.notify(_source, defaultNotification);
+		venato.notify(_source, defaultNotification);
 		TriggerClientEvent("essence:refuel:ko", _source)		
 	end
 end)

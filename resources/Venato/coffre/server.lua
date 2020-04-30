@@ -122,7 +122,7 @@ AddEventHandler("Coffre:TakeWeapon", function(row)
     DataCoffre[indexCoffre].nbWeapon =  DataCoffre[indexCoffre].nbWeapon - 1
     TriggerClientEvent("Coffre:Open", source, indexCoffre)
   else
-    TriggerClientEvent("platypus:notify", source, "Vous n'avez pas assez de place pour prendre l'arme.")
+    TriggerClientEvent("venato:notify", source, "Vous n'avez pas assez de place pour prendre l'arme.")
   end
 end)
 
@@ -141,7 +141,7 @@ AddEventHandler("Coffre:DropWeapon", function(row)
       end)
     end)
   else
-    TriggerClientEvent("platypus:notify", source, "Il n'y a pas de place pour cette arme.")
+    TriggerClientEvent("venato:notify", source, "Il n'y a pas de place pour cette arme.")
   end
 end)
 
@@ -162,12 +162,12 @@ AddEventHandler("Coffre:DropItem", function(qty, row)
       logo = DataPlayers[tonumber(source)].Inventaire[row[2]].picture,
       message = "Vous avez déposé "..qty.." "..DataPlayers[tonumber(source)].Inventaire[row[2]].libelle.." dans le coffre."
     }
-    TriggerClientEvent("platypus:notify", source, defaultNotification)
+    TriggerClientEvent("venato:notify", source, defaultNotification)
 
     TriggerEvent("Inventory:SetItem", DataPlayers[tonumber(source)].Inventaire[indexItem].quantity - qty, indexItem, source)
     TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre + qty, source)
   else
-    TriggerClientEvent("platypus:notify", source, "~r~Une erreur est survenue.")
+    TriggerClientEvent("venato:notify", source, "~r~Une erreur est survenue.")
   end
 end)
 
@@ -192,11 +192,11 @@ AddEventHandler("Coffre:TakeItems", function(qty, row)
       logo = DataCoffre[indexCoffre].inventaire[indexItem].picture,
       message = "Vous avez récuperé "..qty.." "..DataCoffre[indexCoffre].inventaire[indexItem].libelle.." dans le coffre."
     }
-    TriggerClientEvent("platypus:notify", source, defaultNotification)
+    TriggerClientEvent("venato:notify", source, defaultNotification)
     TriggerEvent("Inventory:SetItem",math.floor(qtyOnPlayer + qty), indexItem, source)
     TriggerEvent("Coffre:SetItem", indexCoffre, indexItem, qtyInCoffre - qty, source)
   else
-    TriggerClientEvent("platypus:notifyError", source, "Une erreur est survenue.")
+    TriggerClientEvent("venato:notifyError", source, "Une erreur est survenue.")
   end
 end)
 
@@ -240,9 +240,9 @@ AddEventHandler("Coffre:DropMoney", function(qty, index)
     local source = source
     TriggerEvent("Inventory:RemoveMoney", qty, source)
     TriggerEvent("Coffre:SetMoney", DataCoffre[index].argent + qty , index, source)
-    TriggerClientEvent("platypus:notify", source, "~g~Vous avez déposé "..qty.." € dans le coffre.")    
+    TriggerClientEvent("venato:notify", source, "~g~Vous avez déposé "..qty.." € dans le coffre.")    
   else
-    TriggerClientEvent("platypus:notify", source, "~r~Une erreur est survenue.")
+    TriggerClientEvent("venato:notify", source, "~r~Une erreur est survenue.")
   end
 end)
 
@@ -251,19 +251,19 @@ AddEventHandler("Coffre:AddMoney", function(qty, index)
   if tonumber(qty) + DataCoffre[index].argent <= DataCoffre[index].argentcapacite then
     TriggerEvent("Coffre:SetMoney", DataCoffre[index].argent + qty , index)
   else
-    TriggerClientEvent("platypus:notifyError", source, "Le coffre est plein.")
+    TriggerClientEvent("venato:notifyError", source, "Le coffre est plein.")
   end
 end)
 
 RegisterServerEvent("Coffre:TakeMoney")
 AddEventHandler("Coffre:TakeMoney", function(qty, index)
-  if tonumber(qty) <= DataCoffre[index].argent and platypus.MoneyToPoid(qty) + DataPlayers[tonumber(source)].Poid <= DataPlayers[tonumber(source)].PoidMax then
+  if tonumber(qty) <= DataCoffre[index].argent and venato.MoneyToPoid(qty) + DataPlayers[tonumber(source)].Poid <= DataPlayers[tonumber(source)].PoidMax then
     local source = source
     TriggerEvent("Inventory:AddMoney", qty, source)
     TriggerEvent("Coffre:SetMoney", DataCoffre[index].argent - qty , index, source)
-    TriggerClientEvent("platypus:notify", source, "~g~Vous avez récuperé "..qty.." € du coffre.")
+    TriggerClientEvent("venato:notify", source, "~g~Vous avez récuperé "..qty.." € du coffre.")
   else
-    TriggerClientEvent("platypus:notify", source, "~r~Une erreur est survenue.")
+    TriggerClientEvent("venato:notify", source, "~r~Une erreur est survenue.")
   end
 end)
 

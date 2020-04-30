@@ -41,12 +41,12 @@ Citizen.CreateThread(function()
 		end
 
 		if ItemsOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+			local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 			for k,v in pairs(ItemsOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
-					platypus.Text3D(v.x, v.y, v.z, "<span class='blue--text'>"..v.qty.." "..v.libelle)
-					platypus.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." "..v.libelle)
+					venato.Text3D(v.x, v.y, v.z, "<span class='blue--text'>"..v.qty.." "..v.libelle)
+					venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." "..v.libelle)
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if (v.qty*v.uPoid + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddItem", v.qty , v.id)
@@ -55,64 +55,64 @@ Citizen.CreateThread(function()
               notif.message = "Vous avez ramassé "..v.qty.." "..v.libelle.." ."
               notif.logo = v.picture
               notif.title = "Inventaire"
-							platypus.notify(defaultNotification)
+							venato.notify(defaultNotification)
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropItem))
 							if objet ~= 0 and objet ~= nil then
 								ForceDeleteObject(objet)
 							end
 						else
-							platypus.notifyError("Vous n'avez pas assez de place pour "..v.qty.." "..v.libelle.." .")
+							venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
-					platypus.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." "..v.libelle)
+					venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." "..v.libelle)
 				end
 			end
 		end
 
 		if MoneyOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+			local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 			for k,v in pairs(MoneyOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
-					platypus.Text3D(v.x, v.y, v.z, "~b~"..platypus.FormatMoney(v.qty,2).." €")
-					platypus.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..platypus.FormatMoney(v.qty,2).." €")
+					venato.Text3D(v.x, v.y, v.z, "~b~"..venato.FormatMoney(v.qty,2).." €")
+					venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..venato.FormatMoney(v.qty,2).." €")
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-						if (platypus.MoneyToPoid(v.qty) + DataUser.Poid) <= PoidMax then
+						if (venato.MoneyToPoid(v.qty) + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddMoney", v.qty)
 							TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
-              defaultNotification.message = "Vous avez ramassez "..platypus.FormatMoney(v.qty,2).." € .";
-							platypus.notify(defaultNotification)
+              defaultNotification.message = "Vous avez ramassez "..venato.FormatMoney(v.qty,2).." € .";
+							venato.notify(defaultNotification)
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropMoney))
 							if objet ~= 0 and objet ~= nil then
 								ForceDeleteObject(objet)
 							end
 						else
-							platypus.notifyError("Vous n'avez pas assez de place pour "..v.qty.." € .")
+							venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." € .")
 						end
 					end
 				elseif dis < 10 then
-					platypus.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." €")
+					venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." €")
 				end
 			end
 		end
 
 		if WeaponOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+			local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 			for k,v in pairs(WeaponOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
-					platypus.Text3D(v.x, v.y, v.z, "~b~"..v.libelle)
-					platypus.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.libelle..".")
+					venato.Text3D(v.x, v.y, v.z, "~b~"..v.libelle)
+					venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.libelle..".")
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if v.uPoid + DataUser.Poid <= PoidMax then
 							TriggerServerEvent("Inventory:AddWeapon", v.id, v.ammo, v.uPoid, v.libelle)
 							TriggerServerEvent("Inventory:DelWeaponOnTheGround", k)
 
               defaultNotification.message = "Vous avez ramassez "..v.libelle.." .";
-							platypus.notify(defaultNotification)
+							venato.notify(defaultNotification)
 
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropWeapon))
@@ -120,11 +120,11 @@ Citizen.CreateThread(function()
 								ForceDeleteObject(objet)
 							end
 						else
-							platypus.notifyError("Vous n'avez pas assez de place pour "..v.libelle.." .")
+							venato.notifyError("Vous n'avez pas assez de place pour "..v.libelle.." .")
 						end
 					end
 				elseif dis < 10 then
-					platypus.Text3D(v.x, v.y, v.z, "~b~"..v.libelle.." .")
+					venato.Text3D(v.x, v.y, v.z, "~b~"..v.libelle.." .")
 				end
 			end
 		end
@@ -177,8 +177,8 @@ AddEventHandler('Inventory:ShowMe:cb', function(Data)
     end
   end
 
-  local MoneyPoid = platypus.MoneyToPoid(Data.Money)
-  Menu.addItemButton("Argent : <span class='green--text'>" .. platypus.FormatMoney(Data.Money,
+  local MoneyPoid = venato.MoneyToPoid(Data.Money)
+  Menu.addItemButton("Argent : <span class='green--text'>" .. venato.FormatMoney(Data.Money,
     2) .. " €</span> <span class='orange--text'>(" .. MoneyPoid .. " kg)</span>", "https://i.ibb.co/rZfQxnn/icons8-banknotes-96px.png", "OptionMoney",
     { Data.Money, MoneyPoid, Data.Poid, Data })
   for k, v in pairs(Data.Inventaire) do
@@ -223,13 +223,13 @@ function giveclef(clef)
 end
 
 function givecleff(item)
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("inv:giveclef", GetPlayerServerId(ClosePlayer), item[1], item[2])
     TriggerEvent("Inventory:AnimGive")
-    platypus.notify("<span class='green--text'>Vous avez donné les clef du vehicule " .. item[1] .. "</span>")
+    venato.notify("<span class='green--text'>Vous avez donné les clef du vehicule " .. item[1] .. "</span>")
   else
-    platypus.notifyError("Aucun joueurs à proximité")
+    venato.notifyError("Aucun joueurs à proximité")
   end
 end
 
@@ -266,10 +266,10 @@ function MyDoc(data)
   end
 	for k,v in pairs(data.Documents) do
 		if v.type == "chequier" then
-			Menu.addItemButton("Chéquier <span class='orange--text'>("..platypus.FormatMoney(v.montant,2).." restant)</span>", "https://i.ibb.co/vs3ptjz/icons8-paycheque-96px-2.png", "CreateCheque", data)
+			Menu.addItemButton("Chéquier <span class='orange--text'>("..venato.FormatMoney(v.montant,2).." restant)</span>", "https://i.ibb.co/vs3ptjz/icons8-paycheque-96px-2.png", "CreateCheque", data)
 		end
 		if v.type == "cheque" then
-			Menu.addItemButton("Cheque de <span class='green--text'>"..platypus.FormatMoney(v.montant,2).."</span> €", "https://i.ibb.co/ZXZgqSF/icons8-paycheque-96px.png", "showCheque", {data,k})
+			Menu.addItemButton("Cheque de <span class='green--text'>"..venato.FormatMoney(v.montant,2).."</span> €", "https://i.ibb.co/ZXZgqSF/icons8-paycheque-96px.png", "showCheque", {data,k})
 		end
 	end
 end
@@ -310,29 +310,29 @@ function optionVisa(data)
 end
 
 function ShowToOtherPermis(data)
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("Inventory:ShowToOtherPermis", data, ClosePlayer)
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
 function ShowToOtherIdCard(data)
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("Inventory:ShowToOtherIdCard", data, ClosePlayer)
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
 function ShowToOtherVisa(data)
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("Inventory:ShowToOtherVisa", data, ClosePlayer)
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
@@ -359,16 +359,16 @@ function CreateCheque(data)
 end
 
 function CreateChequeConf(data)
-	local ClosePlayer, distance = platypus.ClosePlayer()
+	local ClosePlayer, distance = venato.ClosePlayer()
 	if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-		local montant = platypus.OpenKeyboard('', '', 10,"Montant du chèque")
+		local montant = venato.OpenKeyboard('', '', 10,"Montant du chèque")
 		if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
 			TriggerServerEvent("Inventory:CreateCheque", ClosePlayer, montant)
 		else
-			platypus.notifyError("Le montant indiqué est erroné.")
+			venato.notifyError("Le montant indiqué est erroné.")
 		end
 	else
-		platypus.notifyError("Il n'y a personne à proximité.")
+		venato.notifyError("Il n'y a personne à proximité.")
 	end
 end
 
@@ -398,7 +398,7 @@ function ShowPermis(data)
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
         "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
-        "&url=" .. platypus.ConvertUrl(data.Url)
+        "&url=" .. venato.ConvertUrl(data.Url)
     })
   else
     PapierOpen = 0
@@ -416,7 +416,7 @@ function ShowIdCard(data)
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
         --"&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
-        "&url=" .. platypus.ConvertUrl(data.Url)
+        "&url=" .. venato.ConvertUrl(data.Url)
     })
   else
     PapierOpen = 0
@@ -434,7 +434,7 @@ function ShowVisa(data)
         "&id=" .. data.Source .. "&steam=" .. data.SteamId .. "&datevoiture=" .. data.PermisVoiture ..
         "&datecamion=" .. data.PermisCamion .. "&point=" .. data.Point ..
         "&startvisa=" .. data.VisaStart .. "&endvisa=" .. data.VisaEnd ..
-        "&url=" .. platypus.ConvertUrl(data.Url)
+        "&url=" .. venato.ConvertUrl(data.Url)
     })
   else
     PapierOpen = 0
@@ -454,20 +454,20 @@ function OptionWeapon(table)
 end
 
 function GiveWeapon(table)
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
     TriggerServerEvent("Inventory:CallInfoWeapon", ClosePlayer, table)
     OpenInventory()
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
 function DropWeapon(tableau)
-		local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+		local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 		TriggerServerEvent("Inventory:DropWeapon", tableau, x,y,z-0.5)
 		TriggerServerEvent("Inventory:RemoveWeapon",tableau[3], tableau[1], tableau[4])
-		local objet = platypus.CreateObject(dropWeapon, x, y+0.5, z-1) 
+		local objet = venato.CreateObject(dropWeapon, x, y+0.5, z-1) 
     PlaceObjectOnGroundProperly(objet) 
 		FreezeEntityPosition(objet, true) 
 		OpenInventory() 
@@ -488,14 +488,14 @@ RegisterNetEvent('Inventory:RemoveWeaponAmmoClient')
 AddEventHandler('Inventory:RemoveWeaponAmmoClient', function(weapon, ammo)
 	local weaponHash = GetHashKey(weapon)
 	local ammo = tonumber(ammo)
-	SetPedAmmo(platypus.GetPlayerPed(), weapon, ammo)
+	SetPedAmmo(venato.GetPlayerPed(), weapon, ammo)
 end)
 
 RegisterNetEvent('Inventory:RemoveWeaponClient')
 AddEventHandler('Inventory:RemoveWeaponClient', function(weapon)
 	local weaponHash = GetHashKey(weapon)
-	SetPedAmmo(platypus.GetPlayerPed(), weaponHash, 0)
-  RemoveWeaponFromPed(platypus.GetPlayerPed(), weaponHash)
+	SetPedAmmo(venato.GetPlayerPed(), weaponHash, 0)
+  RemoveWeaponFromPed(venato.GetPlayerPed(), weaponHash)
 end)
 
 RegisterNetEvent('Inventory:SendWeaponOnTheGround')
@@ -515,36 +515,36 @@ function OptionMoney(table)
 end
 
 function GiveMoney(table)
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-    local nb = platypus.OpenKeyboard('', '', 10, "Nombre à donner")
+    local nb = venato.OpenKeyboard('', '', 10, "Nombre à donner")
     if tonumber(nb) ~= nil and tonumber(nb) ~= 0 and tonumber(nb) > 0 and table[1] - tonumber(nb) >= 0 then
       TriggerServerEvent("Inventory:CallInfoMoney", ClosePlayer, tonumber(nb), table)
       OpenInventory()
     else
-      platypus.notifyError("Une erreur dans le nombre choisi.")
+      venato.notifyError("Une erreur dans le nombre choisi.")
     end
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
 function DropMoney(tableau)
-	local nb = platypus.OpenKeyboard('', '', 10,"Nombre à jeter")
+	local nb = venato.OpenKeyboard('', '', 10,"Nombre à jeter")
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
-			local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+			local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 			TriggerServerEvent("Inventory:DropMoney", tonumber(nb), tableau, x,y,z-0.5)
 			TriggerServerEvent("Inventory:RemoveMoney", tonumber(nb))
-			local objet = platypus.CreateObject(dropMoney, x, y, z-1)
+			local objet = venato.CreateObject(dropMoney, x, y, z-1)
       PlaceObjectOnGroundProperly(objet)
 			FreezeEntityPosition(objet, true)
 			OpenInventory()
 		else
-			platypus.notifyError("Vous ne pouvez pas jeter plus que ce que vous avez.")
+			venato.notifyError("Vous ne pouvez pas jeter plus que ce que vous avez.")
 		end
 	else
-		platypus.notifyError("Erreur dans le nombre désiré.")
+		venato.notifyError("Erreur dans le nombre désiré.")
 	end
 end
 
@@ -575,28 +575,28 @@ function UseItem(table)
     --Citizen.Wait(1000)
     OpenInventory()
   else
-    platypus.notifyError("Error !")
+    venato.notifyError("Error !")
   end
 end
 
 function GiveItem(row)
   local row = row
-  local ClosePlayer, distance = platypus.ClosePlayer()
+  local ClosePlayer, distance = venato.ClosePlayer()
   if ClosePlayer ~= 0 and ClosePlayer ~= nil and distance < 4 then
-    local nb = platypus.OpenKeyboard('', '', 2, "Nombre à donner")
+    local nb = venato.OpenKeyboard('', '', 2, "Nombre à donner")
     if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
       TriggerServerEvent("Inventory:CallInfo", ClosePlayer, tonumber(nb), row)
       Citizen.Wait(500)
       OpenInventory()
     end
   else
-    platypus.notifyError("Il n'y a personne à proximité.")
+    venato.notifyError("Il n'y a personne à proximité.")
   end
 end
 
 RegisterNetEvent('Inventory:CallInfo:cb')
 AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, qty)
-  print(platypus.dump(table))
+  print(venato.dump(table))
   if table[1] - nb >= 0 then
     print(table[3])
     print(nb)
@@ -608,30 +608,30 @@ AddEventHandler('Inventory:CallInfo:cb', function(ClosePlayer, nb, table, poid, 
       TriggerServerEvent("Inventory:SetItem", table[1] - nb, table[2])
       TriggerServerEvent("Inventory:SetItem", qty + nb, table[2], ClosePlayer)
     else
-      platypus.notifyError("L'inventaire de la personne est plein pour ces items.")
+      venato.notifyError("L'inventaire de la personne est plein pour ces items.")
     end
   else
-    platypus.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")
+    venato.notifyError("Vous ne pouvez pas donner plus que ce que vous avez.")
   end
 end)
 
 function DropItem(tableau)
-	local nb = platypus.OpenKeyboard('', '', 2,"Nombre à jeter")
+	local nb = venato.OpenKeyboard('', '', 2,"Nombre à jeter")
 	if tonumber(nb) ~= nil and tonumber(nb) ~= 0 then
 		if tableau[1] - tonumber(nb) >= 0 then
-      local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+      local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 			TriggerServerEvent("Inventory:DropItem",tableau[3], tonumber(nb), tableau[2], tableau[4], x,y,z-0.5, tableau[5], tableau[6])
 			TriggerServerEvent("Inventory:SetItem", tableau[1] - tonumber(nb) , tableau[2])
-			local objet = platypus.CreateObject(dropItem, x, y, z-1)
+			local objet = venato.CreateObject(dropItem, x, y, z-1)
       PlaceObjectOnGroundProperly(objet)
 			FreezeEntityPosition(objet, true)
-			platypus.notify("Vous avez jeté "..nb.." "..tableau[3].." .")
+			venato.notify("Vous avez jeté "..nb.." "..tableau[3].." .")
 			OpenInventory()
 		else
-			platypus.notifyError("Vous ne pouvez pas jeter plus que ce que vous avez.")
+			venato.notifyError("Vous ne pouvez pas jeter plus que ce que vous avez.")
 		end
 	else
-		platypus.notifyError("Erreur dans le nombre désiré.")
+		venato.notifyError("Erreur dans le nombre désiré.")
 	end
 end
 
@@ -642,7 +642,7 @@ end)
 
 RegisterNetEvent('Inventory:AnimGive')
 AddEventHandler('Inventory:AnimGive', function()
-	platypus.playAnim({
+	venato.playAnim({
     useLib = true,
     flag = 48,
     lib = "mp_common",
@@ -652,7 +652,7 @@ AddEventHandler('Inventory:AnimGive', function()
 end)
 RegisterNetEvent('Inventory:AnimReceive')
 AddEventHandler('Inventory:AnimReceive', function()
-	platypus.playAnim({
+	venato.playAnim({
     useLib = true,
     flag = 48,
     lib = "mp_common",

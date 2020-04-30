@@ -73,7 +73,7 @@ end)
 		while true do
 			Citizen.Wait(2000)
       vnt()
-			local player = platypus.GetPlayerPed()
+			local player = venato.GetPlayerPed()
 			if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
 				local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
 				local lock = GetVehicleDoorLockStatus(veh)
@@ -91,14 +91,14 @@ end)
 
 function lockVeh()
   local isvehiclefoundlock = false
-  local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(),true))
+  local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(),true))
   local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
   local vehName = ''
 
   if clostestvehicle == 0 then
-    local pos = GetEntityCoords(platypus.GetPlayerPed())
-    local entityWorld = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, 3.0, 0.0)
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, platypus.GetPlayerPed(), 0)
+    local pos = GetEntityCoords(venato.GetPlayerPed())
+    local entityWorld = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, 3.0, 0.0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, venato.GetPlayerPed(), 0)
     local a, b, c, d, result = GetRaycastResult(rayHandle)
     clostestvehicle = result
   end
@@ -124,7 +124,7 @@ function lockVeh()
     end
     if isvehiclefoundlock then
       local lock = GetVehicleDoorLockStatus(clostestvehicle)
-      platypus.playAnim({
+      venato.playAnim({
         useLib = true,
         flag = 48,
         lib = "anim@mp_player_intmenu@key_fob@",
@@ -151,7 +151,7 @@ function lockVeh()
 end
 
 function unlockveh()
-  local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(),true))
+  local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(),true))
   local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
   local plateVehic = GetVehicleNumberPlateText(clostestvehicle)
   SetVehicleDoorsLocked(clostestvehicle, 1)
@@ -163,12 +163,12 @@ end
 
 function vnt()
   local isvehiclefound = nil
-  local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(),true))
+  local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(),true))
 	local clostestvehicle = GetClosestVehicle(x, y, z, 7.000, 0, 127)
   if clostestvehicle == 0 then
-    local pos = GetEntityCoords(platypus.GetPlayerPed())
-    local entityWorld = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0.0, 3.0, 0.0)
-    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, platypus.GetPlayerPed(), 0)
+    local pos = GetEntityCoords(venato.GetPlayerPed())
+    local entityWorld = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0.0, 3.0, 0.0)
+    local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, venato.GetPlayerPed(), 0)
     local a, b, c, d, result = GetRaycastResult(rayHandle)
     clostestvehicle = result
   end
@@ -192,5 +192,5 @@ end
 
 function Notify(text)
     defaultNotification.message = text;
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
 end

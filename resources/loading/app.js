@@ -1,9 +1,9 @@
 /* Need Help? Join my discord @ discord.gg/yWddFpQ */
 
-//https://platypus-api.netlify.com/.netlify/functions/api
+//https://venato-api.netlify.com/.netlify/functions/api
 
 $.ajax({
-    url : 'https://platypus-api.netlify.com/.netlify/functions/api', // La ressource ciblée
+    url : 'https://venato-api.netlify.com/.netlify/functions/api', // La ressource ciblée
     type : 'GET', // Le type de la requête HTTP.
     complete : function(resultat, statut){ // code_html contient le HTML renvoyé
         const devs = JSON.parse(resultat.responseText);

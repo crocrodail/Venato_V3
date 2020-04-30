@@ -11,7 +11,7 @@ local LastCar = nil
 local init = false
 local defaultNotification = {
   type = "alert",
-  title ="platypus CarShop",
+  title ="venato CarShop",
   logo = "https://i.ibb.co/DG6wbyY/icons8-traffic-jam-96px-1.png"
 }
 
@@ -35,14 +35,21 @@ Citizen.CreateThread(function ()
     Citizen.Wait(0)
 
     if menuIsOpen then
-      scaleform = platypus.GetCarShopIntruction()
+      scaleform = venato.GetCarShopIntruction()
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
 
+<<<<<<< HEAD:resources/Venato/carShop/client.lua
     for i=1, #CarShop, 1 do
       distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), CarShop[i].x, CarShop[i].y, CarShop[i].z, true)
       if distance < CarShop[i].distanceMarker then
         DrawMarker(CarShop[i].type, CarShop[i].x, CarShop[i].y, CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
+=======
+    for i=1, #Config.CarShop, 1 do
+      distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
+      if distance < Config.CarShop[i].distanceMarker then
+        DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
+>>>>>>> master:resources/venato/carShop/client.lua
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
           previousVehicleColor()
         elseif IsControlJustPressed(1, Keys['RIGHT']) and menuIsOpen then
@@ -56,17 +63,23 @@ Citizen.CreateThread(function ()
       end
       if distance < CarShop[i].distanceMin  then
         if not menuIsOpen then
-        platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour voir les véhicules')
+        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour voir les véhicules')
         end
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
           if IsPedInAnyVehicle( playerPed, false ) then
               defaultNotification.message = "Vous devez être à pied !"
               defaultNotification.type = 'error'
-              platypus.notify(defaultNotification)
+              venato.notify(defaultNotification)
           else
+<<<<<<< HEAD:resources/Venato/carShop/client.lua
             OpenCarMenu(CarShop[i].vehiculeType)
             currentShop = CarShop[i].id
             scaleform = platypus.GetCarShopIntruction()
+=======
+            OpenCarMenu(Config.CarShop[i].vehiculeType)
+            currentShop = Config.CarShop[i].id
+            scaleform = venato.GetCarShopIntruction()
+>>>>>>> master:resources/venato/carShop/client.lua
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end
         end
@@ -87,7 +100,7 @@ end)
 
 function RemoveCurrentCar()
   if IsPedInAnyVehicle( playerPed, false ) then
-    platypus.DeleteCar( LastCar )
+    venato.DeleteCar( LastCar )
   end
 end
 
@@ -122,7 +135,7 @@ end
 function ShowCategory(category)
   if IsPedInAnyVehicle( playerPed, false ) then
     car = GetVehiclePedIsIn( playerPed, false )
-    platypus.DeleteCar( car )
+    venato.DeleteCar( car )
   end
   TriggerEvent('Menu:HideVehicleInformation')
   TriggerEvent("CarShop:ShowVehicles",category)
@@ -137,7 +150,7 @@ function ReturnToCategory(category)
   RemoveNotification(lastNotif)
   if IsPedInAnyVehicle( playerPed, false ) then
     car = GetVehiclePedIsIn( playerPed, false )
-    platypus.DeleteCar( car )
+    venato.DeleteCar( car )
   end
   TriggerServerEvent("CarShop:ShowCategory", category)
   TriggerEvent('Menu:HideVehicleInformation')
@@ -194,17 +207,17 @@ function PreviewVehicle(data)
    if not IsModelInCdimage(data.model) or not IsModelAVehicle(data.model) then
         defaultNotification.message = "Ce modèle n'est pas disponible."
         defaultNotification.type = "error"
-        platypus.notify(defaultNotification)
+        venato.notify(defaultNotification)
         return
     end
-    platypus.CreateVehicle(data.model, {x=-44.309, y= -1097.13, z= 26.422}, 114.878, function(vehicle)
+    venato.CreateVehicle(data.model, {x=-44.309, y= -1097.13, z= 26.422}, 114.878, function(vehicle)
       LastCar = vehicle
       SetVehicleColours(vehicle,color,colorSec)
       SetVehicleFuelLevel(vehicle, GetVehicleFuelLevel(vehicle) + 50)
       SetVehicleDirtLevel(vehicle,0)
       if IsPedInAnyVehicle( playerPed, false ) then
         car = GetVehiclePedIsIn( playerPed, false )
-        platypus.DeleteCar( car )
+        venato.DeleteCar( car )
       end
       currentVehicle = data
       TriggerEvent('Menu:ShowVehicleInformation', data)
@@ -252,7 +265,7 @@ function BuyVehicle(data)
       TriggerEvent('Menu:Clear')
       TriggerEvent('Menu:AddButton',"<span class='red--text'>Retour</span>", "ShowVehicles", data.type)
       TriggerEvent('Menu:AddButton',"Payer avec de l'argent", "Pay", vehicle)
-      TriggerEvent('Menu:AddButton',"Payer avec des platypus Points", "PayWithVp", vehicle)
+      TriggerEvent('Menu:AddButton',"Payer avec des venato Points", "PayWithVp", vehicle)
       TriggerEvent('Menu:Open')
     end
   else
@@ -289,8 +302,8 @@ function pairsByKeys (t, f)
   return iter
 end
 
-function platypus.GetCarShopIntruction()
-  scaleform = platypus.ScaleForm("instructional_buttons")
+function venato.GetCarShopIntruction()
+  scaleform = venato.ScaleForm("instructional_buttons")
   PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
   PopScaleformMovieFunctionVoid()
 
@@ -321,8 +334,8 @@ function platypus.GetCarShopIntruction()
   return scaleform
 end
 
-function platypus.GetCarMenuIntruction()
-  scaleform = platypus.ScaleForm("instructional_buttons")
+function venato.GetCarMenuIntruction()
+  scaleform = venato.ScaleForm("instructional_buttons")
   PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
   PopScaleformMovieFunctionVoid()
   PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
@@ -361,7 +374,7 @@ AddEventHandler('CarShop:PaiementOk:response', function(data)
   HideMenu()
   defaultNotification.type = "alert"
   defaultNotification.message = "<span class='green--text'>Félicitation !</span><br/> Votre véhicule vous attends au garage du concessionnaire.";
-  platypus.notify(defaultNotification)
+  venato.notify(defaultNotification)
   LastCar = nil
 end)
 
@@ -369,7 +382,7 @@ RegisterNetEvent('CarShop:PaiementKo:response')
 AddEventHandler('CarShop:PaiementKo:response', function(data)
   defaultNotification.message = data;
   defaultNotification.type = "error"
-  platypus.notify(defaultNotification)
+  venato.notify(defaultNotification)
   TriggerEvent("Menu:Open")
 end)
 

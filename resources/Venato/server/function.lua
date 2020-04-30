@@ -1,4 +1,4 @@
-platypus = {}
+venato = {}
 
 function getSteamID(source)
   local identifiers = GetPlayerIdentifiers(source)
@@ -16,15 +16,15 @@ function GetDataPlayers()
   return DataPlayers
 end
 
-RegisterNetEvent("platypus:SyncData")
-AddEventHandler("platypus:SyncData", function(steam, newSource)
+RegisterNetEvent("venato:SyncData")
+AddEventHandler("venato:SyncData", function(steam, newSource)
   local source = newSource or source
   local steam = steam or getSteamID(source)
   accessGranded(steam, source)
 end)
 
-RegisterNetEvent("platypus:SwitchJob")
-AddEventHandler("platypus:SwitchJob", function(id)
+RegisterNetEvent("venato:SwitchJob")
+AddEventHandler("venato:SwitchJob", function(id)
   local id = id
   local source = source
   TriggerClientEvent("job:deleteBlips", source)
@@ -43,8 +43,13 @@ AddEventHandler("platypus:SwitchJob", function(id)
   end)
 end)
 
+<<<<<<< HEAD:resources/Venato/server/function.lua
 RegisterNetEvent("platypus:AddJob")
 AddEventHandler("platypus:AddJob", function(id, identifier)
+=======
+RegisterNetEvent("venato:AddJob")
+AddEventHandler("venato:AddJob", function(id, identifier)
+>>>>>>> master:resources/venato/server/function.lua
   MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=identifier}, function(result)
     if result[1] ~= nil then
       if result[1].source ~= 'disconnect' then
@@ -56,8 +61,8 @@ AddEventHandler("platypus:AddJob", function(id, identifier)
   end)
 end)
 
-RegisterNetEvent("platypus:RemoveJob")
-AddEventHandler("platypus:RemoveJob", function(data)
+RegisterNetEvent("venato:RemoveJob")
+AddEventHandler("venato:RemoveJob", function(data)
   MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier and JobId = @jobId", {['@identifier'] = data[2], ['@jobId'] = data[1]})
   MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=data[2]}, function(result)
     if result[1] ~= nil then
@@ -66,15 +71,19 @@ AddEventHandler("platypus:RemoveJob", function(data)
           local jobId = data[1]
           print(sourceId)
           print(jobId)
+<<<<<<< HEAD:resources/Venato/server/function.lua
           print(platypus.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
+=======
+          print(venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
+>>>>>>> master:resources/venato/server/function.lua
           DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)] = nil
         end
     end
   end)
 end)
 
-RegisterNetEvent("platypus:QuitJob")
-AddEventHandler("platypus:QuitJob", function(id)
+RegisterNetEvent("venato:QuitJob")
+AddEventHandler("venato:QuitJob", function(id)
   local id = id
   local source = source
   TriggerClientEvent("job:deleteBlips", source)
@@ -101,7 +110,11 @@ function newJob(source, id)
         logo = "https://i.ibb.co/CMFQmq2/icons8-briefcase-96px.png",
         message = "Vous etes maintenant "..result[1].job_name
       }
+<<<<<<< HEAD:resources/Venato/server/function.lua
       platypus.notify(source, defaultNotification)
+=======
+      venato.notify(source, defaultNotification)
+>>>>>>> master:resources/venato/server/function.lua
     end
   end)
 end
@@ -145,7 +158,7 @@ function accessGranded(SteamId, source , balek)
         IsInService = {"none", false},
         Bank = DataUser[1].bank,
         Money = DataUser[1].money,
-        platypusPoint = DataUser[1].platypus_point,
+        venatoPoint = DataUser[1].venato_point,
         Account = DataUser[1].account,
         Code = DataUser[1].code,
         Position = json.decode(DataUser[1].lastPosition),
@@ -159,7 +172,7 @@ function accessGranded(SteamId, source , balek)
         Sool = DataUser[1].sool,
         PhoneNumber = DataUser[1].phone_number,
         Pseudo = GetPlayerName(source),
-        Poid = platypus.MoneyToPoid(DataUser[1].money),
+        Poid = venato.MoneyToPoid(DataUser[1].money),
         Inventaire = { nil },
         Weapon = { nil },
         Documents = { nil },
@@ -177,6 +190,7 @@ function accessGranded(SteamId, source , balek)
         Url = DataUser[1].url,
         Speedometer = DataUser[1].speedometer,
         Clothes = json.decode(DataUser[1].clothes),
+        GardeRobe = { nil },
         Skin = {
           model = DataUser[1].model,
           face = json.decode(DataUser[1].face),
@@ -204,6 +218,7 @@ function accessGranded(SteamId, source , balek)
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
+        TriggerEvent("GardeRobe:UpdateGardeRobe", source)
         MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = jobs.job_id WHERE UserId = @identifier ", { ["@identifier"] = steamIdl }, function(result)
           if not result[1] then
             return
@@ -212,7 +227,11 @@ function accessGranded(SteamId, source , balek)
             DataPlayers[tonumber(source)].Jobs[v.job_id] = v.job_name
             TriggerClientEvent("Job:start"..v.job_name, source, true)
           end
+<<<<<<< HEAD:resources/Venato/server/function.lua
           TriggerClientEvent("platypus:Connection", source)
+=======
+          TriggerClientEvent("venato:Connection", source)
+>>>>>>> master:resources/venato/server/function.lua
         end)
         ControlVisa(SteamId, source)
         TriggerEvent("police:checkIsCop", source)
@@ -227,7 +246,7 @@ function startScript()
   reloadDataCoffre()
 end
 
-function platypus.DisplayBool(value)
+function venato.DisplayBool(value)
   return value and 'true' or 'false'
 end
 
@@ -284,12 +303,12 @@ function PlayerLeaving(SteamID)
   end
 end
 
-function platypus.Round(num, numDecimalPlaces)
+function venato.Round(num, numDecimalPlaces)
   local mult = 10 ^ (numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
 end
 
-function platypus.paymentCB(source, amount, isPolice)
+function venato.paymentCB(source, amount, isPolice)
   if isPolice == nil then
     isPolice = false
   end
@@ -308,44 +327,44 @@ function platypus.paymentCB(source, amount, isPolice)
 end
 
 function ExportPaymentCB(source, amount)
-  return platypus.paymentCB(source, amount)
+  return venato.paymentCB(source, amount)
 end
 
-function platypus.paymentVP(source, amount)
-  print(DataPlayers[tonumber(source)].platypusPoint)
-  if DataPlayers[tonumber(source)].platypusPoint <= tonumber(amount) then
+function venato.paymentVP(source, amount)
+  print(DataPlayers[tonumber(source)].venatoPoint)
+  if DataPlayers[tonumber(source)].venatoPoint <= tonumber(amount) then
     return false
   else
-    DataPlayers[tonumber(source)].platypusPoint = DataPlayers[tonumber(source)].platypusPoint - amount
-    MySQL.Async.execute("UPDATE users SET platypus_point=@money WHERE identifier=@identifier",
-      { ["identifier"] = DataPlayers[tonumber(source)].SteamId, ["money"] = DataPlayers[tonumber(source)].platypusPoint })
+    DataPlayers[tonumber(source)].venatoPoint = DataPlayers[tonumber(source)].venatoPoint - amount
+    MySQL.Async.execute("UPDATE users SET venato_point=@money WHERE identifier=@identifier",
+      { ["identifier"] = DataPlayers[tonumber(source)].SteamId, ["money"] = DataPlayers[tonumber(source)].venatoPoint })
     return true
   end
 end
 
-function platypus.MoneyToPoid(money)
-  return platypus.Round(money * 0.000075, 1)
+function venato.MoneyToPoid(money)
+  return venato.Round(money * 0.000075, 1)
 end
 
-function platypus.GetSteamID(source)
+function venato.GetSteamID(source)
   return getSteamID(source)
 end
 
-RegisterNetEvent("platypus:dump")
-AddEventHandler("platypus:dump", function(arg)
+RegisterNetEvent("venato:dump")
+AddEventHandler("venato:dump", function(arg)
   local str = ''
   for _, item in ipairs(arg) do
-    str = str .. ' ' .. platypus.dump(item)
+    str = str .. ' ' .. venato.dump(item)
   end
   print(str)
 end)
 
-function platypus.dump(o)
+function venato.dump(o)
   if type(o) == 'table' then
     local s = '{ '
     for k, v in pairs(o) do
       if type(k) ~= 'number' then k = '"' .. k .. '"' end
-      s = s .. '[' .. k .. '] = ' .. platypus.dump(v) .. ','
+      s = s .. '[' .. k .. '] = ' .. venato.dump(v) .. ','
     end
     return s .. '} '
   else
@@ -354,7 +373,7 @@ function platypus.dump(o)
 end
 
 
-function platypus.notify(source, notif)
+function venato.notify(source, notif)
   if not notif.message then
     return
   end
@@ -374,12 +393,12 @@ function platypus.notify(source, notif)
   })
 end
 
-RegisterServerEvent('platypus:NotifyPlayer')
-AddEventHandler('platypus:NotifyPlayer', function (data)
-  platypus.notify(data[1], data[2])
+RegisterServerEvent('venato:NotifyPlayer')
+AddEventHandler('venato:NotifyPlayer', function (data)
+  venato.notify(data[1], data[2])
 end)
 
-function platypus.CheckItem(itemId, source)
+function venato.CheckItem(itemId, source)
   if not DataPlayers[tonumber(source)] or not DataPlayers[tonumber(source)].Inventaire[itemId] then
     return 0
   end
@@ -408,7 +427,7 @@ AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
               logo = "https://i.ibb.co/fvtWrv3/icons8-spam-96px.png",
               message = notif
             }
-            platypus.notify(source, defaultNotification)
+            venato.notify(source, defaultNotification)
           end
         else
         end
@@ -418,20 +437,25 @@ AddEventHandler('vnt:chestaddmonney', function (idChest, qty)
   end)
 end)
 
-function platypus.CheckChomage(identifier)
+function venato.CheckChomage(identifier)
   local result =  MySQL.Sync.fetchAll("SELECT COUNT(*) as chomage FROM user_job WHERE UserId=@identifier AND JobId = 1", {['@identifier'] = identifier})
   return result[1].chomage == 1
 end
 
-function platypus.NbJob(identifier)
+function venato.NbJob(identifier)
   local result =  MySQL.Sync.fetchAll("SELECT COUNT(*) as nbJob FROM user_job WHERE UserId=@identifier", {['@identifier'] = identifier})
   return result[1].nbJob
 end
 
-function platypus.AddChomage(identifier)
-  TriggerEvent("platypus:AddJob", 1, identifier)
+function venato.AddChomage(identifier)
+  TriggerEvent("venato:AddJob", 1, identifier)
 end
 
+<<<<<<< HEAD:resources/Venato/server/function.lua
 function platypus.RemoveChomage(identifier)
   TriggerEvent("platypus:RemoveJob", {1, identifier})
+=======
+function venato.RemoveChomage(identifier)
+  TriggerEvent("venato:RemoveJob", {1, identifier})
+>>>>>>> master:resources/venato/server/function.lua
 end

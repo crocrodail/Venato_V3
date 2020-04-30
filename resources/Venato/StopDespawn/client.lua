@@ -12,7 +12,7 @@ function spawnVehicle(model, xcoord, ycoord, zcoord, heading, plate, health, cus
 		Wait(0)
   end
 
-  local vehicle = platypus.CreateVehicle(model, {x = xcoord, y = ycoord, z = zcoord}, heading, function(vhl)
+  local vehicle = venato.CreateVehicle(model, {x = xcoord, y = ycoord, z = zcoord}, heading, function(vhl)
     
     SetVehicleNumberPlateText(vhl, plate)  
     if health ~= nil then

@@ -6,7 +6,7 @@ end)
 
 RegisterNetEvent("AdminVnT:sendMsG")
 AddEventHandler("AdminVnT:sendMsG", function(msg)
-	TriggerClientEvent("platypus:notify", -1 , msg)
+	TriggerClientEvent("venato:notify", -1 , msg)
 end)
 
 RegisterNetEvent("Admin:ActionOnPlayer")

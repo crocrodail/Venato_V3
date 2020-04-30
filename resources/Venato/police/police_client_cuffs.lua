@@ -122,7 +122,7 @@ AddEventHandler('anim:cuff', function(isPolice, from)
 
     end
 
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
     -- Change the cuffed state to be the inverse of the previous state.
     cuffed = not cuffed
 

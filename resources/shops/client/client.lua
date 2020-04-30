@@ -66,7 +66,7 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
         if distance < item.ActivationDist then
           ConfigShop.inShopMarker = true
           ConfigShop.currentShopId = item.Id
-          TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop")
+          TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop")
         elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > (2 * item.ActivationDist) then
           ConfigShop.inShopMarker = false
           ConfigShop.menuOpen = false
@@ -82,10 +82,10 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
           ConfigShop.inGarageMarker = true
           ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
           ConfigShop.currentShopId = item.Id
-          if IsPedInVehicle(PlayerPedId(), ConfigShop.forklift) then
-            TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
+          if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+            TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
           else
-            TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
+            TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
           end
         elseif ConfigShop.currentShopId == item.Id and distance > 1.5 then
           ConfigShop.inGarageMarker = false

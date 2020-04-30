@@ -93,7 +93,7 @@ Citizen.CreateThread(function()
 
 			if(IsControlJustPressed(1, 38)) then
 				
-				local veh = GetVehiclePedIsIn(platypus.GetPlayerPed(), 0)
+				local veh = GetVehiclePedIsIn(venato.GetPlayerPed(), 0)
 				local station = stationsText[stationNumber]
 				local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, station.x, station.y, station.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
 				local streetName = GetStreetNameFromHashKey(streetA)
@@ -143,7 +143,7 @@ Citizen.CreateThread(function()
 			Info(settings[lang].openMenu)
 
 			if(IsControlJustPressed(1, 38)) then		
-				local veh = GetVehiclePedIsIn(platypus.GetPlayerPed(), 0)
+				local veh = GetVehiclePedIsIn(venato.GetPlayerPed(), 0)
 				local station = stationElectric
 				local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, station.x, station.y, station.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
 				local streetName = GetStreetNameFromHashKey(streetA)
@@ -352,7 +352,7 @@ RegisterNetEvent("essence:refuel:ok")
 AddEventHandler("essence:refuel:ok", function(amountToEssence)
 	TriggerEvent('InteractSound_CL:PlayOnOne', "gas_start", 1.0)
 	Wait(2000)
-	local veh = GetVehiclePedIsIn(platypus.GetPlayerPed(), 0)
+	local veh = GetVehiclePedIsIn(venato.GetPlayerPed(), 0)
 	done = false
 	if(veh ~= nil and GetVehicleNumberPlateText(veh) ~= nil) then		
 		while done == false do

@@ -12,7 +12,7 @@ local ClotheVehicle = false
 local BoxOnCamion = false
 
 Citizen.CreateThread(function()
-	local ply = platypus.GetPlayerPed()
+	local ply = venato.GetPlayerPed()
 	while true do
 		Citizen.Wait(0)
 		if IsControlJustPressed(1, Keys["U"]) then
@@ -27,7 +27,7 @@ Citizen.CreateThread(function()
 					distance = GetDistanceBetweenCoords(v.x, v.y, v.z,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 				end
 				if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
-					platypus.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour .")
+					venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour .")
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						takebox()
 						BoxOnForklift = true
@@ -40,7 +40,7 @@ Citizen.CreateThread(function()
 			for i,v in ipairs(CoordForCarries) do
 				local distance = GetDistanceBetweenCoords(v.x, v.y, v.z+0.9,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 				if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
-					platypus.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour détacher.")
+					venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour détacher.")
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						dropBoxInForklift()
 						BoxOnForklift = false
@@ -52,7 +52,7 @@ Citizen.CreateThread(function()
 			local plyCoords = GetEntityCoords(ply, 0)
 			local distance = GetDistanceBetweenCoords(CamionCoord.x, CamionCoord.y, CamionCoord.z+0.9,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 			if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
-				platypus.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour détacher.")
+				venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour détacher.")
 				if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 					AttacheOnCamion()
 					BoxOnForklift = false
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	local ply = platypus.GetPlayerPed()
+	local ply = venato.GetPlayerPed()
 	while true do
 		Citizen.Wait(1000)
 		local plyCoords = GetEntityCoords(ply, 0)
@@ -97,13 +97,13 @@ Citizen.CreateThread(function()
 end)
 
 function CreateBox(x,y,z)
-	local coords = GetEntityCoords(platypus.GetPlayerPed(), 0)
-	local objet = platypus.CreateObject(BoxJobs, x or coords["x"], y or coords["y"], z or coords["z"])
+	local coords = GetEntityCoords(venato.GetPlayerPed(), 0)
+	local objet = venato.CreateObject(BoxJobs, x or coords["x"], y or coords["y"], z or coords["z"])
 	AllObject[objet] = objet
-	local bassin1 = platypus.CreateObject(BassinBox, x or coords["x"], y or coords["y"], z or coords["z"])
+	local bassin1 = venato.CreateObject(BassinBox, x or coords["x"], y or coords["y"], z or coords["z"])
 	AllObject[bassin1] = bassin1
 	SetEntityHeading(bassin1, 90.0)
-	local bassin2 = platypus.CreateObject(BassinBox, x or coords["x"], y or coords["y"], z or coords["z"])
+	local bassin2 = venato.CreateObject(BassinBox, x or coords["x"], y or coords["y"], z or coords["z"])
 	AllObject[bassin2] = bassin2
 	SetEntityHeading(bassin2, 90.0)
 	AttachEntityToEntity(bassin1, objet, 0, -0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
@@ -121,12 +121,12 @@ function AttacheOnCamion()
 end
 
 function takebox()
-	AttachEntityToEntity(GobalBox, GetVehiclePedIsIn(platypus.GetPlayerPed(), false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0, false, false, false, false, 2, true)
+	AttachEntityToEntity(GobalBox, GetVehiclePedIsIn(venato.GetPlayerPed(), false), 3, 0.0, 1.0, -0.4, 0.0, 0, 0.0, false, false, false, false, 2, true)
 	SetEntityCollision(GobalBox, false, true)
 end
 
 function dropBoxInForklift()
-	local coords = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0, 2.0, 0)
+	local coords = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0, 2.0, 0)
 	DetachEntity(GobalBox)
 	PlaceObjectOnGroundProperly(GobalBox)
 	coords = GetEntityCoords(GobalBox, 0)
@@ -136,7 +136,7 @@ function dropBoxInForklift()
 end
 
 function DetacheBoxInForklift()
-	local coords = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0, 2.0, 0)
+	local coords = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0, 2.0, 0)
 	DetachEntity(GobalBox)
 	PlaceObjectOnGroundProperly(GobalBox)
 	coords = GetEntityCoords(GobalBox, 0)
@@ -180,86 +180,91 @@ end
 local bed = nil
 
 function dead()
-	SetEntityHealth(platypus.GetPlayerPed(), 0.0)
+	SetEntityHealth(venato.GetPlayerPed(), 0.0)
 end
 
 function detachebed()
+<<<<<<< HEAD:resources/Venato/test.lua
 	DetachEntity(platypus.GetPlayerPed())
 	ClearPedTasks(PlayerPedId())
+=======
+	DetachEntity(venato.GetPlayerPed())
+	ClearPedTasks(GetPlayerPed(-1))
+>>>>>>> master:resources/venato/test.lua
 end
 
 function attachbed()
-	platypus.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1})
-	AttachEntityToEntity(platypus.GetPlayerPed(), bed, nil, 0.0, -0.25, 1.2, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
+	venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1})
+	AttachEntityToEntity(venato.GetPlayerPed(), bed, nil, 0.0, -0.25, 1.2, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
 end
 
 function test()
-	--platypus.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
-	--platypus.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
-	--platypus.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
-	platypus.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
+	--venato.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
+	--venato.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
+	--venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
+	venato.playAnim({lib = "get_up@standard", anim = "back", useLib = true})
 end
 
 function test2()
-	--platypus.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
-	--platypus.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
-	--platypus.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_intro", useLib = true})
+	--venato.playAnim({lib = "misscarsteal4asleep", anim = "franklin_asleep", useLib = true})
+	--venato.playAnim({lib = "savebighouse@", anim = "f_sleep_l_loop_bighouse", useLib = true}) --PLS en mode dodo
+	--venato.playAnim({lib = "timetable@tracy@sleep@", anim = "idle_c", useLib = true, flag = 1}) -- couchesur le dos jambe l'une sur l'autre
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_intro", useLib = true})
 	Citizen.Wait(15000)
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
 	Citizen.Wait(5000)
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
 	Citizen.Wait(1500)
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol", useLib = true})
 	Citizen.Wait(5000)
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
 	Citizen.Wait(1500)
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
 	Citizen.Wait(5000)
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true})
 end
 
 function test3()
-	local ClonedPed = ClonePed(platypus.GetPlayerPed(), GetEntityHeading(platypus.GetPlayerPed()), 1, 1)
-	local coord = GetEntityCoords(platypus.GetPlayerPed(), true)
+	local ClonedPed = ClonePed(venato.GetPlayerPed(), GetEntityHeading(venato.GetPlayerPed()), 1, 1)
+	local coord = GetEntityCoords(venato.GetPlayerPed(), true)
 	SetEntityCoords(ClonedPed, coord.x, coord.y, coord.z, 0, 0, 0, true)
-	SetEntityCoords(platypus.GetPlayerPed(), coord.x-0.9, coord.y-0.1, coord.z, 0, 0, 0, true)
+	SetEntityCoords(venato.GetPlayerPed(), coord.x-0.9, coord.y-0.1, coord.z, 0, 0, 0, true)
 	local heading = GetEntityHeading(ClonedPed)
-	SetEntityHeading(platypus.GetPlayerPed(), heading-90)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_def", anim = "cpr_intro", useLib = true})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_intro", useLib = true, ped = ClonedPed})
+	SetEntityHeading(venato.GetPlayerPed(), heading-90)
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_def", anim = "cpr_intro", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_def", anim = "cpr_intro", useLib = true, ped = ClonedPed})
 	Citizen.Wait(15000)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1, ped = ClonedPed})
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1, ped = ClonedPed})
 	Citizen.Wait(5000)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_cpr_to_kol", useLib = true, ped = ClonedPed})
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_cpr_to_kol", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_cpr_to_kol", useLib = true, ped = ClonedPed})
 	Citizen.Wait(1500)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol", useLib = true})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol", useLib = true, ped = ClonedPed})
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol", useLib = true, ped = ClonedPed})
 	Citizen.Wait(5000)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol_to_cpr", useLib = true, ped = ClonedPed})
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_kol_to_cpr", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_kol_to_cpr", useLib = true, ped = ClonedPed})
 	Citizen.Wait(1500)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1, ped = ClonedPed})
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_pumpchest", useLib = true, flag = 1, ped = ClonedPed})
 	Citizen.Wait(5000)
-	platypus.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_success", useLib = true})
-	platypus.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true, ped = ClonedPed})
+	venato.playAnim({lib = "mini@cpr@char_a@cpr_str", anim = "cpr_success", useLib = true})
+	venato.playAnim({lib = "mini@cpr@char_b@cpr_str", anim = "cpr_success", useLib = true, ped = ClonedPed})
 	Citizen.Wait(26000)
 	ClearPedTasks(PlayerPedId())
 end
 
 function stopeffect()
-	local coord = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0, 2.0, 0)
-	bed = platypus.CreateObject("xm_lab_chairarm_24", coord["x"], coord["y"], coord["z"])
+	local coord = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0, 2.0, 0)
+	bed = venato.CreateObject("xm_lab_chairarm_24", coord["x"], coord["y"], coord["z"])
 	AllObject[bed] = bed
 	PlaceObjectOnGroundProperly(bed)
 end
 
 function SpawnForkliftTest()
-	local coord = GetOffsetFromEntityInWorldCoords(platypus.GetPlayerPed(), 0, 2.0, 0)
-	platypus.CreateVehicle("forklift", coord , 0, function(vehicle)
+	local coord = GetOffsetFromEntityInWorldCoords(venato.GetPlayerPed(), 0, 2.0, 0)
+	venato.CreateVehicle("forklift", coord , 0, function(vehicle)
 		forklift = vehicle
 	end)
 end

@@ -63,7 +63,11 @@ Citizen.CreateThread(function()
   setMapMarker()
   while true do
     Citizen.Wait(0)
+<<<<<<< HEAD:resources/Venato/garage/client.lua
     local ply = platypus.GetPlayerPed()
+=======
+    local ply = venato.GetPlayerPed()
+>>>>>>> master:resources/venato/garage/client.lua
     local plyCoords = GetEntityCoords(ply, 0)
     local testDistance = 999999
     local testLoopData = {}
@@ -92,7 +96,11 @@ Citizen.CreateThread(function()
         DrawMarker(27,loopData.item.xpoint, loopData.item.ypoint, loopData.item.zpoint+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
         if loopData.distance <= 2 then
           defaultNotification.title = loopData.item.name
+<<<<<<< HEAD:resources/Venato/garage/client.lua
           platypus.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
+=======
+          venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
+>>>>>>> master:resources/venato/garage/client.lua
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
             openGarage(loopData.item.name, loopData.item.xspawn, loopData.item.yspawn, loopData.item.zspawn, loopData.item.hspawn)
           end
@@ -160,7 +168,7 @@ function MyCar(table)
 end
 
 function StoreMyCar(garage)
-  local current = GetPlayersLastVehicle(platypus.GetPlayerPed(), true)
+  local current = GetPlayersLastVehicle(venato.GetPlayerPed(), true)
   if DoesEntityExist(current) then
     TriggerServerEvent('sd:removeId', current)
     local distance = GetDistanceBetweenCoords(GetEntityCoords(current), garage.x,garage.y,garage.z, true)
@@ -219,7 +227,7 @@ function StoreMyCar(garage)
   end
   defaultNotification.message = "Vous ne pouvez stocker que vos véhicules !"
   defaultNotification.type = "error"
-  platypus.notify(defaultNotification)
+  venato.notify(defaultNotification)
 end
 
 
@@ -232,7 +240,11 @@ function SortirVoiture(vhll)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     DeleteEntity(CarOnPoint)
       local car = tonumber(vhll.model)
+<<<<<<< HEAD:resources/Venato/garage/client.lua
       platypus.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
+=======
+      venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
+>>>>>>> master:resources/venato/garage/client.lua
         if health ~= nil then
           SetVehicleEngineHealth(vhl, health[1])
           SetEntityHealth(vhl, health[2])
@@ -261,13 +273,13 @@ function SortirVoiture(vhll)
           end
 
           local wheel = health[8]
-          print(platypus.dump(wheel))
+          print(venato.dump(wheel))
           for i, p in pairs(wheel) do
             SetVehicleWheelHealth(vhl, i, wheel[i..""])
           end
 
         end
-        SetPedIntoVehicle(platypus.GetPlayerPed(), vhl, -1)
+        SetPedIntoVehicle(venato.GetPlayerPed(), vhl, -1)
         SetVehicleNumberPlateText(vhl, vhll.plate)
         TriggerEvent('lock:addVeh', vhll.plate, vhll.name)
         TriggerServerEvent("Garage:SortiVehicule", vhll.plate, vhll.model)
@@ -412,20 +424,20 @@ end)
 
 RegisterNetEvent("Garage:deleteVoiture")
 AddEventHandler("Garage:deleteVoiture", function(vehicle, plate)
-  if IsPedInAnyVehicle( platypus.GetPlayerPed(), false ) then
-    TaskLeaveVehicle(platypus.GetPlayerPed(), GetVehiclePedIsIn(platypus.GetPlayerPed(), false), 262144)
+  if IsPedInAnyVehicle( venato.GetPlayerPed(), false ) then
+    TaskLeaveVehicle(venato.GetPlayerPed(), GetVehiclePedIsIn(venato.GetPlayerPed(), false), 262144)
     Citizen.Wait(2500)
   end
   if GetEntityModel(vehicle) ~= nil then
-    platypus.DeleteCar(vehicle)
+    venato.DeleteCar(vehicle)
   else
-    local current = GetPlayersLastVehicle(platypus.GetPlayerPed(), true)
-    platypus.DeleteCar(vehicle)
+    local current = GetPlayersLastVehicle(venato.GetPlayerPed(), true)
+    venato.DeleteCar(vehicle)
   end
   Menu.close()
   defaultNotification.message = "Véhicule rangé"
   defaultNotification.type = "alert"
-  platypus.notify(defaultNotification)
+  venato.notify(defaultNotification)
 end)
 
 function GetBlacklistedList()
@@ -444,7 +456,7 @@ RegisterNetEvent("maskshop:notifs")
 AddEventHandler("maskshop:notifs", function(msg)
   defaultNotification.message = msg
   defaultNotification.type = "alert"
-  platypus.notify(defaultNotification)
+  venato.notify(defaultNotification)
 end)
 
 TriggerServerEvent('VnT:ActuLibrarie')

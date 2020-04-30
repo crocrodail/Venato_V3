@@ -35,7 +35,7 @@ $(document).ready(function(){
           $('#wrapper').show();
           $('#header p').text(event.data.bank);
         } else {
-          $.post('http://platypus/error', JSON.stringify({}));
+          $.post('http://venato/error', JSON.stringify({}));
         }
         cash = event.data.cash;
         bank = event.data.bank;
@@ -94,7 +94,7 @@ $(document).ready(function(){
       clickSound.play();
       resetAll();
       $('#wrapper').hide();
-      $.post('http://platypus/escape', JSON.stringify({}));
+      $.post('http://venato/escape', JSON.stringify({}));
     }
   });
 
@@ -109,7 +109,7 @@ $(document).ready(function(){
             // Insert all
             if (inside) {
               $('#header p').text( parseInt($('#header p').text()) + parseInt(cash));
-              $.post('http://platypus/insert', JSON.stringify({money : cash}));
+              $.post('http://venato/insert', JSON.stringify({money : cash}));
               bank = parseInt(cash) + parseInt(bank);
               cash = 0;
             }
@@ -117,7 +117,7 @@ $(document).ready(function(){
             // Insert amount
             if (inside) {
               $('#header p').text( parseInt($('#header p').text()) + parseInt(amount));
-              $.post('http://platypus/insert', JSON.stringify({money : amount}));
+              $.post('http://venato/insert', JSON.stringify({money : amount}));
               cash = parseInt(cash) - parseInt(amount);
               bank = parseInt(cash) + parseInt(amount);
             }
@@ -152,7 +152,7 @@ $(document).ready(function(){
                 taking = false;
                 if (inside) {
                   $('#header p').text( parseInt($('#header p').text()) - parseInt(amount));
-                  $.post('http://platypus/take', JSON.stringify({money : amount}));
+                  $.post('http://venato/take', JSON.stringify({money : amount}));
                   console.log(cash);
                   cash = parseInt(cash) + parseInt(amount);
                   console.log(cash);
@@ -265,7 +265,7 @@ $(document).ready(function(){
      if ( e.keyCode == 27 ) {
       resetAll();
       $('#wrapper').hide();
-      $.post('http://platypus/escape', JSON.stringify({}));
+      $.post('http://venato/escape', JSON.stringify({}));
       window.location.href = 'index.html'
     }
   });

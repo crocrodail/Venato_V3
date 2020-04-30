@@ -91,7 +91,7 @@ AddEventHandler('Inventory:DataItem', function(id, qty)
         TriggerClientEvent("Life:UpdateState", source,
           needs)  -- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué-- ###########################   non atribué
       else
-        TriggerClientEvent('platypus:notify', source, "Cette item n'est pas utilisable.", 'danger')
+        TriggerClientEvent('venato:notify', source, "Cette item n'est pas utilisable.", 'danger')
       end
     end
   end)
@@ -117,7 +117,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
         if DataPlayers[tonumber(source)].Poid + (qty * DataPlayers[tonumber(source)].Inventaire[id].uPoid) > DataPlayers[tonumber(source)].PoidMax then
           DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + poidBefore
           defaultNotification.message = "Vous avez trop d'objets en poche."
-          platypus.notify(source, defaultNotification)
+          venato.notify(source, defaultNotification)
           TriggerEvent('inventory:full')
           return false
         end
@@ -139,7 +139,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
           if DataPlayers[tonumber(source)].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[tonumber(source)].PoidMax then
             --DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
-            platypus.notify(source, defaultNotification)
+            venato.notify(source, defaultNotification)
             TriggerEvent('inventory:full')
             return false
           end
@@ -193,7 +193,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
           logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png",
           message = "Vous avez trop d'objet en poche pour ça.",
         }
-        TriggerClientEvent('platypus:notify', source, Notification)
+        TriggerClientEvent('venato:notify', source, Notification)
         TriggerClientEvent('inventory:full', source)
       end
     else
@@ -202,7 +202,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
           if DataPlayers[tonumber(source)].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[tonumber(source)].PoidMax then
             DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + poidBefore
             defaultNotification.message = "Vous avez trop d'objets en poche."
-            platypus.notify(source, defaultNotification)
+            venato.notify(source, defaultNotification)
             TriggerClientEvent('inventory:full', source)
             return false
           end
@@ -297,28 +297,28 @@ RegisterServerEvent('Inventory:CallInfoMoney')
 AddEventHandler('Inventory:CallInfoMoney', function(ClosePlayer, qty, table)
   local infoPlayer = DataPlayers[ClosePlayer]
   local source = source
-  if infoPlayer ~= nil and infoPlayer.Poid + platypus.MoneyToPoid(qty) <= infoPlayer.PoidMax then  
+  if infoPlayer ~= nil and infoPlayer.Poid + venato.MoneyToPoid(qty) <= infoPlayer.PoidMax then  
     if(qty < 0) then
       TriggerEvent("Inventory:RemoveMoney", -qty, ClosePlayer)
       TriggerEvent("Inventory:AddMoney", -qty, source)
       defaultNotification.message = "Vous avez récupéré <span class='green--text'>" .. -qty .. " €</span>"
-      TriggerClientEvent("platypus:notify", source, defaultNotification)
+      TriggerClientEvent("venato:notify", source, defaultNotification)
       TriggerEvent("police:targetCheckInventory", ClosePlayer, source)
     else
       TriggerEvent("Inventory:AddMoney", qty, ClosePlayer)
       TriggerEvent("Inventory:RemoveMoney", qty, source)
       defaultNotification.message = "Vous avez donner <span class='red--text'>" .. qty .. " €</span>"
-      TriggerClientEvent("platypus:notify", source, defaultNotification)
+      TriggerClientEvent("venato:notify", source, defaultNotification)
       defaultNotification.message = "Vous avez reçu <span class='green--text'>" .. qty .. " €</span>"
-      TriggerClientEvent("platypus:notify", ClosePlayer, defaultNotification)
+      TriggerClientEvent("venato:notify", ClosePlayer, defaultNotification)
       TriggerClientEvent("Inventory:AnimReceive", ClosePlayer)
       TriggerClientEvent("Inventory:AnimGive", source)
     end
   else
     defaultNotification.message = "La personne n'a pas la place pour recevoir " .. qty .. " €"
-    TriggerClientEvent("platypus:notify", source, defaultNotification)
+    TriggerClientEvent("venato:notify", source, defaultNotification)
     defaultNotification.message = "Vous n'avez pas la place pour recevoir " .. qty .. " €"
-    TriggerClientEvent("platypus:notify", ClosePlayer, defaultNotification)
+    TriggerClientEvent("venato:notify", ClosePlayer, defaultNotification)
   end
 end)
 
@@ -329,7 +329,7 @@ AddEventHandler("Inventory:AddMoney", function(qty, NewSource)
   if NewSource ~= nil then
     source = NewSource
   end
-  DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + platypus.MoneyToPoid(qty)
+  DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + venato.MoneyToPoid(qty)
   local new = DataPlayers[tonumber(source)].Money + qty
   DataPlayers[tonumber(source)].Money = new
   MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId',
@@ -344,7 +344,7 @@ AddEventHandler("Inventory:RemoveMoney", function(qty, NewSource)
     source = NewSource
   end
   local new = DataPlayers[tonumber(source)].Money - qty
-  DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid - platypus.MoneyToPoid(qty)
+  DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid - venato.MoneyToPoid(qty)
   DataPlayers[tonumber(source)].Money = new
   MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId',
     { ["@SteamId"] = DataPlayers[tonumber(source)].SteamId, ["@Money"] = new })
@@ -357,9 +357,9 @@ AddEventHandler("Inventory:SetMoney", function(qty, NewSource)
   if NewSource ~= nil then
     source = NewSource
   end
-  local newPoid = DataPlayers[tonumber(source)].Poid - platypus.MoneyToPoid(DataPlayers[tonumber(source)].Money)
+  local newPoid = DataPlayers[tonumber(source)].Poid - venato.MoneyToPoid(DataPlayers[tonumber(source)].Money)
   local new = qty
-  DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + platypus.MoneyToPoid(qty)
+  DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + venato.MoneyToPoid(qty)
   DataPlayers[tonumber(source)].Money = new
   MySQL.Async.execute('UPDATE users SET money = @Money WHERE identifier = @SteamId',
     { ["@SteamId"] = DataPlayers[tonumber(source)].SteamId, ["@Money"] = new })
@@ -390,15 +390,15 @@ AddEventHandler('Inventory:CallInfoWeapon', function(ClosePlayer, table)
   if DataPlayers[ClosePlayer].Poid + table[4] <= DataPlayers[ClosePlayer].PoidMax then    
     TriggerEvent("Inventory:AddWeapon", table[3], table[5], table[4], table[2], ClosePlayer)
     defaultNotification.message = "Vous avez donné "..table[2]
-    TriggerClientEvent("platypus:notify", source, defaultNotification)
+    TriggerClientEvent("venato:notify", source, defaultNotification)
     TriggerEvent("Inventory:RemoveWeapon", table[3], table[1], table[4], source)
     TriggerClientEvent("Inventory:AnimReceive", ClosePlayer)
     TriggerClientEvent("Inventory:AnimGive", source)
     defaultNotification.message = "Vous avez reçu "..table[2]
-    TriggerClientEvent("platypus:notify", ClosePlayer, defaultNotification)
+    TriggerClientEvent("venato:notify", ClosePlayer, defaultNotification)
   else
-    TriggerClientEvent("platypus:notify", source, "La personne n'a pas la place pour reçevoir une arme.")
-    TriggerClientEvent("platypus:notify", ClosePlayer, "Vous n'avez pas la place pour reçevoir une arme.")
+    TriggerClientEvent("venato:notify", source, "La personne n'a pas la place pour reçevoir une arme.")
+    TriggerClientEvent("venato:notify", ClosePlayer, "Vous n'avez pas la place pour reçevoir une arme.")
   end
 end)
 
@@ -526,9 +526,9 @@ AddEventHandler('Inventory:CreateCheque', function(player, montant)
               break
             end
           end
-          TriggerClientEvent('platypus:notify', source, Notification)
+          TriggerClientEvent('venato:notify', source, Notification)
           Notification.message = "Vous avez reçu un chèque de " .. montant .. " € ."
-          TriggerClientEvent('platypus:notify', target, Notification)
+          TriggerClientEvent('venato:notify', target, Notification)
         end)
     end)
 end)
@@ -542,9 +542,9 @@ AddEventHandler('Inventory:NotifGive', function(recever, qty, id)
     logo = DataPlayers[tonumber(source)].Inventaire[id].picture,
     message = "Vous avez reçu " .. qty .. " " .. DataPlayers[tonumber(source)].Inventaire[id].libelle .. ".",
   }
-  TriggerClientEvent('platypus:notify', recever, Notification)
+  TriggerClientEvent('venato:notify', recever, Notification)
   Notification.message = "Vous avez donné " .. qty .. " " .. DataPlayers[tonumber(source)].Inventaire[id].libelle .. "."
-  TriggerClientEvent('platypus:notify', source, Notification)
+  TriggerClientEvent('venato:notify', source, Notification)
 end)
 
 RegisterServerEvent('Inventaire:ForceDeleteObject')
@@ -573,6 +573,6 @@ AddEventHandler('Inventory:CreateJobCheck', function(source, amount)
       ["@date"] = date,
     }, function()
       notification.message = "Vous avez reçu un chèque de " .. amount .. " € ."
-      TriggerClientEvent('platypus:notify', source, notification)
+      TriggerClientEvent('venato:notify', source, notification)
     end)
 end)

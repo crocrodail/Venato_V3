@@ -18,7 +18,7 @@ Citizen.CreateThread(
         while true do
             Citizen.Wait(0)
             if menuIsOpen then
-                platypus.GetCarMenuIntruction()
+                venato.GetCarMenuIntruction()
             end
             if IsControlJustPressed(1, Keys["F3"]) then
                 if menuIsOpen then
@@ -133,7 +133,7 @@ function toggleEngine(car)
         defaultNotification.message = "Moteur : <span class='green--text'>démarré</span>"
         SetVehicleEngineOn(car, true, false, true)
     end
-    platypus.notify(defaultNotification)
+    venato.notify(defaultNotification)
 end
 
 function openDoor(data)
@@ -265,7 +265,7 @@ function activRegu(data)
         showMenu()
     end
 
-    platypus.notify(cruiseNotification)
+    venato.notify(cruiseNotification)
 end
 
 RegisterNetEvent("CarMenu:InitSpeedmeter")

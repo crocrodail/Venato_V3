@@ -63,7 +63,7 @@ Citizen.CreateThread(
                         message = "Vous êtes dans la résèrve",
                         timeout = "5000"
                     }
-                    platypus.notify(defaultNotification)
+                    venato.notify(defaultNotification)
                     reserveTrigger = true;
                 end
 
@@ -102,7 +102,7 @@ Citizen.CreateThread(
             )
 
             if food <= 0 or water <= 0 then
-                SetEntityHealth(platypus.GetPlayerPed(), 0)
+                SetEntityHealth(venato.GetPlayerPed(), 0)
                 if food <= 0 then
                     food = 25
                 end
@@ -113,9 +113,9 @@ Citizen.CreateThread(
                 old_water = water
 
                 local needs = {
-                    food = platypus.Round(food, 2),
-                    water = platypus.Round(water, 2),
-                    alcool = platypus.Round(alcool, 2)
+                    food = venato.Round(food, 2),
+                    water = venato.Round(water, 2),
+                    alcool = venato.Round(alcool, 2)
                 }
 
                 TriggerServerEvent("Life:UpdateDB", needs)
@@ -123,9 +123,9 @@ Citizen.CreateThread(
             end
 
             local needs = {
-                food = platypus.Round(food, 2),
-                water = platypus.Round(water, 2),
-                alcool = platypus.Round(alcool, 2)
+                food = venato.Round(food, 2),
+                water = venato.Round(water, 2),
+                alcool = venato.Round(alcool, 2)
             }
             TriggerServerEvent("Life:Update", needs)
 
@@ -398,7 +398,7 @@ function AlcoolEffetPhase(phase)
         -- SetPedCanRagdoll(ped,true)
         -- SetPedCanRagdollFromPlayerImpact(ped,true)
     elseif (phase == 13) then        
-        SetEntityHealth(platypus.GetPlayerPed(), 0)
+        SetEntityHealth(venato.GetPlayerPed(), 0)
         old_phase = -1
     end
 end

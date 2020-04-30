@@ -7,7 +7,7 @@ end)
 RegisterNetEvent("ClothingShop:SaveClothes")
 AddEventHandler("ClothingShop:SaveClothes", function(clothes, price)
 	local source = source
-	local paymentCB = platypus.paymentCB(source, price)
+	local paymentCB = venato.paymentCB(source, price)
 	if paymentCB.status then
 		DataPlayers[tonumber(source)].Clothes = clothes
 		MySQL.Async.execute("UPDATE users SET clothes = @clothes WHERE identifier = @steamId", { ["@steamId"] = DataPlayers[tonumber(source)].SteamId, ["@clothes"] = json.encode(DataPlayers[tonumber(source)].Clothes) })

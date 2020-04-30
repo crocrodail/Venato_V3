@@ -25,11 +25,11 @@ Citizen.CreateThread(function()
   end)
 
   function InitEnterprise()
-    local ped = platypus.GetPlayerPed()
+    local ped = venato.GetPlayerPed()
     local j = 0
     -- Detect Employé    
     for k, v in pairs(employes) do
-        if platypus.HasJob(k) then
+        if venato.HasJob(k) then
             enterprise[k] = employes[k]
             j = j+1
         end
@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
     if not ConfigEnterprise[idEntreprise].Gang then
       Menu.addButton("Faire une annonce", "AnnonceMenu", idEntreprise)
     end
-    if platypus.HasJob(config.PDG) then
+    if venato.HasJob(config.PDG) then
         if ConfigEnterprise[idEntreprise].Gang then
           Menu.addButton("Recruter un nouveau membre", "Hire", idEntreprise)
         else
@@ -89,16 +89,16 @@ Citizen.CreateThread(function()
 
   function MakeAnnonce(idEntreprise)    
     Menu.close()
-    local title =  platypus.OpenKeyboard('', '', 35,"Titre de l'annonce")
+    local title =  venato.OpenKeyboard('', '', 35,"Titre de l'annonce")
     if title ~= '' then
-      local description =  platypus.OpenKeyboard('', '', 200,"Description de l'annonce")
+      local description =  venato.OpenKeyboard('', '', 200,"Description de l'annonce")
       if description ~= '' then
         Annonce({idEntreprise, title, description, ConfigEnterprise[idEntreprise].NotifBackground})
       else
-        platypus.notifyError("Une erreur est survenue.")      
+        venato.notifyError("Une erreur est survenue.")      
       end
     else
-      platypus.notifyError("Une erreur est survenue.")      
+      venato.notifyError("Une erreur est survenue.")      
     end    
     OpenEntrepriseMenu(idEntreprise)
   end
@@ -118,14 +118,14 @@ Citizen.CreateThread(function()
     Menu.clearMenu()
     local name = ''
     if ConfigEnterprise[idEntreprise].Gang then
-      name =  platypus.OpenKeyboard('', '', 250,"Nom de la personne à recruter")
+      name =  venato.OpenKeyboard('', '', 250,"Nom de la personne à recruter")
     else
-      name =  platypus.OpenKeyboard('', '', 250,"Nom de la personne à embaucher")
+      name =  venato.OpenKeyboard('', '', 250,"Nom de la personne à embaucher")
     end
     if name ~= '' then
       TriggerServerEvent("Entreprise:CallHirePlayer", idEntreprise , name)      
     else
-      platypus.notifyError("Une erreur est survenue.")      
+      venato.notifyError("Une erreur est survenue.")      
     end
   end
   
@@ -189,11 +189,11 @@ Citizen.CreateThread(function()
 
   function PaySalaire(data)
     Menu.clearMenu()
-    local pay =  platypus.OpenKeyboard('', '', 250,"Entrez le salaire à verser")
+    local pay =  venato.OpenKeyboard('', '', 250,"Entrez le salaire à verser")
     if pay ~= '' and tonumber(pay) > 0 then
       TriggerServerEvent("Entreprise:PayPlayer", data , tonumber(pay))
     else
-      platypus.notifyError("Une erreur est survenue.")      
+      venato.notifyError("Une erreur est survenue.")      
     end
   end
 

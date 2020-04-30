@@ -13,6 +13,7 @@ ClothingShop = {--73id 47coolor
 	{ name="Venatus Shop", x=-3170.45434570313, y=1045.53295898438,  z=20.8632144927979},
 	{ name="Venatus Shop", x=-1452.13696289063, y=-236.172698974609, z=49.8062591554852},
 	{ name="Venatus Shop", x=77.049049377441,   y=-1391.5979003906,  z=29.3761425018314},
+	{ name="La redoute", x=-159.098,   y=-296.816,  z=39.733},
 }
 
 BlackListLegMale = { --4 (legs) male
