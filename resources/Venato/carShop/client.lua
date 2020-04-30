@@ -41,7 +41,7 @@ Citizen.CreateThread(function ()
 
 <<<<<<< HEAD:resources/Venato/carShop/client.lua
     for i=1, #CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), CarShop[i].x, CarShop[i].y, CarShop[i].z, true)
+      distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), CarShop[i].x, CarShop[i].y, CarShop[i].z, true)
       if distance < CarShop[i].distanceMarker then
         DrawMarker(CarShop[i].type, CarShop[i].x, CarShop[i].y, CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
 =======
@@ -74,7 +74,7 @@ Citizen.CreateThread(function ()
 <<<<<<< HEAD:resources/Venato/carShop/client.lua
             OpenCarMenu(CarShop[i].vehiculeType)
             currentShop = CarShop[i].id
-            scaleform = platypus.GetCarShopIntruction()
+            scaleform = venato.GetCarShopIntruction()
 =======
             OpenCarMenu(Config.CarShop[i].vehiculeType)
             currentShop = Config.CarShop[i].id

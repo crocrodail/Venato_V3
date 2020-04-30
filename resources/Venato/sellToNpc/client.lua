@@ -8,7 +8,7 @@ Citizen.CreateThread(
             Citizen.Wait(500)
             --print("Start Repeat")
             if not sellInProgress then
-                local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+                local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
                 local outped = {}
                 local closePed = {}
                 local handle, ped = GetClosestPed(x, y, z, 20.0,  1, 0, outPed, 1, 1, -1)   
@@ -16,14 +16,14 @@ Citizen.CreateThread(
                 local distance = GetDistanceBetweenCoords(pos.x, pos.y, pos.z, x, y, z, true)
                 local pedNotFound = true
                 if distance < 15.0 then
-                    if IsPedInAnyVehicle(platypus.GetPlayerPed()) == false then
+                    if IsPedInAnyVehicle(venato.GetPlayerPed()) == false then
                         if DoesEntityExist(ped) then
                             if IsPedDeadOrDying(ped) == false then
                                 if IsPedInAnyVehicle(ped) == false then
                                     pedType = GetPedType(ped)
                                     if (pedType == 4 or pedType == 5) and IsPedAPlayer(ped) == false then
                                         currentped = pos
-                                        if distance <= 8.0 and ped ~= platypus.GetPlayerPed() and ped ~= oldped then
+                                        if distance <= 8.0 and ped ~= venato.GetPlayerPed() and ped ~= oldped then
                                             has = true
                                             if has == true then
                                                 pedNotFound = false
@@ -62,27 +62,27 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if closetPed ~= nil or sellInProgress then
-        platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour proposer de la drogue à cette personne.')
+        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour proposer de la drogue à cette personne.')
         if IsControlJustPressed(1, 86) then
             oldped = closetPed
             local randomNumber = math.random(0, 100)
             sellInProgress = true
             if(randomNumber >= accept) then
                 defaultNotification.message = "La personne vous achète de la drogue." 
-                platypus.notify(defaultNotification)               
+                venato.notify(defaultNotification)               
                 PlayAmbientSpeech1(closetPed,"GENERIC_YES", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR",0) 
                 TaskPlayAnim(closetPed,"gestures@m@standing@casual",'gesture_pleased' ,8.0, -8.0, -1, 0, 0, false, false, false )                                                
             elseif randomNumber <= callPolice then
                 defaultNotification.message = "La personne fuit et appelle la police."
-                platypus.notify(defaultNotification)
+                venato.notify(defaultNotification)
                 TaskStandStill(closetPed, 1000)
                 TaskPlayAnim(closetPed,"amb@code_human_cower_stand@male@react_cowering",'base_right' ,8.0, -8.0, -1, 0, 0, false, false, false )                
                 PlayAmbientSpeech1(closetPed,"GENERIC_INSULT_MED", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR",0)
-                AddShockingEventForEntity(99, platypus.GetPlayerPed(), 10.0)
+                AddShockingEventForEntity(99, venato.GetPlayerPed(), 10.0)
                 sellInProgress = false
             else
                 defaultNotification.message = "La personne à refusé." 
-                platypus.notify(defaultNotification)
+                venato.notify(defaultNotification)
                 TaskStandStill(closetPed, 2000)
                 
                 PlayAmbientSpeech1(closetPed,"GENERIC_NO", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR",0)
@@ -103,22 +103,22 @@ Citizen.CreateThread(function()
       Citizen.Wait(0)
       if closetPed ~= nil and sellInProgress then 
         TaskStandStill(closetPed, 2500)    
-        local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+        local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
         local pos = GetEntityCoords(closetPed)
         local distance = GetDistanceBetweenCoords(pos.x, pos.y, pos.z, x, y, z, true)
         if(distance < 2.0) then
             sellInProgress = false
-            platypus.DisableAllControlActions(true)
-            TaskStandStill(platypus.GetPlayerPed(), 2500)
+            venato.DisableAllControlActions(true)
+            TaskStandStill(venato.GetPlayerPed(), 2500)
 
-            platypus.playAnim({lib = "mp_common", flag= 48, anim = "givetake2_a", useLib = true})
-            local x, y, z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))                
-            local playerHeading = GetEntityHeading(platypus.GetPlayerPed())
+            venato.playAnim({lib = "mp_common", flag= 48, anim = "givetake2_a", useLib = true})
+            local x, y, z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))                
+            local playerHeading = GetEntityHeading(venato.GetPlayerPed())
             SetEntityHeading(closetPed, playerHeading-180.0)
             -- SetEntityCoords(closetPed, x+0.7, y+0.7, z-1)
             TaskPlayAnim(closetPed,"mp_common", "givetake2_b" ,8.0, -8.0, -1, 0, 0, false, false, false )
 
-            platypus.DisableAllControlActions(false)
+            venato.DisableAllControlActions(false)
             PlayAmbientSpeech1(closetPed,"GENERIC_BYE", "SPEECH_PARAMS_FORCE_NORMAL_CLEAR",0) 
         elseif(distance > 10.0) then  
             sellInProgress = false

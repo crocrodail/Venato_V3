@@ -74,7 +74,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
 <<<<<<< HEAD:resources/Venato/coffre/client.lua
-    local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+    local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 =======
     local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
 >>>>>>> master:resources/venato/coffre/client.lua
@@ -93,7 +93,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     if indexLoop ~= nil then
 <<<<<<< HEAD:resources/Venato/coffre/client.lua
-      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
+      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
 =======
       venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
 >>>>>>> master:resources/venato/coffre/client.lua
@@ -157,7 +157,7 @@ function CoffreDropItem(row)
     TriggerServerEvent("Coffre:DropItem", qty , row)
   else
 <<<<<<< HEAD:resources/Venato/coffre/client.lua
-    platypus.notifyError("Une erreur est survenue.")
+    venato.notifyError("Une erreur est survenue.")
 =======
     venato.notifyError("Une erreur est survenue.")
 >>>>>>> master:resources/venato/coffre/client.lua
@@ -214,7 +214,7 @@ function CoffreTakeWeapon(row)
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
 <<<<<<< HEAD:resources/Venato/coffre/client.lua
-    platypus.notifyError("Vous n'avez plus de place pour prendre l'arme.")
+    venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
 =======
     venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
 >>>>>>> master:resources/venato/coffre/client.lua
@@ -301,8 +301,8 @@ end
 
 function CoffreTakeMoney(index)
 <<<<<<< HEAD:resources/Venato/coffre/client.lua
-  local qty =  platypus.OpenKeyboard('', '', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and platypus.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
+  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à prendre")
+  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
 =======
   local qty =  venato.OpenKeyboard('', '', 10,"Nombre à prendre")
   if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then

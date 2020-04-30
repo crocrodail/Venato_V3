@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
 <<<<<<< HEAD:resources/Venato/garage/client.lua
-    local ply = platypus.GetPlayerPed()
+    local ply = venato.GetPlayerPed()
 =======
     local ply = venato.GetPlayerPed()
 >>>>>>> master:resources/venato/garage/client.lua
@@ -97,7 +97,7 @@ Citizen.CreateThread(function()
         if loopData.distance <= 2 then
           defaultNotification.title = loopData.item.name
 <<<<<<< HEAD:resources/Venato/garage/client.lua
-          platypus.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
+          venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
 =======
           venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
 >>>>>>> master:resources/venato/garage/client.lua
@@ -241,7 +241,7 @@ function SortirVoiture(vhll)
     DeleteEntity(CarOnPoint)
       local car = tonumber(vhll.model)
 <<<<<<< HEAD:resources/Venato/garage/client.lua
-      platypus.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
+      venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
 =======
       venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
 >>>>>>> master:resources/venato/garage/client.lua

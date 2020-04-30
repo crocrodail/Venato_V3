@@ -1,24 +1,24 @@
-# platypus_V3
+# venato_V3
 
 ## function
 
 ###client
 
 ```lua
-platypus.callServer(eventName, arg) -- need to be on thread, only one arg
-platypus.GetDataPlayer() -- return Data of player
-platypus.CloseVehicle() -- get closet vehicle 
-platypus.ChatMessage(str, source)
-platypus.DeleteCar(entity)
-platypus.CreateVehicle(modelName, coords, heading, cb) 
-platypus.CreateObject(objet, x, y, z)
-platypus.ClosePlayer()
-platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
-platypus.InteractTxt(text)
-platypus.Text3D(x, y, z, text, font, fontSize)
-platypus.addBlip(x, y, z, timeout, blip, color)
-platypus.playAnim(data) --data.lib, data.anim
-platypus.stopAnim(data)
+venato.callServer(eventName, arg) -- need to be on thread, only one arg
+venato.GetDataPlayer() -- return Data of player
+venato.CloseVehicle() -- get closet vehicle 
+venato.ChatMessage(str, source)
+venato.DeleteCar(entity)
+venato.CreateVehicle(modelName, coords, heading, cb) 
+venato.CreateObject(objet, x, y, z)
+venato.ClosePlayer()
+venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
+venato.InteractTxt(text)
+venato.Text3D(x, y, z, text, font, fontSize)
+venato.addBlip(x, y, z, timeout, blip, color)
+venato.playAnim(data) --data.lib, data.anim
+venato.stopAnim(data)
 venato.groundMarker(x, y, z)
 
 ```
@@ -28,8 +28,8 @@ venato.groundMarker(x, y, z)
 ```lua
 GetDataPlayers()
 getSteamID(source)
-platypus.paymentCB(source, amount, isPolice)
-platypus.CheckItem(itemId, source)
+venato.paymentCB(source, amount, isPolice)
+venato.CheckItem(itemId, source)
 
 
 ```
@@ -81,17 +81,17 @@ local defaultNotification = {
  message = "YourText",
  timeout = time
 }
-platypus.notify(defaultNotification)
+venato.notify(defaultNotification)
 
-platypus.notifyError(msg)
+venato.notifyError(msg)
 
 # function utile
 
-platypus.Text3D(x,y,z, text, font, fontSize)                                   # Text flottant ingame
-platypus.InteractTxt(text)                                                     # Text aide affiché en haut a gauche
-result = platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)   # console d'ecriture
-target, distance = platypus.ClosePlayer()                                      # return source du joueur le plus proche et ça distance
-objet = platypus.CreateObject(objet, x, y, z)                                  # Crée un prop et return son id
-platypus.CreateVehicle(modelName, coords, heading, function())                 # Crée un vehicule et retourne l'id du vehicule dans l'arg de la fonction
-platypus.DeleteCar(entity)                                                     # Delete une voiture
-vehicle = platypus.CloseVehicle()                                              # return le vehicule le plus proche
+venato.Text3D(x,y,z, text, font, fontSize)                                   # Text flottant ingame
+venato.InteractTxt(text)                                                     # Text aide affiché en haut a gauche
+result = venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)   # console d'ecriture
+target, distance = venato.ClosePlayer()                                      # return source du joueur le plus proche et ça distance
+objet = venato.CreateObject(objet, x, y, z)                                  # Crée un prop et return son id
+venato.CreateVehicle(modelName, coords, heading, function())                 # Crée un vehicule et retourne l'id du vehicule dans l'arg de la fonction
+venato.DeleteCar(entity)                                                     # Delete une voiture
+vehicle = venato.CloseVehicle()                                              # return le vehicule le plus proche

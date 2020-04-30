@@ -80,7 +80,7 @@ Citizen.CreateThread(function()
       local closeDoor = GetClosestObjectOfType(doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], 5.0, tonumber(obj), false, false, false)
       local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)
 <<<<<<< HEAD:resources/Venato/doors/client.lua
-      if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and platypus.HasJob(doorList[i]["jobId"])) then
+      if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and venato.HasJob(doorList[i]["jobId"])) then
 =======
       if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and venato.HasJob(doorList[i]["jobId"])) then
 >>>>>>> master:resources/venato/doors/client.lua
@@ -106,7 +106,7 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     if loopData.playerDistance ~= nil then
 <<<<<<< HEAD:resources/Venato/doors/client.lua
-      if(loopData.playerDistance < (doorList[loopData.i]["distance"] ~= undefined and doorList[loopData.i]["distance"] or 1) and platypus.HasJob(doorList[loopData.i]["jobId"])) then
+      if(loopData.playerDistance < (doorList[loopData.i]["distance"] ~= undefined and doorList[loopData.i]["distance"] or 1) and venato.HasJob(doorList[loopData.i]["jobId"])) then
 =======
       if(loopData.playerDistance < (doorList[loopData.i]["distance"] ~= undefined and doorList[loopData.i]["distance"] or 1) and venato.HasJob(doorList[loopData.i]["jobId"])) then
 >>>>>>> master:resources/venato/doors/client.lua
@@ -117,8 +117,8 @@ Citizen.CreateThread(function()
         end
         if IsControlJustPressed(1,51) then
 <<<<<<< HEAD:resources/Venato/doors/client.lua
-          platypus.disableAction(true)
-          platypus.playAnim({
+          venato.disableAction(true)
+          venato.playAnim({
 =======
           venato.disableAction(true)
           venato.playAnim({
@@ -130,7 +130,7 @@ Citizen.CreateThread(function()
               timeout = 2500
           })
 <<<<<<< HEAD:resources/Venato/doors/client.lua
-          platypus.disableAction(false)
+          venato.disableAction(false)
 =======
           venato.disableAction(false)
 >>>>>>> master:resources/venato/doors/client.lua

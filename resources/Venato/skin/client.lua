@@ -48,7 +48,7 @@ Citizen.CreateThread(function()
       Citizen.Wait(0)
       local alt = 0.05
 <<<<<<< HEAD:resources/Venato/skin/client.lua
-      if GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
+      if GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
 =======
       if GetEntityModel(venato.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
 >>>>>>> master:resources/venato/skin/client.lua
@@ -118,10 +118,10 @@ function OpenCreatMainMenu()
   fCanCancelOrStartAnim(false)
   PersonnalisationMenu = true
 <<<<<<< HEAD:resources/Venato/skin/client.lua
-  local ped = platypus.GetPlayerPed()
+  local ped = venato.GetPlayerPed()
   SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
   Coords = GetEntityCoords(ped, true)
-  Prop = platypus.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+  Prop = venato.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
 =======
   local ped = venato.GetPlayerPed()
   SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
@@ -543,7 +543,7 @@ function loadPlayer(data)
 <<<<<<< HEAD:resources/Venato/skin/client.lua
     SetPedDefaultComponentVariation(PlayerPedId())
     SetPedComponentVariation(PlayerPedId(), 2, 0, 0, 0)
-    platypus.LoadClothes()
+    venato.LoadClothes()
 =======
     SetPedDefaultComponentVariation(GetPlayerPed(-1))
     SetPedComponentVariation(GetPlayerPed(-1), 2, 0, 0, 0)

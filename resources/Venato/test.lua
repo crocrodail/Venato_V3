@@ -185,7 +185,7 @@ end
 
 function detachebed()
 <<<<<<< HEAD:resources/Venato/test.lua
-	DetachEntity(platypus.GetPlayerPed())
+	DetachEntity(venato.GetPlayerPed())
 	ClearPedTasks(PlayerPedId())
 =======
 	DetachEntity(venato.GetPlayerPed())

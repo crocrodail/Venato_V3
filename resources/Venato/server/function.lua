@@ -44,8 +44,8 @@ AddEventHandler("venato:SwitchJob", function(id)
 end)
 
 <<<<<<< HEAD:resources/Venato/server/function.lua
-RegisterNetEvent("platypus:AddJob")
-AddEventHandler("platypus:AddJob", function(id, identifier)
+RegisterNetEvent("venato:AddJob")
+AddEventHandler("venato:AddJob", function(id, identifier)
 =======
 RegisterNetEvent("venato:AddJob")
 AddEventHandler("venato:AddJob", function(id, identifier)
@@ -72,7 +72,7 @@ AddEventHandler("venato:RemoveJob", function(data)
           print(sourceId)
           print(jobId)
 <<<<<<< HEAD:resources/Venato/server/function.lua
-          print(platypus.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
+          print(venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
 =======
           print(venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
 >>>>>>> master:resources/venato/server/function.lua
@@ -111,7 +111,7 @@ function newJob(source, id)
         message = "Vous etes maintenant "..result[1].job_name
       }
 <<<<<<< HEAD:resources/Venato/server/function.lua
-      platypus.notify(source, defaultNotification)
+      venato.notify(source, defaultNotification)
 =======
       venato.notify(source, defaultNotification)
 >>>>>>> master:resources/venato/server/function.lua
@@ -228,7 +228,7 @@ function accessGranded(SteamId, source , balek)
             TriggerClientEvent("Job:start"..v.job_name, source, true)
           end
 <<<<<<< HEAD:resources/Venato/server/function.lua
-          TriggerClientEvent("platypus:Connection", source)
+          TriggerClientEvent("venato:Connection", source)
 =======
           TriggerClientEvent("venato:Connection", source)
 >>>>>>> master:resources/venato/server/function.lua
@@ -452,8 +452,8 @@ function venato.AddChomage(identifier)
 end
 
 <<<<<<< HEAD:resources/Venato/server/function.lua
-function platypus.RemoveChomage(identifier)
-  TriggerEvent("platypus:RemoveJob", {1, identifier})
+function venato.RemoveChomage(identifier)
+  TriggerEvent("venato:RemoveJob", {1, identifier})
 =======
 function venato.RemoveChomage(identifier)
   TriggerEvent("venato:RemoveJob", {1, identifier})

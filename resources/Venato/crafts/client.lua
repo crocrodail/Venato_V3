@@ -6,7 +6,7 @@ local indexLoop = nil
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+    local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
     for k,v in pairs(Crafts) do
       if Vdist(x, y, z, v.x, v.y, v.z) < v.distance then
         indexLoop = k
@@ -22,9 +22,9 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     if indexLoop ~= nil then
         local craft = Crafts[indexLoop];
-      platypus.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour fabriquer '..craft.nom..'.')
+      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour fabriquer '..craft.nom..'.')
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
-        platypus.Craft(craft.recipeItems, craft.resultItems, craft.animLib, craft.animName, craft.animTimeout) 
+        venato.Craft(craft.recipeItems, craft.resultItems, craft.animLib, craft.animName, craft.animTimeout) 
       end
     end
  end

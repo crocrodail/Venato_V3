@@ -42,7 +42,7 @@ function venato.playAnim(data)
 end
 
 <<<<<<< HEAD:resources/Venato/client/function.lua
-function platypus.stopAnim(data)
+function venato.stopAnim(data)
   StopAnimTask(PlayerPedId(), data.lib ,data.anim, 1.0)
 =======
 function venato.stopAnim(data)
@@ -59,14 +59,14 @@ function venato.HasItem(itemId)
 end
 
 <<<<<<< HEAD:resources/Venato/client/function.lua
-function platypus.HowManyItem(itemId)
+function venato.HowManyItem(itemId)
   if(DataUser == nil or DataUser.Inventaire == nil or DataUser.Inventaire[itemId] == nil) then 
     return 0;
   end
   return DataUser.Inventaire[itemId].quantity;
 end
 
-function platypus.DisplayBool(value)
+function venato.DisplayBool(value)
 =======
 function venato.DisplayBool(value)
 >>>>>>> master:resources/venato/client/function.lua
@@ -94,7 +94,7 @@ end
 
 
 <<<<<<< HEAD:resources/Venato/client/function.lua
-function platypus.disableAction(disabled)
+function venato.disableAction(disabled)
   FreezeEntityPosition(PlayerPedId(), disabled)
 =======
 function venato.disableAction(disabled)
@@ -157,7 +157,7 @@ function venato.InteractTxt(text)
 end
 
 <<<<<<< HEAD:resources/Venato/client/function.lua
-function platypus.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
+function venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
 =======
 function venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
 >>>>>>> master:resources/venato/client/function.lua
@@ -195,7 +195,7 @@ function venato.ClosePlayer()
 end
 
 <<<<<<< HEAD:resources/Venato/client/function.lua
-function platypus.GetPlayerPed()
+function venato.GetPlayerPed()
 =======
 function venato.GetPlayerPed()
 >>>>>>> master:resources/venato/client/function.lua
@@ -365,13 +365,13 @@ function Button(ControlButton)
 end
 
 <<<<<<< HEAD:resources/Venato/client/function.lua
-function platypus.getRandomFromArray(array)  
+function venato.getRandomFromArray(array)  
   local randomNumber = math.random(0, #array)
-  print(platypus.dump(array[randomNumber]))
+  print(venato.dump(array[randomNumber]))
   return array[randomNumber]
 end
 
-function platypus.dump(o)
+function venato.dump(o)
 =======
 function venato.dump(o)
 >>>>>>> master:resources/venato/client/function.lua
@@ -391,8 +391,8 @@ end
 <<<<<<< HEAD:resources/Venato/client/function.lua
 controlDisabled = false
 
-function platypus.DisableAllControlActions(disable)  
-  FreezeEntityPosition(platypus.GetPlayerPed(), disable)
+function venato.DisableAllControlActions(disable)  
+  FreezeEntityPosition(venato.GetPlayerPed(), disable)
   controlDisabled = disable
 end
 
@@ -407,7 +407,7 @@ Citizen.CreateThread(function()
         DisableControlAction(2, KeysFunction[index], true)
       end
       DisableControlAction(0, 24, true) -- Attack
-      DisablePlayerFiring(platypus.GetPlayerPed(), true) -- Disable weapon firing
+      DisablePlayerFiring(venato.GetPlayerPed(), true) -- Disable weapon firing
       DisableControlAction(0, 142, true) -- MeleeAttackAlternate
       DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
     end
@@ -415,10 +415,10 @@ Citizen.CreateThread(function()
 end)
 
 -- CRAFT
-function platypus.Craft(recipeItemsArray, resultItemsArray, animLib, animName, animTimeout) 
+function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, animTimeout) 
   for itemId, recipeItem in pairs(recipeItemsArray) do
-    if(platypus.HowManyItem(itemId) < tonumber(recipeItem)) then
-      platypus.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
+    if(venato.HowManyItem(itemId) < tonumber(recipeItem)) then
+      venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
       return;
     end    
   end
@@ -431,21 +431,21 @@ function platypus.Craft(recipeItemsArray, resultItemsArray, animLib, animName, a
     animTimeout = 0
   end
 
-  platypus.DisableAllControlActions(true)
-  platypus.playAnim({
+  venato.DisableAllControlActions(true)
+  venato.playAnim({
     useLib = true,
     flag = 48,
     lib = animLib, --"missheistfbisetup1",
     anim = animName, --"unlock_enter_janitor",
     timeout = animTimeout--3333
   })
-  platypus.DisableAllControlActions(false)
+  venato.DisableAllControlActions(false)
 
   for itemId, resultItem in pairs(resultItemsArray) do
 		TriggerServerEvent('Inventory:AddItem', tonumber(resultItem), tonumber(itemId))
   end
   
-  platypus.notify({
+  venato.notify({
 		title = "Recette",
 		type = "alert",
 		logo = "https://i.ibb.co/7RcGVMt/icons8-handle-with-care-48px-1.png",
