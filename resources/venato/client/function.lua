@@ -338,37 +338,27 @@ function venato.dump(o)
 end
 
 function venato.callServer(eventName, arg)
-    local response = nil
-
-    TriggerServerEvent(eventName, arg)
-
-
-    RegisterNetEvent(eventName..":cb")
-    AddEventHandler(eventName..":cb", function(cb)
-      response = cb
-    end)
-
-      while response == nil do
-        Citizen.Wait(10)
-      end
-
-    return response
+  local response = nil
+  TriggerServerEvent(eventName, arg)
+  RegisterNetEvent(eventName..":cb")
+  AddEventHandler(eventName..":cb", function(cb)
+    response = cb
+  end)
+  while response == nil do
+    Citizen.Wait(10)
+  end
+  return response
 end
 
 function venato.getDataPlayer()
-    local response = nil
-
-    TriggerServerEvent("venato:GetDataPlayer")
-
-
-    RegisterNetEvent("venato:GetDataPlayer:cb")
-    AddEventHandler("venato:GetDataPlayer:cb", function(cb)
-      response = cb
-    end)
-
-      while response == nil do
-        Citizen.Wait(10)
-      end
-
-    return response
+  local response = nil
+  TriggerServerEvent("venato:GetDataPlayer")
+  RegisterNetEvent("venato:GetDataPlayer:cb")
+  AddEventHandler("venato:GetDataPlayer:cb", function(cb)
+    response = cb
+  end)
+  while response == nil do
+    Citizen.Wait(10)
+  end
+  return response
 end

@@ -177,6 +177,7 @@ function accessGranded(SteamId, source , balek)
         Url = DataUser[1].url,
         Speedometer = DataUser[1].speedometer,
         Clothes = json.decode(DataUser[1].clothes),
+        GardeRobe = { nil },
         Skin = {
           model = DataUser[1].model,
           face = json.decode(DataUser[1].face),
@@ -204,6 +205,7 @@ function accessGranded(SteamId, source , balek)
         TriggerClientEvent("gcphone:updateBank", source, DataUser[1].bank)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
         TriggerEvent("Inventory:UpdateInventory", source)
+        TriggerEvent("GardeRobe:UpdateGardeRobe", source)
         MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = jobs.job_id WHERE UserId = @identifier ", { ["@identifier"] = steamIdl }, function(result)
           if not result[1] then
             return
