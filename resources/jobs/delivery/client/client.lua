@@ -175,7 +175,7 @@ function spawnBoxFromMission()
     DeliveryJobConfig.currentStep = 1.1
   else
     JobsConfig.jobsNotification.message = "<span class='red--text'>un élément block le spawn de caisse.</span>"
-    platypus.notify(JobsConfig.jobsNotification)
+    venato.notify(JobsConfig.jobsNotification)
   end
 end
 
@@ -221,7 +221,7 @@ function DeliveryJob.mainLoop()
           DrawMarker(27, DeliveryJobConfig.chosemission.x, DeliveryJobConfig.chosemission.y, DeliveryJobConfig.chosemission.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,174, 0, 0, 0, 0)
         end
         if ClosetOfMissionPoint < 2 then
-          platypus.InteractTxt(OPEN_CHOSE_MISSION)
+          venato.InteractTxt(OPEN_CHOSE_MISSION)
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
             openChoseMission()
           end
@@ -233,7 +233,7 @@ function DeliveryJob.mainLoop()
           DrawMarker(27, DeliveryJobConfig.takebox.x, DeliveryJobConfig.takebox.y, DeliveryJobConfig.takebox.z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,174, 0, 0, 0, 0)
         end
         if ClosetOfBoxSpawnPoint < 2 then
-          platypus.InteractTxt(SPAWN_BOX)
+          venato.InteractTxt(SPAWN_BOX)
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
             openMenuSpawnBox()
           end
@@ -245,7 +245,7 @@ function DeliveryJob.mainLoop()
           DrawMarker(27, DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].x, DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].y, DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].z, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 112, 168,174, 0, 0, 0, 0)
         end
         if ClosetOfSpawnForkliftPoint < 2 then
-          platypus.InteractTxt(SPAWN_BOX)
+          venato.InteractTxt(SPAWN_BOX)
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
             local playerPos = GetEntityCoords(GetPlayerPed(-1))
             spawnForklift({x=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].x, y=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].y, z=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].z , heading=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].heading})
@@ -265,7 +265,7 @@ function DeliveryJob.mainLoop()
         if distance < 2 and (DeliveryJobConfig.trunk ~= nil and GetEntityModel(GetVehiclePedIsIn(player,
           false)) == GetHashKey(DeliveryJobConfig.TRUNK_KEY) or DeliveryJobConfig.trunk == nil) then
           DeliveryJobConfig.onTrunkDrop = dropPoint
-          platypus.InteractTxt(TAKE_TRUNK_ACTION_MSG)
+          venato.InteractTxt(TAKE_TRUNK_ACTION_MSG)
           interactTxt = true
         elseif DeliveryJobConfig.onTrunkDrop == dropPoint and distance > 1.5 then
           DeliveryJobConfig.onTrunkDrop = nil
@@ -277,7 +277,7 @@ function DeliveryJob.mainLoop()
             if distance < 0.6 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY)
             then
-              platypus.InteractTxt(LOAD_BOXE_IN_TRUNK_ACTION_MSG)
+              venato.InteractTxt(LOAD_BOXE_IN_TRUNK_ACTION_MSG)
               interactTxt = true
               if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                 takeBox(player)
@@ -294,7 +294,7 @@ function DeliveryJob.mainLoop()
               true)
             if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
-              platypus.InteractTxt(PUT_BOX_ON_GROUND_ACTION_MSG)
+              venato.InteractTxt(PUT_BOX_ON_GROUND_ACTION_MSG)
               interactTxt = true
               if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                 dropBoxInForklift(player)
@@ -310,7 +310,7 @@ function DeliveryJob.mainLoop()
             true)
           if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(player,
             false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
-            platypus.InteractTxt(PUT_BOX_ON_TRUNK_ACTION_MSG)
+            venato.InteractTxt(PUT_BOX_ON_TRUNK_ACTION_MSG)
             interactTxt = true
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
               loadOnTrunk()
@@ -361,7 +361,7 @@ function DeliveryJob.mainLoop()
           if distance < 1.5 and GetEntityModel(GetVehiclePedIsIn(player,
             false)) ~= GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
             DeliveryJobConfig.onDeliveryPoint = destination
-            platypus.InteractTxt(GET_FORKLIFT_ACTION_MSG)
+            venato.InteractTxt(GET_FORKLIFT_ACTION_MSG)
             interactTxt = true
             if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
               spawnForklift(destination)
@@ -378,33 +378,33 @@ function DeliveryJob.mainLoop()
 
         if not interactTxt then
           if DeliveryJobConfig.currentStep == 1 then
-            platypus.InteractTxt(LOAD_TRUNK_MSG)
+            venato.InteractTxt(LOAD_TRUNK_MSG)
           elseif DeliveryJobConfig.currentStep == 1.1 then
-            platypus.InteractTxt(LOAD_BOX_ON_TRUCK)
+            venato.InteractTxt(LOAD_BOX_ON_TRUCK)
           elseif DeliveryJobConfig.currentStep == 2 then
             if not DeliveryJobConfig.inWarehouse then
               if DeliveryJobConfig.globalBox == DeliveryJobConfig.box and next(DeliveryJobConfig.itemsTaken) ~= nil then
                 if not DeliveryJobConfig.boxOnTrunk and not DeliveryJobConfig.boxOnForklift then
                   if DeliveryJobConfig.carryBoxWithHand then
-                    platypus.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
+                    venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
                     if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                       putItemInTrunk()
                     end
                   else
-                    platypus.InteractTxt(NO_BOX_ON_HAND)
+                    venato.InteractTxt(NO_BOX_ON_HAND)
                   end
                 else
-                  platypus.InteractTxt(CANT_PUT_ITEMS_IN_BOX_MSG)
+                  venato.InteractTxt(CANT_PUT_ITEMS_IN_BOX_MSG)
                 end
               else
-                platypus.InteractTxt(LOAD_BOX_MSG)
+                venato.InteractTxt(LOAD_BOX_MSG)
               end
               DeliveryJobConfig.ShopProOrNot = true
             else
               DeliveryJobConfig.ShopProOrNot = false
               for k,v in pairs(DeliveryJobConfig.StockItems) do
                 if GetDistanceBetweenCoords(playerPos, v.x, v.y, v.z, true) < 2 then
-                  platypus.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
+                  venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
                   if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
                     if not DeliveryJobConfig.carryBoxWithHand then
                       JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
@@ -418,16 +418,16 @@ function DeliveryJob.mainLoop()
                       end
                     else
                       JobsConfig.jobsNotification.message = "<span class='red--text'>Vous pouvez prendre qu'un type de marchandise à la fois</span>"
-                      platypus.notify(JobsConfig.jobsNotification)
+                      venato.notify(JobsConfig.jobsNotification)
                     end
                   end
                 else
-                  platypus.InteractTxt(TAKE_IN_BOX_MSG)
+                  venato.InteractTxt(TAKE_IN_BOX_MSG)
                 end
               end
             end
           elseif DeliveryJobConfig.currentStep == 3 then
-            platypus.InteractTxt(DELIVERY_MSG)
+            venato.InteractTxt(DELIVERY_MSG)
           end
         end
       end
@@ -445,7 +445,7 @@ function DeliveryJob.mainLoop()
       end
       for k,v in pairs(DeliveryJobConfig.StockItems) do
         if GetDistanceBetweenCoords(playerPos, v.x, v.y, v.z, true) < 2 then
-          platypus.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
+          venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
               JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
               if not JobsConfig.isMenuOpen then
@@ -521,7 +521,7 @@ function DeliveryJob.checkLoop()
       if UserIsInService == true then
         UserIsInService = false
         DeliveryJobConfig.currentStep = nil
-        TriggerEvent("platypus:LoadClothes")
+        TriggerEvent("venato:LoadClothes")
       end
     end
 
@@ -578,7 +578,7 @@ function spawnTrunk()
   local coords = DeliveryJobConfig.trunkDrops.trunk
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnTrunk()
-    platypus.CreateVehicle(
+    venato.CreateVehicle(
       string.upper(name),
       { ["x"] = coords.x, ["y"] = coords.y, ["z"] = coords.z }, coords.heading,
       function(vehicle)
@@ -597,7 +597,7 @@ function spawnForklift(coords)
   local coords = coords or DeliveryJobConfig.trunkDrops.forklift
   if name ~= nil and name ~= '' and name ~= ' ' and IsModelValid(GetHashKey(string.upper(name))) ~= false then
     despawnForklift()
-    platypus.CreateVehicle(
+    venato.CreateVehicle(
       string.upper(name),
       { ["x"] = coords.x, ["y"] = coords.y, ["z"] = coords.z }, coords.heading,
       function(vehicle)
@@ -612,12 +612,12 @@ end
 function spawnBox()
   despawnBox()
   local coords = DeliveryJobConfig.trunkDrops.box
-  local object = platypus.CreateObject(DeliveryJobConfig.BOX_KEY, coords.x, coords.y, coords.z)
+  local object = venato.CreateObject(DeliveryJobConfig.BOX_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[object] = object
-  local box1 = platypus.CreateObject(DeliveryJobConfig.MINI_BOX_KEY, coords.x, coords.y, coords.z)
+  local box1 = venato.CreateObject(DeliveryJobConfig.MINI_BOX_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[box1] = box1
   SetEntityHeading(box1, 90.0)
-  local box2 = platypus.CreateObject(DeliveryJobConfig.MINI_BOX_KEY, coords.x, coords.y, coords.z)
+  local box2 = venato.CreateObject(DeliveryJobConfig.MINI_BOX_KEY, coords.x, coords.y, coords.z)
   DeliveryJobConfig.AllObject[box2] = box2
   SetEntityHeading(box2, 90.0)
   AttachEntityToEntity(box1, object, 0, -0.6, 0.0, -0.08, 0.0, 0.0, 90.0, false, false, false, false, 2, true)
@@ -689,37 +689,37 @@ function showWarehouseShopPro()
 end
 
 function BuyItemsPro(item)
-  local nb = platypus.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
+  local nb = venato.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     TriggerServerEvent("Shops:TestBuyPro", item.id, tonumber(nb))
     Menu.close()
   else
     JobsConfig.jobsNotification.message = "<span class='red--text'>Une erreur dans le nombre saisi</span>"
-    platypus.notify(JobsConfig.jobsNotification)
+    venato.notify(JobsConfig.jobsNotification)
   end
 end
 
 function takeItem(item)
-  local nb = platypus.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
+  local nb = venato.OpenKeyboard("", "", 10, "Combien voulez-vous de '" .. item.libelle .. "' ?")
   if tonumber(nb) ~= nil and tonumber(nb) >= 0 then
     qty = DeliveryJobConfig.itemsTaken[item.id] or 0
     CreateBoxForitemsTaken(qty, item.libelle)
     qty = qty + tonumber(nb)
     DeliveryJobConfig.itemsTaken[item.id] = qty
     JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez maintenant " .. qty .. " " .. item.libelle .. "</span"
-    platypus.notify(JobsConfig.jobsNotification)
+    venato.notify(JobsConfig.jobsNotification)
     Menu.close()
   else
     JobsConfig.jobsNotification.message = "<span class='red--text'>Une erreur dans le nombre saisi</span>"
-    platypus.notify(JobsConfig.jobsNotification)
+    venato.notify(JobsConfig.jobsNotification)
   end
 end
 
 function CreateBoxForitemsTaken(qty, libelle)
   local pedCoords = GetEntityCoords(PlayerPedId())
   DeliveryJobConfig.carryBoxWithHand = true
-	DeliveryJobConfig.handbox = platypus.CreateObject(DeliveryJobConfig.TAKENBOX_KEY, pedCoords.x, pedCoords.y, pedCoords.z)
-  platypus.playAnim({lib = "anim@heists@box_carry@", anim = "idle", useLib = true, flag = 50})
+	DeliveryJobConfig.handbox = venato.CreateObject(DeliveryJobConfig.TAKENBOX_KEY, pedCoords.x, pedCoords.y, pedCoords.z)
+  venato.playAnim({lib = "anim@heists@box_carry@", anim = "idle", useLib = true, flag = 50})
   AttachEntityToEntity(DeliveryJobConfig.handbox , PlayerPedId(), GetPedBoneIndex(PlayerPedId(),  28422), 0.00, -0.4, 0.0, 195.0, 180.0, 180.0, 180.0, false, false, true, false, 1, false)
 end
 
@@ -740,7 +740,7 @@ function putItemInTrunk(item)
   DeliveryJobConfig.itemsTaken = {}
   DropInTheBiggestBoxForitemsTaken()
   JobsConfig.jobsNotification.message = "<span class='green--text'>Vous avez mis vos marchandises dans la caisse</span"
-  platypus.notify(JobsConfig.jobsNotification)
+  venato.notify(JobsConfig.jobsNotification)
 end
 
 function ValidateMission()
@@ -798,7 +798,7 @@ Citizen.CreateThread(function()
     end
 
     if DeliveryJobConfig.carryBoxWithHand then
-      platypus.playAnim({lib = "anim@heists@box_carry@", anim = "idle", useLib = true, flag = 50})
+      venato.playAnim({lib = "anim@heists@box_carry@", anim = "idle", useLib = true, flag = 50})
     end
   end
 end)

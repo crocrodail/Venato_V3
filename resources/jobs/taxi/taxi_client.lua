@@ -448,7 +448,7 @@ local function toogleService()
   else
     -- Restaure Ped
     TriggerServerEvent('taxi:endService')
-    TriggerEvent("platypus:LoadClothes")
+    TriggerEvent("venato:LoadClothes")
   end
 end
 
@@ -607,7 +607,7 @@ Citizen.CreateThread(function()
             TriggerServerEvent('taxi:requestMission')
             openMenuGeneralTaxi()
         else
-            platypus.notifyError("Vous devais etre en service pour accedez au menu")
+            venato.notifyError("Vous devais etre en service pour accedez au menu")
         end
       end
     end

@@ -20,9 +20,9 @@
 			if Brasseur_markerBool == true then
 				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Champ"].x,brasseur_blips["Champ"].y,brasseur_blips["Champ"].z, true) <= brasseur_blips["Champ"].distanceBetweenCoords then
 					if(not recolt) then
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter de l'~b~orge~s~.")						
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à récolter de l'~b~orge~s~.")						
 					else
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter de l'~b~orge~s~.")
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de récolter de l'~b~orge~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -33,9 +33,9 @@
 				end
 				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Brasserie"].x,brasseur_blips["Brasserie"].y,brasseur_blips["Brasserie"].z, true) <= brasseur_blips["Brasserie"].distanceBetweenCoords then
 					if(not transform) then
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer l'~b~orge~s~.")						
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à transformer l'~b~orge~s~.")						
 					else
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer l'~b~orge~s~.")
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de transformer l'~b~orge~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -46,9 +46,9 @@
 				end
 				if isInServiceBrasseur and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), brasseur_blips["Point de vente"].x,brasseur_blips["Point de vente"].y,brasseur_blips["Point de vente"].z, true) <= brasseur_blips["Point de vente"].distanceBetweenCoords then
 					if(not sell) then
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de la ~b~bière~s~.")						
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour commencer à vendre de la ~b~bière~s~.")						
 					else
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de la ~b~bière~s~.")
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour arrêter de vendre de la ~b~bière~s~.")
 					end
 
 					if IsControlJustPressed(1, Keys["E"]) then
@@ -130,9 +130,9 @@ Citizen.CreateThread(function ()
 				DrawMarker(1, brasseur_blips["Entreprise"].x, brasseur_blips["Entreprise"].y, brasseur_blips["Entreprise"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 				if distance <= 5 then
 					if isInServiceBrasseur then
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour quitter le ~b~service actif")
 					else
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour rentrer en ~b~service actif")
 					end
 					if IsControlJustPressed(1, Keys["E"]) then
 						GetServiceBrasseur()
@@ -145,7 +145,7 @@ Citizen.CreateThread(function ()
 				if distance2 <= brasseur_blips["Garage"].distanceMarker+5 then
 					DrawMarker(1, brasseur_blips["Garage"].x, brasseur_blips["Garage"].y, brasseur_blips["Garage"].z, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 0, 155, 255, 200, 0, 0, 0, 0)
 					if distance2 <= 5 then
-						platypus.InteractTxt("Appuyez sur ~g~E~s~ pour faire appairaitre/ranger votre ~b~vehicule")
+						venato.InteractTxt("Appuyez sur ~g~E~s~ pour faire appairaitre/ranger votre ~b~vehicule")
 						if IsControlJustPressed(1, Keys["E"]) then
 							if(existingVeh ~= nil) then
 								SetEntityAsMissionEntity(existingVeh, true, true)
@@ -188,11 +188,11 @@ function GetServiceBrasseur()
 	local playerPed = GetPlayerPed(-1)
 	if isInServiceBrasseur then
 		defaultNotification.message = "Vous n'êtes plus en service."
-		platypus.notify(defaultNotification)
-		TriggerEvent("platypus:LoadClothes")
+		venato.notify(defaultNotification)
+		TriggerEvent("venato:LoadClothes")
 	else
 		defaultNotification.message = "Début de service."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 		TriggerEvent("brasseur:getSkin")
 	end
 	isInServiceBrasseur = not isInServiceBrasseur
@@ -225,7 +225,7 @@ AddEventHandler('brasseur:getCar', function (source)
 		local myPed = GetPlayerPed(-1)
 		local player = PlayerId()
 		local plate = math.random(1000, 9000)
-		platypus.CreateVehicle('pounder',{x=brasseur_car.x, y=brasseur_car.y, z=brasseur_car.z},-50.0, function(vehicle)
+		venato.CreateVehicle('pounder',{x=brasseur_car.x, y=brasseur_car.y, z=brasseur_car.z},-50.0, function(vehicle)
 			existingVeh = vehicle
 			SetVehicleNumberPlateText(existingVeh, brasseur_platesuffix.." "..plate.." ")
 			plate = GetVehicleNumberPlateText(existingVeh)
@@ -233,7 +233,7 @@ AddEventHandler('brasseur:getCar', function (source)
 			Menu.close()
 		end)
 	else
-		platypus.notifyError("Zone encombrée.")
+		venato.notifyError("Zone encombrée.")
 	end
 end)
 
@@ -246,11 +246,11 @@ AddEventHandler('brasseur:drawGetOrge', function (qteBase)
 	if qteBase < 30 then
 		TriggerServerEvent('Inventory:AddItem',1,tonumber(brasseur_ressourceBase))
 		defaultNotification.message = "Vous avez récolté de l'orge."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 	else
 		recolt = false
 		defaultNotification.message = "Vous ne pouvez plus récolter."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 	end
 end)
 
@@ -268,11 +268,11 @@ AddEventHandler('brasseur:drawGetBiere', function(qteBase, qteTraite)
 		TriggerServerEvent("Inventory:RemoveItem", 1, tonumber(brasseur_ressourceBase))
 		TriggerServerEvent('Inventory:AddItem',1,tonumber(brasseur_ressourceTraite))
 		defaultNotification.message = "+1 bière brassée."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 	else
 		transform = false
 		defaultNotification.message = "Vous ne pouvez plus brasser."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 	end
 end)
 
@@ -287,10 +287,10 @@ AddEventHandler('brasseur:drawSellBiere', function (qte)
 		local salaire = math.random(brasseur_pay.minimum, brasseur_pay.maximum)
 		TriggerServerEvent("Bank:Salaire", salaire, "brasseur")
 		defaultNotification.message = "Bières vendues. <br/> <span class='green--text'>"..salaire.."€</span> sont sur votre compte en banque."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 	else
 		sell = false
 		defaultNotification.message = "Vous n'avez plus de bières à vendre."
-		platypus.notify(defaultNotification)
+		venato.notify(defaultNotification)
 	end
 end)

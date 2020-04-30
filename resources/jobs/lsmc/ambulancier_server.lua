@@ -281,14 +281,14 @@
     AddEventHandler("ambulancier:GetInTableTheBlassure", function(sourcePatien)
       local source = source
       local sourcePatien = sourcePatien
-      local cause = exports.platypus:GetCauseOfDeath()
+      local cause = exports.venato:GetCauseOfDeath()
       local notif = {
         title= "Blessure",
         type = "info", --  danger, error, alert, info, success, warning
         logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
         message = cause,
       }
-      TriggerClientEvent("platypus:notify", source, notif)
+      TriggerClientEvent("venato:notify", source, notif)
     end)
 
     RegisterServerEvent('ambulancier:healHim')
@@ -300,7 +300,7 @@
         logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
         message = "Vous venez d'être soigné.",
       }
-      TriggerClientEvent("platypus:notify", idToHeal, notif)
+      TriggerClientEvent("venato:notify", idToHeal, notif)
     end)
 
     RegisterServerEvent('ambulancier:Makepayement')
@@ -313,17 +313,17 @@
         logo = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Ic%C3%B4ne_de_blessure.svg/1024px-Ic%C3%B4ne_de_blessure.svg.png",
         message = "Vous venez d'être facturé du montant de "..price.." au profit du LSMC",
       }      
-      local paymentCB = exports.platypus:ExportPaymentCB(target, price)
+      local paymentCB = exports.venato:ExportPaymentCB(target, price)
       if paymentCB.status then
         TriggerEvent("Coffre:AddMoney", price, 1178)
-        TriggerClientEvent("platypus:notify", target, notif)
+        TriggerClientEvent("venato:notify", target, notif)
         notif.message = "Le client a bien payé sa facture !"
-        TriggerClientEvent("platypus:notify", source, notif)
+        TriggerClientEvent("venato:notify", source, notif)
       else
         notif.type = "danger"
         notif.message = "Le client n'est pas en mesure de payer sa facture : ".. paymentCB.message
-        TriggerClientEvent("platypus:notify", source, notif)
+        TriggerClientEvent("venato:notify", source, notif)
         notif.message = paymentCB.message
-        TriggerClientEvent("platypus:notify", target, notif)
+        TriggerClientEvent("venato:notify", target, notif)
       end
     end)

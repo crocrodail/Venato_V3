@@ -48,9 +48,9 @@ RegisterCommand('radiotest', function(source, args)
   print(tonumber(data))
 
   if data == "nil" then
-    platypusNotify(Config.messages['not_on_radio'])
+    venatoNotify(Config.messages['not_on_radio'])
   else
-   platypusNotify(Config.messages['on_radio'] .. data .. '.00 MHz </b>')
+   venatoNotify(Config.messages['on_radio'] .. data .. '.00 MHz </b>')
  end
 
 end, false)
@@ -69,20 +69,20 @@ RegisterNUICallback('joinRadio', function(data, cb)
             exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
             exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(data.channel), true);
             exports.tokovoip_script:addPlayerToRadio(tonumber(data.channel))
-            platypusNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
+            venatoNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
           elseif not (DataUser.NameJob == 'Policier' or DataUser.NameJob == 'ambulance' or DataUser.NameJob == 'fire') then
             --- info że nie możesz dołączyć bo nie jesteś policjantem
-            platypusErrorNotify(Config.messages['restricted_channel_error'])
+            venatoErrorNotify(Config.messages['restricted_channel_error'])
           end
         end
         if tonumber(data.channel) > Config.RestrictedChannels then
           exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
           exports.tokovoip_script:setPlayerData(playerName, "radio:channel", tonumber(data.channel), true);
           exports.tokovoip_script:addPlayerToRadio(tonumber(data.channel))
-          platypusNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
+          venatoNotify(Config.messages['joined_to_radio'] .. data.channel .. '.00 MHz </b>')
         end
       else
-        platypusErrorNotify(Config.messages['you_on_radio'] .. data.channel .. '.00 MHz </b>')
+        venatoErrorNotify(Config.messages['you_on_radio'] .. data.channel .. '.00 MHz </b>')
       end
       --[[
     exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
@@ -101,11 +101,11 @@ RegisterNUICallback('leaveRadio', function(data, cb)
    local getPlayerRadioChannel = exports.tokovoip_script:getPlayerData(playerName, "radio:channel")
 
     if getPlayerRadioChannel == "nil" then
-      platypusNotify(Config.messages['not_on_radio'])
+      venatoNotify(Config.messages['not_on_radio'])
         else
           exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
           exports.tokovoip_script:setPlayerData(playerName, "radio:channel", "nil", true)
-          platypusNotify(Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
+          venatoNotify(Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
     end
 
    cb('ok')
@@ -138,7 +138,7 @@ AddEventHandler('ls-radio:onRadioDrop', function(source)
 
     exports.tokovoip_script:removePlayerFromRadio(getPlayerRadioChannel)
     exports.tokovoip_script:setPlayerData(playerName, "radio:channel", "nil", true)
-    platypusNotify(Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
+    venatoNotify(Config.messages['you_leave'] .. getPlayerRadioChannel .. '.00 MHz </b>')
 
 end
 end)
@@ -181,22 +181,22 @@ AddEventHandler('Radio:CallData:cb', function(data)
   TriggerEvent("ls-radio:use")
 end)
 
-function platypusNotify(text)
+function venatoNotify(text)
   local notif = {
     title= "Radio",
     type = "info", --  danger, error, alert, info, success, warning
     logo = "https://img.icons8.com/cotton/64/000000/marine-radio.png",
     message = text,
   }
-  TriggerEvent("platypus:notify", notif)
+  TriggerEvent("venato:notify", notif)
 end
 
-function platypusErrorNotify(text)
+function venatoErrorNotify(text)
   local notif = {
     title= "Radio",
     type = "error", --  danger, error, alert, info, success, warning
     logo = "https://img.icons8.com/cotton/64/000000/marine-radio.png",
     message = text,
   }
-  TriggerEvent("platypus:notify", notif)
+  TriggerEvent("venato:notify", notif)
 end

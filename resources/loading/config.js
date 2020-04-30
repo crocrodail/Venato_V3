@@ -9,7 +9,7 @@ var config = {
     /* Music Volume (0%-100%) | Lower is Quieter, Higher is Louder */
     "musicVolume": 50,
     "text": {
-        "title": "Platypus",
+        "title": "venato",
         "link": "",
     },
     /* You dont have to include the '/imgs/' dir AND ALSO REMEMBER TO ADD THESE IMGS IN YOUR __resource.lua*/

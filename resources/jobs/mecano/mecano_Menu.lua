@@ -7,17 +7,17 @@ function updateMenuMeca(newUrgenceMenu, bool)
 end
 
 function MECANO_deleteVehicle()
-  local vehicle = GetVehiclePedIsUsing(platypus.GetPlayerPed())
+  local vehicle = GetVehiclePedIsUsing(venato.GetPlayerPed())
   if tonumber(vehicle) == 0 then
-    vehicle = platypus.CloseVehicle()
-    platypus.DeleteCar(vehicle)
+    vehicle = venato.CloseVehicle()
+    venato.DeleteCar(vehicle)
   else
-    platypus.DeleteCar(vehicle)
+    venato.DeleteCar(vehicle)
   end
 end
 
 function deleteCar( entity )
-    platypus.DeleteCar(entity)
+    venato.DeleteCar(entity)
 end
 
 function openMenuGeneralMecano()
@@ -39,17 +39,17 @@ end
 
 
 function MakePay()
-  local closestPlayer, closestDistance, a= platypus.ClosePlayer()
+  local closestPlayer, closestDistance, a= venato.ClosePlayer()
   
   if closestDistance < 2.0 and closestDistance ~= -1 then
-      local montant = platypus.OpenKeyboard('', '', 10,"Montant du paiement")
+      local montant = venato.OpenKeyboard('', '', 10,"Montant du paiement")
       if montant ~= "" and tonumber(montant) ~= nil and tonumber(montant) ~= 0 then
         TriggerServerEvent("mecano:Makepayement", GetPlayerServerId(a), montant)
       else
-        platypus.notifyError("Le montant indiqué est erroné.")
+        venato.notifyError("Le montant indiqué est erroné.")
       end
   else
-      platypus.notifyError("Pas de joueur proche!")
+      venato.notifyError("Pas de joueur proche!")
   end
 end
 

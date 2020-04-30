@@ -19,7 +19,7 @@ function setIdentity(identifier, data, source)
         ['@taille'] = data.taille,
         ['@clothes'] = clotheToSet,
         ['@identifier'] = identifier
-    },function() TriggerEvent("platypus:SyncData", identifier, source) end)
+    },function() TriggerEvent("venato:SyncData", identifier, source) end)
 end
 
 RegisterNetEvent("Register:AddPlayer")
