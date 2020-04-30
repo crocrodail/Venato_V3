@@ -58,15 +58,9 @@ AddEventHandler("venato:SpawnInit", function(DataPlayers, source)
   if DataPlayers[tonumber(source)] ~= nil then
     DataUser = DataPlayers[tonumber(source)]
     LoadBlips()
-<<<<<<< HEAD:resources/Venato/client/global.lua
     venato.LoadSkin(DataPlayers[tonumber(source)])
     venato.LoadClothes()
     if tonumber(DataPlayers[tonumber(source)].Health) < 100 then SetEntityHealth(venato.GetPlayerPed(), tonumber(DataPlayers[tonumber(source)].Health)) end
-=======
-    venato.LoadSkin(DataPlayers[tonumber(source)])
-    venato.LoadClothes()
-    if tonumber(DataPlayers[tonumber(source)].Health) < 100 then SetEntityHealth(venato.GetPlayerPed(), tonumber(DataPlayers[tonumber(source)].Health)) end
->>>>>>> master:resources/venato/client/global.lua
     TriggerServerEvent("GcPhone:Load")
   end
 end)

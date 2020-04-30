@@ -73,11 +73,7 @@ Citizen.CreateThread(function()
   TriggerServerEvent("Coffre:ReloadCoffre")
   while true do
     Citizen.Wait(0)
-<<<<<<< HEAD:resources/Venato/coffre/client.lua
     local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
-=======
-    local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
->>>>>>> master:resources/venato/coffre/client.lua
     for k,v in pairs(DataCoffre) do
       if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) then
         indexLoop = k
@@ -92,11 +88,7 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
-<<<<<<< HEAD:resources/Venato/coffre/client.lua
       venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
-=======
-      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
->>>>>>> master:resources/venato/coffre/client.lua
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         TriggerServerEvent("Coffre:CheckWhitelist", indexLoop)
         coffre_index = indexLoop
@@ -156,11 +148,7 @@ function CoffreDropItem(row)
   if tonumber(qty) ~= nil and tonumber(qty) ~= 0 then
     TriggerServerEvent("Coffre:DropItem", qty , row)
   else
-<<<<<<< HEAD:resources/Venato/coffre/client.lua
     venato.notifyError("Une erreur est survenue.")
-=======
-    venato.notifyError("Une erreur est survenue.")
->>>>>>> master:resources/venato/coffre/client.lua
   end
   Menu.close()
   Citizen.Wait(500)
@@ -213,11 +201,7 @@ function CoffreTakeWeapon(row)
   if DataCoffre[row[1]].weapon[row[2]].poid + DataUser.Poid <= DataUser.PoidMax then
     TriggerServerEvent("Coffre:TakeWeapon", row)
   else
-<<<<<<< HEAD:resources/Venato/coffre/client.lua
     venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
-=======
-    venato.notifyError("Vous n'avez plus de place pour prendre l'arme.")
->>>>>>> master:resources/venato/coffre/client.lua
   end
   Menu.close()
 end
@@ -300,13 +284,8 @@ function CoffreTakeItem(row)
 end
 
 function CoffreTakeMoney(index)
-<<<<<<< HEAD:resources/Venato/coffre/client.lua
   local qty =  venato.OpenKeyboard('', '', 10,"Nombre à prendre")
   if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
-=======
-  local qty =  venato.OpenKeyboard('', '', 10,"Nombre à prendre")
-  if tonumber(qty) ~= nil and tonumber(qty) > 0 and tonumber(qty) <= DataCoffre[index].argent and venato.MoneyToPoid(qty) + DataUser.Poid <= DataUser.PoidMax then
->>>>>>> master:resources/venato/coffre/client.lua
     TriggerServerEvent("Coffre:TakeMoney", qty , index)
   else
     venato.notifyError("Une erreur est survenue.")

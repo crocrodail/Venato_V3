@@ -79,11 +79,7 @@ Citizen.CreateThread(function()
       end
       local closeDoor = GetClosestObjectOfType(doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], 5.0, tonumber(obj), false, false, false)
       local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)
-<<<<<<< HEAD:resources/Venato/doors/client.lua
       if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and venato.HasJob(doorList[i]["jobId"])) then
-=======
-      if(playerDistance < (doorList[i]["distance"] ~= undefined and doorList[i]["distance"] or 1) and venato.HasJob(doorList[i]["jobId"])) then
->>>>>>> master:resources/venato/doors/client.lua
       else
         FreezeEntityPosition(closeDoor, doorList[i]["locked"])
       end
@@ -105,35 +101,22 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if loopData.playerDistance ~= nil then
-<<<<<<< HEAD:resources/Venato/doors/client.lua
       if(loopData.playerDistance < (doorList[loopData.i]["distance"] ~= undefined and doorList[loopData.i]["distance"] or 1) and venato.HasJob(doorList[loopData.i]["jobId"])) then
-=======
-      if(loopData.playerDistance < (doorList[loopData.i]["distance"] ~= undefined and doorList[loopData.i]["distance"] or 1) and venato.HasJob(doorList[loopData.i]["jobId"])) then
->>>>>>> master:resources/venato/doors/client.lua
         if doorList[loopData.i]["locked"] == true then
           DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~b~ouvrir la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)
         else
           DisplayHelpText("Appuyer sur ~INPUT_PICKUP~ pour ~r~fermer la porte",1, 1, 0.5, 0.8, 0.9, 255, 255, 255, 255)
         end
         if IsControlJustPressed(1,51) then
-<<<<<<< HEAD:resources/Venato/doors/client.lua
           venato.disableAction(true)
           venato.playAnim({
-=======
-          venato.disableAction(true)
-          venato.playAnim({
->>>>>>> master:resources/venato/doors/client.lua
               useLib = true,
               flag = 48,
               lib = "missheistfbisetup1",
               anim = "unlock_enter_janitor",
               timeout = 2500
           })
-<<<<<<< HEAD:resources/Venato/doors/client.lua
           venato.disableAction(false)
-=======
-          venato.disableAction(false)
->>>>>>> master:resources/venato/doors/client.lua
           if doorList[loopData.i]["locked"] == true then
               TriggerServerEvent("door:update", loopData.i, false)
           else

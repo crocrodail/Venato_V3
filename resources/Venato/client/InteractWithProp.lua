@@ -48,15 +48,9 @@ Citizen.CreateThread(function()
 					end
 				else
 					AttachOnProp = false
-<<<<<<< HEAD:resources/Venato/client/InteractWithProp.lua
-					DetachEntity(venato.GetPlayerPed())
-					ClearPedTasks(PlayerPedId())
-					FreezeEntityPosition(PlayerPedId(), false)
-=======
 					DetachEntity(venato.GetPlayerPed())
 					ClearPedTasks(GetPlayerPed(-1))
 					FreezeEntityPosition(GetPlayerPed(-1), false)
->>>>>>> master:resources/venato/client/InteractWithProp.lua
 				end
 			end
 		end

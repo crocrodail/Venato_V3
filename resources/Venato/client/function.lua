@@ -41,13 +41,8 @@ function venato.playAnim(data)
   Citizen.Wait(timeout)
 end
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
-function venato.stopAnim(data)
-  StopAnimTask(PlayerPedId(), data.lib ,data.anim, 1.0)
-=======
 function venato.stopAnim(data)
   StopAnimTask(GetPlayerPed(-1), data.lib ,data.anim, 1.0)
->>>>>>> master:resources/venato/client/function.lua
 end
 
 function venato.HasJob(jobId)
@@ -58,7 +53,6 @@ function venato.HasItem(itemId)
   return DataUser ~= nil and DataUser.Inventaire ~= nil and DataUser.Inventaire[itemId] ~= nil;
 end
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
 function venato.HowManyItem(itemId)
   if(DataUser == nil or DataUser.Inventaire == nil or DataUser.Inventaire[itemId] == nil) then 
     return 0;
@@ -67,9 +61,6 @@ function venato.HowManyItem(itemId)
 end
 
 function venato.DisplayBool(value)
-=======
-function venato.DisplayBool(value)
->>>>>>> master:resources/venato/client/function.lua
   return value and 'true' or 'false'
 end
 
@@ -93,13 +84,8 @@ function venato.notifyError(msg)
 end
 
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
-function venato.disableAction(disabled)
-  FreezeEntityPosition(PlayerPedId(), disabled)
-=======
 function venato.disableAction(disabled)
   FreezeEntityPosition(GetPlayerPed(-1), disabled)
->>>>>>> master:resources/venato/client/function.lua
 end
 
 function venato.notify(notif)
@@ -156,11 +142,7 @@ function venato.InteractTxt(text)
   DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
 function venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
-=======
-function venato.OpenKeyboard(title, defaultText, maxlength, TextEntrynote)
->>>>>>> master:resources/venato/client/function.lua
   AddTextEntry('FMMC_KEY_TIP12', TextEntrynote)
   DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP12", "", defaultText or "", "", "", "", maxlength or 20)
   while (UpdateOnscreenKeyboard() == 0) do
@@ -194,11 +176,7 @@ function venato.ClosePlayer()
   return GetPlayerServerId(closestPlayer), closestDistance, closestPlayer
 end
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
 function venato.GetPlayerPed()
-=======
-function venato.GetPlayerPed()
->>>>>>> master:resources/venato/client/function.lua
 	return  GetPlayerPed(-1)
 end
 
@@ -364,7 +342,6 @@ function Button(ControlButton)
   N_0xe83a3e3557a56640(ControlButton)
 end
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
 function venato.getRandomFromArray(array)  
   local randomNumber = math.random(0, #array)
   print(venato.dump(array[randomNumber]))
@@ -372,9 +349,6 @@ function venato.getRandomFromArray(array)
 end
 
 function venato.dump(o)
-=======
-function venato.dump(o)
->>>>>>> master:resources/venato/client/function.lua
   if type(o) == 'table' then
     local s = '{ '
     for k, v in pairs(o) do
@@ -388,7 +362,6 @@ function venato.dump(o)
   end
 end
 
-<<<<<<< HEAD:resources/Venato/client/function.lua
 controlDisabled = false
 
 function venato.DisableAllControlActions(disable)  
@@ -453,7 +426,6 @@ function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, ani
     message = "Recette terminée"
 	})
 end
-=======
 function venato.callServer(eventName, arg)
   local response = nil
   TriggerServerEvent(eventName, arg)
@@ -479,4 +451,3 @@ function venato.getDataPlayer()
   end
   return response
 end
->>>>>>> master:resources/venato/client/function.lua

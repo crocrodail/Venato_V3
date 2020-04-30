@@ -63,11 +63,7 @@ Citizen.CreateThread(function()
   setMapMarker()
   while true do
     Citizen.Wait(0)
-<<<<<<< HEAD:resources/Venato/garage/client.lua
     local ply = venato.GetPlayerPed()
-=======
-    local ply = venato.GetPlayerPed()
->>>>>>> master:resources/venato/garage/client.lua
     local plyCoords = GetEntityCoords(ply, 0)
     local testDistance = 999999
     local testLoopData = {}
@@ -96,11 +92,7 @@ Citizen.CreateThread(function()
         DrawMarker(27,loopData.item.xpoint, loopData.item.ypoint, loopData.item.zpoint+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
         if loopData.distance <= 2 then
           defaultNotification.title = loopData.item.name
-<<<<<<< HEAD:resources/Venato/garage/client.lua
           venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
-=======
-          venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
->>>>>>> master:resources/venato/garage/client.lua
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
             openGarage(loopData.item.name, loopData.item.xspawn, loopData.item.yspawn, loopData.item.zspawn, loopData.item.hspawn)
           end
@@ -240,11 +232,7 @@ function SortirVoiture(vhll)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     DeleteEntity(CarOnPoint)
       local car = tonumber(vhll.model)
-<<<<<<< HEAD:resources/Venato/garage/client.lua
       venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
-=======
-      venato.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
->>>>>>> master:resources/venato/garage/client.lua
         if health ~= nil then
           SetVehicleEngineHealth(vhl, health[1])
           SetEntityHealth(vhl, health[2])

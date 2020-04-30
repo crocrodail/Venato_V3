@@ -164,7 +164,6 @@ function saveFace()
     end
     TriggerServerEvent('face:save', data)
     Citizen.Wait(1000)
-<<<<<<< HEAD:resources/Venato/skin/face_client.lua
     TriggerServerEvent("venato:SyncData")
     DetachEntity(venato.GetPlayerPed(), true, true)
     DeleteEntity(Prop)
@@ -172,15 +171,6 @@ function saveFace()
     Citizen.Wait(1000)
     FreezeEntityPosition(venato.GetPlayerPed(), true)
     SetEntityCoords(venato.GetPlayerPed(), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
-=======
-    TriggerServerEvent("venato:SyncData")
-    DetachEntity(venato.GetPlayerPed(), true, true)
-    DeleteEntity(Prop)
-    DoScreenFadeOut(1000)
-    Citizen.Wait(1000)
-    FreezeEntityPosition(venato.GetPlayerPed(), true)
-    SetEntityCoords(venato.GetPlayerPed(), -1044.0, -2749.0, 21.363, 0.0, 0.0, 0.0, false)
->>>>>>> master:resources/venato/skin/face_client.lua
     Citizen.Wait(2000)
     FreezeEntityPosition(venato.GetPlayerPed(), false)
     DoScreenFadeIn(2000)

@@ -43,13 +43,8 @@ AddEventHandler("venato:SwitchJob", function(id)
   end)
 end)
 
-<<<<<<< HEAD:resources/Venato/server/function.lua
 RegisterNetEvent("venato:AddJob")
 AddEventHandler("venato:AddJob", function(id, identifier)
-=======
-RegisterNetEvent("venato:AddJob")
-AddEventHandler("venato:AddJob", function(id, identifier)
->>>>>>> master:resources/venato/server/function.lua
   MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=identifier}, function(result)
     if result[1] ~= nil then
       if result[1].source ~= 'disconnect' then
@@ -71,11 +66,7 @@ AddEventHandler("venato:RemoveJob", function(data)
           local jobId = data[1]
           print(sourceId)
           print(jobId)
-<<<<<<< HEAD:resources/Venato/server/function.lua
           print(venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
-=======
-          print(venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
->>>>>>> master:resources/venato/server/function.lua
           DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)] = nil
         end
     end
@@ -110,11 +101,7 @@ function newJob(source, id)
         logo = "https://i.ibb.co/CMFQmq2/icons8-briefcase-96px.png",
         message = "Vous etes maintenant "..result[1].job_name
       }
-<<<<<<< HEAD:resources/Venato/server/function.lua
       venato.notify(source, defaultNotification)
-=======
-      venato.notify(source, defaultNotification)
->>>>>>> master:resources/venato/server/function.lua
     end
   end)
 end
@@ -227,11 +214,7 @@ function accessGranded(SteamId, source , balek)
             DataPlayers[tonumber(source)].Jobs[v.job_id] = v.job_name
             TriggerClientEvent("Job:start"..v.job_name, source, true)
           end
-<<<<<<< HEAD:resources/Venato/server/function.lua
           TriggerClientEvent("venato:Connection", source)
-=======
-          TriggerClientEvent("venato:Connection", source)
->>>>>>> master:resources/venato/server/function.lua
         end)
         ControlVisa(SteamId, source)
         TriggerEvent("police:checkIsCop", source)
@@ -451,11 +434,6 @@ function venato.AddChomage(identifier)
   TriggerEvent("venato:AddJob", 1, identifier)
 end
 
-<<<<<<< HEAD:resources/Venato/server/function.lua
 function venato.RemoveChomage(identifier)
   TriggerEvent("venato:RemoveJob", {1, identifier})
-=======
-function venato.RemoveChomage(identifier)
-  TriggerEvent("venato:RemoveJob", {1, identifier})
->>>>>>> master:resources/venato/server/function.lua
 end

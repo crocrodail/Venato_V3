@@ -39,17 +39,10 @@ Citizen.CreateThread(function ()
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
 
-<<<<<<< HEAD:resources/Venato/carShop/client.lua
-    for i=1, #CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), CarShop[i].x, CarShop[i].y, CarShop[i].z, true)
-      if distance < CarShop[i].distanceMarker then
-        DrawMarker(CarShop[i].type, CarShop[i].x, CarShop[i].y, CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
-=======
     for i=1, #Config.CarShop, 1 do
       distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
       if distance < Config.CarShop[i].distanceMarker then
         DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
->>>>>>> master:resources/venato/carShop/client.lua
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
           previousVehicleColor()
         elseif IsControlJustPressed(1, Keys['RIGHT']) and menuIsOpen then
@@ -71,15 +64,9 @@ Citizen.CreateThread(function ()
               defaultNotification.type = 'error'
               venato.notify(defaultNotification)
           else
-<<<<<<< HEAD:resources/Venato/carShop/client.lua
-            OpenCarMenu(CarShop[i].vehiculeType)
-            currentShop = CarShop[i].id
-            scaleform = venato.GetCarShopIntruction()
-=======
             OpenCarMenu(Config.CarShop[i].vehiculeType)
             currentShop = Config.CarShop[i].id
             scaleform = venato.GetCarShopIntruction()
->>>>>>> master:resources/venato/carShop/client.lua
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end
         end

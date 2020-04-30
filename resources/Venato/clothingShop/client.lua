@@ -90,7 +90,6 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
   if data ~= nil then
     Clothes = data.Clothes
     if canSetClothes then
-<<<<<<< HEAD:resources/Venato/clothingShop/client.lua
       SetPedComponentVariation(venato.GetPlayerPed(), 1, 0, 0, 1)
       SetPedComponentVariation(venato.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
       SetPedComponentVariation(venato.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
@@ -101,18 +100,6 @@ AddEventHandler("ClothingShop:CallData:cb", function(data)
       SetPedComponentVariation(venato.GetPlayerPed(), 9, Clothes.ComponentVariation.kevlar.id, Clothes.ComponentVariation.kevlar.color, 1)
       SetPedComponentVariation(venato.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
       SetPedComponentVariation(venato.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
-=======
-      SetPedComponentVariation(venato.GetPlayerPed(), 1, 0, 0, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 5, Clothes.ComponentVariation.parachute.id, Clothes.ComponentVariation.parachute.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 6, Clothes.ComponentVariation.shoes.id, Clothes.ComponentVariation.shoes.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 7, Clothes.ComponentVariation.accessory.id, Clothes.ComponentVariation.accessory.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 8, Clothes.ComponentVariation.undershirt.id, Clothes.ComponentVariation.undershirt.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 9, Clothes.ComponentVariation.kevlar.id, Clothes.ComponentVariation.kevlar.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
-      SetPedComponentVariation(venato.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
->>>>>>> master:resources/venato/clothingShop/client.lua
     else
       canSetClothes = true
       CSsendMask()

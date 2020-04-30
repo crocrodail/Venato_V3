@@ -184,13 +184,8 @@ function dead()
 end
 
 function detachebed()
-<<<<<<< HEAD:resources/Venato/test.lua
-	DetachEntity(venato.GetPlayerPed())
-	ClearPedTasks(PlayerPedId())
-=======
 	DetachEntity(venato.GetPlayerPed())
 	ClearPedTasks(GetPlayerPed(-1))
->>>>>>> master:resources/venato/test.lua
 end
 
 function attachbed()
