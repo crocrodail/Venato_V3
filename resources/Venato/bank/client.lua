@@ -15,21 +15,21 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     for i = 1, #ATMS, 1 do
       Citizen.Wait(0)
-      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[i].x, ATMS[i].y, ATMS[i].z, true) < 2 and (ATMS[i].b ~= nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2 and (Config.ATMS[i].b ~= nil) then
         indexLoop = i
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[i].x, ATMS[i].y, ATMS[i].z, true) < 10 and (ATMS[i].b == nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 10 and (Config.ATMS[i].b == nil) then
         indexLoopATM = i
       end
       if indexLoop ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[indexLoop].x, ATMS[indexLoop].y, ATMS[indexLoop].z, true) < 0.5 then
+        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z, true) < 0.5 then
           inBankMarker = true
         else
           inBankMarker = false
         end
       end
       if indexLoopATM ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), ATMS[indexLoopATM].x, ATMS[indexLoopATM].y, ATMS[indexLoopATM].z, true) < 1 then
+        if GetDistanceBetweenCoords(GetEntityCoords(platypus.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 1 then
           inMarker = true
         else
           inMarker = false

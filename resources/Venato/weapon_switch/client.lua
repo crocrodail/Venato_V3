@@ -1,6 +1,3 @@
-Config = {}
-
--- Lägg till alla vapen det ska fungera på
 Config.WeaponList = {
 	453432689, --pistol
 	-1716189206, --knife
@@ -18,7 +15,7 @@ Citizen.CreateThread(function()
 	local animFlag = 0
 
 	RequestAnimDict(animDict)
-	  
+
 	while not HasAnimDictLoaded(animDict) do
 		Citizen.Wait(100)
 	end

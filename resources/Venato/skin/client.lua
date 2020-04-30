@@ -10,6 +10,27 @@ local inEdit = false
 if (GetEntityModel(PlayerPedId()) == GetHashKey("mp_m_freemode_01") or GetEntityModel(PlayerPedId()) == GetHashKey("mp_f_freemode_01")) then
   loaded = true
 end
+function firstcamspawn(Prop)
+Citizen.CreateThread(function()
+  local currentItem = 0
+  local distanceCam = 2.0
+  local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
+  local boneIndex = 65068
+  SetCamActive(cam, true)
+  RenderScriptCams(true, false, 0, 1, 0)
+  index = 0
+  value = 0.0
+  local h = GetEntityHeading(GetPlayerPed(-1))
+  inEdit = true
+    while inEdit == true do
+      Citizen.Wait(0)
+      local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z + 75
+      AttachCamToPedBone(cam, GetPlayerPed(-1), boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam , 0.05 , true)
+      SetCamRot(cam, 0.0, 0.0, YawCam + h + 90, true)
+    end
+  end)
+end
+
 function camspawn()
 Citizen.CreateThread(function()
   local currentItem = 0
@@ -25,8 +46,12 @@ Citizen.CreateThread(function()
   inEdit = true
     while inEdit == true do
       Citizen.Wait(0)
-      local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z
-      AttachCamToPedBone(cam, PlayerPedId(), boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam ,0.05 , true)
+      local alt = 0.05
+      if GetEntityModel(platypus.GetPlayerPed()) == GetHashKey('mp_f_freemode_01') then
+        alt = 0.15
+      end
+      local YawCam = Citizen.InvokeNative(0x837765A25378F0BB, 0, Citizen.ResultAsVector()).z + 75
+      AttachCamToPedBone(cam, GetPlayerPed(-1), boneIndex, math.cos(YawCam * 0.01745329251) * distanceCam, math.sin(YawCam * 0.01745329251) * distanceCam , alt , true)
       SetCamRot(cam, 0.0, 0.0, YawCam + h + 90, true)
     end
   end)
@@ -62,35 +87,49 @@ Citizen.CreateThread(function()
       DisableControlAction(1, Keys["BACKSPACE"], true)
       DisableControlAction(1, Keys["K"], true)
       DisableControlAction(1, Keys["F2"], true)
+      DisableControlAction(1, Keys["F1"], true)
       DisableControlAction(1, Keys["F3"], true)
-      DisableControlAction(1, Keys["Y"], true)
+      DisableControlAction(1, Keys["F4"], true)
+      DisableControlAction(1, Keys["F5"], true)
+      DisableControlAction(1, Keys["F6"], true)
+      DisableControlAction(1, Keys["F7"], true)
+      DisableControlAction(1, Keys["F8"], true)
+      DisableControlAction(1, Keys["F9"], true)
+      DisableControlAction(1, Keys["F10"], true)
+      DisableControlAction(1, Keys["F11"], true)
+      DisableControlAction(1, Keys["F12"], true)
+      DisableControlAction(1, Keys["LEFTCTRL"], true)
+      DisableControlAction(1, Keys["C"], true)
       DisableControlAction(1, Keys["H"], true)
       DisableControlAction(1, Keys["J"], true)
       DisableControlAction(1, Keys["G"], true)
       DisableControlAction(1, Keys["5"], true)
+      DisableControlAction(inputGroup, control, disable)
     end
   end
 end)
 
 function OpenCreatMainMenu()
-    ShutdownLoadingScreen()
-    PersonnalisationMenu = true
-    local ped = platypus.GetPlayerPed()
-    SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
-    Coords = GetEntityCoords(ped, true)
-    Prop = platypus.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
-    SetEntityHeading(Prop, 27.0)
-    SetEntityCollision(Prop, false, true)
-    FreezeEntityPosition(Prop, true)
-    AttachEntityToEntity(ped, Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
-    SetEntityVisible(Prop, false, 0)
-    SetEntityVisible(ped, true, 0)
-    Menu.toggle()
-    Menu.clearMenu()
-    Menu.setTitle("Personnalisation")
-    Menu.setSubtitle("Bienvenue")
-    Menu.addButton2("Creez votre perso", "modelMenu", nil, nil)
-    Menu.CreateMenu()
+  ShutdownLoadingScreen()
+  fCanCancelOrStartAnim(false)
+  PersonnalisationMenu = true
+  local ped = platypus.GetPlayerPed()
+  SetEntityCoords(ped, -755.0, 768.0, 212.2, 0.0, 0.0, 0.0, true)
+  Coords = GetEntityCoords(ped, true)
+  Prop = platypus.CreateObject("prop_apple_box_01", Coords["x"], Coords["y"], Coords["z"]-0.1)
+  firstcamspawn()
+  SetEntityHeading(Prop, 27.0)
+  SetEntityCollision(Prop, false, true)
+  FreezeEntityPosition(Prop, true)
+  AttachEntityToEntity(ped, Prop, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, false)
+  SetEntityVisible(Prop, false, 0)
+  SetEntityVisible(ped, true, 0)
+  Menu.toggle()
+  Menu.clearMenu()
+  Menu.setTitle("Personnalisation")
+  Menu.setSubtitle("Bienvenue")
+  Menu.addButton2("Creez votre perso", "modelMenu", nil, nil)
+  Menu.CreateMenu()
 end
 
 function modelMenu()
@@ -373,14 +412,12 @@ function endGenSkin()
   TriggerServerEvent('skin:saveOutfitForNewPlayer', current_skin)
   Menu.close()
   inEdit = false
-  Citizen.CreateThread(function ()
-      startEditFace()
-  end)
+  startEditFace()
 end
 
 RegisterNetEvent('Skin:Create')
 AddEventHandler("Skin:Create", function()
-    OpenCreatMainMenu()
+  OpenCreatMainMenu()
 end)
 
 

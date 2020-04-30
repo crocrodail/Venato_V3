@@ -232,7 +232,7 @@ function SortirVoiture(vhll)
     local CarOnPoint = GetClosestVehicle(vhll.x,vhll.y,vhll.z, 5.000, 0, 70)
     DeleteEntity(CarOnPoint)
       local car = tonumber(vhll.model)
-      platypus.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)        
+      platypus.CreateVehicle(car, {x=vhll.x,y=vhll.y,z=vhll.z}, vhll.h, function(vhl)
         if health ~= nil then
           SetVehicleEngineHealth(vhl, health[1])
           SetEntityHealth(vhl, health[2])

@@ -29,27 +29,27 @@ AddEventHandler("platypus:SwitchJob", function(id)
   local source = source
   TriggerClientEvent("job:deleteBlips", source)
   MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm", { ["@identifier"] = getSteamID(source) }, function(result)
-    
+
     if result[1] then
       TriggerClientEvent("job:deleteBlips", source)
-      TriggerClientEvent("Job:start"..result[1].job_name, source, false)  
-      DataPlayers[tonumber(source)].Jobs[result[1].JobId] = nil 
+      TriggerClientEvent("Job:start"..result[1].job_name, source, false)
+      DataPlayers[tonumber(source)].Jobs[result[1].JobId] = nil
       MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)}, function()
         newJob(source,id)
-      end)      
+      end)
     else
       newJob(source,id)
     end
-  end)  
+  end)
 end)
 
 RegisterNetEvent("platypus:AddJob")
-AddEventHandler("platypus:AddJob", function(id, identifier)  
+AddEventHandler("platypus:AddJob", function(id, identifier)
   MySQL.Async.fetchAll("SELECT * FROM users WHERE identifier = @identifier",{["@identifier"]=identifier}, function(result)
     if result[1] ~= nil then
       if result[1].source ~= 'disconnect' then
         newJob(result[1].source, id)
-      else            
+      else
         newJobIdentifier(result[1].identifier, id)
       end
     end
@@ -67,7 +67,7 @@ AddEventHandler("platypus:RemoveJob", function(data)
           print(sourceId)
           print(jobId)
           print(platypus.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
-          DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)] = nil           
+          DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)] = nil
         end
     end
   end)
@@ -78,14 +78,14 @@ AddEventHandler("platypus:QuitJob", function(id)
   local id = id
   local source = source
   TriggerClientEvent("job:deleteBlips", source)
-  MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm", { ["@identifier"] = getSteamID(source) }, function(result)    
+  MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm", { ["@identifier"] = getSteamID(source) }, function(result)
     if result[1] then
       TriggerClientEvent("job:deleteBlips", source)
-      TriggerClientEvent("Job:start"..result[1].job_name, source, false)  
-      DataPlayers[tonumber(source)].Jobs[result[1].JobId] = nil 
-      MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)})      
+      TriggerClientEvent("Job:start"..result[1].job_name, source, false)
+      DataPlayers[tonumber(source)].Jobs[result[1].JobId] = nil
+      MySQL.Async.execute("DELETE user_job FROM user_job INNER JOIN jobs ON JobId = job_id WHERE UserId = @identifier AND isFarm = true", {['@identifier'] = getSteamID(source)})
     end
-  end)  
+  end)
 end)
 
 
@@ -102,12 +102,12 @@ function newJob(source, id)
         message = "Vous etes maintenant "..result[1].job_name
       }
       platypus.notify(source, defaultNotification)
-    end         
+    end
   end)
 end
 
 function newJobIdentifier(identifier, id)
-  MySQL.Async.execute("INSERT INTO user_job(UserId, JobId) VALUES (@identifier, @jobId)", {['@identifier'] = identifier, ['@jobId'] = id })  
+  MySQL.Async.execute("INSERT INTO user_job(UserId, JobId) VALUES (@identifier, @jobId)", {['@identifier'] = identifier, ['@jobId'] = id })
 end
 
 DataPlayers = {}
@@ -122,7 +122,7 @@ function accessGranded(SteamId, source , balek)
     elseif DataUser[1].nom == nil or DataUser[1].nom == "" then
       TriggerEvent("Register:AddPlayer", source, true)
       print("^3Create identity : "..SteamId.." ("..GetPlayerName(source)..")^7")
-    elseif DataUser[1].model == nil or DataUser[1].model == "" then
+    elseif DataUser[1].face == nil or DataUser[1].face == "" or DataUser[1].face == "NOT" then
       print("^3Create Skin : "..DataUser[1].prenom.." "..DataUser[1].nom.." ("..GetPlayerName(source)..")^7")
       TriggerClientEvent("Skin:Create", source)
     elseif SteamId == nil or SteamId == "" then
@@ -209,9 +209,9 @@ function accessGranded(SteamId, source , balek)
             return
           end
           for k, v in pairs(result) do
-            DataPlayers[tonumber(source)].Jobs[v.job_id] = v.job_name   
-            TriggerClientEvent("Job:start"..v.job_name, source, true)         
-          end          
+            DataPlayers[tonumber(source)].Jobs[v.job_id] = v.job_name
+            TriggerClientEvent("Job:start"..v.job_name, source, true)
+          end
           TriggerClientEvent("platypus:Connection", source)
         end)
         ControlVisa(SteamId, source)

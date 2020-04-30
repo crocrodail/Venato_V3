@@ -87,21 +87,23 @@ end
 
 RegisterNetEvent("ClothingShop:CallData:cb")
 AddEventHandler("ClothingShop:CallData:cb", function(data)
-  Clothes = data.Clothes
-  if canSetClothes then
-    SetPedComponentVariation(platypus.GetPlayerPed(), 1, 0, 0, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 5, Clothes.ComponentVariation.parachute.id, Clothes.ComponentVariation.parachute.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 6, Clothes.ComponentVariation.shoes.id, Clothes.ComponentVariation.shoes.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 7, Clothes.ComponentVariation.accessory.id, Clothes.ComponentVariation.accessory.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 8, Clothes.ComponentVariation.undershirt.id, Clothes.ComponentVariation.undershirt.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 9, Clothes.ComponentVariation.kevlar.id, Clothes.ComponentVariation.kevlar.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
-    SetPedComponentVariation(platypus.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
-  else
-    canSetClothes = true
-    CSsendMask()
+  if data ~= nil then
+    Clothes = data.Clothes
+    if canSetClothes then
+      SetPedComponentVariation(platypus.GetPlayerPed(), 1, 0, 0, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 3, Clothes.ComponentVariation.torso.id, Clothes.ComponentVariation.torso.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 4, Clothes.ComponentVariation.leg.id, Clothes.ComponentVariation.leg.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 5, Clothes.ComponentVariation.parachute.id, Clothes.ComponentVariation.parachute.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 6, Clothes.ComponentVariation.shoes.id, Clothes.ComponentVariation.shoes.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 7, Clothes.ComponentVariation.accessory.id, Clothes.ComponentVariation.accessory.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 8, Clothes.ComponentVariation.undershirt.id, Clothes.ComponentVariation.undershirt.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 9, Clothes.ComponentVariation.kevlar.id, Clothes.ComponentVariation.kevlar.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 10, Clothes.ComponentVariation.badge.id, Clothes.ComponentVariation.badge.color, 1)
+      SetPedComponentVariation(platypus.GetPlayerPed(), 11, Clothes.ComponentVariation.torso2.id, Clothes.ComponentVariation.torso2.color, 1)
+    else
+      canSetClothes = true
+      CSsendMask()
+    end
   end
 end)
 
@@ -574,7 +576,7 @@ function CMask()
 	local ped = platypus.GetPlayerPed()
 	Menu.addButton2("Retour", "OpenClothingShop", nil)
 	for i=1,GetNumberOfPedDrawableVariations(ped, componentId) do
-    local dont = false		
+    local dont = false
     if(GetEntityModel(ped) == GetHashKey("mp_m_freemode_01")) then
 			for k,v in pairs(BlackListMaskMale) do
 				if i == v then

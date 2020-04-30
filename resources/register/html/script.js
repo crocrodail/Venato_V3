@@ -33,11 +33,18 @@ $(document).ready(function () {
         event.preventDefault()
         let form = event.target
         let data = {}
-        let attrs = ['nom', 'prenom', 'dateNaissance', 'sexe', 'taille']
+        let attrs = ['nom', 'prenom', 'day','mounth','year', 'sexe', 'taille']
         attrs.forEach(e => {
             data[e] = form.elements[e].value
         })
-        data.dateNaissance = data.dateNaissance.split('/').reverse().join('-')
+        console.log(data.day[0])
+        if (data.day < 10 && data.day[0] != 0) {
+          data.day = 0 + data.day
+        }
+        if (data.mounth < 10 && data.mounth[0] != 0) {
+          data.mounth = 0 + data.mounth
+        }
+        data.dateNaissance = data.year + '-' + data.mounth + '-' + data.day
         $.post('http://register/' + 'register', JSON.stringify(data))
     })
 })
