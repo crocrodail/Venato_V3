@@ -26,7 +26,7 @@ new Vue({
     open: false,
     selectedItem: 0,
     oldSelectedItem: 0,
-    oldItemsLength:0,
+    oldItemsLength: 0,
     title: 'Concessionnaire',
     subtitle: 'Choisissez votre prochaine voiture',
     maxItemsShow: 5,
@@ -36,7 +36,13 @@ new Vue({
     showShopAdmin: false,
     vehicle: {},
     headers: [],
-    desserts: []
+    desserts: [],
+    commands: [
+      { command: 'F6', icon: '🗣️', text: 'Changer la portée de la parole' },
+      { command: 'E', icon: '💊', text: 'Proposer de la drogue au passant' },
+      { command: 'F', icon: '🚗', text: 'Monter dans le véhicule' },
+      { command: 'Y', icon: '🔑', text: 'Ouvrir/Fermer le véhicule' },
+    ]
   },
   beforeDestroy() {
   },
@@ -44,6 +50,13 @@ new Vue({
     window.addEventListener('resize', this.handleResize)
     window.addEventListener('message', this.handleMessage)
     this.handleResize();
+    setTimeout(() => {
+      this.commands.push(
+        {command: 'L', icon: '🗝️', text: 'Ouvrir/Fermer le coffre du véhicule'});
+    }, 2000);
+    setTimeout(() => {
+      this.commands.pop();
+    }, 5000);
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
@@ -81,13 +94,13 @@ new Vue({
       } else if (event.data.action == "genMenu") {
         var obj = JSON.parse(event.data[1]);
         for (var i = 0; i < obj.length; i++) {
-          if(!obj[i].isShopItem){
-            this.items.push({ title: obj[i].name, subtitle: '', confirm: obj[i].func, hover: obj[i].hover, data: obj[i].args, avatar: obj[i].avatar})
-          }else{
-            this.items.push({ title: obj[i].name, subtitle: obj[i].stock, confirm: obj[i].func, data: obj[i].args, avatar: obj[i].avatar, price: obj[i].price, isShopItem: obj[i].isShopItem})
+          if (!obj[i].isShopItem) {
+            this.items.push({ title: obj[i].name, subtitle: '', confirm: obj[i].func, hover: obj[i].hover, data: obj[i].args, avatar: obj[i].avatar })
+          } else {
+            this.items.push({ title: obj[i].name, subtitle: obj[i].stock, confirm: obj[i].func, data: obj[i].args, avatar: obj[i].avatar, price: obj[i].price, isShopItem: obj[i].isShopItem })
           }
-         };
-         this.selectedItem = this.oldItemsLength != this.items.length ? 0 : this.oldSelectedItem;
+        };
+        this.selectedItem = this.oldItemsLength != this.items.length ? 0 : this.oldSelectedItem;
       } else if (event.data.action == "init") {
         this.title = event.data.title;
         this.subtitle = event.data.subtitle;
@@ -126,7 +139,7 @@ new Vue({
         document.getElementById('menuList').scrollTop = 0;
       } else {
         this.selectedItem++;
-        if(document.getElementById('menuList').querySelector('.selected') != null){
+        if (document.getElementById('menuList').querySelector('.selected') != null) {
           document.getElementById('menuList').scrollTop = document.getElementById('menuList').querySelector('.selected').offsetTop - 250;
         }
       }
