@@ -421,7 +421,6 @@ end)
 
 function RemoveCommandEnter(k)  
   if isCommandEnterAdded == k then
-    dprint("Remove Enter Command")
     TriggerEvent('Commands:Remove', commandEnterHelp.id)
     isCommandEnterAdded = nil
   end
@@ -429,7 +428,6 @@ end
 
 function RemoveCommandExit(k)
   if isCommandExitAdded == k then
-    dprint("Remove Exit Command")
     TriggerEvent('Commands:Remove', commandExitHelp.id)
     isCommandExitAdded = nil
   end

@@ -388,16 +388,20 @@ Citizen.CreateThread(function()
 end)
 
 -- CRAFT
-function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, animTimeout) 
-  for itemId, recipeItem in pairs(recipeItemsArray) do
-    if(venato.HowManyItem(itemId) < tonumber(recipeItem)) then
+function venato.Craft(craftReceipe) 
+  animLib = craftReceipe.animLib
+  animName = craftReceipe.animName
+  animTimeout = craftReceipe.animTimeout  
+
+  for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+    if(venato.HowManyItem(itemId) < tonumber(recipeItem.quantity)) then
       venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
       return;
     end    
   end
 
-  for itemId, recipeItem in pairs(recipeItemsArray) do
-    TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem), tonumber(itemId))   
+  for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+    TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem.quantity), tonumber(itemId))   
   end
 
   if(not animTimeout) then
@@ -414,8 +418,8 @@ function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, ani
   })
   venato.DisableAllControlActions(false)
 
-  for itemId, resultItem in pairs(resultItemsArray) do
-		TriggerServerEvent('Inventory:AddItem', tonumber(resultItem), tonumber(itemId))
+  for itemId, resultItem in pairs(craftReceipe.results) do
+		TriggerServerEvent('Inventory:AddItem', tonumber(resultItem.quantity), tonumber(itemId))
   end
   
   venato.notify({
@@ -426,6 +430,8 @@ function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, ani
     message = "Recette terminée"
 	})
 end
+
+
 function venato.callServer(eventName, arg)
   local response = nil
   TriggerServerEvent(eventName, arg)
