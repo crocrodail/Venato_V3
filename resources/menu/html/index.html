@@ -1,40 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Oswald|Poppins|Roboto&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.min.css"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui"
-    />
-    <link rel="stylesheet" href="./scss/menu.css" />
-  </head>
-  <body>
-    <div id="app">
-      <v-app>
-        <v-style>
-          .selected{ background-color: {{ color }}; color: white; }
-        </v-style>
-        <v-layout>
-          <v-flex class="menu_container" sm3 pl-5>
+
+<head>
+  <meta charset="utf-8" />
+  <link href="https://fonts.googleapis.com/css?family=Oswald|Poppins|Roboto&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+  <link rel="stylesheet" href="./scss/menu.css" />
+</head>
+
+<body>
+  <div id="app">
+    <v-app>
+      <v-style>
+        .selected{ background-color: {{ color }}; color: white; }
+      </v-style>
+      <v-layout>        
+          <v-flex class="menu_container" sm3 pl-5><transition name="custom-classes-transition" enter-active-class="animated fadeInLeft delay-1s"
+          leave-active-class="animated fadeOutLeft faster">
             <v-card class="elevation-10" :dark="isDark" v-if="open">
               <v-img :src="background" height="8vh">
-                <div
-                  class="menu_title"
-                  :dark="isDark"
-                  :style="'background-color:'+color"
-                >
+                <div class="menu_title" :dark="isDark" :style="'background-color:'+color">
                   <p class="text-xs-center" v-html="title"></p>
                   <p class="menu_info">({{selectedItem+1}}/{{items.length}})</p>
                 </div>
@@ -42,45 +29,34 @@
               <v-list two-line :dark="isDark" id="menuList">
                 <v-subheader :dark="isDark" v-html="subtitle">
                 </v-subheader>
-                <template v-for="(item, index) in items">                  
-                  <v-list-tile
-                    :key="index"
-                    :dark="isDark"
-                    @click="selectedItem = index"
-                    :class="[{selected: index === selectedItem}]"
-                  >
+                <template v-for="(item, index) in items">
+                  <v-list-tile :key="index" :dark="isDark" @click="selectedItem = index"
+                    :class="[{selected: index === selectedItem}]">
                     <v-list-tile-avatar v-if="item.avatar">
                       <v-img :src="item.avatar" aspect-ratio="1" contain></v-img>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                      <v-list-tile-title
-                        v-html="item.title"
-                      ></v-list-tile-title>
-                      <v-list-tile-sub-title
-                        v-html="item.subtitle"
-                      ></v-list-tile-sub-title>
+                      <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                      <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
                       <v-btn icon ripple v-if="!item.price">
                         <v-icon :color="(isDark ? 'white':'black')">{{
-                          item.icon || "fa fa-chevron-right fa-xs"
-                        }}</v-icon>
+                            item.icon || "fa fa-chevron-right fa-xs"
+                          }}</v-icon>
                       </v-btn>
                       <span v-else>{{item.price | toCurrency}} €</span>
                     </v-list-tile-action>
                   </v-list-tile>
-                  
+
                 </template>
               </v-list>
             </v-card>
+            </transition>
+            
           </v-flex>
-          <v-flex class="vehicle_information" sm2>
-            <vehicle-information
-              inline-template
-              :vehicle="vehicle"
-              :color="color"
-              v-if="showVehicleInformation"
-            >
+          <v-flex class="vehicle_information" sm2>            
+            <vehicle-information inline-template :vehicle="vehicle" :color="color" v-if="showVehicleInformation">
               <v-card elevation-5 class="mx-auto" color="#ECEFF1BF" width="390">
                 <v-card-title>
                   <span class="headline font-weight-bold text-truncate">
@@ -90,55 +66,25 @@
                 <v-card-text>
                   <p class="title font-weight-black">Spécifications</p>
                   <p>Vitesse</p>
-                  <v-progress-linear
-                    query
-                    :color="color"
-                    height="10"
-                    :value="vehicle.speed"
-                  ></v-progress-linear>
+                  <v-progress-linear query :color="color" height="10" :value="vehicle.speed"></v-progress-linear>
                   <p>Accélération</p>
-                  <v-progress-linear
-                    query
-                    :color="color"
-                    height="10"
-                    :value="vehicle.acceleration"
-                  ></v-progress-linear>
+                  <v-progress-linear query :color="color" height="10" :value="vehicle.acceleration"></v-progress-linear>
                   <p>Freinage</p>
-                  <v-progress-linear
-                    query
-                    :color="color"
-                    height="10"
-                    :value="vehicle.braking"
-                  ></v-progress-linear>
+                  <v-progress-linear query :color="color" height="10" :value="vehicle.braking"></v-progress-linear>
                   <p>Maniabilité</p>
-                  <v-progress-linear
-                    query
-                    :color="color"
-                    height="10"
-                    :value="vehicle.handling"
-                  ></v-progress-linear>
+                  <v-progress-linear query :color="color" height="10" :value="vehicle.handling"></v-progress-linear>
                   <v-divider></v-divider>
                   <v-layout row wrap pt-2>
                     <v-flex xs6>
-                      <v-card
-                        v-if="!vehicle.vp_only"
-                        color="blue-grey lighten-3"
-                      >
-                        <v-card-text
-                          class="black--text title font-weight-bold text-xs-center px-0"
-                        >
+                      <v-card v-if="!vehicle.vp_only" color="blue-grey lighten-3">
+                        <v-card-text class="black--text title font-weight-bold text-xs-center px-0">
                           {{ vehicle.price | toCurrency }} €
                         </v-card-text>
                       </v-card>
                     </v-flex>
                     <v-flex xs6>
-                      <v-card
-                        v-if="vehicle.vp_enabled"
-                        color="blue-grey lighten-3"
-                      >
-                        <v-card-text
-                          class="black--text title font-weight-bold text-xs-center px-0"
-                        >
+                      <v-card v-if="vehicle.vp_enabled" color="blue-grey lighten-3">
+                        <v-card-text class="black--text title font-weight-bold text-xs-center px-0">
                           {{ vehicle.price_vp | toCurrency }} VP
                         </v-card-text>
                       </v-card>
@@ -148,12 +94,8 @@
               </v-card>
             </vehicle-information>
           </v-flex>
-          <v-flew class="shop_admin" sm12 v-if="showShopAdmin">
-            <v-data-table
-              :headers="headers"
-              :items="desserts"
-              class="elevation-1"
-            >
+          <v-flex class="shop_admin" sm12 v-if="showShopAdmin">            
+            <v-data-table :headers="headers" :items="desserts" class="elevation-1">
               <template v-slot:items="props">
                 <td>{{ props.item.name }}</td>
                 <td class="text-xs-right">{{ props.item.calories }}</td>
@@ -163,21 +105,46 @@
                 <td class="text-xs-right">{{ props.item.iron }}</td>
               </template>
             </v-data-table>
-          </v-flew>
-        </v-layout>
-      </v-app>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.js"></script>
-    <script src="https://kit.fontawesome.com/15284e8427.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.14/lodash.min.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-      crossorigin="anonymous"
-    ></script>
+          </v-flex>
+      </v-layout>
+      <transition name="custom-classes-transition" enter-active-class="animated fadeInLeft delay-1s"
+        leave-active-class="animated fadeOutLeft faster">
+        <div class="commands" v-if="commands && commands.length > 0 && !open && !showShopAdmin">
+          <h2>Raccourcis clavier</h2>
+          <transition-group name="custom-classes-transition" enter-active-class="animated bounceIn"
+            leave-active-class="animated fadeOut faster">
+            <v-layout row wrap class="command" v-for="command in commands" :key="command.id">
+              <v-flex xs1 v-if="command.command">
+                <h3 class="key">{{command.command}}</h3>
+              </v-flex>
+              <v-flex xs1 v-if="command.command">
+                <v-img v-if="command.icon" :src="command.icon" aspect-ratio="1" contain height="22px"></v-img>
+              </v-flex>
+              <v-flex xs10 v-if="command.command">
+                <div class="text">{{command.text}}</div>
+              </v-flex>
+              <v-flex xs12 v-if="command.title">
+                <div class="commandTitle">{{command.title}}</div>
+              </v-flex>
+              <v-flex xs12 v-if="command.divider">
+                <v-divider></v-divider>
+              </v-flex>
+            </v-layout>
+          </transition-group>
+          <p class="infoHide">- pour afficher/cacher cette interface</p>
+        </div>
+      </transition>
+    </v-app>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.js"></script>
+  <script src="https://kit.fontawesome.com/15284e8427.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.14/lodash.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
-    <script src="./vehicleInformation.js" type="text/javascript"></script>
-    <script src="./menu.js" type="text/javascript"></script>
-  </body>
+  <script src="./vehicleInformation.js" type="text/javascript"></script>
+  <script src="./menu.js" type="text/javascript"></script>
+</body>
+
 </html>

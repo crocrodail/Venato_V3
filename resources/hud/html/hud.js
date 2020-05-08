@@ -33,7 +33,7 @@ new Vue({
           },
           timeout: 3000
       });
-      Noty.setMaxVisible(2);
+      Noty.setMaxVisible(2);      
     },
     destroyed() {
       window.removeEventListener('resize', this.handleResize)

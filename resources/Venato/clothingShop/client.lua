@@ -81,6 +81,21 @@ local priceTop = 200
 local priceLegs = 200
 local priceShoes = 200
 
+local defaultNotification = {
+  title= "Magasin de vêtements",
+  logo = "https://i.ibb.co/ZT6dpsG/icons8-clothes-48px.png",
+  message = "La transaction s'est bien passé ! Ces vêtements sont à vous.",
+ }
+ 
+local commandHelp = {
+  id = "clothingShop",
+  command = "E",
+  icon = "https://i.ibb.co/ZT6dpsG/icons8-clothes-48px.png",
+  text = "Essayer de nouveau vêtements"
+}
+
+local isCommandAdded = nil;
+
 function venato.LoadClothes()
   TriggerServerEvent("ClothingShop:CallData")
 end
@@ -159,7 +174,10 @@ Citizen.CreateThread(function()
 			end
       if Vdist(x, y, z, v.x, v.y, v.z) < 1 then
         DrawMarker(27,v.x,v.y,v.z-0.99,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,0,0,0,0)
-        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour accèder au shop.')
+        if not isCommandAdded then
+          TriggerEvent('Commands:Add', commandHelp)
+          isCommandAdded = k
+        end
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
           Menu.toggle()
           OpenClothingShop()
@@ -169,6 +187,9 @@ Citizen.CreateThread(function()
             debug = false
           end
         end
+      elseif isCommandAdded == k then
+        TriggerEvent('Commands:Remove', commandHelp.id)
+        isCommandAdded = nil
       end
     end
 		if ActualDomponentId ~= nil then
@@ -352,11 +373,7 @@ AddEventHandler("ClothingShop:SaveClothes:response", function(response)
    buyAnything = true
    Menu.close()
    venato.LoadClothes()
-   local defaultNotification = {
-    title= "Magasin de vêtements",
-    logo = "https://img.icons8.com/nolan/64/000000/clothes.png",
-    message = "La transaction s'est bien passé ! Ces vêtements sont à vous.",
-   }
+   
    venato.notify(defaultNotification)
   else
     venato.notifyError(response.message)

@@ -18,6 +18,15 @@ local defaultNotification = {
 local colors = {}
 local maxColorIndex = 11
 
+local commandHelp = {
+  id = "seeCarCatalog",
+  command = "E",
+  icon = "https://i.ibb.co/Z8F722b/icons8-magazine-48px.png",
+  text = "Consulter le catalogue auto"
+}
+
+local isCommandAdded = nil;
+
 
 function HideMenu()
   menuIsOpen = false
@@ -39,10 +48,10 @@ Citizen.CreateThread(function ()
       DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
     end
 
-    for i=1, #Config.CarShop, 1 do
-      distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z, true)
-      if distance < Config.CarShop[i].distanceMarker then
-        DrawMarker(Config.CarShop[i].type, Config.CarShop[i].x, Config.CarShop[i].y, Config.CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
+    for i=1, #CarShop, 1 do
+      distance = GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), CarShop[i].x, CarShop[i].y, CarShop[i].z, true)
+      if distance < CarShop[i].distanceMarker then
+        DrawMarker(CarShop[i].type, CarShop[i].x, CarShop[i].y, CarShop[i].z+0.1,0,0,0,0,0,0,1.0,1.0,1.0,0,150,255,200,true,true,0,0)
         if IsControlJustPressed(1, Keys['LEFT']) and menuIsOpen then
           previousVehicleColor()
         elseif IsControlJustPressed(1, Keys['RIGHT']) and menuIsOpen then
@@ -56,7 +65,10 @@ Citizen.CreateThread(function ()
       end
       if distance < CarShop[i].distanceMin  then
         if not menuIsOpen then
-        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour voir les véhicules')
+          if not isCommandAdded then
+            TriggerEvent('Commands:Add', commandHelp)
+            isCommandAdded = i
+          end
         end
         if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
           if IsPedInAnyVehicle( playerPed, false ) then
@@ -64,8 +76,8 @@ Citizen.CreateThread(function ()
               defaultNotification.type = 'error'
               venato.notify(defaultNotification)
           else
-            OpenCarMenu(Config.CarShop[i].vehiculeType)
-            currentShop = Config.CarShop[i].id
+            OpenCarMenu(CarShop[i].vehiculeType)
+            currentShop = CarShop[i].id
             scaleform = venato.GetCarShopIntruction()
             DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
           end
@@ -78,6 +90,10 @@ Citizen.CreateThread(function ()
         if menuIsOpen and CarShop[i].id == currentShop then
           HideMenu()
           RemoveCurrentCar()
+        end
+        if isCommandAdded == i then
+          TriggerEvent('Commands:Remove', commandHelp.id)
+          isCommandAdded = nil
         end
       end
     end
@@ -319,37 +335,6 @@ function venato.GetCarShopIntruction()
   EndScaleformMovieMethodReturn()
 
   return scaleform
-end
-
-function venato.GetCarMenuIntruction()
-  scaleform = venato.ScaleForm("instructional_buttons")
-  PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(2)
-  Button(GetControlInstructionalButton(2, Keys["Y"], true))
-  ButtonMessage("Vérrouiler/Déverrouiller le véhicule (avec les clès)")
-  PopScaleformMovieFunctionVoid()
-
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(1)
-  Button(GetControlInstructionalButton(2, Keys["L"], true))
-  ButtonMessage("Ouvrir l'inventaire du coffre")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-  PushScaleformMovieFunctionParameterInt(0)
-  Button(GetControlInstructionalButton(2, Keys["H"], true))
-  ButtonMessage("Régler les phares")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
-  PopScaleformMovieFunctionVoid()
-  PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(0)
-  PushScaleformMovieFunctionParameterInt(80)
-  EndScaleformMovieMethodReturn()
-  DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255, 0)
 end
 
 RegisterNetEvent('CarShop:PaiementOk:response')

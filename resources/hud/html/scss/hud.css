@@ -13,7 +13,7 @@ html body #app {
 
 html body #app .besoins {
   position: absolute;
-  bottom: 2.5%;
+  bottom: 5%;
   right: 1.5%;
 }
 
@@ -114,8 +114,7 @@ html body #app .fullscreen {
 .noty_layout {
   width: 30% !important;
   scale: 0.80;
-  -webkit-transform-origin: top right;
-          transform-origin: top right;
+  transform-origin: top right;
 }
 
 .noty_layout .noty_type__alert {
@@ -141,4 +140,3 @@ html body #app .fullscreen {
 .hide {
   display: none;
 }
-/*# sourceMappingURL=hud.css.map */

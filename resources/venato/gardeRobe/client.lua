@@ -1,16 +1,31 @@
 local coord = { x = -167.359, y = -300.007, z = 39.650 }
 local menuIsOpen = false
 
+local commandHelp = {
+  id = "wardrobe",
+  command = "E",
+  icon = "https://i.ibb.co/XjNqbmP/icons8-wardrobe-48px.png",
+  text = "Ouvrir la garde-robe"
+}
+
+local isCommandAdded = nil;
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     local dist = Vdist2(GetEntityCoords(GetPlayerPed(-1), true), coord.x, coord.y, coord.z)
     if dist < 1 then
-      venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir la garde-robe.")
+      if not isCommandAdded then
+        TriggerEvent('Commands:Add', commandHelp)
+        isCommandAdded = true
+      end
       venato.groundMarker(coord.x, coord.y, coord.z-1)
       if IsControlJustPressed(0, Keys["E"]) then
         openMenuGardeRobe()
       end
+    elseif dist > 1 and isCommandAdded then
+      TriggerEvent('Commands:Remove', commandHelp.id)
+      isCommandAdded = nil
     elseif dist < 50 then
       venato.groundMarker(coord.x, coord.y, coord.z-1)
     elseif menuIsOpen == true then

@@ -5,6 +5,15 @@ local defaultNotification = {
   logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
 }
 
+local random = math.random
+local function uuid()
+    local template ='xxxxxxxx'
+    return string.gsub(template, '[xy]', function (c)
+        local v = (c == 'x') and random(0, 0xf) or random(8, 0xb)
+        return string.format('%x', v)
+    end)
+end
+
 RegisterServerEvent('debuge')
 AddEventHandler('debuge', function()
   local SteamId = getSteamID(source)
@@ -277,7 +286,7 @@ ItemsOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropItem')
 AddEventHandler('Inventory:DropItem', function(libelle, qty, id, uPoid, x, y, z, poid, picture)
   ItemsOnTheGroundIndex = ItemsOnTheGroundIndex + 1
-  ItemsOnTheGround[ItemsOnTheGroundIndex] = { id = id, libelle = libelle, qty = qty, uPoid = uPoid, poid = poid, x = x, y = y, z = z, picture = picture }
+  ItemsOnTheGround[ItemsOnTheGroundIndex] = { id = id, dropId = uuid(), libelle = libelle, qty = qty, uPoid = uPoid, poid = poid, x = x, y = y, z = z, picture = picture }
   ActualiseTableOfItemOnTheGround()
 end)
 
@@ -370,7 +379,7 @@ MoneyOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropMoney')
 AddEventHandler('Inventory:DropMoney', function(qty, tableau, x, y, z, poid)
   MoneyOnTheGroundIndex = MoneyOnTheGroundIndex + 1
-  MoneyOnTheGround[MoneyOnTheGroundIndex] = { qty = qty, poid = tableau[3], PlayerMoney = tableau[1], x = x, y = y, z = z }
+  MoneyOnTheGround[MoneyOnTheGroundIndex] = { qty = qty, dropId = uuid(), poid = tableau[3], PlayerMoney = tableau[1], x = x, y = y, z = z }
   ActualiseTableOfMoneyOnTheGround()
 end)
 
@@ -407,7 +416,7 @@ WeaponOnTheGroundIndex = 0
 RegisterServerEvent('Inventory:DropWeapon')
 AddEventHandler('Inventory:DropWeapon', function(tableau, x, y, z)
   WeaponOnTheGroundIndex = WeaponOnTheGroundIndex + 1
-  WeaponOnTheGround[WeaponOnTheGroundIndex] = { id = tableau[3], libelle = tableau[2], ammo = tableau[5], uPoid = tableau[4], x = x, y = y, z = z, poid = tableau[6] }
+  WeaponOnTheGround[WeaponOnTheGroundIndex] = { id = tableau[3], dropId = uuid(),  libelle = tableau[2], ammo = tableau[5], uPoid = tableau[4], x = x, y = y, z = z, poid = tableau[6] }
   ActualiseTableOfWeaponOnTheGround()
 end)
 

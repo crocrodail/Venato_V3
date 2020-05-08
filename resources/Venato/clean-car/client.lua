@@ -10,6 +10,16 @@ local defaultNotification = {
     logo = "https://i.ibb.co/K6THzfK/icons8-cleaning-service-96px-1.png"
   }
 
+
+  local commandHelp = {
+    id = "cleanCar",
+    command = "E",
+    icon = "https://i.ibb.co/K6THzfK/icons8-cleaning-service-96px-1.png",
+    text = "Nettoyer le véhicule (10€)"
+  }
+  
+  local isCommandAdded = nil;
+
 function setMapMarkerCleaner()
     for k,v in ipairs(cleaner)do
         local blip = AddBlipForCoord(v.xpoint, v.ypoint, v.zpoint)
@@ -34,8 +44,11 @@ Citizen.CreateThread(function()
           if distance < 5 then
             DrawMarker(25,item.xpoint, item.ypoint, item.zpoint,0,0,0,0,0,0,0.5,0.5,0.5,0,55,118,189,0,0,0,0)
             if distance <= 2 then
-                defaultNotification.title = item.name
-                venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour nettoyer votre voiture (10€).")
+                defaultNotification.title = item.name                
+                if not isCommandAdded then
+                    TriggerEvent('Commands:Add', commandHelp)
+                    isCommandAdded = _
+                end
                 if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement                
                     local current = GetPlayersLastVehicle(venato.GetPlayerPed(), true)
                     if current == nil then
@@ -53,6 +66,9 @@ Citizen.CreateThread(function()
                         end
                     end
                 end
+            elseif isCommandAdded == _ then
+                TriggerEvent('Commands:Remove', commandHelp.id)
+                isCommandAdded = nil
             end
           end
         end

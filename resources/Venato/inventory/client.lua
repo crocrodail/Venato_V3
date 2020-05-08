@@ -12,6 +12,16 @@ local defaultNotification = {
   logo = "https://i.ibb.co/qJ2yMXG/icons8-backpack-96px-1.png"
 }
 
+local commandHelp = {
+  id = "inventoryDrop",
+  command = "E",
+  icon = "https://i.ibb.co/VgYnKHc/icons8-grab-48px-1.png",
+  text = "Récupérer"
+}
+
+local isCommandAdded = nil;
+local oldCommandAdded = nil;
+
 -- ######## CONFIG ##############
 local PoidMax = 20 -- Kg
 --##############################
@@ -22,7 +32,8 @@ end
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+    Citizen.Wait(0)
+    
 		if IsControlJustPressed(1, Keys['K']) and GetLastInputMethod(2) then
 			Menu.clearMenu()
 			if Menu.hidden == true then
@@ -40,18 +51,26 @@ Citizen.CreateThread(function()
 			Menu.close()
 		end
 
-		if ItemsOnTheGround ~= nil then
-			local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
-			for k,v in pairs(ItemsOnTheGround) do
-				local dis = Vdist(x, y, z, v.x, v.y, v.z)
-				if dis < 1 then
+    if ItemsOnTheGround ~= nil then
+      local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
+      
+      for k,v in pairs(ItemsOnTheGround) do        
+        local dis = Vdist(x, y, z, v.x, v.y, v.z)
+        if dis <= 1 then
 					venato.Text3D(v.x, v.y, v.z, "<span class='blue--text'>"..v.qty.." "..v.libelle)
-					venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.qty.." "..v.libelle)
-					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+          if not isCommandAdded and oldCommandAdded ~= v.dropId then
+            commandHelp.text = "Récupérer "..v.qty.." "..v.libelle
+            TriggerEvent('Commands:Add', commandHelp)
+            isCommandAdded = v.dropId
+          end
+          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if (v.qty*v.uPoid + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddItem", v.qty , v.id)
               TriggerServerEvent("Inventory:DelItemsOnTheGround", k)
               local notif = defaultNotification;
+              TriggerEvent('Commands:Remove', commandHelp.id)
+              oldCommandAdded = v.dropId    
+              isCommandAdded = nil
               notif.message = "Vous avez ramassé "..v.qty.." "..v.libelle.." ."
               notif.logo = v.picture
               notif.title = "Inventaire"
@@ -64,7 +83,10 @@ Citizen.CreateThread(function()
 						else
 							venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." "..v.libelle.." .")
 						end
-					end
+          end
+        elseif isCommandAdded == v.dropId and dis > 1 then
+          TriggerEvent('Commands:Remove', commandHelp.id)
+          isCommandAdded = nil
 				elseif dis < 10 then
 					venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." "..v.libelle)
 				end
@@ -73,17 +95,25 @@ Citizen.CreateThread(function()
 
 		if MoneyOnTheGround ~= nil then
 			local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
-			for k,v in pairs(MoneyOnTheGround) do
+      for k,v in pairs(MoneyOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
 				if dis < 1 then
-					venato.Text3D(v.x, v.y, v.z, "~b~"..venato.FormatMoney(v.qty,2).." €")
-					venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..venato.FormatMoney(v.qty,2).." €")
+          venato.Text3D(v.x, v.y, v.z, "~b~"..venato.FormatMoney(v.qty,2).." €")
+          if isCommandAdded == nil and oldCommandAdded ~= v.dropId then
+            commandHelp.text = "Récupérer "..venato.FormatMoney(v.qty,2).." €"
+            TriggerEvent('Commands:Add', commandHelp)
+            isCommandAdded = v.dropId
+          end					
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if (venato.MoneyToPoid(v.qty) + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddMoney", v.qty)
-							TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
+              TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
+              defaultNotification.logo = "https://i.ibb.co/VgYnKHc/icons8-grab-48px-1.png"
               defaultNotification.message = "Vous avez ramassez "..venato.FormatMoney(v.qty,2).." € .";
-							venato.notify(defaultNotification)
+              TriggerEvent('Commands:Remove', commandHelp.id)
+              isCommandAdded = nil
+              oldCommandAdded = v.dropId
+              venato.notify(defaultNotification)
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropMoney))
 							if objet ~= 0 and objet ~= nil then
@@ -93,6 +123,9 @@ Citizen.CreateThread(function()
 							venato.notifyError("Vous n'avez pas assez de place pour "..v.qty.." € .")
 						end
 					end
+				elseif isCommandAdded ~= nil and isCommandAdded == v.dropId and dis > 1 then
+          TriggerEvent('Commands:Remove', commandHelp.id)
+          isCommandAdded = nil
 				elseif dis < 10 then
 					venato.Text3D(v.x, v.y, v.z, "~b~"..v.qty.." €")
 				end
@@ -101,19 +134,25 @@ Citizen.CreateThread(function()
 
 		if WeaponOnTheGround ~= nil then
 			local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
-			for k,v in pairs(WeaponOnTheGround) do
+      for k,v in pairs(WeaponOnTheGround) do
 				local dis = Vdist(x, y, z, v.x, v.y, v.z)
-				if dis < 1 then
-					venato.Text3D(v.x, v.y, v.z, "~b~"..v.libelle)
-					venato.InteractTxt("Appuyer sur ~INPUT_CONTEXT~ pour récupérer "..v.libelle..".")
+        if dis < 1 then          
+          venato.Text3D(v.x, v.y, v.z, "~b~"..v.libelle)
+          if isCommandAdded == nil and oldCommandAdded ~= v.dropId then
+            commandHelp.text = "Récupérer "..v.libelle
+            TriggerEvent('Commands:Add', commandHelp)
+            isCommandAdded = v.dropId
+          end		
 					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
 						if v.uPoid + DataUser.Poid <= PoidMax then
 							TriggerServerEvent("Inventory:AddWeapon", v.id, v.ammo, v.uPoid, v.libelle)
 							TriggerServerEvent("Inventory:DelWeaponOnTheGround", k)
-
-              defaultNotification.message = "Vous avez ramassez "..v.libelle.." .";
+              defaultNotification.logo = "https://i.ibb.co/VgYnKHc/icons8-grab-48px-1.png"
+              defaultNotification.message = "Vous avez ramassé "..v.libelle.." .";
 							venato.notify(defaultNotification)
-
+              TriggerEvent('Commands:Remove', commandHelp.id)
+              isCommandAdded = nil
+              oldCommandAdded = v.dropId
 							local pedCoords = GetEntityCoords(PlayerPedId())
 							local objet = GetClosestObjectOfType(pedCoords.x, pedCoords.y, pedCoords.z, 10.0, GetHashKey(dropWeapon))
 							if objet ~= 0 and objet ~= nil then
@@ -123,6 +162,9 @@ Citizen.CreateThread(function()
 							venato.notifyError("Vous n'avez pas assez de place pour "..v.libelle.." .")
 						end
 					end
+				elseif isCommandAdded ~= nil and isCommandAdded == v.dropId and dis > 1 then
+          TriggerEvent('Commands:Remove', commandHelp.id)
+          isCommandAdded = nil
 				elseif dis < 10 then
 					venato.Text3D(v.x, v.y, v.z, "~b~"..v.libelle.." .")
 				end

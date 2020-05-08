@@ -1,3 +1,21 @@
+@font-face {
+  font-family: 'Circular';
+  src: url('fonts/Circular-Bold.woff2') format('woff2'),
+      url('fonts/Circular-Bold.woff') format('woff'),
+      url('fonts/Circular-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Circular';
+  src: url('fonts/Circular-Book.woff2') format('woff2'),
+      url('fonts/Circular-Book.woff') format('woff'),
+      url('fonts/Circular-Book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html {
   background-color: transparent;
   overflow: hidden;
@@ -9,7 +27,7 @@ html {
         border-radius: 30px;
         background-color: #f7f7f780;
         &.theme--dark {
-          background-color: #2e2e2ede;
+          background-color: rgba(46, 46, 46, 0.904);
         }
         .menu_title {
           font-size: 1.9vw;
@@ -50,6 +68,53 @@ html {
             font-size: 0.7vw;
             font-family: "Poppins";
           }
+        }
+      }
+      
+      .commands{
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.85);
+        color: white;
+        top: 10vh;
+        left: 30px;
+        width: 350px;
+        height: auto;
+        transition: max-height 1s ease-out;
+        transition: height 1s ease-out;
+        border-radius: 30px;
+        padding: 15px;
+        font-family: 'Circular';
+        .command{
+          h3{
+            font-family: 'Circular';
+            font-weight: bold;
+
+          }
+          .key {
+            font-family: 'Circular';
+            font-weight: bold;
+            margin-right: 10px;
+          }
+          .text {
+            margin-left: 10px;
+          }
+          .v-divider{
+            border-color: rgba(255, 255, 255, 0.2);
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+          .commandTitle{
+            font-family: 'Circular';
+            font-weight: bolder;
+            margin: 5px;
+          }
+        }
+        .infoHide{
+          font-size: small;
+          font-family: 'Circular';
+          font-weight: bold;
+          margin-top: 10px;
+          padding: 5px;
         }
       }
     }
