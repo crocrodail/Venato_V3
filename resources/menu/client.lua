@@ -219,3 +219,37 @@ RegisterNUICallback('close', function(data, cb)
     _G[data.data.hover](data.data.data)
     TriggerEvent("Menu:Close")
 end)
+
+
+
+RegisterNetEvent('Commands:Add')
+AddEventHandler('Commands:Add', function(data)
+	SendNUIMessage({
+        action = "addCommand",
+        command = data
+	})
+end)
+
+RegisterNetEvent('Commands:AddRange')
+AddEventHandler('Commands:AddRange', function(data)
+	SendNUIMessage({
+        action = "addRangeCommand",
+        commands = data
+	})
+end)
+
+RegisterNetEvent('Commands:Remove')
+AddEventHandler('Commands:Remove', function(data)
+	SendNUIMessage({
+        action = "removeCommand",
+        commandId = data
+	})
+end)
+
+RegisterNetEvent('Commands:RemoveRange')
+AddEventHandler('Commands:RemoveRange', function(data)
+	SendNUIMessage({
+        action = "removeRangeCommand",
+        commands = data
+	})
+end)

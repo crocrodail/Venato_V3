@@ -10,6 +10,15 @@ local defaultNotification = {
   logo = "https://i.ibb.co/Sn8gqHX/icons8-safe-96px.png"
 }
 
+local commandHelp = {
+  id = "coffre",
+  command = "E",
+  icon = "https://i.ibb.co/Sn8gqHX/icons8-safe-96px.png",
+  text = "Ouvrir le coffre"
+}
+
+local isCommandAdded = nil;
+
 RegisterNetEvent("venatoSpawn")
 AddEventHandler("venatoSpawn", function()
   TriggerServerEvent("Coffre:CallData")
@@ -88,11 +97,18 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
-      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour ouvrir '..DataCoffre[indexLoop].nom..'.')
+      if not isCommandAdded then
+        commandHelp.text = 'Ouvrir '..DataCoffre[indexLoop].nom
+        TriggerEvent('Commands:Add', commandHelp)
+        isCommandAdded = indexLoop
+      end
       if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
         TriggerServerEvent("Coffre:CheckWhitelist", indexLoop)
         coffre_index = indexLoop
       end
+    elseif isCommandAdded then
+      TriggerEvent('Commands:Remove', commandHelp.id)
+      isCommandAdded = nil
     end
   end
 end)

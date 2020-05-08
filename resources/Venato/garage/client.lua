@@ -37,6 +37,15 @@ local defaultNotification = {
   logo = "https://i.ibb.co/wpxH8B1/icons8-parking-96px.png"
 }
 
+local commandOpenGarage = {
+  id = "openGarage",
+  command = "E",
+  icon = "https://i.ibb.co/872sDJ2/icons8-garage-closed-96px-1.png",
+  text = "Ouvrir le garage"
+}
+
+local isCommandAdded = nil;
+
 
 function setMapMarker()
     for k,v in ipairs(garage)do
@@ -65,22 +74,31 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     local ply = venato.GetPlayerPed()
     local plyCoords = GetEntityCoords(ply, 0)
-    local testDistance = 999999
-    local testLoopData = {}
+    local displayDistance = 20
+    local commandDistance = 2
+    local displayData = {}
     for _, item in pairs(garage) do
-      Citizen.Wait(100)
+      Citizen.Wait(1)
       local distance = GetDistanceBetweenCoords(item.xpoint, item.ypoint, item.zpoint,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
       if loopData.item ~= nil then
         if item.name == loopData.item.name then
-          testLoopData = { distance = distance, item = item }
+          displayData = { distance = distance, item = item }
         end
       end
-      if distance < testDistance then
-        testDistance = distance
-        testLoopData = { distance = distance, item = item }
+      if distance < displayDistance then
+        displayData = { distance = distance, item = item }
+        if distance <= commandDistance then     
+          if not isCommandAdded then        
+            TriggerEvent('Commands:Add', commandOpenGarage)          
+            isCommandAdded = _
+          end
+        elseif isCommandAdded == _ then
+          TriggerEvent('Commands:Remove', commandOpenGarage.id)
+          isCommandAdded = nil 
+        end
       end
     end
-    loopData = testLoopData
+    loopData = displayData
   end
 end)
 
@@ -92,7 +110,6 @@ Citizen.CreateThread(function()
         DrawMarker(27,loopData.item.xpoint, loopData.item.ypoint, loopData.item.zpoint+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
         if loopData.distance <= 2 then
           defaultNotification.title = loopData.item.name
-          venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour ouvrir le garage.")
           if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
             openGarage(loopData.item.name, loopData.item.xspawn, loopData.item.yspawn, loopData.item.zspawn, loopData.item.hspawn)
           end

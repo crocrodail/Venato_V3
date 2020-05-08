@@ -55,9 +55,7 @@
             </transition>
             
           </v-flex>
-          <v-flex class="vehicle_information" sm2>
-            <transition name="custom-classes-transition" enter-active-class="animated fadeInLeft delay-1s"
-            leave-active-class="animated fadeOutLeft faster">
+          <v-flex class="vehicle_information" sm2>            
             <vehicle-information inline-template :vehicle="vehicle" :color="color" v-if="showVehicleInformation">
               <v-card elevation-5 class="mx-auto" color="#ECEFF1BF" width="390">
                 <v-card-title>
@@ -95,7 +93,6 @@
                 </v-card-text>
               </v-card>
             </vehicle-information>
-            </transition>
           </v-flex>
           <v-flex class="shop_admin" sm12 v-if="showShopAdmin">            
             <v-data-table :headers="headers" :items="desserts" class="elevation-1">
@@ -112,19 +109,25 @@
       </v-layout>
       <transition name="custom-classes-transition" enter-active-class="animated fadeInLeft delay-1s"
         leave-active-class="animated fadeOutLeft faster">
-        <div class="commands" v-if="commands && !open && !showShopAdmin">
+        <div class="commands" v-if="commands && commands.length > 0 && !open && !showShopAdmin">
           <h2>Raccourcis clavier</h2>
           <transition-group name="custom-classes-transition" enter-active-class="animated bounceIn"
             leave-active-class="animated fadeOut faster">
-            <v-layout row wrap class="command" v-for="command in commands" :key="command.command">
-              <v-flex xs1>
+            <v-layout row wrap class="command" v-for="command in commands" :key="command.id">
+              <v-flex xs1 v-if="command.command">
                 <h3 class="key">{{command.command}}</h3>
               </v-flex>
-              <v-flex xs1>
-                <h3>{{command.icon}}</h3>
+              <v-flex xs1 v-if="command.command">
+                <v-img v-if="command.icon" :src="command.icon" aspect-ratio="1" contain height="22px"></v-img>
               </v-flex>
-              <v-flex xs10>
+              <v-flex xs10 v-if="command.command">
                 <div class="text">{{command.text}}</div>
+              </v-flex>
+              <v-flex xs12 v-if="command.title">
+                <div class="commandTitle">{{command.title}}</div>
+              </v-flex>
+              <v-flex xs12 v-if="command.divider">
+                <v-divider></v-divider>
               </v-flex>
             </v-layout>
           </transition-group>

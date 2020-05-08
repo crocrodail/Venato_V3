@@ -12,14 +12,33 @@ local cruiseNotification = {
     logo = "https://i.ibb.co/P9VLmNZ/icons8-speedometer-96px.png"
 }
 
+
+local commandsCars = {
+    { id="commandCarTitle", title = "En véhicule"},
+    { id="commandCloseCarOpenEnter", command='F', icon='https://i.ibb.co/1MTzMKq/icons8-car-theft-48px.png', text='Sortir du véhicule' },  
+    { id="commandCarOpenMenu", command='F3', icon='https://i.ibb.co/Gv2Wyhq/icons8-car-96px-1.png', text='Gestion véhicule' },  
+    { id="commandCarOpenClose", command='Y', icon='https://i.ibb.co/VwgB5xz/icons8-key-2-96px.png', text='Vérrouiller / Dévérouiller le véhicule' },  
+    { id="commandSafety", command='X', icon='https://i.ibb.co/0G3KyFB/icons8-passenger-96px.png', text='Enlever / Mettre la ceinture' },  
+    { id="commandHeadLigth", command='H', icon='https://i.ibb.co/yPDj68W/icons8-car-headlights-48px.png', text='Régler phares véhicule' },  
+    { id="gnrCarMenuEnd", divider=true },
+}
+
+local commandsCloseCars = {
+    { id="commandCloseCarTitle", title = "Véhicule"},
+    { id="commandCloseCarOpenEnter", command='F', icon='https://i.ibb.co/1MTzMKq/icons8-car-theft-48px.png', text='Entrer dans le véhicule' },  
+    { id="commandCloseCarOpenClose", command='Y', icon='https://i.ibb.co/VwgB5xz/icons8-key-2-96px.png', text='Vérrouiller / Dévérouiller le véhicule' },  
+    { id="commandCloseCarTrunk", command='L', icon='https://i.ibb.co/G0Hm3LM/cartrunk.png', text='Ouvrir le coffre du véhicule' },  
+    { id="gnrCloseCarMenuEnd", divider=true },
+}
+  
+local isCommandCarMenuAdded = nil;
+local isCommandCloseCarMenuAdded = nil;
+
 Citizen.CreateThread(
     function()
         SetNuiFocus(false, false)
         while true do
             Citizen.Wait(0)
-            if menuIsOpen then
-                venato.GetCarMenuIntruction()
-            end
             if IsControlJustPressed(1, Keys["F3"]) then
                 if menuIsOpen then
                     hideMenu()
@@ -35,6 +54,34 @@ Citizen.CreateThread(
              then
                 hideMenu()
                 previewSpeedmeter(defaultStyle)
+            end
+            local car = GetVehiclePedIsIn(PlayerPedId(), false)
+            local playerPos = GetEntityCoords(PlayerPedId())
+            local closestVehicule = GetClosestVehicle(playerPos.x, playerPos.y, playerPos.z, 3.0, 0, 127)
+            if car == 0 and isCommandCarMenuAdded then
+                TriggerEvent('Commands:RemoveRange', commandsCars)
+                isCommandCarMenuAdded = nil
+            end
+
+            if closestVehicule == 0 and isCommandCloseCarMenuAdded then
+                TriggerEvent('Commands:RemoveRange', commandsCloseCars)
+                isCommandCloseCarMenuAdded = nil
+            end
+            if car ~= 0 then
+                if isCommandCloseCarMenuAdded then
+                    TriggerEvent('Commands:RemoveRange', commandsCloseCars)
+                    isCommandCloseCarMenuAdded = nil
+                end
+                if not isCommandCarMenuAdded then
+                    TriggerEvent('Commands:AddRange', commandsCars)
+                    isCommandCarMenuAdded = true
+                end                
+            end
+            if car == 0 and closestVehicule ~= 0 then
+                if not isCommandCloseCarMenuAdded then
+                    TriggerEvent('Commands:AddRange', commandsCloseCars)
+                    isCommandCloseCarMenuAdded = true
+                end
             end
         end
     end

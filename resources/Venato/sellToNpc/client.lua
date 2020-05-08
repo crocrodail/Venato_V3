@@ -1,6 +1,7 @@
 local closetPed = nil
 local sellInProgress = false
 local pedType = 0
+--TODO oldPed Array for not resell drugs to same ped
 local oldped = nil
 Citizen.CreateThread(
     function()
@@ -58,12 +59,24 @@ local defaultNotification = {
     timeout = 900
 }
 
+local commandHelp = {
+    id = "sellDrugs",
+    command = "F",
+    icon = "https://i.ibb.co/PxrBpGQ/icons8-pills-96px.png",
+    text = "Vendre de la drogue"
+  }
+  
+  local isCommandAdded = nil;
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if closetPed ~= nil or sellInProgress then
-        venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour proposer de la drogue à cette personne.')
-        if IsControlJustPressed(1, 86) then
+        if not isCommandAdded then
+            TriggerEvent('Commands:Add', commandHelp)
+            isCommandAdded = closetPed
+        end
+        if IsControlJustPressed(1, 23) then
             oldped = closetPed
             local randomNumber = math.random(0, 100)
             sellInProgress = true
@@ -91,6 +104,9 @@ Citizen.CreateThread(function()
                 sellInProgress = false
             end
         end
+    elseif isCommandAdded then
+        TriggerEvent('Commands:Remove', commandHelp.id)
+        isCommandAdded = nil
     end
  end
 end)

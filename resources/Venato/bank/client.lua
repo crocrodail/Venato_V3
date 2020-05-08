@@ -9,27 +9,37 @@ local message_block = "Votre compte est bloqué pour mouvements suspicieux.<br/>
 local indexLoop = nil
 local indexLoopATM = nil
 
+
+local commandHelp = {
+  id = "atm",
+  command = "E",
+  icon = "https://i.ibb.co/PxrBpGQ/icons8-pills-96px.png",
+  text = "Utiliser le distributeur"
+}
+
+local isCommandAdded = nil;
+
 Citizen.CreateThread(function()
   SetNuiFocus(false, false)
   while true do
     Citizen.Wait(0)
-    for i = 1, #Config.ATMS, 1 do
+    for i = 1, #ATMS, 1 do
       Citizen.Wait(0)
-      if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 2 and (Config.ATMS[i].b ~= nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), ATMS[i].x, ATMS[i].y, ATMS[i].z, true) < 2 and (ATMS[i].b ~= nil) then
         indexLoop = i
       end
-      if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[i].x, Config.ATMS[i].y, Config.ATMS[i].z, true) < 10 and (Config.ATMS[i].b == nil) then
+      if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), ATMS[i].x, ATMS[i].y, ATMS[i].z, true) < 10 and (ATMS[i].b == nil) then
         indexLoopATM = i
       end
       if indexLoop ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z, true) < 0.5 then
+        if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), ATMS[indexLoop].x, ATMS[indexLoop].y, ATMS[indexLoop].z, true) < 1 then
           inBankMarker = true
         else
           inBankMarker = false
         end
       end
       if indexLoopATM ~= nil then
-        if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), Config.ATMS[indexLoopATM].x, Config.ATMS[indexLoopATM].y, Config.ATMS[indexLoopATM].z, true) < 1 then
+        if GetDistanceBetweenCoords(GetEntityCoords(venato.GetPlayerPed()), ATMS[indexLoopATM].x, ATMS[indexLoopATM].y, ATMS[indexLoopATM].z, true) < 1 then
           inMarker = true
         else
           inMarker = false
@@ -43,12 +53,23 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if indexLoop ~= nil then
-      DrawMarker(27, Config.ATMS[indexLoop].x, Config.ATMS[indexLoop].y, Config.ATMS[indexLoop].z + -0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,150, 255, 200, 0, 0, 0, 0)
+      -- DrawMarker(27, ATMS[indexLoop].x, ATMS[indexLoop].y, ATMS[indexLoop].z + -0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0,150, 255, 200, 0, 0, 0, 0)
     end
     if inMarker == true then
-      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ Pour utiliser le distributeur')
+      commandHelp.text = "Utiliser le distributeur"
+      commandHelp.icon = "https://i.ibb.co/VTYxM5J/icons8-atm-48px.png"
     elseif inBankMarker == true then
-      venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour être servi')
+      commandHelp.text = "Parler au guichetier"
+      commandHelp.icon = "https://i.ibb.co/37sTZLc/icons8-bank-building-48px.png"
+    end
+    if inMarker == true or inBankMarker == true then
+      if not isCommandAdded then
+        TriggerEvent('Commands:Add', commandHelp)
+        isCommandAdded = true
+      end
+    elseif isCommandAdded then
+      TriggerEvent('Commands:Remove', commandHelp.id)
+      isCommandAdded = false
     end
   end
 end)

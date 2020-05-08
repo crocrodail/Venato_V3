@@ -79,7 +79,6 @@ html {
         left: 30px;
         width: 350px;
         height: auto;
-        max-height:600px;
         transition: max-height 1s ease-out;
         transition: height 1s ease-out;
         border-radius: 30px;
@@ -94,10 +93,20 @@ html {
           .key {
             font-family: 'Circular';
             font-weight: bold;
-            margin-left: 5px;
+            margin-right: 10px;
           }
           .text {
-            margin-right: 5px;
+            margin-left: 10px;
+          }
+          .v-divider{
+            border-color: rgba(255, 255, 255, 0.2);
+            margin-top: 10px;
+            margin-bottom: 10px;
+          }
+          .commandTitle{
+            font-family: 'Circular';
+            font-weight: bolder;
+            margin: 5px;
           }
         }
         .infoHide{

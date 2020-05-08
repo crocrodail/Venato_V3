@@ -38,10 +38,19 @@ new Vue({
     headers: [],
     desserts: [],
     commands: [
-      { command: 'F6', icon: '🗣️', text: 'Changer la portée de la parole' },
-      { command: 'E', icon: '💊', text: 'Proposer de la drogue au passant' },
-      { command: 'F', icon: '🚗', text: 'Monter dans le véhicule' },
-      { command: 'Y', icon: '🔑', text: 'Ouvrir/Fermer le véhicule' },
+      { id:"gnrMenus", title: 'Menus' },
+      { id:"interaction", command: 'F1', icon: 'https://i.ibb.co/n7YJR7m/icons8-communication-48px.png', text: 'Intéractions' },
+      { id:"phone", command: 'F2', icon: 'https://i.ibb.co/fnN5J8D/icons8-android-48px.png', text: 'Téléphone (nécessite d\'en posséder un)' }      ,
+      { id:"enterprise", command: 'F7', icon: 'https://i.ibb.co/TPb9r86/icons8-briefcase-48px.png', text: 'Menu gestion d\'entreprise' }      ,
+      { id:"inventory", command: 'K', icon: 'https://i.ibb.co/mhY6QRY/icons8-backpack-48px.png', text: 'Inventaire' }      ,
+      { id:"gnrMenuEnd", divider: true }, 
+      { id:"gnrCommand", title: 'Commandes' },   
+      { id:"speakArea", command: 'F6', icon: 'https://i.ibb.co/sPkSd0K/icons8-voice-48px.png', text: 'Changer volume voix' }      ,  
+      { id:"layDown", command: 'CTRL', text: 'S\'allonger au sol / Se relever' }      ,  
+      { id:"crouch", command: 'C', text: 'S\'accroupir / Se relever' }      ,  
+      { id:"point", command: 'B', icon: 'https://i.ibb.co/8r8G6Wv/icons8-hand-right-48px.png', text: 'Pointer du doigt' }      ,  
+      { id:"handUp", command: 'X', icon: 'https://i.ibb.co/pb6fHhL/icons8-hand-48px.png', text: 'Lever les mains' }      ,  
+      { id:"gnrCommandEnd", divider: true }, 
     ]
   },
   beforeDestroy() {
@@ -50,13 +59,7 @@ new Vue({
     window.addEventListener('resize', this.handleResize)
     window.addEventListener('message', this.handleMessage)
     this.handleResize();
-    setTimeout(() => {
-      this.commands.push(
-        {command: 'L', icon: '🗝️', text: 'Ouvrir/Fermer le coffre du véhicule'});
-    }, 2000);
-    setTimeout(() => {
-      this.commands.pop();
-    }, 5000);
+   
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
@@ -120,6 +123,20 @@ new Vue({
         this.showShopAdmin = true
       } else if (event.data.action == "hideShopAdmin") {
         this.showShopAdmin = false
+      } else if (event.data.action == "addCommand") {
+        if(this.commands.map(c => c.id).indexOf(event.data.command.id) === -1){
+          this.commands.push(event.data.command);
+        }
+      } else if (event.data.action == "addRangeCommand") {
+        event.data.commands.forEach(c => {
+          if(this.commands.map(c => c.id).indexOf(c) === -1){
+            this.commands.push(c);
+          }
+        });
+      } else if (event.data.action == "removeCommand") {
+        this.commands = this.commands.filter(c => c.id !== event.data.commandId);
+      } else if (event.data.action == "removeRangeCommand") {
+        this.commands = this.commands.filter(c => !event.data.commands.map(cmd=>cmd.id).includes(c.id));
       }
     },
     navigateMenuUp() {
