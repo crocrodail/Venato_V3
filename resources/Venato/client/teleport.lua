@@ -236,9 +236,19 @@ local TeleportFromTo = {
   },
 
   ["Weed - Entrée"] = {
-    positionFrom = { ['x'] = -558.909, ['y'] = 209.16, ['z'] = 78.552, ['h'] = 269.566, nom = "entrer"},
-    positionTo = { ['x'] = -80.41, ['y'] = 70.98, ['z'] = -78.06, ['h'] = 263.016, nom = "sortir" },
-    hideFrom = true
+    positionFrom = { ['x'] = 1402.569, ['y'] = 3667.622, ['z'] = 34.033, ['h'] = 109.184, nom = "entrer"},
+    positionTo = { ['x'] = 1403.852, ['y'] = 3668.037, ['z'] = 34.065, ['h'] = 289.44, nom = "sortir" },
+    hideFrom = true,
+    hideTo = true,
+    distance = 0.5
+  },
+
+  ["Weed - Recolte"] = {
+    positionFrom = { ['x'] = 656.892, ['y'] = -410.68, ['z'] = 25.709, ['h'] = 65.54, nom = "entrer"},
+    positionTo = { ['x'] = 622.786, ['y'] = -417.343, ['z'] = -1.575, ['h'] = 226.148, nom = "sortir" },
+    hideFrom = true,
+    hideTo = true,
+    distance = 0.5
   },
 
 }
@@ -385,12 +395,16 @@ Citizen.CreateThread(function()
         RemoveCommandEnter(k)
       end
 
-      if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0 and not j.hideTo) then
+      if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0) then
+        if(not j.hideTo) then
         DrawMarker(1, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101, 255,
           255, 255, 255, 0, 0, 0, 0)
+        end
         if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 5.0) then
-          Drawing.draw3DText(j.positionTo.x, j.positionTo.y, j.positionTo.z - 1.100, j.positionTo.nom, 1, 0.2, 0.1, 255,
+          if(not j.hideTo) then
+            Drawing.draw3DText(j.positionTo.x, j.positionTo.y, j.positionTo.z - 1.100, j.positionTo.nom, 1, 0.2, 0.1, 255,
             255, 255, 215)
+          end
           if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < (j.distance ~= nil and j.distance or 2.0)) then
             if not isCommandExitAdded then
               TriggerEvent('Commands:Add', commandExitHelp)

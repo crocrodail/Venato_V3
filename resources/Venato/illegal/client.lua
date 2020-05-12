@@ -111,6 +111,20 @@ Citizen.CreateThread(function()
     end
 end)
 
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        local closeWeed = GetClosestObjectOfType(GetEntityCoords(venato.GetPlayerPed()), 1.3, GetHashKey("bkr_prop_weed_lrg_01b"), false, false, false)
+        if closeWeed ~= 0 then
+            --local weedCoords = GetEntityCoords(closeWeed)
+            --local weedHeading = GetEntityHeading(closeWeed)
+            SetEntityVisible(closeWeed, false)
+            --local newWeed = CreateObject((GetHashKey"bkr_prop_weed_01_small_01a"), GetEntityCoords(closeWeed), false, false, false)
+            --SetEntityHeading(newWeed, weedHeading)
+        end
+    end
+end)
+
 function GenerateNpc(item)
     RequestModel(GetHashKey(item.ped_model))
 

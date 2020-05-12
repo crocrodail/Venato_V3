@@ -24,7 +24,6 @@ function spawnVehicle(model, xcoord, ycoord, zcoord, heading, plate, health, cus
       local doors = health[5]
       for i=0, 9 do  
         if(doors[i] == 1) then
-          print('coucou')
           SetVehicleDoorBroken(vhl, i)   
         end   
       end 
@@ -51,7 +50,6 @@ function spawnVehicle(model, xcoord, ycoord, zcoord, heading, plate, health, cus
     end
     SetVehicleOnGroundProperly(vhl)
     SetVehicleModKit(vhl, 0 )  
-    print(customsJson) 
     if(customsJson) then
       local customs = json.decode(tostring(customsJson))
       
