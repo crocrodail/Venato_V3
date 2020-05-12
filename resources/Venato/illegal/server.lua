@@ -4,6 +4,31 @@ local defaultNotification = {
     logo = "https://i.ibb.co/PxrBpGQ/icons8-pills-96px.png"
   }
 
+local weedRecolt = {}
+
+RegisterServerEvent('illegal:weed:recolt')
+AddEventHandler('illegal:weed:recolt', function(weedVector)
+   weedRecolt[(#weedRecolt + 1)] = { pos = weedVector, time = os.clock(), progress= 0}
+   dprint("Add recolt")
+   dprint(venato.dump(weedRecolt[(#weedRecolt)]))
+end)
+
+RegisterServerEvent('illegal:weed:check')
+AddEventHandler('illegal:weed:check', function()
+    dprint('Checking weed recolts ...' .. #weedRecolt)
+    local localTime = os.clock()
+    for i=1,#weedRecolt,1 do 
+        if(weedRecolt[i].progress == 100) then
+            weedRecolt[i] = nil
+        else
+            weedRecolt[i].progress = localTime - weedRecolt[i].time > 30  and 100 or 0
+            weedRecolt[i].result = localTime - weedRecolt[i].time
+        end
+    end
+	TriggerClientEvent('illegal:weed:checkResult', source, weedRecolt)
+end)
+
+
 RegisterServerEvent('illegal:farm')
 AddEventHandler('illegal:farm', function(drugId)
     local source = source

@@ -14,6 +14,8 @@ local defaultNotification = {
   logo = "https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png"
 }
 
+local checkInterval = 30
+
 Citizen.CreateThread(function()
     while true do
         Wait(0)
@@ -115,12 +117,34 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         local closeWeed = GetClosestObjectOfType(GetEntityCoords(venato.GetPlayerPed()), 1.3, GetHashKey("bkr_prop_weed_lrg_01b"), false, false, false)
-        if closeWeed ~= 0 then
-            --local weedCoords = GetEntityCoords(closeWeed)
-            --local weedHeading = GetEntityHeading(closeWeed)
+        if closeWeed ~= 0 and IsEntityVisible(closeWeed) then
+            TriggerServerEvent('illegal:weed:recolt', GetEntityCoords(closeWeed))
             SetEntityVisible(closeWeed, false)
-            --local newWeed = CreateObject((GetHashKey"bkr_prop_weed_01_small_01a"), GetEntityCoords(closeWeed), false, false, false)
-            --SetEntityHeading(newWeed, weedHeading)
+        end
+    end
+end)
+
+-- Trigger despawn check (set interval in config).
+Citizen.CreateThread(function()    
+	while true do
+        TriggerServerEvent('illegal:weed:check')
+        dprint("Check recolts")
+        Citizen.Wait(intervals.check*1000)
+    end
+end)
+
+
+RegisterNetEvent('illegal:weed:checkResult')
+AddEventHandler("illegal:weed:checkResult", function(recolts)
+    for i=1,#recolts,1 do 
+        local weedPlant = GetClosestObjectOfType(recolts[i].pos, 1.0, GetHashKey("bkr_prop_weed_lrg_01b"), false, false, false)
+        dprint("CheckResult : " .. weedPlant .. " Progress : " .. recolts[i].progress .. " Result : " .. recolts[i].result)
+        if weedPlant ~= nil then
+            if(recolts[i].progress ~= 100) then
+                SetEntityVisible(weedPlant, false)
+            else
+                SetEntityVisible(weedPlant, true)
+            end
         end
     end
 end)
@@ -172,3 +196,14 @@ Citizen.CreateThread(function()
         Citizen.Wait(60000)
 	end
 end)
+
+
+table.filter = function(t, filterIter)
+    local out = {}
+  
+    for k, v in pairs(t) do
+      if filterIter(v, k, t) then out[k] = v end
+    end
+  
+    return out
+  end
