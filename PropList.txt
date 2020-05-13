@@ -75,6 +75,7 @@ canyon_1x
 canyon_2x
 canyonpaste_mb2
 canyonpaste_mb4
+carbon_wall
 carpet_blue
 carpet_brown_dot
 carpet_green_future

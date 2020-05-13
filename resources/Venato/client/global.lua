@@ -8,6 +8,8 @@ function fCanCancelOrStartAnim(bool)
   CanCancelOrStartAnim = bool
 end
 
+SetOverrideWeather("RAIN")
+
 Citizen.CreateThread(function()
   local ped = venato.GetPlayerPed()
   local playerId = PlayerId()
@@ -21,6 +23,7 @@ Citizen.CreateThread(function()
     --TriggerServerEvent("venato:SyncData")
   --end
   while true do
+    
     Citizen.Wait(50)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
