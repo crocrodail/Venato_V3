@@ -1,0 +1,15 @@
+<CodeWalkerProject>
+  <Name>New CodeWalker Project</Name>
+  <Version value="1" />
+  <YmapFilenames>
+    <Item>weedplantation.ymap</Item>
+    <Item>weed_recolt_door.ymap</Item>
+    <Item>weed-processing.ymap</Item>
+    <Item>..\drogue_spot_1_weed.ymap</Item>
+  </YmapFilenames>
+  <YtypFilenames />
+  <YndFilenames />
+  <YnvFilenames />
+  <TrainsFilenames />
+  <ScenarioFilenames />
+</CodeWalkerProject>

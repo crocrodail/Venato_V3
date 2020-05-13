@@ -8,13 +8,26 @@ local old_nbPolice = 0
 local is_on_farm_zone = false
 local is_on_transform_zone = false
 local is_on_sell_zone = false
+
 local defaultNotification = {
   title = 'Illégal',
   type = "alert",
   logo = "https://cdn.pixabay.com/photo/2017/05/15/21/58/drug-icon-2316244_960_720.png"
 }
 
+
+local commandHelp = {
+    id = "recoltWeed",
+    command = "E",
+    icon = "https://i.ibb.co/jfwZ8kB/icons8-cannabis-48px.png",
+    text = "Recolter"
+}
+
+local isCommandAdded = false;
+
 local checkInterval = 30
+local minWeed = 2
+local maxWeed = 10
 
 Citizen.CreateThread(function()
     while true do
@@ -117,9 +130,32 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
         local closeWeed = GetClosestObjectOfType(GetEntityCoords(venato.GetPlayerPed()), 1.3, GetHashKey("bkr_prop_weed_lrg_01b"), false, false, false)
+        local closeWeedMedium = GetClosestObjectOfType(GetEntityCoords(venato.GetPlayerPed()), 1.3, GetHashKey("bkr_prop_weed_med_01a"), false, false, false)
         if closeWeed ~= 0 and IsEntityVisible(closeWeed) then
-            TriggerServerEvent('illegal:weed:recolt', GetEntityCoords(closeWeed))
-            SetEntityVisible(closeWeed, false)
+            
+            if not isCommandAdded then
+                TriggerEvent('Commands:Add', commandHelp)
+                isCommandAdded = true
+            end
+            if IsControlJustPressed(1, 38) then
+                local recipe = {
+                    animLib="amb@world_human_gardener_plant@male@base",
+                    animName="base",
+                    animTimeout= 8933,
+                    ingredients = {nil},
+                    results = {nil}
+                }
+
+                recipe.results[29] = {quantity = math.random(minWeed, maxWeed)}
+
+                venato.Craft(recipe)
+                TriggerServerEvent('illegal:weed:recolt', GetEntityCoords(closeWeed))
+                SetEntityVisible(closeWeed, false)
+                SetEntityVisible(closeWeedMedium, false)
+            end            
+        elseif isCommandAdded then
+            TriggerEvent('Commands:Remove', commandHelp.id)
+            isCommandAdded = false
         end
     end
 end)
@@ -128,7 +164,6 @@ end)
 Citizen.CreateThread(function()    
 	while true do
         TriggerServerEvent('illegal:weed:check')
-        dprint("Check recolts")
         Citizen.Wait(intervals.check*1000)
     end
 end)
@@ -137,13 +172,18 @@ end)
 RegisterNetEvent('illegal:weed:checkResult')
 AddEventHandler("illegal:weed:checkResult", function(recolts)
     for i=1,#recolts,1 do 
-        local weedPlant = GetClosestObjectOfType(recolts[i].pos, 1.0, GetHashKey("bkr_prop_weed_lrg_01b"), false, false, false)
-        dprint("CheckResult : " .. weedPlant .. " Progress : " .. recolts[i].progress .. " Result : " .. recolts[i].result)
-        if weedPlant ~= nil then
-            if(recolts[i].progress ~= 100) then
-                SetEntityVisible(weedPlant, false)
-            else
-                SetEntityVisible(weedPlant, true)
+        local weedPlantLarge = GetClosestObjectOfType(recolts[i].pos, 1.0, GetHashKey("bkr_prop_weed_lrg_01b"), false, false, false)
+        local weedPlantMedium= GetClosestObjectOfType(recolts[i].pos, 1.0, GetHashKey("bkr_prop_weed_med_01a"), false, false, false)        
+        if weedPlantLarge ~= nil then
+            if (recolts[i].progress >= 100) then
+                SetEntityVisible(weedPlantLarge, true)
+                SetEntityVisible(weedPlantMedium, true)
+            elseif(recolts[i].progress >= 50) then
+                SetEntityVisible(weedPlantLarge, false)
+                SetEntityVisible(weedPlantMedium, true)
+            elseif(recolts[i].progress < 50) then
+                SetEntityVisible(weedPlantLarge, false)
+                SetEntityVisible(weedPlantMedium, false)
             end
         end
     end

@@ -393,15 +393,17 @@ function venato.Craft(craftReceipe)
   animName = craftReceipe.animName
   animTimeout = craftReceipe.animTimeout  
 
-  for itemId, recipeItem in pairs(craftReceipe.ingredients) do
-    if(venato.HowManyItem(itemId) < tonumber(recipeItem.quantity)) then
-      venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
-      return;
-    end    
-  end
+  if craftReceipe.ingredients then
+    for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+      if(venato.HowManyItem(itemId) < tonumber(recipeItem.quantity)) then
+        venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
+        return;
+      end    
+    end
 
-  for itemId, recipeItem in pairs(craftReceipe.ingredients) do
-    TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem.quantity), tonumber(itemId))   
+    for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+      TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem.quantity), tonumber(itemId))   
+    end
   end
 
   if(not animTimeout) then
@@ -422,13 +424,13 @@ function venato.Craft(craftReceipe)
 		TriggerServerEvent('Inventory:AddItem', tonumber(resultItem.quantity), tonumber(itemId))
   end
   
-  venato.notify({
-		title = "Recette",
-		type = "alert",
-		logo = "https://i.ibb.co/7RcGVMt/icons8-handle-with-care-48px-1.png",
-    timeout = 900,
-    message = "Recette terminée"
-	})
+  -- venato.notify({
+	-- 	title = "Recette",
+	-- 	type = "alert",
+	-- 	logo = "https://i.ibb.co/7RcGVMt/icons8-handle-with-care-48px-1.png",
+  --   timeout = 900,
+  --   message = "Recette terminée"
+	-- })
 end
 
 
