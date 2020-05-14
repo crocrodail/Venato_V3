@@ -388,16 +388,24 @@ Citizen.CreateThread(function()
 end)
 
 -- CRAFT
-function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, animTimeout) 
-  for itemId, recipeItem in pairs(recipeItemsArray) do
-    if(venato.HowManyItem(itemId) < tonumber(recipeItem)) then
-      venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
-      return;
-    end    
-  end
+function venato.Craft(craftReceipe) 
+  animLib = craftReceipe.animLib
+  animName = craftReceipe.animName
+  animTimeout = craftReceipe.animTimeout  
 
-  for itemId, recipeItem in pairs(recipeItemsArray) do
-    TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem), tonumber(itemId))   
+  if craftReceipe.ingredients then
+    for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+      dprint(DataUser.Inventaire[itemId].quantity)
+      if(venato.HowManyItem(itemId) < tonumber(recipeItem.quantity)) then
+        venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
+        return;
+      end    
+    end
+
+    for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+      DataUser.Inventaire[itemId].quantity = DataUser.Inventaire[itemId].quantity - tonumber(recipeItem.quantity)
+      TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem.quantity), tonumber(itemId))   
+    end
   end
 
   if(not animTimeout) then
@@ -414,18 +422,20 @@ function venato.Craft(recipeItemsArray, resultItemsArray, animLib, animName, ani
   })
   venato.DisableAllControlActions(false)
 
-  for itemId, resultItem in pairs(resultItemsArray) do
-		TriggerServerEvent('Inventory:AddItem', tonumber(resultItem), tonumber(itemId))
+  for itemId, resultItem in pairs(craftReceipe.results) do
+		TriggerServerEvent('Inventory:AddItem', tonumber(resultItem.quantity), tonumber(itemId))
   end
   
-  venato.notify({
-		title = "Recette",
-		type = "alert",
-		logo = "https://i.ibb.co/7RcGVMt/icons8-handle-with-care-48px-1.png",
-    timeout = 900,
-    message = "Recette terminée"
-	})
+  -- venato.notify({
+	-- 	title = "Recette",
+	-- 	type = "alert",
+	-- 	logo = "https://i.ibb.co/7RcGVMt/icons8-handle-with-care-48px-1.png",
+  --   timeout = 900,
+  --   message = "Recette terminée"
+	-- })
 end
+
+
 function venato.callServer(eventName, arg)
   local response = nil
   TriggerServerEvent(eventName, arg)

@@ -47,6 +47,8 @@ local doorList = {
     [45] = { ["objName"] = "30769481", ["x"]= -28.80, ["y"]= -1085.92,["z"]= 28.74,["distance"]=5, ["locked"]= true, ['jobId'] = 59},-- carshop
     [46] = { ["objName"] = "100848840", ["x"]= -24.49, ["y"]= -1086.47,["z"]= 27.18,["distance"]=5, ["locked"]= true, ['jobId'] = 59}, -- carshop
     [47] = { ["objName"] = "-1234764774", ["x"]= 223.983, ["y"]= -2011.299,["z"]= 19.295,["distance"]=5, ["locked"]= true, ['jobId'] = 59}, -- carshop
+    [48] = { ["objName"] = "1853479348", ["x"]= 1402.89, ["y"]= 3668.34,["z"]= 34.17,["distance"]=1.5, ["locked"]= true }, -- weed place
+    [49] = { ["objName"] = "1890297615", ["x"]= 623.83, ["y"]= -418.63,["z"]= -1.43,["distance"]=0.5, ["locked"]= true }, -- weed recolt space
 }
 
 RegisterNetEvent('door:state')

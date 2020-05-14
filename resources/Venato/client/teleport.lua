@@ -236,9 +236,19 @@ local TeleportFromTo = {
   },
 
   ["Weed - Entrée"] = {
-    positionFrom = { ['x'] = -558.909, ['y'] = 209.16, ['z'] = 78.552, ['h'] = 269.566, nom = "entrer"},
-    positionTo = { ['x'] = -80.41, ['y'] = 70.98, ['z'] = -78.06, ['h'] = 263.016, nom = "sortir" },
-    hideFrom = true
+    positionFrom = { ['x'] = 1402.569, ['y'] = 3667.622, ['z'] = 34.033, ['h'] = 109.184, nom = "entrer"},
+    positionTo = { ['x'] = 1403.852, ['y'] = 3668.037, ['z'] = 34.065, ['h'] = 289.44, nom = "sortir" },
+    hideFrom = true,
+    hideTo = true,
+    distance = 0.5
+  },
+
+  ["Weed - Recolte"] = {
+    positionFrom = { ['x'] = 656.892, ['y'] = -410.68, ['z'] = 25.709, ['h'] = 65.54, nom = "entrer"},
+    positionTo = { ['x'] = 622.786, ['y'] = -417.343, ['z'] = -1.575, ['h'] = 226.148, nom = "sortir" },
+    hideFrom = true,
+    hideTo = true,
+    distance = 0.5
   },
 
 }
@@ -296,6 +306,25 @@ function msginf(msg, duree)
   DrawSubtitleTimed(duree, 1)
 end
 
+
+local commandEnterHelp = {
+  id = "enterDoor",
+  command = "E",
+  icon = "https://i.ibb.co/2NPLqZ3/icons8-open-door-48px.png",
+  text = "Entrer"
+}
+
+local isCommandEnterAdded = nil;
+
+local commandExitHelp = {
+  id = "exitDoor",
+  command = "E",
+  icon = "https://i.ibb.co/2NPLqZ3/icons8-open-door-48px.png",
+  text = "Sortir"
+}
+
+local isCommandExitAdded = nil;
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
@@ -315,10 +344,10 @@ Citizen.CreateThread(function()
             0.1, 255, 255, 255, 215)
           end
           if (Vdist(pos.x, pos.y, pos.z, j.positionFrom.x, j.positionFrom.y, j.positionFrom.z) < (j.distance ~= nil and j.distance or 2.0) ) then
-            ClearPrints()
-            SetTextEntry_2("STRING")
-            AddTextComponentString("Appuyez sur la touche ~r~E~w~ pour " .. j.positionFrom.nom)
-            DrawSubtitleTimed(2000, 1)
+            if not isCommandEnterAdded then
+              TriggerEvent('Commands:Add', commandEnterHelp)
+              isCommandEnterAdded = k
+            end
             if IsControlJustPressed(1, 38) then
               canGoIn = true
               local curVehicule = GetVehiclePedIsIn(venato.GetPlayerPed(), false)
@@ -355,22 +384,32 @@ Citizen.CreateThread(function()
                 DoScreenFadeIn(1000)
                 FreezeEntityPosition(venato.GetPlayerPed(), false)
               end
-            end
+            end          
+          else
+            RemoveCommandEnter(k)
           end
+        else
+          RemoveCommandEnter(k)
         end
+      else
+        RemoveCommandEnter(k)
       end
 
-      if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0 and not j.hideTo) then
+      if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 150.0) then
+        if(not j.hideTo) then
         DrawMarker(1, j.positionTo.x, j.positionTo.y, j.positionTo.z - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, .101, 255,
           255, 255, 255, 0, 0, 0, 0)
+        end
         if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < 5.0) then
-          Drawing.draw3DText(j.positionTo.x, j.positionTo.y, j.positionTo.z - 1.100, j.positionTo.nom, 1, 0.2, 0.1, 255,
+          if(not j.hideTo) then
+            Drawing.draw3DText(j.positionTo.x, j.positionTo.y, j.positionTo.z - 1.100, j.positionTo.nom, 1, 0.2, 0.1, 255,
             255, 255, 215)
+          end
           if (Vdist(pos.x, pos.y, pos.z, j.positionTo.x, j.positionTo.y, j.positionTo.z) < (j.distance ~= nil and j.distance or 2.0)) then
-            ClearPrints()
-            SetTextEntry_2("STRING")
-            AddTextComponentString("Appuyez sur la touche ~r~E~w~ pour " .. j.positionTo.nom)
-            DrawSubtitleTimed(2000, 1)
+            if not isCommandExitAdded then
+              TriggerEvent('Commands:Add', commandExitHelp)
+              isCommandExitAdded = k
+            end
             if IsControlJustPressed(1, 38) then
               DoScreenFadeOut(1000)
               Citizen.Wait(1000)
@@ -381,9 +420,29 @@ Citizen.CreateThread(function()
               DoScreenFadeIn(1000)
               FreezeEntityPosition(venato.GetPlayerPed(), false)
             end
+          else
+            RemoveCommandExit(k)
           end
+        else
+          RemoveCommandExit(k)
         end
+      else
+        RemoveCommandExit(k)
       end
     end
   end
 end)
+
+function RemoveCommandEnter(k)  
+  if isCommandEnterAdded == k then
+    TriggerEvent('Commands:Remove', commandEnterHelp.id)
+    isCommandEnterAdded = nil
+  end
+end
+
+function RemoveCommandExit(k)
+  if isCommandExitAdded == k then
+    TriggerEvent('Commands:Remove', commandExitHelp.id)
+    isCommandExitAdded = nil
+  end
+end

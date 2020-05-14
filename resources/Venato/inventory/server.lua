@@ -34,7 +34,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
     { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)      
       if result[1] ~= nil then
         for i, v in ipairs(result) do
-          Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture, ["consomable"] = v.consomable }
+          Inv = { ["id"] = v.item_id, ["libelle"] = v.libelle, ["quantity"] = v.quantity, ["poid"] = tonumber(v.poid) * v.quantity, ["uPoid"] = tonumber(v.poid), ["picture"] = v.picture, ["consomable"] = v.consomable, ['canBeSellToNPC'] = v.canBeSellToNPC, ['price'] = v.price }
           inventaire[v.item_id] = Inv
           poid = poid + tonumber(v.poid) * v.quantity
         end
@@ -143,7 +143,7 @@ AddEventHandler('Inventory:SetItem', function(qty, id, NewSource)
     else
       MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
         if result[1] ~= nil then
-          DataPlayers[tonumber(source)].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable  }
+          DataPlayers[tonumber(source)].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable, ['canBeSellToNPC'] = result[1].canBeSellToNPC, ['price'] = result[1].price  }
           DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + DataPlayers[tonumber(source)].Inventaire[id].poid
           if DataPlayers[tonumber(source)].Poid + (qty * tonumber(result[1].poid)) > DataPlayers[tonumber(source)].PoidMax then
             --DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + poidBefore
@@ -215,7 +215,7 @@ AddEventHandler('Inventory:AddItem', function(qty, id, NewSourcee)
             TriggerClientEvent('inventory:full', source)
             return false
           end
-          DataPlayers[tonumber(source)].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture, ['consomable'] = result[1].consomable }
+          DataPlayers[tonumber(source)].Inventaire[id] = { ["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid) * qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture, ['consomable'] = result[1].consomable, ['canBeSellToNPC'] = result[1].canBeSellToNPC, ['price'] = result[1].price }
           DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + DataPlayers[tonumber(source)].Inventaire[id].poid
           MySQL.Async.execute("INSERT INTO user_inventory (`identifier`, `item_id`, `quantity`) VALUES (@player, @item, @qty)",
           { ['@player'] = DataPlayers[tonumber(source)].SteamId, ['@item'] = id, ['@qty'] = qty })
@@ -259,7 +259,7 @@ AddEventHandler('Inventory:RemoveItem', function(qty, id, NewSource)
 		else
 			MySQL.Async.fetchAll("SELECT * FROM items WHERE id = @id", { ['@id'] = id }, function(result)
 				if result[1] ~= nil then
-					DataPlayers[tonumber(source)].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable }
+					DataPlayers[tonumber(source)].Inventaire[id] =  {["id"] = id, ["libelle"] = result[1].libelle, ["quantity"] = qty, ["poid"] = tonumber(result[1].poid)*qty, ["uPoid"] = tonumber(result[1].poid), ["picture"] = result[1].picture,result[1].picture, ['consomable'] = result[1].consomable, ['canBeSellToNPC'] = result[1].canBeSellToNPC, ['price'] = result[1].price }
 					DataPlayers[tonumber(source)].Poid = DataPlayers[tonumber(source)].Poid + DataPlayers[tonumber(source)].Inventaire[id].poid
 				else
 					print("GROS Probleme 2!!")

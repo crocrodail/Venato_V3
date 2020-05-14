@@ -4,6 +4,30 @@ local defaultNotification = {
     logo = "https://i.ibb.co/PxrBpGQ/icons8-pills-96px.png"
   }
 
+local weedRecolt = {}
+
+local weedRefillHour = 1
+
+RegisterServerEvent('illegal:weed:recolt')
+AddEventHandler('illegal:weed:recolt', function(weedVector)
+   weedRecolt[(#weedRecolt + 1)] = { pos = weedVector, time = os.clock(), progress= 0}
+end)
+
+RegisterServerEvent('illegal:weed:check')
+AddEventHandler('illegal:weed:check', function()
+    local localTime = os.clock()
+    for i=1,#weedRecolt,1 do 
+        if(weedRecolt[i].progress >= 100) then
+            weedRecolt[i] = nil
+        else
+            local ecart = localTime - weedRecolt[i].time;
+            weedRecolt[i].progress =  (ecart * 100) / (weedRefillHour * 3600)
+            weedRecolt[i].result = (localTime - weedRecolt[i].time)/60
+        end        
+    end
+	TriggerClientEvent('illegal:weed:checkResult', source, weedRecolt)
+end)
+
 RegisterServerEvent('illegal:farm')
 AddEventHandler('illegal:farm', function(drugId)
     local source = source
@@ -38,6 +62,17 @@ AddEventHandler('illegal:sell', function(drugId)
         TriggerEvent('Inventory:AddMoney', drugItem.sell.sell_price, source)
         defaultNotification.message = "Vous avez vendu " .. drugItem.sell.sell_qte .. drugItem.transform.transform_message .. ".<br/> Vous avez reçu <span class='green--text'>"..drugItem.sell.sell_price.." €</span>"
     end
+    venato.notify(source, defaultNotification)
+end)
+
+
+RegisterServerEvent('illegal:v2:sell')
+AddEventHandler('illegal:v2:sell', function(drug)
+    local source = source
+    TriggerEvent("Inventory:RemoveItem", 1, drug.drugId, source)
+    local sellPrice = math.random(drug.price - drug.variation, drug.price + drug.variation)
+    TriggerEvent('Inventory:AddMoney', sellPrice, source)
+    defaultNotification.message = "Vous avez reçu <span class='green--text'>"..sellPrice.." €</span>"
     venato.notify(source, defaultNotification)
 end)
 
