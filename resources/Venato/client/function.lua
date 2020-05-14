@@ -395,6 +395,7 @@ function venato.Craft(craftReceipe)
 
   if craftReceipe.ingredients then
     for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+      dprint(DataUser.Inventaire[itemId].quantity)
       if(venato.HowManyItem(itemId) < tonumber(recipeItem.quantity)) then
         venato.notifyError("Vous n'avez pas les ingrédients nécessaires à la réalisation de cette recette.")
         return;
@@ -402,6 +403,7 @@ function venato.Craft(craftReceipe)
     end
 
     for itemId, recipeItem in pairs(craftReceipe.ingredients) do
+      DataUser.Inventaire[itemId].quantity = DataUser.Inventaire[itemId].quantity - tonumber(recipeItem.quantity)
       TriggerServerEvent("Inventory:RemoveItem", tonumber(recipeItem.quantity), tonumber(itemId))   
     end
   end

@@ -65,6 +65,17 @@ AddEventHandler('illegal:sell', function(drugId)
     venato.notify(source, defaultNotification)
 end)
 
+
+RegisterServerEvent('illegal:v2:sell')
+AddEventHandler('illegal:v2:sell', function(drug)
+    local source = source
+    TriggerEvent("Inventory:RemoveItem", 1, drug.drugId, source)
+    local sellPrice = math.random(drug.price - drug.variation, drug.price + drug.variation)
+    TriggerEvent('Inventory:AddMoney', sellPrice, source)
+    defaultNotification.message = "Vous avez reçu <span class='green--text'>"..sellPrice.." €</span>"
+    venato.notify(source, defaultNotification)
+end)
+
 RegisterServerEvent('illegal:requestNbCop')
 AddEventHandler('illegal:requestNbCop', function()
 	getPoliceInService( function(nbPolicier)

@@ -8,8 +8,6 @@ function fCanCancelOrStartAnim(bool)
   CanCancelOrStartAnim = bool
 end
 
-SetOverrideWeather("RAIN")
-
 Citizen.CreateThread(function()
   local ped = venato.GetPlayerPed()
   local playerId = PlayerId()
