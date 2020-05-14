@@ -36,7 +36,7 @@ Citizen.CreateThread(function()
 end)
 
 function openMenuGardeRobe()
-  local dataPlayer = venato.getDataPlayer()
+  local dataPlayer = venato.GetDataPlayer()
   menuIsOpen = true
   TriggerEvent('Menu:Init', "Garde-Robe", "Stoquez vos plus belle tenues", "#00aa3a99", "https://milksymposium.org/wp-content/uploads/2017/08/spacer-garde-robe-walk-in-et-rangement-sur-mesure-quc3a3c2a9bec-porte-garde-robe-moderne-garde-robe-moderne.jpg")
   Menu.clearMenu()

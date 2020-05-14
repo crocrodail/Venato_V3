@@ -449,15 +449,18 @@ function venato.callServer(eventName, arg)
   return response
 end
 
-function venato.getDataPlayer()
-  local response = nil
-  TriggerServerEvent("venato:GetDataPlayer")
-  RegisterNetEvent("venato:GetDataPlayer:cb")
-  AddEventHandler("venato:GetDataPlayer:cb", function(cb)
-    response = cb
-  end)
+local response = nil
+
+function venato.GetDataPlayer()
+  response = nil  
   while response == nil do
-    Citizen.Wait(10)
+    TriggerServerEvent("venato:GetDataPlayer")  
+    Citizen.Wait(500)
   end
   return response
 end
+
+RegisterNetEvent("venato:GetDataPlayer:cb")
+AddEventHandler("venato:GetDataPlayer:cb", function(cb)
+  response = cb
+end)

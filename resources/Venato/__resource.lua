@@ -69,6 +69,7 @@ client_script {
   '/sellToNpc/client.lua',
   '/gardeRobe/client.lua',
   '/gardeRobe/config.lua',
+  '/binocular/client.lua',
 }
 
 server_script {
