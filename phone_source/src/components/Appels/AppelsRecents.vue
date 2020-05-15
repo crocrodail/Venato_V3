@@ -7,16 +7,16 @@
 
             <!--<div @click.stop="selectItem(histo)" class="elem-pic" :style="stylePuce(histo)">{{histo.letter}}</div>-->
             <img style="width: 32px; margin-left: 10px;" src="/html/static/img/icons_app/borrado.png" alt="Logotipo APR2">
-            
+
 
             <div @click.stop="selectItem(histo)" class="elem-content">
-              <div style="font-size: 20px; font-weight: 400;     margin-top: 20px;" @click.stop="selectItem(histo)" class="elem-content-p">{{histo.display}}</div>
-                
+              <div style="font-size: 20px; font-weight: 600; margin-top: 10px;" @click.stop="selectItem(histo)" class="elem-content-p">{{histo.display}}</div>
+
               <div @click.stop="selectItem(histo)" class="elem-content-s">
-               <div 
+               <div
               @click.stop="selectItem(histo)"
-              class="elem-histo-pico" 
-              :class="{'reject': hc.accept === false}" 
+              class="elem-histo-pico"
+              :class="{'reject': hc.accept === false}"
               v-for="(hc, i) in histo.lastCall" :key="i">
                 <svg @click.stop="selectItem(histo)" v-if="hc.accepts === 1 && hc.incoming === 1" viewBox="0 0 24 24" fill="#c5c5c7">
                   <path d="M9,5v2h6.59L4,18.59L5.41,20L17,8.41V15h2V5H9z"/>
@@ -31,7 +31,7 @@
                   <path d="M19.59,7L12,14.59L6.41,9H11V7H3v8h2v-4.59l7,7l9-9L19.59,7z"/>
                 </svg>
               </div>
-                
+
                 <!--<div v-if="histo.lastCall.length !==0" class="lastCall">
                   <timeago :since='histo.lastCall[0].date' :auto-update="20"></timeago>
                 </div>-->
@@ -43,9 +43,9 @@
             <!--<div class="elem-icon" @click.stop="selectItem(histo)">
               <i class="fa fa-phone" @click.stop="selectItem(histo)"></i>
             </div>-->
-            
-            
-            
+
+
+
         </div>
     </div>
   </div>
@@ -180,6 +180,7 @@ export default {
 <style scoped>
   .content {
     height: 100%;
+  background-color: #FFFFFF;
   }
   .elements {
     overflow-y: auto;
@@ -191,18 +192,18 @@ export default {
     display: flex;
     align-items: center;
     position: relative;
-    margin: 14px 10px;
     border-radius: 2px;
+    padding: 15px 5px;
   }
   .active, .element:hover {
     background: radial-gradient(rgba(3, 168, 244, 0.14), rgba(3, 169, 244, 0.26));
   }
   .elem-pic{
-    margin-left: 12px;
-    height: 48px;
-    width: 48px;
+    margin: auto;
+    height: 35px;
+    width: 35px;
     text-align: center;
-    line-height: 48px;
+    line-height: 35px;
     font-weight: 700;
     border-radius: 50%;
     color: white;
@@ -240,7 +241,6 @@ export default {
   .elem-histo-pico svg {
     width: 16px;
     height: 16px;
-    margin-left: 6px;
   }
   .lastCall {
     padding-left: 4px;

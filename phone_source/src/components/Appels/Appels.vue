@@ -8,7 +8,7 @@
       <div
         class="subMenu-elem"
         :style="getColorItem(i)"
-        v-for="(Comp, i) of subMenu" 
+        v-for="(Comp, i) of subMenu"
         :key="i"
         @click="swapMenu(i)"
       >
@@ -74,7 +74,7 @@ export default {
     },
     onBackspace: function () {
       if (this.ignoreControls === true) return
-      this.$router.push({ name: 'home' })
+      this.$router.go(-1)
     }
   },
 
@@ -113,6 +113,7 @@ export default {
   height: calc(100% - 68px);
   overflow-y: auto;
   width: 337px;
+  background-color: #FFFFFF;
 }
 .subMenu{
   border-top: 1px solid rgba(0,0,0,0.24);

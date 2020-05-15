@@ -1,9 +1,22 @@
 <template>
   <div class="phone_title_content" :style="style" :class="{'hasInfoBare': showInfoBare}" >
     <InfoBare v-if="showInfoBare" />
-    <div class="phone_title" :style="{backgroundColor: backgroundColor}">
-      <button class="btn-back" @click.stop="back"><i class="fas fa-angle-left" @click.stop="back"></i></button>
-      {{title}}
+    <div class="phone_back">
+      <vs-row vs-w="12">
+        <vs-col vs-type="flex" vs-justify="start" vs-align="left" vs-w="1">
+          <vs-button class="btn-back" icon-pack="FA5" @click.stop="back" radius color="primary" type="flat" icon="fas fa-angle-left"></vs-button>
+        </vs-col>
+        <vs-col vs-type="flex" vs-justify="start" vs-align="left" vs-w="2">
+          <span class="back_text">Retour</span>
+        </vs-col>
+      </vs-row>
+    </div>
+    <div class="phone_title">
+      <vs-row vs-w="12">
+        <vs-col vs-type="flex" vs-justify="start" vs-align="left" vs-w="12">
+          <span class="title">{{title}}</span>
+       </vs-col>
+      </vs-row>
     </div>
   </div>
 </template>
@@ -19,7 +32,6 @@ export default {
     ...mapGetters(['themeColorTitle']),
     style () {
       return {
-        backgroundColor: this.backgroundColor || this.themeColorTitle,
         color: this.color || '#FFF'
       }
     }

@@ -2,9 +2,9 @@
   <div style="width: 334px; height: 742px; color: white" class="phone_app">
     <PhoneTitle :title="IntlString('APP_NOTES')" backgroundColor="#f8d344" color="white" @back="onBack" />
     <div  style="backgroundColor: white;" class="elements" @contextmenu.prevent="addChannelOption">
-        <div  
+        <div
           >
-            <div v-for='(elem, key) in notesChannels' 
+            <div v-for='(elem, key) in notesChannels'
           v-bind:key="elem.channel"
           v-bind:class="{ select: key === currentSelect}" class="elem-title">
               <h3 style="margin-left: 7px; font-size: 16px; font-weight: 400;"> {{elem.channel}}</h3>
@@ -99,7 +99,7 @@ export default {
     },
     onBack () {
       if (this.ignoreControls === true) return
-      this.$router.push({ name: 'home' })
+      this.$router.go(-1)
     },
     async addChannelOption () {
       try {
@@ -176,7 +176,7 @@ export default {
   color: #34302f;
   margin-left: 13px;
   border-radius: 13px;
-  
+
 }
 .elem-title .diese {
   color: #34302f;
@@ -188,7 +188,7 @@ export default {
 .elem-title.select, .elem-title:hover{
    background-color:rgba(112, 108, 108, 0.1);
    color: #34302f;
-   
+
 }
 .element.select .elem-title, .element:hover .elem-title {
    margin-left: 12px;

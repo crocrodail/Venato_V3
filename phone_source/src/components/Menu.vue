@@ -2,15 +2,15 @@
   <div style="width: 326px; height: 743px;" class="phone_app">
     <div style="width: 342px;
     height: 756px;" class="backblur" v-bind:style="{background: 'url(' + backgroundURL +')'}"></div>
-    <InfoBare class="infobare"/>
+    <InfoBare class="infobare" :dark="true" />
     <div class="menu" @click="onBack">
-      
+
       <div class="menu_content">
-      
+
           <div class='menu_buttons'>
-            <button class="letra"  
-                v-for="(but, key) of Apps" 
-                v-bind:key="but.name" 
+            <button class="letra"
+                v-for="(but, key) of Apps"
+                v-bind:key="but.name"
 
                 v-bind:class="{ select: key === currentSelect}"
                 v-bind:style="{backgroundImage: 'url(' + but.icons +')'}"
@@ -20,7 +20,7 @@
                 <span class="puce" v-if="but.puce !== undefined && but.puce !== 0">{{but.puce}}</span>
             </button>
           </div>
-      </div> 
+      </div>
     </div>
   </div>
 </template>
@@ -165,7 +165,7 @@ button{
   margin: 0px;
   border: none;
   width: 80px;
-  height: 110px;
+  height: 95px;
   margin: 8px;
   color: white;
   background-size: 64px 64px;
@@ -175,7 +175,7 @@ button{
   font-size: 14px;
   padding-top: 72px;
   font-weight: 700;
-  text-shadow: -1px 0 0 rgba(0,0,0, 0.8), 
+  text-shadow: -1px 0 0 rgba(0,0,0, 0.8),
              1px 0 0 rgba(0,0,0, 0.8),
              0 -1px 0 rgba(0,0,0, 0.8),
              0 1px 0 rgba(0,0,0, 0.8);
@@ -198,12 +198,9 @@ button .puce{
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   bottom: 32px;
   right: 12px;
-  
-  bottom: 32px;
-  right: 12px;
 }
 button.select, button:hover{
-  background-color: rgba(255,255,255, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
 }
 

@@ -5,7 +5,7 @@
 local myPedId = nil
 
 local phoneProp = 0
-local phoneModel = "prop_amb_phone"
+local phoneModel = "prop_iphone"
 -- OR "prop_npc_phone"
 -- OR "prop_npc_phone_02"
 -- OR "prop_cs_phone_01"
@@ -56,7 +56,10 @@ function newPhoneProp()
 	while not HasModelLoaded(phoneModel) do
 		Citizen.Wait(1)
 	end
-	phoneProp = CreateObject(phoneModel, 1.0, 1.0, 1.0, 1, 1, 0)
+	print(phoneModel)
+	phoneProp = CreateObject(GetHashKey(phoneModel), 1.0, 1.0, 1.0, 1, 1, 0)
+	print(phoneProp)
+	print(myPedId)
 	local bone = GetPedBoneIndex(myPedId, 28422)
 	AttachEntityToEntity(phoneProp, myPedId, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
 end

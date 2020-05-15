@@ -5,15 +5,15 @@
       @click.stop="cancel">
 
         <div class="modal-container">
-            <div class="modal-choix" 
-              v-bind:class="{ select: index === currentSelect}" 
+            <div class="modal-choix"
+              v-bind:class="{ select: index === currentSelect}"
               v-for="(val, index) in choix" :key='index'
               v-bind:style="{color: val.color}"
               @click.stop="selectItem(val)"
             >
                 <i @click.stop="selectItem(val)" class="fas" :class="val.icons" ></i>{{val.title}}
             </div>
-          
+
 
         </div>
     </div>
@@ -29,13 +29,24 @@ export default {
   store: store,
   data () {
     return {
-      currentSelect: 0
+      currentSelect: 0,
+      audio: null
     }
   },
   props: {
     choix: {
       type: Array,
       default: () => []
+    }
+  },
+  watch: {
+    currentSelect: function (val) {
+      if(this.audio){
+        this.audio.pause();
+      }
+      this.audio = new Audio('/html/static/sound/'+this.choix[val].picto);
+      this.audio.volume = 0.1;
+      this.audio.play();
     }
   },
   computed: {
@@ -57,6 +68,7 @@ export default {
     },
     selectItem (elem) {
       this.$emit('select', elem)
+
     },
     onEnter () {
       this.$emit('select', this.choix[this.currentSelect])
@@ -76,6 +88,9 @@ export default {
     this.$bus.$on('keyUpBackspace', this.cancel)
   },
   beforeDestroy () {
+     if(this.audio){
+        this.audio.pause();
+      }
     this.$bus.$off('keyUpArrowDown', this.onDown)
     this.$bus.$off('keyUpArrowUp', this.onUp)
     this.$bus.$off('keyUpEnter', this.onEnter)

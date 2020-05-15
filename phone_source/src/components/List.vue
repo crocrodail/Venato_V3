@@ -5,7 +5,7 @@
     <div v-if="title !== ''" class="phone_title" v-bind:style="styleTitle()">{{title}}</div>
     -->
     <div style="width: 324px; height: 595px;" class="phone_content elements">
-        <div class="element" v-for='(elem, key) in list' 
+        <div class="element" v-for='(elem, key) in list'
           v-bind:key="elem[keyDispay]"
           v-bind:class="{ select: key === currentSelect}"
           @click.stop="selectItem(elem)"
@@ -175,24 +175,25 @@ export default {
   align-items: center;
   position: relative;
   font-weight: 300;
-    font-size: 18px;
+  font-size: 18px;
+  border-bottom: rgba(0, 0, 0, 0.2) solid 1px;
 }
 
 .element.select, .element:hover {
-   background-color: #DDD;
+  background: radial-gradient(rgba(3, 168, 244, 0.14), rgba(3, 169, 244, 0.26));
 }
 
 .elem-pic{
   margin-left: 12px;
-  height: 48px;
-  width: 48px;
+  height: 35px;
+  width: 35px;
   text-align: center;
-  line-height: 48px;
+  line-height: 35px;
   font-weight: 200;
 }
 .elem-puce{
   background-color: #EE3838;
-  top: 0px;
+  top: 5px;
   color:white;
   height: 18px;
   width: 18px;
@@ -203,29 +204,28 @@ export default {
   margin: 0px;
   padding: 0px;
   position: absolute;
-  left: 42px;
+  left: 35px;
   z-index: 6;
 }
 .elem-title{
   margin-left: 12px;
   font-size: 20px;
-    font-weight: 400;
+  font-weight: 600;
 }
 .elem-title-has-desc {
   margin-top:-15px;
   margin-left: 12px;
+  font-weight: 500;
 }
 .elem-description{
   text-align:left;
-  color:grey;
   position:absolute;
   display:block;
   width:75%;
-  left:73px;
+  left:58px;
   top:12px;
-  font-weight: 100px;
+  font-weight: 200;
   font-size:13.5px;
-  font-style:italic;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space: nowrap;

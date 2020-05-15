@@ -1,28 +1,28 @@
 <template>
   <div style="width: 326px; height: 743px;" class="phone_app">
-    <PhoneTitle :title="contact.display" @back="forceCancel"/>  
+    <PhoneTitle :title="contact.display" @back="forceCancel"/>
     <div class='phone_content content inputText'>
-        
-        <div class="group select" data-type="text" data-model='display' data-maxlength = '64'>      
+
+        <div class="group select" data-type="text" data-model='display' data-maxlength = '64'>
             <input type="text" v-model="contact.display" maxlength="64" v-autofocus>
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>{{ IntlString('APP_CONTACT_LABEL_NAME') }}</label>
         </div>
-        
-        <div class="group inputText" data-type="text" data-model='number' data-maxlength='10'>      
+
+        <div class="group inputText" data-type="text" data-model='number' data-maxlength='10'>
             <input type="text" v-model="contact.number" maxlength="10">
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>{{ IntlString('APP_CONTACT_LABEL_NUMBER') }}</label>
         </div>
-        <div  style="margin-top: 23px; width: 263px; margin-left: 23px; " class="group " data-type="button" data-action='save' @click.stop="save">      
+        <div  style="margin-top: 23px; width: 263px; margin-left: 23px; " class="group " data-type="button" data-action='save' @click.stop="save">
             <input style="font-weight: 100;" type='button' class="btn btn-green" :value="IntlString('APP_CONTACT_SAVE')" @click.stop="save"/>
         </div>
-        <div style="margin-top: 23px; width: 263px; margin-left: 23px;" class="group" data-type="button" data-action='cancel' @click.stop="forceCancel">      
+        <div style="margin-top: 23px; width: 263px; margin-left: 23px;" class="group" data-type="button" data-action='cancel' @click.stop="forceCancel">
             <input  style="font-weight: 100;" type='button' class="btn btn-orange" :value="IntlString('APP_CONTACT_CANCEL')" @click.stop="forceCancel"/>
         </div>
-        <div style="margin-top: 23px; width: 263px; margin-left: 23px;" class="group" data-type="button" data-action='deleteC' @click.stop="deleteC">      
+        <div style="margin-top: 23px; width: 263px; margin-left: 23px;" class="group" data-type="button" data-action='deleteC' @click.stop="deleteC">
             <input style="font-weight: 100;" type='button' class="btn btn-red" :value="IntlString('APP_CONTACT_DELETE')" @click.stop="deleteC"/>
         </div>
     </div>
@@ -188,14 +188,15 @@ export default {
 .content{
     margin: 6px 10px;
     margin-top: 28px;
+  background-color: #FFFFFF;
 }
-.group { 
-  position:relative; 
-  margin-top:24px; 
+.group {
+  position:relative;
+  margin-top:24px;
 }
-.group.inputText { 
-  position:relative; 
-  margin-top:45px; 
+.group.inputText {
+  position:relative;
+  margin-top:45px;
 }
 input 				{
   font-size:24px;
@@ -210,15 +211,15 @@ input:focus 		{ outline:none; }
 
 /* LABEL ======================================= */
 label 				 {
-  color:#999; 
+  color:#999;
   font-size:18px;
   font-weight:normal;
   position:absolute;
   pointer-events:none;
   left:5px;
   top:10px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
+  transition:0.2s ease all;
+  -moz-transition:0.2s ease all;
   -webkit-transition:0.2s ease all;
 }
 
@@ -233,19 +234,19 @@ input:focus ~ label, input:valid ~ label 		{
 .bar 	{ position:relative; display:block; width:100%; }
 .bar:before, .bar:after 	{
   content:'';
-  height:3px; 
+  height:3px;
   width:0;
-  bottom:1px; 
-  position:absolute; 
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
+  bottom:1px;
+  position:absolute;
+  transition:0.2s ease all;
+  -moz-transition:0.2s ease all;
   -webkit-transition:0.2s ease all;
 }
 .bar:before {
   left:50%;
 }
 .bar:after {
-  right:50%; 
+  right:50%;
 }
 
 /* active state */
@@ -257,9 +258,9 @@ input:focus ~ .bar:before, input:focus ~ .bar:after,
 /* HIGHLIGHTER ================================== */
 .highlight {
   position:absolute;
-  height:60%; 
-  width:100px; 
-  top:25%; 
+  height:60%;
+  width:100px;
+  top:25%;
   left:0;
   pointer-events:none;
   opacity:0.5;
@@ -297,7 +298,7 @@ input:focus ~ .highlight {
   border-radius: 28px;
 }
 .group.select .btn.btn-green, .group:hover .btn.btn-green{
-  background-image: linear-gradient(to right, #62A3FF, #4994FF , #0b81ff); 
+  background-image: linear-gradient(to right, #62A3FF, #4994FF , #0b81ff);
   color: white;
   border: none;
 }
@@ -310,7 +311,7 @@ input:focus ~ .highlight {
 }
 .group.select .btn.btn-orange, .group:hover .btn.btn-orange{
 
-  background-image: linear-gradient(to right, #D3D3D3, #C5C5C5 , #B6B6B6); 
+  background-image: linear-gradient(to right, #D3D3D3, #C5C5C5 , #B6B6B6);
   color: white;
   border: #B6B6B6;
 }
@@ -323,7 +324,7 @@ input:focus ~ .highlight {
   border-radius: 28px;
 }
 .group.select .btn.btn-red, .group:hover .btn.btn-red{
-  background-image: linear-gradient(to right, #FF5B5B, #FF4B4B , #FE3C3C); 
+  background-image: linear-gradient(to right, #FF5B5B, #FF4B4B , #FE3C3C);
   color: white;
   border: none;
 }

@@ -1,6 +1,6 @@
 <template>
   <div style="width: 326px; height: 743px;" class="home" v-bind:style="{background: 'url(' + backgroundURL +')'}">
-    <InfoBare />
+    <InfoBare :dark="true" />
     <span class="warningMess" v-if="messages.length >= warningMessageCount">
       <div class="warningMess_icon"><i class="fa fa-warning"></i></div>
       <span class="warningMess_content">
@@ -9,26 +9,22 @@
       </span>
     </span>
 
-    <div class="time"></div>
-    <div class="time-display">{{timeDisplay}}</div>
-    
-
     <div class='home_buttons'>
-     
+
       <button style=" top: 73px; font-family:initial; margin-left: 10px; margin-right: 10px;"
-          v-for="(but, key) of AppsHome" 
-          v-bind:key="but.name" 
+          v-for="(but, key) of AppsHome"
+          v-bind:key="but.name"
           v-bind:class="{ select: key === currentSelect}"
           v-bind:style="{backgroundImage: 'url(' + but.icons +')'}"
-          
+
           @click="openApp(but)"
          >
           <!--{{but.intlName}}-->
           <span class="puce" v-if="but.puce !== undefined && but.puce !== 0">{{but.puce}}</span>
       </button>
-      
+
       <div class="btn_menu_ctn">
-        <button 
+        <button
           class="btn_menu"
           :class="{ select: AppsHome.length === currentSelect}"
           v-bind:style="{backgroundImage: 'url(' + '/html/static/img/icons_app/menu.png' +')'}"
@@ -37,7 +33,7 @@
         </button>
       </div>
 
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -108,7 +104,7 @@ export default {
 .home{
   background-size: cover !important;
   background-position: center !important;
-  
+
   position: relative;
   left: 0;
   top: 0;
@@ -158,7 +154,7 @@ export default {
 
 .home_buttons{
   display: flex;
-  padding: 6px; 
+  padding: 6px;
   width: 100%;
   bottom:1px;
   position: absolute;
@@ -183,7 +179,7 @@ button{
   font-size: 14px;
   padding-top: 72px;
   font-weight: 700;
-  text-shadow: -1px 0 0 rgba(0,0,0, 0.8), 
+  text-shadow: -1px 0 0 rgba(0,0,0, 0.8),
              1px 0 0 rgba(0,0,0, 0.8),
              0 -1px 0 rgba(0,0,0, 0.8),
              0 1px 0 rgba(0,0,0, 0.8);
@@ -192,7 +188,7 @@ button{
 
 
 button .puce{
-  
+
  position: absolute;
   display: block;
   background-color: #EE3838;
@@ -200,21 +196,21 @@ button .puce{
   width: 26px;
   height: 26px;
   top: -5px;
-    left: 51px;
+  left: 51px;
   font-family: none;
-  line-height: 28px;
+  line-height: 25px;
   text-align: center;
   border-radius: 50%;
   font-weight: 400;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   bottom: 32px;
   right: 12px;
-  
+
   bottom: 32px;
   right: 12px;
 }
 button.select, button:hover{
-  background-color: rgba(255,255,255, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 22%;
 }
 

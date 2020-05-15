@@ -1,5 +1,5 @@
 {
-  "reseau": "ElBichop",
+  "reseau": "VenatoCom",
   "warningMessageCount": 250,
   "themeColor": "#007aff",
   "themeColorTitle": "#f7f7f7",
@@ -55,11 +55,11 @@
     "Tokio neon": "tokio.jpg",
     "Custom URL": "URL"
   },
+
   "background_default": {
     "label": "Santa Mónica Beach",
     "value": "back003.jpg"
   },
-
 
   "coque": {
     "Gray": "grey.png",
@@ -177,8 +177,6 @@
       "routeName": "appels",
       "inHomePage": true
     },
-   
-    
     {
       "name": "Contacts",
       "fr_FR__name": "Contacts",
@@ -215,11 +213,10 @@
       "icons": "/html/static/img/icons_app/settings.png",
       "routeName": "parametre",
       "inHomePage": false
-    },
-    
+    },    
     {
       "name": "Bank",
-      "fr_FR__name": "Wallet",
+      "fr_FR__name": "Banque",
       "en_US__name": "Wallet",
       "cs_CZ__name": "Wallet",
       "de_DE__name": "Wallet",
@@ -228,17 +225,6 @@
       "icons": "/html/static/img/icons_app/banco.png",
       "routeName": "bank",
       "inHomePage": false
-    },
-    {
-      "name": "Bourse",
-      "fr_FR__name": "Bourse",
-      "cs_CZ__name": "Burza",
-      "en_US__name": "Stock Market",
-      "de_DE__name": "Börse",
-      "es_ES__name": "Bolsa",
-      "icons": "/html/static/img/icons_app/bourse1.png",
-      "routeName": "bourse",
-      "enabled": true
     },
     {
       "name": "Camera",
@@ -250,16 +236,6 @@
       "es_ES__name": "Cámara",
       "icons": "/html/static/img/icons_app/photo.png",
       "routeName": "photo"
-    },
-    {
-      "name": "Reddit",
-      "fr_FR__name": "Reddit",
-      "en_US__name": "Reddit",
-      "de_DE__name": "Reddit",
-      "pl_PL__name": "Reddit",
-      "es_ES__name": "Reddit",
-      "icons": "/html/static/img/icons_app/reddit.png",
-      "routeName": "tchat"
     },
     {
       "name": "Notes",
@@ -278,7 +254,7 @@
       "routeName": "9gag"
     }
   ],
-  "defaultLanguage": "en_US",
+  "defaultLanguage": "fr_FR",
   "language": {
      "fr_FR": {
       "NAME": "Français",

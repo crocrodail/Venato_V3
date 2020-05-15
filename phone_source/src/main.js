@@ -5,11 +5,14 @@ import store from './store'
 import VueTimeago from './TimeAgo'
 import PhoneAPI from './PhoneAPI'
 import Notification from './Notification'
+import Vuesax from 'vuesax'
 
 import AutoFocus from './directives/autofocus'
+import 'vuesax/dist/vuesax.css' //Vuesax styles
 
 Vue.use(VueTimeago)
 Vue.use(Notification)
+Vue.use(Vuesax)
 Vue.config.productionTip = false
 
 Vue.prototype.$bus = new Vue()

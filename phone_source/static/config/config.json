@@ -1,5 +1,5 @@
 {
-  "reseau": "ElBichop",
+  "reseau": "VenatoCom",
   "warningMessageCount": 250,
   "themeColor": "#007aff",
   "themeColorTitle": "#f7f7f7",
@@ -154,31 +154,7 @@
     }
   ],
 
-  "apps": [{
-      "name": "Twitter",
-      "fr_FR__name": "Twitter",
-      "en_US__name": "Twitter",
-      "de_DE__name": "Twitter",
-      "pl_PL__name": "Twitter",
-      "es_ES__name": "Twitter",
-      "icons": "/html/static/img/icons_app/twitter.png",
-      "routeName": "twitter.splash",
-      "inHomePage": false
-    },
-    {
-      "name": "Phone",
-      "fr_FR__name": "Téléphone",
-      "cs_CZ__name": "Telefon",
-      "en_US__name": "Phone",
-      "de_DE__name": "Telefon",
-      "pl_PL__name": "Telefon",
-      "es_ES__name": "Teléfono",
-      "icons": "/html/static/img/icons_app/call.png",
-      "routeName": "appels",
-      "inHomePage": true
-    },
-   
-    
+  "apps": [
     {
       "name": "Contacts",
       "fr_FR__name": "Contacts",
@@ -190,6 +166,18 @@
       "icons": "/html/static/img/icons_app/contacts.png",
       "routeName": "contacts",
       "inHomePage": false
+    },
+    {
+      "name": "Phone",
+      "fr_FR__name": "Récents",
+      "cs_CZ__name": "Telefon",
+      "en_US__name": "Phone",
+      "de_DE__name": "Telefon",
+      "pl_PL__name": "Telefon",
+      "es_ES__name": "Teléfono",
+      "icons": "/html/static/img/icons_app/call.png",
+      "routeName": "appels",
+      "inHomePage": true
     },
     {
       "name": "Messages",
@@ -216,10 +204,20 @@
       "routeName": "parametre",
       "inHomePage": false
     },
-    
+    {
+      "name": "Twitter",
+      "fr_FR__name": "Twitter",
+      "en_US__name": "Twitter",
+      "de_DE__name": "Twitter",
+      "pl_PL__name": "Twitter",
+      "es_ES__name": "Twitter",
+      "icons": "/html/static/img/icons_app/twitter.png",
+      "routeName": "twitter.splash",
+      "inHomePage": false
+    },
     {
       "name": "Bank",
-      "fr_FR__name": "Wallet",
+      "fr_FR__name": "Banque",
       "en_US__name": "Wallet",
       "cs_CZ__name": "Wallet",
       "de_DE__name": "Wallet",
@@ -238,7 +236,7 @@
       "es_ES__name": "Bolsa",
       "icons": "/html/static/img/icons_app/bourse1.png",
       "routeName": "bourse",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "Camera",
@@ -259,7 +257,8 @@
       "pl_PL__name": "Reddit",
       "es_ES__name": "Reddit",
       "icons": "/html/static/img/icons_app/reddit.png",
-      "routeName": "tchat"
+      "routeName": "tchat",
+      "enabled": false
     },
     {
       "name": "Notes",
@@ -270,7 +269,7 @@
       "es_ES__name": "Notas ",
       "routeName": "notes",
       "icons": "/html/static/img/icons_app/notes.png"
-      
+
     },
     {
       "name": "9GAG",
@@ -278,7 +277,7 @@
       "routeName": "9gag"
     }
   ],
-  "defaultLanguage": "en_US",
+  "defaultLanguage": "fr_FR",
   "language": {
      "fr_FR": {
       "NAME": "Français",
@@ -301,7 +300,7 @@
       "APP_PHONE_CALL_ANONYMOUS": "Appeler en anomyne",
       "APP_PHONE_DELETE": "Effacer",
       "APP_PHONE_DELETE_ALL": "Effacer TOUT.",
-      "APP_PHONE_TITLE": "Téléphone",
+      "APP_PHONE_TITLE": "Récents",
       "APP_PHONE_MENU_FAVORITES": "Favoris",
       "APP_PHONE_MENU_RECENTS": "Récents",
       "APP_PHONE_MENU_CONTACTS": "Contacts",

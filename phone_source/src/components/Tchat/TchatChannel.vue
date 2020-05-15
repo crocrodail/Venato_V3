@@ -2,7 +2,7 @@
   <div style="width: 334px; height: 742px; color: white" class="phone_app">
     <PhoneTitle style="color: white" :title="IntlString('APP_DARKTCHAT_TITLE')" backgroundColor="#ff4500" @back="onBack" />
     <div style="backgroundColor: #dae0e6;" class="elements" @contextmenu.prevent="addChannelOption">
-        <div class="element" v-for='(elem, key) in tchatChannels' 
+        <div class="element" v-for='(elem, key) in tchatChannels'
           v-bind:key="elem.channel"
           v-bind:class="{ select: key === currentSelect}"
           @click.stop="showChannel(elem.channel)"
@@ -100,7 +100,7 @@ export default {
     },
     onBack () {
       if (this.ignoreControls === true) return
-      this.$router.push({ name: 'home' })
+      this.$router.go(-1)
     },
     async addChannelOption () {
       try {
@@ -184,7 +184,7 @@ export default {
 .element.select, .element:hover{
    background-color: white;
    color: #0079d3;
-   
+
 }
 .element.select .elem-title, .element:hover .elem-title {
    margin-left: 12px;
