@@ -37,6 +37,7 @@ export default {
   computed: {
     ...mapGetters(['IntlString', 'useMouse', 'myPhoneNumber', 'backgroundLabel', 'coqueLabel', 'sonidoLabel', 'zoom', 'config', 'volume', 'availableLanguages']),
     paramList () {
+      console.log(this.config);
       const cancelStr = this.IntlString('CANCEL')
       const confirmResetStr = this.IntlString('APP_CONFIG_RESET_CONFIRM')
       const cancelOption = {}
