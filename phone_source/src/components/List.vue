@@ -188,7 +188,7 @@ export default {
   height: 35px;
   width: 35px;
   text-align: center;
-  line-height: 35px;
+  line-height: 31px;
   font-weight: 200;
 }
 .elem-puce{

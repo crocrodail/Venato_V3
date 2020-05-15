@@ -1,13 +1,13 @@
 {
   "name": "src_htmlphone",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "A Vue.js project",
   "author": "Jonathan <gannon.hlw@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "build": "node build/build.js"
+    "build": "webpack --config build/webpack.prod.conf.js"
   },
   "dependencies": {
     "babel-preset-es2017": "^6.24.1",

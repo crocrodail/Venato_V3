@@ -1,5 +1,5 @@
 <template>
-<!--ESTE HTML ES ACOPLADO DEL VIEJO--> 
+<!--ESTE HTML ES ACOPLADO DEL VIEJO-->
   <div style="width: 330px; height: 743px; backgroundColor: white"  class="phone_app messages">
     <PhoneTitle :title="displayContact" style="backgroundColor: #F1F1F1; color: black" @back="quit"/> <!--:title="displayContact" :backgroundColor="color" -->
     <div class="img-fullscreen" v-if="imgZoom !== undefined" @click.stop="imgZoom = undefined">
@@ -7,8 +7,8 @@
     </div>
 
     <textarea ref="copyTextarea" class="copyTextarea"/>
-    
-    
+
+
     <div style="width: 326px; height: 678px; backgroundColor: white"  id='sms_list' @contextmenu.prevent="showOptions">
         <div class="sms" v-bind:class="{ select: key === selectMessage}" v-for='(mess, key) in messagesList' v-bind:key="mess.id" @click.stop="onActionMessage(mess)"
         >
@@ -16,21 +16,21 @@
               <h6  v-bind:class="{ sms_me : mess.owner === 1}"  class="name_other_sms_me">{{displayContact}}</h6>
               <h6   v-bind:class="{ sms_me : mess.owner === 1}"  class="name_other_sms_other" @click.stop="onActionMessage(mess)"><timeago style="font-weight: 500" class="sms_time" :since='mess.time' :auto-update="20"></timeago></h6>
           </div>
-            <span class='sms_message sms_me' 
+            <span class='sms_message sms_me'
               @click.stop="onActionMessage(mess)"
-              
-              v-bind:class="{ sms_other : mess.owner === 0}" >
-              
+
+              v-bind:class="{ sms_other : mess.owner === 0, sms_img: isSMSImage(mess)}" >
+
               <img v-if="isSMSImage(mess)" @click.stop="onActionMessage(mess)" class="sms-img" :src="mess.message">
               <span v-else @click.stop="onActionMessage(mess)" >{{mess.message}}</span>
-                
+
                 <!--<span style="color: white; font-size: 17px; margin: 24px;" @click.stop="onActionMessage(mess)" ><timeago class="sms_time" :since='mess.time' :auto-update="20"></timeago></span>-->
             </span>
         </div>
     </div>
 
     <div style="width: 306px;" id='sms_write' @contextmenu.prevent="showOptions">
-        <input 
+        <input
           type="text"
           v-model="message"
           :placeholder="IntlString('APP_MESSAGE_PLACEHOLDER_ENTER_MESSAGE')"
@@ -362,7 +362,7 @@ export default {
     height: 678px;
     right: 0;
     height: calc(100% - 20px);
-    background-color: #DDD;    
+    background-color: #DDD;
 }
 #sms_contact{
     background-color: #4CAF50;
@@ -379,7 +379,7 @@ export default {
 
   .name_other_sms_other{
     margin-bottom: -9px;
-    margin-left: 42px;
+    margin-left: 15px;
     font-size: 14px;
     font-weight: 500;
     color: lightgrey;
@@ -426,10 +426,11 @@ export default {
   float: right;
   background-color: #e9e9eb;
   border-radius: 17px;
-  padding: 5px 10px;
+  padding: 10px;
   max-width: 90%;
   margin-right: 5%;
   margin-top: 10px;
+  margin-bottom: 5px;
 }
 
 .sms_other{
@@ -456,12 +457,11 @@ export default {
     margin-top: -5px;
     display: none;
     font-size: 9px;
-    
+
 }
 .sms_other .sms_time{
     color: white;
     display: none;
-    margin-left: 4px;
     margin-top: -5px;
     font-size: 9px;
 }
@@ -513,7 +513,7 @@ export default {
     margin-right: 10px;
 }
 .sms_send svg{
-    margin: 8px; 
+    margin: 8px;
     width: 36px;
     height: 36px;
     fill: #C0C0C0;

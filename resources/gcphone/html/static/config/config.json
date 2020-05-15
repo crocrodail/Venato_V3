@@ -55,11 +55,11 @@
     "Tokio neon": "tokio.jpg",
     "Custom URL": "URL"
   },
-
   "background_default": {
     "label": "Santa Mónica Beach",
     "value": "back003.jpg"
   },
+
 
   "coque": {
     "Gray": "grey.png",
@@ -154,29 +154,7 @@
     }
   ],
 
-  "apps": [{
-      "name": "Twitter",
-      "fr_FR__name": "Twitter",
-      "en_US__name": "Twitter",
-      "de_DE__name": "Twitter",
-      "pl_PL__name": "Twitter",
-      "es_ES__name": "Twitter",
-      "icons": "/html/static/img/icons_app/twitter.png",
-      "routeName": "twitter.splash",
-      "inHomePage": false
-    },
-    {
-      "name": "Phone",
-      "fr_FR__name": "Téléphone",
-      "cs_CZ__name": "Telefon",
-      "en_US__name": "Phone",
-      "de_DE__name": "Telefon",
-      "pl_PL__name": "Telefon",
-      "es_ES__name": "Teléfono",
-      "icons": "/html/static/img/icons_app/call.png",
-      "routeName": "appels",
-      "inHomePage": true
-    },
+  "apps": [
     {
       "name": "Contacts",
       "fr_FR__name": "Contacts",
@@ -188,6 +166,18 @@
       "icons": "/html/static/img/icons_app/contacts.png",
       "routeName": "contacts",
       "inHomePage": false
+    },
+    {
+      "name": "Phone",
+      "fr_FR__name": "Récents",
+      "cs_CZ__name": "Telefon",
+      "en_US__name": "Phone",
+      "de_DE__name": "Telefon",
+      "pl_PL__name": "Telefon",
+      "es_ES__name": "Teléfono",
+      "icons": "/html/static/img/icons_app/call.png",
+      "routeName": "appels",
+      "inHomePage": true
     },
     {
       "name": "Messages",
@@ -213,7 +203,18 @@
       "icons": "/html/static/img/icons_app/settings.png",
       "routeName": "parametre",
       "inHomePage": false
-    },    
+    },
+    {
+      "name": "Twitter",
+      "fr_FR__name": "Twitter",
+      "en_US__name": "Twitter",
+      "de_DE__name": "Twitter",
+      "pl_PL__name": "Twitter",
+      "es_ES__name": "Twitter",
+      "icons": "/html/static/img/icons_app/twitter.png",
+      "routeName": "twitter.splash",
+      "inHomePage": false
+    },
     {
       "name": "Bank",
       "fr_FR__name": "Banque",
@@ -227,6 +228,17 @@
       "inHomePage": false
     },
     {
+      "name": "Bourse",
+      "fr_FR__name": "Bourse",
+      "cs_CZ__name": "Burza",
+      "en_US__name": "Stock Market",
+      "de_DE__name": "Börse",
+      "es_ES__name": "Bolsa",
+      "icons": "/html/static/img/icons_app/bourse1.png",
+      "routeName": "bourse",
+      "enabled": false
+    },
+    {
       "name": "Camera",
       "fr_FR__name": "Photo",
       "cs_CZ__name": "Fotoaparát",
@@ -238,6 +250,17 @@
       "routeName": "photo"
     },
     {
+      "name": "Reddit",
+      "fr_FR__name": "Reddit",
+      "en_US__name": "Reddit",
+      "de_DE__name": "Reddit",
+      "pl_PL__name": "Reddit",
+      "es_ES__name": "Reddit",
+      "icons": "/html/static/img/icons_app/reddit.png",
+      "routeName": "tchat",
+      "enabled": false
+    },
+    {
       "name": "Notes",
       "fr_FR__name": "Notes ",
       "en_US__name": "Notes ",
@@ -246,7 +269,7 @@
       "es_ES__name": "Notas ",
       "routeName": "notes",
       "icons": "/html/static/img/icons_app/notes.png"
-      
+
     },
     {
       "name": "9GAG",
@@ -262,7 +285,6 @@
       "PHONE_WARNING_MESSAGE_MESS": "messages",
       "CONFIRM": "Accepter",
       "CANCEL": "Annuler",
-      "APP_MESSAGE_MESS_NUMBER": "Le numéro",
       "APP_CONFIG_TITLE": "Paramètres",
       "APP_CONFIG_MY_MUNBER": "Mon numéro",
       "APP_CONFIG_WALLPAPER": "Fond d'écran",
@@ -278,7 +300,7 @@
       "APP_PHONE_CALL_ANONYMOUS": "Appeler en anomyne",
       "APP_PHONE_DELETE": "Effacer",
       "APP_PHONE_DELETE_ALL": "Effacer TOUT.",
-      "APP_PHONE_TITLE": "Téléphone",
+      "APP_PHONE_TITLE": "Récents",
       "APP_PHONE_MENU_FAVORITES": "Favoris",
       "APP_PHONE_MENU_RECENTS": "Récents",
       "APP_PHONE_MENU_CONTACTS": "Contacts",
@@ -310,7 +332,7 @@
       "APP_MESSAGE_MESS_CALL": "Appeler",
       "APP_MESSAGE_MESS_COPY": "Copier",
       "APP_MESSAGE_CONTACT_TITLE": "Contacts",
-      "APP_MESSAGE_CONTRACT_ENTER_NUMBER": "Enter un numero",
+      "APP_MESSAGE_CONTRACT_ENTER_NUMBER": "Entrer un numéro",
       "APP_MESSAGE_PLACEHOLDER_ENTER_MESSAGE": "Envoyer un message",
       "APP_DARKTCHAT_TITLE": "Dark Tchat",
       "APP_DARKTCHAT_NEW_CHANNEL": "Ajouter un channel",
@@ -383,7 +405,6 @@
       "PHONE_WARNING_MESSAGE_MESS": "Messages",
       "CONFIRM": "Accept",
       "CANCEL": "Abort",
-      "APP_MESSAGE_MESS_NUMBER": "Number",
       "APP_CONFIG_TITLE": "Settings",
       "APP_CONFIG_MY_MUNBER": "My number",
       "APP_CONFIG_WALLPAPER": "Wallpaper",
@@ -612,7 +633,6 @@
       "PHONE_WARNING_MESSAGE_MESS": "nowiny",
       "CONFIRM": "Akceptacja",
       "CANCEL": "przerwać",
-      "APP_MESSAGE_MESS_NUMBER": "Liczba",
       "APP_CONFIG_TITLE": "parametr",
       "APP_CONFIG_MY_MUNBER": "Mój numer",
       "APP_CONFIG_WALLPAPER": "tapeta",
@@ -840,7 +860,6 @@
       "PHONE_WARNING_MESSAGE_MESS": "zprávy",
       "CONFIRM": "Přijmout",
       "CANCEL": "Zrušit",
-       "APP_MESSAGE_MESS_NUMBER": "Číslo",
       "APP_CONFIG_TITLE": "nastavení",
       "APP_CONFIG_MY_MUNBER": "Mé číslo",
       "APP_CONFIG_WALLPAPER": "tapeta",

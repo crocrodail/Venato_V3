@@ -1,6 +1,6 @@
 <template>
   <div class="phone_app">
-    <PhoneTitle :title="'9 GAG (' + currentSelectPost + ')'" backgroundColor="#000" @back="quit"/>  
+    <PhoneTitle title="9GAG" @back="quit"/>
     <div class='phone_content' @click="onClick">
       <div class="post" v-if="currentPost !== undefined">
         <h1 class="post-title">{{ currentPost.title }}</h1>
@@ -11,7 +11,14 @@
         </div>
       </div>
       <div v-else class="loading">
-        <div>CHARGEMENT</div>
+        <vs-row>
+          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">
+            <img width="200px" src="html/static/img/icons_app/9gag.png">
+          </vs-col>
+          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">
+            <i class="fas fa-spinner fa-pulse fa-3x"></i>
+          </vs-col>
+        </vs-row>
       </div>
     </div>
   </div>
@@ -34,6 +41,7 @@ export default {
     currentPost () {
       if (this.posts && this.posts.length > this.currentSelectPost) {
         return this.posts[this.currentSelectPost]
+        console.log(this.posts[this.currentSelectPost])
       }
       this.loadItems()
       return undefined
@@ -96,7 +104,7 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  
+
   .post-title {
     padding-left: 12px;
     font-size: 18px;
@@ -110,6 +118,10 @@ export default {
     height: 670px;
   }
 
+  .phone_content{
+    height: 100%;
+  }
+
   .post-video, .post-image{
     object-fit: contain;
     max-width: 100%;
@@ -120,16 +132,5 @@ export default {
 }
 
 
-.loading{
-  height: 100%;
-  background-color: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  div {
-    text-align: center;
-    margin-bottom: 36px;
-  }
-}
+
 </style>
