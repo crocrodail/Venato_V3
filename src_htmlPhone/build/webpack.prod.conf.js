@@ -82,18 +82,21 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
-    })
+    }),
     // copy custom static assets
-    // new CopyWebpackPlugin([
-    //   {
-    //     from: path.resolve(__dirname, '../../resources/gcphone/html/static'),
-    //     to: config.build.assetsSubDirectory,
-    //     ignore: ['.*']
-    //   }
-    // ])
+    new CopyWebpackPlugin([
+      {
+        to: path.resolve(__dirname, '../../resources/gcphone/html/static'),
+        from: config.build.assetsSubDirectory,
+        ignore: ['.*']
+      }
+    ])
   ]
 })
 
+console.log("dirname", __dirname);
+console.log("resolve",path.resolve(__dirname, '../../resources/gcphone/html/static'));
+console.log("to",config.build.assetsSubDirectory);
 if (config.build.productionGzip) {
   var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
