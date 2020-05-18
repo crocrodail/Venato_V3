@@ -2,14 +2,16 @@
   <div class="phone_app">
     <PhoneTitle title="9GAG" @back="quit"/>
     <div class='phone_content' @click="onClick">
-      <div class="post" v-if="currentPost !== undefined">
-        <h1 class="post-title">{{ currentPost.title }}</h1>
-        <div class="post-content">
+      <vs-row class="post" v-if="currentPost !== undefined">
+         <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">
+        <span class="post-title">{{ currentPost.title }}</span>
+         </vs-col>
+        <vs-col class="post-content"  vs-type="flex" vs-justify="center" vs-align="start" vs-w="12">
           <video class="post-video" ref="video" v-if="currentPost.images.image460svwm !== undefined" autoplay loop :src="currentPost.images.image460svwm.url">
           </video>
           <img class="post-image" v-else :src="currentPost.images.image460.url" alt="">
-        </div>
-      </div>
+        </vs-col>
+      </vs-row>
       <div v-else class="loading">
         <vs-row>
           <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="12">
@@ -34,7 +36,7 @@ export default {
     return {
       nextCursor: 'c=10',
       currentSelectPost: 0,
-      posts: []
+      posts: [],
     }
   },
   computed: {
@@ -106,16 +108,18 @@ export default {
   flex-direction: column;
 
   .post-title {
-    padding-left: 12px;
-    font-size: 18px;
-    height: 18px;
+    font-size: 30px;
+    height: 45px;
     overflow: hidden;
+    text-align: center;
+    font-weight: bolder;
   }
 
   .post-content{
     display: flex;
     width: 390px;
     height: 670px;
+    padding: 15px;
   }
 
   .phone_content{
