@@ -2,18 +2,26 @@
   <div class="phone_app">
     <PhoneTitle :title="IntlString('APP_CONFIG_TITLE')" @back="onBackspace"/>
     <div class='phone_content elements'>
-      <div class='element'
+      <vs-row class='element'
           v-for='(elem, key) in paramList'
           v-bind:class="{ select: key === currentSelect}"
           v-bind:key="key"
           @click.stop="onPressItem(key)"
         >
-        <i class="fa" v-bind:class="elem.icons" v-bind:style="{color: elem.color}" @click.stop="onPressItem(key)"></i>
-        <div class="element-content" @click.stop="onPressItem(key)">
-          <span class="element-title" @click.stop="onPressItem(key)">{{elem.title}}</span>
-          <span v-if="elem.value" class="element-value" @click.stop="onPressItem(key)">{{elem.value}}</span>
-        </div>
-      </div>
+        <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+          <i v-bind:class="elem.icons" v-bind:style="{color: elem.color}" @click.stop="onPressItem(key)"></i>
+        </vs-col>
+        <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="10">
+          <vs-row>
+            <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="12">
+              <span class="element-title" @click.stop="onPressItem(key)">{{elem.title}}</span>
+            </vs-col>
+            <vs-col vs-type="flex" vs-justify="left" vs-align="center" vs-w="12">
+              <span class="element-value" @click.stop="onPressItem(key)">{{elem.value}}</span>
+            </vs-col>
+          </vs-row>
+        </vs-col>
+      </vs-row>
     </div>
 
   </div>
@@ -37,7 +45,6 @@ export default {
   computed: {
     ...mapGetters(['IntlString', 'useMouse', 'myPhoneNumber', 'backgroundLabel', 'coqueLabel', 'sonidoLabel', 'zoom', 'config', 'volume', 'availableLanguages']),
     paramList () {
-      console.log(this.config);
       const cancelStr = this.IntlString('CANCEL')
       const confirmResetStr = this.IntlString('APP_CONFIG_RESET_CONFIRM')
       const cancelOption = {}
@@ -46,33 +53,33 @@ export default {
       confirmReset[confirmResetStr] = 'accept'
       return [
         {
-          icons: 'fa-phone',
+          icons: 'fas fa-phone',
           title: this.IntlString('APP_CONFIG_MY_MUNBER'),
           value: this.myPhoneNumber
         },
         {
-          icons: 'fa-picture-o',
+          icons: 'far fa-image',
           title: this.IntlString('APP_CONFIG_WALLPAPER'),
           value: this.backgroundLabel,
           onValid: 'onChangeBackground',
           values: this.config.background
         },
         {
-          icons: 'fa-mobile',
+          icons: 'fas fa-mobile-alt',
           title: this.IntlString('APP_CONFIG_CASE'),
           value: this.coqueLabel,
           onValid: 'onChangeCoque',
           values: this.config.coque
         },
         {
-          icons: 'fa-bell-o',
+          icons: 'far fa-bell',
           title: this.IntlString('APP_CONFIG_SOUND'),
           value: this.sonidoLabel,
           onValid: 'onChangeSonido',
           values: this.config.sonido
         },
         {
-          icons: 'fa-search',
+          icons: 'fas fa-search',
           title: this.IntlString('APP_CONFIG_ZOOM'),
           value: this.zoom,
           onValid: 'setZoom',
@@ -88,7 +95,7 @@ export default {
           }
         },
         {
-          icons: 'fa-volume-down',
+          icons: 'fas fa-volume-up',
           title: this.IntlString('APP_CONFIG_VOLUME'),
           value: this.valumeDisplay,
           onValid: 'setPhoneVolume',
@@ -104,7 +111,7 @@ export default {
           }
         },
         {
-          icons: 'fa-globe',
+          icons: 'fas fa-globe-europe',
           title: this.IntlString('APP_CONFIG_LANGUAGE'),
           onValid: 'onChangeLanguages',
           values: {
@@ -113,7 +120,7 @@ export default {
           }
         },
         {
-          icons: 'fa-mouse-pointer',
+          icons: 'fas fa-mouse-pointer',
           title: this.IntlString('APP_CONFIG_MOUSE_SUPPORT'),
           onValid: 'onChangeMouseSupport',
           values: {
@@ -123,7 +130,7 @@ export default {
           }
         },
         {
-          icons: 'fa-exclamation-triangle',
+          icons: 'fas fa-exclamation-triangle',
           color: '#ee3838',
           title: this.IntlString('APP_CONFIG_RESET'),
           onValid: 'resetPhone',
@@ -177,7 +184,7 @@ export default {
       if (param.values !== undefined) {
         this.ignoreControls = true
         let choix = Object.keys(param.values).map(key => {
-          return {title: key, value: param.values[key], picto: param.values[key]}
+          return {title: key, value: param.values[key], picto: param.icons}
         })
         Modal.CreateModal({choix}).then(reponse => {
           this.ignoreControls = false
@@ -305,6 +312,7 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
+  padding: 0 20px;
 }
 .element .fa{
   color: #0b81ff;
@@ -343,4 +351,5 @@ export default {
 .element.select, .element:hover{
   background: radial-gradient(rgba(3, 168, 244, 0.14), rgba(3, 169, 244, 0.26));
 }
+
 </style>

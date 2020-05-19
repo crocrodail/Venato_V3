@@ -16,7 +16,6 @@
 <script>
 
 import './PhoneBaseStyle.scss'
-import './assets/css/font-awesome.min.css'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'app',

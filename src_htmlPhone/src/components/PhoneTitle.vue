@@ -57,4 +57,7 @@ export default {
 }
 </script>
 <style scoped>
+.btn-back{
+  z-index: 0;
+}
 </style>
