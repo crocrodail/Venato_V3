@@ -1,6 +1,6 @@
 <template>
    <div style="width: 326px; height: 743px;" class="phone_app">
-    <PhoneTitle :title="IntlString('APP_PHONE_TITLE')" v-on:back="onBackspace" />
+    <PhoneTitle :title="subMenu[currentMenuIndex].name" v-on:back="onBackspace" />
     <div class="content">
       <component :is="subMenu[currentMenuIndex].Comp" />
     </div>
@@ -26,6 +26,7 @@ import PhoneTitle from './../PhoneTitle'
 import AppelsFavoris from './AppelsFavoris'
 import AppelsContacts from './AppelsContacts'
 import AppelsRecents from './AppelsRecents'
+import AppelsNumber from './AppelsNumber'
 
 export default {
   components: {
@@ -33,7 +34,7 @@ export default {
   },
   data () {
     return {
-      currentMenuIndex: 1
+      currentMenuIndex: 3
     }
   },
   computed: {
@@ -51,6 +52,10 @@ export default {
         Comp: AppelsContacts,
         name: this.IntlString('APP_PHONE_MENU_CONTACTS'),
         icon: 'user'
+      }, {
+        Comp: AppelsNumber,
+        name: this.IntlString('APP_PHONE_MENU_CALL'),
+        icon: 'phone'
       }]
     }
   },

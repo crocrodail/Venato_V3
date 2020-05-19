@@ -1,187 +1,191 @@
 <template>
-   <div style="width: 326px; height: 743px;"  class="phone_app">
+  <div style="width: 326px; height: 743px;" class="phone_app">
     <div class="backblur" v-bind:style="{background: 'url(' + backgroundURL +')'}"></div>
-    <InfoBare />
+    <InfoBare dark="true" />
     <div class="num">{{appelsDisplayNumber}}</div>
     <div class="contactName">{{appelsDisplayName}}</div>
 
     <div class="time"></div>
     <div class="time-display">{{timeDisplay}}</div>
 
-    <div 
+    <div
       v-if="useMouse && status === 0"
       class="ignore"
-      @click.stop="onIgnoreCall">
-      {{ IntlString('APP_PHONE_CALL_IGNORE')}}
-    </div>
+      @click.stop="onIgnoreCall"
+    >{{ IntlString('APP_PHONE_CALL_IGNORE')}}</div>
 
-    <div class="actionbox">
-      <div class="action raccrocher" :class="{disableTrue: status === 0 && select !== 0}"
+    <vs-row class="actionbox">
+      <vs-col
+        class="action raccrocher"
+        :class="{disableTrue: status === 0 && select !== 0}"
         @click.stop="raccrocher"
+        vs-w="3"
       >
-        <svg viewBox="0 0 24 24" @click.stop="raccrocher">
-          <g transform="rotate(135, 12, 12)">
-          <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-            </g>
-        </svg>
-      </div>
-
-      <div class="action deccrocher" v-if="status === 0" :class="{disableFalse: status === 0 && select !== 1}"
+        <i class="fas fa-phone-slash"></i>
+      </vs-col>
+      <vs-col
+        class="action deccrocher"
+        v-if="status === 0"
+        :class="{disableFalse: status === 0 && select !== 1}"
         @click.stop="deccrocher"
+        vs-w="3"
       >
-        <svg viewBox="0 0 24 24" @click.stop="deccrocher">
-          <g transform="rotate(0, 12, 12)">
-          <path d="M6.62,10.79C8.06,13.62 10.38,15.94 13.21,17.38L15.41,15.18C15.69,14.9 16.08,14.82 16.43,14.93C17.55,15.3 18.75,15.5 20,15.5A1,1 0 0,1 21,16.5V20A1,1 0 0,1 20,21A17,17 0 0,1 3,4A1,1 0 0,1 4,3H7.5A1,1 0 0,1 8.5,4C8.5,5.25 8.7,6.45 9.07,7.57C9.18,7.92 9.1,8.31 8.82,8.59L6.62,10.79Z"/>
-            </g>
-        </svg>
-      
-      </div>
-     </div>
-   </div>
+        <i class="icon fas fa-phone-alt"></i>
+      </vs-col>
+    </vs-row>
+  </div>
 </template>
 
 <script>
 // eslint-disable-next-line
-import { mapGetters, mapActions } from 'vuex'
-import InfoBare from './../InfoBare'
+import { mapGetters, mapActions } from "vuex";
+import InfoBare from "./../InfoBare";
 
 export default {
   components: {
     InfoBare
   },
-  data () {
+  data() {
     return {
       time: -1,
       intervalNum: undefined,
       select: -1,
       status: 0
-    }
+    };
   },
   methods: {
-    ...mapActions(['acceptCall', 'rejectCall', 'ignoreCall']),
-    onBackspace () {
+    ...mapActions(["acceptCall", "rejectCall", "ignoreCall"]),
+    onBackspace() {
       if (this.status === 1) {
-        this.onRejectCall()
+        this.onRejectCall();
       } else {
-        this.onIgnoreCall()
+        this.onIgnoreCall();
       }
     },
-    onEnter () {
+    onEnter() {
       if (this.status === 0) {
         if (this.select === 0) {
-          this.onRejectCall()
+          this.onRejectCall();
         } else {
-          this.onAcceptCall()
+          this.onAcceptCall();
         }
       }
     },
-    raccrocher () {
-      this.onRejectCall()
+    raccrocher() {
+      this.onRejectCall();
     },
-    deccrocher () {
+    deccrocher() {
       if (this.status === 0) {
-        this.onAcceptCall()
+        this.onAcceptCall();
       }
     },
-    onLeft () {
+    onLeft() {
       if (this.status === 0) {
-        this.select = 0
+        this.select = 0;
       }
     },
-    onRight () {
+    onRight() {
       if (this.status === 0) {
-        this.select = 1
+        this.select = 1;
       }
     },
-    updateTime () {
-      this.time += 1
+    updateTime() {
+      this.time += 1;
     },
-    onRejectCall () {
-      this.rejectCall()
-      this.$phoneAPI.setIgnoreFocus(false)
+    onRejectCall() {
+      this.rejectCall();
+      this.$phoneAPI.setIgnoreFocus(false);
     },
-    onAcceptCall () {
-      this.acceptCall()
-      this.$phoneAPI.setIgnoreFocus(true)
+    onAcceptCall() {
+      this.acceptCall();
+      this.$phoneAPI.setIgnoreFocus(true);
     },
-    onIgnoreCall () {
-      this.ignoreCall()
-      this.$phoneAPI.setIgnoreFocus(false)
-      this.$router.push({ name: 'home' })
+    onIgnoreCall() {
+      this.ignoreCall();
+      this.$phoneAPI.setIgnoreFocus(false);
+      this.$router.push({ name: "home" });
     },
-    startTimer () {
+    startTimer() {
       if (this.intervalNum === undefined) {
-        this.time = 0
-        this.intervalNum = setInterval(this.updateTime, 1000)
+        this.time = 0;
+        this.intervalNum = setInterval(this.updateTime, 1000);
       }
     }
   },
 
   watch: {
-    appelsInfo () {
-      if (this.appelsInfo === null) return
+    appelsInfo() {
+      if (this.appelsInfo === null) return;
       if (this.appelsInfo.is_accepts === true) {
-        this.status = 1
-        this.$phoneAPI.setIgnoreFocus(true)
-        this.startTimer()
+        this.status = 1;
+        this.$phoneAPI.setIgnoreFocus(true);
+        this.startTimer();
       }
     }
   },
 
   computed: {
-    ...mapGetters(['IntlString', 'backgroundURL', 'useMouse', 'appelsInfo', 'appelsDisplayName', 'appelsDisplayNumber', 'myPhoneNumber']),
-    timeDisplay () {
+    ...mapGetters([
+      "IntlString",
+      "backgroundURL",
+      "useMouse",
+      "appelsInfo",
+      "appelsDisplayName",
+      "appelsDisplayNumber",
+      "myPhoneNumber"
+    ]),
+    timeDisplay() {
       if (this.time < 0) {
-        return '. . .'
+        return ". . .";
       }
-      const min = Math.floor(this.time / 60)
-      let sec = this.time % 60
+      const min = Math.floor(this.time / 60);
+      let sec = this.time % 60;
       if (sec < 10) {
-        sec = '0' + sec
+        sec = "0" + sec;
       }
-      return `${min}:${sec}`
+      return `${min}:${sec}`;
     }
   },
 
-  mounted () {
+  mounted() {
     if (this.appelsInfo !== null && this.appelsInfo.initiator === true) {
-      this.status = 1
-      this.$phoneAPI.setIgnoreFocus(true)
+      this.status = 1;
+      this.$phoneAPI.setIgnoreFocus(true);
     }
   },
 
-  created () {
+  created() {
     if (!this.useMouse) {
-      this.$bus.$on('keyUpEnter', this.onEnter)
-      this.$bus.$on('keyUpArrowLeft', this.onLeft)
-      this.$bus.$on('keyUpArrowRight', this.onRight)
+      this.$bus.$on("keyUpEnter", this.onEnter);
+      this.$bus.$on("keyUpArrowLeft", this.onLeft);
+      this.$bus.$on("keyUpArrowRight", this.onRight);
     }
-    this.$bus.$on('keyUpBackspace', this.onBackspace)
+    this.$bus.$on("keyUpBackspace", this.onBackspace);
   },
-  beforeDestroy () {
-    this.$bus.$off('keyUpBackspace', this.onBackspace)
-    this.$bus.$off('keyUpEnter', this.onEnter)
-    this.$bus.$off('keyUpArrowLeft', this.onLeft)
-    this.$bus.$off('keyUpArrowRight', this.onRight)
+  beforeDestroy() {
+    this.$bus.$off("keyUpBackspace", this.onBackspace);
+    this.$bus.$off("keyUpEnter", this.onEnter);
+    this.$bus.$off("keyUpArrowLeft", this.onLeft);
+    this.$bus.$off("keyUpArrowRight", this.onRight);
     if (this.intervalNum !== undefined) {
-      window.clearInterval(this.intervalNum)
+      window.clearInterval(this.intervalNum);
     }
-    this.$phoneAPI.setIgnoreFocus(false)
+    this.$phoneAPI.setIgnoreFocus(false);
   }
-}
+};
 </script>
 
-<style scoped>
-.backblur{
+<style lang="scss" scoped>
+.backblur {
   top: -6px;
   left: -6px;
-  right:-6px;
+  right: -6px;
   bottom: -6px;
   position: absolute;
   background-size: cover !important;
   filter: blur(6px);
 }
-.num{
+.num {
   position: absolute;
   text-shadow: 0px 0px 15px black, 0px 0px 15px black;
   top: 60px;
@@ -191,7 +195,7 @@ export default {
   text-align: center;
   font-size: 46px;
 }
-.contactName{
+.contactName {
   position: absolute;
   text-shadow: 0px 0px 15px black, 0px 0px 15px black;
   top: 100px;
@@ -203,7 +207,7 @@ export default {
   font-size: 26px;
 }
 
-.time{
+.time {
   position: relative;
   margin: 0 auto;
   top: 280px;
@@ -214,7 +218,7 @@ export default {
   border-radius: 50%;
   animation: rond 1.8s infinite linear;
 }
-.time-display{
+.time-display {
   text-shadow: 0px 0px 15px black, 0px 0px 15px black;
   position: relative;
   top: 187px;
@@ -235,58 +239,41 @@ export default {
   left: 0;
   right: 0;
   justify-content: space-around;
+  .action {
+    height: 80px;
+    width: 100px;
+    border-radius: 50%;
+    svg {
+      position: relative;
+      left: 20px;
+      top: 20px;
+      color: white;
+      height: 40px;
+      width: 40px;
+    }
+    &.raccrocher {
+      background-color: #fd3d2e;
+      &:hover {
+        background-color: #ffffff !important;
+        svg {
+          color: #fd3d2e;
+        }
+      }
+    }
+    &.deccrocher {
+      background-color: #4ddb62;
+      &:hover {
+        background-color: #ffffff !important;
+        svg {
+          color: #4ddb62;
+        }
+      }
+    }
+    .disableTrue {
+      background-color: #fd3d2e;
+    }
+  }
 }
-
-.action {
-  height: 100px;
-  width: 100px;
-  border-radius: 50%;
-}
-
-.raccrocher {
-  background-color: #fd3d2e;
-  height: 70px;
-  width: 70px;
-}
-
-.raccrocher:hover {
-  background-color: #ffffff !important;
-  height: 90px;
-  width: 90px;
-
-}
-
-.deccrocher {
-  background-color: #4ddb62;
-  height: 70px;
-  width: 70px;
-}
-.deccrocher:hover {
-  background-color: #ffffff !important;
-  height: 90px;
-  width: 90px;
-
-}
-
-.disableTrue { 
-  background-color: #fd3d2e;
-  height: 70px;
-  width: 70px;
-}
-
-.disable { 
-  background-color: #4ddb62;
-  height: 70px;
-  width: 70px;
-}
-
-.action svg{
-  width: 60px;
-  height: 60px;
-  margin: 5px;
-  fill: #EEE;
-}
-
 
 .ignore {
   position: absolute;
@@ -302,18 +289,18 @@ export default {
   background-color: #4d4d4d;
   width: 70%;
   left: 15%;
-  color: #CCC;
-}
-.ignore:hover {
-  background-color: #818080;
+  color: #ccc;
+  &:hover {
+    background-color: #818080;
+  }
 }
 
 @keyframes rond {
   from {
-    rotate: 0deg
+    rotate: 0deg;
   }
   to {
-    rotate: 360deg
+    rotate: 360deg;
   }
 }
 </style>

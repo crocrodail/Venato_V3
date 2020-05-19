@@ -31,12 +31,7 @@ export default {
   computed: {
     ...mapGetters(['IntlString', 'contacts']),
     contactsList () {
-      return [{
-        display: this.IntlString('APP_PHONE_ENTER_NUMBER'),
-        letter: '#',
-        backgroundColor: '#D32F2F',
-        custom: true
-      }, ...this.contacts.slice(0).map(c => {
+      return [...this.contacts.slice(0).map(c => {
         c.backgroundColor = generateColorForStr(c.number)
         return c
       })]
