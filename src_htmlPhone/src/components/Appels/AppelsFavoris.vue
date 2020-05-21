@@ -31,7 +31,7 @@ export default {
         this.ignoreControls = false
         if (rep.title === 'Cancelar') return
         this.$phoneAPI.callEvent(rep.eventName, rep.type)
-        this.$router.push({name: 'home'})
+        this.$router.push({ name: 'menu' })
       })
     }
   },

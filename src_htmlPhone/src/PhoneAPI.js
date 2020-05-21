@@ -186,8 +186,11 @@ class PhoneAPI {
   onupdateBankbalance (data) {
     store.commit('SET_BANK_AMONT', data.banking)
   }
-  onupdateBourse (data) {
-    store.commit('SET_BOURSE_INFO', data.bourse)
+  onupdateBankAccount (data) {
+    store.commit('SET_NUM_BANK_ACCOUNT', data.account)
+  }
+  onupdateFullname (data) {
+    store.commit('SET_FULLNAME_ACCOUNT', data.fullname)
   }
   // Call
   async startCall (numero, extraData = undefined) {

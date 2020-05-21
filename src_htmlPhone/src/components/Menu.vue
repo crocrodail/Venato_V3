@@ -191,7 +191,7 @@ button .puce{
   top: -5px;
     left: 51px;
   font-family: none;
-  line-height: 28px;
+  line-height: 24px;
   text-align: center;
   border-radius: 50%;
       font-weight: 400;

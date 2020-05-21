@@ -3,7 +3,7 @@
     <PhoneTitle :title="IntlString('APP_BOURSE_TITLE')" @back="onBackspace"/>
     <div class='elements'>
       <div class='element'
-          v-for='(elem, key) in bourseInfo' 
+          v-for='(elem, key) in bourseInfo'
           v-bind:class="{ select: key === currentSelect}"
           v-bind:key="key">
         <div class="elem-evo"><i class="fa" :class="classInfo(elem)"></i></div>
@@ -55,7 +55,7 @@ export default {
       }
     },
     onBackspace () {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'menu' })
     },
     onUp () {
       this.currentSelect = this.currentSelect === 0 ? 0 : this.currentSelect - 1
@@ -111,7 +111,7 @@ export default {
 .element.select{
    background-color: #DDD;
 }
-    
+
 .element .fa{
   color: #2e7d32;
   font-size: 18px;
@@ -119,7 +119,7 @@ export default {
 }
 .element .fa-arrow-down{
   color: #c62828;
-}   
+}
 .element .fa-arrow-right{
   color: #1565c0;
 }

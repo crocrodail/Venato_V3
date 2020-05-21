@@ -56,8 +56,11 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .btn-back{
   z-index: 0;
+  &:hover{
+    background: transparent !important;
+  }
 }
 </style>

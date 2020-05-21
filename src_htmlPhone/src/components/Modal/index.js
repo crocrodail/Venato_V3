@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Modal from './Modal'
 import TextModal from './TextModal'
+import KeyboardModal from './KeyboardModal'
 import store from '@/store'
 import PhoneAPI from '@/PhoneAPI'
 
@@ -45,5 +46,5 @@ export default {
         modal.$destroy()
       })
     })
-  }
+  },
 }

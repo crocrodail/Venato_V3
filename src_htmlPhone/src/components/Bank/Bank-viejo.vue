@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     onBackspace () {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'menu' })
     }
   },
   created () {
@@ -73,7 +73,7 @@ export default {
   background-color: #EB202D;
 }
 .logo_maze {
-  width: 100%; 
+  width: 100%;
   height: auto;
   flex-shrink: 0;
 }

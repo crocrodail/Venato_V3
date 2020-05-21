@@ -54,7 +54,7 @@ export default {
     },
     back () {
       if (this.disableList === true) return
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'menu' })
     }
   },
   created () {

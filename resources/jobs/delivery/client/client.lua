@@ -222,7 +222,7 @@ function DeliveryJob.mainLoop()
         end
         if ClosetOfMissionPoint < 2 then
           venato.InteractTxt(OPEN_CHOSE_MISSION)
-          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+          if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
             openChoseMission()
           end
         end
@@ -234,7 +234,7 @@ function DeliveryJob.mainLoop()
         end
         if ClosetOfBoxSpawnPoint < 2 then
           venato.InteractTxt(SPAWN_BOX)
-          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+          if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
             openMenuSpawnBox()
           end
         end
@@ -246,7 +246,7 @@ function DeliveryJob.mainLoop()
         end
         if ClosetOfSpawnForkliftPoint < 2 then
           venato.InteractTxt(SPAWN_BOX)
-          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+          if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
             local playerPos = GetEntityCoords(PlayerPedId())
             spawnForklift({x=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].x, y=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].y, z=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].z , heading=DeliveryJobConfig.trunkDrops["forklift"][indexSpawnFroklift].heading})
           end
@@ -279,7 +279,7 @@ function DeliveryJob.mainLoop()
             then
               venato.InteractTxt(LOAD_BOXE_IN_TRUNK_ACTION_MSG)
               interactTxt = true
-              if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+              if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                 takeBox(player)
                 DeliveryJobConfig.boxOnForklift = true
                 DeliveryJobConfig.boxOnTrunk = false
@@ -296,7 +296,7 @@ function DeliveryJob.mainLoop()
               false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
               venato.InteractTxt(PUT_BOX_ON_GROUND_ACTION_MSG)
               interactTxt = true
-              if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+              if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                 dropBoxInForklift(player)
                 DeliveryJobConfig.boxOnForklift = false
                 DeliveryJobConfig.boxOnTrunk = false
@@ -312,7 +312,7 @@ function DeliveryJob.mainLoop()
             false)) == GetHashKey(DeliveryJobConfig.FORKLIFT_KEY) then
             venato.InteractTxt(PUT_BOX_ON_TRUNK_ACTION_MSG)
             interactTxt = true
-            if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
               loadOnTrunk()
               DeliveryJobConfig.boxOnForklift = false
               DeliveryJobConfig.boxOnTrunk = true
@@ -363,12 +363,12 @@ function DeliveryJob.mainLoop()
             DeliveryJobConfig.onDeliveryPoint = destination
             venato.InteractTxt(GET_FORKLIFT_ACTION_MSG)
             interactTxt = true
-            if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
               spawnForklift(destination)
             end
           elseif boxOnDestination < 3 and not DeliveryJobConfig.boxOnForklift then
             DeliveryJobConfig.onDeliveryPoint = destination
-            if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+            if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
               ValidateMission()
             end
           elseif DeliveryJobConfig.onDeliveryPoint == destination and distance > 5 then
@@ -387,7 +387,7 @@ function DeliveryJob.mainLoop()
                 if not DeliveryJobConfig.boxOnTrunk and not DeliveryJobConfig.boxOnForklift then
                   if DeliveryJobConfig.carryBoxWithHand then
                     venato.InteractTxt(PUT_ITEMS_IN_BOX_ACTION_MSG)
-                    if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                    if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                       putItemInTrunk()
                     end
                   else
@@ -405,7 +405,7 @@ function DeliveryJob.mainLoop()
               for k,v in pairs(DeliveryJobConfig.StockItems) do
                 if GetDistanceBetweenCoords(playerPos, v.x, v.y, v.z, true) < 2 then
                   venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
-                  if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                  if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                     if not DeliveryJobConfig.carryBoxWithHand then
                       JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
                       if not JobsConfig.isMenuOpen then
@@ -446,7 +446,7 @@ function DeliveryJob.mainLoop()
       for k,v in pairs(DeliveryJobConfig.StockItems) do
         if GetDistanceBetweenCoords(playerPos, v.x, v.y, v.z, true) < 2 then
           venato.InteractTxt(OPEN_ITEMS_MENU_ACTION_MSG)
-          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+          if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
               JobsConfig.isMenuOpen = not JobsConfig.isMenuOpen
               if not JobsConfig.isMenuOpen then
                 Menu.close()

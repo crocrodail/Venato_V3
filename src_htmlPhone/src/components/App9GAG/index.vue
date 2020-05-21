@@ -43,7 +43,6 @@ export default {
     currentPost () {
       if (this.posts && this.posts.length > this.currentSelectPost) {
         return this.posts[this.currentSelectPost]
-        console.log(this.posts[this.currentSelectPost])
       }
       this.loadItems()
       return undefined
@@ -84,7 +83,7 @@ export default {
       }
     },
     quit: function () {
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'menu' })
     }
   },
   created: function () {

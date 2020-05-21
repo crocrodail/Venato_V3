@@ -28,7 +28,7 @@ Citizen.CreateThread(function()
 				end
 				if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
 					venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour .")
-					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+					if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 						takebox()
 						BoxOnForklift = true
 						BoxOnCamion = false
@@ -41,7 +41,7 @@ Citizen.CreateThread(function()
 				local distance = GetDistanceBetweenCoords(v.x, v.y, v.z+0.9,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 				if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
 					venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour détacher.")
-					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+					if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 						dropBoxInForklift()
 						BoxOnForklift = false
 						BoxOnCamion = false
@@ -53,7 +53,7 @@ Citizen.CreateThread(function()
 			local distance = GetDistanceBetweenCoords(CamionCoord.x, CamionCoord.y, CamionCoord.z+0.9,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
 			if distance < 0.5 and GetEntityModel(GetVehiclePedIsIn(ply, false)) == GetHashKey("FORKLIFT") then
 				venato.InteractTxt("Appuyez sur la touche ~INPUT_CONTEXT~ pour détacher.")
-				if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+				if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 					AttacheOnCamion()
 					BoxOnForklift = false
 					BoxOnCamion = true

@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      currentMenuIndex: 3
+      currentMenuIndex: 2
     };
   },
   computed: {
@@ -59,11 +59,6 @@ export default {
           Comp: AppelsContacts,
           name: this.IntlString("APP_PHONE_MENU_CONTACTS"),
           icon: "user"
-        },
-        {
-          Comp: AppelsNumber,
-          name: this.IntlString("APP_PHONE_MENU_CALL"),
-          icon: "phone"
         }
       ];
     }

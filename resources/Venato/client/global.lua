@@ -146,7 +146,7 @@ Citizen.CreateThread(function()
     if disPole <= 1 then
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
       venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour choisir votre nouveau métier')
-      if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+      if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
         Openpoleemploie()
         Menu.toggle()
       end
@@ -155,7 +155,7 @@ Citizen.CreateThread(function()
     elseif disScouteur <= 1 then
       DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
       venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour louer un scooter')
-      if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+      if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
         getScouteur()
       end
     elseif disScouteur < 20 then

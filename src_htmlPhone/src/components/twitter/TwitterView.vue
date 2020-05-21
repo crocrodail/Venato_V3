@@ -179,7 +179,7 @@ export default {
       if (this.selectMessage !== -1) {
         this.selectMessage = -1
       } else {
-        this.$router.go(-1)
+        this.$router.push({ name: 'menu' })
       }
     },
     formatTime (time) {

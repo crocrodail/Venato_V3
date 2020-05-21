@@ -56,6 +56,8 @@ files {
 	'html/static/img/icons_app/borrado.png',
 	
 	'html/static/img/app_bank/fleeca_tar.png',
+	'html/static/img/app_bank/chip.png',
+	'html/static/img/app_bank/bank.png',
 	'html/static/img/app_bank/tarjetas.png',
 
 	'html/static/img/app_tchat/reddit.png',
