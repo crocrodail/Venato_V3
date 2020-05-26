@@ -161,6 +161,9 @@ class PhoneAPI {
   async notesGetMessagesChannel (channel) {
     window.localStorage.setItem('gc_notas_locales', channel)
   }
+  async notesGetChannel (userId) {
+    this.post('notes_getChannels', { userId })
+  }
   async notesSendMessage (channel, message) {
     this.post('notes_addMessage', { channel, message })
   }
@@ -188,6 +191,10 @@ class PhoneAPI {
   }
   onupdateBankAccount (data) {
     store.commit('SET_NUM_BANK_ACCOUNT', data.account)
+  }
+  onupdateUserId (data) {
+    console.log("Set UserID", data.userId)
+    store.commit('SET_USER_ID', data.userId)
   }
   onupdateFullname (data) {
     store.commit('SET_FULLNAME_ACCOUNT', data.fullname)
@@ -298,6 +305,9 @@ class PhoneAPI {
   }
   ontwitter_tweets (data) {
     store.commit('SET_TWEETS', data)
+  }
+  onnotes_setChannels (data) {
+    store.commit('SET_NOTE_CHANNELS', data["channels"])
   }
   ontwitter_favoritetweets (data) {
     store.commit('SET_FAVORITE_TWEETS', data)

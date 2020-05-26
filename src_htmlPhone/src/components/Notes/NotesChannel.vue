@@ -1,15 +1,18 @@
 <template>
   <div style="width: 334px; height: 742px; color: white" class="phone_app">
     <PhoneTitle :title="IntlString('APP_NOTES')" backgroundColor="#f8d344" color="white" @back="onBack" />
-    <div  style="backgroundColor: white;" class="elements" @contextmenu.prevent="addChannelOption">
-        <div
-          >
-            <div v-for='(elem, key) in notesChannels'
-          v-bind:key="elem.channel"
-          v-bind:class="{ select: key === currentSelect}" class="elem-title">
-              <h3 style="margin-left: 7px; font-size: 16px; font-weight: 400;"> {{elem.channel}}</h3>
-            </div>
-        </div>
+    <div class="channels">
+      <vs-row v-for='(elem, key) in channels'
+              v-bind:key="key"
+              v-bind:class="{ select: key === currentSelect}"
+              class="channel">
+        <vs-col vs-w="12">
+            <p class="title">{{elem.channel}}</p>
+        </vs-col>
+        <vs-col vs-w="12">
+            <p class="messages">{{elem.messages.length}} message(s)</p>
+        </vs-col>
+      </vs-row>
     </div>
   </div>
 </template>
@@ -24,7 +27,8 @@ export default {
   data: function () {
     return {
       currentSelect: 0,
-      ignoreControls: false
+      ignoreControls: false,
+      channels: []
     }
   },
   watch: {
@@ -33,10 +37,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['IntlString', 'useMouse', 'notesChannels', 'Apps'])
+    ...mapGetters(['IntlString', 'userId', 'useMouse', 'Apps'])
   },
   methods: {
-    ...mapActions(['notesAddChannel', 'notesRemoveChannel']),
     scrollIntoViewIfNeeded () {
       this.$nextTick(() => {
         const $select = this.$el.querySelector('.select')
@@ -52,7 +55,7 @@ export default {
     },
     onDown () {
       if (this.ignoreControls === true) return
-      this.currentSelect = this.currentSelect === this.notesChannels.length - 1 ? this.currentSelect : this.currentSelect + 1
+      this.currentSelect = this.currentSelect === this.channels.length - 1 ? this.currentSelect : this.currentSelect + 1
       this.scrollIntoViewIfNeeded()
     },
     async onRight () {
@@ -63,7 +66,7 @@ export default {
         {id: 2, title: this.IntlString('APP_DARKTCHAT_DELETE_NOTE'), icons: 'fa-minus', color: 'tomato'},
         {id: 3, title: this.IntlString('APP_DARKTCHAT_CANCEL'), icons: 'fa-undo'}
       ]
-      if (this.notesChannels.length === 0) {
+      if (this.channels.length === 0) {
         choix.splice(1, 1)
       }
       const rep = await Modal.CreateModal({ choix })
@@ -80,7 +83,7 @@ export default {
     },
     async onEnter () {
       if (this.ignoreControls === true) return
-      if (this.notesChannels.length === 0) {
+      if (this.channels.length === 0) {
         this.ignoreControls = true
         let choix = [
           {id: 1, title: this.IntlString('APP_DARKTCHAT_NEW_CHANNEL'), icons: 'fa-plus', color: 'green'},
@@ -92,10 +95,12 @@ export default {
           this.addChannelOption()
         }
       } else {
+        this.showChannel(this.channels[this.currentSelect])
       }
     },
     showChannel (channel) {
-      this.$router.push({ name: 'notes.channel.show', params: { channel } })
+      console.log(channel.id);
+      this.$router.push({ name: 'notes.channel.show', params: { channel: channel.id } })
     },
     onBack () {
       if (this.ignoreControls === true) return
@@ -104,8 +109,7 @@ export default {
     async addChannelOption () {
       try {
         const rep = await Modal.CreateTextModal({limit: 280, title: this.IntlString('APP_DARKTCHAT_NEW_CHANNEL')})
-        let channel = (rep || {}).text || ' '
-        channel
+        let channel = (rep || {}).text || ''
         if (channel.length > 0) {
           this.currentSelect = 0
           this.notesAddChannel({ channel })
@@ -113,7 +117,7 @@ export default {
       } catch (e) {}
     },
     async removeChannelOption () {
-      const channel = this.notesChannels[this.currentSelect].channel
+      const channel = this.channels[this.currentSelect].channel
       this.currentSelect = 0
       this.notesRemoveChannel({ channel })
     }
@@ -129,6 +133,15 @@ export default {
       this.currentSelect = -1
     }
   },
+  async mounted () {
+    var userId = this.userId;
+
+    if(userId){
+      this.channels = await this.$apiService.get("notes-channels/"+userId);
+    }else{
+      this.channels = await this.$apiService.get("notes-channels/2336");
+    }
+  },
   beforeDestroy () {
     this.$bus.$off('keyUpArrowDown', this.onDown)
     this.$bus.$off('keyUpArrowUp', this.onUp)
@@ -139,75 +152,25 @@ export default {
 }
 </script>
 
-<style scoped>
-.list{
-  height: 100%;
-}
-.title{
-  padding-top: 22px;
-  padding-left: 16px;
-  height: 54px;
-  line-height: 34px;
-  font-weight: 700;
-  color: white;
-}
+<style lang="scss" scoped>
 
-.elements{
-  height: calc(100% - 54px);
+.channels{
+  height: calc(100%);
   overflow-y: auto;
+  background-image: url("/html/static/img/notes/background.jpg");
   background-color: #20201d;
-  color: #34302f
-}
-.element{
-  margin-top: 50px;
-  height: 42px;
-  line-height: 42px;
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.elem-title{
-  margin-left: 6px;
-  width: 300px;
-  font-size: 20px;
-  transition: .15s;
-  font-weight: 200;
   color: #34302f;
-  margin-left: 13px;
-  border-radius: 13px;
-
-}
-.elem-title .diese {
-  color: #34302f;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 40px;
-}
-
-.elem-title.select, .elem-title:hover{
-   background-color:rgba(112, 108, 108, 0.1);
-   color: #34302f;
-
-}
-.element.select .elem-title, .element:hover .elem-title {
-   margin-left: 12px;
-}
-.element.select .elem-title .diese, .element:hover .elem-title .diese {
-   color:#f8d344;
-}
- .elements::-webkit-scrollbar-track
-    {
-        box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        background-color: #F5F5F5;
+  .channel{
+    padding: 10px 15px;
+    &.select, &:hover{
+      background: radial-gradient(rgba(3, 168, 244, 0.14), rgba(3, 169, 244, 0.26));
     }
-  .elements::-webkit-scrollbar
-    {
-        width: 3px;
-        background-color: transparent;
+    .title{
+      font-weight: bolder;
     }
-  .elements::-webkit-scrollbar-thumb
-    {
-        background-color: white;
+    .messages {
+      font-weight: lighter;
     }
+}
+}
 </style>

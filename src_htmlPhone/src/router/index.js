@@ -116,7 +116,8 @@ export default new Router({
     }, {
       path: '/notes/:channel',
       name: 'notes.channel.show',
-      component: NotesMessage
+      component: NotesMessage,
+      props: true
     }, {
       path: '/twitter/splash',
       name: 'twitter.splash',

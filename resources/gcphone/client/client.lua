@@ -603,7 +603,7 @@ RegisterNUICallback('reponseText', function(data, cb)
   local limit = data.limit or 255
   local text = data.text or ''
 
-  DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", text, "", "", "", limit)
+  DisplayOnscreenKeyboard(1, "", "", text, "", "", "", limit)
   while (UpdateOnscreenKeyboard() == 0) do
       DisableAllControlActions(0);
       Wait(0);
@@ -790,4 +790,14 @@ RegisterNUICallback('takePhoto', function(data, cb)
   end
   Citizen.Wait(1000)
   PhonePlayAnim('text', false, true)
+end)
+
+
+function setUserId (value)
+  SendNUIMessage({event = 'updateUserId', userId = value})
+end
+
+RegisterNetEvent('gcphone:updateUserId')
+AddEventHandler('gcphone:updateUserId', function(playerData)  
+  setUserId(playerData)
 end)

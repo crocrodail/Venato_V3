@@ -1,16 +1,19 @@
 <template>
   <div style="width: 334px; height: 742px; background: white" class="phone_app">
-    <PhoneTitle :title="channelName" backgroundColor="#f8d344" @back="onQuit"/>
+    <PhoneTitle :title="channel.channel" backgroundColor="#f8d344" @back="onQuit"/>
     <div class="phone_content">
       <div class="elements" ref="elementsDiv">
-          <div class="element" v-for='(elem) in notesMessages' 
+          <vs-row class="element" v-for='(elem, key) in channel.messages'
             v-bind:key="elem.id"
+            v-bind:class="{ select: key === currentSelect}"
             >
-            <div class="time">{{formatTime(elem.time)}}</div>
-            <div class="message">
+            <vs-col class="message" vs-w="12">
               {{elem.message}}
-            </div>
-          </div>
+            </vs-col>
+            <vs-col class="time">
+              {{getTime(elem.timestamp)}}
+            </vs-col>
+          </vs-row>
       </div>
 
       <div class='notes_write'>
@@ -24,32 +27,31 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import PhoneTitle from './../PhoneTitle'
+import moment from 'moment';
 
 export default {
   components: { PhoneTitle },
   data () {
     return {
       message: '',
-      channel: '',
-      currentSelect: 0
+      currentSelect: 0,
+      channel: {}
     }
   },
   computed: {
-    ...mapGetters(['notesMessages', 'notesCurrentChannel', 'useMouse']),
-    channelName () {
-      return '# ' + this.channel
-    }
-  },
-  watch: {
-    notesMessages () {
-      const c = this.$refs.elementsDiv
-      c.scrollTop = c.scrollHeight
-    }
+    ...mapGetters(['useMouse']),
   },
   methods: {
     setChannel (channel) {
       this.channel = channel
-      this.notesSetChannel({ channel })
+      this.notesSetChannel(this.channel.id)
+    },
+    getTime(date){
+      moment.locale("fr");
+      var now = moment();
+      var messageDate = moment(date);
+
+      return now.to(messageDate);
     },
     ...mapActions(['notesSetChannel', 'notesSendMessage']),
     scrollIntoViewIfNeeded () {
@@ -95,14 +97,14 @@ export default {
       this.onQuit()
     },
     onQuit () {
-      this.$router.push({ name: 'notes.channel' })
+      this.$router.push({ name: 'notes' })
     },
     formatTime (time) {
       const d = new Date(time)
       return d.toLocaleTimeString()
     }
   },
-  created () {
+  async created () {
     if (!this.useMouse) {
       this.$bus.$on('keyUpArrowDown', this.onDown)
       this.$bus.$on('keyUpArrowUp', this.onUp)
@@ -111,7 +113,7 @@ export default {
       this.currentSelect = -1
     }
     this.$bus.$on('keyUpBackspace', this.onBack)
-    this.setChannel(this.$route.params.channel)
+    this.channel = await this.$apiService.get("/notes-channels/messages/" + this.$route.params.channel);
   },
   mounted () {
     window.c = this.$refs.elementsDiv
@@ -127,43 +129,52 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
+.phone_title{
+  .title{
+    font-size: 18px !important;
+  }
+}
 .elements{
   height: calc(100% - 56px);
-  background-color: #dae0e6;
+  background-image: url("/html/static/img/notes/background.jpg");
   color: white;
   display: flex;
   flex-direction: column;
   padding-bottom: 12px;
   overflow-y: auto;
+
+  .element{
+    color: #a6a28c;
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    /* margin: 9px 12px;
+    line-height: 18px;
+    font-size: 18px;
+    padding-bottom: 6px;
+
+    flex-direction: row;
+    height: 60px; */
+
+    .message{
+      width: 100%;
+      font-size: 16px;
+      color: black;
+      padding: 10px 15px;
+    }
+    .time{
+      padding: 0px 15px;
+      font-size: 10px;
+      margin-left: 15px;
+
+    }
+  }
 }
 
-.element{
-  color: #a6a28c;
-  flex: 0 0 auto;
-  width: 100%;
-  display: flex;
-  /* margin: 9px 12px;
-  line-height: 18px;
-  font-size: 18px;
-  padding-bottom: 6px;
-  
-  flex-direction: row;
-  height: 60px; */
-}
 
-.time{
-  padding-right: 10px;
-  font-size: 10px;
-  margin-left: 15px;
 
-}
-
-.message{
-  width: 100%;
-  color: black;
-}
 
 .notes_write{
     height: 56px;

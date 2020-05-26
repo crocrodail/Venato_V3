@@ -57,6 +57,8 @@ files {
 	'html/static/img/app_bank/chip.png',
 	'html/static/img/app_bank/tarjetas.png',
 
+	'html/static/img/notes/background.jpg',
+
 	'html/static/img/app_tchat/reddit.png',
 
 	'html/static/img/twitter/bird.png',
@@ -90,7 +92,8 @@ client_script {
 	"client/photo.lua",
 	"client/app_tchat.lua",
 	"client/bank.lua",
-	"client/twitter.lua"
+	"client/twitter.lua",
+	"client/notes.lua"
 }
 
 server_script {
@@ -99,5 +102,6 @@ server_script {
 	"server/server.lua",
 
 	"server/app_tchat.lua",
-	"server/twitter.lua"
+	"server/twitter.lua",
+	"server/notes.lua"
 }

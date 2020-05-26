@@ -4,7 +4,7 @@ const LOCAL_NAME = 'gc_notes_channels'
 let NotesAudio = null
 
 const state = {
-  channels: JSON.parse(localStorage[LOCAL_NAME] || null) || [],
+  channels: [{"channel":"Idées de développements","lastMessage":1590076564000,"id":1},{"channel":"Bugs Venato","lastMessage":1590076601000,"id":2},{"channel":"Idées pour changer le monde","lastMessage":0,"id":3}],
   currentChannel: null,
   messagesChannel: []
 }
@@ -21,31 +21,17 @@ const actions = {
     commit('NOTES_SET_CHANNEL', { channel: null })
     commit('NOTES_REMOVES_ALL_CHANNELS')
   },
-  notesSetChannel ({ state, commit, dispatch }, { channel }) {
-    if (state.currentChannel !== channel) {
-      commit('NOTES_SET_MESSAGES', { messages: [] })
-      commit('NOTES_SET_CHANNEL', { channel })
-      dispatch('notesGetMessagesChannel', { channel })
-    }
-  },
-  notesAddMessage ({ state, commit, getters }, { message }) {
-    const channel = message.channel
-    if (state.channels.find(e => e.channel === channel) !== undefined) {
-      if (NotesAudio !== null) {
-        NotesAudio.pause()
-        NotesAudio = null
-      }
-      NotesAudio = new Audio('/html/static/sound/tchatNotification.ogg')
-      NotesAudio.volume = getters.volume
-      NotesAudio.play()
-    }
-    commit('NOTES_ADD_MESSAGES', { message })
+  notesSetChannel ({ state, commit, dispatch }, channel) {
+    console.log(channel)
   },
   notesAddChannel ({ commit }, { channel }) {
     commit('NOTES_ADD_CHANNELS', { channel })
   },
   notesRemoveChannel ({ commit }, { channel }) {
     commit('NOTES_REMOVES_CHANNELS', { channel })
+  },
+  notesGetChannels (data, userId) {
+    PhoneAPI.notesGetChannel(userId)
   },
   notesGetMessagesChannel ({ commit }, { channel }) {
     PhoneAPI.notesGetMessagesChannel(channel)
@@ -59,11 +45,13 @@ const mutations = {
   NOTES_SET_CHANNEL (state, { channel }) {
     state.currentChannel = channel
   },
+  SET_NOTE_CHANNELS (state, channels) {
+    state.channels = channels
+  },
   NOTES_ADD_CHANNELS (state, { channel }) {
     state.channels.push({
       channel
     })
-    localStorage[LOCAL_NAME] = JSON.stringify(state.channels)
   },
   NOTES_REMOVES_CHANNELS (state, { channel }) {
     state.channels = state.channels.filter(c => {

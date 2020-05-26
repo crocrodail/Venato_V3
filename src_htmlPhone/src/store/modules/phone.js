@@ -19,12 +19,14 @@ const state = {
     themeColor: '#2A56C6',
     colors: ['#2A56C6'],
     language: {}
-  }
+  },
+  userId: 0
 }
 
 PhoneAPI.setUseMouse(state.mouse)
 
 const getters = {
+  userId: ({ userId }) => userId,
   show: ({ show }) => show,
   tempoHide: ({ tempoHide }) => tempoHide,
   myPhoneNumber: ({ myPhoneNumber }) => myPhoneNumber,
@@ -181,6 +183,9 @@ const actions = {
 const mutations = {
   SET_CONFIG (state, config) {
     state.config = config
+  },
+  SET_USER_ID (state, userId) {
+    state.userId = userId
   },
   SET_APP_ENABLE (state, {appName, enable}) {
     const appIndex = state.config.apps.findIndex(app => app.name === appName)

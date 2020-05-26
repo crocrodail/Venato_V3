@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import VueTimeago from './TimeAgo'
 import PhoneAPI from './PhoneAPI'
+import ApiService from './apiService'
 import Notification from './Notification'
 import Vuesax from 'vuesax'
 
@@ -17,6 +18,7 @@ Vue.config.productionTip = false
 
 Vue.prototype.$bus = new Vue()
 Vue.prototype.$phoneAPI = PhoneAPI
+Vue.prototype.$apiService = ApiService
 
 window.VueTimeago = VueTimeago
 window.Vue = Vue
