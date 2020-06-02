@@ -1,6 +1,6 @@
 <template>
   <div style="width: 326px; height: 743px;" class="phone_app">
-    <PhoneTitle :title="contact.display" @back="forceCancel"/>
+    <PhoneTitle :dark="true" :title="contact.display" @back="forceCancel"/>
     <div class='phone_content content inputText'>
 
         <div class="group select" data-type="text" data-model='display' data-maxlength = '64'>
@@ -188,7 +188,6 @@ export default {
 .content{
     margin: 6px 10px;
     margin-top: 28px;
-  background-color: #FFFFFF;
 }
 .group {
   position:relative;
@@ -203,7 +202,10 @@ input 				{
   display:block;
   width:100%;
   border:none;
-  border-bottom:1px solid #e9e9eb;
+  background-color: rgb(39, 39, 39);
+  border-bottom:1px solid #1f1f1f;
+  color: white;
+  padding: 0 8px;
   font-weight: 100;
   font-size: 20px;
 }
@@ -283,7 +285,6 @@ input:focus ~ .highlight {
     font-weight: 500;
     line-height: 34px;
     color: #202129;
-    background-color: #edeeee;
 }
 .group.select .btn{
     /* border: 6px solid #C0C0C0; */
@@ -293,7 +294,6 @@ input:focus ~ .highlight {
 .group .btn.btn-green{
   border: 1px solid #0b81ff;
   color: #0b81ff;
-  background-color: white;
   font-weight: 500;
   border-radius: 28px;
 }
@@ -305,7 +305,6 @@ input:focus ~ .highlight {
 .group .btn.btn-orange{
   border: 1px solid #B6B6B6;
   color: #B6B6B6;
-  background-color: white;
   font-weight: 500;
   border-radius: 28px;
 }
@@ -319,7 +318,6 @@ input:focus ~ .highlight {
 .group .btn.btn-red{
   border: 1px solid #e74c3c80;
   color: #e74c3c;
-  background-color: white;
   font-weight: 500;
   border-radius: 28px;
 }

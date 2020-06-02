@@ -112,6 +112,7 @@ export default {
     overflow: hidden;
     text-align: center;
     font-weight: bolder;
+    color:white;
   }
 
   .post-content{
@@ -119,6 +120,7 @@ export default {
     width: 390px;
     height: 670px;
     padding: 15px;
+    color:white;
   }
 
   .phone_content{

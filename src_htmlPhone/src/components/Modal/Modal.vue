@@ -122,7 +122,7 @@ export default {
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color: #fff;
+  background-color: rgb(47, 47, 47);
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;

@@ -1,9 +1,7 @@
 <template>
   <div class="phone_app">
     <PhoneTitle :title="title" :showInfoBare="showInfoBare" v-if="showHeader" @back="back"/>
-    <!-- <InfoBare v-if="showInfoBare"/>
-    <div v-if="title !== ''" class="phone_title" v-bind:style="styleTitle()">{{title}}</div>
-    -->
+
     <div style="width: 324px; height: 595px;" class="phone_content elements">
         <div class="element" v-for='(elem, key) in list'
           v-bind:key="elem[keyDispay]"
@@ -57,7 +55,7 @@ export default {
     },
     color: {
       type: String,
-      default: '#FFFFFF'
+      default: 'white'
     },
     backgroundColor: {
       type: String,
@@ -176,6 +174,7 @@ export default {
   position: relative;
   font-weight: 300;
   font-size: 18px;
+  color: white;
   border-bottom: rgba(0, 0, 0, 0.2) solid 1px;
 }
 

@@ -191,6 +191,7 @@ export default {
     padding-right: 8px;
     margin-bottom: 8px;
     position: relative;
+    color:white;
   }
   .keyboard {
     .key {
@@ -205,19 +206,19 @@ export default {
         border: none;
         &:hover,
         &.isActive {
-          background-color: rgba(0, 0, 0, 0.1);
+          background-color: rgba(255, 255, 255, 0.1);
         }
         .key-primary {
           display: block;
           font-size: 36px;
-          color: black;
+          color: white;
           line-height: 22px;
         }
         .key-secondary {
           text-transform: uppercase;
           display: block;
           font-size: 12px;
-          color: black;
+          color: rgb(148, 148, 148);
           line-height: 12px;
           padding-top: 10px;
           height: 22px;

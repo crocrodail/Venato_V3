@@ -113,7 +113,6 @@ export default {
   height: calc(100% - 68px);
   overflow-y: auto;
   width: 337px;
-  background-color: #ffffff;
 }
 .twitter_menu {
   border-top: 1px solid #ccc;

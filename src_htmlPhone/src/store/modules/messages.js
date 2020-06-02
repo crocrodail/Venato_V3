@@ -1,7 +1,7 @@
 import PhoneAPI from './../../PhoneAPI'
 
 const state = {
-  messages: []
+  messages: ["Coucou"]
 }
 
 const getters = {

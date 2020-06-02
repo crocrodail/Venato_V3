@@ -314,13 +314,8 @@ export default {
   position: relative;
   padding: 0 20px;
 }
-.element .fa{
-  color: #0b81ff;
-  margin-left: 6px;
-  height: 52px;
-  width: 52px;
-  text-align: center;
-  line-height: 52px;
+.element svg{
+  color :white;
 }
 .element-content{
   display: block;
@@ -333,6 +328,7 @@ export default {
 }
 .element-title{
   display: block;
+  color:white;
   margin-top: 4px;
   height: 22px;
   line-height: 22px;

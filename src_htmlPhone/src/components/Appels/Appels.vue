@@ -125,7 +125,6 @@ export default {
   height: calc(100% - 68px);
   overflow-y: auto;
   width: 337px;
-  background-color: #ffffff;
 }
 .subMenu {
   border-top: 1px solid rgba(0, 0, 0, 0.24);

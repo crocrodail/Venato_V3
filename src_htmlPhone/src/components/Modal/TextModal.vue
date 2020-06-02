@@ -5,7 +5,7 @@
       >
         <div class="modal-container" @click.stop >
           <h2 :style="{color}">{{ title }}</h2>
-          <textarea 
+          <textarea
             class="modal-textarea"
             :class="{oneline: limit <= 18}"
             ref="textarea"
@@ -126,7 +126,7 @@ export default {
         width: 100%;
         margin: 0;
         padding: 0;
-        background-color: #fff;
+        background-color: rgb(0, 0, 0);
         border-radius: 2px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
         transition: all .3s ease;

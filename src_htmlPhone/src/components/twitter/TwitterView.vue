@@ -247,15 +247,14 @@ export default {
 }
 .tweets-wrapper{
   height: 100%;
-  background-color: #DBF0F4;
-  color: black;
+  color: white;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
 
 .tweet{
-  background-color: white;
+  color: white;
   flex: 0 0 auto;
   width: 100%;
   display: flex;

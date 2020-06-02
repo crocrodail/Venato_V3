@@ -19,6 +19,18 @@ class ApiService {
     return response.data;
   }
 
+  async delete(url){
+    const response = await this._instance.delete(url);
+    this.log(response.data);
+    return response.data;
+  }
+
+  async post(url, data){
+    const response = await this._instance.post(url, data);
+    this.log(response.data);
+    return response.data;
+  }
+
   log(data){
     if(_debug){
       console.log(data);

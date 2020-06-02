@@ -1,6 +1,6 @@
 <template>
   <div class="phone_title_content" :style="style" :class="{'hasInfoBare': showInfoBare}" >
-    <InfoBare v-if="showInfoBare" />
+    <InfoBare  :dark="true" v-if="showInfoBare" />
     <div class="phone_back">
       <vs-row vs-w="12">
         <vs-col vs-type="flex" vs-justify="start" vs-align="left" vs-w="1">

@@ -180,7 +180,6 @@ export default {
 <style scoped>
   .content {
     height: 100%;
-  background-color: #FFFFFF;
   }
   .elements {
     overflow-y: auto;
@@ -224,6 +223,7 @@ export default {
   }
 
   .elem-content-p{
+    color: white;
     font-size: 20px;
     line-height: 20px;
     width: 153px;

@@ -1,7 +1,7 @@
 <template>
 <!--ESTE HTML ES ACOPLADO DEL VIEJO-->
-  <div style="width: 330px; height: 743px; backgroundColor: white"  class="phone_app messages">
-    <PhoneTitle :title="displayContact" style="backgroundColor: #F1F1F1; color: black" @back="quit"/> <!--:title="displayContact" :backgroundColor="color" -->
+  <div style="width: 330px; height: 743px"  class="phone_app messages">
+    <PhoneTitle :title="displayContact"  @back="quit"/>
     <div class="img-fullscreen" v-if="imgZoom !== undefined" @click.stop="imgZoom = undefined">
       <img :src="imgZoom" />
     </div>
@@ -9,7 +9,7 @@
     <textarea ref="copyTextarea" class="copyTextarea"/>
 
 
-    <div style="width: 326px; height: 678px; backgroundColor: white"  id='sms_list' @contextmenu.prevent="showOptions">
+    <div style="width: 326px; height: 678px;"  id='sms_list' @contextmenu.prevent="showOptions">
         <div class="sms" v-bind:class="{ select: key === selectMessage}" v-for='(mess, key) in messagesList' v-bind:key="mess.id" @click.stop="onActionMessage(mess)"
         >
           <div class="sms_message_time">
@@ -362,7 +362,6 @@ export default {
     height: 678px;
     right: 0;
     height: calc(100% - 20px);
-    background-color: #DDD;
 }
 #sms_contact{
     background-color: #4CAF50;
@@ -495,7 +494,7 @@ export default {
     height: 56px;
     margin: 10px;
     width: 380px;
-    background-color: #e9e9eb;
+    background-color: #3d3d3d;
     border-radius: 56px;
 }
 #sms_write input{

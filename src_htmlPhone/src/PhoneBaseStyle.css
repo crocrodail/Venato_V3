@@ -43,7 +43,7 @@ body {
 .phone_wrapper .phone_screen {
   overflow: hidden;
   position: absolute;
-  background-color: white;
+  background-color: black;
   width: 326px;
   height: 742px;
   bottom: 100px;
@@ -62,8 +62,8 @@ body {
 }
 
 .phone_wrapper .phone_screen .phone_app .phone_title_content {
-  background-color: #f9f9f9;
-  border-bottom: solid 2px #e2e2e2;
+  background-color: #181818;
+  border-bottom: solid 2px #1f1f1f;
 }
 
 .phone_wrapper .phone_screen .phone_app .phone_title_content .phone_infoBare {
@@ -86,14 +86,14 @@ body {
   font-weight: 300;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin-top: 4px;
-  color: black;
+  color: white;
   height: 35px;
   padding-left: 15px;
   margin-bottom: 5px;
 }
 
 .phone_wrapper .phone_screen .phone_app .phone_title_content .phone_title .title {
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 700;
 }
 

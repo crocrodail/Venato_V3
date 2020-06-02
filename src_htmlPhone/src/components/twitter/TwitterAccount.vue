@@ -490,7 +490,6 @@ export default {
   height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
 }
 .group {
   position: relative;
@@ -572,7 +571,6 @@ input:focus {
   margin-top: -10px;
   width: 15px;
   height: 15px;
-  background-color: white;
   border: 3px #007aff solid;
   border-radius: 50%;
 }
@@ -661,7 +659,6 @@ input:focus ~ .highlight {
   font-weight: 500;
   line-height: 34px;
   color: #202129;
-  background-color: #edeeee;
 }
 .group.select .btn {
   /* border: 6px solid #C0C0C0; */
@@ -673,7 +670,6 @@ input:focus ~ .highlight {
   margin-left: 6px;
   border: 1px solid #007aff;
   color: #007aff;
-  background-color: white;
   font-weight: 500;
   border-radius: 10px;
   font-weight: 300;
@@ -691,7 +687,6 @@ input:focus ~ .highlight {
   margin-left: 6px;
   border: 1px solid #757575;
   color: #757575;
-  background-color: white;
   font-weight: 500;
   border-radius: 10px;
   font-weight: 300;
@@ -707,7 +702,6 @@ input:focus ~ .highlight {
 .group .btn.btn-red {
   border: 1px solid #ee3838;
   color: #ee3838;
-  background-color: white;
   font-weight: 200;
   border-radius: 10px;
   width: 193px;

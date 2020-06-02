@@ -18,7 +18,6 @@ export default {
   .splash{
     width: 100%;
     height: 100%;
-    background-color: white; /*#1da1f2;*/
     display: flex;
     justify-content: center;
     align-items: center;

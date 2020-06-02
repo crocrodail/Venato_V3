@@ -1,7 +1,12 @@
 <template>
   <div style="width: 326px; height: 743px;" class="home" v-bind:style="{background: 'url(' + backgroundURL +')'}">
     <InfoBare :dark="true" />
-    <span class="warningMess" v-if="messages.length >= warningMessageCount">
+
+    <div class="notifs">
+      <Notifications :data="notifications"></Notifications>
+    </div>
+
+    <span class="warningMess" v-if="messages.length >= 2">
       <div class="warningMess_icon"><i class="fa fa-warning"></i></div>
       <span class="warningMess_content">
         <span class="warningMess_title">{{ IntlString('PHONE_WARNING_MESSAGE') }}</span><br>
@@ -40,14 +45,36 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import InfoBare from './InfoBare'
+import Notifications from './Notification/Notifications'
 
 export default {
   components: {
-    InfoBare
+    InfoBare,
+    Notifications
   },
   data () {
     return {
-      currentSelect: 0
+      currentSelect: 0,
+      notifications: [
+        {id: 0, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 1, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 2, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 3, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 4, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 5, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 6, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 7, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 8, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 9, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 10, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 11, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 12, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 13, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 14, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 15, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 16, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
+        {id: 17, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"}
+      ]
     }
   },
   computed: {
@@ -115,12 +142,21 @@ export default {
   justify-content: center;
   color: gray;
 }
-.warningMess{
-  background-color: white;
+.notifs{
   position: absolute;
   left: 12px;
   right: 12px;
-  top: 34px;
+  top: 40px;
+  max-height: 490px;
+  overflow: hidden;
+}
+.warningMess{
+  color:white;
+  background-color: rgb(34, 34, 34);
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 100px;
   min-height: 64px;
   display: flex;
   padding: 12px;
@@ -143,7 +179,7 @@ export default {
 }
 .warningMess .warningMess_content{
   padding-left: 12px;
-  background-color: rgba(255,255,255, 0.2);
+  background-color: rgb(34, 34, 34);
 }
 .warningMess_title {
   font-size: 20px;

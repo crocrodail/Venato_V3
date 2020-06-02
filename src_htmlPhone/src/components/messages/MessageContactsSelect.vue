@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 326px; height: 743px; backgroundColor: white" class="contact">
+  <div style="width: 326px; height: 743px;" class="contact">
     <list :list='lcontacts' :title="IntlString('APP_MESSAGE_CONTACT_TITLE')" v-on:select="onSelect" @back="back"></list>
   </div>
 </template>
