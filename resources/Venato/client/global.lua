@@ -8,6 +8,28 @@ function fCanCancelOrStartAnim(bool)
   CanCancelOrStartAnim = bool
 end
 
+Keys = {
+	["ESC"] = 322, ["F1"] = 288, ["F2"] = 289, ["F3"] = 170, ["F5"] = 166, ["F6"] = 167, ["F7"] = 168, ["F8"] = 169, ["F9"] = 56, ["F10"] = 57,
+	["~"] = 243, ["1"] = 157, ["2"] = 158, ["3"] = 160, ["4"] = 164, ["5"] = 165, ["6"] = 159, ["7"] = 161, ["8"] = 162, ["9"] = 163, ["-"] = 84, ["="] = 83, ["BACKSPACE"] = 177,
+	["TAB"] = 37, ["Q"] = 44, ["W"] = 32, ["E"] = 38, ["R"] = 45, ["T"] = 245, ["Y"] = 246, ["U"] = 303, ["P"] = 199, ["["] = 39, ["]"] = 40, ["ENTER"] = 18,
+	["CAPS"] = 137, ["A"] = 34, ["S"] = 8, ["D"] = 9, ["F"] = 23, ["G"] = 47, ["H"] = 74, ["K"] = 311, ["L"] = 182,
+	["LEFTSHIFT"] = 21, ["Z"] = 20, ["X"] = 73, ["C"] = 26, ["V"] = 0, ["B"] = 29, ["N"] = 249, ["M"] = 244, [","] = 82, ["."] = 81,
+	["LEFTCTRL"] = 36, ["LEFTALT"] = 19, ["SPACE"] = 22, ["RIGHTCTRL"] = 70,
+	["HOME"] = 213, ["PAGEUP"] = 10, ["PAGEDOWN"] = 11, ["DELETE"] = 178,
+	["LEFT"] = 174, ["RIGHT"] = 175, ["TOP"] = 27, ["DOWN"] = 173,
+	["NENTER"] = 201, ["N4"] = 108, ["N5"] = 60, ["N6"] = 107, ["N+"] = 96, ["N-"] = 97, ["N7"] = 117, ["N8"] = 61, ["N9"] = 118
+}
+
+DataPlayer = nil
+--THREADS--
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1000)
+		DataPlayer = venato.GetDataPlayer()
+	end
+end)
+
 Citizen.CreateThread(function()
   local ped = venato.GetPlayerPed()
   local playerId = PlayerId()
@@ -21,7 +43,7 @@ Citizen.CreateThread(function()
     --TriggerServerEvent("venato:SyncData")
   --end
   while true do
-    
+
     Citizen.Wait(50)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
@@ -70,6 +92,8 @@ RegisterNetEvent("venato:notify")
 AddEventHandler("venato:notify", function(notif)
   venato.notify(notif)
 end)
+
+
 
 RegisterNetEvent("venato:notifyError")
 AddEventHandler("venato:notifyError", function(msg)
@@ -124,7 +148,7 @@ Citizen.CreateThread(function()
     if disPole <= 1 then
       DrawMarker(27,poleemploie.x,poleemploie.y,poleemploie.z-0.9,0,0,0,0,0,0,1.0,1.0,1.0,250,250,250,200,0,0,0,0)
       venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour choisir votre nouveau métier')
-      if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+      if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
         Openpoleemploie()
         Menu.toggle()
       end
@@ -133,7 +157,7 @@ Citizen.CreateThread(function()
     elseif disScouteur <= 1 then
       DrawMarker(37,Scouteur.x,Scouteur.y,Scouteur.z,0,0,0,0,0,0,1.0,1.0,1.0,250,0,0,200,1,0,0,0)
       venato.InteractTxt('Appuyez sur ~INPUT_PICKUP~ pour louer un scooter')
-      if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+      if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
         getScouteur()
       end
     elseif disScouteur < 20 then

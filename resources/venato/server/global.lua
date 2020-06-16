@@ -23,5 +23,7 @@ end)
 
 RegisterNetEvent("venato:GetDataPlayer")
 AddEventHandler("venato:GetDataPlayer", function()
-  TriggerClientEvent("venato:GetDataPlayer:cb", source, DataPlayers[source])
+  if DataPlayers ~= nil or DataPlayers[tonumber(source)] ~= nil then
+    TriggerClientEvent("venato:GetDataPlayer:cb", source, DataPlayers[source])
+  end
 end)

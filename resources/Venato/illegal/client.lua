@@ -42,7 +42,7 @@ Citizen.CreateThread(function()
                     else
                         venato.InteractTxt('Récupération de '.. drugInProgress.title .. ' en cours ...')
                     end
-                    if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                    if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                         farmInProgress = true
                         drugInProgress = drugs[i]
                     end
@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
                     else
                         venato.InteractTxt('Transformation de '.. drugInProgress.title .. ' en cours ...')
                     end
-                    if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                    if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                         transformInProgress = true
                         drugInProgress = drugs[i]
                     end
@@ -72,7 +72,7 @@ Citizen.CreateThread(function()
                     else
                         venato.InteractTxt('Vente de '.. drugInProgress.title .. ' en cours ...')
                     end
-                    if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+                    if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
                       if nbPolice > 0 then
                         sellInProgress = true
                         drugInProgress = drugs[i]

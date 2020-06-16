@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
             TriggerEvent('Commands:Add', commandHelp)
             isCommandAdded = v.dropId
           end
-          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+          if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 						if (v.qty*v.uPoid + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddItem", v.qty , v.id)
               TriggerServerEvent("Inventory:DelItemsOnTheGround", k)
@@ -104,7 +104,7 @@ Citizen.CreateThread(function()
             TriggerEvent('Commands:Add', commandHelp)
             isCommandAdded = v.dropId
           end					
-					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+					if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 						if (venato.MoneyToPoid(v.qty) + DataUser.Poid) <= PoidMax then
 							TriggerServerEvent("Inventory:AddMoney", v.qty)
               TriggerServerEvent("Inventory:DelMoneyOnTheGround", k)
@@ -143,7 +143,7 @@ Citizen.CreateThread(function()
             TriggerEvent('Commands:Add', commandHelp)
             isCommandAdded = v.dropId
           end		
-					if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+					if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 						if v.uPoid + DataUser.Poid <= PoidMax then
 							TriggerServerEvent("Inventory:AddWeapon", v.id, v.ammo, v.uPoid, v.libelle)
 							TriggerServerEvent("Inventory:DelWeaponOnTheGround", k)

@@ -178,7 +178,7 @@ Citizen.CreateThread(function()
           TriggerEvent('Commands:Add', commandHelp)
           isCommandAdded = k
         end
-        if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+        if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
           Menu.toggle()
           OpenClothingShop()
           if v.name == "La redoute" then

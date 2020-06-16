@@ -125,7 +125,7 @@ Citizen.CreateThread(
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    if DataUser.Inventaire and has_value(DataUser.Inventaire, "canBeSellToNPC", 1) then
+    if DataPlayer and DataPlayer.Inventaire and has_value(DataPlayer.Inventaire, "canBeSellToNPC", 1) then
         if closetPed ~= nil or sellInProgress then
             if not isCommandAdded then
                 TriggerEvent('Commands:Add', commandHelp)

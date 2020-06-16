@@ -5,6 +5,18 @@
   @date 2019-07-11
   @version 1.0
 --]]
+
+
+local commandHelp = {
+  id = "shop",
+  command = "E",
+  icon = "https://i.ibb.co/9b3f1KS/icons8-basket-48px.png",
+  text = "Acheter des provisions"
+}
+
+local isCommandAdded = -1;
+
+
 RegisterNetEvent("Shops:LoadShops:cb")
 AddEventHandler("Shops:LoadShops:cb", function(shops)
   CreateThread(function()
@@ -57,40 +69,52 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
       local playerPos = GetEntityCoords(PlayerPedId())
       for _, item in ipairs(shops) do
         local distance = GetDistanceBetweenCoords(playerPos, item.PositionX, item.PositionY, item.PositionZ, true)
-        if distance < 20 then
-          local x = item.PositionX - 2.0 * Sin(item.NpcHeading)
-          local y = item.PositionY + 2.0 * Cos(item.NpcHeading)
-          local z = item.PositionZ + 1.0
-          DrawMarker(29, x, y, z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 150, 0, 250, 1, 1, 2, 0)
-        end
+        -- if distance < 20 then
+        --   local x = item.PositionX - 2.0 * Sin(item.NpcHeading)
+        --   local y = item.PositionY + 2.0 * Cos(item.NpcHeading)
+        --   local z = item.PositionZ + 1.0
+        --   DrawMarker(29, x, y, z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 150, 0, 250, 1, 1, 2, 0)
+        -- end
         if distance < item.ActivationDist then
           ConfigShop.inShopMarker = true
           ConfigShop.currentShopId = item.Id
-          TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ouvrir/fermer le shop")
-        elseif ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id and distance > (2 * item.ActivationDist) then
-          ConfigShop.inShopMarker = false
-          ConfigShop.menuOpen = false
-          TriggerEvent('Menu:Close')
-          ConfigShop.page = "client"
+
+          if isCommandAdded == -1 then
+            
+            TriggerEvent('Commands:Add', commandHelp)
+            isCommandAdded = item.Id
+          end
+
+        elseif distance > (2 * item.ActivationDist) then
+          if ConfigShop.menuOpen and ConfigShop.currentShopId == item.Id then
+            ConfigShop.inShopMarker = false
+            ConfigShop.menuOpen = false
+            TriggerEvent('Menu:Close')          
+            ConfigShop.page = "client"
+          end
+          if isCommandAdded == item.Id then
+            TriggerEvent('Commands:Remove', commandHelp.id)
+            isCommandAdded = -1
+          end
         end
         distance = GetDistanceBetweenCoords(playerPos, item.GarageX, item.GarageY, item.GarageZ, true)
-        if distance < 20 and item.IsSupervisor then
-          DrawMarker(27, item.GarageX, item.GarageY, item.GarageZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 150, 255, 200, 0,
-            0, 0, 0)
-        end
-        if distance < 1 and item.IsSupervisor then
-          ConfigShop.inGarageMarker = true
-          ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
-          ConfigShop.currentShopId = item.Id
-          if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
-            TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
-          else
-            TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
-          end
-        elseif ConfigShop.currentShopId == item.Id and distance > 1.5 then
-          ConfigShop.inGarageMarker = false
-          ConfigShop.spawnConfig = false
-        end
+        -- if distance < 20 and item.IsSupervisor then
+        --   DrawMarker(27, item.GarageX, item.GarageY, item.GarageZ, 0, 0, 0, 0, 0, 0, 1.9, 1.9, 1.9, 0, 150, 255, 200, 0,
+        --     0, 0, 0)
+        -- end
+        -- if distance < 1 and item.IsSupervisor then
+        --   ConfigShop.inGarageMarker = true
+        --   ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
+        --   ConfigShop.currentShopId = item.Id
+        --   if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+        --     TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
+        --   else
+        --     TriggerEvent("venato:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")
+        --   end
+        -- elseif ConfigShop.currentShopId == item.Id and distance > 1.5 then
+        --   ConfigShop.inGarageMarker = false
+        --   ConfigShop.spawnConfig = false
+        -- end
       end
     end
   end)
