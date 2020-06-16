@@ -89,7 +89,7 @@ html body #app .commands {
   color: white;
   top: 10vh;
   left: 30px;
-  width: 350px;
+  width: 400px;
   height: auto;
   transition: max-height 1s ease-out;
   transition: height 1s ease-out;

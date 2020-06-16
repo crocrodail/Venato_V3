@@ -70,6 +70,9 @@ client_script {
   '/gardeRobe/client.lua',
   '/gardeRobe/config.lua',
   '/binocular/client.lua',
+  '/sit/config.lua',
+  '/sit/lists/seat.lua',
+  '/sit/client.lua',
 }
 
 server_script {
@@ -117,6 +120,9 @@ server_script {
   '/crafts/server.lua',
   '/sellToNpc/server.lua',
   '/gardeRobe/server.lua',
+  '/sit/config.lua',
+  '/sit/lists/seat.lua',
+  '/sit/server.lua',
 }
 
 files {

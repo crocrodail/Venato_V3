@@ -482,3 +482,110 @@ RegisterNetEvent("venato:GetDataPlayer:cb")
 AddEventHandler("venato:GetDataPlayer:cb", function(cb)
   response = cb
 end)
+
+
+function venato.GetObjects()
+	local objects = {}
+
+	for object in EnumerateObjects() do
+		table.insert(objects, object)
+	end
+
+	return objects
+end
+
+function venato.GetClosestObject(filter, coords)
+	local objects         = venato.GetObjects()
+	local closestDistance = -1
+	local closestObject   = -1
+	local filter          = filter
+	local coords          = coords
+
+	if type(filter) == 'string' then
+		if filter ~= '' then
+			filter = {filter}
+		end
+	end
+
+	if coords == nil then
+		local playerPed = PlayerPedId()
+		coords          = GetEntityCoords(playerPed)
+	end
+
+	for i=1, #objects, 1 do
+		local foundObject = false
+
+		if filter == nil or (type(filter) == 'table' and #filter == 0) then
+			foundObject = true
+		else
+			local objectModel = GetEntityModel(objects[i])
+
+			for j=1, #filter, 1 do
+				if objectModel == GetHashKey(filter[j]) then
+					foundObject = true
+				end
+			end
+		end
+
+		if foundObject then
+			local objectCoords = GetEntityCoords(objects[i])
+			local distance     = GetDistanceBetweenCoords(objectCoords, coords.x, coords.y, coords.z, true)
+
+			if closestDistance == -1 or closestDistance > distance then
+				closestObject   = objects[i]
+				closestDistance = distance
+			end
+		end
+	end
+
+	return closestObject, closestDistance
+end
+
+
+
+function EnumerateEntities(initFunc, moveFunc, disposeFunc)
+	return coroutine.wrap(function()
+		local iter, id = initFunc()
+		if not id or id == 0 then
+			disposeFunc(iter)
+			return
+		end
+
+		local enum = {handle = iter, destructor = disposeFunc}
+		setmetatable(enum, entityEnumerator)
+
+		local next = true
+		repeat
+		coroutine.yield(id)
+		next, id = moveFunc(iter)
+		until not next
+
+		enum.destructor, enum.handle = nil, nil
+		disposeFunc(iter)
+	end)
+end
+
+function EnumerateObjects()
+	return EnumerateEntities(FindFirstObject, FindNextObject, EndFindObject)
+end
+
+venato.CurrentRequestId          = 0
+venato.ServerCallbacks           = {}
+
+venato.TriggerServerCallback = function(name, cb, ...)
+	venato.ServerCallbacks[venato.CurrentRequestId] = cb
+
+	TriggerServerEvent('venato:triggerServerCallback', name, venato.CurrentRequestId, ...)
+
+	if venato.CurrentRequestId < 65535 then
+		venato.CurrentRequestId = venato.CurrentRequestId + 1
+	else
+		venato.CurrentRequestId = 0
+	end
+end
+
+RegisterNetEvent('venato:serverCallback')
+AddEventHandler('venato:serverCallback', function(requestId, ...)
+	venato.ServerCallbacks[requestId](...)
+	venato.ServerCallbacks[requestId] = nil
+end)
