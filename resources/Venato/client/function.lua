@@ -88,6 +88,16 @@ function venato.disableAction(disabled)
   FreezeEntityPosition(GetPlayerPed(-1), disabled)
 end
 
+
+local random = math.random
+local function uuid()
+  local template ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+  return string.gsub(template, '[xy]', function (c)
+      local v = (c == 'x') and random(0, 0xf) or random(8, 0xb)
+      return string.format('%x', v)
+  end)
+end
+
 function venato.notify(notif)
   if not notif.message then
     return
@@ -99,18 +109,26 @@ function venato.notify(notif)
     notif.timeout = 3500
   end
 
-  TriggerEvent("Hud:Update", {
-    action = "notify",
-    message = notif.message,
-    type = notif.type,
-    timeout = notif.timeout,
-    logo = notif.logo,
-    title = notif.title,
-    event = notif.event,
-    titleFont = notif.titleFont,
-    descriptionFont = notif.descriptionFont,
-    color= notif.color
-  })
+  print(venato.HasItem(206))
+
+  if(venato.HasItem(206)) then
+    notif.id = uuid()
+    TriggerEvent("gcphone:notification", notif)
+  else
+    TriggerEvent("Hud:Update", {
+      action = "notify",
+      message = notif.message,
+      type = notif.type,
+      timeout = notif.timeout,
+      logo = notif.logo,
+      title = notif.title,
+      event = notif.event,
+      titleFont = notif.titleFont,
+      descriptionFont = notif.descriptionFont,
+      color= notif.color
+    })
+  end 
+
 end
 
 function venato.Text3D(x, y, z, text, font, fontSize)

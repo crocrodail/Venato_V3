@@ -48,6 +48,7 @@ new Vue({
       { id:"speakArea", command: 'F6', icon: 'https://i.ibb.co/sPkSd0K/icons8-voice-48px.png', text: 'Changer volume voix' }      ,  
       { id:"layDown", command: 'CTRL', text: 'S\'allonger au sol / Se relever' }      ,  
       { id:"crouch", command: 'C', text: 'S\'accroupir / Se relever' }      ,  
+      { id:"cover", command: 'A', icon:'https://i.ibb.co/5FsSN5x/icons8-exit-sign-48px.png', text: 'Se mettre à couvert / Se relever-' }      ,  
       { id:"point", command: 'B', icon: 'https://i.ibb.co/8r8G6Wv/icons8-hand-right-48px.png', text: 'Pointer du doigt' }      ,  
       { id:"handUp", command: 'X', icon: 'https://i.ibb.co/pb6fHhL/icons8-hand-48px.png', text: 'Lever les mains' }      ,  
       { id:"gnrCommandEnd", divider: true }, 

@@ -70,7 +70,7 @@ Citizen.CreateThread(function ()
             isCommandAdded = i
           end
         end
-        if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
+        if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
           if IsPedInAnyVehicle( playerPed, false ) then
               defaultNotification.message = "Vous devez être à pied !"
               defaultNotification.type = 'error'

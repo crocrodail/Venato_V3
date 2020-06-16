@@ -110,7 +110,7 @@ Citizen.CreateThread(function()
         DrawMarker(27,loopData.item.xpoint, loopData.item.ypoint, loopData.item.zpoint+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
         if loopData.distance <= 2 then
           defaultNotification.title = loopData.item.name
-          if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
+          if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
             openGarage(loopData.item.name, loopData.item.xspawn, loopData.item.yspawn, loopData.item.zspawn, loopData.item.hspawn)
           end
           if resend then

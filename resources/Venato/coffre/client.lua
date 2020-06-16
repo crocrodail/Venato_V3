@@ -102,7 +102,7 @@ Citizen.CreateThread(function()
         TriggerEvent('Commands:Add', commandHelp)
         isCommandAdded = indexLoop
       end
-      if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+      if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
         TriggerServerEvent("Coffre:CheckWhitelist", indexLoop)
         coffre_index = indexLoop
       end

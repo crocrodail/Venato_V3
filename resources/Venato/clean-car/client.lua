@@ -49,7 +49,7 @@ Citizen.CreateThread(function()
                     TriggerEvent('Commands:Add', commandHelp)
                     isCommandAdded = _
                 end
-                if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement                
+                if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement                
                     local current = GetPlayersLastVehicle(venato.GetPlayerPed(), true)
                     if current == nil then
                         defaultNotification.message = "Le véhicule n'est pas détecté par les capteurs, montez dedans et réessayer."

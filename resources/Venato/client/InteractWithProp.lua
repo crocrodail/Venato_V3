@@ -34,7 +34,7 @@ Citizen.CreateThread(function()
 		if NextTo ~= nil and Prop ~= nil then
 			local coordProp = GetEntityCoords(Prop, true)
 			venato.Text3D(coordProp.x, coordProp.y, coordProp.z, "Appuyez sur ~g~E~s~ "..PropData[NextTo].text)
-			if IsControlJustPressed(1, Keys['INPUT_CONTEXT']) and GetLastInputMethod(2) then
+			if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then
 				if not AttachOnProp then
 					AttachEntityToEntity(venato.GetPlayerPed(), Prop, nil, PropData[NextTo].x, PropData[NextTo].y, PropData[NextTo].z, 0.0, 0.0, PropData[NextTo].h, false, false, false, false, 2, true)
 					if PropData[NextTo].anim ~= false then
