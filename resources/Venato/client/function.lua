@@ -109,21 +109,25 @@ function venato.notify(notif)
     notif.timeout = 3500
   end
 
-  -- TriggerEvent("Hud:Update", {
-  --   action = "notify",
-  --   message = notif.message,
-  --   type = notif.type,
-  --   timeout = notif.timeout,
-  --   logo = notif.logo,
-  --   title = notif.title,
-  --   event = notif.event,
-  --   titleFont = notif.titleFont,
-  --   descriptionFont = notif.descriptionFont,
-  --   color= notif.color
-  -- })
-  
-  notif.id = uuid()
-  TriggerEvent("gcphone:notification", notif)
+  print(venato.HasItem(206))
+
+  if(venato.HasItem(206)) then
+    notif.id = uuid()
+    TriggerEvent("gcphone:notification", notif)
+  else
+    TriggerEvent("Hud:Update", {
+      action = "notify",
+      message = notif.message,
+      type = notif.type,
+      timeout = notif.timeout,
+      logo = notif.logo,
+      title = notif.title,
+      event = notif.event,
+      titleFont = notif.titleFont,
+      descriptionFont = notif.descriptionFont,
+      color= notif.color
+    })
+  end 
 
 end
 

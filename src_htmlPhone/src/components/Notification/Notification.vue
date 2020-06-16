@@ -61,9 +61,11 @@ export default {
     padding-left: 5px;
   }
   .message{
-    color: rgb(255, 255, 255);
-    font-size: 15px;
-    padding-left: 5px;
+    span{
+      color: rgb(255, 255, 255);
+      font-size: 15px;
+      padding-left: 5px;
+    }
   }
 }
 </style>
