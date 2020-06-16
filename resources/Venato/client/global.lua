@@ -43,7 +43,7 @@ Citizen.CreateThread(function()
     --TriggerServerEvent("venato:SyncData")
   --end
   while true do
-    
+
     Citizen.Wait(50)
     if not Startload then
       if NetworkIsPlayerActive(PlayerId()) then
@@ -92,6 +92,8 @@ RegisterNetEvent("venato:notify")
 AddEventHandler("venato:notify", function(notif)
   venato.notify(notif)
 end)
+
+
 
 RegisterNetEvent("venato:notifyError")
 AddEventHandler("venato:notifyError", function(msg)

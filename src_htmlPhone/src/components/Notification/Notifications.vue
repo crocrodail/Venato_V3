@@ -1,6 +1,12 @@
 <template>
   <div class="notifications">
-    <Notification :source="notif.source" :title="notif.title" :icon="notif.icon" :message="notif.message" v-for="notif in data" :key="notif.id"></Notification>
+     <transition-group
+        name="custom-classes-transition"
+        enter-active-class="animated slideInLeft"
+        leave-active-class="animated slideOutRight"
+      >
+        <Notification :source="notif.source" :title="notif.title" :icon="notif.logo" :message="notif.message" v-for="notif in data" :key="notif.id"></Notification>
+     </transition-group>
   </div>
 </template>
 

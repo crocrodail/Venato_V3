@@ -1,31 +1,39 @@
 <template>
-  <div style="width: 326px; height: 743px;" class="home" v-bind:style="{background: 'url(' + backgroundURL +')'}">
+  <div
+    style="width: 326px; height: 743px;"
+    class="home"
+    v-bind:style="{background: 'url(' + backgroundURL +')'}"
+  >
     <InfoBare :dark="true" />
 
     <div class="notifs">
-      <Notifications :data="notifications"></Notifications>
+        <Notifications :data="notifications"></Notifications>
     </div>
 
-    <span class="warningMess" v-if="messages.length >= 2">
-      <div class="warningMess_icon"><i class="fa fa-warning"></i></div>
+    <span class="warningMess" v-if="messages.length >= 240">
+      <div class="warningMess_icon">
+        <i class="fa fa-warning"></i>
+      </div>
       <span class="warningMess_content">
-        <span class="warningMess_title">{{ IntlString('PHONE_WARNING_MESSAGE') }}</span><br>
-        <span class="warningMess_mess">{{messages.length}} / {{warningMessageCount}} {{IntlString('PHONE_WARNING_MESSAGE_MESS')}}</span>
+        <span class="warningMess_title">{{ IntlString('PHONE_WARNING_MESSAGE') }}</span>
+        <br />
+        <span
+          class="warningMess_mess"
+        >{{messages.length}} / {{warningMessageCount}} {{IntlString('PHONE_WARNING_MESSAGE_MESS')}}</span>
       </span>
     </span>
 
-    <div class='home_buttons'>
-
-      <button style=" top: 73px; font-family:initial; margin-left: 10px; margin-right: 10px;"
-          v-for="(but, key) of AppsHome"
-          v-bind:key="but.name"
-          v-bind:class="{ select: key === currentSelect}"
-          v-bind:style="{backgroundImage: 'url(' + but.icons +')'}"
-
-          @click="openApp(but)"
-         >
-          <!--{{but.intlName}}-->
-          <span class="puce" v-if="but.puce !== undefined && but.puce !== 0">{{but.puce}}</span>
+    <div class="home_buttons">
+      <button
+        style=" top: 73px; font-family:initial; margin-left: 10px; margin-right: 10px;"
+        v-for="(but, key) of AppsHome"
+        v-bind:key="but.name"
+        v-bind:class="{ select: key === currentSelect}"
+        v-bind:style="{backgroundImage: 'url(' + but.icons +')'}"
+        @click="openApp(but)"
+      >
+        <!--{{but.intlName}}-->
+        <span class="puce" v-if="but.puce !== undefined && but.puce !== 0">{{but.puce}}</span>
       </button>
 
       <div class="btn_menu_ctn">
@@ -34,101 +42,97 @@
           :class="{ select: AppsHome.length === currentSelect}"
           v-bind:style="{backgroundImage: 'url(' + '/html/static/img/icons_app/menu.png' +')'}"
           @click="openApp({routeName: 'menu'})"
-          >
-        </button>
+        ></button>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import InfoBare from './InfoBare'
-import Notifications from './Notification/Notifications'
+import { mapGetters, mapActions } from "vuex";
+import InfoBare from "./InfoBare";
+import Notifications from "./Notification/Notifications";
 
 export default {
   components: {
     InfoBare,
     Notifications
   },
-  data () {
+  data() {
     return {
       currentSelect: 0,
-      notifications: [
-        {id: 0, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 1, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 2, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 3, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 4, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 5, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 6, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 7, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 8, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 9, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 10, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 11, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 12, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 13, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 14, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 15, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 16, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"},
-        {id: 17, source: "Venato Bank", title: "Virement reçu", message: "Vous avez reçu un virement de 12€", icon: "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"}
-      ]
-    }
+      test: 0
+    };
   },
   computed: {
-    ...mapGetters(['IntlString', 'useMouse', 'nbMessagesUnread', 'backgroundURL', 'messages', 'AppsHome', 'warningMessageCount'])
+    ...mapGetters([
+      "IntlString",
+      "useMouse",
+      "nbMessagesUnread",
+      "backgroundURL",
+      "messages",
+      "AppsHome",
+      "warningMessageCount",
+      "notifications"
+    ])
   },
   methods: {
-    ...mapActions(['closePhone', 'setMessages']),
-    onLeft () {
-      this.currentSelect = (this.currentSelect + 1) % (this.AppsHome.length + 1)
+    ...mapActions(["closePhone", "setMessages"]),
+    onLeft() {
+      this.currentSelect =
+        (this.currentSelect + 1) % (this.AppsHome.length + 1);
     },
-    onRight () {
-      this.currentSelect = (this.currentSelect + this.AppsHome.length) % (this.AppsHome.length + 1)
+    onRight() {
+      this.currentSelect =
+        (this.currentSelect + this.AppsHome.length) %
+        (this.AppsHome.length + 1);
     },
-    onUp () {
-      this.currentSelect = Math.max(this.currentSelect - 4, 0)
+    onUp() {
+      this.currentSelect = Math.max(this.currentSelect - 4, 0);
     },
-    onDown () {
-      this.currentSelect = Math.min(this.currentSelect + 4, this.AppsHome.length)
+    onDown() {
+      this.currentSelect = Math.min(
+        this.currentSelect + 4,
+        this.AppsHome.length
+      );
     },
-    openApp (app) {
-      this.$router.push({ name: app.routeName })
+    openApp(app) {
+      this.$router.push({ name: app.routeName });
     },
-    onEnter () {
-      this.openApp(this.AppsHome[this.currentSelect] || {routeName: 'menu'})
+    onEnter() {
+      this.openApp(this.AppsHome[this.currentSelect] || { routeName: "menu" });
     },
-    onBack () {
-      this.closePhone()
+    onBack() {
+      this.closePhone();
     }
   },
-  created () {
+  created() {
     if (!this.useMouse) {
-      this.$bus.$on('keyUpArrowLeft', this.onLeft)
-      this.$bus.$on('keyUpArrowRight', this.onRight)
-      this.$bus.$on('keyUpArrowDown', this.onDown)
-      this.$bus.$on('keyUpArrowUp', this.onUp)
-      this.$bus.$on('keyUpEnter', this.onEnter)
+      this.$bus.$on("keyUpArrowLeft", this.onLeft);
+      this.$bus.$on("keyUpArrowRight", this.onRight);
+      this.$bus.$on("keyUpArrowDown", this.onDown);
+      this.$bus.$on("keyUpArrowUp", this.onUp);
+      this.$bus.$on("keyUpEnter", this.onEnter);
     } else {
-      this.currentSelect = -1
+      this.currentSelect = -1;
     }
-    this.$bus.$on('keyUpBackspace', this.onBack)
+    this.$bus.$on("keyUpBackspace", this.onBack);
+
+
   },
-  beforeDestroy () {
-    this.$bus.$off('keyUpArrowLeft', this.onLeft)
-    this.$bus.$off('keyUpArrowRight', this.onRight)
-    this.$bus.$off('keyUpArrowDown', this.onDown)
-    this.$bus.$off('keyUpArrowUp', this.onUp)
-    this.$bus.$off('keyUpEnter', this.onEnter)
-    this.$bus.$off('keyUpBackspace', this.onBack)
+  beforeDestroy() {
+    this.$bus.$off("keyUpArrowLeft", this.onLeft);
+    this.$bus.$off("keyUpArrowRight", this.onRight);
+    this.$bus.$off("keyUpArrowDown", this.onDown);
+    this.$bus.$off("keyUpArrowUp", this.onUp);
+    this.$bus.$off("keyUpEnter", this.onEnter);
+    this.$bus.$off("keyUpBackspace", this.onBack);
   }
-}
+};
 </script>
 
 <style scoped="true">
-.home{
+.home {
   background-size: cover !important;
   background-position: center !important;
 
@@ -142,7 +146,7 @@ export default {
   justify-content: center;
   color: gray;
 }
-.notifs{
+.notifs {
   position: absolute;
   left: 12px;
   right: 12px;
@@ -150,8 +154,8 @@ export default {
   max-height: 490px;
   overflow: hidden;
 }
-.warningMess{
-  color:white;
+.warningMess {
+  color: white;
   background-color: rgb(34, 34, 34);
   position: absolute;
   left: 12px;
@@ -161,9 +165,10 @@ export default {
   display: flex;
   padding: 12px;
   border-radius: 4px;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
-.warningMess .warningMess_icon{
+.warningMess .warningMess_icon {
   display: flex;
   width: 16%;
   align-items: center;
@@ -175,9 +180,9 @@ export default {
 }
 .warningMess .warningMess_icon .fa {
   text-align: center;
-  color: #F94B42;
+  color: #f94b42;
 }
-.warningMess .warningMess_content{
+.warningMess .warningMess_content {
   padding-left: 12px;
   background-color: rgb(34, 34, 34);
 }
@@ -188,11 +193,11 @@ export default {
   font-size: 16px;
 }
 
-.home_buttons{
+.home_buttons {
   display: flex;
   padding: 6px;
   width: 100%;
-  bottom:1px;
+  bottom: 1px;
   position: absolute;
   align-items: flex-end;
   flex-flow: row;
@@ -201,7 +206,7 @@ export default {
   justify-content: space-between;
   transition: all 0.5s ease-in-out;
 }
-button{
+button {
   position: relative;
   margin: 0px;
   border: none;
@@ -215,19 +220,15 @@ button{
   font-size: 14px;
   padding-top: 72px;
   font-weight: 700;
-  text-shadow: -1px 0 0 rgba(0,0,0, 0.8),
-             1px 0 0 rgba(0,0,0, 0.8),
-             0 -1px 0 rgba(0,0,0, 0.8),
-             0 1px 0 rgba(0,0,0, 0.8);
+  text-shadow: -1px 0 0 rgba(0, 0, 0, 0.8), 1px 0 0 rgba(0, 0, 0, 0.8),
+    0 -1px 0 rgba(0, 0, 0, 0.8), 0 1px 0 rgba(0, 0, 0, 0.8);
   text-align: center;
 }
 
-
-button .puce{
-
- position: absolute;
+button .puce {
+  position: absolute;
   display: block;
-  background-color: #EE3838;
+  background-color: #ee3838;
   font-size: 14px;
   width: 26px;
   height: 26px;
@@ -238,31 +239,29 @@ button .puce{
   text-align: center;
   border-radius: 50%;
   font-weight: 400;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
   bottom: 32px;
   right: 12px;
 
   bottom: 32px;
   right: 12px;
 }
-button.select, button:hover{
+button.select,
+button:hover {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 22%;
 }
 
-.btn_menu_ctn{
+.btn_menu_ctn {
   width: 100%;
   display: flex;
   height: 70px;
   justify-content: center;
   align-content: center;
-    border-radius: 24px;
+  border-radius: 24px;
 }
 .btn_menu {
   height: 50px;
 }
-
-
-
-
 </style>

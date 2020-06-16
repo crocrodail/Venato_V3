@@ -1,6 +1,7 @@
 local defaultNotification = {
-  title ="Banque",
-  logo = "https://i.ibb.co/6t5n3yP/icons8-merchant-account-96px.png"
+  title ="Information",
+  source = "Venato Bank",
+  logo = "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"
 }
 
 local plafondDepot = 15000

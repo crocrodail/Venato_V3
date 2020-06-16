@@ -1,9 +1,10 @@
 local open = false
 local type = 'fleeca'
 local defaultNotification = {
-  title ="Banque",
-  logo = "https://img.icons8.com/officel/16/000000/bank-euro.png"
+  title ="Venato Bank",
+  logo = "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"
 }
+
 local accountIsBlocked = false
 local message_block = "Votre compte est bloqué pour mouvements suspicieux.<br/><br/><span class='red--text'> Rendez-vous au LSPD pour régulariser votre situation.</span>"
 local indexLoop = nil

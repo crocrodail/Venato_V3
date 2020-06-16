@@ -83,6 +83,7 @@ class PhoneAPI {
 
   // === Autre
   async closePhone () {
+    store.commit('HIDE_PHONE')
     return this.post('closePhone')
   }
   async setUseMouse (useMouse) {
@@ -195,6 +196,9 @@ class PhoneAPI {
   onupdateUserId (data) {
     console.log("Set UserID", data.userId)
     store.commit('SET_USER_ID', data.userId)
+  }
+  onnotification (data) {
+    store.commit("ADD_NOTIFICATION", data.notification)
   }
   onupdateFullname (data) {
     store.commit('SET_FULLNAME_ACCOUNT', data.fullname)

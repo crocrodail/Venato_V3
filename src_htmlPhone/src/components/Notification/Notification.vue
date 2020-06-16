@@ -11,7 +11,7 @@
         {{title}}
       </vs-col>
       <vs-col vs-type="flex" vs-justify="left" class="message" vs-align="center" vs-w="12">
-        {{message}}
+        <span v-html="message"></span>
       </vs-col>
     </vs-row>
   </div>

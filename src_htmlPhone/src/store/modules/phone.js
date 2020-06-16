@@ -2,7 +2,8 @@ import Vue from 'vue'
 import PhoneAPI from './../../PhoneAPI'
 
 const state = {
-  show: process.env.NODE_ENV !== 'production',
+  show: false,
+  needToHide: false,
   tempoHide: false,
   myPhoneNumber: '###-####',
   background: JSON.parse(window.localStorage['gc_background'] || null),
@@ -20,7 +21,8 @@ const state = {
     colors: ['#2A56C6'],
     language: {}
   },
-  userId: 0
+  userId: 0,
+  notifications: []
 }
 
 PhoneAPI.setUseMouse(state.mouse)
@@ -28,6 +30,7 @@ PhoneAPI.setUseMouse(state.mouse)
 const getters = {
   userId: ({ userId }) => userId,
   show: ({ show }) => show,
+  notifications: ({ notifications}) => notifications,
   tempoHide: ({ tempoHide }) => tempoHide,
   myPhoneNumber: ({ myPhoneNumber }) => myPhoneNumber,
   volume: ({ volume }) => volume,
@@ -167,8 +170,22 @@ const actions = {
     PhoneAPI.setUseMouse(value)
     commit('SET_MOUSE_SUPPORT', value)
   },
-  closePhone () {
-    PhoneAPI.closePhone()
+  closePhone({commit}) {
+    PhoneAPI.closePhone();
+  },
+  showPhone({commit}) {
+    commit('SHOW_PHONE');
+  },
+  addNotification({commit}, notif){
+      commit('ADD_NOTIFICATION', notif);
+  },
+  removeNotification({commit, state}){
+    commit('REMOVE_NOTIFICATION');
+    if(state.notifications.length == 0) {
+      setTimeout(()=>{
+        PhoneAPI.closePhone();
+      }, 1 * 1000);
+    }
   },
   resetPhone ({ dispatch, getters }) {
     dispatch('setZoon', '100%')
@@ -184,6 +201,30 @@ const mutations = {
   SET_CONFIG (state, config) {
     state.config = config
   },
+  ADD_NOTIFICATION (state, notif) {
+    const notifDuration = 10;
+    if(!state.show){
+      state.show = true;
+      state.needToHide = true;
+      setTimeout(()=>{
+        state.notifications.push(notif);
+      }, 0.7 * 1000);
+    }else{
+      state.notifications.push(notif)
+    }
+    setTimeout(() => {
+      state.notifications.shift();
+      if(state.notifications.length == 0 && state.needToHide) {
+        state.needToHide = false;
+        setTimeout(()=>{
+          PhoneAPI.closePhone();
+        }, 1 * 1000);
+      }
+    }, notif.timeout+ 2000);
+  },
+  REMOVE_NOTIFICATION (state) {
+    state.notifications.pop();
+  },
   SET_USER_ID (state, userId) {
     state.userId = userId
   },
@@ -195,6 +236,8 @@ const mutations = {
   },
   SET_PHONE_VISIBILITY (state, show) {
     state.show = show
+
+    state.needToHide = false;
     state.tempoHide = false
   },
   SET_TEMPO_HIDE (state, hide) {
@@ -217,6 +260,13 @@ const mutations = {
   },
   SET_VOLUME (state, volume) {
     state.volume = volume
+  },
+  SHOW_PHONE (state) {
+    state.show = true;
+    state.needToHide = flase;
+  },
+  HIDE_PHONE (state) {
+    state.show = false
   },
   SET_LANGUAGE (state, lang) {
     state.lang = lang
