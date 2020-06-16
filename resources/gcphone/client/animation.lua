@@ -115,6 +115,8 @@ function PhonePlayAnim (status, freeze, force)
 end
 
 function PhonePlayOut ()
+    print("Close")
+    TriggerEvent("Venato:ClosePhone")
 	PhonePlayAnim('out')
 end
 
@@ -128,6 +130,8 @@ end
 
 function PhonePlayIn () 
 	if currentStatus == 'out' then
+		print("Open")
+		TriggerEvent("Venato:OpenPhone")
 		PhonePlayText()
 	end
 end

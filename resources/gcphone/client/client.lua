@@ -54,41 +54,11 @@ AddEventHandler(
     end
   end
 )
---====================================================================================
---  Que faire si le joueur veut ouvrir son téléphone mais qu'il n'en a pas ?
---====================================================================================
+
 function ShowNoPhoneWarning()
   TriggerEvent("venato:notify", "<span class='red--text'>Vous n'avez pas de téléphone.</span>")
 end
 
---[[
-  Ouverture du téphone lié a un item
-  Un solution ESC basé sur la solution donnée par HalCroves
-  https://forum.fivem.net/t/tutorial-for-gcphone-with-call-and-job-message-other/177904
---]]
---[[
-ESX = nil
-Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-  end
-end)
-
-function hasPhone (cb)
-  if (ESX == nil) then return cb(0) end
-  ESX.TriggerServerCallback('gcphone:getItemAmount', function(qtty)
-    cb(qtty > 0)
-  end, 'phone')
-end
-function ShowNoPhoneWarning ()
-  if (ESX == nil) then return end
-  ESX.ShowNotification("Vous n'avez pas de ~r~téléphone~s~")
-end
---]]
---====================================================================================
---
---====================================================================================
 Citizen.CreateThread(
   function()
     while true do
@@ -770,7 +740,7 @@ RegisterNUICallback(
 function TooglePhone()
   menuIsOpen = not menuIsOpen
   SendNUIMessage({show = menuIsOpen})
-  if menuIsOpen == true then    
+  if menuIsOpen == true then 
     PhonePlayIn()
   else    
     PhonePlayOut()

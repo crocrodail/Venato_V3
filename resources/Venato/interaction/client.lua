@@ -249,20 +249,38 @@ end)
 
 local crouched = false
 local proned = false
+local phone = false
 crouchKey = 26
 proneKey = 36
+
+
+RegisterNetEvent("Venato:OpenPhone")
+AddEventHandler("Venato:OpenPhone", function()
+  phone = true
+end)
+
+RegisterNetEvent("Venato:ClosePhone")
+AddEventHandler("Venato:ClosePhone", function()
+  phone = false
+end)
+
 
 Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait( 1 )
-		local ped = GetPlayerPed( -1 )
-		if CanCancelOrStartAnim then
-		if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
+        local ped = GetPlayerPed( -1 )
+        if ( phone ) then            
+            DisableControlAction( 1, 26, true ) 
+			DisableControlAction( 1, proneKey, true )
+			DisableControlAction( 1, crouchKey, true )
+        end
+        if CanCancelOrStartAnim then
+		if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) and not phone ) then
 			ProneMovement()
 			DisableControlAction( 1, proneKey, true )
 			DisableControlAction( 1, crouchKey, true )
 			if ( not IsPauseMenuActive() ) then
-				if ( IsDisabledControlJustPressed( 1, crouchKey ) and not proned ) then
+                if ( IsDisabledControlJustPressed( 1, crouchKey ) and not proned ) then
 					RequestAnimSet( "move_ped_crouched" )
 					RequestAnimSet("MOVE_M@TOUGH_GUY@")
 
