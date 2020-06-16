@@ -2,7 +2,7 @@ import Vue from 'vue'
 import PhoneAPI from './../../PhoneAPI'
 
 const state = {
-  show: false,
+  show: true,
   needToHide: false,
   tempoHide: false,
   myPhoneNumber: '###-####',

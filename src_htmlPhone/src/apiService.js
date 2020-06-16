@@ -6,8 +6,8 @@ class ApiService {
 
   constructor() {
     this._instance = axios.create({
-      baseURL: 'http://localhost:3000/',
-      // baseURL: 'https://venato-api.herokuapp.com/',
+      // baseURL: 'http://localhost:3000/',
+      baseURL: 'https://venato-api.herokuapp.com/',
       timeout: 1000,
       headers: {'token': 'venato12345'}
     });
