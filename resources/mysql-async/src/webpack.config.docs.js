@@ -7,70 +7,15 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
-const baseConfig = {
-  mode: 'production',
-  target: 'node',
-  optimization: {
-    minimize: false,
-  },
-  resolve: {
-    extensions: [ '.ts', '.js' ],
-  },
-  module: {
-    rules: [
-      {
-        test: /.ts$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                "@babel/preset-env",
-                {
-                  targets: {
-                    node: true,
-                  },
-                },
-              ],
-            ],
-            plugins: ["@babel/plugin-transform-typescript"],
-          },
-        },
-      },
-    ],
-  },
-};
-
-const serverConfig = {
-  entry: './entry/server.ts',
-  output: {
-    filename: 'mysql-async.js',
-    path: path.resolve(__dirname, '..'),
-  },
-  ...baseConfig,
-};
-
-const clientConfig = {
-  entry: './entry/client.ts',
-  output: {
-    filename: 'mysql-async-client.js',
-    path: path.resolve(__dirname, '..'),
-  },
-  ...baseConfig,
-};
-
-const nuiConfig = {
-  entry: './entry/nui.js',
+const docsConfig = {
+  entry: './docs/docs.js',
   mode: 'production',
   output: {
     filename: 'app.js',
-    path: path.resolve(__dirname, '../ui'),
+    path: path.resolve(__dirname, './docs/dist'),
   },
   optimization: {
     minimize: true,
-  },
-  externals: {
-    moment: 'moment',
   },
   stats: {
     children: false,
@@ -115,12 +60,12 @@ const nuiConfig = {
         }],
       },
       {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+        test: /\.(png|webp|jpeg)(\?.*)?$/i,
         use: [{
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',
-            outputPath: './fonts',
+            outputPath: '.',
           },
         }],
       },
@@ -130,7 +75,7 @@ const nuiConfig = {
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './template/index.html',
+      template: './docs/template/index.html',
     }),
     new MiniCssExtractPlugin({
       filename: 'app.css',
@@ -149,9 +94,9 @@ const nuiConfig = {
   ],
   resolve: {
     alias: {
-      '@': path.resolve('ui'),
+      '@': path.resolve('docs'),
     },
   },
 };
 
-module.exports = [serverConfig, clientConfig, nuiConfig];
+module.exports = docsConfig;
