@@ -88,7 +88,7 @@ body {
 
 .phone .phone_wrapper .phone_screen .phone_app .phone_title_content .phone_title {
   font-weight: 300;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin-top: 4px;
   color: white;
   height: 35px;
@@ -120,7 +120,7 @@ body {
 }
 
 * {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   box-sizing: border-box;
   font-size: 19px;
 }

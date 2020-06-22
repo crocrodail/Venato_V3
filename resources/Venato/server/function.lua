@@ -440,3 +440,26 @@ end
 function venato.RemoveChomage(identifier)
   TriggerEvent("venato:RemoveJob", {1, identifier})
 end
+
+venato.ServerCallbacks = {}
+
+venato.RegisterServerCallback = function(name, cb)
+	venato.ServerCallbacks[name] = cb
+end
+
+RegisterServerEvent('venato:triggerServerCallback')
+AddEventHandler('venato:triggerServerCallback', function(name, requestId, ...)
+	local _source = source
+
+	venato.TriggerServerCallback(name, requestID, _source, function(...)
+		TriggerClientEvent('venato:serverCallback', _source, requestId, ...)
+	end, ...)
+end)
+
+venato.TriggerServerCallback = function(name, requestId, source, cb, ...)
+	if venato.ServerCallbacks[name] ~= nil then
+	   venato.ServerCallbacks[name](source, cb, ...)
+	else
+		print('Venato: TriggerServerCallback => [' .. name .. '] does not exist')
+	end
+end

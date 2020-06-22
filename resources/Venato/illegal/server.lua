@@ -6,7 +6,7 @@ local defaultNotification = {
 
 local weedRecolt = {}
 
-local weedRefillHour = 1
+local weedRefillHour = 0.2
 
 RegisterServerEvent('illegal:weed:recolt')
 AddEventHandler('illegal:weed:recolt', function(weedVector)
@@ -17,13 +17,15 @@ RegisterServerEvent('illegal:weed:check')
 AddEventHandler('illegal:weed:check', function()
     local localTime = os.clock()
     for i=1,#weedRecolt,1 do 
-        if(weedRecolt[i].progress >= 100) then
-            weedRecolt[i] = nil
-        else
-            local ecart = localTime - weedRecolt[i].time;
-            weedRecolt[i].progress =  (ecart * 100) / (weedRefillHour * 3600)
-            weedRecolt[i].result = (localTime - weedRecolt[i].time)/60
-        end        
+        if weedRecolt[i] ~= nil then
+            if(weedRecolt[i].progress >= 100) then
+                weedRecolt[i] = nil
+            else
+                local ecart = localTime - weedRecolt[i].time;
+                weedRecolt[i].progress =  (ecart * 100) / (weedRefillHour * 3600)
+                weedRecolt[i].result = (localTime - weedRecolt[i].time)/60
+            end     
+        end   
     end
 	TriggerClientEvent('illegal:weed:checkResult', source, weedRecolt)
 end)

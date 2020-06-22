@@ -12,18 +12,6 @@
   font-style: normal;
 }
 
-@-webkit-keyframes fadeLoop {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 @keyframes fadeLoop {
   0% {
     opacity: 0;
@@ -53,19 +41,14 @@ body {
 }
 
 .background, .outer {
-  -webkit-transform: rotate(-180deg);
-          transform: rotate(-180deg);
-  -webkit-transform-origin: 50% 50%;
-          transform-origin: 50% 50%;
+  transform: rotate(-180deg);
+  transform-origin: 50% 50%;
 }
 
 .progress {
-  -webkit-transition: 0.35s stroke-dashoffset;
   transition: 0.35s stroke-dashoffset;
-  -webkit-transform: rotate(140deg);
-          transform: rotate(140deg);
-  -webkit-transform-origin: 50% 50%;
-          transform-origin: 50% 50%;
+  transform: rotate(140deg);
+  transform-origin: 50% 50%;
 }
 
 .huds {
@@ -78,8 +61,7 @@ body {
   height: 40px;
   bottom: 60px;
   left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .huds .hud.dashboard div {
@@ -97,8 +79,7 @@ body {
 }
 
 .huds .hud.dashboard .clignotant.active svg {
-  -webkit-animation: fadeLoop 1s step-start infinite !important;
-          animation: fadeLoop 1s step-start infinite !important;
+  animation: fadeLoop 1s step-start infinite !important;
 }
 
 .huds .hud.dashboard .clignotant.active svg path {
@@ -125,8 +106,7 @@ body {
   width: 100px;
   height: 100px;
   text-align: center;
-  -webkit-clip-path: polygon(100% 45%, 80% 45%, 60% 100%, 0% 100%, 0% 0%, 100% 0%);
-          clip-path: polygon(100% 45%, 80% 45%, 60% 100%, 0% 100%, 0% 0%, 100% 0%);
+  clip-path: polygon(100% 45%, 80% 45%, 60% 100%, 0% 100%, 0% 0%, 100% 0%);
 }
 
 .huds .hud.dashboard .speedometer svg {
@@ -134,14 +114,12 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  -webkit-transform: scale(2) translate(-25%, -25%);
-          transform: scale(2) translate(-25%, -25%);
+  transform: scale(2) translate(-25%, -25%);
 }
 
 .huds .hud.dashboard .speedometer .outer {
   opacity: .3;
-  -webkit-transform: rotate(180deg) scale(1.2);
-          transform: rotate(180deg) scale(1.2);
+  transform: rotate(180deg) scale(1.2);
 }
 
 .huds .hud.dashboard .speedometer .text {
@@ -149,8 +127,7 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   margin: 0;
 }
 
@@ -168,8 +145,7 @@ body {
 }
 
 .huds .hud.fuel {
-  -webkit-transform: scale(0.7);
-          transform: scale(0.7);
+  transform: scale(0.7);
   position: absolute;
   bottom: -60px;
   right: 87px;
@@ -203,8 +179,7 @@ body {
 }
 
 .hud.fuel g {
-  -webkit-transform: translate(16px, 13px);
-          transform: translate(16px, 13px);
+  transform: translate(16px, 13px);
 }
 
 .orangeStroke {
@@ -214,4 +189,3 @@ body {
 .redStroke {
   stroke: #FF0245;
 }
-/*# sourceMappingURL=style.css.map */

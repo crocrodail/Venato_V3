@@ -1,10 +1,10 @@
-Config.WeaponList = {
+local WeaponList = {
 	453432689, --pistol
 	-1716189206, --knife
 }
 
-Config.PedAbleToWalkWhileSwapping = true
-Config.UnarmedHash = -1569615261
+local PedAbleToWalkWhileSwapping = true
+local UnarmedHash = -1569615261
 
 Citizen.CreateThread(function()
 	local animDict = 'reaction@intimidation@1h'
@@ -26,26 +26,26 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		if not IsPedInAnyVehicle(PlayerPedId(), true) then
-			if Config.PedAbleToWalkWhileSwapping then
+			if PedAbleToWalkWhileSwapping then
 				animFlag = 48
 			else
 				animFlag = 0
 			end
 
-			for i=1, #Config.WeaponList do
-				if lastWeapon ~= nil and lastWeapon ~= Config.WeaponList[i] and GetSelectedPedWeapon(PlayerPedId()) == Config.WeaponList[i] then
-					SetCurrentPedWeapon(PlayerPedId(), Config.UnarmedHash, true)
+			for i=1, #WeaponList do
+				if lastWeapon ~= nil and lastWeapon ~= WeaponList[i] and GetSelectedPedWeapon(PlayerPedId()) == WeaponList[i] then
+					SetCurrentPedWeapon(PlayerPedId(), UnarmedHash, true)
 					TaskPlayAnim(PlayerPedId(), animDict, animIntroName, 8.0, -8.0, 2700, animFlag, 0.0, false, false, false)
 
 					Citizen.Wait(1000)
-					SetCurrentPedWeapon(PlayerPedId(), Config.WeaponList[i], true)
+					SetCurrentPedWeapon(PlayerPedId(), WeaponList[i], true)
 				end
 
-				if lastWeapon ~= nil and lastWeapon == Config.WeaponList[i] and GetSelectedPedWeapon(PlayerPedId()) == Config.UnarmedHash then
+				if lastWeapon ~= nil and lastWeapon == WeaponList[i] and GetSelectedPedWeapon(PlayerPedId()) == UnarmedHash then
 					TaskPlayAnim(PlayerPedId(), animDict, animOutroName, 8.0, -8.0, 2100, animFlag, 0.0, false, false, false)
 
 					Citizen.Wait(1000)
-					SetCurrentPedWeapon(PlayerPedId(), Config.UnarmedHash, true)
+					SetCurrentPedWeapon(PlayerPedId(), UnarmedHash, true)
 				end
 			end
 		end
