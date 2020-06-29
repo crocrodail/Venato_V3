@@ -589,3 +589,5 @@ AddEventHandler('venato:serverCallback', function(requestId, ...)
 	venato.ServerCallbacks[requestId](...)
 	venato.ServerCallbacks[requestId] = nil
 end)
+
+local Character		= {}

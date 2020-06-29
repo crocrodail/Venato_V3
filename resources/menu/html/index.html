@@ -109,7 +109,7 @@
       </v-layout>
       <transition name="custom-classes-transition" enter-active-class="animated fadeInLeft delay-1s"
         leave-active-class="animated fadeOutLeft faster">
-        <div class="commands" v-if="commands && commands.length > 0 && !open && !showShopAdmin">
+        <div class="commands" v-if="showCommands && commands && commands.length > 0 && !open && !showShopAdmin">
           <h2>Raccourcis clavier</h2>
           <transition-group name="custom-classes-transition" enter-active-class="animated bounceIn"
             leave-active-class="animated fadeOut faster">

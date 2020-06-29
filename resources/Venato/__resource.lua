@@ -73,6 +73,7 @@ client_script {
   '/sit/config.lua',
   '/sit/lists/seat.lua',
   '/sit/client.lua',
+  '/tattoo/client.lua'
 }
 
 server_script {
@@ -123,6 +124,7 @@ server_script {
   '/sit/config.lua',
   '/sit/lists/seat.lua',
   '/sit/server.lua',
+  '/tattoo/server.lua'
 }
 
 files {

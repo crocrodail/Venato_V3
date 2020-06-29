@@ -1,0 +1,165 @@
+local tatooShops = {
+    {id = 1 , pos = vector3(-1155.575, -1426.593, 4.954), cam = vector3(-1153.258, -1426.144, 5.175034), camRot = vector3(6.933684, -0, 95.83086)}
+}
+
+local cam = -1
+local currentTattoos = {collection = "mphipster_overlays", nameHash = "FM_Hip_M_Tat_045", addedX = 0.2, addedY=-0.8 ,addedZ=0.3, rotZ = 13.6, price = 50}
+-- local currentTattoos = {}
+local shopOpen = false
+
+local addedX = 1.5
+local addedY= 1
+local addedZ= -0.1
+local rotZ = 100.0
+
+local commandTatoo = {
+    id = "tatoo",
+    command = "E",
+    icon = "https://i.ibb.co/jwX4LpD/icons8-tattoo-machine-48px.png",
+    text = "Se faire tatouer"
+  }
+  
+local isCommandAdded = nil;
+
+-- Création du blips
+Citizen.CreateThread(function()
+	for k,v in pairs(tatooShops) do
+		local blip = AddBlipForCoord(v.pos)
+		SetBlipSprite(blip, 75)
+		SetBlipColour(blip, 1)
+		SetBlipScale  (blip, 0.8)
+		SetBlipAsShortRange(blip, true)
+
+		BeginTextCommandSetBlipName('STRING')
+		AddTextComponentString("Salon de tatouage")
+		EndTextCommandSetBlipName(blip)
+	end
+end)
+
+--Boucle de détection de zone
+
+local loopData = {}
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(0)
+    local ply = venato.GetPlayerPed()
+    local plyCoords = GetEntityCoords(ply, 0)
+    local displayDistance = 20
+    local commandDistance = 2
+    local displayData = {}
+    for _, item in pairs(tatooShops) do
+      Citizen.Wait(1)
+      local distance = GetDistanceBetweenCoords(item.pos["x"], item.pos["y"], item.pos["z"],  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
+      if loopData.item ~= nil then
+        if item.id == loopData.item.id then
+          displayData = { distance = distance, item = item }
+        end
+      end
+      if distance < displayDistance then
+        displayData = { distance = distance, item = item }
+        if distance <= commandDistance then     
+          if not isCommandAdded then        
+            TriggerEvent('Commands:Add', commandTatoo)          
+            isCommandAdded = _
+          end
+        elseif isCommandAdded == _ then
+          TriggerEvent('Commands:Remove', commandTatoo.id)
+          isCommandAdded = nil 
+        end
+      end
+    end
+    loopData = displayData
+  end
+end)
+
+--Détection de raccourci clavier
+Citizen.CreateThread(function()
+    local player = venato.GetPlayerPed()
+    while true do
+      Citizen.Wait(0)
+      if loopData.distance ~= nil then
+        if loopData.distance < 50 then
+        -- DrawMarker(27,loopData.item.pos["x"], loopData.item.pos["y"], loopData.item.pos["z"]+0.1,0,0,0,0,1,0,1.9,1.9,1.9,0,150,255,200,0,true,0,0)
+          if loopData.distance <= 2 then
+            FreezeEntityPosition(player, shopOpen)
+            if IsControlJustPressed(1, Keys['E']) and GetLastInputMethod(2) then -- press action contextuel (e) pour joueur clavier uniquement
+              if not shopOpen then
+                openTattooShop()
+              else
+                closeTattooShop()
+              end
+            end
+          end
+        end
+      end
+    end
+  end)
+
+
+function openTattooShop()
+    shopOpen = true
+
+    local player = venato.GetPlayerPed()
+    
+    SetEntityHeading(player, 297.7296)
+    FreezeEntityPosition(player, true)
+
+	  if DoesCamExist(cam) then
+      RenderScriptCams(false, false, 0, 1, 0)
+      DestroyCam(cam, false)
+    end
+
+    if not DoesCamExist(cam) then
+      cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
+      local x,y,z = table.unpack(GetEntityCoords(player))	
+      SetCamCoord(cam, x + 1.2, y + 0.2, z + 0.2)
+      SetCamRot(cam, 0.0, 0.0, 124.9)
+      SetCamActive(cam, true)
+      RenderScriptCams(true, false, 0, true, true)
+    end
+    
+    cleanPlayer()
+
+    if(currentTattoos.collection) then
+      applyTattoo(player)    
+    end
+end
+
+function applyTattoo(player)
+  local player = venato.GetPlayerPed()
+	local x,y,z = table.unpack(GetEntityCoords(player))	
+  SetCamCoord(cam, x + 1.2, y + 0.2, z + currentTattoos.addedZ)
+  SetCamRot(cam, 0.0, 0.0, 124.9)
+  local heading = 297.7296
+
+  SetEntityHeading(player, -(currentTattoos.rotZ - 50))
+
+  AddPedDecorationFromHashes(player, currentTattoos.collection, currentTattoos.nameHash)
+end
+
+function closeTattooShop()
+    local player = venato.GetPlayerPed()
+    
+	if DoesCamExist(cam) then
+		RenderScriptCams(false, false, 0, 1, 0)
+		DestroyCam(cam, false)
+    end   
+    
+    venato.LoadClothes()
+
+    FreezeEntityPosition(player, false)
+    venato.disableAction(false)
+    shopOpen = false
+
+end
+
+
+function cleanPlayer()
+    local player = venato.GetPlayerPed()
+    ClearPedDecorationsLeaveScars(player)
+    SetPedComponentVariation(player, 8, 15, 0, 0)
+    SetPedComponentVariation(player, 11, 15, 0, 0)
+    SetPedComponentVariation(player, 3, 15, 0, 0)
+    SetPedComponentVariation(player, 4, 18, 0, 0)
+    SetPedComponentVariation(player, 6, 34, 0, 0)
+end
