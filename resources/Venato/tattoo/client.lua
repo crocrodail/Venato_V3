@@ -3,14 +3,14 @@ local tatooShops = {
 }
 
 local cam = -1
-local currentTattoos = {collection = "mphipster_overlays", nameHash = "FM_Hip_M_Tat_045", addedX = 0.2, addedY=-0.8 ,addedZ=0.3, rotZ = 13.6, price = 50}
--- local currentTattoos = {}
+-- local currentTattoos = { collection = "mpbeach_overlays", nameHash = "MP_Bea_M_Head_000", x = 0.6, y=0.25 ,z=0.7, rot = 480, price = 50}
+local currentTattoos = {}
 local shopOpen = false
 
-local addedX = 1.5
-local addedY= 1
-local addedZ= -0.1
-local rotZ = 100.0
+local x = 1.5
+local y= 1
+local z= -0.1
+local rot = 100.0
 
 local commandTatoo = {
     id = "tatoo",
@@ -112,7 +112,7 @@ function openTattooShop()
     if not DoesCamExist(cam) then
       cam = CreateCam('DEFAULT_SCRIPTED_CAMERA', true)
       local x,y,z = table.unpack(GetEntityCoords(player))	
-      SetCamCoord(cam, x + 1.2, y + 0.2, z + 0.2)
+      SetCamCoord(cam, x + 1.7, y + 0.2, z)
       SetCamRot(cam, 0.0, 0.0, 124.9)
       SetCamActive(cam, true)
       RenderScriptCams(true, false, 0, true, true)
@@ -120,21 +120,24 @@ function openTattooShop()
     
     cleanPlayer()
 
+    TriggerEvent("Shop:OpenTattoo")
+
     if(currentTattoos.collection) then
-      applyTattoo(player)    
+      applyTattoo()    
     end
 end
 
-function applyTattoo(player)
+function applyTattoo()
+  cleanPlayer()
   local player = venato.GetPlayerPed()
 	local x,y,z = table.unpack(GetEntityCoords(player))	
-  SetCamCoord(cam, x + 1.2, y + 0.2, z + currentTattoos.addedZ)
+  SetCamCoord(cam, x + 1.7, y + 0.2, z)
   SetCamRot(cam, 0.0, 0.0, 124.9)
   local heading = 297.7296
 
-  SetEntityHeading(player, -(currentTattoos.rotZ - 50))
+  SetEntityHeading(player, -(currentTattoos.rot - 50))
 
-  AddPedDecorationFromHashes(player, currentTattoos.collection, currentTattoos.nameHash)
+  AddPedDecorationFromHashes(player, currentTattoos.collection, currentTattoos.hash)
 end
 
 function closeTattooShop()
@@ -146,6 +149,7 @@ function closeTattooShop()
     end   
     
     venato.LoadClothes()
+    cleanPlayer()
 
     FreezeEntityPosition(player, false)
     venato.disableAction(false)
@@ -163,3 +167,17 @@ function cleanPlayer()
     SetPedComponentVariation(player, 4, 18, 0, 0)
     SetPedComponentVariation(player, 6, 34, 0, 0)
 end
+
+
+RegisterNetEvent('Tattoo:Apply')
+AddEventHandler('Tattoo:Apply', function(tattoo)
+  print("Apply Tattoo : ".. tattoo.id)
+  currentTattoos = tattoo
+  applyTattoo()
+end)
+
+RegisterNetEvent('Tattoo:Close')
+AddEventHandler('Tattoo:Close', function()
+  print("Close Tattoo")
+  closeTattooShop()
+end)
