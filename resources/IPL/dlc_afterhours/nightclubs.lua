@@ -9,7 +9,7 @@ AfterHoursNightclubs = {
 
     Ipl = {
         Interior = {
-            ipl = "ba_int_placement_ba_interior_2_dlc_int_03_ba_milo_",
+            ipl = "ba_int_placement_ba_interior_0_dlc_int_01_ba_milo_",
             Load = function() EnableIpl(AfterHoursNightclubs.Ipl.Interior.ipl, true) end,
             Remove = function() EnableIpl(AfterHoursNightclubs.Ipl.Interior.ipl, false) end
         },
@@ -195,6 +195,32 @@ AfterHoursNightclubs = {
                 SetInteriorPropColor(AfterHoursNightclubs.interiorId, trophy, color)
             end
         },
+        DryIce = {
+            scale = 5.0,
+            Emitters = {
+                {pos = {x = -1602.932, y = -3019.1, z = -79.99}, rot = {x = 0.0, y = -10.0, z = 66.0}},
+                {pos = {x = -1593.238, y = -3017.05, z = -79.99}, rot = {x = 0.0, y = -10.0, z = 110.0}},
+                {pos = {x = -1597.134, y = -3008.2, z = -79.99}, rot = {x = 0.0, y = -10.0, z = -122.53}},
+                {pos = {x = -1589.966, y = -3008.518, z = -79.99}, rot = {x = 0.0, y = -10.0, z = -166.97}}
+            },
+            Enable = function(state)
+                if (state) then
+                    RequestNamedPtfxAsset("scr_ba_club")
+                    while not HasNamedPtfxAssetLoaded("scr_ba_club") do
+                        Wait(0)
+                    end
+                    for key, emitter in pairs(AfterHoursNightclubs.Interior.DryIce.Emitters) do
+                        UseParticleFxAssetNextCall("scr_ba_club")
+                        StartParticleFxLoopedAtCoord("scr_ba_club_smoke_machine", emitter.pos.x, emitter.pos.y, emitter.pos.z, emitter.rot.x, emitter.rot.y, emitter.rot.z, AfterHoursNightclubs.Interior.DryIce.scale, false, false, false, true)
+                    end
+                else
+                    local radius = 1.0
+                    for key, emitter in pairs(AfterHoursNightclubs.Interior.DryIce.Emitters) do
+                        RemoveParticleFxInRange(emitter.pos.x, emitter.pos.y, emitter.pos.z, radius)
+                    end
+                end
+            end,
+        },
         Details = {
             clutter = "Int01_ba_Clutter",               -- Clutter and graffitis
             worklamps = "Int01_ba_Worklamps",           -- Work lamps + trash
@@ -209,7 +235,7 @@ AfterHoursNightclubs = {
             vaultFakeID = "Int01_ba_trophy08",          -- (inside vault) Fake ID
             vaultWeed = "Int01_ba_trophy09",            -- (inside vault) Opened weed bag
             vaultCoke = "Int01_ba_trophy10",            -- (inside vault) Coke doll
-            vaultCash = "Int01_ba_trophy11",            -- (inside vault) Scrunched fake money
+            vaultCash = "Int01_ba_trophy11",            -- (inside vault) Scrunched fake money 
             Enable = function (details, state, refresh)
                 SetIplPropState(AfterHoursNightclubs.interiorId, details, state, refresh)
             end
@@ -217,7 +243,7 @@ AfterHoursNightclubs = {
     },
 
     -- 760, -1337, 27
-    Mesa = {
+    Mesa = { 
         id = 0,
         Barrier = {
             Enable = function(state)
@@ -237,7 +263,7 @@ AfterHoursNightclubs = {
     },
 
     -- 348, -979, 30
-    MissionRow = {
+    MissionRow = { 
         id = 1,
         Barrier = {
             Enable = function(state)
@@ -257,7 +283,7 @@ AfterHoursNightclubs = {
     },
 
     -- -118, -1260, 30
-    Strawberry = {
+    Strawberry = { 
         id = 2,
         Barrier = {
             Enable = function(state)
@@ -277,7 +303,7 @@ AfterHoursNightclubs = {
     },
 
     -- 9, 221, 109
-    VinewoodWest = {
+    VinewoodWest = { 
         id = 3,
         Barrier = {
             Enable = function(state)
@@ -297,7 +323,7 @@ AfterHoursNightclubs = {
     },
 
     -- 868, -2098, 31
-    Cypress = {
+    Cypress = { 
         id = 4,
         Barrier = {
             Enable = function(state)
@@ -317,7 +343,7 @@ AfterHoursNightclubs = {
     },
 
     -- -1287, -647, 27
-    DelPerro = {
+    DelPerro = { 
         id = 5,
         Barrier = {
             Enable = function(state)
@@ -337,7 +363,7 @@ AfterHoursNightclubs = {
     },
 
     -- -680, -2461, 14
-    Airport = {
+    Airport = { 
         id = 6,
         Barrier = {
             Enable = function(state)
@@ -357,7 +383,7 @@ AfterHoursNightclubs = {
     },
 
     -- 192, -3168, 6
-    Elysian = {
+    Elysian = { 
         id = 7,
         Barrier = {
             Enable = function(state)
@@ -377,7 +403,7 @@ AfterHoursNightclubs = {
     },
 
     -- 373, 254, 103
-    Vinewood = {
+    Vinewood = { 
         id = 8,
         Barrier = {
             Enable = function(state)
@@ -397,7 +423,7 @@ AfterHoursNightclubs = {
     },
 
     -- -1171, -1150, 6
-    Vespucci = {
+    Vespucci = { 
         id = 9,
         Barrier = {
             Enable = function(state)
@@ -456,20 +482,18 @@ AfterHoursNightclubs = {
     LoadDefault = function()
         -- Interior setup
         AfterHoursNightclubs.Ipl.Interior.Load()
+        
+        AfterHoursNightclubs.Interior.Name.Set(AfterHoursNightclubs.Interior.Name.galaxy)
+        AfterHoursNightclubs.Interior.Style.Set(AfterHoursNightclubs.Interior.Style.edgy)
 
-        AfterHoursNightclubs.Interior.Name.Set(AfterHoursNightclubs.Interior.Name.palace)
-        AfterHoursNightclubs.Interior.Style.Set(AfterHoursNightclubs.Interior.Style.glam)
-
-        AfterHoursNightclubs.Interior.Podium.Set(AfterHoursNightclubs.Interior.Podium.glam)
+        AfterHoursNightclubs.Interior.Podium.Set(AfterHoursNightclubs.Interior.Podium.edgy)
         AfterHoursNightclubs.Interior.Speakers.Set(AfterHoursNightclubs.Interior.Speakers.upgrade)
 
         AfterHoursNightclubs.Interior.Security.Set(AfterHoursNightclubs.Interior.Security.on)
-
-        AfterHoursNightclubs.Interior.Turntables.Set(AfterHoursNightclubs.Interior.Turntables.style04)
+        
+        AfterHoursNightclubs.Interior.Turntables.Set(AfterHoursNightclubs.Interior.Turntables.style01)
         AfterHoursNightclubs.Interior.Lights.Bands.Set(AfterHoursNightclubs.Interior.Lights.Bands.cyan)
-        AfterHoursNightclubs.Interior.Lights.Neons.Set(AfterHoursNightclubs.Interior.Lights.Neons.cyan)
-		AfterHoursNightclubs.Interior.Lights.Droplets.Set(AfterHoursNightclubs.Interior.Lights.Droplets.purple)
-		AfterHoursNightclubs.Interior.Lights.Lasers.Set(AfterHoursNightclubs.Interior.Lights.Lasers.purple)
+
         AfterHoursNightclubs.Interior.Bar.Enable(true)
 
         AfterHoursNightclubs.Interior.Booze.Enable(AfterHoursNightclubs.Interior.Booze, true)
@@ -479,12 +503,11 @@ AfterHoursNightclubs = {
         RefreshInterior(AfterHoursNightclubs.interiorId)
 
 
-
         -- Exterior IPL
         AfterHoursNightclubs.Mesa.Barrier.Enable(true)
         AfterHoursNightclubs.Mesa.Posters.Enable(AfterHoursNightclubs.Posters, true)
         AfterHoursNightclubs.Mesa.Posters.Enable(AfterHoursNightclubs.Posters.forSale, false)
-
+        
         AfterHoursNightclubs.MissionRow.Barrier.Enable(true)
         AfterHoursNightclubs.MissionRow.Posters.Enable(AfterHoursNightclubs.Posters, true)
         AfterHoursNightclubs.MissionRow.Posters.Enable(AfterHoursNightclubs.Posters.forSale, false)
@@ -516,58 +539,9 @@ AfterHoursNightclubs = {
         AfterHoursNightclubs.Vinewood.Barrier.Enable(true)
         AfterHoursNightclubs.Vinewood.Posters.Enable(AfterHoursNightclubs.Posters, true)
         AfterHoursNightclubs.Vinewood.Posters.Enable(AfterHoursNightclubs.Posters.forSale, false)
-
+        
         AfterHoursNightclubs.Vespucci.Barrier.Enable(true)
         AfterHoursNightclubs.Vespucci.Posters.Enable(AfterHoursNightclubs.Posters, true)
         AfterHoursNightclubs.Vespucci.Posters.Enable(AfterHoursNightclubs.Posters.forSale, false)
     end
 }
-
-
-
-
-
-
-
-
-
-
-function CreateNamedRenderTargetForModel(name, model)
-local handle = 0
-if not IsNamedRendertargetRegistered(name) then
-RegisterNamedRendertarget(name, 0)
-end
-if not IsNamedRendertargetLinked(model) then
-LinkNamedRendertarget(model)
-end
-if IsNamedRendertargetRegistered(name) then
-handle = GetNamedRendertargetRenderId(name)
-end
-
-return handle
-end
-
-Citizen.CreateThread(function ()
-local model = GetHashKey("ba_prop_club_screens_01");
-local pos = { x = -1604.664, y = -3012.583, z = 80.00 };
-local entity = GetClosestObjectOfType(pos.x, pos.y, pos.z, 0.05, model, 0, 0, 0)
-local handle = CreateNamedRenderTargetForModel("club_projector", model)
-
-RegisterScriptWithAudio(0)
-SetTvChannel(-1)
-
-Citizen.InvokeNative(0x9DD5A62390C3B735, 2, "PL_SOL_LED_PALACE", 0)
-SetTvChannel(2)
-EnableMovieSubtitles(1)
-
-while true do
-    SetTvAudioFrontend(0)
-    AttachTvAudioToEntity(entity)
-    SetTextRenderId(handle)
-        Set_2dLayer(4)
-        Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)
-        DrawTvChannel(0.5, 0.5, 1.0, 1.0, 0.0, 255, 255, 255, 255)
-    SetTextRenderId(GetDefaultScriptRendertargetRenderId())
-    Citizen.Wait(0)
-end
-end)

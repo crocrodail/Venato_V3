@@ -130,12 +130,12 @@ end
 function applyTattoo()
   cleanPlayer()
   local player = venato.GetPlayerPed()
-	local x,y,z = table.unpack(GetEntityCoords(player))	
-  SetCamCoord(cam, x + 1.7, y + 0.2, z)
-  SetCamRot(cam, 0.0, 0.0, 124.9)
-  local heading = 297.7296
+	-- local x,y,z = table.unpack(GetEntityCoords(player))	
+  -- SetCamCoord(cam, x + 1.7, y + 0.2, z)
+  -- SetCamRot(cam, 0.0, 0.0, 124.9)
+  -- local heading = 297.7296
 
-  SetEntityHeading(player, -(currentTattoos.rot - 50))
+  -- SetEntityHeading(player, currentTattoos.rot)
 
   AddPedDecorationFromHashes(player, currentTattoos.collection, currentTattoos.hash)
 end

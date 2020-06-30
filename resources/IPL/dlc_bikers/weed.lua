@@ -380,7 +380,7 @@ BikerWeedFarm = {
     LoadDefault = function()
         BikerWeedFarm.Ipl.Interior.Load()
         BikerWeedFarm.Style.Set(BikerWeedFarm.Style.upgrade)
-        BikerWeedFarm.Security.Set(BikerWeedFarm.Security.upgrade)
+        BikerWeedFarm.Security.Set(BikerWeedFarm.Security.basic)
         BikerWeedFarm.Details.Enable(BikerWeedFarm.Details.drying, false)
         BikerWeedFarm.Details.Enable(BikerWeedFarm.Details.chairs, false)
         BikerWeedFarm.Details.Enable(BikerWeedFarm.Details.production, false)

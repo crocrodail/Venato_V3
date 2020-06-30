@@ -1,8 +1,8 @@
 # Fix Holes In The Map (Updated to After Hours DLC)
 
-The purpose of this script is to fix the holes in the map by loading zones that aren’t loaded by default. I’ve added quite a lot of places to load, based on [Mikeeh’s script](https://forum.fivem.net/t/release-load-unloaded-ipls/5911). If you just want to fix the holes in the map, then use this resource as is.
+The purpose of this script is to fix the holes in the map by loading zones that aren’t loaded by default. I’ve added quite a lot of places to load, based on [Mikeeh’s script](https://forum.fivem.net/t/release-load-unloaded-ipls/5911). If you just want to fix the holes in the map, then use this resource as provided.
 
-This resource has been completely rewritten from scratch since v2.0. You can customized almost every storymode and purchasable interiors from your own resources.
+This resource has been completely rewritten from scratch since v2.0. You can customize almost every storymode and online purchasable interiors from your own resources.
 
 ## Download
 - Latest version: https://github.com/Bob74/bob74_ipl/releases/latest
@@ -45,6 +45,21 @@ This resource has been completely rewritten from scratch since v2.0. You can cus
 
 <details><summary>Click to view</summary>
 (DD/MM/YYYY)
+
+20/10/2019 - 2.0.8
+- Nightclubs: Added dry ice emitters
+- Heist & Gunrunning: Added water to the yachts hot tubs (to enable/disable)
+- Offices: Added a way to open and close the safes
+- Facility: Added privacy glass
+- Moved Bahama Mamas and PillBox Hospital in their own files
+- Fixed error `ReleaseNamedRendertarget`
+- Cleaned and optimized the code
+
+22/03/2019 - 2.0.7c
+- CEO Offices: Changed the default loaded garage to ImportCEOGarage4.Part.Garage2 in order to avoid Office glitchs
+
+15/01/2019 - 2.0.7b
+- Nightclubs: Fixed a typo for the fake lights
 
 15/01/2019 - 2.0.7a
 - Nightclubs: Added the ability to set no podium (using `AfterHoursNightclubs.Interior.Podium.none`)

@@ -73,9 +73,6 @@ Citizen.CreateThread(function()
     -- Raton Canyon river: -1652.83, 4445.28, 2.52
     RequestIpl("CanyonRvrShallow")
         
-    -- Pillbox hospital: 307.1680, -590.807, 43.280
-    RequestIpl("rc12b_default")
-        
     -- Josh's house: -1117.1632080078, 303.090698, 66.52217
     RequestIpl("bh1_47_joshhse_unburnt")
     RequestIpl("bh1_47_joshhse_unburnt_lod")
@@ -92,4 +89,6 @@ Citizen.CreateThread(function()
     RequestIpl("canyonriver01")
     RequestIpl("canyonriver01_lod")
 
+    -- Ferris wheel
+    RequestIpl("ferris_finale_anim")
 end)
