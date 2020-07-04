@@ -13,6 +13,18 @@ Vue.config.productionTip = false
 Vue.prototype.$bus = new Vue()
 Vue.prototype.$apiService = ApiService
 
+Vue.filter('toCurrency', function (value) {
+  if (typeof value !== "number") {
+      return value;
+  }
+  var formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+  });
+  return formatter.format(value);
+});
+
 window.Vue = Vue
 window.store = store
 

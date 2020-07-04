@@ -12,10 +12,10 @@
             v-for="item in items"
             :key="item.id"
           >
-            <div class="container"
-            @click="selectItem(item)">
+            <div class="container" v-bind:class="{ active: item.active }" @click="selectItem(item)">
               <img :src="item.image" />
-              {{item.id}}
+              <div class="id">{{item.id}}</div>
+              <div class="price">{{item.price | toCurrency}} $</div>
             </div>
           </vs-col>
         </vs-row>
@@ -44,7 +44,8 @@ export default {
       open: false,
       class: "tattoo",
       color: "#626262",
-      items: []
+      items: [],
+      currentItem: {}
     };
   },
   computed: {
@@ -58,17 +59,14 @@ export default {
   methods: {
     // ...mapActions(["closePhone", "setMessages"]),
     selectItem(item) {
-      console.log("Apply Tattoo");
-      $.post(
-        "http://shop/"+this.class+"/apply",
-        JSON.stringify(item)
-      );
+      this.items.forEach(i => {
+        i.active = i.id == item.id;
+      });
+
+      $.post("http://shop/" + this.class + "/apply", JSON.stringify(item));
     },
-    close(){
-        console.log("Close Tattoo shop");
-       $.post(
-        "http://shop/"+this.class+"/close"
-      );
+    close() {
+      $.post("http://shop/" + this.class + "/close");
     },
     handleMessage(event) {
       if (event.data.event == "open") {
@@ -77,14 +75,28 @@ export default {
       } else if (event.data.event == "close") {
         this.open = false;
       }
+    },
+    async refreshList() {
+      this.items = (await this.$apiService.get("/"+this.class)).map(t => {
+        return {...t, active: false };
+      });
     }
   },
-  async created() {
-    window.addEventListener('message', this.handleMessage);
-    this.items = await this.$apiService.get("/tattoo");
+  watch: {
+    open: async function(value) {
+      if(value){
+        await this.refreshList();
+      }
+    }
+  },
+  created() {
+    window.addEventListener("message", this.handleMessage);
+  },
+  async mounted(){
+    await this.refreshList();
   },
   beforeDestroy() {
-    window.removeEventListener('message', this.handleMessage)
+    window.removeEventListener("message", this.handleMessage);
   }
 };
 </script>
@@ -97,7 +109,8 @@ export default {
   overflow: hidden;
   &.tattoo {
     background: url("/html/static/img/tattoo_shop.png");
-    background-size: contain;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
   .content {
     background-color: white;
@@ -105,21 +118,44 @@ export default {
     box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
     margin-top: 10%;
     margin-left: 5% !important;
-    height: 900px;
-    max-height: 900px;
+    height: 70vh;
+    max-height: 70vh;
     border-radius: 20px;
     padding: 15px;
     overflow: auto;
     .item {
       padding: 10px;
       .container {
+        position: relative;
         border-radius: 10px;
         text-align: center;
+        width: 100%;
+        height: 100%;
+        &.active {
+          border: 2px rgba(0, 0, 0, 0.3) solid;
+        }
         &:hover {
           background-color: rgb(211, 211, 211);
         }
         img {
           width: 90%;
+        }
+        .id{
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          font-weight: bolder;
+        }
+        .active{
+          position: absolute;
+          top: 10px;
+          right: 10px;
+        }
+        .price{
+          bottom: -10px;
+          width: 100%;
+          text-align: center;
+          font-weight: bolder;
         }
       }
     }
