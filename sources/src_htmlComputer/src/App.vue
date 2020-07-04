@@ -26,10 +26,10 @@ export default {
 
     window.addEventListener("keydown", event => {
       const keyValid = [
-        "a",
-        "e",
-        "z",
-        "s"
+        // "a",
+        // "e",
+        // "z",
+        // "s"
         // "ArrowUp",
         // "ArrowDown",
         // "Backspace",
@@ -37,7 +37,7 @@ export default {
       ];
       if (keyValid.indexOf(event.key) !== -1) {
         // this.$bus.$emit("keyUp" + event.key);
-        $.post("http://shop/tattoo/key", JSON.stringify({ key: event.key }));
+        // $.post("http://shop/tattoo/key", JSON.stringify({ key: event.key }));
       }
     });
   },

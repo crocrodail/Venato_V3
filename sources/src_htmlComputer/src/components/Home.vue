@@ -1,39 +1,9 @@
 <template>
-  <div :class="getClass" v-if="open">
-    <vs-row>
-      <vs-col class="content" vs-offset="0" vs-type="flex" vs-w="4">
-        <vs-row vs-w="12">
-          <vs-col
-            vs-type="flex"
-            vs-justify="center"
-            vs-align="center"
-            class="item"
-            vs-w="4"
-            v-for="item in items"
-            :key="item.id"
-          >
-            <div class="container" v-bind:class="{ active: item.active }" @click="selectItem(item)">
-              <img :src="item.image" />
-              <div class="id">{{item.id}}</div>
-              <div class="price">{{item.price | toCurrency}} $</div>
-            </div>
-          </vs-col>
-        </vs-row>
-      </vs-col>
-    </vs-row>
-    <div class="keys">
-      <vs-button :color="color" type="relief">A</vs-button>
-      <vs-button :color="color" type="relief">E</vs-button>
-    </div>
-    <div class="close">
-      <vs-button color="#b71c1c" type="relief" @click="close">X</vs-button>
-    </div>
-  </div>
+
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import ShopMenu from "./ShopMenu.vue";
 
 export default {
   components: {
@@ -42,10 +12,6 @@ export default {
   data() {
     return {
       open: false,
-      class: "tattoo",
-      color: "#626262",
-      items: [],
-      currentItem: {}
     };
   },
   computed: {
