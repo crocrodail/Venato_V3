@@ -1,76 +1,76 @@
-local questions = {
+local questionsAutoEcole = {
     {
-        image = "./assets/img/1.jpg",
+        image = "assets/images/autoecole/1.jpg",
         question = "Dans cette situation, le feu est vert :",
         answer = {
             "Je m'arrête devant le feu tricolore", 
-            "Je passe car le feu tricolore est vert", 
+            good = "Je passe car le feu tricolore est vert", 
             "Je change d'itinéraire", 
             "J'appel les mécanos car le feu est en panne"
         }
     },
     {
-        image = "./assets/img/2.jpg",
+        image = "assets/images/autoecole/2.jpg",
         question = "Dans cette situation, le piéton traverse alors que le feu est vert",
         answer = {
             "J'appel la LSPD, il est en infraction", 
             "J'accélère pour lui faire peur et je freine au dernier moment !", 
             "Je change d'itinéraire", 
-            "Je m'arrête"
+            good = "Je m'arrête"
         }
     },
     {
-        image = "./assets/img/3.jpg",
+        image = "assets/images/autoecole/3.jpg",
         question = "Dans cette situation, je double le véhicule à ma droite",
         answer = {
             "Je me rabat tout de suite ", 
             "Je n'ai pas le droit, je suis en infraction", 
-            "Je me rabat dans quelques secondes", 
+            good =  "Je me rabat dans quelques secondes", 
             "Je dépasse la vitesse maximale autorisée"
         }
     },
     {
-        image = "./assets/img/4.jpg",
+        image = "assets/images/autoecole/4.jpg",
         question = "Dans cette situation, je veux tourner à droite",
         answer = {
             "J'attend que le feu rouge soit vert, puis je m'engage", 
-            "Je peux m'engager en faisant attention", 
+            good =  "Je peux m'engager en faisant attention", 
             "Je change d'avis et tourne directement à gauche", 
             "Dans cette voie, je peux continuer tout droit"
         }
     },
     {
-        image = "./assets/img/5.jpg",
+        image = "assets/images/autoecole/5.jpg",
         question = "Dans cette situation, un homme est a terre suite à un grave accident",
         answer = {
             "Je continue ma route, c'est pas mon problème", 
-            "Je sécurise les lieux, appel les EMS et je reste sur les lieux jusqu'à leurs arrivés", 
+            good =   "Je sécurise les lieux, appel les EMS et je reste sur les lieux jusqu'à leurs arrivés", 
             "J'appel la LSPD", 
             "Je prend un selfie et le poste sur les réseaux sociaux"
         }
     },
     {
-        image = "./assets/img/6.jpg",
+        image = "assets/images/autoecole/6.jpg",
         question = "Dans cette situation, je rentre dans une propriété privée",
         answer = {
             "Je peux stationner sans aucun soucis", 
-            "Je fais demi-tour, je n'ai pas le droit d'être là", 
+            good =  "Je fais demi-tour, je n'ai pas le droit d'être là", 
             "Je peux stationner en mettant un mot avec mon numéro de téléphone sur le par-brise", 
             "Je peux m'arrêter quelques minutes pour faire pipi"
         }
     },
     {
-        image = "./assets/img/7.jpg",
+        image = "assets/images/autoecole/7.jpg",
         question = "Dans cette situation, la police me fait signe de m'arrêter sur le côté",
         answer = {
             "J'augmente le son de ma radio", 
-            "J'execute la demande des forces de l'ordre", 
+            good =  "J'execute la demande des forces de l'ordre", 
             "J'accélère", 
             "Je fais comme ci je n'avais rien entendu"
         }
     },
     {
-        image = "./assets/img/8.jpg",
+        image = "assets/images/autoecole/8.jpg",
         question = "Dans cette situation, le feu tricolore est orange",
         answer = {
             "Il est préférable de s'arrêter", 
@@ -80,7 +80,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/9.jpg",
+        image = "assets/images/autoecole/9.jpg",
         question = "Dans cette situation, je suis face a un panneau stop",
         answer = {
             "Comme le panneau le dit, je STOP mon véhicule", 
@@ -90,7 +90,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/10.jpg",
+        image = "assets/images/autoecole/10.jpg",
         question = "Dans cette situation, je regarde mon GPS en circulation",
         answer = {
             "La situation ne présente absolument aucun danger", 
@@ -100,7 +100,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/11.jpg",
+        image = "assets/images/autoecole/11.jpg",
         question = "Dans cette situation :",
         answer = {
             "J'accélère", 
@@ -110,7 +110,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/12.jpg",
+        image = "assets/images/autoecole/12.jpg",
         question = "Dans cette situation :",
         answer = {
             "Je peux doubler par la droite", 
@@ -120,7 +120,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/13.jpg",
+        image = "assets/images/autoecole/13.jpg",
         question = "Dans cette situation, je veux acheter des fruits à l'épicier",
         answer = {
             "Je m'arrête au milieu de la route pendant quelques secondes", 
@@ -130,7 +130,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/14.jpg",
+        image = "assets/images/autoecole/14.jpg",
         question = "Dans cette situation, je veux faire mes courses",
         answer = {
             "Je peux stationner ici sans aucun soucis", 
@@ -140,7 +140,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/15.jpg",
+        image = "assets/images/autoecole/15.jpg",
         question = "Dans cette situation :",
         answer = {
             "Je suis bien placer pour circuler", 
@@ -150,7 +150,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/16.jpg",
+        image = "assets/images/autoecole/16.jpg",
         question = "Dans cette situation, en deux roues",
         answer = {
             "Je peux doubler par la droite", 
@@ -160,7 +160,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/17.jpg",
+        image = "assets/images/autoecole/17.jpg",
         question = "Dans cette situation :",
         answer = {
             "Je fonce dans la voiture pour aller plus vite", 
@@ -170,7 +170,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/18.jpg",
+        image = "assets/images/autoecole/18.jpg",
         question = "Dans cette situation :",
         answer = {
             "Je peux stationner sans aucun soucis", 
@@ -180,7 +180,7 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/19.jpg",
+        image = "assets/images/autoecole/19.jpg",
         question = "Dans cette situation ce panneau m'indique :",
         answer = {
             "Une interdiction de faire demi-tour", 
@@ -190,15 +190,34 @@ local questions = {
         }
     },
     {
-        image = "./assets/img/20.jpg",
+        image = "assets/images/autoecole/20.jpg",
         question = "Dans cette situation, je veux aller au concessionnaire",
         answer = {
             "Je passe avant la voiture", 
             "Je passe après la voiture", 
             "Je passe avant la voiture mais en marche arrière", 
-            "Je gare mon véhicule ici et continu à pieds"
+            "Je gare mon véhicule ici et ceontinu à pieds"
         }
     },
 }
+local defaultNotification = {
+    
+}
+RegisterServerEvent('AutoEcole:CodeOuPermis')
+AddEventHandler("AutoEcole:CodeOuPermis", function()
+    local source = source
+    if DataPlayers[source]["HighwayCode"] == "Non acquis" then
 
+        defaultNotification.message = "Vous devez passer le code de la route"
 
+        TriggerClientEvent('AutoEcole:GetQuestionForCode', source, questionsAutoEcole)
+        TriggerClientEvent("AutoEcole:OpencodeOrOpenpermis", source, "code")
+        TriggerClientEvent('platypus:notify', source, defaultNotification.message)
+    else
+        TriggerClientEvent("AutoEcole:OpencodeOrOpenpermis", source, "permis")
+        defaultNotification.message = "Vous devez passer le permis de conduire"
+        TriggerClientEvent('platypus:notify', source, defaultNotification.message)
+    end
+end)
+
+-- TriggerClientEvent("AutoEcole:sendQuestions", source)

@@ -20,7 +20,6 @@ var nomprenomd = getUrlParameter('nomprenomd');
 var montant = "* * " + getUrlParameter('montant') + " €";
 var montant1 = "* * " + getUrlParameter('montant') + " Euro * *";
 var num = getUrlParameter('num');
-
 if (type === "show") {
   $('#cheque').show();
   $('#date').text(date);

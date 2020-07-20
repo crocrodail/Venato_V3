@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./assets/css/reset.css">
-    <link rel="stylesheet" href="./assets/css/code.css">
-    <script src="./assets/js/script.js"></script>
+    <link type="text/css" rel="stylesheet" href="./assets/css/autoecole.css">
+    <script src="./assets/js/autoecole.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -28,8 +27,42 @@
 
                 Pour avoir le détail des consignes du Ministère, regardez la vidéo proposée dans le cadre d’une session d’examen dans un centre La Poste.
             </div>
+            <div class="questions" style="display: none;">
+                <div class="imageCode"></div>
+                <h1 class="title">Dans cette situation</h1>
+                <ul>
+                    <li>
+                        <label for="answerA">
+                            <input type="radio" name="answer" id="answerA" class="answer a">
+                            <p class="un"></p>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="answerB">
+                            <input type="radio" name="answer" id="answerB" class="answer b">
+                            <p class="deux"></p>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="answerC">
+                            <input type="radio" name="answer" id="answerC" class="answer c">
+                            <p class="trois"></p>
+                        </label>
+                    </li>
+                    <li>
+                        <label for="answerD">
+                            <input type="radio" name="answer" id="answerD" class="answer d">
+                            <p class="quatre"></p>
+                        </label>
+                    </li>
+                </ul>
+            </div>
         </div>
         <button type="submit" class="btn btn-submit">Commencer l'épreuve</button>
     </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.core.min.js"></script>
+<script src="assets/js/jquery.js" type="text/javascript"></script>
+<script src="assets/js/materialize.js" type="text/javascript"></script>
+<script src="assets/js/init.js" type="text/javascript"></script>
 </html>

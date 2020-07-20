@@ -31,6 +31,7 @@ $(document).ready(function(){
 
   window.addEventListener('message', function(event) {
       if (event.data.action == 'open') {
+        window.location.href = "index.html"
         if (!taking) {
           $('#wrapper').show();
           $('#header p').text(event.data.bank);
@@ -54,6 +55,12 @@ $(document).ready(function(){
         window.location.href = 'identity.html?'+event.data.string
       } else if (event.data.action == 'showCheque'){
         window.location.href = 'cheque.html?'+event.data.string
+      } else if (event.data.action == 'sendQuestions'){
+        let codeQuestions = event.data.questions
+        localStorage.setItem("questions", JSON.stringify(codeQuestions))
+      } else if (event.data.action == "openCodeAutoEcole"){
+        window.location.href = 'autoecole.html'
+
       }
   });
 

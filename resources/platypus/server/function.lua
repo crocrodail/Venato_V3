@@ -115,6 +115,7 @@ DataPlayers = {}
 function accessGranded(SteamId, source , balek)
   MySQL.Async.fetchAll("SELECT * FROM users "..
    "LEFT JOIN skin ON `users`.`identifier` = `skin`.`identifier` "..
+   "LEFT JOIN user_permis ON `user_permis`.`identifier` = `users`.`identifier` "..
    "WHERE users.identifier = @SteamId", {['@SteamId'] = getSteamID(source)}, function(DataUser)
     if DataUser[1] == nil then
       TriggerEvent("Register:AddPlayer", source, false)
@@ -170,8 +171,11 @@ function accessGranded(SteamId, source , balek)
         VisaEnd = nil,
         VisaCanBeReload = false,
         CanBeACitoyen = false,
-        PermisVoiture = DataUser[1].permisVoiture,
-        PermisCamion = DataUser[1].permisCamion,
+        HighwayCode = DataUser[1].code or 'Non acquis',
+        PermisVoiture = DataUser[1].car or 'Non acquis',
+        PermisCamion = DataUser[1].truck or 'Non acquis',
+        PermisMoto = DataUser[1].bike or 'Non acquis',
+        PermisPoint = DataUser[1].point or 0,
         Point = DataUser[1].point,
         Citoyen = 1,
         Url = DataUser[1].url,
@@ -196,7 +200,7 @@ function accessGranded(SteamId, source , balek)
           lipstick_color = DataUser[1].lipstick_color
         },
         IsBankAccountBlocked = DataUser[1].isBankAccountBlocked
-      }
+      }      
       TriggerClientEvent("Bank:AccountIsBlocked:Set", source, DataUser[1].isBankAccountBlocked)
       local steamIdl = getSteamID(source)
       if DataUser[1].PDGLVL > 50 then TriggerClientEvent("DeliveryJob:isPro", source, true) end --pdglvl > 50 peux avoir acces aux shop pro
