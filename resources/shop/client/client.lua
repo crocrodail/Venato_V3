@@ -1,8 +1,10 @@
 
 RegisterNUICallback('tattoo/apply', function(data, cb)
-    print("Apply Tattoo")
-    print(data.id)
     TriggerEvent('Tattoo:Apply', data)
+end)
+
+RegisterNUICallback('tattoo/buy', function(data, cb)
+    TriggerEvent('Tattoo:Buy', data)
 end)
 
 RegisterNUICallback('tattoo/close', function(data, cb)

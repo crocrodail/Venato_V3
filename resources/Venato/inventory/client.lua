@@ -198,6 +198,13 @@ function OpenInventory(wait)
   TriggerServerEvent("Inventory:ShowMe")
 end
 
+
+
+RegisterNetEvent('Inventory:RefreshTattoo:cb')
+AddEventHandler('Inventory:RefreshTattoo:cb', function(Data)
+  DataUser.Tattoos = Data
+end)
+
 RegisterNetEvent('Inventory:ShowMe:cb')
 AddEventHandler('Inventory:ShowMe:cb', function(Data)
   Menu.clearMenu()

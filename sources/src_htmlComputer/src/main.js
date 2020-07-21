@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
 import ApiService from './apiService'
 import Vuesax from 'vuesax'
 
@@ -26,12 +25,10 @@ Vue.filter('toCurrency', function (value) {
 });
 
 window.Vue = Vue
-window.store = store
 
 /* eslint-disable no-new */
 window.APP = new Vue({
   el: '#app',
-  store,
   router,
   render: h => h(App)
 })

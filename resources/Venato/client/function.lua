@@ -98,6 +98,12 @@ local function uuid()
   end)
 end
 
+
+RegisterNetEvent('venato:notify:server')
+AddEventHandler('venato:notify:server', function(notif)
+	venato.notify(notif)
+end)
+
 function venato.notify(notif)
   if not notif.message then
     return
@@ -109,10 +115,9 @@ function venato.notify(notif)
     notif.timeout = 3500
   end
 
-  print(venato.HasItem(206))
-
   if(venato.HasItem(206)) then
     notif.id = uuid()
+    print("Notif")
     TriggerEvent("gcphone:notification", notif)
   else
     TriggerEvent("Hud:Update", {

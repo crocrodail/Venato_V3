@@ -122,7 +122,7 @@ function openTattooShop()
 
     TriggerEvent("Shop:OpenTattoo")
 
-    if(currentTattoos.collection) then
+    if(currentTattoos and currentTattoos.collection) then
       applyTattoo()    
     end
 end
@@ -137,15 +137,14 @@ function applyTattoo()
     (GetEntityModel(venato.GetPlayerPed()) == GetHashKey("mp_m_freemode_01")) 
   then
     currentTattoos.hash = currentTattoos.hash:gsub("_F", "_M")
-    print(currentTattoos.hash)
   end
-
 
   AddPedDecorationFromHashes(player, currentTattoos.collection, currentTattoos.hash)
 end
 
 function closeTattooShop()
     local player = venato.GetPlayerPed()
+    currentTattoos = nil
     
 	if DoesCamExist(cam) then
 		RenderScriptCams(false, false, 0, 1, 0)
@@ -169,19 +168,31 @@ function cleanPlayer()
     SetPedComponentVariation(player, 11, 15, 0, 0)
     SetPedComponentVariation(player, 3, 15, 0, 0)
     SetPedComponentVariation(player, 4, 18, 0, 0)
-    SetPedComponentVariation(player, 6, 34, 0, 0)
+    SetPedComponentVariation(player, 6, 34, 0, 0)  
+    venato.LoadSkin(DataUser)  
 end
 
 
 RegisterNetEvent('Tattoo:Apply')
 AddEventHandler('Tattoo:Apply', function(tattoo)
-  print("Apply Tattoo : ".. tattoo.id)
   currentTattoos = tattoo
   applyTattoo()
 end)
 
+RegisterNetEvent('Tattoo:Buy')
+AddEventHandler('Tattoo:Buy', function(tattoo)
+  TriggerServerEvent("Tattoo:Buy", tattoo)
+end)
+
+RegisterNetEvent('Tattoo:Buy:response')
+AddEventHandler('Tattoo:Buy:response', function(response)
+  if(response.status) then
+    TriggerServerEvent('Inventory:RefreshTattoo')    
+  end
+end)
+
 RegisterNetEvent('Tattoo:Close')
-AddEventHandler('Tattoo:Close', function()
-  print("Close Tattoo")
+AddEventHandler('Tattoo:Close', function()  
+  venato.LoadSkin(DataUser)
   closeTattooShop()
 end)

@@ -294,22 +294,39 @@ function venato.Round(num, numDecimalPlaces)
   return math.floor(num * mult + 0.5) / mult
 end
 
+local defaultNotification = {
+  title ="Venato Bank",
+  type= "alert",
+  logo = "https://i.ibb.co/0V3MVZn/venato-bank-icon-48.png"
+}
+
 function venato.paymentCB(source, amount, isPolice)
+  local response = {}
   if isPolice == nil then
     isPolice = false
   end
   if DataPlayers[tonumber(source)].IsBankAccountBlocked == 1 then
-    return {status = false, message = "Votre compte est bloqué, rendez vous au LSPD pour régulariser votre situation."}
+    response = {status = false, message = "Votre compte est bloqué, rendez vous au LSPD pour régulariser votre situation."}
   end
   if not isPolice and DataPlayers[tonumber(source)].Bank <= tonumber(amount) then
-    return {status = false, message = "Votre solde est insuffisant."}
+    response = {status = false, message = "Votre solde est insuffisant."}
   else
     DataPlayers[tonumber(source)].Bank = DataPlayers[tonumber(source)].Bank - amount
     MySQL.Async.execute("UPDATE users SET bank=@money WHERE identifier=@identifier",
       { ["identifier"] = DataPlayers[tonumber(source)].SteamId, ["money"] = DataPlayers[tonumber(source)].Bank })
       TriggerClientEvent("gcphone:updateBank", source, DataPlayers[tonumber(source)].Bank)
-    return {status = true}
+    response = {status = true}
   end
+
+  if(response.status) then
+    defaultNotification.message = "Paiement accepté. Nouveau solde : " .. DataPlayers[tonumber(source)].Bank .. "$"
+  else
+    defaultNotification.message = "Paiement refusé. " .. response.message
+  end
+
+  venato.notify(source, defaultNotification)
+  
+  return response;
 end
 
 function ExportPaymentCB(source, amount)
@@ -369,7 +386,7 @@ function venato.notify(source, notif)
   if not notif.timeout then
     notif.timeout = 3500
   end
-  TriggerClientEvent("Hud:Update", source, {
+  TriggerClientEvent("venato:notify:server", source, {
     action = "notify",
     message = notif.message,
     type = notif.type,

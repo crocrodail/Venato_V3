@@ -29,6 +29,7 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
   local Weapon = {}
   local doc = {}
   local Document = {}
+  local Tattoo = {}
   local poid = 0
   MySQL.Async.fetchAll("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE identifier = @SteamId",
     { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)      
@@ -62,21 +63,51 @@ AddEventHandler('Inventory:UpdateInventory', function(source)
         end
     end)
   end)  
-  MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId",
+  MySQL.Async.fetchAll("SELECT ut.id, t.collection, t.hash, t.image  FROM user_tattoos ut  INNER JOIN tattoo t ON t.id = ut.tattoos  WHERE identifier = @SteamId",
     { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)
       if result[1] ~= nil then
         for i, v in ipairs(result) do
-          doc = { ["type"] = v.type, ["nom1"] = v.nom, ["prenom1"] = v.prenom, ["montant"] = tonumber(v.montant), ["numeroDeCompte"] = v.numero_de_compte, ["date"] = v.date, ["nom2"] = v.nom_du_factureur, ["prenom2"] = v.prenom_du_factureur }
-          Document[v.id] = doc
-        end
-        DataPlayers[tonumber(source)].Documents = Document
+          tattoo = { ["collection"] = v.collection, ["hash"] = v.hash, ["image"] = v.image }
+          Tattoo[v.id] = tattoo
+        end       
       end
+      DataPlayers[tonumber(source)].Tattoos = Tattoo
     end)
+    MySQL.Async.fetchAll("SELECT * FROM user_document WHERE identifier = @SteamId",
+      { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)
+        if result[1] ~= nil then
+          for i, v in ipairs(result) do
+            doc = { ["type"] = v.type, ["nom1"] = v.nom, ["prenom1"] = v.prenom, ["montant"] = tonumber(v.montant), ["numeroDeCompte"] = v.numero_de_compte, ["date"] = v.date, ["nom2"] = v.nom_du_factureur, ["prenom2"] = v.prenom_du_factureur }
+            Document[v.id] = doc
+          end
+          DataPlayers[tonumber(source)].Documents = Document
+        end
+      end)
 end)
 
 RegisterServerEvent('Inventory:ShowMe')
 AddEventHandler('Inventory:ShowMe', function()
   TriggerClientEvent("Inventory:ShowMe:cb", source, DataPlayers[tonumber(source)])
+end)
+
+RegisterServerEvent('Inventory:RefreshTattoo')
+AddEventHandler('Inventory:RefreshTattoo', function()
+  local Tattoo = {}
+  local source = source
+  MySQL.Async.fetchAll("SELECT ut.id, t.collection, t.hash, t.image  FROM user_tattoos ut  INNER JOIN tattoo t ON t.id = ut.tattoos  WHERE identifier = @SteamId",
+    { ['@SteamId'] = DataPlayers[tonumber(source)].SteamId }, function(result)
+      if result[1] ~= nil then
+        for i, v in ipairs(result) do
+          tattoo = { ["collection"] = v.collection, ["hash"] = v.hash, ["image"] = v.image }
+          Tattoo[v.id] = tattoo
+        end       
+      end
+      print(source)
+      print(DataPlayers)
+      print(DataPlayers[tonumber(source)])
+      DataPlayers[tonumber(source)].Tattoos = Tattoo
+      TriggerClientEvent("Inventory:RefreshTattoo:cb", source, DataPlayers[tonumber(source)].Tattoos)
+    end)
 end)
 
 RegisterServerEvent('Inventory:DataItem')

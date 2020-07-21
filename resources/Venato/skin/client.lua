@@ -421,7 +421,7 @@ AddEventHandler("Skin:Create", function()
 end)
 
 
-function venato.LoadSkin(DataUser)
+function venato.LoadSkin(DataUser)  
     local skin = DataUser.Skin
     if not loaded then
       loadPlayer(DataUser)
@@ -508,8 +508,25 @@ function venato.LoadSkin(DataUser)
         end
 
     end
+    local tattoo = DataUser.Tattoos
+    if tattoo then
+      for k, v in pairs(tattoo) do
+        applyTatto(venato.GetPlayerPed(), v)
+      end
+    end
 end
 
+function applyTatto(player, currentTattoos)
+  if 
+    string.find(currentTattoos.hash, "_Bea") == nil and
+    string.find(currentTattoos.hash, "_Bui") == nil and
+    (GetEntityModel(player) == GetHashKey("mp_m_freemode_01")) 
+  then
+    currentTattoos.hash = currentTattoos.hash:gsub("_F", "_M")
+  end
+
+  AddPedDecorationFromHashes(player, currentTattoos.collection, currentTattoos.hash)
+end
 
 function loadPlayer(data)
   DoScreenFadeOut(500)

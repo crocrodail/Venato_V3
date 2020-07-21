@@ -14,13 +14,24 @@
           >
             <div class="container" v-bind:class="{ active: item.active }" @click="selectItem(item)">
               <img :src="item.image" />
-              <div class="id">{{item.id}}</div>
-              <div class="price">{{item.price | toCurrency}} $</div>
+              <!-- <div class="id">{{item.id}}</div> -->
+              <div class="price">{{item.price | toCurrency}}</div>
             </div>
           </vs-col>
         </vs-row>
       </vs-col>
     </vs-row>
+     <vs-row class="button-shop">
+          <vs-col
+            vs-type="flex"
+            vs-justify="center"
+            vs-align="center"
+            vs-w="3"
+            vs-offset="1"
+          >
+          <vs-button @click="confirm" v-if="currentItem != null" :color="color2" size="large" type="relief">{{confirmText}} - {{currentItem.price | toCurrency}}</vs-button>
+          </vs-col>
+        </vs-row>
     <div class="keys">
       <vs-button :color="color" type="relief">A</vs-button>
       <vs-button :color="color" type="relief">E</vs-button>
@@ -44,8 +55,9 @@ export default {
       open: false,
       class: "tattoo",
       color: "#626262",
+      color2: "#B71C1C",
       items: [],
-      currentItem: {}
+      currentItem: null
     };
   },
   computed: {
@@ -54,6 +66,13 @@ export default {
     // ])
     getClass() {
       return "background " + this.class;
+    },
+    confirmText(){
+      if(this.class == "tattoo"){
+        return "Tatouer";
+      }
+
+      return "Confirmer";
     }
   },
   methods: {
@@ -63,7 +82,13 @@ export default {
         i.active = i.id == item.id;
       });
 
+      this.currentItem = item;
+
       $.post("http://shop/" + this.class + "/apply", JSON.stringify(item));
+    },
+    confirm(){
+      $.post("http://shop/" + this.class + "/buy", JSON.stringify(this.currentItem));
+      this.currentItem = null;
     },
     close() {
       $.post("http://shop/" + this.class + "/close");
@@ -118,8 +143,8 @@ export default {
     box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
     margin-top: 10%;
     margin-left: 5% !important;
-    height: 70vh;
-    max-height: 70vh;
+    height: 60vh;
+    max-height: 60vh;
     border-radius: 20px;
     padding: 15px;
     overflow: auto;
@@ -158,6 +183,14 @@ export default {
           font-weight: bolder;
         }
       }
+    }
+  }
+
+  .button-shop{
+    margin-top: 40px;
+    .vs-button{
+      width: 100%;
+      font-size: 30px;
     }
   }
 
