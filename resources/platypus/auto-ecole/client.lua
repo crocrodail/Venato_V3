@@ -95,65 +95,70 @@ function getCarForLicense(vehicle)
         end
     end
 end
-Citizen.CreateThread(function()
-    local i = 1
-    local randomKey = math.random(1,21)
-    ClearGpsMultiRoute()
-    StartGpsMultiRoute(6, true, false)
-    AddPointToGpsMultiRoute(configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z)
-    SetGpsMultiRouteRender(true)
-    while true do 
-        Citizen.Wait(0)
-        local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
-        if i <= 17 then
-            DrawMarker(2, configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z + 1, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 0,150,255,200, false, true, 2, nil, nil, false)
-        
-            if Vdist(x, y, z, configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z) < 5 then
-                i = i+1
-
-                ClearGpsMultiRoute()
-                StartGpsMultiRoute(6, true, false)
-                AddPointToGpsMultiRoute(configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z)
-                SetGpsMultiRouteRender(true)
-            end
-        else
-            DrawMarker(2, configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z + 1, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 0,150,255,200, false, true, 2, nil, nil, false)
-            print(x, y ,z)
-            if Vdist(x, y, z, configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z) < 5 then
-                break
-            end
-        end
+function vehicleDetected(randomKey, callback)
+    local vehiculeDetected = GetClosestVehicle(configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z, 4.0, 0, 70)
+    if not DoesEntityExist(vehiculeDetected) then
+        return callback(randomKey)
+    else
+        vehicleDetected(math.random(1, #configAutoEcole.parking_place), callback)
     end
-end)
+end
+
+function drawMarkerForCourse(index, randomKey, callback)
+    if index <= #configAutoEcole.Course then        
+        -- Create marker point
+        DrawMarker(2, configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z + 1, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 0,150,255,200, false, true, 2, nil, nil, false)
+    elseif index == 18 then
+        ClearGpsMultiRoute()
+            -- Parking place marker for park the car
+        vehicleDetected(randomKey, function(key)
+            DrawMarker(2, configAutoEcole.parking_place[key].x, configAutoEcole.parking_place[key].y, configAutoEcole.parking_place[key].z + 1, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 0,150,255,200, false, true, 2, nil, nil, false)
+            return callback(key)
+        end);
+    end
+end
+
+function getResult()
+    
+end
+
 function doTheCourse()
     Citizen.CreateThread(function()
-        local i = 1
+        local index = 17
+        local randomKey = math.random(1, #configAutoEcole.parking_place)
+        -- Je set une première fois le GPS
         ClearGpsMultiRoute()
         StartGpsMultiRoute(6, true, false)
-        AddPointToGpsMultiRoute(configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z)
+        AddPointToGpsMultiRoute(configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z)
         SetGpsMultiRouteRender(true)
         while true do 
             Citizen.Wait(0)
-            DrawMarker(2, configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z + 1, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 2.0, 2.0, 2.0, 0,150,255,200, false, true, 2, nil, nil, false)
-            
-            local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true)) -- Permet de recuperer la position du joueur
-            if Vdist(x, y, z, configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z) < 5 then
-                i = i+1
-                ClearGpsMultiRoute()
-                StartGpsMultiRoute(6, true, false)
-                AddPointToGpsMultiRoute(configAutoEcole.Course[i].x, configAutoEcole.Course[i].y, configAutoEcole.Course[i].z)
-                SetGpsMultiRouteRender(true)
-            end
-            if i == 18 then
-                local randomKey = math.random(1,21)
-                ClearGpsMultiRoute()
-                StartGpsMultiRoute(6, true, false)
-                AddPointToGpsMultiRoute(configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z)
-                SetGpsMultiRouteRender(true)
-            end
+            local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
+            if index <= #configAutoEcole.Course then
+                drawMarkerForCourse(index)
+                if Vdist(x, y, z, configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z) < 5 then
+                    -- Une fois qu'il à atteind le point GPS on passe à l'autre
+                    ClearGpsMultiRoute()
+                    StartGpsMultiRoute(6, true, false)
+                    AddPointToGpsMultiRoute(configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z)
+                    SetGpsMultiRouteRender(true) 
+                    index = index + 1    
+                end 
+            else
+                -- Call parking place marker function for park the car
+                drawMarkerForCourse(index, randomKey, function(key)
+                    randomKey = key
+                end)
+                if Vdist(x, y, z, configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z) < 1 then
+                    break;
+                    -- Its the end of the exam, now call result
+
+                end
+            end 
         end
     end)
 end
+doTheCourse();
 
 function carLicense()
     getCarForLicense("cooperworks")
