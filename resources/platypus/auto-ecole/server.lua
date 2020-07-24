@@ -73,7 +73,7 @@ local questionsAutoEcole = {
         image = "assets/images/autoecole/8.jpg",
         question = "Dans cette situation, le feu tricolore est orange",
         answer = {
-            "Il est préférable de s'arrêter", 
+            good = "Il est préférable de s'arrêter", 
             "J'accelère et passe à toute vitesse avant que le feu ne passe au rouge", 
             "Je klaxonne", 
             "J'appel le gouvernement pour enlever les feux orange"
@@ -83,7 +83,7 @@ local questionsAutoEcole = {
         image = "assets/images/autoecole/9.jpg",
         question = "Dans cette situation, je suis face a un panneau stop",
         answer = {
-            "Comme le panneau le dit, je STOP mon véhicule", 
+            good = "Comme le panneau le dit, je STOP mon véhicule", 
             "Il est beau le panneau, je peux continuer", 
             "J'accélère", 
             "Je stationne face a la ligne blanche"
@@ -95,7 +95,7 @@ local questionsAutoEcole = {
         answer = {
             "La situation ne présente absolument aucun danger", 
             "Je peux configurer mon itinéraire tranquillement", 
-            "La situation présente de grands dangers", 
+            good = "La situation présente un danger", 
             "J'allume une cigarette"
         }
     },
@@ -105,7 +105,7 @@ local questionsAutoEcole = {
         answer = {
             "J'accélère", 
             "Je klaxonne", 
-            "Je circule au pas", 
+            good = "Je circule au pas", 
             "Je peux stationner ici"
         }
     },
@@ -115,7 +115,7 @@ local questionsAutoEcole = {
         answer = {
             "Je peux doubler par la droite", 
             "Je klaxonne", 
-            "Je peux doubler par la gauche", 
+            good = "Je peux doubler par la gauche", 
             "Je freine brusquement"
         }
     },
@@ -125,7 +125,7 @@ local questionsAutoEcole = {
         answer = {
             "Je m'arrête au milieu de la route pendant quelques secondes", 
             "Je fais demi-tour, je n'ai pas le droit d'être là", 
-            "Je m'arrête un peu plus loins à droite", 
+            good = "Je m'arrête un peu plus loins à droite", 
             "Je reste dans la voiture et passe commande en drive"
         }
     },
@@ -134,7 +134,7 @@ local questionsAutoEcole = {
         question = "Dans cette situation, je veux faire mes courses",
         answer = {
             "Je peux stationner ici sans aucun soucis", 
-            "Je recule et stationne sur les emplacements indiqués", 
+            good = "Je recule et stationne sur les emplacements indiqués", 
             "Je klaxonne pour que l'épicier vienne me servir", 
             "Je peux m'arrêter ici quelques instants pour montrer ma belle voiture à la dame à gauche"
         }
@@ -144,7 +144,7 @@ local questionsAutoEcole = {
         question = "Dans cette situation :",
         answer = {
             "Je suis bien placer pour circuler", 
-            "Cette zone est reservé aux piétons", 
+            good = "Cette zone est reservé aux piétons", 
             "Je ne prend aucun risque", 
             "Je peux stationner ici"
         }
@@ -154,7 +154,7 @@ local questionsAutoEcole = {
         question = "Dans cette situation, en deux roues",
         answer = {
             "Je peux doubler par la droite", 
-            "Je peux doubler par la voie la plus à gauche", 
+            good = "Je peux doubler par la voie la plus à gauche", 
             "Je peux serer les voitures sans aucun risques", 
             "Je suis moins vulnérable qu'en voiture"
         }
@@ -166,7 +166,7 @@ local questionsAutoEcole = {
             "Je fonce dans la voiture pour aller plus vite", 
             "Je klaxonne", 
             "Je fais demi-tour", 
-            "Je double par la gauche et continue ma route"
+            good = "Je double par la gauche et continue ma route"
         }
     },
     {
@@ -175,7 +175,7 @@ local questionsAutoEcole = {
         answer = {
             "Je peux stationner sans aucun soucis", 
             "Je stationne comme ceci pour eviter de me faire rayer mon véhicule", 
-            "Je refais une main-oeuvre et me gare en bataille", 
+            good = "Je refais une main-oeuvre et me gare en bataille", 
             "Je coupe le moteur et laisse mon véhicule"
         }
     },
@@ -183,7 +183,7 @@ local questionsAutoEcole = {
         image = "assets/images/autoecole/19.jpg",
         question = "Dans cette situation ce panneau m'indique :",
         answer = {
-            "Une interdiction de faire demi-tour", 
+            good = "Une interdiction de faire demi-tour", 
             "Une obligation de faire demi-tour", 
             "Une obligation de rouler au pas", 
             "Une interdiction de s'arrêter quelques minutes"
@@ -194,7 +194,7 @@ local questionsAutoEcole = {
         question = "Dans cette situation, je veux aller au concessionnaire",
         answer = {
             "Je passe avant la voiture", 
-            "Je passe après la voiture", 
+           good =  "Je passe après la voiture", 
             "Je passe avant la voiture mais en marche arrière", 
             "Je gare mon véhicule ici et ceontinu à pieds"
         }
