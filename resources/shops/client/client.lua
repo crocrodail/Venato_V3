@@ -82,7 +82,7 @@ AddEventHandler("Shops:LoadShops:cb", function(shops)
           ConfigShop.inGarageMarker = true
           ConfigShop.spawnConfig = { item.GarageX, item.GarageY, item.GarageZ, item.GarageHeading }
           ConfigShop.currentShopId = item.Id
-          if IsPedInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
+          if noInVehicle(GetPlayerPed(-1), ConfigShop.forklift) then
             TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour sortir le transpalette")
           else
             TriggerEvent("platypus:InteractTxt", "Appuyez sur ~INPUT_CONTEXT~ pour ranger le transpalette")

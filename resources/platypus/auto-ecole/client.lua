@@ -1,3 +1,5 @@
+local status = false;
+
 function GenerateNpcAutoEcole()
     RequestModel(GetHashKey(configAutoEcole.ped_model))
 
@@ -57,13 +59,21 @@ RegisterNetEvent('AutoEcole:OpencodeOrOpenpermis')
             Menu.addButton("Permis moto", "motoLicense", nil, '', 'https://img.icons8.com/officel/64/000000/motorcycle.png')
         end
 end)
+
 function openmenuautoecole()
-    Menu.clearMenu()
-    Menu.open()
-    TriggerEvent('Menu:Init', "", "Bienvenue dans le menu de l'auto-école !", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
-    Menu.addButton("<span class='red--text'>Fermer</span>", "closemenuautoecole")
-    TriggerServerEvent("AutoEcole:CodeOuPermis")
+    if status == false then
+        Menu.clearMenu()
+        Menu.open()
+        TriggerEvent('Menu:Init', "", "Bienvenue dans le menu de l'auto-école !", "#F9A82599", "https://cdn.discordapp.com/attachments/618546482135433226/618546497373339653/20181216224111_1.jpg")
+        Menu.addButton("<span class='red--text'>Fermer</span>", "closemenuautoecole")
+        TriggerServerEvent("AutoEcole:CodeOuPermis")
+    else
+        platypus.notifyError('Vous êtes déjà en examen')
+    end
+
+    
 end
+
 function openmenucode()
     SetNuiFocus(true, true)
     open = true
@@ -71,30 +81,7 @@ function openmenucode()
         action = "openCodeAutoEcole",
     })
 end
-function getCarForLicense(vehicle)
-    local randomKey = math.random(1,21)
-    for k,v in pairs(configAutoEcole.parking_place) do 
-        Citizen.Wait(0)
-        if k == randomKey then
-            local vehiculeDetected = GetClosestVehicle(v.x, v.y, v.z, 4.0, 0, 70)
-            if not DoesEntityExist(vehiculeDetected) then
-                platypus.CreateVehicle(GetHashKey(vehicle), {x = v.x, y = v.y, z = v.z}, v.h, function(vhl)
-                    local npc2 = CreatePed(4, GetHashKey("cs_tom"))
-                    if vehicle ~= "tmax" then
-                        FreezeEntityPosition(npc2, true)
-                        SetEntityInvincible(npc2, true)
-                        SetBlockingOfNonTemporaryEvents(npc2, true)
-                        SetPedIntoVehicle(npc2, vhl, 0)
-                    end
-                    SetPedIntoVehicle(platypus.GetPlayerPed(), vhl, -1)
-                    closemenuautoecole() 
-                end)
-            else
-                getCarForLicense(vehicle)
-            end
-        end
-    end
-end
+
 function vehicleDetected(randomKey, callback)
     local vehiculeDetected = GetClosestVehicle(configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z, 4.0, 0, 70)
     if not DoesEntityExist(vehiculeDetected) then
@@ -103,6 +90,25 @@ function vehicleDetected(randomKey, callback)
         vehicleDetected(math.random(1, #configAutoEcole.parking_place), callback)
     end
 end
+
+function getCarForLicense(vehicle, callback)
+    local randomKey = math.random(1, #configAutoEcole.parking_place)
+    vehicleDetected(randomKey, function(key)
+        platypus.CreateVehicle(GetHashKey(vehicle), {x = configAutoEcole.parking_place[key].x, y = configAutoEcole.parking_place[key].y, z = configAutoEcole.parking_place[key].z}, configAutoEcole.parking_place[key].h, function(vhl)
+            local npc2 = CreatePed(4, GetHashKey("cs_tom"))
+            if vehicle ~= "tmax" then
+                FreezeEntityPosition(npc2, true)
+                SetEntityInvincible(npc2, true)
+                SetBlockingOfNonTemporaryEvents(npc2, true)
+                SetPedIntoVehicle(npc2, vhl, 0)
+            end
+            SetPedIntoVehicle(platypus.GetPlayerPed(), vhl, -1)
+            closemenuautoecole() 
+            return callback(vhl, npc2)
+        end)
+    end)
+end
+
 
 function drawMarkerForCourse(index, randomKey, callback)
     if index <= #configAutoEcole.Course then        
@@ -118,51 +124,79 @@ function drawMarkerForCourse(index, randomKey, callback)
     end
 end
 
-function getResult()
-    
+function montiorInstructions(callback)
+    print('This is the end')
+    return callback()
 end
 
-function doTheCourse()
+function getResult(bool, vehicleKey, npc)
+    montiorInstructions(function()
+        if IsPedInVehicle(platypus.GetPlayerPed(), vehicleKey) and IsPedInVehicle(npc, vehicleKey) then 
+            TaskLeaveVehicle(platypus.GetPlayerPed(), vehicleKey, 1)
+            TaskLeaveVehicle(npc, vehicleKey, 1)
+            FreezeEntityPosition(npc, false)
+            SetEntityInvincible(npc, false)
+            SetBlockingOfNonTemporaryEvents(npc, false)
+        end
+        status = false
+    end)
+end
+
+function getRules(vehicleKey, npc, x, y, z, bool)
+    local error = 0
+    local speedLimit = 50
+    local vX,vY,vZ = table.unpack(GetEntityCoords(vehicleKey, true))
+    if Vdist(x, y, z, vX, vY, vZ) > 20 then
+        platypus.notifyError('C\'est pas bien de fuir les examens mon graçon !')
+        getResult(false, vehicleKey, npc)
+    end
+    if bool == true then getResult(true, vehicleKey, npc) end
+end
+
+function doTheCourse(vehicleKey, npc)
     Citizen.CreateThread(function()
+        status = true
         local index = 17
         local randomKey = math.random(1, #configAutoEcole.parking_place)
-        -- Je set une première fois le GPS
+        -- First set of the GPS point
         ClearGpsMultiRoute()
         StartGpsMultiRoute(6, true, false)
         AddPointToGpsMultiRoute(configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z)
         SetGpsMultiRouteRender(true)
-        while true do 
+        while status do 
             Citizen.Wait(0)
             local x,y,z = table.unpack(GetEntityCoords(platypus.GetPlayerPed(), true))
             if index <= #configAutoEcole.Course then
+                getRules(vehicleKey, npc, x, y, z, false)
                 drawMarkerForCourse(index)
                 if Vdist(x, y, z, configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z) < 5 then
-                    -- Une fois qu'il à atteind le point GPS on passe à l'autre
-                    ClearGpsMultiRoute()
-                    StartGpsMultiRoute(6, true, false)
-                    AddPointToGpsMultiRoute(configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z)
-                    SetGpsMultiRouteRender(true) 
-                    index = index + 1    
+                    index = index + 1
+                    if index <= #configAutoEcole.Course then
+                        ClearGpsMultiRoute()
+                        StartGpsMultiRoute(6, true, false)
+                        AddPointToGpsMultiRoute(configAutoEcole.Course[index].x, configAutoEcole.Course[index].y, configAutoEcole.Course[index].z)
+                        SetGpsMultiRouteRender(true)
+                    end
                 end 
+                 
             else
                 -- Call parking place marker function for park the car
                 drawMarkerForCourse(index, randomKey, function(key)
                     randomKey = key
                 end)
                 if Vdist(x, y, z, configAutoEcole.parking_place[randomKey].x, configAutoEcole.parking_place[randomKey].y, configAutoEcole.parking_place[randomKey].z) < 1 then
-                    break;
                     -- Its the end of the exam, now call result
-
+                    getRules(vehicleKey, npc, x, y, z, true)
                 end
             end 
         end
     end)
 end
-doTheCourse();
 
 function carLicense()
-    getCarForLicense("cooperworks")
-    doTheCourse()
+    getCarForLicense("i8", function(vehicleKey, npc)
+        doTheCourse(vehicleKey, npc)
+    end)
 end
 function truckLicense()
     getCarForLicense("phantom")
