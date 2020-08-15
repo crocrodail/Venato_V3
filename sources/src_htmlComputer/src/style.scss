@@ -6,7 +6,8 @@
   text-align: center;
 }
 body {
-  background: radial-gradient(circle, rgba(61,82,108,1) 0%, rgba(29,50,75,1) 100%);
+  background: url('https://i.ibb.co/Zg02PsJ/wallpaper.jpg');
+  background-size: cover;
 }
 .title {
   font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
@@ -22,10 +23,26 @@ body {
   padding-bottom: 30px;
   color: #fff;
 }
+
+.date{
+  position: absolute;
+  top: 5%;
+  width: 100%;
+  left: 0;
+  font-size: 60px;
+  color: white;
+}
+
+.desktop{
+  position: absolute;
+  bottom: 5%;
+  width: 50%;
+  left: 25%;
 .grid-layout-container {
   display: inline-block;
-  width: 390px;
+  width: 100%;
   height: 100%;
+}
 }
 .margin-right {
   margin-right: 17px
@@ -42,6 +59,12 @@ body {
   top: 0;
   bottom: 0;
   margin: auto;
+  height: 60%;
+  width: auto;
+  &.fill{
+    width: 100%;
+    height: auto;
+  }
 }
 .image {
   position: absolute;

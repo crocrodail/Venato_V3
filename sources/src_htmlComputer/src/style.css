@@ -7,7 +7,8 @@
 }
 
 body {
-  background: radial-gradient(circle, #3d526c 0%, #1d324b 100%);
+  background: url("https://i.ibb.co/Zg02PsJ/wallpaper.jpg");
+  background-size: cover;
 }
 
 .title {
@@ -26,9 +27,25 @@ body {
   color: #fff;
 }
 
-.grid-layout-container {
+.date {
+  position: absolute;
+  top: 5%;
+  width: 100%;
+  left: 0;
+  font-size: 60px;
+  color: white;
+}
+
+.desktop {
+  position: absolute;
+  bottom: 5%;
+  width: 50%;
+  left: 25%;
+}
+
+.desktop .grid-layout-container {
   display: inline-block;
-  width: 390px;
+  width: 100%;
   height: 100%;
 }
 
@@ -49,6 +66,13 @@ body {
   top: 0;
   bottom: 0;
   margin: auto;
+  height: 60%;
+  width: auto;
+}
+
+.icon.fill {
+  width: 100%;
+  height: auto;
 }
 
 .image {
