@@ -34,7 +34,7 @@ new Vue({
     ],
     showVehicleInformation: false,
     showShopAdmin: false,
-    showCommands: false,
+    showCommands: true,
     vehicle: {},
     headers: [],
     desserts: [],

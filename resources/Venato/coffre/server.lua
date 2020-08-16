@@ -31,6 +31,7 @@ function reloadDataCoffre()
             ["argentcapacite"] = v.ArgentMax,
             ["maxWeapon"] = v.QtyWeapon,
             ["props"] = v.props,
+            ["instance"] = v.instance,
             ["inventaire"] = {nil},
             ["weapon"] = {nil},
             ["whitelist"] = {nil}

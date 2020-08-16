@@ -140,6 +140,7 @@ function accessGranded(SteamId, source , balek)
         Group = DataUser[1].group,
         Nom = DataUser[1].nom,
         Prenom = DataUser[1].prenom,
+        Instance = nil,
         -- IdJob = DataUser[1].job,
         -- NameJob = DataUser[1].job_name,
         IsInService = {"none", false},

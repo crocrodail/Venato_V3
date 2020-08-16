@@ -86,11 +86,12 @@ local TeleportFromTo = {
   --   whitelist = false,
   -- },
 
-  ["Gouvernement"] = {
-    positionFrom = { ['x'] = -429.32, ['y'] = 1110.22, ['z'] = 327.68, nom = "Entrer - Gouvernement" },
-    positionTo = { ['x'] = -141.25, ['y'] = -613.84, ['z'] = 168.82, nom = "Sortir - Gouvernement" },
-    whitelist = false,
-  },
+  -- ["Gouvernement"] = {
+  --   positionFrom = { ['x'] = -263.242, ['y'] =-968.068, ['z'] = 31.225, nom = "Entrer - Gouvernement" },
+  --   positionTo = { ['x'] = -141.25, ['y'] = -613.84, ['z'] = 168.82, nom = "Sortir - Gouvernement" },
+  --   whitelist = false,
+  --   hideFrom = true,
+  -- },
 
   ["Labo"] = {
     positionFrom = { ['x'] = 3514.0, ['y'] = 3755.0, ['z'] = 30.0, nom = "Entrer - Labo" },

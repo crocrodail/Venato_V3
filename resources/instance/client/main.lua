@@ -189,7 +189,6 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 		local playerPed = PlayerPedId()
-
 		-- Hide all these players
 		for player,_ in pairs(playersToHide) do
 			local otherPlayerPed = GetPlayerPed(player)

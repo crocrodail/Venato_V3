@@ -66,12 +66,16 @@ AddEventHandler("Coffre:CallData:init", function(Coffre)
         Wait(1)
       end
 
-      local coffre = CreateObject(GetHashKey(v.props), v.x, v.y, v.z, false, false, false)
+      local coffre = CreateObject(GetHashKey(v.props), v.x, v.y, v.z, true, true, false)
       SetEntityHeading(coffre, v.h)
       PlaceObjectOnGroundProperly(coffre)
       SetEntityAsMissionEntity(coffre, true, true)
       FreezeEntityPosition(coffre, true)
       SetModelAsNoLongerNeeded(v.props)
+
+      if(v.instance) then
+        TriggerServerEvent("instance:addEntity", v.instance, NetworkGetNetworkIdFromEntity(coffre))
+      end
     end
   end
 end)
@@ -81,10 +85,12 @@ Citizen.CreateThread(function()
   TriggerServerEvent("Coffre:CallData")
   TriggerServerEvent("Coffre:ReloadCoffre")
   while true do
+    local dataPlayer = venato.GetDataPlayer()
     Citizen.Wait(0)
     local x,y,z = table.unpack(GetEntityCoords(venato.GetPlayerPed(), true))
     for k,v in pairs(DataCoffre) do
-      if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) then
+      Citizen.Wait(0)
+      if Vdist(x, y, z, v.x, v.y, v.z) < (v.props ~= nil and 2 or 0.5) and v.instance == dataPlayer.Instance then
         indexLoop = k
       elseif k == indexLoop then
         indexLoop = nil

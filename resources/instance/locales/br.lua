@@ -1,4 +1,3 @@
-Locales = {}
 Locales['br'] = {
   ['left_instance'] = 'você deixou a instância',
   ['invite_expired'] = 'convite expirado',

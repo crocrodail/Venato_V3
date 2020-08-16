@@ -461,14 +461,15 @@ end
 
 function venato.callServer(eventName, arg)
   local response = nil
-  TriggerServerEvent(eventName, arg)
   RegisterNetEvent(eventName..":cb")
-  AddEventHandler(eventName..":cb", function(cb)
+  local event = AddEventHandler(eventName..":cb", function(cb)
     response = cb
-  end)
+  end)  
+  TriggerServerEvent(eventName, arg)
   while response == nil do
     Citizen.Wait(10)
-  end
+  end  
+  RemoveEventHandler(event)
   return response
 end
 
