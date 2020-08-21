@@ -4,23 +4,61 @@ local instances = {
 
 RegisterServerEvent('instance:addEntity')
 AddEventHandler('instance:addEntity', function(instance, networkId)
-   TriggerEvent('instance:removeEntity', networkId)
-   if not instances[instance] then
-    instance[instance] = {
-        entities = {}
-    }
-   end
-   instances[instance].entities[networkId] = true
+    removeEntityFunc(networkId)
+    addEntity(instance, networkId)
 end)
 
 RegisterServerEvent('instance:removeEntity')
 AddEventHandler('instance:removeEntity', function(networkId)
+    removeEntityFunc(networkId)
+end)
+
+function removeEntityFunc(networkId)
+    removeEntity(networkId)
+end
+
+
+RegisterServerEvent('instance:addPlayer')
+AddEventHandler('instance:addPlayer', function(instance, networkId, playerId)
+    if networkId == 0 then
+        return
+    end
+    removePlayerFunc(networkId, playerId)
+    addEntity(instance, networkId)
+    MySQL.Async.execute("UPDATE users SET instance = @instance WHERE identifier = @identifier",{ ["@identifier"] = playerId,  ["@instance"] = instance}, function()
+    end)
+end)
+
+RegisterServerEvent('instance:removePlayer')
+AddEventHandler('instance:removePlayer', function(networkId, playerId)
+    removePlayerFunc(networkId, playerId)
+end)
+
+function removePlayerFunc(networkId, playerId)
+    removeEntity(networkId)
+    MySQL.Async.execute("UPDATE users SET instance = NULL WHERE identifier = @identifier",{ ["@identifier"] = playerId }, function()
+    end)
+end
+
+
+function addEntity(instance, networkId)
+    if not instances[instance] then
+    instances[instance] = {
+        id = instance,
+        entities = {}
+    }
+   end
+   instances[instance].entities[networkId] = true
+end
+
+function removeEntity(networkId)
     for k, j in pairs(instances) do     
         if j.entities[networkId] then
             j.entities[networkId] = nil
         end
     end
-end)
+end
+
 
 
 RegisterServerEvent('instance:get')
@@ -42,6 +80,7 @@ AddEventHandler('instance:get', function(networkId)
 
     if not currentInstance then
         currentInstance = { 
+            id = -1,
             label = "Global",
             entitiesToHide = entitiesToHide,
             entities = {}
