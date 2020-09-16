@@ -12,12 +12,23 @@ client_script {
   '/client/savePos.lua',
   '/client/InteractWithProp.lua',
   '/client/vocal.lua',
-  '/inventory/client.lua',
+  '/inventory/client/config.lua',
+  '/inventory/client/global.lua',
+  '/inventory/client/document.lua',
+  '/inventory/client/item.lua',
+  '/inventory/client/key.lua',
+  '/inventory/client/money.lua',
+  '/inventory/client/tattoo.lua',
+  '/inventory/client/weapon.lua',
   '/coffre_voiture/client.lua',
   '/bank/config.lua',
   '/bank/client.lua',
   '/bank/config.lua',
-  '/coffre/client.lua',
+  '/coffre/client/item.lua',
+  '/coffre/client/money.lua',
+  '/coffre/client/weapon.lua',
+  '/coffre/client/whitelist.lua',
+  '/coffre/client/global.lua',
   '/carShop/config.lua',
   '/carShop/client.lua',
   '/garage/client.lua',
@@ -59,7 +70,6 @@ client_script {
   '/clean-car/client.lua',
   '/ffpsshot_aim/forcefirst.lua',
   '/damageragdollv2/client.lua',
-  '/weapons-on-back/client.lua',
   '/weapon_switch/client.lua',
   '/no_radar/config.lua',
   '/no_radar/client.lua',
@@ -74,7 +84,8 @@ client_script {
   '/sit/lists/seat.lua',
   '/sit/client.lua',
   '/tattoo/client.lua',
-  '/instance/client.lua'
+  '/instance/client.lua',
+  '/weapon/client.lua'
 }
 
 server_script {
@@ -87,13 +98,22 @@ server_script {
   '@jobs/brasseur/brasseur_config.lua',
   '@jobs/vigneron/vigneron_config.lua',
   '/server/jobs.lua',
-  '/inventory/server.lua',
+  '/inventory/server/global.lua',
+  '/inventory/server/document.lua',
+  '/inventory/server/item.lua',
+  '/inventory/server/money.lua',
+  '/inventory/server/tattoo.lua',
+  '/inventory/server/weapon.lua',
   '/coffre_voiture/server.lua',
   '/coffre_voiture/config.lua',
   '/bank/server.lua',
   '/carShop/server.lua',
   '/garage/server.lua',
-  '/coffre/server.lua',
+  '/coffre/server/item.lua',
+  '/coffre/server/money.lua',
+  '/coffre/server/weapon.lua',
+  '/coffre/server/whitelist.lua',
+  '/coffre/server/global.lua',
   '/life/server.lua',
   '/lockVehicule/server.lua',
   '/admin/server.lua',
@@ -126,7 +146,8 @@ server_script {
   '/sit/lists/seat.lua',
   '/sit/server.lua',
   '/tattoo/server.lua',
-  '/instance/server.lua'
+  '/instance/server.lua',
+  '/weapon/server.lua'
 }
 
 files {

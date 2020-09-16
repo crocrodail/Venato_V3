@@ -278,7 +278,6 @@ function SortirVoiture(vhll)
           end
 
           local wheel = health[8]
-          print(venato.dump(wheel))
           for i, p in pairs(wheel) do
             SetVehicleWheelHealth(vhl, i, wheel[i..""])
           end

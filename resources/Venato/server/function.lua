@@ -64,9 +64,6 @@ AddEventHandler("venato:RemoveJob", function(data)
         if result[1].source ~= 'disconnect' then
           local sourceId = result[1].source
           local jobId = data[1]
-          print(sourceId)
-          print(jobId)
-          print(venato.dump(DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)]))
           DataPlayers[tonumber(sourceId)].Jobs[tonumber(jobId)] = nil
         end
     end
@@ -354,25 +351,26 @@ function venato.GetSteamID(source)
   return getSteamID(source)
 end
 
-RegisterNetEvent("venato:dump")
-AddEventHandler("venato:dump", function(arg)
-  local str = ''
-  for _, item in ipairs(arg) do
-    str = str .. ' ' .. venato.dump(item)
+function venato.dump(o, indent)
+  if indent == nil then
+    indent = 0
   end
-  print(str)
-end)
-
-function venato.dump(o)
   if type(o) == 'table' then
-    local s = '{ '
+    local s = '{ \n'
     for k, v in pairs(o) do
-      if type(k) ~= 'number' then k = '"' .. k .. '"' end
-      s = s .. '[' .. k .. '] = ' .. venato.dump(v) .. ','
+      if type(k) ~= 'number' then k = '"' .. k .. '"'
+      end 
+      for j = 1, indent do 
+        s = s .. '  '
+      end    
+      s = s .. '[' .. k .. '] = ' .. venato.dump(v, indent+1) .. ',\n'
     end
-    return s .. '} '
+    for j = 1, indent do 
+      s = s .. '  '
+    end 
+    return dprint(s .. '} ')
   else
-    return tostring(o)
+    return dprint(tostring(o))
   end
 end
 

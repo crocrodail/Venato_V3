@@ -367,18 +367,26 @@ end
 
 function venato.getRandomFromArray(array)  
   local randomNumber = math.random(0, #array)
-  print(venato.dump(array[randomNumber]))
   return array[randomNumber]
 end
 
-function venato.dump(o)
+function venato.dump(o, indent)
+  if indent == nil then
+    indent = 0
+  end
   if type(o) == 'table' then
-    local s = '{ '
+    local s = '{ \n'
     for k, v in pairs(o) do
       if type(k) ~= 'number' then k = '"' .. k .. '"'
-      end
-      s = s .. '[' .. k .. '] = ' .. venato.dump(v) .. ','
+      end 
+      for j = 1, indent do 
+        s = s .. '  '
+      end    
+      s = s .. '[' .. k .. '] = ' .. venato.dump(v, indent+1) .. ',\n'
     end
+    for j = 1, indent do 
+      s = s .. '  '
+    end 
     return s .. '} '
   else
     return tostring(o)

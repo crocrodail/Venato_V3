@@ -2,8 +2,6 @@ CraftsTables = {}
 Recipes = {}
 local isInit = false
 
-local coffre_index = -1
-
 RegisterNetEvent("Craft:CallData:cb")
 AddEventHandler("Craft:CallData:cb", function(tables, recipes)  
   CraftsTables = tables

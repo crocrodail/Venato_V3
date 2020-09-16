@@ -102,7 +102,6 @@ end)
 
 AddEventHandler("Shops:ShowItem", function(shopId, item, newSource)
   local source = getSource(source, newSource)
-  TriggerEvent('venato:dump', { shopId, item })
   TriggerClientEvent("Shops:UpdateMenu:cb", source, ShopDbFunctions.getOrderItem(shopId, item.ItemId))
 end)
 

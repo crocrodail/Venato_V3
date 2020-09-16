@@ -66,7 +66,7 @@ function checkInventory(source, target, t)
 		  	end
 		end
 	end
-	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_weapons` u INNER JOIN weapon_model wp ON wp.weapond = u.weapon_model WHERE u.identifier = @username", { ['@username'] = target})
+	local result = MySQL.Sync.fetchAll("SELECT * FROM `user_weapons` u INNER JOIN weapon wp ON wp.weapon = u.id WHERE u.identifier = @username", { ['@username'] = target})
 	if (result) then
 		for _, v in ipairs(result) do
 			inventory[v.id] = v
