@@ -205,7 +205,7 @@ function accessGranded(SteamId, source , balek)
         TriggerClientEvent("gcphone:updateAccount", source, DataUser[1].account)
         TriggerClientEvent("gcphone:updateFullname", source, DataUser[1].nom .. ' ' .. DataUser[1].prenom)
         TriggerClientEvent("CarMenu:InitSpeedmeter", source, DataUser[1].speedometer)
-        TriggerEvent("Inventory:UpdateInventory", source)
+        TriggerEvent("Inventory:UpdateInventory", source)        
         TriggerEvent("GardeRobe:UpdateGardeRobe", source)
         MySQL.Async.fetchAll("SELECT * FROM user_job INNER JOIN jobs ON JobId = jobs.job_id WHERE UserId = @identifier ", { ["@identifier"] = steamIdl }, function(result)
           if not result[1] then

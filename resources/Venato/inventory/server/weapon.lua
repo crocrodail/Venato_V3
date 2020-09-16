@@ -30,6 +30,14 @@ AddEventHandler(
     end
 )
 
+RegisterServerEvent("Inventory:ForceLoadWeapon")
+AddEventHandler(
+    "Inventory:ForceLoadWeapon",
+    function()
+        LoadWeapon(source)
+    end
+)
+
 function ActualiseTableOfWeaponOnTheGround()
     TriggerClientEvent("Inventory:SendWeaponOnTheGround", -1, WeaponOnTheGround)
 end
@@ -65,7 +73,6 @@ function LoadWeapon(source)
                             }
                             Weapon[v.weaponId] = Wp
                             poids = poids + tonumber(v.poids)
-                            dprint("Add Weapon : " .. v.weapon_id)
                             TriggerClientEvent("Inventory:AddWeaponClient", source, v.weapon_id, tonumber(v.balles))
                         end
                         DataPlayers[tonumber(source)].Poid = poids

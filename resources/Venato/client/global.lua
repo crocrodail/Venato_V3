@@ -89,7 +89,8 @@ AddEventHandler("venato:SpawnInit", function(DataPlayers, source)
     end
 
     if tonumber(DataPlayers[tonumber(source)].Health) < 100 then SetEntityHealth(venato.GetPlayerPed(), tonumber(DataPlayers[tonumber(source)].Health)) end
-    TriggerServerEvent("GcPhone:Load")
+    TriggerServerEvent("GcPhone:Load")    
+    TriggerServerEvent("Inventory:ForceLoadWeapon")
   end
 end)
 
