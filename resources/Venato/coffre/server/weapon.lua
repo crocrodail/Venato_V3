@@ -45,7 +45,7 @@ AddEventHandler(
                 },
                 function()
                     MySQL.Async.fetchAll(
-                        "SELECT CW.Id, W.libelle, W.poids, W.weapon_id  FROM coffres_weapons CW join weapon W ON CW.Weapon = W.id WHERE CW.Weapon = @weapon AND CW.CoffreId = @coffreId",
+                        "SELECT CW.Id, W.libelle, W.poids, W.weapon_id  FROM coffres_weapons CW join weapon W ON CW.Weapon = W.id WHERE CW.Weapon = @weapon AND CW.CoffreId = @coffreId ORDER BY Id DESC",
                         {
                             ["@weapon"] = DataPlayers[tonumber(source)].Weapon[indexWeapon].idWeapon,
                             ["@coffreId"] = indexCoffre
